@@ -247,16 +247,21 @@
             "d3a13b531babee66",
             "7313d7c724d31538",
             "f0083147745c8366",
-            "fa3a575e55726ee5",
             "828d354cf5dc7635",
             "48e3b18cb440da52",
             "25162d774c052102",
-            "7169dd5d96b420b3"
+            "7169dd5d96b420b3",
+            "32ec19602e928185",
+            "3ea9ad63448926e3",
+            "9c55b7521da89694",
+            "6411e739ab7c774d",
+            "f1bb8352c6190531",
+            "13597d3fd9a7351b"
         ],
         "x": 54,
-        "y": 79,
-        "w": 1128,
-        "h": 288
+        "y": 19,
+        "w": 1118,
+        "h": 348
     },
     {
         "id": "5d1ecae7ac09586c",
@@ -318,12 +323,13 @@
             "000b002344662b42",
             "c769cda1070372b2",
             "a0885c7cb1a0a88f",
-            "57e45f522fc50a9b"
+            "57e45f522fc50a9b",
+            "4259c887eedd95ec"
         ],
         "x": 74,
-        "y": 413,
-        "w": 1258,
-        "h": 188
+        "y": 419,
+        "w": 1238,
+        "h": 308
     },
     {
         "id": "b83700dc9a87e735",
@@ -346,7 +352,7 @@
             "5aa99ce2ed0b8c6d"
         ],
         "x": 74,
-        "y": 659,
+        "y": 779,
         "w": 1098,
         "h": 408
     },
@@ -420,7 +426,7 @@
         "type": "group",
         "z": "7f95345534f00358",
         "g": "067069104a82b459",
-        "name": "Rest unique tank list",
+        "name": "Reset unique list",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -431,25 +437,6 @@
         ],
         "x": 174,
         "y": 299,
-        "w": 472,
-        "h": 82
-    },
-    {
-        "id": "fa3a575e55726ee5",
-        "type": "group",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "Rest unique light list",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "1f628567c4df0138",
-            "393fac7ed2755f3a"
-        ],
-        "x": 684,
-        "y": 259,
         "w": 472,
         "h": 82
     },
@@ -487,7 +474,7 @@
             "c74247a21994b920"
         ],
         "x": 674,
-        "y": 959,
+        "y": 1079,
         "w": 472,
         "h": 82
     },
@@ -505,8 +492,27 @@
             "0474640b44c5d2a9",
             "d137fb1314cb498b"
         ],
-        "x": 834,
-        "y": 439,
+        "x": 814,
+        "y": 619,
+        "w": 472,
+        "h": 82
+    },
+    {
+        "id": "32ec19602e928185",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "Reset unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "886a33cd8776ba5a",
+            "6e2b753c50d28b2b"
+        ],
+        "x": 674,
+        "y": 259,
         "w": 472,
         "h": 82
     },
@@ -868,6 +874,7 @@
         "id": "d3a13b531babee66",
         "type": "link out",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "MQTT Out",
         "mode": "link",
@@ -892,7 +899,9 @@
         "y": 140,
         "wires": [
             [
-                "828d354cf5dc7635"
+                "828d354cf5dc7635",
+                "f0083147745c8366",
+                "13597d3fd9a7351b"
             ]
         ],
         "l": true
@@ -901,6 +910,7 @@
         "id": "f0083147745c8366",
         "type": "function",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "Unique switch",
         "func": "/***********************************************************\n * Unified Unique Instance Tracker\n * Tracks unique device instances across multiple device types\n * Handles DC_DIMMER_STATUS, WATER_PUMP_STATUS, and AUTOFILL_STATUS\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.dgn_name (String): DGN type for device type detection\n *\n * Output: Creates new message with instance and device_type if unique,\n *         returns null if duplicate\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst dgnName = msg.payload.dgn_name;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof dgnName !== 'string') {\n    node.error(\"Input missing 'dgn_name' (string).\", msg);\n    return null;\n}\n\n// Device type mapping\nlet deviceType;\nlet contextKey;\n\nswitch (dgnName) {\n    case \"DC_DIMMER_STATUS_1\":\n        deviceType = \"switch1\";\n        contextKey = \"uniqueSwitch1\";\n        break;\n    case \"DC_DIMMER_STATUS_2\":\n        deviceType = \"switch2\";\n        contextKey = \"uniqueSwitch2\";\n        break;\n    case \"DC_DIMMER_STATUS_3\":\n        deviceType = \"switch\";\n        contextKey = \"uniqueSwitch\";\n        break;\n    case \"WATER_PUMP_STATUS\":\n        deviceType = \"pump\";\n        contextKey = \"uniquePumps\";\n        break;\n    case \"AUTOFILL_STATUS\":\n        deviceType = \"autofill\";\n        contextKey = \"uniqueAutofills\";\n        break;\n    default:\n        node.error(`Unsupported dgn_name: ${dgnName}`, msg);\n        return null;\n}\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueInstances = flow.get(contextKey) || [];\n\n// Create unique identifier string\nconst instanceStr = JSON.stringify(instance);\n\n// Check if it's a new unique instance for this device type\nif (!uniqueInstances.includes(instanceStr)) {\n    uniqueInstances.push(instanceStr);\n    flow.set(contextKey, uniqueInstances);\n\n    // Create a new message with instance and device type\n    return {\n        payload: {\n            instance: instance,\n            device_type: deviceType\n        }\n    };\n}\n\n// Return null if duplicate (prevents duplicate entity creation)\nreturn null;\n",
@@ -910,61 +920,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 180,
+        "x": 440,
+        "y": 220,
         "wires": [
             [
-                "25162d774c052102"
+                "25162d774c052102",
+                "6411e739ab7c774d"
             ]
-        ]
-    },
-    {
-        "id": "1f628567c4df0138",
-        "type": "inject",
-        "z": "3470febb2cd6e952",
-        "g": "fa3a575e55726ee5",
-        "name": "Reset unique",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 800,
-        "y": 300,
-        "wires": [
-            [
-                "393fac7ed2755f3a"
-            ]
-        ]
-    },
-    {
-        "id": "393fac7ed2755f3a",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "fa3a575e55726ee5",
-        "name": "Reset function",
-        "func": "flow.set(\"uniqueLights\", []);\nreturn null;  // Nothing needs to go downstream\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1050,
-        "y": 300,
-        "wires": [
-            []
         ]
     },
     {
@@ -1002,8 +964,8 @@
         "y": 140,
         "wires": [
             [
-                "f0083147745c8366",
-                "48e3b18cb440da52"
+                "48e3b18cb440da52",
+                "3ea9ad63448926e3"
             ],
             [],
             [],
@@ -1017,7 +979,7 @@
         "type": "function",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "Switch status",
+        "name": "DC_DIMMER_STATUS_3 status",
         "func": "/***********************************************************\n * Unified HA Status Updater\n * Handles DC_DIMMER_STATUS, WATER_PUMP_STATUS, and AUTOFILL_STATUS\n * Routes to appropriate HA switch entities with different prefixes\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.dgn_name (String): DGN type for device type detection\n * - Status field varies by device type:\n *   - DC_DIMMER_STATUS: msg.payload.load_status\n *   - WATER_PUMP_STATUS: msg.payload.operating_state\n *   - AUTOFILL_STATUS: msg.payload.operating_status\n ***********************************************************/\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst dgnName = msg.payload.dgn_name;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof dgnName !== 'string') {\n    node.error(\"Input missing 'dgn_name' (string).\", msg);\n    return null;\n}\n\n// Device type mapping and status field extraction\nlet devicePrefix;\nlet statusValue;\nlet haStatus = \"OFF\"; // Default\n\nswitch (dgnName) {\n    case \"DC_DIMMER_STATUS_1\":\n        devicePrefix = \"switch1\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"DC_DIMMER_STATUS_2\":\n        devicePrefix = \"switch2\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"DC_DIMMER_STATUS_3\":\n        devicePrefix = \"switch\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"WATER_PUMP_STATUS\":\n        devicePrefix = \"pump\";\n        statusValue = msg.payload.operating_state;\n\n        if (typeof statusValue !== 'string') {\n            node.error(\"WATER_PUMP_STATUS missing 'operating_state' (string).\", msg);\n            return null;\n        }\n\n        // Water Pump: Check for active states\n        if (statusValue.includes(\"Running\") ||\n            statusValue.includes(\"On\") ||\n            statusValue.includes(\"Priming\") ||\n            statusValue === \"Self Test\") {\n            haStatus = \"ON\";\n        } else if (statusValue.includes(\"Off\") ||\n                   statusValue.includes(\"Stop\") ||\n                   statusValue === \"Standby\") {\n            haStatus = \"OFF\";\n        } else {\n            // Fault states default to OFF\n            haStatus = \"OFF\";\n        }\n        break;\n\n    case \"AUTOFILL_STATUS\":\n        devicePrefix = \"autofill\";\n        statusValue = msg.payload.operating_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(\"AUTOFILL_STATUS missing 'operating_status' (string).\", msg);\n            return null;\n        }\n\n        // Autofill: Check for active states (case insensitive)\n        const lowerStatus = statusValue.toLowerCase();\n        if (lowerStatus.includes(\"on\") || lowerStatus.includes(\"auto\")) {\n            haStatus = \"ON\";\n        } else if (lowerStatus.includes(\"off\")) {\n            haStatus = \"OFF\";\n        } else {\n            haStatus = \"OFF\";\n        }\n        break;\n\n    default:\n        node.error(`Unsupported dgn_name: ${dgnName}`, msg);\n        return null;\n}\n\n// Construct the MQTT topic with appropriate prefix\nconst stateTopic = `homeassistant/switch/${devicePrefix}_${instance}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\nmsg.payload = haStatus; // The payload is just the string \"ON\" or \"OFF\"\nmsg.retain = true; // Retain the status so HA shows the correct state after a restart\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -1025,11 +987,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 670,
         "y": 120,
         "wires": [
             [
-                "d3a13b531babee66"
+                "d3a13b531babee66",
+                "9c55b7521da89694"
             ]
         ]
     },
@@ -1050,7 +1013,8 @@
         "y": 180,
         "wires": [
             [
-                "d3a13b531babee66"
+                "d3a13b531babee66",
+                "f1bb8352c6190531"
             ]
         ]
     },
@@ -1067,11 +1031,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
+        "x": 550,
         "y": 560,
         "wires": [
             [
-                "000b002344662b42"
+                "000b002344662b42",
+                "4259c887eedd95ec",
+                "c769cda1070372b2"
             ]
         ]
     },
@@ -1088,8 +1054,7 @@
         "y": 560,
         "wires": [
             [
-                "a1beccb1a2803ca5",
-                "c769cda1070372b2"
+                "a1beccb1a2803ca5"
             ]
         ],
         "l": true
@@ -1147,7 +1112,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1050,
-        "y": 820,
+        "y": 940,
         "wires": [],
         "l": true
     },
@@ -1162,7 +1127,7 @@
             "7af7fb2178a714cf"
         ],
         "x": 200,
-        "y": 760,
+        "y": 880,
         "wires": [
             [
                 "aff9e41f09dd5407"
@@ -1185,7 +1150,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 880,
+        "y": 1000,
         "wires": [
             [
                 "5aa99ce2ed0b8c6d"
@@ -1216,7 +1181,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 790,
-        "y": 1000,
+        "y": 1120,
         "wires": [
             [
                 "c74247a21994b920"
@@ -1238,7 +1203,7 @@
         "finalize": "",
         "libs": [],
         "x": 1040,
-        "y": 1000,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -1273,7 +1238,7 @@
         "repair": false,
         "outputs": 3,
         "x": 410,
-        "y": 760,
+        "y": 880,
         "wires": [
             [
                 "71105ed6a3681957"
@@ -1303,7 +1268,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 650,
-        "y": 700,
+        "y": 820,
         "wires": []
     },
     {
@@ -1322,7 +1287,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 650,
-        "y": 760,
+        "y": 880,
         "wires": []
     },
     {
@@ -1340,7 +1305,7 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 820,
+        "y": 940,
         "wires": [
             [
                 "41a795b109c2b36f"
@@ -1362,7 +1327,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 880,
+        "y": 1000,
         "wires": [
             [
                 "41a795b109c2b36f"
@@ -1393,15 +1358,15 @@
         "z": "3470febb2cd6e952",
         "g": "852597de52df1703",
         "name": "Unique command",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommands = flow.get(\"uniqueCommands\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.tank_type);\n\n// Check if it's a new unique message\nif (!uniqueCommands.includes(newMsgStr)) {\n    uniqueCommands.push(newMsgStr);\n    flow.set(\"uniqueCommands\", uniqueCommands);\n\n    // Create a new msg with only payload\n    return { payload: msg.payload.tank_type };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommands = flow.get(\"uniqueCommands\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.instance);\n\n// Check if it's a new unique message\nif (!uniqueCommands.includes(newMsgStr)) {\n    uniqueCommands.push(newMsgStr);\n    flow.set(\"uniqueCommands\", uniqueCommands);\n\n    // Create a new msg with only payload\n    return { payload: msg.payload };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 480,
+        "x": 890,
+        "y": 460,
         "wires": [
             [
                 "57e45f522fc50a9b"
@@ -1430,8 +1395,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 950,
-        "y": 480,
+        "x": 930,
+        "y": 660,
         "wires": [
             [
                 "d137fb1314cb498b"
@@ -1451,8 +1416,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1200,
-        "y": 480,
+        "x": 1180,
+        "y": 660,
         "wires": [
             []
         ]
@@ -1471,8 +1436,159 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 740,
-        "y": 480,
+        "x": 1100,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "886a33cd8776ba5a",
+        "type": "inject",
+        "z": "3470febb2cd6e952",
+        "g": "32ec19602e928185",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 790,
+        "y": 300,
+        "wires": [
+            [
+                "6e2b753c50d28b2b"
+            ]
+        ]
+    },
+    {
+        "id": "6e2b753c50d28b2b",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "32ec19602e928185",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueInstances\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4259c887eedd95ec",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "852597de52df1703",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "3ea9ad63448926e3",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 6",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "9c55b7521da89694",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 8",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6411e739ab7c774d",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 9",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "f1bb8352c6190531",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 10",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "13597d3fd9a7351b",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 11",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 80,
         "wires": []
     },
     {
@@ -3145,7 +3261,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "Decode RVC CAN",
-        "func": "// RVC CAN Message Parser\n// Decodes a raw RVC CAN message string into a structured object.\n// Input: msg.payload (string) - e.g., \"19FEDA8C#3AFF00FDFF2100FF\"\n// Output: msg.payload (object) with decoded CAN message components\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\n\n// Retrieve the DGN map from global context\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized before this node receives messages.\");\n    return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format received: \" + originalMessage + \". Expected format: CANID#PAYLOAD\");\n    return null;\n}\n\nconst canId = parts[0];\nconst dataPayload = parts[1];\n\n// Validate CAN ID length (should be 8 hex characters for 29-bit CAN ID)\nif (canId.length < 3 || canId.length > 8) {\n    node.warn(\"Invalid CAN ID length: \" + canId + \". Expected 3-8 hex characters.\");\n    return null;\n}\n\n// Validate CAN ID is valid hexadecimal\nconst canIdNum = parseInt(canId, 16);\nif (isNaN(canIdNum)) {\n    node.warn(\"Invalid CAN ID format: \" + canId + \". Must be hexadecimal.\");\n    return null;\n}\n\n// Validate data payload is even length (hex bytes)\nif (dataPayload.length % 2 !== 0) {\n    node.warn(\"Invalid data payload length: \" + dataPayload + \". Must be even number of hex characters.\");\n    return null;\n}\n\n// Extract CAN ID fields using proper bitwise operations for 29-bit CAN ID\n// CAN ID structure: [Priority:3][Reserved:1][Data Page:1][PDU Format:8][PDU Specific:8][Source Address:8]\n\n// Extract Priority (top 3 bits of the 29-bit ID)\nconst priority = (canIdNum >> 26) & 0x7;\n\n// Extract Source Address (lowest 8 bits)\nconst sourceAddress = (canIdNum & 0xFF).toString(16).toUpperCase().padStart(2, '0');\n\n// Extract DGN (Parameter Group Number - 17 bits: bits 8-24)\nconst dgnRaw = (canIdNum >> 8) & 0x1FFFF;\nconst dgn = dgnRaw.toString(16).toUpperCase();\n\n// Fix 4-character DGNs: All should start with '1' except GPS_POSITION (FEF3)\n// This is the only 4-character DGN in the RV-C spec; all others are 5 characters\nlet lookupDgn = dgn;\nif (dgn.length === 4 && dgn !== 'FEF3') {\n    lookupDgn = '1' + dgn;  // Prepend missing '1' to correct parsing error\n}\n\n// Look up DGN name using corrected value\nlet dgnName = dgnMap.get(lookupDgn) || \"UNKNOWN\";\n\n// Manufacturer-specific DGN overrides\nif (dgn === \"EF64\") {\n    dgnName = \"AQUAHOT\";\n}\n\n// Create structured output\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    sourceAddress: sourceAddress,\n    priority: priority,\n    dataPayload: dataPayload,\n    // Additional fields for debugging/analysis\n    canIdHex: canId,\n    canIdDecimal: canIdNum,\n    dataLength: dataPayload.length / 2 // Number of data bytes\n};\n\nreturn msg;",
+        "func": "// RVC CAN Message Parser\n// Decodes a raw RVC CAN message string into a structured object.\n// Input: msg.payload (string) - e.g., \"19FEDA8C#3AFF00FDFF2100FF\"\n// Output: msg.payload (object) with decoded CAN message components\n\nconst originalMessage = msg.payload;\n\n// 1. Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\n\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// 2. Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\n\nconst canIdHex = parts[0];\nconst dataPayload = parts[1];\n\nconst canIdNum = parseInt(canIdHex, 16);\nif (isNaN(canIdNum) || canIdHex.length > 8) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// 3. Extract CAN ID fields and determine DGN\nconst priority = (canIdNum >> 26) & 0x7;\nconst sourceAddress = (canIdNum & 0xFF).toString(16).toUpperCase().padStart(2, '0');\n\n// Extract the 17-bit DGN value\nlet dgn = ((canIdNum >> 8) & 0x1FFFF).toString(16).toUpperCase();\n\n// Look up the DGN name\nlet dgnName = dgnMap.get(dgn);\n\n// *** NEW LOGIC STARTS HERE ***\n// If the DGN is UNKNOWN and 4 characters long, try prepending a '1'\n// This handles cases where a standard RV-C message might have an incorrect Data Page bit (e.g., \"FECA\" instead of \"1FECA\").\nif (!dgnName && dgn.length === 4) {\n    const alternateDgn = '1' + dgn;\n    const alternateName = dgnMap.get(alternateDgn);\n    \n    if (alternateName) {\n        // The alternate lookup was successful, so we'll use these corrected values.\n        dgn = alternateDgn;\n        dgnName = alternateName;\n    }\n}\n// *** NEW LOGIC ENDS HERE ***\n\n// If it's still not found after the second try, set it to UNKNOWN\nif (!dgnName) {\n    dgnName = \"UNKNOWN\";\n}\n\n\n// 4. Create structured output\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    sourceAddress: sourceAddress,\n    priority: priority,\n    dataPayload: dataPayload,\n    canIdHex: canIdHex,\n    canIdDecimal: canIdNum,\n    dataLength: dataPayload.length / 2\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3502,7 +3618,7 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
