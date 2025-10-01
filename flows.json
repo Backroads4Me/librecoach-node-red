@@ -79,7 +79,7 @@
         "id": "aea9d97e0563bd83",
         "type": "group",
         "z": "b3d80c5dc947ec88",
-        "name": "Home Assistant message routing",
+        "name": "Home Assistant message encoding",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -91,7 +91,7 @@
             "6aa079d768e1571c"
         ],
         "x": 94,
-        "y": 219,
+        "y": 99,
         "w": 1052,
         "h": 82
     },
@@ -223,7 +223,7 @@
         ],
         "x": 134,
         "y": 99,
-        "w": 1012,
+        "w": 992,
         "h": 308
     },
     {
@@ -274,7 +274,7 @@
         ],
         "x": 134,
         "y": 539,
-        "w": 1152,
+        "w": 1132,
         "h": 308
     },
     {
@@ -534,7 +534,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 260,
+        "y": 140,
         "wires": [
             [
                 "85de1b537d9b8b35"
@@ -551,7 +551,7 @@
             "64c5e5cfd4382453"
         ],
         "x": 170,
-        "y": 260,
+        "y": 140,
         "wires": [
             [
                 "a37da245aba53b96"
@@ -573,7 +573,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 260,
+        "y": 140,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -591,7 +591,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1010,
-        "y": 260,
+        "y": 140,
         "wires": [],
         "l": true
     },
@@ -678,7 +678,7 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Create Switch",
-        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch1\", \"switch2\", \"switch\", \"pump\", \"autofill\", \"indicator\", \"lock\", \"shade\"];\nif (commandableTypes.includes(deviceType)) {\n    if (instance < 1 || instance > 47) {\n        node.warn(`Instance ${instance} is outside the valid command range (1-47) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration\nlet prefix;\nlet displayPrefix;\nlet icon;\n\nswitch (deviceType) {\n    case \"switch1\":\n        prefix = \"switch1\";\n        displayPrefix = \"Switch1\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch2\":\n        prefix = \"switch2\";\n        displayPrefix = \"Switch2\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        break;\n    case \"indicator\":\n        prefix = \"indicator\";\n        displayPrefix = \"Indicator\";\n        icon = \"mdi:led-on\";\n        break;\n    case \"lock\":\n        prefix = \"lock\";\n        displayPrefix = \"Lock\";\n        icon = \"mdi:lock\";\n        break;\n    case \"shade\":\n        prefix = \"shade\";\n        displayPrefix = \"Shade\";\n        icon = \"mdi:window-shutter\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\nconst componentType = \"switch\";\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch1\", \"switch2\", \"switch\", \"pump\", \"autofill\", \"indicator\", \"lock\", \"shade\"];\nif (commandableTypes.includes(deviceType)) {\n    if (instance < 1 || instance > 47) {\n        //node.warn(`Instance ${instance} is outside the valid command range (1-47) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration\nlet prefix;\nlet displayPrefix;\nlet icon;\n\nswitch (deviceType) {\n    case \"switch1\":\n        prefix = \"switch1\";\n        displayPrefix = \"Switch1\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch2\":\n        prefix = \"switch2\";\n        displayPrefix = \"Switch2\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        break;\n    case \"indicator\":\n        prefix = \"indicator\";\n        displayPrefix = \"Indicator\";\n        icon = \"mdi:led-on\";\n        break;\n    case \"lock\":\n        prefix = \"lock\";\n        displayPrefix = \"Lock\";\n        icon = \"mdi:lock\";\n        break;\n    case \"shade\":\n        prefix = \"shade\";\n        displayPrefix = \"Shade\";\n        icon = \"mdi:window-shutter\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\nconst componentType = \"switch\";\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -940,6 +940,7 @@
         "id": "f5c9eda511035b05",
         "type": "switch",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "",
         "property": "payload.instance",
@@ -966,6 +967,7 @@
         "id": "89fcccb1a1ddabde",
         "type": "debug",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "debug 6",
         "active": false,
@@ -983,6 +985,7 @@
         "id": "e209357d4b24a638",
         "type": "inject",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "",
         "props": [
@@ -1014,6 +1017,7 @@
         "id": "683d87d7466008a2",
         "type": "link out",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "MQTT out: Retail FALSE",
         "mode": "link",
@@ -1029,6 +1033,7 @@
         "id": "7df11d39fbb7628c",
         "type": "debug",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "debug 9",
         "active": true,
@@ -1052,8 +1057,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1010,
-        "y": 220,
+        "x": 990,
+        "y": 140,
         "wires": [],
         "l": true
     },
@@ -1178,8 +1183,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1150,
-        "y": 660,
+        "x": 1130,
+        "y": 580,
         "wires": [],
         "l": true
     },
@@ -3693,7 +3698,7 @@
             },
             {
                 "p": "entityId",
-                "v": "black",
+                "v": "tank_other",
                 "vt": "str"
             }
         ],
