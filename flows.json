@@ -86,23 +86,14 @@
         },
         "nodes": [
             "a37da245aba53b96",
-            "4ed779099168c76a",
             "a3b957142479c075",
-            "df3821169e6c964b",
             "85de1b537d9b8b35",
-            "6aa079d768e1571c",
-            "e0c0bb35150de614",
-            "8115fa481c11dce8",
-            "b011e01946374aee",
-            "dca1043661f9a61d",
-            "e3c7fa28c1f3e11b",
-            "0796de17a5bbcbdd",
-            "aede20744de83038"
+            "6aa079d768e1571c"
         ],
         "x": 94,
-        "y": 79,
-        "w": 1032,
-        "h": 342
+        "y": 219,
+        "w": 1052,
+        "h": 82
     },
     {
         "id": "3c819b7900145438",
@@ -114,10 +105,8 @@
             "label": true
         },
         "nodes": [
-            "19e68bc19dddefb9",
             "cacf35b859af22a9",
             "e7ae35364ce60f3f",
-            "4fce77126a105df2",
             "f658418a7b9b4857",
             "b86f82e84d961549",
             "64c5e5cfd4382453",
@@ -131,12 +120,13 @@
             "4f33fad10d85b69d",
             "51910a93d572e95c",
             "982faa37c0038bf4",
-            "4d8ffc7896c8353f"
+            "74329f13cbbc528a",
+            "1ac6e0fa1cbb3852"
         ],
         "x": 74,
-        "y": 159,
+        "y": 179,
         "w": 1392,
-        "h": 422
+        "h": 442
     },
     {
         "id": "f09f79586501cb0b",
@@ -158,18 +148,18 @@
             "c6fb02a17f709e08",
             "2fcbc4d630144362",
             "a6594a9464d8fe4e",
-            "01b53bba61cb7227",
             "9dd6a98018824be9",
             "02bdfc59de71b5a5",
             "37b11a996fc2757e",
             "45414bacecada477",
             "5f6336442bfb9808",
-            "8f99241c9a1cfbde"
+            "8f99241c9a1cfbde",
+            "01b53bba61cb7227"
         ],
         "x": 74,
-        "y": 633,
-        "w": 1778,
-        "h": 454
+        "y": 679,
+        "w": 1438,
+        "h": 688
     },
     {
         "id": "0b18891888586798",
@@ -191,7 +181,7 @@
         ],
         "x": 84,
         "y": 279,
-        "w": 942,
+        "w": 1022,
         "h": 202
     },
     {
@@ -233,7 +223,7 @@
         ],
         "x": 134,
         "y": 99,
-        "w": 932,
+        "w": 1012,
         "h": 308
     },
     {
@@ -249,21 +239,19 @@
             "d3a13b531babee66",
             "7313d7c724d31538",
             "f0083147745c8366",
-            "828d354cf5dc7635",
             "48e3b18cb440da52",
             "25162d774c052102",
-            "7169dd5d96b420b3",
             "32ec19602e928185",
-            "3ea9ad63448926e3",
-            "9c55b7521da89694",
-            "6411e739ab7c774d",
-            "f1bb8352c6190531",
-            "13597d3fd9a7351b"
+            "f5c9eda511035b05",
+            "89fcccb1a1ddabde",
+            "e209357d4b24a638",
+            "683d87d7466008a2",
+            "7df11d39fbb7628c"
         ],
         "x": 54,
-        "y": 19,
-        "w": 1118,
-        "h": 348
+        "y": 99,
+        "w": 1492,
+        "h": 308
     },
     {
         "id": "5d1ecae7ac09586c",
@@ -286,7 +274,7 @@
         ],
         "x": 134,
         "y": 539,
-        "w": 1072,
+        "w": 1152,
         "h": 308
     },
     {
@@ -306,7 +294,7 @@
         ],
         "x": 94,
         "y": 79,
-        "w": 592,
+        "w": 672,
         "h": 162
     },
     {
@@ -328,35 +316,10 @@
             "57e45f522fc50a9b",
             "4259c887eedd95ec"
         ],
-        "x": 74,
-        "y": 419,
+        "x": 54,
+        "y": 459,
         "w": 1238,
         "h": 308
-    },
-    {
-        "id": "b83700dc9a87e735",
-        "type": "group",
-        "z": "3470febb2cd6e952",
-        "name": "Switches",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "41a795b109c2b36f",
-            "0595840d92bab186",
-            "98f19ef1b785bbe6",
-            "3967fb1502d909f9",
-            "aff9e41f09dd5407",
-            "71105ed6a3681957",
-            "6377c21abc9d08b3",
-            "318270a1f3eddf69",
-            "5aa99ce2ed0b8c6d"
-        ],
-        "x": 74,
-        "y": 779,
-        "w": 1098,
-        "h": 408
     },
     {
         "id": "8ef86a1c4b59d8e1",
@@ -378,30 +341,9 @@
             "89f2d386ecc80a69"
         ],
         "x": 74,
-        "y": 1159,
+        "y": 1439,
         "w": 1392,
         "h": 182
-    },
-    {
-        "id": "01b53bba61cb7227",
-        "type": "group",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "Reset unique CAN decode list",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "1e93f7b73c40091a",
-            "38606e245b70b98e",
-            "d0150fd6556514e6",
-            "8f7381d08bf2b8a8"
-        ],
-        "x": 1294,
-        "y": 919,
-        "w": 492,
-        "h": 142
     },
     {
         "id": "9dd6a98018824be9",
@@ -419,8 +361,8 @@
             "c781b519a9f9b156",
             "eea1641469efb23f"
         ],
-        "x": 1294,
-        "y": 659,
+        "x": 954,
+        "y": 1199,
         "w": 532,
         "h": 142
     },
@@ -463,25 +405,6 @@
         "h": 82
     },
     {
-        "id": "3967fb1502d909f9",
-        "type": "group",
-        "z": "3470febb2cd6e952",
-        "g": "b83700dc9a87e735",
-        "name": "Rest unique light list",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "2425876f634bf24f",
-            "c74247a21994b920"
-        ],
-        "x": 674,
-        "y": 1079,
-        "w": 472,
-        "h": 82
-    },
-    {
         "id": "a0885c7cb1a0a88f",
         "type": "group",
         "z": "3470febb2cd6e952",
@@ -495,8 +418,8 @@
             "0474640b44c5d2a9",
             "d137fb1314cb498b"
         ],
-        "x": 814,
-        "y": 619,
+        "x": 794,
+        "y": 659,
         "w": 472,
         "h": 82
     },
@@ -514,10 +437,31 @@
             "886a33cd8776ba5a",
             "6e2b753c50d28b2b"
         ],
-        "x": 674,
-        "y": 259,
+        "x": 654,
+        "y": 299,
         "w": 472,
         "h": 82
+    },
+    {
+        "id": "01b53bba61cb7227",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Reset unique CAN decode list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "1e93f7b73c40091a",
+            "38606e245b70b98e",
+            "d0150fd6556514e6",
+            "8f7381d08bf2b8a8"
+        ],
+        "x": 954,
+        "y": 1019,
+        "w": 532,
+        "h": 142
     },
     {
         "id": "481f3f804361a6fd",
@@ -593,72 +537,7 @@
         "y": 260,
         "wires": [
             [
-                "4ed779099168c76a",
-                "0796de17a5bbcbdd"
-            ]
-        ]
-    },
-    {
-        "id": "4ed779099168c76a",
-        "type": "switch",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "HA Entity Type",
-        "property": "entityType",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "switch",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "shade",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "lock",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "indicator",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "light",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 6,
-        "x": 580,
-        "y": 260,
-        "wires": [
-            [
                 "85de1b537d9b8b35"
-            ],
-            [
-                "e0c0bb35150de614"
-            ],
-            [
-                "8115fa481c11dce8"
-            ],
-            [
-                "dca1043661f9a61d"
-            ],
-            [
-                "b011e01946374aee"
-            ],
-            [
-                "e3c7fa28c1f3e11b"
             ]
         ]
     },
@@ -681,44 +560,23 @@
         "l": true
     },
     {
-        "id": "df3821169e6c964b",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "d": true,
-        "g": "aea9d97e0563bd83",
-        "name": "Decode HA MQTT",
-        "func": "const topicParts = msg.topic.split('/');\nif (topicParts.length !== 4) {\n    return null; // unexpected format\n}\n\nconst entityType = topicParts[1];\nconst entityId = topicParts[2];\nconst command = (typeof msg.payload === 'string') ? msg.payload.toUpperCase() : msg.payload;\n\nmsg.entityType = entityType;\nmsg.entityId = entityId;\nmsg.command = command;\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 610,
-        "y": 120,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "85de1b537d9b8b35",
         "type": "function",
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
-        "name": "switch",
-        "func": "// Encodes any HA switch command to an RV-C DC_DIMMER_COMMAND_2 \"Toggle\"\n// Outputs in standard CAN bus format for a 'can/send' topic.\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x05; // 0x05 = \"Toggle\" command type\nconst DESIRED_LEVEL = 200; // 200 = 100% brightness (toggle between 0% and 100%)\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or Null as fallback\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// 1. Parse the instance number from the topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\d+)$/);\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// 2. Build the 8-byte data payload to match the physical switch\nconst dataBytes = new Array(8).fill(0xFF);\n\ndataBytes[0] = instance;            // Instance Number\ndataBytes[1] = 0xFF;                // Group (Non-group command)\ndataBytes[2] = DESIRED_LEVEL;       // Desired Level = 200 = 100% (toggles between 0% and 100%)\ndataBytes[3] = RVC_COMMAND;         // Command = Toggle\ndataBytes[4] = 0xFF;                // Delay/Duration (Not Available)\ndataBytes[5] = 0x00;                // Interlock (No Interlock)\ndataBytes[6] = 0x00;                // Ramp Time (Not Available)\ndataBytes[7] = 0xFF;                // Padding\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// 3. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 4. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
+        "name": "Encode switch command",
+        "func": "// Universal Toggle Command Encoder\n// Outputs an RV-C DC_DIMMER_COMMAND_2 \"Toggle\" message.\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x05; // 0x05 = \"Toggle\" command\nconst DESIRED_LEVEL = 200; // 200 = 100% brightness\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// 1. Parse instance number from the HA command topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\d+)$/); // Corrected Regex\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// 2. Build the 8-byte data payload for the toggle command\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = instance;        // Instance Number\ndataBytes[1] = 0xFF;            // Group (Non-group command)\ndataBytes[2] = DESIRED_LEVEL;   // Desired Level\ndataBytes[3] = RVC_COMMAND;     // Command = Toggle\ndataBytes[4] = 0xFF;            // Not Used\ndataBytes[5] = 0x00;            // Interlock (No Interlock)\ndataBytes[6] = 0x00;            // Not Used\ndataBytes[7] = 0xFF;            // Not Used\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// 3. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 4. Construct the final output message\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
-        "y": 160,
+        "x": 670,
+        "y": 260,
         "wires": [
             [
-                "6aa079d768e1571c",
-                "aede20744de83038"
+                "6aa079d768e1571c"
             ]
         ]
     },
@@ -727,165 +585,28 @@
         "type": "link out",
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
-        "name": "RVC out",
+        "name": "MQTT out: Retain FALSE",
         "mode": "link",
         "links": [
-            "b7cc11c60eb56768"
+            "74329f13cbbc528a"
         ],
-        "x": 1040,
-        "y": 240,
+        "x": 1010,
+        "y": 260,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "e0c0bb35150de614",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "shade",
-        "func": "// Encodes any HA shade command to an RV-C WINDOW_SHADE_CONTROL_COMMAND\n// Outputs in standard CAN bus format for a 'can/send' topic.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or Null as fallback\nconst PRIORITY = 6;\nconst DGN = \"1FEDF\";\n\n// 1. Parse the instance number from the topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\\\d+)$/);\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// 2. Parse the HA command\nlet command;\nlet motorDuty = 50; // Default 50% motor duty\nlet duration = 0; // Momentary command by default\n\ntry {\n    const haCommand = typeof msg.payload === 'string' ? JSON.parse(msg.payload) : msg.payload;\n\n    // Handle different HA command types\n    if (haCommand.command) {\n        switch (haCommand.command.toLowerCase()) {\n            case 'open':\n                command = 0x81; // Forward (Open Shade)\n                duration = 255; // Continuous until stopped\n                break;\n            case 'close':\n                command = 0x41; // Reverse (Close Shade)\n                duration = 255; // Continuous until stopped\n                break;\n            case 'stop':\n                command = 0x04; // Stop\n                duration = 0; // Momentary\n                break;\n            default:\n                node.warn('Unknown shade command: ' + haCommand.command);\n                return null;\n        }\n    } else if (typeof haCommand === 'string') {\n        // Direct string command\n        switch (haCommand.toLowerCase()) {\n            case 'open':\n                command = 0x81;\n                duration = 255;\n                break;\n            case 'close':\n                command = 0x41;\n                duration = 255;\n                break;\n            case 'stop':\n                command = 0x04;\n                duration = 0;\n                break;\n            default:\n                node.warn('Unknown shade command string: ' + haCommand);\n                return null;\n        }\n    } else {\n        node.warn('Invalid command format');\n        return null;\n    }\n\n    // Handle position commands if present\n    if (haCommand.position !== undefined) {\n        const position = parseInt(haCommand.position);\n        if (position >= 0 && position <= 100) {\n            // Convert position to motor duty\n            motorDuty = Math.round((position / 100) * 100);\n            if (position > 50) {\n                command = 0x81; // Open\n            } else if (position < 50) {\n                command = 0x41; // Close\n            } else {\n                command = 0x04; // Stop at middle\n            }\n        }\n    }\n\n} catch (error) {\n    node.warn('Error parsing HA command: ' + error.message);\n    return null;\n}\n\n// 3. Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xFF);\n\ndataBytes[0] = instance;            // Instance Number\ndataBytes[1] = 0xFF;                // Group (Non-group command)\ndataBytes[2] = motorDuty;           // Motor Duty Cycle (0-100%)\ndataBytes[3] = command;             // Command\ndataBytes[4] = duration;            // Duration\ndataBytes[5] = 0x00;                // Interlock (No Interlock)\ndataBytes[6] = 0xFF;                // Byte 7 (Not Available)\ndataBytes[7] = 0xFF;                // Byte 8 (Not Available)\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// 4. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 5. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 200,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
-        "id": "8115fa481c11dce8",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "lock",
-        "func": "// Encodes any HA lock command to an RV-C LOCK_COMMAND\n// Outputs in standard CAN bus format for a 'can/send' topic.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or Null as fallback\nconst PRIORITY = 6;\nconst DGN = \"1FEE4\";\n\n// 1. Parse the instance number from the topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\\\d+)$/);\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// 2. Parse the HA command\nlet lockCommand;\nlet additionalCommand = 0; // No additional action by default\n\ntry {\n    const haCommand = typeof msg.payload === 'string' ? JSON.parse(msg.payload) : msg.payload;\n\n    // Handle different HA command types\n    if (haCommand.command) {\n        switch (haCommand.command.toLowerCase()) {\n            case 'lock':\n                lockCommand = 1; // Lock\n                break;\n            case 'unlock':\n                lockCommand = 0; // Unlock\n                break;\n            default:\n                node.warn('Unknown lock command: ' + haCommand.command);\n                return null;\n        }\n\n        // Handle additional door actions if specified\n        if (haCommand.door_action) {\n            switch (haCommand.door_action.toLowerCase()) {\n                case 'open':\n                    additionalCommand = 1; // Open/Extend Door\n                    break;\n                case 'close':\n                    additionalCommand = 2; // Close/Retract Door\n                    break;\n                default:\n                    additionalCommand = 0; // No additional action\n            }\n        }\n    } else if (typeof haCommand === 'string') {\n        // Direct string command\n        switch (haCommand.toLowerCase()) {\n            case 'lock':\n                lockCommand = 1;\n                break;\n            case 'unlock':\n                lockCommand = 0;\n                break;\n            default:\n                node.warn('Unknown lock command string: ' + haCommand);\n                return null;\n        }\n    } else {\n        node.warn('Invalid command format');\n        return null;\n    }\n\n} catch (error) {\n    node.warn('Error parsing HA command: ' + error.message);\n    return null;\n}\n\n// 3. Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xFF);\n\ndataBytes[0] = instance;            // Instance Number\ndataBytes[1] = 0xFF;                // Group (Non-group command)\ndataBytes[2] = lockCommand;         // Lock Command (0=unlock, 1=lock)\ndataBytes[3] = additionalCommand;   // Additional Command (door actions)\ndataBytes[4] = 0xFF;                // Byte 5 (Not Available)\ndataBytes[5] = 0xFF;                // Byte 6 (Not Available)\ndataBytes[6] = 0xFF;                // Byte 7 (Not Available)\ndataBytes[7] = 0xFF;                // Byte 8 (Not Available)\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// 4. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 5. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 240,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
-        "id": "dca1043661f9a61d",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "indicator",
-        "func": "// Encodes any HA light command to an RV-C GENERIC_INDICATOR_COMMAND\n// Outputs in standard CAN bus format for a 'can/send' topic.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or Null as fallback\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\n\n// 1. Parse the instance number from the topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\\\d+)$/);\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// 2. Parse the HA command\nlet brightness = 0;\nlet state = \"OFF\";\nlet indicatorFunction = 0; // Steady on/off\n\ntry {\n    const haCommand = typeof msg.payload === 'string' ? JSON.parse(msg.payload) : msg.payload;\n\n    // Handle state command\n    if (haCommand.state) {\n        state = haCommand.state.toUpperCase();\n    } else if (typeof haCommand === 'string') {\n        state = haCommand.toUpperCase();\n    }\n\n    // Handle brightness (0-255 from HA, convert to 0-100% for RV-C)\n    if (haCommand.brightness !== undefined) {\n        const haBrightness = parseInt(haCommand.brightness);\n        if (haBrightness >= 0 && haBrightness <= 255) {\n            brightness = Math.round((haBrightness / 255) * 100);\n            if (brightness > 0) {\n                state = \"ON\";\n            }\n        }\n    } else if (state === \"ON\" && brightness === 0) {\n        brightness = 100; // Default to full brightness if ON with no brightness specified\n    }\n\n    // Handle flashing/function if specified\n    if (haCommand.effect) {\n        switch (haCommand.effect.toLowerCase()) {\n            case 'flash':\n            case 'strobe':\n                indicatorFunction = 1; // Slow flash\n                break;\n            case 'fast_flash':\n                indicatorFunction = 2; // Fast flash\n                break;\n            default:\n                indicatorFunction = 0; // Steady\n        }\n    }\n\n} catch (error) {\n    node.warn('Error parsing HA command: ' + error.message);\n    return null;\n}\n\n// Convert final state and brightness\nif (state === \"OFF\") {\n    brightness = 0;\n}\n\n// 3. Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xFF);\n\ndataBytes[0] = instance;            // Instance Number\ndataBytes[1] = 0xFF;                // Group (Non-group command)\ndataBytes[2] = brightness;          // Brightness Level (0-100%)\ndataBytes[3] = indicatorFunction;   // Indicator Function (0=steady, 1=slow flash, 2=fast flash)\ndataBytes[4] = 0xFF;                // On Time (Not Available)\ndataBytes[5] = 0xFF;                // Off Time (Not Available)\ndataBytes[6] = 0xFF;                // Byte 7 (Not Available)\ndataBytes[7] = 0xFF;                // Byte 8 (Not Available)\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// 4. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 5. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 800,
-        "y": 280,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
-        "id": "b011e01946374aee",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "light",
-        "func": "// Encodes an HA switch command to an RV-C DC_DIMMER_COMMAND_2\n// Outputs in standard CAN bus format for a 'can/send' topic.\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x00; // 0x00 is \"Set Level\"\nconst LEVEL_ON = 200;\nconst LEVEL_OFF = 0;\nconst NON_GROUP = 0xFF;\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or Null as fallback\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// Parse the instance number from the topic\nconst topicParts = msg.topic.split('/');\nconst entityId = topicParts[2] || \"\";\nconst match = entityId.match(/_(\\d+)$/);\n\nif (!match) {\n    node.warn(`Could not parse instance number from topic: ${msg.topic}`);\n    return null;\n}\n\nconst instance = parseInt(match[1], 10);\nif (isNaN(instance) || instance < 1 || instance > 250) {\n    node.warn(`Parsed instance number \"${instance}\" is invalid.`);\n    return null;\n}\n\n// Determine the desired level from the payload\nlet desiredLevel;\nconst state = msg.payload.toUpperCase();\n\nif (state === \"ON\") {\n    desiredLevel = LEVEL_ON;\n} else if (state === \"OFF\") {\n    desiredLevel = LEVEL_OFF;\n} else {\n    node.warn(`Invalid payload: \"${msg.payload}\". Expected \"ON\" or \"OFF\".`);\n    return null;\n}\n\n// Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = instance;\ndataBytes[1] = NON_GROUP;\ndataBytes[2] = desiredLevel;\ndataBytes[3] = RVC_COMMAND;\ndataBytes[4] = 0;\ndataBytes[5] = 0;\ndataBytes[6] = 0;\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// Construct the CAN ID\n// CAN ID format is: Priority (3 bits) + DGN (18 bits) + Source Address (8 bits)\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 320,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
-        "id": "e3c7fa28c1f3e11b",
-        "type": "debug",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "Unknown HA message",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 840,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "0796de17a5bbcbdd",
-        "type": "debug",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "aede20744de83038",
-        "type": "debug",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 890,
-        "y": 120,
-        "wires": []
     },
     {
         "id": "d3a13b531babee66",
         "type": "link out",
         "z": "3470febb2cd6e952",
-        "d": true,
         "g": "e2dc4d711cc9dc94",
-        "name": "MQTT Out",
+        "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1050,
-        "y": 120,
+        "x": 1010,
+        "y": 140,
         "wires": [],
         "l": true
     },
@@ -902,9 +623,9 @@
         "y": 140,
         "wires": [
             [
-                "828d354cf5dc7635",
                 "f0083147745c8366",
-                "13597d3fd9a7351b"
+                "48e3b18cb440da52",
+                "f5c9eda511035b05"
             ]
         ],
         "l": true
@@ -913,10 +634,9 @@
         "id": "f0083147745c8366",
         "type": "function",
         "z": "3470febb2cd6e952",
-        "d": true,
         "g": "e2dc4d711cc9dc94",
         "name": "Unique switch",
-        "func": "/***********************************************************\n * Unified Unique Instance Tracker\n * Tracks unique device instances across multiple device types\n * Handles DC_DIMMER_STATUS, WATER_PUMP_STATUS, and AUTOFILL_STATUS\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.dgn_name (String): DGN type for device type detection\n *\n * Output: Creates new message with instance and device_type if unique,\n *         returns null if duplicate\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst dgnName = msg.payload.dgn_name;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof dgnName !== 'string') {\n    node.error(\"Input missing 'dgn_name' (string).\", msg);\n    return null;\n}\n\n// Device type mapping\nlet deviceType;\nlet contextKey;\n\nswitch (dgnName) {\n    case \"DC_DIMMER_STATUS_1\":\n        deviceType = \"switch1\";\n        contextKey = \"uniqueSwitch1\";\n        break;\n    case \"DC_DIMMER_STATUS_2\":\n        deviceType = \"switch2\";\n        contextKey = \"uniqueSwitch2\";\n        break;\n    case \"DC_DIMMER_STATUS_3\":\n        deviceType = \"switch\";\n        contextKey = \"uniqueSwitch\";\n        break;\n    case \"WATER_PUMP_STATUS\":\n        deviceType = \"pump\";\n        contextKey = \"uniquePumps\";\n        break;\n    case \"AUTOFILL_STATUS\":\n        deviceType = \"autofill\";\n        contextKey = \"uniqueAutofills\";\n        break;\n    default:\n        node.error(`Unsupported dgn_name: ${dgnName}`, msg);\n        return null;\n}\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueInstances = flow.get(contextKey) || [];\n\n// Create unique identifier string\nconst instanceStr = JSON.stringify(instance);\n\n// Check if it's a new unique instance for this device type\nif (!uniqueInstances.includes(instanceStr)) {\n    uniqueInstances.push(instanceStr);\n    flow.set(contextKey, uniqueInstances);\n\n    // Create a new message with instance and device type\n    return {\n        payload: {\n            instance: instance,\n            device_type: deviceType\n        }\n    };\n}\n\n// Return null if duplicate (prevents duplicate entity creation)\nreturn null;\n",
+        "func": "/***********************************************************\n * Unified Unique Instance Tracker (Centralized)\n * Tracks unique device instances in a single, resettable list.\n *\n * Expects input msg.payload with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.dgn_name (String): DGN type for device type detection\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst dgnName = msg.payload.dgn_name;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\nif (typeof dgnName !== 'string') {\n    node.error(\"Input missing 'dgn_name' (string).\", msg);\n    return null;\n}\n\n// Map DGN to a simple device type\nlet deviceType;\nswitch (dgnName) {\n    case \"DC_DIMMER_STATUS_1\":\n        deviceType = \"switch1\";\n        break;\n    case \"DC_DIMMER_STATUS_2\":\n        deviceType = \"switch2\";\n        break;\n    case \"DC_DIMMER_STATUS_3\":\n        deviceType = \"switch\";\n        break;\n    case \"WATER_PUMP_STATUS\":\n        deviceType = \"pump\";\n        break;\n    case \"AUTOFILL_STATUS\":\n        deviceType = \"autofill\";\n        break;\n    default:\n        // Stop if the device type is not one we want to create\n        return null;\n}\n\nconst uniqueId = `${deviceType}_${instance}`;\n\nconst contextKey = \"uniqueInstances\";\nlet uniqueInstances = flow.get(contextKey) || [];\n\n// Check if this specific device ID has been seen before\nif (!uniqueInstances.includes(uniqueId)) {\n    // If it's new, add it to the list and save it\n    uniqueInstances.push(uniqueId);\n    flow.set(contextKey, uniqueInstances);\n\n    // Send the message downstream to create the HA entity\n    return {\n        payload: {\n            instance: instance,\n            device_type: deviceType\n        }\n    };\n}\n\n// If it's a duplicate, stop the flow\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -927,53 +647,7 @@
         "y": 220,
         "wires": [
             [
-                "25162d774c052102",
-                "6411e739ab7c774d"
-            ]
-        ]
-    },
-    {
-        "id": "828d354cf5dc7635",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "",
-        "property": "payload.dgnName",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "DC_DIMMER_STATUS_3",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "WATER_PUMP_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "AUTOFILL_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 4,
-        "x": 410,
-        "y": 140,
-        "wires": [
-            [
-                "48e3b18cb440da52",
-                "3ea9ad63448926e3"
-            ],
-            [],
-            [],
-            [
-                "7169dd5d96b420b3"
+                "25162d774c052102"
             ]
         ]
     },
@@ -982,7 +656,7 @@
         "type": "function",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "DC_DIMMER_STATUS_3 status",
+        "name": "Unified STATUS",
         "func": "/***********************************************************\n * Unified HA Status Updater\n * Handles DC_DIMMER_STATUS, WATER_PUMP_STATUS, and AUTOFILL_STATUS\n * Routes to appropriate HA switch entities with different prefixes\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.dgn_name (String): DGN type for device type detection\n * - Status field varies by device type:\n *   - DC_DIMMER_STATUS: msg.payload.load_status\n *   - WATER_PUMP_STATUS: msg.payload.operating_state\n *   - AUTOFILL_STATUS: msg.payload.operating_status\n ***********************************************************/\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst dgnName = msg.payload.dgn_name;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof dgnName !== 'string') {\n    node.error(\"Input missing 'dgn_name' (string).\", msg);\n    return null;\n}\n\n// Device type mapping and status field extraction\nlet devicePrefix;\nlet statusValue;\nlet haStatus = \"OFF\"; // Default\n\nswitch (dgnName) {\n    case \"DC_DIMMER_STATUS_1\":\n        devicePrefix = \"switch1\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"DC_DIMMER_STATUS_2\":\n        devicePrefix = \"switch2\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"DC_DIMMER_STATUS_3\":\n        devicePrefix = \"switch\";\n        statusValue = msg.payload.load_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(`${dgnName} missing 'load_status' (string).`, msg);\n            return null;\n        }\n\n        // DC Dimmer: Check if load_status contains \"Off\"\n        haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n        break;\n\n    case \"WATER_PUMP_STATUS\":\n        devicePrefix = \"pump\";\n        statusValue = msg.payload.operating_state;\n\n        if (typeof statusValue !== 'string') {\n            node.error(\"WATER_PUMP_STATUS missing 'operating_state' (string).\", msg);\n            return null;\n        }\n\n        // Water Pump: Check for active states\n        if (statusValue.includes(\"Running\") ||\n            statusValue.includes(\"On\") ||\n            statusValue.includes(\"Priming\") ||\n            statusValue === \"Self Test\") {\n            haStatus = \"ON\";\n        } else if (statusValue.includes(\"Off\") ||\n                   statusValue.includes(\"Stop\") ||\n                   statusValue === \"Standby\") {\n            haStatus = \"OFF\";\n        } else {\n            // Fault states default to OFF\n            haStatus = \"OFF\";\n        }\n        break;\n\n    case \"AUTOFILL_STATUS\":\n        devicePrefix = \"autofill\";\n        statusValue = msg.payload.operating_status;\n\n        if (typeof statusValue !== 'string') {\n            node.error(\"AUTOFILL_STATUS missing 'operating_status' (string).\", msg);\n            return null;\n        }\n\n        // Autofill: Check for active states (case insensitive)\n        const lowerStatus = statusValue.toLowerCase();\n        if (lowerStatus.includes(\"on\") || lowerStatus.includes(\"auto\")) {\n            haStatus = \"ON\";\n        } else if (lowerStatus.includes(\"off\")) {\n            haStatus = \"OFF\";\n        } else {\n            haStatus = \"OFF\";\n        }\n        break;\n\n    default:\n        node.error(`Unsupported dgn_name: ${dgnName}`, msg);\n        return null;\n}\n\n// Construct the MQTT topic with appropriate prefix\nconst stateTopic = `homeassistant/switch/${devicePrefix}_${instance}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\nmsg.payload = haStatus; // The payload is just the string \"ON\" or \"OFF\"\nmsg.retain = true; // Retain the status so HA shows the correct state after a restart\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -990,12 +664,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
-        "y": 120,
+        "x": 440,
+        "y": 140,
         "wires": [
             [
-                "d3a13b531babee66",
-                "9c55b7521da89694"
+                "d3a13b531babee66"
             ]
         ]
     },
@@ -1005,19 +678,18 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Create Switch",
-        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\n// Device type configuration\nlet prefix;\nlet displayPrefix;\nlet icon;\n\nswitch (deviceType) {\n    case \"switch1\":\n        prefix = \"switch1\";\n        displayPrefix = \"Switch1\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch2\":\n        prefix = \"switch2\";\n        displayPrefix = \"Switch2\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\nconst componentType = \"switch\";\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch1\", \"switch2\", \"switch\", \"pump\", \"autofill\", \"indicator\", \"lock\", \"shade\"];\nif (commandableTypes.includes(deviceType)) {\n    if (instance < 1 || instance > 47) {\n        node.warn(`Instance ${instance} is outside the valid command range (1-47) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration\nlet prefix;\nlet displayPrefix;\nlet icon;\n\nswitch (deviceType) {\n    case \"switch1\":\n        prefix = \"switch1\";\n        displayPrefix = \"Switch1\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch2\":\n        prefix = \"switch2\";\n        displayPrefix = \"Switch2\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        break;\n    case \"indicator\":\n        prefix = \"indicator\";\n        displayPrefix = \"Indicator\";\n        icon = \"mdi:led-on\";\n        break;\n    case \"lock\":\n        prefix = \"lock\";\n        displayPrefix = \"Lock\";\n        icon = \"mdi:lock\";\n        break;\n    case \"shade\":\n        prefix = \"shade\";\n        displayPrefix = \"Shade\";\n        icon = \"mdi:window-shutter\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\nconst componentType = \"switch\";\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 180,
+        "x": 720,
+        "y": 220,
         "wires": [
             [
-                "d3a13b531babee66",
-                "f1bb8352c6190531"
+                "d3a13b531babee66"
             ]
         ]
     },
@@ -1025,6 +697,7 @@
         "id": "a1beccb1a2803ca5",
         "type": "function",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "852597de52df1703",
         "name": "Decode DC_DIMMER_COMMAND_2",
         "func": "// === Main Decode Function (Updated for July 31, 2025 Spec) ===\nfunction decodeDcDimmerCommand2Message(dgn, data) {\n    const result = {};\n    if (data.length < 7) return { error: \"Invalid data length for DGN 1FEDBh\" };\n\n    // Byte 0: Instance\n    result.instance = data[0]; // [cite: 269]\n\n    // Byte 1: Group (bitmap)\n    const groupDetails = getGroupDetails(data[1]); // [cite: 269]\n    result.group_description = groupDetails.description;\n    \n    // Byte 2: Desired Level\n    result.desired_level = decodeDesiredLevel(data[2]); // [cite: 269]\n    \n    // Byte 3: Command\n    result.command = decodeCommand(data[3]); // [cite: 269]\n    \n    // --- UPDATED SECTION ---\n    \n    // Byte 4: Delay/Duration\n    result.delay_duration = decodeDelayDuration(data[4]); // \n    \n    // Byte 5: Interlock\n    const interlockValue = decodeBits(data[5], 0, 1); // \n    const interlocks = { 0: \"No Interlock active\", 1: \"Interlock A\", 2: \"Interlock B\" };\n    result.interlock = interlocks[interlockValue] || \"Invalid\";\n\n    // Byte 6: Ramp Time\n    result.ramp_time = decodeRampTime(data[6]); // \n    \n    // --- END UPDATED SECTION ---\n    \n    return result;\n}\n\n// === Full Node-RED Function (with all helpers) ===\n\n// Helper Functions (assumed to be correct from previous versions)\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\nfunction decodeRampTime(value) {\n    if (value === 0) return 0;\n    if (value >= 1 && value <= 250) return parseFloat((value * 0.1).toFixed(1));\n    if (value === 255) return \"Not Available\";\n    return \"Invalid\";\n}\nfunction decodeDesiredLevel(value) {\n    if (value >= 0 && value <= 200) return parseFloat((value * 0.5).toFixed(1));\n    if (value >= 230 && value <= 249) return `Scene ${value - 229}`;\n    if (value === 250) return \"Dimmed Memory\";\n    if (value === 251) return \"Master Memory\";\n    if (value === 255) return \"Not Available\";\n    return \"Invalid\";\n}\nfunction getGroupDetails(value) {\n    if (value === 0xFF) return { type: 'special', description: 'No data' };\n    if (value & 0x80) return { type: 'non-group', description: 'Non-group or Node Group command' };\n    if (value === 0x00) return { type: 'special', description: 'Member of all groups' };\n    const groups = []; const groupBits = value & 0x7F;\n    for (let bit = 0; bit < 7; bit++) { if (!(groupBits & (1 << bit))) { groups.push(bit + 1); } }\n    return { type: 'standard', groups: groups, description: groups.length > 0 ? `Groups: ${groups.join(', ')}` : \"No group membership\"};\n}\nfunction decodeDelayDuration(value) {\n    if (value >= 0 && value <= 240) return `${value} seconds`;\n    if (value >= 241 && value <= 250) return `${value - 236} minutes`;\n    if (value === 255) return \"Continuous\";\n    return \"Invalid\";\n}\nfunction decodeCommand(value) {\n    const commands = { 0: \"Set Level (Delay)\", 1: \"On (Duration)\", 2: \"On (Delay)\", 3: \"Off (Delay)\", 4: \"Stop\", 5: \"Toggle\", 6: \"Memory Off\", 7: \"Save Scene\", 11: \"Ramp Brightness\", 12: \"Ramp Toggle\", 13: \"Ramp Up\", 14: \"Ramp Down\", 15: \"Ramp Up/Down\", 16: \"Ramp Up/Down Toggle\", 21: \"Lock\", 22: \"Unlock\", 31: \"Flash\", 32: \"Flash Momentary\" };\n    return commands[value] || `unknown command: ${value}`;\n}\n\n// Main Decode Function (Updated for July 31, 2025 Spec)\nfunction decodeDcDimmerCommand2Message(dgn, data) {\n    const result = {};\n    if (data.length < 7) return { error: \"Invalid data length for DGN 1FEDBh\" };\n    result.instance = data[0]; // [cite: 269]\n    const groupDetails = getGroupDetails(data[1]); // [cite: 269]\n    result.group_description = groupDetails.description;\n    result.desired_level = decodeDesiredLevel(data[2]); // [cite: 269]\n    result.command = decodeCommand(data[3]); // [cite: 269]\n    result.delay_duration = decodeDelayDuration(data[4]); // \n    const interlockValue = decodeBits(data[5], 0, 1); // \n    const interlocks = { 0: \"No Interlock active\", 1: \"Interlock A\", 2: \"Interlock B\" };\n    result.interlock = interlocks[interlockValue] || \"Invalid\";\n    result.ramp_time = decodeRampTime(data[6]); // \n    return result;\n}\n\n// === Main Logic ===\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    dataBytes.push(parseInt(dataPayload.substring(i, i + 2), 16));\n}\n\nlet decodedData;\nif (dgn === '1FEDB') {\n    decodedData = decodeDcDimmerCommand2Message(dgn, dataBytes);\n} else {\n    decodedData = { error: `Decoder for DGN ${dgn} is not implemented.` };\n}\n\nmsg.payload = { ...incomingPayload, ...decodedData };\ndelete msg.payload.dataPayload;\nreturn msg;",
@@ -1034,8 +707,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 560,
+        "x": 530,
+        "y": 600,
         "wires": [
             [
                 "000b002344662b42",
@@ -1048,13 +721,14 @@
         "id": "44947b512cb27b5b",
         "type": "link in",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "852597de52df1703",
         "name": "DC_DIMMER_COMMAND_2",
         "links": [
             "37b11a996fc2757e"
         ],
-        "x": 220,
-        "y": 560,
+        "x": 200,
+        "y": 600,
         "wires": [
             [
                 "a1beccb1a2803ca5"
@@ -1077,8 +751,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1060,
-        "y": 560,
+        "x": 1040,
+        "y": 600,
         "wires": []
     },
     {
@@ -1095,8 +769,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "payload.instance",
-        "x": 830,
-        "y": 560,
+        "x": 810,
+        "y": 600,
         "wires": [
             [
                 "25e6f74b216427e5"
@@ -1104,261 +778,10 @@
         ]
     },
     {
-        "id": "41a795b109c2b36f",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "MQTT Out",
-        "mode": "link",
-        "links": [
-            "f658418a7b9b4857"
-        ],
-        "x": 1050,
-        "y": 940,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "0595840d92bab186",
-        "type": "link in",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "DC_DIMMER_STATUS",
-        "links": [
-            "7af7fb2178a714cf"
-        ],
-        "x": 200,
-        "y": 880,
-        "wires": [
-            [
-                "aff9e41f09dd5407"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "98f19ef1b785bbe6",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "Unique switch",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueLights = flow.get(\"uniqueLights\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.instance);\n\n// Check if it's a new unique message\nif (!uniqueLights.includes(newMsgStr)) {\n    uniqueLights.push(newMsgStr);\n    flow.set(\"uniqueLights\", uniqueLights);\n\n    // Create a new msg with only payload\n    return { payload: msg.payload.instance };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 1000,
-        "wires": [
-            [
-                "5aa99ce2ed0b8c6d"
-            ]
-        ]
-    },
-    {
-        "id": "2425876f634bf24f",
-        "type": "inject",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "3967fb1502d909f9",
-        "name": "Reset unique",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 790,
-        "y": 1120,
-        "wires": [
-            [
-                "c74247a21994b920"
-            ]
-        ]
-    },
-    {
-        "id": "c74247a21994b920",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "3967fb1502d909f9",
-        "name": "Reset function",
-        "func": "flow.set(\"uniqueLights\", []);\nreturn null;  // Nothing needs to go downstream\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1040,
-        "y": 1120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "aff9e41f09dd5407",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "",
-        "property": "payload.dgnName",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "DC_DIMMER_STATUS_1",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "DC_DIMMER_STATUS_2",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "DC_DIMMER_STATUS_3",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 410,
-        "y": 880,
-        "wires": [
-            [
-                "71105ed6a3681957"
-            ],
-            [
-                "6377c21abc9d08b3"
-            ],
-            [
-                "98f19ef1b785bbe6",
-                "318270a1f3eddf69"
-            ]
-        ]
-    },
-    {
-        "id": "71105ed6a3681957",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "DC_DIMMER_STATUS_1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 650,
-        "y": 820,
-        "wires": []
-    },
-    {
-        "id": "6377c21abc9d08b3",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "DC_DIMMER_STATUS_2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 650,
-        "y": 880,
-        "wires": []
-    },
-    {
-        "id": "318270a1f3eddf69",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "Switch status",
-        "func": "/***********************************************************\n * HA Switch Status Updater\n * * Takes a JSON payload as input and sends an ON/OFF status\n * update to the correct Home Assistant MQTT state topic.\n * * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The ID of the light.\n * - msg.payload.load_status (String): Status text, e.g., \"Off (status=0)\".\n ***********************************************************/\n\n\nif (typeof msg.payload.instance !== 'number' || typeof msg.payload.load_status !== 'string') {\n    node.error(\"Input missing 'instance' (number) or 'load_status' (string).\", msg);\n    return null; // Stop the flow\n}\n\nconst instance = msg.payload.instance;\n\nconst haStatus = msg.payload.load_status.includes(\"Off\") ? \"OFF\" : \"ON\";\n\nconst stateTopic = `homeassistant/switch/switch_${instance}/state`;\n\nmsg.topic = stateTopic;\nmsg.payload = haStatus; // The payload is just the string \"ON\" or \"OFF\"\nmsg.retain = true;    // Retain the status so HA shows the correct state after a restart\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 610,
-        "y": 940,
-        "wires": [
-            [
-                "41a795b109c2b36f"
-            ]
-        ]
-    },
-    {
-        "id": "5aa99ce2ed0b8c6d",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "b83700dc9a87e735",
-        "name": "Create Switch",
-        "func": "/***********************************************************\n * Simple Switch MQTT Discovery for Home Assistant\n * * Creates a switch entity based on a numeric input.\n * Expects msg.payload to be a number (e.g., 101).\n * * Example Input: msg.payload = 101\n * Resulting Entity ID: switch_101\n ***********************************************************/\n\n\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number.\", msg);\n    return null; // Stop the flow if the input is not a number\n}\n\n\nconst entityId = `switch_${msg.payload}`;\nconst displayName = `Switch ${msg.payload}`;\nconst componentType = \"switch\";\n\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: \"mdi:light-recessed\",\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n    \n};\n\n// 5. Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 820,
-        "y": 1000,
-        "wires": [
-            [
-                "41a795b109c2b36f"
-            ]
-        ]
-    },
-    {
-        "id": "7169dd5d96b420b3",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "Unexpected switch status",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 290,
-        "y": 280,
-        "wires": []
-    },
-    {
         "id": "c769cda1070372b2",
         "type": "function",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "852597de52df1703",
         "name": "Unique command",
         "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommands = flow.get(\"uniqueCommands\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.instance);\n\n// Check if it's a new unique message\nif (!uniqueCommands.includes(newMsgStr)) {\n    uniqueCommands.push(newMsgStr);\n    flow.set(\"uniqueCommands\", uniqueCommands);\n\n    // Create a new msg with only payload\n    return { payload: msg.payload };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
@@ -1368,8 +791,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 460,
+        "x": 870,
+        "y": 500,
         "wires": [
             [
                 "57e45f522fc50a9b"
@@ -1380,6 +803,7 @@
         "id": "0474640b44c5d2a9",
         "type": "inject",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "a0885c7cb1a0a88f",
         "name": "Reset unique",
         "props": [
@@ -1398,8 +822,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 930,
-        "y": 660,
+        "x": 910,
+        "y": 700,
         "wires": [
             [
                 "d137fb1314cb498b"
@@ -1410,6 +834,7 @@
         "id": "d137fb1314cb498b",
         "type": "function",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "a0885c7cb1a0a88f",
         "name": "Reset function",
         "func": "flow.set(\"uniqueCommands\", []);\nreturn null;  // Nothing needs to go downstream\n",
@@ -1419,8 +844,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
-        "y": 660,
+        "x": 1160,
+        "y": 700,
         "wires": [
             []
         ]
@@ -1429,6 +854,7 @@
         "id": "57e45f522fc50a9b",
         "type": "debug",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "852597de52df1703",
         "name": "command",
         "active": true,
@@ -1439,8 +865,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1100,
-        "y": 460,
+        "x": 1080,
+        "y": 500,
         "wires": []
     },
     {
@@ -1465,8 +891,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 790,
-        "y": 300,
+        "x": 770,
+        "y": 340,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1486,8 +912,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
-        "y": 300,
+        "x": 1020,
+        "y": 340,
         "wires": [
             []
         ]
@@ -1496,6 +922,7 @@
         "id": "4259c887eedd95ec",
         "type": "debug",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "852597de52df1703",
         "name": "debug 7",
         "active": false,
@@ -1505,12 +932,38 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 880,
-        "y": 520,
+        "x": 860,
+        "y": 560,
         "wires": []
     },
     {
-        "id": "3ea9ad63448926e3",
+        "id": "f5c9eda511035b05",
+        "type": "switch",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "",
+        "property": "payload.instance",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "89fcccb1a1ddabde"
+            ]
+        ]
+    },
+    {
+        "id": "89fcccb1a1ddabde",
         "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
@@ -1522,76 +975,71 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 550,
-        "y": 60,
+        "x": 530,
+        "y": 320,
         "wires": []
     },
     {
-        "id": "9c55b7521da89694",
-        "type": "debug",
+        "id": "e209357d4b24a638",
+        "type": "inject",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "debug 8",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 870,
-        "y": 80,
-        "wires": []
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDB8C#01FFC801FF0000FF",
+        "payloadType": "str",
+        "x": 1210,
+        "y": 240,
+        "wires": [
+            [
+                "683d87d7466008a2",
+                "7df11d39fbb7628c"
+            ]
+        ]
     },
     {
-        "id": "6411e739ab7c774d",
+        "id": "683d87d7466008a2",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "MQTT out: Retail FALSE",
+        "mode": "link",
+        "links": [
+            "74329f13cbbc528a"
+        ],
+        "x": 1410,
+        "y": 280,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "7df11d39fbb7628c",
         "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "debug 9",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 790,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "f1bb8352c6190531",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "debug 10",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1030,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "13597d3fd9a7351b",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "debug 11",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 310,
-        "y": 80,
+        "x": 1380,
+        "y": 200,
         "wires": []
     },
     {
@@ -1599,12 +1047,12 @@
         "type": "link out",
         "z": "7f95345534f00358",
         "g": "067069104a82b459",
-        "name": "MQTT Out",
+        "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 970,
+        "x": 1010,
         "y": 220,
         "wires": [],
         "l": true
@@ -1725,12 +1173,12 @@
         "z": "7f95345534f00358",
         "d": true,
         "g": "5d1ecae7ac09586c",
-        "name": "MQTT Out",
+        "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1110,
+        "x": 1150,
         "y": 660,
         "wires": [],
         "l": true
@@ -2146,7 +1594,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode AUTOFILL_STATUS",
-        "func": "// AUTOFILL_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes AUTOFILL_STATUS messages per RV-C specification\n// Handles automatic tank filling system status and control\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === AUTOFILL_STATUS Specific Decoders ===\n\nfunction decodeOperatingStatus(value) {\n    // Operating status from bits 0-1 of byte 0\n    const states = {\n        0: \"AutoFill off\",\n        1: \"AutoFill on\"\n    };\n    return states[value] || `Unknown Status ${value}`;\n}\n\nfunction decodeValveStatus(value) {\n    // Valve status from bits 2-3 of byte 0\n    const states = {\n        0: \"Diverter valve closed\",\n        1: \"Valve open\"\n    };\n    return states[value] || `Unknown Valve Status ${value}`;\n}\n\nfunction decodeLastOperation(value) {\n    // Last operation from bits 4-7 of byte 0\n    const operations = {\n        0: \"Still running\",\n        1: \"Successful fill\",\n        2: \"Fill timed out\",\n        3: \"Fill manually aborted\",\n        4: \"Fill aborted due to error\"\n    };\n    return operations[value] || `Unknown Operation ${value}`;\n}\n\n// Note: AUTOFILL_STATUS only uses bit fields in byte 0\n// All other decoder functions were removed as they're not applicable to this DGN\n\n\n// === Main Decode Function ===\n\nfunction decodeAutofillMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"AUTOFILL_STATUS\"\n    };\n\n    // Decode byte 0 based on RV-C spec\n    if (data.length > 0) {\n        const byte0 = data[0];\n\n        // Extract bit fields from byte 0\n        const operatingStatus = decodeBits(byte0, 0, 1);\n        const valveStatus = decodeBits(byte0, 2, 3);\n        const lastOperation = decodeBits(byte0, 4, 7);\n\n        result.operating_status = decodeOperatingStatus(operatingStatus);\n        result.valve_status = decodeValveStatus(valveStatus);\n        result.last_operation = decodeLastOperation(lastOperation);\n\n        // Raw bit values for debugging\n        result.raw_operating_status = operatingStatus;\n        result.raw_valve_status = valveStatus;\n        result.raw_last_operation = lastOperation;\n        result.raw_byte_0 = byte0;\n    }\n\n    // Add convenience fields\n    result.autofill_active = result.operating_status && result.operating_status.includes(\"on\");\n    result.valve_open = result.valve_status && result.valve_status.includes(\"open\");\n    result.has_error = result.last_operation && result.last_operation.includes(\"error\");\n    result.fill_successful = result.last_operation && result.last_operation.includes(\"successful\");\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the AUTOFILL_STATUS message\nconst decodedData = decodeAutofillMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// AUTOFILL_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes AUTOFILL_STATUS messages per RV-C specification\n// Handles automatic tank filling system status and control\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === AUTOFILL_STATUS Specific Decoders ===\n\nfunction decodeOperatingStatus(value) {\n    // Operating status from bits 0-1 of byte 0\n    const states = {\n        0: \"AutoFill off\",\n        1: \"AutoFill on\"\n    };\n    return states[value] || `Unknown Status ${value}`;\n}\n\nfunction decodeValveStatus(value) {\n    // Valve status from bits 2-3 of byte 0\n    const states = {\n        0: \"Diverter valve closed\",\n        1: \"Valve open\"\n    };\n    return states[value] || `Unknown Valve Status ${value}`;\n}\n\nfunction decodeLastOperation(value) {\n    // Last operation from bits 4-7 of byte 0\n    const operations = {\n        0: \"Still running\",\n        1: \"Successful fill\",\n        2: \"Fill timed out\",\n        3: \"Fill manually aborted\",\n        4: \"Fill aborted due to error\"\n    };\n    return operations[value] || `Unknown Operation ${value}`;\n}\n\n\n// === Main Decode Function ===\n\nfunction decodeAutofillMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"AUTOFILL_STATUS\"\n    };\n\n    // Instance is not provided for AutoFill\n    result.instance = 1;\n\n    // Decode byte 0 based on RV-C spec\n    if (data.length > 0) {\n        const byte0 = data[0];\n\n        // Extract bit fields from byte 0\n        const operatingStatus = decodeBits(byte0, 0, 1);\n        const valveStatus = decodeBits(byte0, 2, 3);\n        const lastOperation = decodeBits(byte0, 4, 7);\n\n        result.operating_status = decodeOperatingStatus(operatingStatus);\n        result.valve_status = decodeValveStatus(valveStatus);\n        result.last_operation = decodeLastOperation(lastOperation);\n\n        // Raw bit values for debugging\n        result.raw_operating_status = operatingStatus;\n        result.raw_valve_status = valveStatus;\n        result.raw_last_operation = lastOperation;\n        result.raw_byte_0 = byte0;\n    }\n\n    // Add convenience fields\n    result.autofill_active = result.operating_status && result.operating_status.includes(\"on\");\n    result.valve_open = result.valve_status && result.valve_status.includes(\"open\");\n    result.has_error = result.last_operation && result.last_operation.includes(\"error\");\n    result.fill_successful = result.last_operation && result.last_operation.includes(\"successful\");\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the AUTOFILL_STATUS message\nconst decodedData = decodeAutofillMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2240,7 +1688,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode WATER_PUMP_STATUS",
-        "func": "// WATER_PUMP_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes WATER_PUMP_STATUS messages per RV-C specification\n// Handles water pump operation status and control\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === WATER_PUMP_STATUS Specific Decoders ===\n\nfunction decodeWaterPumpInstance(value) {\n    // Water pump instance mapping\n    if (value <= 200) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeOperatingState(value) {\n    // Water pump operating state mapping per RV-C specification\n    const states = {\n        0: \"Off\",\n        1: \"On\",\n        2: \"Running\",\n        3: \"Priming\",\n        4: \"Self Test\",\n        5: \"Fault\",\n        6: \"Maintenance Required\",\n        7: \"Pressure Switch Open\",\n        8: \"Low Voltage\",\n        9: \"High Temperature\",\n        10: \"Dry Run Protection\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return states[value] || `Unknown State ${value}`;\n}\n\nfunction decodePumpCommand(value) {\n    // Pump command mapping\n    const commands = {\n        0: \"Stop\",\n        1: \"Start\",\n        2: \"Auto\",\n        3: \"Manual\",\n        4: \"Prime\",\n        5: \"Test\",\n        6: \"Reset Fault\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return commands[value] || `Unknown Command ${value}`;\n}\n\nfunction decodePressure(value) {\n    // Pressure in kPa (0.5 kPa resolution)\n    if (value <= 500) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5 kPa per step\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeFlowRate(value) {\n    // Flow rate in liters per minute (0.1 L/min resolution)\n    if (value <= 6500) {\n        return parseFloat((value * 0.1).toFixed(1)); // 0.1 L/min per step\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeCurrent(value) {\n    // Current in amperes (0.05A resolution)\n    // Handle special values first\n    if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    } else if (value <= 500) {\n        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTemperature(value, isCelsius = false) {\n    // Temperature decoding with offset\n    if (value <= 210) {\n        const temp = value - 40; // -40°C to +170°C range\n        if (isCelsius) {\n            return temp;\n        } else {\n            // Convert to Fahrenheit: F = C * 9/5 + 32\n            return parseFloat(((temp * 9 / 5) + 32).toFixed(1));\n        }\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodePumpSpeed(value) {\n    // Pump speed as percentage\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeSystemStatus(value) {\n    // System status bit field\n    // Handle special values first\n    if (value === 255) {\n        return \"Not Available\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 0) {\n        return \"Standby\";\n    }\n\n    const statusBits = [];\n\n    if (value & 0x01) statusBits.push(\"Pump Running\");\n    if (value & 0x02) statusBits.push(\"Pressure OK\");\n    if (value & 0x04) statusBits.push(\"Flow Detected\");\n    if (value & 0x08) statusBits.push(\"Auto Mode\");\n    if (value & 0x10) statusBits.push(\"Prime Mode\");\n    if (value & 0x20) statusBits.push(\"Overtemperature\");\n    if (value & 0x40) statusBits.push(\"Service Required\");\n    if (value & 0x80) statusBits.push(\"System Fault\");\n\n    return statusBits.length > 0 ? statusBits.join(\", \") : \"Standby\";\n}\n\nfunction decodeFaultCode(value) {\n    // Fault code mapping\n    const faultCodes = {\n        0: \"No Fault\",\n        1: \"Overcurrent\",\n        2: \"Overvoltage\",\n        3: \"Undervoltage\",\n        4: \"Overtemperature\",\n        5: \"Dry Run\",\n        6: \"Pressure Switch Fault\",\n        7: \"Motor Fault\",\n        8: \"Communication Error\",\n        9: \"Sensor Fault\",\n        10: \"Flow Sensor Fault\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return faultCodes[value] || `Unknown Fault ${value}`;\n}\n\n\n// === Main Decode Function ===\n\nfunction decodeWaterPumpMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"WATER_PUMP_STATUS\"\n    };\n\n    // Decode based on water pump format (8 bytes)\n    if (data.length >= 8) {\n        // Byte 0: Instance\n        result.instance = decodeWaterPumpInstance(data[0]);\n\n        // Byte 1: Operating State\n        result.operating_state = decodeOperatingState(data[1]);\n\n        // Byte 2: Command\n        result.command = decodePumpCommand(data[2]);\n\n        // Byte 3: Pump Speed\n        result.pump_speed = decodePumpSpeed(data[3]);\n\n        // Byte 4: Current\n        result.current = decodeCurrent(data[4]);\n\n        // Bytes 5-6: Pressure (uint16, little-endian)\n        const pressureRaw = data[5] | (data[6] << 8);\n        result.pressure = decodePressure(pressureRaw);\n\n        // Byte 7: System Status\n        if (data.length > 7) {\n            result.system_status = decodeSystemStatus(data[7]);\n        }\n\n        // Raw values for debugging\n        result.raw_instance = data[0];\n        result.raw_operating_state = data[1];\n        result.raw_command = data[2];\n        result.raw_pump_speed = data[3];\n        result.raw_current = data[4];\n        result.raw_pressure = pressureRaw;\n        if (data.length > 7) {\n            result.raw_system_status = data[7];\n        }\n    }\n\n    // Add convenience fields\n    result.pump_running = result.operating_state && result.operating_state.includes(\"Running\");\n    result.pump_active = result.operating_state &&\n        (result.operating_state.includes(\"Running\") ||\n            result.operating_state.includes(\"Priming\") ||\n            result.operating_state.includes(\"On\"));\n    result.pump_available = result.operating_state &&\n        !result.operating_state.includes(\"Fault\") &&\n        !result.operating_state.includes(\"Error\") &&\n        result.operating_state !== \"Not Available\";\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the WATER_PUMP_STATUS message\nconst decodedData = decodeWaterPumpMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// WATER_PUMP_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes WATER_PUMP_STATUS messages per RV-C specification\n// Handles water pump operation status and control\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === WATER_PUMP_STATUS Specific Decoders ===\n\nfunction decodeWaterPumpInstance(value) {\n    // Water pump instance mapping\n    if (value <= 200) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeOperatingState(value) {\n    // Water pump operating state mapping per RV-C specification\n    const states = {\n        0: \"Off\",\n        1: \"On\",\n        2: \"Running\",\n        3: \"Priming\",\n        4: \"Self Test\",\n        5: \"Fault\",\n        6: \"Maintenance Required\",\n        7: \"Pressure Switch Open\",\n        8: \"Low Voltage\",\n        9: \"High Temperature\",\n        10: \"Dry Run Protection\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return states[value] || `Unknown State ${value}`;\n}\n\nfunction decodePumpCommand(value) {\n    // Pump command mapping\n    const commands = {\n        0: \"Stop\",\n        1: \"Start\",\n        2: \"Auto\",\n        3: \"Manual\",\n        4: \"Prime\",\n        5: \"Test\",\n        6: \"Reset Fault\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return commands[value] || `Unknown Command ${value}`;\n}\n\nfunction decodePressure(value) {\n    // Pressure in kPa (0.5 kPa resolution)\n    if (value <= 500) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5 kPa per step\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeFlowRate(value) {\n    // Flow rate in liters per minute (0.1 L/min resolution)\n    if (value <= 6500) {\n        return parseFloat((value * 0.1).toFixed(1)); // 0.1 L/min per step\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeCurrent(value) {\n    // Current in amperes (0.05A resolution)\n    // Handle special values first\n    if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    } else if (value <= 500) {\n        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTemperature(value, isCelsius = false) {\n    // Temperature decoding with offset\n    if (value <= 210) {\n        const temp = value - 40; // -40°C to +170°C range\n        if (isCelsius) {\n            return temp;\n        } else {\n            // Convert to Fahrenheit: F = C * 9/5 + 32\n            return parseFloat(((temp * 9 / 5) + 32).toFixed(1));\n        }\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodePumpSpeed(value) {\n    // Pump speed as percentage\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeSystemStatus(value) {\n    // System status bit field\n    // Handle special values first\n    if (value === 255) {\n        return \"Not Available\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 0) {\n        return \"Standby\";\n    }\n\n    const statusBits = [];\n\n    if (value & 0x01) statusBits.push(\"Pump Running\");\n    if (value & 0x02) statusBits.push(\"Pressure OK\");\n    if (value & 0x04) statusBits.push(\"Flow Detected\");\n    if (value & 0x08) statusBits.push(\"Auto Mode\");\n    if (value & 0x10) statusBits.push(\"Prime Mode\");\n    if (value & 0x20) statusBits.push(\"Overtemperature\");\n    if (value & 0x40) statusBits.push(\"Service Required\");\n    if (value & 0x80) statusBits.push(\"System Fault\");\n\n    return statusBits.length > 0 ? statusBits.join(\", \") : \"Standby\";\n}\n\nfunction decodeFaultCode(value) {\n    // Fault code mapping\n    const faultCodes = {\n        0: \"No Fault\",\n        1: \"Overcurrent\",\n        2: \"Overvoltage\",\n        3: \"Undervoltage\",\n        4: \"Overtemperature\",\n        5: \"Dry Run\",\n        6: \"Pressure Switch Fault\",\n        7: \"Motor Fault\",\n        8: \"Communication Error\",\n        9: \"Sensor Fault\",\n        10: \"Flow Sensor Fault\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return faultCodes[value] || `Unknown Fault ${value}`;\n}\n\n\n// === Main Decode Function ===\n\nfunction decodeWaterPumpMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"WATER_PUMP_STATUS\"\n    };\n\n    // Decode based on water pump format (8 bytes)\n    if (data.length >= 8) {\n        // Byte 0: Instance\n        result.instance = data[0];\n        result.instance_name = decodeWaterPumpInstance(data[0]);\n\n        // Byte 1: Operating State\n        result.operating_state = decodeOperatingState(data[1]);\n\n        // Byte 2: Command\n        result.command = decodePumpCommand(data[2]);\n\n        // Byte 3: Pump Speed\n        result.pump_speed = decodePumpSpeed(data[3]);\n\n        // Byte 4: Current\n        result.current = decodeCurrent(data[4]);\n\n        // Bytes 5-6: Pressure (uint16, little-endian)\n        const pressureRaw = data[5] | (data[6] << 8);\n        result.pressure = decodePressure(pressureRaw);\n\n        // Byte 7: System Status\n        if (data.length > 7) {\n            result.system_status = decodeSystemStatus(data[7]);\n        }\n\n        // Raw values for debugging\n        result.raw_instance = data[0];\n        result.raw_operating_state = data[1];\n        result.raw_command = data[2];\n        result.raw_pump_speed = data[3];\n        result.raw_current = data[4];\n        result.raw_pressure = pressureRaw;\n        if (data.length > 7) {\n            result.raw_system_status = data[7];\n        }\n    }\n\n    // Add convenience fields\n    result.pump_running = result.operating_state && result.operating_state.includes(\"Running\");\n    result.pump_active = result.operating_state &&\n        (result.operating_state.includes(\"Running\") ||\n            result.operating_state.includes(\"Priming\") ||\n            result.operating_state.includes(\"On\"));\n    result.pump_available = result.operating_state &&\n        !result.operating_state.includes(\"Fault\") &&\n        !result.operating_state.includes(\"Error\") &&\n        result.operating_state !== \"Not Available\";\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the WATER_PUMP_STATUS message\nconst decodedData = decodeWaterPumpMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2556,7 +2004,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode TANK_STATUS",
-        "func": "// TANK_STATUS Decoder (Updated with Flat Output) - Complete and Accurate RV-C Implementation\n// Decodes TANK_STATUS messages (1FFB7) per RV-C specification\n// Handles all RV tank types: Fresh Water, Gray Water, Black Water, LPG\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === TANK_STATUS Specific Decoders ===\n\nfunction decodeTankInstance(value) {\n    // Tank instance mapping per RV-C specification\n    const tankTypes = {\n        0: \"Fresh Water\",\n        1: \"Gray Water\",\n        2: \"Black Water\",\n        3: \"LPG\",\n        4: \"Fuel\",\n        5: \"Hot Water\",\n        6: \"Hydraulic Fluid\",\n        7: \"Live Well\",\n        8: \"Ballast\",\n        9: \"Oil\",\n        10: \"Coolant\",\n        11: \"Diesel Exhaust Fluid\",\n        12: \"Compressed Air\",\n        13: \"Fresh Water 2\",\n        14: \"Gray Water 2\",\n        15: \"Black Water 2\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return tankTypes[value] || `Unknown Tank ${value}`;\n}\n\nfunction decodeTankLevel(value) {\n    // Tank level as raw sensor reading (not percentage)\n    // Percentage calculated as: (relative_level / resolution) * 100\n    if (value <= 250) {\n        return value; // Raw sensor reading\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTankResolution(value) {\n    // Tank resolution as raw sensor resolution value\n    // Used in calculation: (relative_level / resolution) * 100\n    if (value <= 250) {\n        return value; // Raw resolution value\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTemperature(value) {\n    // Temperature in Celsius, offset -40°C\n    if (value <= 210) {\n        return value - 40; // -40°C to +170°C range\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTankStatus(value) {\n    // Tank status bit field decoding\n    const statusBits = {\n        0: \"Tank OK\",\n        1: \"Tank Low\",\n        2: \"Tank Full\",\n        3: \"Tank Overfilled\",\n        4: \"Sensor Fault\",\n        5: \"Tank Disconnected\",\n        6: \"Reserved\",\n        7: \"Reserved\"\n    };\n\n    const activeStatuses = [];\n    for (let bit = 0; bit < 8; bit++) {\n        if (value & (1 << bit)) {\n            activeStatuses.push(statusBits[bit]);\n        }\n    }\n\n    return activeStatuses.length > 0 ? activeStatuses.join(\", \") : \"Tank OK\";\n}\n\n// === Parameter Decoder ===\n\nfunction decodeParameter(param, data) {\n    if (!data || param.byte >= data.length) {\n        return \"Invalid Data\";\n    }\n\n    const byte = param.byte;\n    const value = data[byte];\n\n    if (param.type === 'uint8') {\n        // Handle specific TANK_STATUS parameter types\n        if (param.name === 'instance') {\n            return decodeTankInstance(value);\n        }\n        if (param.name === 'relative level' || param.name === 'level') {\n            return decodeTankLevel(value);\n        }\n        if (param.name === 'resolution') {\n            return decodeTankResolution(value);\n        }\n        if (param.name === 'temperature') {\n            return decodeTemperature(value);\n        }\n        if (param.name === 'status' || param.name === 'tank status') {\n            return decodeTankStatus(value);\n        }\n\n        // Default uint8 handling\n        return value;\n\n    } else if (param.type === 'bit2' || param.type.startsWith('uint') && param.bit) {\n        // Handle bit field parameters\n        const bitMatch = param.bit.match(/(\\d+)-(\\d+)/);\n        if (bitMatch) {\n            const [, startBit, endBit] = bitMatch.map(Number);\n            const bitValue = decodeBits(value, startBit, endBit);\n\n            if (param.values) {\n                return param.values[bitValue.toString()] || bitValue;\n            }\n            return bitValue;\n        }\n    }\n\n    return value;\n}\n\n// === Main Decode Function ===\n\nfunction decodeTankStatusMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"TANK_STATUS\"\n    };\n\n    // Decode based on TANK_STATUS format (8 bytes typical)\n    if (data.length >= 8) {\n        // Byte 0: Tank Instance\n        result.instance = decodeTankInstance(data[0]);\n\n        // Byte 1: Relative Level (0-200)\n        result.relative_level = decodeTankLevel(data[1]);\n\n        // Byte 2: Resolution (tank capacity steps)\n        result.resolution = decodeTankResolution(data[2]);\n\n        // Byte 3: Temperature\n        result.temperature = decodeTemperature(data[3]);\n\n        // Byte 4: Tank Status (bit field)\n        result.status = decodeTankStatus(data[4]);\n\n        // Bytes 5-7: Reserved/Future use\n        // Currently set to 0xFF in most implementations\n\n        // Raw values for debugging\n        result.raw_instance = data[0];\n        result.raw_relative_level = data[1];\n        result.raw_resolution = data[2];\n        result.raw_temperature = data[3];\n        result.raw_status = data[4];\n        if (data.length > 5) result.raw_byte_5 = data[5];\n        if (data.length > 6) result.raw_byte_6 = data[6];\n        if (data.length > 7) result.raw_byte_7 = data[7];\n    }\n\n    // Add convenience fields for easier consumption\n    // Calculate tank percentage using RV-C formula: (relative_level / resolution) * 100\n    if (result.relative_level !== undefined && result.resolution !== undefined &&\n        typeof result.relative_level === 'number' && typeof result.resolution === 'number' &&\n        result.resolution > 0) {\n        result.level_percentage = Math.round((result.relative_level / result.resolution) * 100);\n    } else if (result.relative_level !== undefined && typeof result.relative_level === 'number') {\n        // Fallback if resolution is not available (direct percentage)\n        result.level_percentage = Math.round(result.relative_level * 0.5); // 0.5% per step\n    }\n\n    if (result.instance !== undefined) {\n        // Extract just the tank type for easier filtering\n        const instanceStr = result.instance.toString();\n        if (instanceStr.includes(\"Fresh\")) result.tank_type = \"fresh\";\n        else if (instanceStr.includes(\"Gray\")) result.tank_type = \"gray\";\n        else if (instanceStr.includes(\"Black\")) result.tank_type = \"black\";\n        else if (instanceStr.includes(\"LPG\")) result.tank_type = \"lpg\";\n        else result.tank_type = \"other\";\n    }\n\n    // Tank level status\n    if (typeof result.level_percentage === 'number') {\n        result.tank_empty = result.level_percentage <= 5;\n        result.tank_low = result.level_percentage <= 25;\n        result.tank_full = result.level_percentage >= 95;\n        result.tank_level_available = true;\n    } else {\n        result.tank_level_available = false;\n    }\n\n    // Temperature status\n    result.temperature_available = typeof result.temperature === 'number';\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the TANK_STATUS message\nconst decodedData = decodeTankStatusMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// TANK_STATUS Decoder (Updated with Flat Output) - Complete and Accurate RV-C Implementation\n// Decodes TANK_STATUS messages (1FFB7) per RV-C specification\n// Handles all RV tank types: Fresh Water, Gray Water, Black Water, LPG\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === TANK_STATUS Specific Decoders ===\n\nfunction decodeTankInstance(value) {\n    // Tank instance mapping per RV-C specification\n    const tankTypes = {\n        0: \"Fresh Water\",\n        1: \"Gray Water\",\n        2: \"Black Water\",\n        3: \"LPG\",\n        4: \"Fuel\",\n        5: \"Hot Water\",\n        6: \"Hydraulic Fluid\",\n        7: \"Live Well\",\n        8: \"Ballast\",\n        9: \"Oil\",\n        10: \"Coolant\",\n        11: \"Diesel Exhaust Fluid\",\n        12: \"Compressed Air\",\n        13: \"Fresh Water 2\",\n        14: \"Gray Water 2\",\n        15: \"Black Water 2\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return tankTypes[value] || `Unknown Tank ${value}`;\n}\n\nfunction decodeTankLevel(value) {\n    // Tank level as raw sensor reading (not percentage)\n    // Percentage calculated as: (relative_level / resolution) * 100\n    if (value <= 250) {\n        return value; // Raw sensor reading\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTankResolution(value) {\n    // Tank resolution as raw sensor resolution value\n    // Used in calculation: (relative_level / resolution) * 100\n    if (value <= 250) {\n        return value; // Raw resolution value\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTemperature(value) {\n    // Temperature in Celsius, offset -40°C\n    if (value <= 210) {\n        return value - 40; // -40°C to +170°C range\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTankStatus(value) {\n    // Tank status bit field decoding\n    const statusBits = {\n        0: \"Tank OK\",\n        1: \"Tank Low\",\n        2: \"Tank Full\",\n        3: \"Tank Overfilled\",\n        4: \"Sensor Fault\",\n        5: \"Tank Disconnected\",\n        6: \"Reserved\",\n        7: \"Reserved\"\n    };\n\n    const activeStatuses = [];\n    for (let bit = 0; bit < 8; bit++) {\n        if (value & (1 << bit)) {\n            activeStatuses.push(statusBits[bit]);\n        }\n    }\n\n    return activeStatuses.length > 0 ? activeStatuses.join(\", \") : \"Tank OK\";\n}\n\n// === Parameter Decoder ===\n\nfunction decodeParameter(param, data) {\n    if (!data || param.byte >= data.length) {\n        return \"Invalid Data\";\n    }\n\n    const byte = param.byte;\n    const value = data[byte];\n\n    if (param.type === 'uint8') {\n        // Handle specific TANK_STATUS parameter types\n        if (param.name === 'instance') {\n            return decodeTankInstance(value);\n        }\n        if (param.name === 'relative level' || param.name === 'level') {\n            return decodeTankLevel(value);\n        }\n        if (param.name === 'resolution') {\n            return decodeTankResolution(value);\n        }\n        if (param.name === 'temperature') {\n            return decodeTemperature(value);\n        }\n        if (param.name === 'status' || param.name === 'tank status') {\n            return decodeTankStatus(value);\n        }\n\n        // Default uint8 handling\n        return value;\n\n    } else if (param.type === 'bit2' || param.type.startsWith('uint') && param.bit) {\n        // Handle bit field parameters\n        const bitMatch = param.bit.match(/(\\d+)-(\\d+)/);\n        if (bitMatch) {\n            const [, startBit, endBit] = bitMatch.map(Number);\n            const bitValue = decodeBits(value, startBit, endBit);\n\n            if (param.values) {\n                return param.values[bitValue.toString()] || bitValue;\n            }\n            return bitValue;\n        }\n    }\n\n    return value;\n}\n\n// === Main Decode Function ===\n\nfunction decodeTankStatusMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"TANK_STATUS\"\n    };\n\n    // Decode based on TANK_STATUS format (8 bytes typical)\n    if (data.length >= 8) {\n        // Byte 0: Tank Instance\n        result.instance = data[0];\n        result.instance_name = decodeTankInstance(data[0]);\n\n        // Byte 1: Relative Level (0-200)\n        result.relative_level = decodeTankLevel(data[1]);\n\n        // Byte 2: Resolution (tank capacity steps)\n        result.resolution = decodeTankResolution(data[2]);\n\n        // Byte 3: Temperature\n        result.temperature = decodeTemperature(data[3]);\n\n        // Byte 4: Tank Status (bit field)\n        result.status = decodeTankStatus(data[4]);\n\n        // Bytes 5-7: Reserved/Future use\n        // Currently set to 0xFF in most implementations\n\n        // Raw values for debugging\n        result.raw_instance = data[0];\n        result.raw_relative_level = data[1];\n        result.raw_resolution = data[2];\n        result.raw_temperature = data[3];\n        result.raw_status = data[4];\n        if (data.length > 5) result.raw_byte_5 = data[5];\n        if (data.length > 6) result.raw_byte_6 = data[6];\n        if (data.length > 7) result.raw_byte_7 = data[7];\n    }\n\n    // Add convenience fields for easier consumption\n    // Calculate tank percentage using RV-C formula: (relative_level / resolution) * 100\n    if (result.relative_level !== undefined && result.resolution !== undefined &&\n        typeof result.relative_level === 'number' && typeof result.resolution === 'number' &&\n        result.resolution > 0) {\n        result.level_percentage = Math.round((result.relative_level / result.resolution) * 100);\n    } else if (result.relative_level !== undefined && typeof result.relative_level === 'number') {\n        // Fallback if resolution is not available (direct percentage)\n        result.level_percentage = Math.round(result.relative_level * 0.5); // 0.5% per step\n    }\n\n    if (result.instance !== undefined) {\n        // Extract just the tank type for easier filtering\n        const instanceStr = result.instance.toString();\n        if (instanceStr.includes(\"Fresh\")) result.tank_type = \"fresh\";\n        else if (instanceStr.includes(\"Gray\")) result.tank_type = \"gray\";\n        else if (instanceStr.includes(\"Black\")) result.tank_type = \"black\";\n        else if (instanceStr.includes(\"LPG\")) result.tank_type = \"lpg\";\n        else result.tank_type = \"other\";\n    }\n\n    // Tank level status\n    if (typeof result.level_percentage === 'number') {\n        result.tank_empty = result.level_percentage <= 5;\n        result.tank_low = result.level_percentage <= 25;\n        result.tank_full = result.level_percentage >= 95;\n        result.tank_level_available = true;\n    } else {\n        result.tank_level_available = false;\n    }\n\n    // Temperature status\n    result.temperature_available = typeof result.temperature === 'number';\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the TANK_STATUS message\nconst decodedData = decodeTankStatusMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2744,7 +2192,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode DC_DIMMER_STATUS",
-        "func": "// DC_DIMMER_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes DC_DIMMER_STATUS_1/2/3 messages per RV-C specification\n// Handles RGB/RGBW dimmer loads with brightness, current, and fault monitoring\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === DC_DIMMER_STATUS Specific Decoders ===\n\nfunction decodeDimmerInstance(value) {\n    // Dimmer instance interpretation per RV-C spec\n    if (value === 0) {\n        return \"Invalid\";\n    } else if (value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeBrightnessLevel(value) {\n    // Brightness level (0-200% per Table 5.3)\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeDCCurrent(value) {\n    // DC Current per Table 5.3 (0.05A resolution for small currents)\n    if (value <= 250) {\n        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeChannelFault(value) {\n    // Channel fault status (2-bit field)\n    const faultStates = {\n        0: \"No Fault\",\n        1: \"Undercurrent (Open Circuit)\",\n        2: \"Overcurrent\",\n        3: \"Reserved\"\n    };\n    return faultStates[value] || \"Unknown\";\n}\n\nfunction decodeFaultByte(value) {\n    // Decode fault bits from byte 5 (STATUS_2)\n    const masterFault = decodeBits(value, 0, 1);\n    const redFault = decodeBits(value, 2, 3);\n    const greenFault = decodeBits(value, 4, 5);\n    const blueFault = decodeBits(value, 6, 7);\n\n    const faults = [];\n    if (masterFault > 0) faults.push(`Master: ${decodeChannelFault(masterFault)}`);\n    if (redFault > 0) faults.push(`Red: ${decodeChannelFault(redFault)}`);\n    if (greenFault > 0) faults.push(`Green: ${decodeChannelFault(greenFault)}`);\n    if (blueFault > 0) faults.push(`Blue: ${decodeChannelFault(blueFault)}`);\n\n    return {\n        fault_summary: faults.length > 0 ? faults.join(\", \") : \"No Faults\",\n        master_fault: decodeChannelFault(masterFault),\n        red_fault: decodeChannelFault(redFault),\n        green_fault: decodeChannelFault(greenFault),\n        blue_fault: decodeChannelFault(blueFault),\n        any_fault: faults.length > 0\n    };\n}\n\nfunction decodeGroupBitmap(value) {\n    // Group membership bitmap (7 groups max)\n    if (value === 0) {\n        return \"All Groups\";\n    } else if (value === 255) {\n        return \"No Data\";\n    }\n\n    const groups = [];\n    for (let i = 1; i <= 7; i++) {\n        const groupBit = 1 << i;\n        if (!(value & groupBit)) { // Inverted logic - 0 means member\n            groups.push(i);\n        }\n    }\n\n    return groups.length > 0 ? `Groups: ${groups.join(\", \")}` : \"No Groups\";\n}\n\nfunction decodeOperatingStatus(value) {\n    // Operating status for STATUS_3\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte3(value) {\n    // Decode status bits from byte 3 (STATUS_3)\n    const lockStatus = decodeBits(value, 0, 1);\n    const overcurrentStatus = decodeBits(value, 2, 3);\n    const overrideStatus = decodeBits(value, 4, 5);\n    const enableStatus = decodeBits(value, 6, 7);\n\n    const lockStates = [\"Unlocked\", \"Locked\", \"Reserved\", \"Not Supported\"];\n    const statusStates = [\"Normal/Inactive\", \"Active/Abnormal\", \"Reserved\", \"Not Supported\"];\n    const enableStates = [\"Enabled\", \"Disabled\", \"Reserved\", \"Not Supported\"];\n\n    return {\n        lock_status: lockStates[lockStatus] || \"Unknown\",\n        overcurrent_status: statusStates[overcurrentStatus] || \"Unknown\",\n        override_status: statusStates[overrideStatus] || \"Unknown\",\n        enable_status: enableStates[enableStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeLastCommand(value) {\n    // Last executed command (STATUS_3)\n    const commands = {\n        0: \"Set Brightness\",\n        1: \"ON\",\n        2: \"ON Delay\",\n        3: \"OFF\",\n        4: \"Stop\",\n        5: \"Toggle\",\n        6: \"Memory OFF\",\n        7: \"Save Scene\",\n        11: \"Ramp Brightness\",\n        12: \"Ramp Toggle\",\n        13: \"Ramp Up\",\n        14: \"Ramp Down\",\n        15: \"Ramp Up/Down\",\n        16: \"Ramp Up/Down Toggle\",\n        21: \"Lock\",\n        22: \"Unlock\",\n        31: \"Flash\",\n        32: \"Flash Momentary\",\n        33: \"Flash Pattern\",\n        34: \"Scene Recall\",\n        35: \"Scene Store\",\n        36: \"Group Command\",\n        37: \"Reset\",\n        38: \"Factory Reset\",\n        39: \"Calibrate\",\n        40: \"Test Mode\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return commands[value] || `Unknown Command ${value}`;\n}\n\nfunction decodeDelayDuration(value) {\n    // Delay/Duration field (STATUS_3)\n    if (value === 0) {\n        return \"Expired\";\n    } else if (value <= 240) {\n        return `${value} seconds`;\n    } else if (value >= 241 && value <= 250) {\n        return `${value - 236} minutes`; // 241-250 = 5-14 minutes\n    } else if (value === 252) {\n        return \"Flashing\";\n    } else if (value === 253) {\n        return \">240 seconds\";\n    } else if (value === 255) {\n        return \"No delay active\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte6(value) {\n    // Decode status bits from byte 6 (STATUS_3)\n    const interlockStatus = decodeBits(value, 0, 1);\n    const loadStatus = decodeBits(value, 2, 3);\n    const undercurrentStatus = decodeBits(value, 6, 7);\n\n    const interlockStates = [\"Not Active\", \"Active\", \"Reserved\", \"Not Supported\"];\n    const loadStates = [\"Off (status=0)\", \"On (status>0 or flashing)\", \"Reserved\", \"Reserved\"];\n    const undercurrentStates = [\"Normal\", \"Active\", \"Timeout Error\", \"Not Supported\"];\n\n    return {\n        interlock_status: interlockStates[interlockStatus] || \"Unknown\",\n        load_status: loadStates[loadStatus] || \"Unknown\",\n        undercurrent_status: undercurrentStates[undercurrentStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeUint16(data, startByte) {\n    // Decode 16-bit value (little-endian)\n    if (!data || startByte + 1 >= data.length) {\n        return 65535; // Not available\n    }\n    return data[startByte] | (data[startByte + 1] << 8);\n}\n\n// === Main Decode Function ===\n\nfunction decodeDCDimmerMessage(dgn, data) {\n    // Map DGN hex codes to specific names for unified routing\n    let dgnName = \"DC_DIMMER_STATUS\"; // fallback\n    const dgnHex = dgn.toUpperCase();\n    if (dgnHex === \"1FFBB\") {\n        dgnName = \"DC_DIMMER_STATUS_1\";\n    } else if (dgnHex === \"1FFBA\") {\n        dgnName = \"DC_DIMMER_STATUS_2\";\n    } else if (dgnHex === \"1FEDA\") {\n        dgnName = \"DC_DIMMER_STATUS_3\";\n    }\n\n    const result = {\n        dgn: dgn,\n        dgn_name: dgnName\n    };\n\n    // Determine which STATUS message based on DGN and decode accordingly\n\n    if (dgnHex === \"1FFBB\") {\n        // DC_DIMMER_STATUS_1 - Brightness levels and timing\n        result.status_type = \"STATUS_1\";\n\n        if (data.length >= 7) {\n            result.instance = decodeDimmerInstance(data[0]);\n            result.master_brightness = decodeBrightnessLevel(data[1]);\n            result.red_brightness = decodeBrightnessLevel(data[2]);\n            result.green_brightness = decodeBrightnessLevel(data[3]);\n            result.blue_brightness = decodeBrightnessLevel(data[4]);\n\n            // Byte 5: On/Off Duration (4 bits each)\n            result.on_duration = decodeBits(data[5], 0, 3); // 0-14 seconds\n            result.off_duration = decodeBits(data[5], 4, 7); // 0-14 seconds\n\n            if (data.length > 6) {\n                result.white_brightness = decodeBrightnessLevel(data[6]);\n            }\n        }\n\n    } else if (dgnHex === \"1FFBA\") {\n        // DC_DIMMER_STATUS_2 - Current measurements and faults\n        result.status_type = \"STATUS_2\";\n\n        if (data.length >= 8) {\n            result.instance = decodeDimmerInstance(data[0]);\n            result.master_current = decodeDCCurrent(data[1]);\n            result.red_current = decodeDCCurrent(data[2]);\n            result.green_current = decodeDCCurrent(data[3]);\n            result.blue_current = decodeDCCurrent(data[4]);\n\n            // Byte 5: Fault bits\n            const faultInfo = decodeFaultByte(data[5]);\n            Object.assign(result, faultInfo);\n\n            if (data.length > 6) {\n                result.white_current = decodeDCCurrent(data[6]);\n            }\n\n            if (data.length > 7) {\n                // Byte 7: White fault (bits 0-1)\n                const whiteFault = decodeBits(data[7], 0, 1);\n                result.white_fault = decodeChannelFault(whiteFault);\n            }\n        }\n\n    } else if (dgnHex === \"1FEDA\") {\n        // DC_DIMMER_STATUS_3 - Comprehensive operational status\n        result.status_type = \"STATUS_3\";\n\n        if (data.length >= 8) {\n            result.instance = decodeDimmerInstance(data[0]);\n            result.group_membership = decodeGroupBitmap(data[1]);\n            result.operating_status = decodeOperatingStatus(data[2]);\n\n            // Byte 3: Status bits\n            const status3Info = decodeStatus3Byte3(data[3]);\n            Object.assign(result, status3Info);\n\n            result.delay_duration = decodeDelayDuration(data[4]);\n            result.last_command = decodeLastCommand(data[5]);\n\n            // Byte 6: More status bits\n            const status6Info = decodeStatus3Byte6(data[6]);\n            Object.assign(result, status6Info);\n\n            result.master_memory_value = decodeBrightnessLevel(data[7]);\n        }\n    }\n\n    // Add convenience fields\n    if (result.master_brightness !== undefined) {\n        result.dimmer_on = typeof result.master_brightness === 'number' && result.master_brightness > 0;\n    }\n\n    if (result.operating_status !== undefined) {\n        result.dimmer_active = typeof result.operating_status === 'number' && result.operating_status > 0;\n    }\n\n    if (result.any_fault !== undefined) {\n        result.dimmer_healthy = !result.any_fault;\n    }\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the DC_DIMMER_STATUS message\nconst decodedData = decodeDCDimmerMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// DC_DIMMER_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes DC_DIMMER_STATUS_1/2/3 messages per RV-C specification\n// Handles RGB/RGBW dimmer loads with brightness, current, and fault monitoring\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === DC_DIMMER_STATUS Specific Decoders ===\n\nfunction decodeDimmerInstance(value) {\n    // Dimmer instance interpretation per RV-C spec\n    if (value === 0) {\n        return \"Invalid\";\n    } else if (value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeBrightnessLevel(value) {\n    // Brightness level (0-200% per Table 5.3)\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeDCCurrent(value) {\n    // DC Current per Table 5.3 (0.05A resolution for small currents)\n    if (value <= 250) {\n        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeChannelFault(value) {\n    // Channel fault status (2-bit field)\n    const faultStates = {\n        0: \"No Fault\",\n        1: \"Undercurrent (Open Circuit)\",\n        2: \"Overcurrent\",\n        3: \"Reserved\"\n    };\n    return faultStates[value] || \"Unknown\";\n}\n\nfunction decodeFaultByte(value) {\n    // Decode fault bits from byte 5 (STATUS_2)\n    const masterFault = decodeBits(value, 0, 1);\n    const redFault = decodeBits(value, 2, 3);\n    const greenFault = decodeBits(value, 4, 5);\n    const blueFault = decodeBits(value, 6, 7);\n\n    const faults = [];\n    if (masterFault > 0) faults.push(`Master: ${decodeChannelFault(masterFault)}`);\n    if (redFault > 0) faults.push(`Red: ${decodeChannelFault(redFault)}`);\n    if (greenFault > 0) faults.push(`Green: ${decodeChannelFault(greenFault)}`);\n    if (blueFault > 0) faults.push(`Blue: ${decodeChannelFault(blueFault)}`);\n\n    return {\n        fault_summary: faults.length > 0 ? faults.join(\", \") : \"No Faults\",\n        master_fault: decodeChannelFault(masterFault),\n        red_fault: decodeChannelFault(redFault),\n        green_fault: decodeChannelFault(greenFault),\n        blue_fault: decodeChannelFault(blueFault),\n        any_fault: faults.length > 0\n    };\n}\n\nfunction decodeGroupBitmap(value) {\n    // Group membership bitmap (7 groups max)\n    if (value === 0) {\n        return \"All Groups\";\n    } else if (value === 255) {\n        return \"No Data\";\n    }\n\n    const groups = [];\n    for (let i = 1; i <= 7; i++) {\n        const groupBit = 1 << i;\n        if (!(value & groupBit)) { // Inverted logic - 0 means member\n            groups.push(i);\n        }\n    }\n\n    return groups.length > 0 ? `Groups: ${groups.join(\", \")}` : \"No Groups\";\n}\n\nfunction decodeOperatingStatus(value) {\n    // Operating status for STATUS_3\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte3(value) {\n    // Decode status bits from byte 3 (STATUS_3)\n    const lockStatus = decodeBits(value, 0, 1);\n    const overcurrentStatus = decodeBits(value, 2, 3);\n    const overrideStatus = decodeBits(value, 4, 5);\n    const enableStatus = decodeBits(value, 6, 7);\n\n    const lockStates = [\"Unlocked\", \"Locked\", \"Reserved\", \"Not Supported\"];\n    const statusStates = [\"Normal/Inactive\", \"Active/Abnormal\", \"Reserved\", \"Not Supported\"];\n    const enableStates = [\"Enabled\", \"Disabled\", \"Reserved\", \"Not Supported\"];\n\n    return {\n        lock_status: lockStates[lockStatus] || \"Unknown\",\n        overcurrent_status: statusStates[overcurrentStatus] || \"Unknown\",\n        override_status: statusStates[overrideStatus] || \"Unknown\",\n        enable_status: enableStates[enableStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeLastCommand(value) {\n    // Last executed command (STATUS_3)\n    const commands = {\n        0: \"Set Brightness\",\n        1: \"ON\",\n        2: \"ON Delay\",\n        3: \"OFF\",\n        4: \"Stop\",\n        5: \"Toggle\",\n        6: \"Memory OFF\",\n        7: \"Save Scene\",\n        11: \"Ramp Brightness\",\n        12: \"Ramp Toggle\",\n        13: \"Ramp Up\",\n        14: \"Ramp Down\",\n        15: \"Ramp Up/Down\",\n        16: \"Ramp Up/Down Toggle\",\n        21: \"Lock\",\n        22: \"Unlock\",\n        31: \"Flash\",\n        32: \"Flash Momentary\",\n        33: \"Flash Pattern\",\n        34: \"Scene Recall\",\n        35: \"Scene Store\",\n        36: \"Group Command\",\n        37: \"Reset\",\n        38: \"Factory Reset\",\n        39: \"Calibrate\",\n        40: \"Test Mode\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return commands[value] || `Unknown Command ${value}`;\n}\n\nfunction decodeDelayDuration(value) {\n    // Delay/Duration field (STATUS_3)\n    if (value === 0) {\n        return \"Expired\";\n    } else if (value <= 240) {\n        return `${value} seconds`;\n    } else if (value >= 241 && value <= 250) {\n        return `${value - 236} minutes`; // 241-250 = 5-14 minutes\n    } else if (value === 252) {\n        return \"Flashing\";\n    } else if (value === 253) {\n        return \">240 seconds\";\n    } else if (value === 255) {\n        return \"No delay active\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte6(value) {\n    // Decode status bits from byte 6 (STATUS_3)\n    const interlockStatus = decodeBits(value, 0, 1);\n    const loadStatus = decodeBits(value, 2, 3);\n    const undercurrentStatus = decodeBits(value, 6, 7);\n\n    const interlockStates = [\"Not Active\", \"Active\", \"Reserved\", \"Not Supported\"];\n    const loadStates = [\"Off (status=0)\", \"On (status>0 or flashing)\", \"Reserved\", \"Reserved\"];\n    const undercurrentStates = [\"Normal\", \"Active\", \"Timeout Error\", \"Not Supported\"];\n\n    return {\n        interlock_status: interlockStates[interlockStatus] || \"Unknown\",\n        load_status: loadStates[loadStatus] || \"Unknown\",\n        undercurrent_status: undercurrentStates[undercurrentStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeUint16(data, startByte) {\n    // Decode 16-bit value (little-endian)\n    if (!data || startByte + 1 >= data.length) {\n        return 65535; // Not available\n    }\n    return data[startByte] | (data[startByte + 1] << 8);\n}\n\n// === Main Decode Function ===\n\nfunction decodeDCDimmerMessage(dgn, data) {\n    // Map DGN hex codes to specific names for unified routing\n    let dgnName = \"DC_DIMMER_STATUS\"; // fallback\n    const dgnHex = dgn.toUpperCase();\n    if (dgnHex === \"1FFBB\") {\n        dgnName = \"DC_DIMMER_STATUS_1\";\n    } else if (dgnHex === \"1FFBA\") {\n        dgnName = \"DC_DIMMER_STATUS_2\";\n    } else if (dgnHex === \"1FEDA\") {\n        dgnName = \"DC_DIMMER_STATUS_3\";\n    }\n\n    const result = {\n        dgn: dgn,\n        dgn_name: dgnName\n    };\n\n    // Determine which STATUS message based on DGN and decode accordingly\n\n    if (dgnHex === \"1FFBB\") {\n        // DC_DIMMER_STATUS_1 - Brightness levels and timing\n        result.status_type = \"STATUS_1\";\n\n        if (data.length >= 7) {\n            result.instance = data[0];\n            result.instance_name = decodeDimmerInstance(data[0]);\n            result.master_brightness = decodeBrightnessLevel(data[1]);\n            result.red_brightness = decodeBrightnessLevel(data[2]);\n            result.green_brightness = decodeBrightnessLevel(data[3]);\n            result.blue_brightness = decodeBrightnessLevel(data[4]);\n\n            // Byte 5: On/Off Duration (4 bits each)\n            result.on_duration = decodeBits(data[5], 0, 3); // 0-14 seconds\n            result.off_duration = decodeBits(data[5], 4, 7); // 0-14 seconds\n\n            if (data.length > 6) {\n                result.white_brightness = decodeBrightnessLevel(data[6]);\n            }\n        }\n\n    } else if (dgnHex === \"1FFBA\") {\n        // DC_DIMMER_STATUS_2 - Current measurements and faults\n        result.status_type = \"STATUS_2\";\n\n        if (data.length >= 8) {\n            result.instance = data[0];\n            result.instance_name = decodeDimmerInstance(data[0]);\n            result.red_current = decodeDCCurrent(data[2]);\n            result.green_current = decodeDCCurrent(data[3]);\n            result.blue_current = decodeDCCurrent(data[4]);\n\n            // Byte 5: Fault bits\n            const faultInfo = decodeFaultByte(data[5]);\n            Object.assign(result, faultInfo);\n\n            if (data.length > 6) {\n                result.white_current = decodeDCCurrent(data[6]);\n            }\n\n            if (data.length > 7) {\n                // Byte 7: White fault (bits 0-1)\n                const whiteFault = decodeBits(data[7], 0, 1);\n                result.white_fault = decodeChannelFault(whiteFault);\n            }\n        }\n\n    } else if (dgnHex === \"1FEDA\") {\n        // DC_DIMMER_STATUS_3 - Comprehensive operational status\n        result.status_type = \"STATUS_3\";\n\n        if (data.length >= 8) {\n            result.instance = decodeDimmerInstance(data[0]);\n            result.group_membership = decodeGroupBitmap(data[1]);\n            result.operating_status = decodeOperatingStatus(data[2]);\n\n            // Byte 3: Status bits\n            const status3Info = decodeStatus3Byte3(data[3]);\n            Object.assign(result, status3Info);\n\n            result.delay_duration = decodeDelayDuration(data[4]);\n            result.last_command = decodeLastCommand(data[5]);\n\n            // Byte 6: More status bits\n            const status6Info = decodeStatus3Byte6(data[6]);\n            Object.assign(result, status6Info);\n\n            result.master_memory_value = decodeBrightnessLevel(data[7]);\n        }\n    }\n\n    // Add convenience fields\n    if (result.master_brightness !== undefined) {\n        result.dimmer_on = typeof result.master_brightness === 'number' && result.master_brightness > 0;\n    }\n\n    if (result.operating_status !== undefined) {\n        result.dimmer_active = typeof result.operating_status === 'number' && result.operating_status > 0;\n    }\n\n    if (result.any_fault !== undefined) {\n        result.dimmer_healthy = !result.any_fault;\n    }\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the DC_DIMMER_STATUS message\nconst decodedData = decodeDCDimmerMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2805,7 +2253,7 @@
             "02bdfc59de71b5a5"
         ],
         "x": 220,
-        "y": 80,
+        "y": 220,
         "wires": [
             [
                 "9f88f215f3f07227"
@@ -3083,33 +2531,11 @@
         ]
     },
     {
-        "id": "19e68bc19dddefb9",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
-        "name": "Encode CAN message",
-        "func": "// RV-C CAN Message Encoder - Complete and Accurate Implementation\n// Constructs a complete RV-C CAN message from DGN and data payload per RV-C specification\n// Supports 29-bit CAN ID construction with proper priority, DGN, and source address handling\n//\n// Input: msg.payload object with encoding parameters\n// Output: msg.payload string with complete CAN message ready for transmission\n\n// === Configuration ===\n\nconst CONFIG = {\n    // Default source address for this Node-RED instance\n    // Using high dynamic address range (240-253) to avoid conflicts\n    DEFAULT_SOURCE_ADDRESS: 0xF5, // 245 decimal - high unused dynamic address\n\n    // Default priority for different message types\n    DEFAULT_PRIORITY: {\n        COMMAND: 3,        // High priority for commands\n        STATUS: 6,         // Standard priority for status messages\n        CONFIGURATION: 6,  // Standard priority for configuration\n        DATA: 6           // Standard priority for general data\n    },\n\n    // Default MQTT topic for CAN transmission\n    DEFAULT_MQTT_TOPIC: \"can/send\",\n\n    // Message validation limits\n    MAX_DATA_LENGTH: 16,  // 8 bytes = 16 hex characters\n    MIN_DATA_LENGTH: 2,   // At least 1 byte = 2 hex characters\n    MAX_DGN_VALUE: 0x1FFFF, // 18-bit maximum\n    MAX_PRIORITY: 7,      // 3-bit maximum\n    MAX_SOURCE_ADDRESS: 255 // 8-bit maximum\n};\n\n// === Input Validation Functions ===\n\nfunction validateHexString(value, name, minLength = 1, maxLength = Infinity) {\n    if (!value || typeof value !== 'string') {\n        throw new Error(`${name} must be a non-empty string`);\n    }\n\n    if (!/^[0-9A-Fa-f]+$/.test(value)) {\n        throw new Error(`${name} must contain only hexadecimal characters (0-9, A-F)`);\n    }\n\n    if (value.length < minLength || value.length > maxLength) {\n        throw new Error(`${name} length must be between ${minLength} and ${maxLength} characters`);\n    }\n\n    return true;\n}\n\nfunction validateNumericRange(value, name, min, max) {\n    if (typeof value !== 'number' || isNaN(value)) {\n        throw new Error(`${name} must be a number`);\n    }\n\n    if (value < min || value > max) {\n        throw new Error(`${name} must be between ${min} and ${max}`);\n    }\n\n    return true;\n}\n\nfunction determinePriority(dgn, messageType) {\n    // Determine priority based on DGN and message type\n    if (messageType) {\n        const upperType = messageType.toUpperCase();\n        if (CONFIG.DEFAULT_PRIORITY[upperType] !== undefined) {\n            return CONFIG.DEFAULT_PRIORITY[upperType];\n        }\n    }\n\n    // Priority based on DGN characteristics\n    const dgnNum = parseInt(dgn, 16);\n\n    // Command messages typically have higher priority\n    if ((dgnNum >= 0x1FEDB && dgnNum <= 0x1FEDC) || // DC_DIMMER commands\n        (dgnNum >= 0x1FFB9 && dgnNum <= 0x1FFBC) || // DC_DIMMER/LOAD commands\n        (dgn.toLowerCase().includes('command'))) {\n        return CONFIG.DEFAULT_PRIORITY.COMMAND;\n    }\n\n    // Status messages use standard priority\n    return CONFIG.DEFAULT_PRIORITY.STATUS;\n}\n\n// === CAN ID Construction ===\n\nfunction constructCANId(priority, dgn, sourceAddress) {\n    const dgnNum = parseInt(dgn, 16);\n\n    // Validate ranges\n    validateNumericRange(priority, 'Priority', 0, CONFIG.MAX_PRIORITY);\n    validateNumericRange(dgnNum, 'DGN', 0, CONFIG.MAX_DGN_VALUE);\n    validateNumericRange(sourceAddress, 'Source Address', 0, CONFIG.MAX_SOURCE_ADDRESS);\n\n    // Construct 29-bit CAN ID per RV-C specification:\n    // [Priority:3][Reserved:1][Data Page:1][DGN:18][Source Address:8]\n    // Note: Reserved and Data Page bits are typically 0 for RV-C\n    const canId = (priority << 26) | (dgnNum << 8) | sourceAddress;\n\n    // Ensure we don't exceed 29-bit limit\n    if (canId > 0x1FFFFFFF) {\n        throw new Error('Constructed CAN ID exceeds 29-bit limit');\n    }\n\n    return canId;\n}\n\n// === Main Logic ===\n\ntry {\n    // Validate input payload structure\n    if (!msg.payload || typeof msg.payload !== 'object') {\n        throw new Error('msg.payload must be an object');\n    }\n\n    const input = msg.payload;\n\n    // Extract required fields\n    const dgn = input.dgn;\n    const dataPayload = input.dataPayload || input.data;\n\n    if (!dgn) {\n        throw new Error('msg.payload.dgn is required');\n    }\n\n    if (!dataPayload) {\n        throw new Error('msg.payload.dataPayload (or msg.payload.data) is required');\n    }\n\n    // Validate DGN\n    validateHexString(dgn, 'DGN', 1, 5); // 1-5 hex chars for DGN\n\n    // Validate data payload\n    validateHexString(dataPayload, 'Data Payload', CONFIG.MIN_DATA_LENGTH, CONFIG.MAX_DATA_LENGTH);\n\n    // Data payload must be even length (complete bytes)\n    if (dataPayload.length % 2 !== 0) {\n        throw new Error('Data payload must have even length (complete hex bytes)');\n    }\n\n    // Extract optional parameters with defaults\n    const priority = input.priority !== undefined ?\n        input.priority :\n        determinePriority(dgn, input.messageType);\n\n    const sourceAddress = input.sourceAddress !== undefined ?\n        input.sourceAddress :\n        CONFIG.DEFAULT_SOURCE_ADDRESS;\n\n    // Construct the CAN ID\n    const canIdNum = constructCANId(priority, dgn, sourceAddress);\n\n    // Format CAN ID as 8-character uppercase hex string\n    const canIdHex = canIdNum.toString(16).toUpperCase().padStart(8, '0');\n\n    // Construct the complete CAN message\n    const canMessage = `${canIdHex}#${dataPayload.toUpperCase()}`;\n\n    // Set output topic and payload\n    msg.topic = input.topic || msg.topic || CONFIG.DEFAULT_MQTT_TOPIC;\n    msg.payload = canMessage;\n\n    // Add metadata for debugging/logging\n    msg.canMetadata = {\n        dgn: dgn.toUpperCase(),\n        dgnDecimal: parseInt(dgn, 16),\n        priority: priority,\n        sourceAddress: sourceAddress,\n        sourceAddressHex: sourceAddress.toString(16).toUpperCase().padStart(2, '0'),\n        canIdHex: canIdHex,\n        canIdDecimal: canIdNum,\n        dataLength: dataPayload.length / 2,\n        originalInput: input\n    };\n\n    // Status indication for successful encoding\n    node.status({\n        fill: 'green',\n        shape: 'dot',\n        text: `Encoded DGN:${dgn} SA:${sourceAddress.toString(16).toUpperCase()}`\n    });\n\n    return msg;\n\n} catch (error) {\n    // Handle all validation and encoding errors\n    node.error(`CAN encoding failed: ${error.message}`, msg);\n    node.status({\n        fill: 'red',\n        shape: 'ring',\n        text: `Error: ${error.message.substring(0, 20)}...`\n    });\n\n    // Return error details for debugging\n    msg.encodingError = {\n        message: error.message,\n        timestamp: new Date().toISOString(),\n        input: msg.payload\n    };\n\n    return msg;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 380,
-        "y": 540,
-        "wires": [
-            [
-                "e7ae35364ce60f3f",
-                "cacf35b859af22a9"
-            ]
-        ]
-    },
-    {
         "id": "cacf35b859af22a9",
         "type": "mqtt out",
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
-        "name": "MQTT Out",
+        "name": "MQTT Out: Retain FALSE",
         "topic": "",
         "qos": "0",
         "retain": "false",
@@ -3119,8 +2545,8 @@
         "correl": "",
         "expiry": "",
         "broker": "80727e60a251c36c",
-        "x": 630,
-        "y": 480,
+        "x": 670,
+        "y": 460,
         "wires": []
     },
     {
@@ -3138,45 +2564,29 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 540,
+        "y": 520,
         "wires": []
-    },
-    {
-        "id": "4fce77126a105df2",
-        "type": "link in",
-        "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
-        "name": "CAN out",
-        "links": [],
-        "x": 160,
-        "y": 540,
-        "wires": [
-            [
-                "19e68bc19dddefb9"
-            ]
-        ],
-        "l": true
     },
     {
         "id": "f658418a7b9b4857",
         "type": "link in",
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
-        "name": "MQTT out",
+        "name": "MQTT out: Retain TRUE",
         "links": [
-            "d4ef1d361f084b58",
-            "1bf17ae955275cf0",
-            "d3a13b531babee66",
-            "ea29386f9f8682bc",
-            "d38c75bc1474be23",
             "41a795b109c2b36f",
-            "a2334b77d3764815"
+            "a2334b77d3764815",
+            "d38c75bc1474be23",
+            "d3a13b531babee66",
+            "d4ef1d361f084b58",
+            "ea29386f9f8682bc"
         ],
-        "x": 160,
-        "y": 480,
+        "x": 210,
+        "y": 460,
         "wires": [
             [
-                "cacf35b859af22a9"
+                "cacf35b859af22a9",
+                "e7ae35364ce60f3f"
             ]
         ],
         "l": true
@@ -3189,14 +2599,14 @@
         "name": "HA in",
         "topic": "homeassistant/+/+/set",
         "qos": "1",
-        "datatype": "json",
+        "datatype": "utf8",
         "broker": "80727e60a251c36c",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
         "x": 150,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -3215,7 +2625,7 @@
             "a3b957142479c075"
         ],
         "x": 610,
-        "y": 360,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -3234,7 +2644,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 150,
-        "y": 300,
+        "y": 280,
         "wires": [
             [
                 "32add109922d428a",
@@ -3254,7 +2664,7 @@
             "2fcbc4d630144362"
         ],
         "x": 620,
-        "y": 300,
+        "y": 280,
         "wires": [],
         "l": true
     },
@@ -3264,15 +2674,15 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "Decode RVC CAN",
-        "func": "// RVC CAN Message Parser\n// Decodes a raw RVC CAN message string into a structured object.\n// Input: msg.payload (string) - e.g., \"19FEDA8C#3AFF00FDFF2100FF\"\n// Output: msg.payload (object) with decoded CAN message components\n\nconst originalMessage = msg.payload;\n\n// 1. Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\n\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// 2. Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\n\nconst canIdHex = parts[0];\nconst dataPayload = parts[1];\n\nconst canIdNum = parseInt(canIdHex, 16);\nif (isNaN(canIdNum) || canIdHex.length > 8) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// 3. Extract CAN ID fields and determine DGN\nconst priority = (canIdNum >> 26) & 0x7;\nconst sourceAddress = (canIdNum & 0xFF).toString(16).toUpperCase().padStart(2, '0');\n\nlet dgn = ((canIdNum >> 8) & 0x1FFFF).toString(16).toUpperCase();\nlet dgnName = dgnMap.get(dgn);\n\n// If the lookup fails and the DGN is 4 characters, try prepending a '1'\nif (!dgnName && dgn.length === 4) {\n    const alternateDgn = '1' + dgn;\n    const alternateName = dgnMap.get(alternateDgn);\n\n    if (alternateName) {\n        dgn = alternateDgn;\n        dgnName = alternateName;\n    }\n}\n\n// *** NEW LOGIC STARTS HERE ***\n// If still not found, check for specific proprietary overrides or the general proprietary range\nif (!dgnName) {\n    if (dgn === 'EF64') {\n        dgnName = \"AQUAHOT\";\n    } else if (dgn.startsWith('EF')) {\n        dgnName = \"PROPRIETARY\";\n    }\n}\n// *** NEW LOGIC ENDS HERE ***\n\n// If it's still not found after all checks, set it to UNKNOWN\nif (!dgnName) {\n    dgnName = \"UNKNOWN\";\n}\n\n// 4. Create structured output\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    sourceAddress: sourceAddress,\n    priority: priority,\n    dataPayload: dataPayload,\n    canIdHex: canIdHex,\n    canIdDecimal: canIdNum,\n    dataLength: dataPayload.length / 2\n};\n\nreturn msg;",
+        "func": "// RVC CAN Message Parser\n// Decodes a raw RVC CAN message string into a structured object.\n// Input: msg.payload (string) - e.g., \"19FEDA8C#3AFF00FDFF2100FF\"\n// Output: msg.payload (object) with decoded CAN message components\n\nconst originalMessage = msg.payload;\n\n// 1. Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\n\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// 2. Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\n\nconst canIdHex = parts[0];\nconst dataPayload = parts[1];\n\nconst canIdNum = parseInt(canIdHex, 16);\nif (isNaN(canIdNum) || canIdHex.length > 8) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// 3. Extract CAN ID fields and determine DGN\nconst priority = (canIdNum >> 26) & 0x7;\nconst sourceAddress = (canIdNum & 0xFF).toString(16).toUpperCase().padStart(2, '0');\n\nlet dgn = ((canIdNum >> 8) & 0x1FFFF).toString(16).toUpperCase();\nlet dgnName = dgnMap.get(dgn);\n\n// If the lookup fails and the DGN is 4 characters, try prepending a '1'\nif (!dgnName && dgn.length === 4) {\n    const alternateDgn = '1' + dgn;\n    const alternateName = dgnMap.get(alternateDgn);\n\n    if (alternateName) {\n        dgn = alternateDgn;\n        dgnName = alternateName;\n    }\n}\n\n// If still not found, check for specific proprietary overrides or the general proprietary range\nif (!dgnName) {\n    if (dgn === 'EF64') {\n        dgnName = \"AQUAHOT\";\n    } else if (dgn.startsWith('EF')) {\n        dgnName = \"PROPRIETARY\";\n    }\n}\n\n// If it's still not found after all checks, set it to UNKNOWN\nif (!dgnName) {\n    dgnName = \"UNKNOWN\";\n}\n\n// 4. Create structured output\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    sourceAddress: sourceAddress,\n    priority: priority,\n    dataPayload: dataPayload,\n    canIdHex: canIdHex,\n    canIdDecimal: canIdNum,\n    dataLength: dataPayload.length / 2\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 860,
+        "x": 350,
+        "y": 880,
         "wires": [
             [
                 "ac47ce53a9fc3f21",
@@ -3300,8 +2710,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
-        "y": 980,
+        "x": 600,
+        "y": 1000,
         "wires": []
     },
     {
@@ -3318,8 +2728,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 650,
-        "y": 940,
+        "x": 610,
+        "y": 960,
         "wires": []
     },
     {
@@ -3336,8 +2746,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 630,
-        "y": 740,
+        "x": 590,
+        "y": 760,
         "wires": []
     },
     {
@@ -3354,8 +2764,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
-        "y": 780,
+        "x": 600,
+        "y": 800,
         "wires": []
     },
     {
@@ -3372,8 +2782,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 700,
+        "x": 620,
+        "y": 720,
         "wires": []
     },
     {
@@ -3390,8 +2800,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 820,
+        "x": 620,
+        "y": 840,
         "wires": []
     },
     {
@@ -3408,8 +2818,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 630,
-        "y": 900,
+        "x": 590,
+        "y": 920,
         "wires": []
     },
     {
@@ -3422,7 +2832,7 @@
             "958fed9f12301f59"
         ],
         "x": 150,
-        "y": 860,
+        "y": 880,
         "wires": [
             [
                 "8d7d5d3ea117cf79"
@@ -3456,11 +2866,6 @@
             },
             {
                 "t": "eq",
-                "v": "UNKNOWN",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
                 "v": "DC_DIMMER_COMMAND_2",
                 "vt": "str"
             },
@@ -3480,22 +2885,24 @@
                 "vt": "str"
             },
             {
+                "t": "eq",
+                "v": "UNKNOWN",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "false",
         "repair": false,
         "outputs": 9,
-        "x": 890,
-        "y": 860,
+        "x": 830,
+        "y": 880,
         "wires": [
             [],
             [],
             [
                 "02bdfc59de71b5a5"
-            ],
-            [
-                "c781b519a9f9b156"
             ],
             [
                 "37b11a996fc2757e"
@@ -3508,6 +2915,9 @@
             ],
             [
                 "5f6336442bfb9808"
+            ],
+            [
+                "c781b519a9f9b156"
             ],
             [
                 "d0150fd6556514e6"
@@ -3529,95 +2939,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "1e93f7b73c40091a",
-        "type": "inject",
-        "z": "292e70a6ba25b323",
-        "g": "01b53bba61cb7227",
-        "name": "Reset unique",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 1410,
-        "y": 960,
-        "wires": [
-            [
-                "38606e245b70b98e"
-            ]
-        ]
-    },
-    {
-        "id": "38606e245b70b98e",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "01b53bba61cb7227",
-        "name": "Reset function",
-        "func": "flow.set(\"uniqueDecoded\", []);\nreturn null;  // Nothing needs to go downstream\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1680,
-        "y": 960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d0150fd6556514e6",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "01b53bba61cb7227",
-        "name": "Unique decoded messages",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDecoded = flow.get(\"uniqueDecoded\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload);\n\n// Check if it's a new unique message\nif (!uniqueDecoded.includes(newMsgStr)) {\n    uniqueDecoded.push(newMsgStr);\n    flow.set(\"uniqueDecoded\", uniqueDecoded);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 1020,
-        "wires": [
-            [
-                "8f7381d08bf2b8a8"
-            ]
-        ]
-    },
-    {
-        "id": "8f7381d08bf2b8a8",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "g": "01b53bba61cb7227",
-        "name": "New Unique",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1670,
-        "y": 1020,
+        "y": 220,
         "wires": []
     },
     {
@@ -3637,13 +2959,13 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": true,
+        "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1440,
-        "y": 700,
+        "x": 1100,
+        "y": 1240,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -3663,8 +2985,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1680,
-        "y": 700,
+        "x": 1340,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -3682,8 +3004,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1410,
-        "y": 760,
+        "x": 1070,
+        "y": 1300,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -3704,8 +3026,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1690,
-        "y": 760,
+        "x": 1350,
+        "y": 1300,
         "wires": []
     },
     {
@@ -3731,7 +3053,7 @@
         "payload": "toggle",
         "payloadType": "str",
         "x": 190,
-        "y": 240,
+        "y": 220,
         "wires": [
             [
                 "4ad3b304d4f1e27b"
@@ -3753,7 +3075,7 @@
         "statusCmd": "status",
         "persist": false,
         "x": 370,
-        "y": 300,
+        "y": 280,
         "wires": [
             [
                 "958fed9f12301f59"
@@ -3770,8 +3092,8 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 1070,
-        "y": 740,
+        "x": 1030,
+        "y": 720,
         "wires": [],
         "l": true
     },
@@ -3790,7 +3112,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 610,
-        "y": 420,
+        "y": 400,
         "wires": []
     },
     {
@@ -3803,8 +3125,8 @@
         "links": [
             "44947b512cb27b5b"
         ],
-        "x": 1420,
-        "y": 840,
+        "x": 1080,
+        "y": 780,
         "wires": [],
         "l": true
     },
@@ -3831,7 +3153,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 1240,
+        "y": 1520,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -3852,7 +3174,7 @@
         "finalize": "",
         "libs": [],
         "x": 700,
-        "y": 1240,
+        "y": 1520,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -3879,7 +3201,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 930,
-        "y": 1300,
+        "y": 1580,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -3900,7 +3222,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 1300,
+        "y": 1580,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -3920,8 +3242,8 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 1400,
-        "y": 880,
+        "x": 1060,
+        "y": 840,
         "wires": [],
         "l": true
     },
@@ -3935,7 +3257,7 @@
             "45414bacecada477"
         ],
         "x": 200,
-        "y": 1300,
+        "y": 1580,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -3951,10 +3273,11 @@
         "name": "MQTT Out",
         "mode": "link",
         "links": [
-            "f658418a7b9b4857"
+            "f658418a7b9b4857",
+            "74329f13cbbc528a"
         ],
         "x": 1370,
-        "y": 1240,
+        "y": 1520,
         "wires": [],
         "l": true
     },
@@ -3972,7 +3295,7 @@
         "finalize": "",
         "libs": [],
         "x": 1140,
-        "y": 1300,
+        "y": 1580,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -3994,11 +3317,10 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 260,
+        "y": 240,
         "wires": [
             [
-                "982faa37c0038bf4",
-                "4d8ffc7896c8353f"
+                "982faa37c0038bf4"
             ]
         ]
     },
@@ -4017,7 +3339,7 @@
         "finalize": "",
         "libs": [],
         "x": 1110,
-        "y": 320,
+        "y": 300,
         "wires": [
             [
                 "51910a93d572e95c"
@@ -4039,7 +3361,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1360,
-        "y": 320,
+        "y": 300,
         "wires": []
     },
     {
@@ -4057,30 +3379,12 @@
         "finalize": "",
         "libs": [],
         "x": 1050,
-        "y": 260,
+        "y": 240,
         "wires": [
             [
                 "4f33fad10d85b69d"
             ]
         ]
-    },
-    {
-        "id": "4d8ffc7896c8353f",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "d": true,
-        "g": "3c819b7900145438",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1020,
-        "y": 200,
-        "wires": []
     },
     {
         "id": "5f6336442bfb9808",
@@ -4096,8 +3400,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1080,
-        "y": 1040,
+        "x": 1040,
+        "y": 960,
         "wires": []
     },
     {
@@ -4114,8 +3418,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1070,
-        "y": 1000,
+        "x": 1030,
+        "y": 900,
         "wires": []
     },
     {
@@ -4141,12 +3445,142 @@
         "payload": "",
         "payloadType": "date",
         "x": 450,
-        "y": 1200,
+        "y": 1480,
         "wires": [
             [
                 "b846bc1605dae821"
             ]
         ]
+    },
+    {
+        "id": "1e93f7b73c40091a",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "g": "01b53bba61cb7227",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1070,
+        "y": 1060,
+        "wires": [
+            [
+                "38606e245b70b98e"
+            ]
+        ]
+    },
+    {
+        "id": "38606e245b70b98e",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "01b53bba61cb7227",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueDecoded\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1340,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0150fd6556514e6",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "01b53bba61cb7227",
+        "name": "Unique decoded messages",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDecoded = flow.get(\"uniqueDecoded\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload);\n\n// Check if it's a new unique message\nif (!uniqueDecoded.includes(newMsgStr)) {\n    uniqueDecoded.push(newMsgStr);\n    flow.set(\"uniqueDecoded\", uniqueDecoded);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 1120,
+        "wires": [
+            [
+                "8f7381d08bf2b8a8"
+            ]
+        ]
+    },
+    {
+        "id": "8f7381d08bf2b8a8",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "01b53bba61cb7227",
+        "name": "New Unique Dgn",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1350,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "1ac6e0fa1cbb3852",
+        "type": "mqtt out",
+        "z": "292e70a6ba25b323",
+        "g": "3c819b7900145438",
+        "name": "MQTT Out: Retain TRUE",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "80727e60a251c36c",
+        "x": 670,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "74329f13cbbc528a",
+        "type": "link in",
+        "z": "292e70a6ba25b323",
+        "g": "3c819b7900145438",
+        "name": "MQTT out: Retain FALSE",
+        "links": [
+            "1bf17ae955275cf0",
+            "41a795b109c2b36f",
+            "a2334b77d3764815",
+            "6aa079d768e1571c",
+            "683d87d7466008a2"
+        ],
+        "x": 210,
+        "y": 580,
+        "wires": [
+            [
+                "1ac6e0fa1cbb3852",
+                "e7ae35364ce60f3f"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "802228bc8d89d80a",
@@ -4205,12 +3639,12 @@
         "type": "link out",
         "z": "222c995b7790b8de",
         "g": "04e375b0c463df72",
-        "name": "MQTT Out",
+        "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 590,
+        "x": 630,
         "y": 160,
         "wires": [],
         "l": true
@@ -4545,9 +3979,7 @@
         "z": "ee904ab46f56578e",
         "g": "0b18891888586798",
         "name": "RVC In",
-        "links": [
-            "6aa079d768e1571c"
-        ],
+        "links": [],
         "x": 500,
         "y": 320,
         "wires": [
@@ -4598,12 +4030,12 @@
         "type": "link out",
         "z": "ee904ab46f56578e",
         "g": "0b18891888586798",
-        "name": "MQTT Out",
+        "name": "MQTT out: Retain FALSE",
         "mode": "link",
         "links": [
-            "f658418a7b9b4857"
+            "74329f13cbbc528a"
         ],
-        "x": 930,
+        "x": 970,
         "y": 380,
         "wires": [],
         "l": true
