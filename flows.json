@@ -227,13 +227,12 @@
             "f9f5381eb086c0e6",
             "b6d3cd6d2e6fbc66",
             "240af7ca01aa2041",
-            "6ce8faba3e3bd3c3",
-            "cc621fc63e303e1b"
+            "da2041e2faba86a3"
         ],
         "x": 134,
-        "y": -1,
+        "y": 99,
         "w": 992,
-        "h": 408
+        "h": 348
     },
     {
         "id": "e2dc4d711cc9dc94",
@@ -251,12 +250,14 @@
             "48e3b18cb440da52",
             "25162d774c052102",
             "32ec19602e928185",
-            "3d64b0d9c219e954"
+            "3d64b0d9c219e954",
+            "af972f4c226ebc32",
+            "ac41981e9754eca5"
         ],
         "x": 54,
         "y": 99,
-        "w": 1092,
-        "h": 348
+        "w": 1312,
+        "h": 468
     },
     {
         "id": "5d1ecae7ac09586c",
@@ -275,12 +276,13 @@
             "86fa588a8393f6de",
             "d68c2206e3379850",
             "a1c297b2d8067a0b",
-            "64578fa414def60a"
+            "64578fa414def60a",
+            "0d54f0db9a010394"
         ],
         "x": 134,
         "y": 539,
         "w": 1132,
-        "h": 308
+        "h": 368
     },
     {
         "id": "04e375b0c463df72",
@@ -322,7 +324,7 @@
             "4259c887eedd95ec"
         ],
         "x": 54,
-        "y": 499,
+        "y": 639,
         "w": 1238,
         "h": 308
     },
@@ -363,14 +365,14 @@
             "97f9cc8db4a66114",
             "8203b055d9149eff",
             "73abad3deeed31e8",
-            "c1bf29f13e5e33d8",
             "695ef0ed6d78a244",
-            "3f5eb271f702c8f3"
+            "3f5eb271f702c8f3",
+            "1e244bad0304bb74"
         ],
         "x": 1014,
         "y": 39,
         "w": 752,
-        "h": 222
+        "h": 202
     },
     {
         "id": "9dd6a98018824be9",
@@ -405,12 +407,13 @@
         },
         "nodes": [
             "bfc3dc28b23b2396",
-            "d574ead42dd36caa"
+            "d574ead42dd36caa",
+            "21799a7e71f6c5b4"
         ],
         "x": 174,
-        "y": 299,
+        "y": 279,
         "w": 472,
-        "h": 82
+        "h": 142
     },
     {
         "id": "d68c2206e3379850",
@@ -424,12 +427,13 @@
         },
         "nodes": [
             "7c04541818436246",
-            "738718a321d185e7"
+            "738718a321d185e7",
+            "b9f27aaa32da92c0"
         ],
         "x": 174,
         "y": 739,
         "w": 472,
-        "h": 82
+        "h": 142
     },
     {
         "id": "a0885c7cb1a0a88f",
@@ -446,7 +450,7 @@
             "d137fb1314cb498b"
         ],
         "x": 794,
-        "y": 699,
+        "y": 839,
         "w": 472,
         "h": 82
     },
@@ -465,8 +469,8 @@
             "6e2b753c50d28b2b",
             "e8b62c33eab8e3ac"
         ],
-        "x": 614,
-        "y": 279,
+        "x": 674,
+        "y": 399,
         "w": 472,
         "h": 142
     },
@@ -841,7 +845,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1010,
+        "x": 1230,
         "y": 140,
         "wires": [],
         "l": true
@@ -878,11 +882,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 380,
         "y": 220,
         "wires": [
             [
-                "25162d774c052102"
+                "af972f4c226ebc32"
             ]
         ]
     },
@@ -899,7 +903,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 380,
         "y": 140,
         "wires": [
             [
@@ -920,8 +924,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 220,
+        "x": 940,
+        "y": 200,
         "wires": [
             [
                 "d3a13b531babee66",
@@ -944,7 +948,7 @@
         "finalize": "",
         "libs": [],
         "x": 530,
-        "y": 640,
+        "y": 780,
         "wires": [
             [
                 "000b002344662b42",
@@ -964,7 +968,7 @@
             "37b11a996fc2757e"
         ],
         "x": 200,
-        "y": 640,
+        "y": 780,
         "wires": [
             [
                 "a1beccb1a2803ca5"
@@ -988,7 +992,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1040,
-        "y": 640,
+        "y": 780,
         "wires": []
     },
     {
@@ -1006,7 +1010,7 @@
         "property": "payload",
         "topi": "payload.instance",
         "x": 810,
-        "y": 640,
+        "y": 780,
         "wires": [
             [
                 "25e6f74b216427e5"
@@ -1028,7 +1032,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 540,
+        "y": 680,
         "wires": [
             [
                 "57e45f522fc50a9b"
@@ -1059,7 +1063,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 910,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "d137fb1314cb498b"
@@ -1081,7 +1085,7 @@
         "finalize": "",
         "libs": [],
         "x": 1160,
-        "y": 740,
+        "y": 880,
         "wires": [
             []
         ]
@@ -1102,7 +1106,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1080,
-        "y": 540,
+        "y": 680,
         "wires": []
     },
     {
@@ -1127,8 +1131,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 730,
-        "y": 380,
+        "x": 790,
+        "y": 500,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1148,8 +1152,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 980,
-        "y": 380,
+        "x": 1040,
+        "y": 500,
         "wires": [
             []
         ]
@@ -1169,7 +1173,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 860,
-        "y": 600,
+        "y": 740,
         "wires": []
     },
     {
@@ -1177,7 +1181,7 @@
         "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "Create switch",
+        "name": "Create mqtt",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -1186,7 +1190,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1020,
+        "x": 1230,
         "y": 220,
         "wires": []
     },
@@ -1197,10 +1201,11 @@
         "g": "32ec19602e928185",
         "name": "Reset switches",
         "links": [
-            "c1bf29f13e5e33d8"
+            "c1bf29f13e5e33d8",
+            "1e244bad0304bb74"
         ],
-        "x": 720,
-        "y": 320,
+        "x": 780,
+        "y": 440,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1247,6 +1252,86 @@
         ]
     },
     {
+        "id": "af972f4c226ebc32",
+        "type": "switch",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "",
+        "property": "payload.device_type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "switch",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "autofill",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pump",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "lock",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "shade",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 5,
+        "x": 610,
+        "y": 220,
+        "wires": [
+            [
+                "25162d774c052102"
+            ],
+            [
+                "25162d774c052102"
+            ],
+            [
+                "25162d774c052102"
+            ],
+            [
+                "ac41981e9754eca5"
+            ],
+            [
+                "ac41981e9754eca5"
+            ]
+        ]
+    },
+    {
+        "id": "ac41981e9754eca5",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "Create Button",
+        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch\", \"pump\", \"autofill\", \"lock\", \"shade\"];\nif (commandableTypes.includes(deviceType)) {\n    // RV-C valid instance range: 1-250\n    // Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\n    if (instance < 1 || instance > 250) {\n        // Silently ignore special RV-C status values - these aren't real devices\n        if (instance >= 251 && instance <= 255) {\n            return null;\n        }\n        node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration with HA component mapping\nlet prefix;\nlet displayPrefix;\nlet icon;\nlet componentType;\n\nswitch (deviceType) {\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        componentType = \"switch\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        componentType = \"switch\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        componentType = \"switch\";\n        break;\n    case \"lock\":\n        prefix = \"lock\";\n        displayPrefix = \"Lock\";\n        icon = \"mdi:lock\";\n        componentType = \"switch\";\n        break;\n    case \"shade\":\n        prefix = \"shade\";\n        displayPrefix = \"Shade\";\n        icon = \"mdi:window-shutter\";\n        componentType = \"switch\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    object_id: entityId,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 240,
+        "wires": [
+            [
+                "d3a13b531babee66",
+                "3d64b0d9c219e954"
+            ]
+        ]
+    },
+    {
         "id": "d4ef1d361f084b58",
         "type": "link out",
         "z": "7f95345534f00358",
@@ -1275,8 +1360,7 @@
         "wires": [
             [
                 "6dc4171b23e1cc2a",
-                "240af7ca01aa2041",
-                "cc621fc63e303e1b"
+                "240af7ca01aa2041"
             ]
         ],
         "l": true
@@ -1320,7 +1404,7 @@
         "wires": [
             [
                 "d4ef1d361f084b58",
-                "6ce8faba3e3bd3c3"
+                "da2041e2faba86a3"
             ]
         ]
     },
@@ -1347,7 +1431,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 290,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "d574ead42dd36caa"
@@ -1368,7 +1452,7 @@
         "finalize": "",
         "libs": [],
         "x": 540,
-        "y": 340,
+        "y": 380,
         "wires": [
             []
         ]
@@ -1470,7 +1554,8 @@
         "y": 660,
         "wires": [
             [
-                "ea29386f9f8682bc"
+                "ea29386f9f8682bc",
+                "0d54f0db9a010394"
             ]
         ]
     },
@@ -1498,7 +1583,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 290,
-        "y": 780,
+        "y": 840,
         "wires": [
             [
                 "738718a321d185e7"
@@ -1520,7 +1605,7 @@
         "finalize": "",
         "libs": [],
         "x": 540,
-        "y": 780,
+        "y": 840,
         "wires": [
             []
         ]
@@ -1591,16 +1676,51 @@
         ]
     },
     {
-        "id": "6ce8faba3e3bd3c3",
+        "id": "21799a7e71f6c5b4",
+        "type": "link in",
+        "z": "7f95345534f00358",
+        "g": "b6d3cd6d2e6fbc66",
+        "name": "Reset tanks",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 270,
+        "y": 320,
+        "wires": [
+            [
+                "d574ead42dd36caa"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "b9f27aaa32da92c0",
+        "type": "link in",
+        "z": "7f95345534f00358",
+        "g": "d68c2206e3379850",
+        "name": "Reset batteries",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 300,
+        "y": 780,
+        "wires": [
+            []
+        ],
+        "l": true
+    },
+    {
+        "id": "da2041e2faba86a3",
         "type": "debug",
         "z": "7f95345534f00358",
         "g": "067069104a82b459",
-        "name": "debug 1",
-        "active": true,
+        "name": "Create mqtt",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 950,
@@ -1608,20 +1728,21 @@
         "wires": []
     },
     {
-        "id": "cc621fc63e303e1b",
+        "id": "0d54f0db9a010394",
         "type": "debug",
         "z": "7f95345534f00358",
-        "g": "067069104a82b459",
-        "name": "debug 3",
+        "g": "5d1ecae7ac09586c",
+        "name": "Create mqtt",
         "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 410,
-        "y": 40,
+        "x": 1090,
+        "y": 660,
         "wires": []
     },
     {
@@ -3938,8 +4059,8 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
+        "once": true,
+        "onceDelay": "1",
         "topic": "",
         "payload": "",
         "payloadType": "date",
@@ -3948,9 +4069,9 @@
         "wires": [
             [
                 "73abad3deeed31e8",
-                "c1bf29f13e5e33d8",
                 "695ef0ed6d78a244",
-                "3f5eb271f702c8f3"
+                "3f5eb271f702c8f3",
+                "1e244bad0304bb74"
             ]
         ]
     },
@@ -3989,21 +4110,6 @@
                 "8203b055d9149eff"
             ]
         ]
-    },
-    {
-        "id": "c1bf29f13e5e33d8",
-        "type": "link out",
-        "z": "292e70a6ba25b323",
-        "g": "ff07f63b9271ea10",
-        "name": "Reset switches",
-        "mode": "link",
-        "links": [
-            "e8b62c33eab8e3ac"
-        ],
-        "x": 1380,
-        "y": 220,
-        "wires": [],
-        "l": true
     },
     {
         "id": "695ef0ed6d78a244",
@@ -4046,6 +4152,23 @@
                 "8203b055d9149eff"
             ]
         ]
+    },
+    {
+        "id": "1e244bad0304bb74",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "ff07f63b9271ea10",
+        "name": "Clear unique values",
+        "mode": "link",
+        "links": [
+            "e8b62c33eab8e3ac",
+            "21799a7e71f6c5b4",
+            "b9f27aaa32da92c0"
+        ],
+        "x": 1400,
+        "y": 200,
+        "wires": [],
+        "l": true
     },
     {
         "id": "802228bc8d89d80a",
