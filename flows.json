@@ -16,17 +16,9 @@
         "env": []
     },
     {
-        "id": "7f95345534f00358",
-        "type": "tab",
-        "label": "Tanks and Batteries",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "3e5f038a4f5a8b9a",
         "type": "tab",
-        "label": "Status Decode",
+        "label": "Status",
         "disabled": false,
         "info": "",
         "env": []
@@ -48,14 +40,6 @@
         "env": []
     },
     {
-        "id": "ee904ab46f56578e",
-        "type": "tab",
-        "label": "HomeKit",
-        "disabled": true,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "9cfcca5efde78052",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -70,8 +54,8 @@
             "cd670f6465b6374b",
             "c78420a075d43408"
         ],
-        "x": 74,
-        "y": 1699,
+        "x": 134,
+        "y": 1639,
         "w": 852,
         "h": 82
     },
@@ -126,8 +110,8 @@
             "74329f13cbbc528a",
             "1ac6e0fa1cbb3852"
         ],
-        "x": 74,
-        "y": 79,
+        "x": 134,
+        "y": 59,
         "w": 732,
         "h": 442
     },
@@ -159,33 +143,10 @@
             "01b53bba61cb7227",
             "cfa01b55c1dabc91"
         ],
-        "x": 54,
-        "y": 579,
+        "x": 134,
+        "y": 559,
         "w": 1438,
         "h": 688
-    },
-    {
-        "id": "0b18891888586798",
-        "type": "group",
-        "z": "ee904ab46f56578e",
-        "name": "HomeKit",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "faf503bfdd48519a",
-            "107cff91357ef6da",
-            "9104e3fb894083ee",
-            "b7cc11c60eb56768",
-            "7c30a3bc33fa2315",
-            "9428382ab57f3f5d",
-            "1bf17ae955275cf0"
-        ],
-        "x": 84,
-        "y": 279,
-        "w": 1022,
-        "h": 202
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -208,29 +169,6 @@
         "h": 142
     },
     {
-        "id": "067069104a82b459",
-        "type": "group",
-        "z": "7f95345534f00358",
-        "name": "Tanks",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "d4ef1d361f084b58",
-            "61f4573c56915577",
-            "6dc4171b23e1cc2a",
-            "f9f5381eb086c0e6",
-            "b6d3cd6d2e6fbc66",
-            "240af7ca01aa2041",
-            "da2041e2faba86a3"
-        ],
-        "x": 134,
-        "y": 99,
-        "w": 992,
-        "h": 348
-    },
-    {
         "id": "e2dc4d711cc9dc94",
         "type": "group",
         "z": "3470febb2cd6e952",
@@ -247,35 +185,10 @@
             "25162d774c052102",
             "32ec19602e928185"
         ],
-        "x": 54,
+        "x": 114,
         "y": 39,
         "w": 1078,
         "h": 348
-    },
-    {
-        "id": "5d1ecae7ac09586c",
-        "type": "group",
-        "z": "7f95345534f00358",
-        "name": "Batteries",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "ea29386f9f8682bc",
-            "663120adc5ec254f",
-            "2c1151c97bb185f2",
-            "b6d90639c3fc122c",
-            "86fa588a8393f6de",
-            "d68c2206e3379850",
-            "a1c297b2d8067a0b",
-            "64578fa414def60a",
-            "0d54f0db9a010394"
-        ],
-        "x": 134,
-        "y": 539,
-        "w": 1132,
-        "h": 368
     },
     {
         "id": "04e375b0c463df72",
@@ -320,8 +233,8 @@
             "1e244bad0304bb74",
             "07b8bcce03f19e8f"
         ],
-        "x": 74,
-        "y": 1359,
+        "x": 134,
+        "y": 1299,
         "w": 1652,
         "h": 282
     },
@@ -342,7 +255,7 @@
             "d5b86b351963235f",
             "b94bb12a8c0a7027"
         ],
-        "x": 54,
+        "x": 114,
         "y": 439,
         "w": 1078,
         "h": 328
@@ -364,8 +277,8 @@
             "927340668e7942e4",
             "ac41981e9754eca5"
         ],
-        "x": 54,
-        "y": 879,
+        "x": 114,
+        "y": 819,
         "w": 1078,
         "h": 328
     },
@@ -385,49 +298,9 @@
             "c781b519a9f9b156",
             "eea1641469efb23f"
         ],
-        "x": 934,
-        "y": 1099,
+        "x": 1014,
+        "y": 1079,
         "w": 532,
-        "h": 142
-    },
-    {
-        "id": "b6d3cd6d2e6fbc66",
-        "type": "group",
-        "z": "7f95345534f00358",
-        "g": "067069104a82b459",
-        "name": "Reset unique list",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "bfc3dc28b23b2396",
-            "d574ead42dd36caa",
-            "21799a7e71f6c5b4"
-        ],
-        "x": 174,
-        "y": 279,
-        "w": 472,
-        "h": 142
-    },
-    {
-        "id": "d68c2206e3379850",
-        "type": "group",
-        "z": "7f95345534f00358",
-        "g": "5d1ecae7ac09586c",
-        "name": "Rest unique battery list",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "7c04541818436246",
-            "738718a321d185e7",
-            "b9f27aaa32da92c0"
-        ],
-        "x": 174,
-        "y": 739,
-        "w": 472,
         "h": 142
     },
     {
@@ -445,7 +318,7 @@
             "6e2b753c50d28b2b",
             "e8b62c33eab8e3ac"
         ],
-        "x": 634,
+        "x": 694,
         "y": 219,
         "w": 472,
         "h": 142
@@ -466,8 +339,8 @@
             "d0150fd6556514e6",
             "8f7381d08bf2b8a8"
         ],
-        "x": 934,
-        "y": 919,
+        "x": 1014,
+        "y": 899,
         "w": 532,
         "h": 142
     },
@@ -486,7 +359,7 @@
             "d240e935bd38ebd0",
             "54c6beb1daaa00bb"
         ],
-        "x": 634,
+        "x": 694,
         "y": 599,
         "w": 472,
         "h": 142
@@ -506,36 +379,98 @@
             "81bed51dd2f37032",
             "84e908d542084d74"
         ],
-        "x": 634,
-        "y": 1039,
+        "x": 694,
+        "y": 979,
         "w": 472,
         "h": 142
     },
     {
-        "id": "481f3f804361a6fd",
-        "type": "homekit-bridge",
-        "bridgeName": "CoachHomekit",
-        "pinCode": "4062-3183",
-        "port": "",
-        "advertiser": "bonjour-hap",
-        "allowInsecureRequest": false,
-        "manufacturer": "NRCHKB",
-        "model": "1.7.3",
-        "serialNo": "Default Serial Number",
-        "firmwareRev": "1.7.3",
-        "hardwareRev": "1.7.3",
-        "softwareRev": "1.7.3",
-        "bind": "",
-        "bindType": "str",
-        "customMdnsConfig": false,
-        "mdnsMulticast": true,
-        "mdnsInterface": "",
-        "mdnsPort": "",
-        "mdnsIp": "",
-        "mdnsTtl": "",
-        "mdnsLoopback": true,
-        "mdnsReuseAddr": true,
-        "allowMessagePassthrough": true
+        "id": "067069104a82b459",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Tanks",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "d4ef1d361f084b58",
+            "61f4573c56915577",
+            "6dc4171b23e1cc2a",
+            "f9f5381eb086c0e6",
+            "b6d3cd6d2e6fbc66",
+            "240af7ca01aa2041",
+            "da2041e2faba86a3"
+        ],
+        "x": 114,
+        "y": 1199,
+        "w": 992,
+        "h": 348
+    },
+    {
+        "id": "5d1ecae7ac09586c",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Batteries",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "ea29386f9f8682bc",
+            "663120adc5ec254f",
+            "2c1151c97bb185f2",
+            "b6d90639c3fc122c",
+            "86fa588a8393f6de",
+            "d68c2206e3379850",
+            "a1c297b2d8067a0b",
+            "64578fa414def60a",
+            "0d54f0db9a010394"
+        ],
+        "x": 108,
+        "y": 1599,
+        "w": 1178,
+        "h": 368
+    },
+    {
+        "id": "b6d3cd6d2e6fbc66",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "067069104a82b459",
+        "name": "Reset unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "bfc3dc28b23b2396",
+            "d574ead42dd36caa",
+            "21799a7e71f6c5b4"
+        ],
+        "x": 154,
+        "y": 1379,
+        "w": 472,
+        "h": 142
+    },
+    {
+        "id": "d68c2206e3379850",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "5d1ecae7ac09586c",
+        "name": "Rest unique battery list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "7c04541818436246",
+            "738718a321d185e7",
+            "b9f27aaa32da92c0"
+        ],
+        "x": 134,
+        "y": 1799,
+        "w": 472,
+        "h": 142
     },
     {
         "id": "80727e60a251c36c",
@@ -842,7 +777,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 970,
+        "x": 1030,
         "y": 80,
         "wires": [],
         "l": true
@@ -856,7 +791,7 @@
         "links": [
             "7af7fb2178a714cf"
         ],
-        "x": 140,
+        "x": 200,
         "y": 80,
         "wires": [
             [
@@ -879,7 +814,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
+        "x": 440,
         "y": 140,
         "wires": [
             [
@@ -900,7 +835,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
+        "x": 440,
         "y": 80,
         "wires": [
             [
@@ -921,7 +856,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
+        "x": 720,
         "y": 140,
         "wires": [
             [
@@ -951,7 +886,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 750,
+        "x": 810,
         "y": 320,
         "wires": [
             [
@@ -972,7 +907,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
+        "x": 1060,
         "y": 320,
         "wires": [
             []
@@ -987,7 +922,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 740,
+        "x": 800,
         "y": 260,
         "wires": [
             [
@@ -1009,7 +944,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 630,
+        "x": 690,
         "y": 540,
         "wires": [
             [
@@ -1030,7 +965,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 430,
         "y": 480,
         "wires": [
             [
@@ -1047,7 +982,7 @@
         "links": [
             "f00adfe38f0e26b5"
         ],
-        "x": 160,
+        "x": 220,
         "y": 480,
         "wires": [
             [
@@ -1070,7 +1005,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 430,
         "y": 540,
         "wires": [
             [
@@ -1088,7 +1023,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 930,
+        "x": 990,
         "y": 480,
         "wires": [],
         "l": true
@@ -1115,7 +1050,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 750,
+        "x": 810,
         "y": 700,
         "wires": [
             [
@@ -1136,7 +1071,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
+        "x": 1060,
         "y": 700,
         "wires": [
             []
@@ -1151,7 +1086,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 730,
+        "x": 790,
         "y": 640,
         "wires": [
             [
@@ -1182,8 +1117,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 750,
-        "y": 1140,
+        "x": 810,
+        "y": 1080,
         "wires": [
             [
                 "81bed51dd2f37032"
@@ -1203,8 +1138,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
-        "y": 1140,
+        "x": 1060,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -1218,8 +1153,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 730,
-        "y": 1080,
+        "x": 790,
+        "y": 1020,
         "wires": [
             [
                 "81bed51dd2f37032"
@@ -1240,8 +1175,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 920,
+        "x": 430,
+        "y": 860,
         "wires": [
             [
                 "927340668e7942e4"
@@ -1257,8 +1192,8 @@
         "links": [
             "4ab29d3dd1da32a5"
         ],
-        "x": 160,
-        "y": 920,
+        "x": 220,
+        "y": 860,
         "wires": [
             [
                 "ad388870b71549ef",
@@ -1280,8 +1215,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 980,
+        "x": 440,
+        "y": 920,
         "wires": [
             [
                 "ac41981e9754eca5"
@@ -1298,8 +1233,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 930,
-        "y": 920,
+        "x": 990,
+        "y": 860,
         "wires": [],
         "l": true
     },
@@ -1316,8 +1251,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 980,
+        "x": 680,
+        "y": 920,
         "wires": [
             [
                 "927340668e7942e4"
@@ -1327,29 +1262,29 @@
     {
         "id": "d4ef1d361f084b58",
         "type": "link out",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 990,
-        "y": 140,
+        "x": 970,
+        "y": 1240,
         "wires": [],
         "l": true
     },
     {
         "id": "61f4573c56915577",
         "type": "link in",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "TANK_STATUS",
         "links": [
             "45ae070eafc9a732"
         ],
-        "x": 240,
-        "y": 140,
+        "x": 220,
+        "y": 1240,
         "wires": [
             [
                 "6dc4171b23e1cc2a",
@@ -1361,7 +1296,7 @@
     {
         "id": "6dc4171b23e1cc2a",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Tank Level",
         "func": "/***********************************************************\n * HA Tank Status Updater\n * Takes a JSON payload as input and sends tank level updates\n * to the correct Home Assistant MQTT state topic for tank sensor entities.\n * Expects input msg.payload to be an object with:\n * - msg.payload.tank_type (String): The type of the tank (\"fresh\", \"gray\", \"black\", \"lpg\").\n * - msg.payload.level_percentage (Number): Tank level 0-100%.\n * - msg.payload.relative_level (String): Availability indicator.\n ***********************************************************/\n\n// Validate input and availability\nif (msg.payload?.relative_level === \"Not Available\" || msg.relative_level === \"Not Available\") {\n    return null; // Stop the flow if level data not available\n}\n\n// Extract values with fallback support (preserving original working logic)\nconst tankType = msg.payload?.tank_type ?? msg.tank_type;\nconst levelPercentage = msg.payload?.level_percentage ?? msg.level_percentage;\n\n// Validate tank type\nif (!tankType) {\n    node.error(\"Input missing 'tank_type'.\", msg);\n    return null; // Stop the flow\n}\n\n// Validate level percentage\nif (typeof levelPercentage !== 'number') {\n    node.error(\"Input missing 'level_percentage' (number).\", msg);\n    return null; // Stop the flow\n}\n\n// Ensure level is within valid range\nconst level = Math.max(0, Math.min(100, Math.round(levelPercentage)));\n\n// Create the state topic for this tank instance\nconst stateTopic = `homeassistant/sensor/tank_${tankType}/state`;\n\nmsg.topic = stateTopic;\nmsg.payload = level; // The payload is the numeric level percentage\nmsg.retain = true; // Retain the status so HA shows the correct state after a restart\n\n// Add debug information for troubleshooting\nmsg.debug_info = {\n    original_tank_type: tankType,\n    calculated_level: level,\n    raw_level_percentage: levelPercentage,\n    raw_relative_level: msg.payload?.relative_level ?? msg.relative_level\n};\n\nreturn msg;",
@@ -1371,8 +1306,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 140,
+        "x": 470,
+        "y": 1240,
         "wires": [
             [
                 "d4ef1d361f084b58"
@@ -1382,7 +1317,7 @@
     {
         "id": "f9f5381eb086c0e6",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Create Tank",
         "func": "/***********************************************************\n * Tank MQTT Discovery for Home Assistant\n * Creates a sensor entity based on tank type input.\n * Expects msg.payload to be a tank type string (e.g., \"fresh\", \"gray\", \"black\", \"lpg\").\n * Example Input: msg.payload = \"fresh\"\n * Resulting Entity ID: tank_fresh\n ***********************************************************/\n\n// Accept numeric instance ID from unique_tank.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to single-word tank type and display name\nconst tankTypeMap = {\n    0: { type: \"fresh\", name: \"Fresh Water\" },\n    1: { type: \"gray\", name: \"Gray Water\" },\n    2: { type: \"black\", name: \"Black Water\" },\n    3: { type: \"lpg\", name: \"LPG\" },\n    4: { type: \"fuel\", name: \"Fuel\" },\n    5: { type: \"hot\", name: \"Hot Water\" },\n    6: { type: \"hydraulic\", name: \"Hydraulic Fluid\" },\n    7: { type: \"livewell\", name: \"Live Well\" },\n    8: { type: \"ballast\", name: \"Ballast\" },\n    9: { type: \"oil\", name: \"Oil\" },\n    10: { type: \"coolant\", name: \"Coolant\" },\n    11: { type: \"def\", name: \"DEF\" },\n    12: { type: \"air\", name: \"Air\" },\n    13: { type: \"fresh2\", name: \"Fresh Water 2\" },\n    14: { type: \"gray2\", name: \"Gray Water 2\" },\n    15: { type: \"black2\", name: \"Black Water 2\" },\n    251: { type: \"error\", name: \"Error\" },\n    252: { type: \"notsupported\", name: \"Not Supported\" },\n    253: { type: \"outofrange\", name: \"Out of Range\" },\n    254: { type: \"reserved\", name: \"Reserved\" },\n    255: { type: \"notavailable\", name: \"Not Available\" }\n};\n\nconst tankInfo = tankTypeMap[instanceId] || { type: \"other\", name: `Unknown Tank ${instanceId}` };\nconst tankType = tankInfo.type;\nconst displayName = tankInfo.name;\n\nconst entityId = `tank_${tankType}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:water-percent\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"%\",\n    value_template: \"{{ value | float }}\", // Ensure it's parsed as a number\n\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
@@ -1392,8 +1327,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 220,
+        "x": 710,
+        "y": 1320,
         "wires": [
             [
                 "d4ef1d361f084b58",
@@ -1404,7 +1339,7 @@
     {
         "id": "bfc3dc28b23b2396",
         "type": "inject",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "b6d3cd6d2e6fbc66",
         "name": "Reset unique",
         "props": [
@@ -1423,8 +1358,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 380,
+        "x": 270,
+        "y": 1480,
         "wires": [
             [
                 "d574ead42dd36caa"
@@ -1434,7 +1369,7 @@
     {
         "id": "d574ead42dd36caa",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "b6d3cd6d2e6fbc66",
         "name": "Reset function",
         "func": "flow.set(\"uniqueTanks\", []);\n\nreturn null;  // Nothing needs to go downstream\n",
@@ -1444,16 +1379,73 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 380,
+        "x": 520,
+        "y": 1480,
         "wires": [
             []
         ]
     },
     {
+        "id": "21799a7e71f6c5b4",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "b6d3cd6d2e6fbc66",
+        "name": "Reset tanks",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 250,
+        "y": 1420,
+        "wires": [
+            [
+                "d574ead42dd36caa"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "240af7ca01aa2041",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "067069104a82b459",
+        "name": "Unique tanks",
+        "func": "// Retrieve existing tank instances from flow context, or initialize as empty array\nlet uniqueTanks = flow.get(\"uniqueTanks\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueTanks.includes(instanceId)) {\n    uniqueTanks.push(instanceId);\n    flow.set(\"uniqueTanks\", uniqueTanks);\n\n    // Pass the instance ID to create_tank.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1320,
+        "wires": [
+            [
+                "f9f5381eb086c0e6"
+            ]
+        ]
+    },
+    {
+        "id": "da2041e2faba86a3",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "067069104a82b459",
+        "name": "Create mqtt",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 1320,
+        "wires": []
+    },
+    {
         "id": "ea29386f9f8682bc",
         "type": "link out",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "MQTT out: Retain TRUE",
@@ -1461,23 +1453,23 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1130,
-        "y": 580,
+        "x": 1150,
+        "y": 1640,
         "wires": [],
         "l": true
     },
     {
         "id": "663120adc5ec254f",
         "type": "link in",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "DC_SOURCE_STATUS",
         "links": [
             "bff245b2ca47ef79"
         ],
-        "x": 260,
-        "y": 580,
+        "x": 280,
+        "y": 1640,
         "wires": [
             [
                 "a1c297b2d8067a0b"
@@ -1488,7 +1480,7 @@
     {
         "id": "2c1151c97bb185f2",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Battery Level",
@@ -1499,8 +1491,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 650,
-        "y": 580,
+        "x": 670,
+        "y": 1640,
         "wires": [
             [
                 "ea29386f9f8682bc"
@@ -1510,7 +1502,7 @@
     {
         "id": "b6d90639c3fc122c",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Unique batteries",
@@ -1521,8 +1513,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 660,
+        "x": 680,
+        "y": 1720,
         "wires": [
             [
                 "86fa588a8393f6de"
@@ -1532,7 +1524,7 @@
     {
         "id": "86fa588a8393f6de",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Create Battery",
@@ -1543,8 +1535,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 660,
+        "x": 900,
+        "y": 1720,
         "wires": [
             [
                 "ea29386f9f8682bc",
@@ -1555,7 +1547,7 @@
     {
         "id": "7c04541818436246",
         "type": "inject",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "d68c2206e3379850",
         "name": "Reset unique",
@@ -1575,8 +1567,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 840,
+        "x": 250,
+        "y": 1900,
         "wires": [
             [
                 "738718a321d185e7"
@@ -1586,7 +1578,7 @@
     {
         "id": "738718a321d185e7",
         "type": "function",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "d68c2206e3379850",
         "name": "Reset function",
@@ -1597,16 +1589,32 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 840,
+        "x": 500,
+        "y": 1900,
         "wires": [
             []
         ]
     },
     {
+        "id": "b9f27aaa32da92c0",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "d68c2206e3379850",
+        "name": "Reset batteries",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 320,
+        "y": 1840,
+        "wires": [
+            []
+        ],
+        "l": true
+    },
+    {
         "id": "a1c297b2d8067a0b",
         "type": "switch",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "",
@@ -1625,8 +1633,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 450,
-        "y": 580,
+        "x": 470,
+        "y": 1640,
         "wires": [
             [
                 "2c1151c97bb185f2",
@@ -1638,92 +1646,19 @@
     {
         "id": "64578fa414def60a",
         "type": "comment",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "DC_SOURCE_STATUS types",
         "info": "DC_SOURCE_STATUS_1: This is the most basic status message. It provides the fundamental electrical readings: \n\nDC Voltage and DC Current. A positive current value indicates the source is discharging (power flowing out), while a negative value indicates it is charging.\n\nDC_SOURCE_STATUS_2: This message adds thermal and capacity information. It reports the \n\nSource Temperature, the battery's State of Charge (SOC) as a percentage, and the estimated Time Remaining until the battery is either full or empty.\n\nDC_SOURCE_STATUS_3: This provides more nuanced details about the battery's long-term health and capacity. It includes the \n\nState of Health (SOH), Capacity Remaining in amp-hours, and Relative Capacity, which is the state of charge adjusted for the state of health.\n\n\nDC_SOURCE_STATUS_5: This message is for high-precision measurement. It reports the \n\nDC Voltage with 0.001 V precision, allowing for more accurate remote voltage sensing without needing dedicated wires.",
-        "x": 920,
-        "y": 800,
-        "wires": []
-    },
-    {
-        "id": "240af7ca01aa2041",
-        "type": "function",
-        "z": "7f95345534f00358",
-        "g": "067069104a82b459",
-        "name": "Unique tanks",
-        "func": "// Retrieve existing tank instances from flow context, or initialize as empty array\nlet uniqueTanks = flow.get(\"uniqueTanks\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueTanks.includes(instanceId)) {\n    uniqueTanks.push(instanceId);\n    flow.set(\"uniqueTanks\", uniqueTanks);\n\n    // Pass the instance ID to create_tank.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 490,
-        "y": 220,
-        "wires": [
-            [
-                "f9f5381eb086c0e6"
-            ]
-        ]
-    },
-    {
-        "id": "21799a7e71f6c5b4",
-        "type": "link in",
-        "z": "7f95345534f00358",
-        "g": "b6d3cd6d2e6fbc66",
-        "name": "Reset tanks",
-        "links": [
-            "1e244bad0304bb74"
-        ],
-        "x": 270,
-        "y": 320,
-        "wires": [
-            [
-                "d574ead42dd36caa"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "b9f27aaa32da92c0",
-        "type": "link in",
-        "z": "7f95345534f00358",
-        "g": "d68c2206e3379850",
-        "name": "Reset batteries",
-        "links": [
-            "1e244bad0304bb74"
-        ],
-        "x": 300,
-        "y": 780,
-        "wires": [
-            []
-        ],
-        "l": true
-    },
-    {
-        "id": "da2041e2faba86a3",
-        "type": "debug",
-        "z": "7f95345534f00358",
-        "g": "067069104a82b459",
-        "name": "Create mqtt",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 950,
-        "y": 220,
+        "x": 940,
+        "y": 1860,
         "wires": []
     },
     {
         "id": "0d54f0db9a010394",
         "type": "debug",
-        "z": "7f95345534f00358",
+        "z": "3470febb2cd6e952",
         "g": "5d1ecae7ac09586c",
         "name": "Create mqtt",
         "active": false,
@@ -1734,8 +1669,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1090,
-        "y": 660,
+        "x": 1110,
+        "y": 1720,
         "wires": []
     },
     {
@@ -2955,8 +2890,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 200,
-        "y": 1740,
+        "x": 260,
+        "y": 1680,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -2975,8 +2910,8 @@
         "chunk": false,
         "sendError": false,
         "allProps": false,
-        "x": 400,
-        "y": 1740,
+        "x": 460,
+        "y": 1680,
         "wires": [
             [
                 "c78420a075d43408"
@@ -2996,8 +2931,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 1740,
+        "x": 880,
+        "y": 1680,
         "wires": []
     },
     {
@@ -3009,8 +2944,8 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 610,
-        "y": 1740,
+        "x": 670,
+        "y": 1680,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -3032,8 +2967,8 @@
         "correl": "",
         "expiry": "",
         "broker": "80727e60a251c36c",
-        "x": 670,
-        "y": 360,
+        "x": 730,
+        "y": 340,
         "wires": []
     },
     {
@@ -3050,8 +2985,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 620,
-        "y": 420,
+        "x": 680,
+        "y": 400,
         "wires": []
     },
     {
@@ -3068,8 +3003,8 @@
             "b94bb12a8c0a7027",
             "927340668e7942e4"
         ],
-        "x": 210,
-        "y": 360,
+        "x": 270,
+        "y": 340,
         "wires": [
             [
                 "cacf35b859af22a9",
@@ -3092,8 +3027,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 150,
-        "y": 240,
+        "x": 210,
+        "y": 220,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -3111,8 +3046,8 @@
         "links": [
             "a3b957142479c075"
         ],
-        "x": 610,
-        "y": 240,
+        "x": 670,
+        "y": 220,
         "wires": [],
         "l": true
     },
@@ -3130,8 +3065,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 150,
-        "y": 180,
+        "x": 210,
+        "y": 160,
         "wires": [
             [
                 "32add109922d428a",
@@ -3149,8 +3084,8 @@
         "links": [
             "2fcbc4d630144362"
         ],
-        "x": 620,
-        "y": 180,
+        "x": 680,
+        "y": 160,
         "wires": [],
         "l": true
     },
@@ -3167,8 +3102,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 780,
+        "x": 410,
+        "y": 760,
         "wires": [
             [
                 "ac47ce53a9fc3f21",
@@ -3196,8 +3131,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 900,
+        "x": 660,
+        "y": 880,
         "wires": []
     },
     {
@@ -3214,8 +3149,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 590,
-        "y": 860,
+        "x": 670,
+        "y": 840,
         "wires": []
     },
     {
@@ -3232,8 +3167,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 570,
-        "y": 660,
+        "x": 650,
+        "y": 640,
         "wires": []
     },
     {
@@ -3250,8 +3185,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 700,
+        "x": 660,
+        "y": 680,
         "wires": []
     },
     {
@@ -3268,8 +3203,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
-        "y": 620,
+        "x": 680,
+        "y": 600,
         "wires": []
     },
     {
@@ -3286,8 +3221,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
-        "y": 740,
+        "x": 680,
+        "y": 720,
         "wires": []
     },
     {
@@ -3304,8 +3239,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 570,
-        "y": 820,
+        "x": 650,
+        "y": 800,
         "wires": []
     },
     {
@@ -3317,8 +3252,8 @@
         "links": [
             "958fed9f12301f59"
         ],
-        "x": 130,
-        "y": 780,
+        "x": 210,
+        "y": 760,
         "wires": [
             [
                 "8d7d5d3ea117cf79"
@@ -3382,8 +3317,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 9,
-        "x": 810,
-        "y": 780,
+        "x": 890,
+        "y": 760,
         "wires": [
             [],
             [],
@@ -3424,8 +3359,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 620,
-        "y": 120,
+        "x": 680,
+        "y": 100,
         "wires": []
     },
     {
@@ -3450,8 +3385,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1080,
-        "y": 1140,
+        "x": 1160,
+        "y": 1120,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -3471,8 +3406,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1320,
-        "y": 1140,
+        "x": 1400,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -3490,8 +3425,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1050,
-        "y": 1200,
+        "x": 1130,
+        "y": 1180,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -3512,8 +3447,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 1200,
+        "x": 1410,
+        "y": 1180,
         "wires": []
     },
     {
@@ -3538,8 +3473,8 @@
         "topic": "control",
         "payload": "toggle",
         "payloadType": "str",
-        "x": 190,
-        "y": 120,
+        "x": 250,
+        "y": 100,
         "wires": [
             [
                 "4ad3b304d4f1e27b"
@@ -3560,8 +3495,8 @@
         "defaultCmd": "default",
         "statusCmd": "status",
         "persist": false,
-        "x": 370,
-        "y": 180,
+        "x": 430,
+        "y": 160,
         "wires": [
             [
                 "958fed9f12301f59"
@@ -3578,8 +3513,8 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 1050,
-        "y": 620,
+        "x": 1130,
+        "y": 600,
         "wires": [],
         "l": true
     },
@@ -3597,8 +3532,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 610,
-        "y": 300,
+        "x": 670,
+        "y": 280,
         "wires": []
     },
     {
@@ -3623,8 +3558,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 240,
-        "y": 1400,
+        "x": 300,
+        "y": 1340,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -3644,8 +3579,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
-        "y": 1400,
+        "x": 700,
+        "y": 1340,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -3671,8 +3606,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 790,
-        "y": 1480,
+        "x": 850,
+        "y": 1420,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -3692,8 +3627,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 1480,
+        "x": 500,
+        "y": 1420,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -3713,8 +3648,8 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 1080,
-        "y": 740,
+        "x": 1160,
+        "y": 720,
         "wires": [],
         "l": true
     },
@@ -3727,8 +3662,8 @@
         "links": [
             "45414bacecada477"
         ],
-        "x": 200,
-        "y": 1480,
+        "x": 260,
+        "y": 1420,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -3746,8 +3681,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1590,
-        "y": 1400,
+        "x": 1650,
+        "y": 1340,
         "wires": [],
         "l": true
     },
@@ -3764,8 +3699,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 1480,
+        "x": 1080,
+        "y": 1420,
         "wires": [
             [
                 "a2334b77d3764815",
@@ -3790,8 +3725,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1060,
-        "y": 860,
+        "x": 1140,
+        "y": 840,
         "wires": []
     },
     {
@@ -3808,8 +3743,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1050,
-        "y": 800,
+        "x": 1130,
+        "y": 780,
         "wires": []
     },
     {
@@ -3834,8 +3769,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1050,
-        "y": 960,
+        "x": 1130,
+        "y": 940,
         "wires": [
             [
                 "38606e245b70b98e"
@@ -3855,8 +3790,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1320,
-        "y": 960,
+        "x": 1400,
+        "y": 940,
         "wires": [
             []
         ]
@@ -3874,8 +3809,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1080,
-        "y": 1020,
+        "x": 1160,
+        "y": 1000,
         "wires": [
             [
                 "8f7381d08bf2b8a8"
@@ -3896,8 +3831,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 1020,
+        "x": 1410,
+        "y": 1000,
         "wires": []
     },
     {
@@ -3915,8 +3850,8 @@
         "correl": "",
         "expiry": "",
         "broker": "80727e60a251c36c",
-        "x": 670,
-        "y": 480,
+        "x": 730,
+        "y": 460,
         "wires": []
     },
     {
@@ -3930,8 +3865,8 @@
             "a2334b77d3764815",
             "6aa079d768e1571c"
         ],
-        "x": 210,
-        "y": 480,
+        "x": 270,
+        "y": 460,
         "wires": [
             [
                 "1ac6e0fa1cbb3852",
@@ -3953,8 +3888,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1310,
-        "y": 1480,
+        "x": 1370,
+        "y": 1420,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -3965,6 +3900,7 @@
         "id": "695ef0ed6d78a244",
         "type": "function",
         "z": "292e70a6ba25b323",
+        "d": true,
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll all locks",
         "func": "// Generates an RV-C \"Request\" message to poll all locks for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (1FEE5).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;       // Standard priority for requests\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// 1. Build the data payload\n// This is the DGN for LOCK_STATUS (1FEE5), sent in little-endian format (least-significant byte first).\nconst dataPayload = \"E5FE01FFFFFFFF\";\n\n// 2. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayload.toUpperCase()}`;\n\n//node.warn(`[Poll Locks] Sending global request for lock status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
@@ -3974,8 +3910,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1310,
-        "y": 1520,
+        "x": 1370,
+        "y": 1460,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -3986,6 +3922,7 @@
         "id": "3f5eb271f702c8f3",
         "type": "function",
         "z": "292e70a6ba25b323",
+        "d": true,
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll all shades",
         "func": "// Generates an RV-C \"Request\" message to poll all window shades for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (1FEDE).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;       // Standard priority for requests\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// 1. Build the data payload\n// This is the DGN for WINDOW_SHADE_CONTROL_STATUS (1FEDE), sent in little-endian format (least-significant byte first).\nconst dataPayload = \"DEFE01FFFFFFFF\";\n\n// 2. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayload.toUpperCase()}`;\n\n//node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
@@ -3995,8 +3932,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1320,
-        "y": 1560,
+        "x": 1380,
+        "y": 1500,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -4017,8 +3954,8 @@
             "e8b62c33eab8e3ac",
             "84e908d542084d74"
         ],
-        "x": 1340,
-        "y": 1600,
+        "x": 1400,
+        "y": 1540,
         "wires": [],
         "l": true
     },
@@ -4044,8 +3981,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1040,
-        "y": 1580,
+        "x": 1100,
+        "y": 1520,
         "wires": [
             [
                 "73abad3deeed31e8",
@@ -4069,8 +4006,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1100,
-        "y": 680,
+        "x": 1180,
+        "y": 660,
         "wires": []
     },
     {
@@ -4297,238 +4234,5 @@
                 "356ca3617c50f06b"
             ]
         ]
-    },
-    {
-        "id": "80011a285355da55",
-        "type": "link in",
-        "z": "ee904ab46f56578e",
-        "name": "HomeKit In",
-        "links": [],
-        "x": 160,
-        "y": 120,
-        "wires": [
-            [
-                "6e4cdf00d6531664"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "6e4cdf00d6531664",
-        "type": "function",
-        "z": "ee904ab46f56578e",
-        "name": "HomeKit IN",
-        "func": "let State;\nif (msg.state == \"ON\") {\n    State = true;\n} else if (msg.state == \"OFF\") {\n    State = false;\n}\nmsg = {\n    \"payload\": {\n        \"On\": State\n    }\n};\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 120,
-        "wires": [
-            [
-                "352f4c207b613014"
-            ]
-        ]
-    },
-    {
-        "id": "352f4c207b613014",
-        "type": "homekit-service",
-        "z": "ee904ab46f56578e",
-        "d": true,
-        "isParent": true,
-        "hostType": "0",
-        "bridge": "481f3f804361a6fd",
-        "accessoryId": "",
-        "parentService": "",
-        "name": "4_state_Entry_Lights",
-        "serviceName": "Switch",
-        "topic": "4_state_Entry_Lights",
-        "filter": false,
-        "manufacturer": "NRCHKB",
-        "model": "1.7.3",
-        "serialNo": "Default Serial Number",
-        "firmwareRev": "1.7.3",
-        "hardwareRev": "1.7.3",
-        "softwareRev": "1.7.3",
-        "cameraConfigVideoProcessor": "ffmpeg",
-        "cameraConfigSource": "",
-        "cameraConfigStillImageSource": "",
-        "cameraConfigMaxStreams": 2,
-        "cameraConfigMaxWidth": 1280,
-        "cameraConfigMaxHeight": 720,
-        "cameraConfigMaxFPS": 10,
-        "cameraConfigMaxBitrate": 300,
-        "cameraConfigVideoCodec": "libx264",
-        "cameraConfigAudioCodec": "libfdk_aac",
-        "cameraConfigAudio": false,
-        "cameraConfigPacketSize": 1316,
-        "cameraConfigVerticalFlip": false,
-        "cameraConfigHorizontalFlip": false,
-        "cameraConfigMapVideo": "0:0",
-        "cameraConfigMapAudio": "0:1",
-        "cameraConfigVideoFilter": "scale=1280:720",
-        "cameraConfigAdditionalCommandLine": "-tune zerolatency",
-        "cameraConfigDebug": false,
-        "cameraConfigSnapshotOutput": "disabled",
-        "cameraConfigInterfaceName": "",
-        "characteristicProperties": "{}",
-        "waitForSetupMsg": false,
-        "outputs": 2,
-        "adaptiveLightingOptionsEnable": false,
-        "adaptiveLightingOptionsCustomTemperatureAdjustment": "",
-        "x": 550,
-        "y": 120,
-        "wires": [
-            [
-                "cb7cb161a1362911"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "cb7cb161a1362911",
-        "type": "link out",
-        "z": "ee904ab46f56578e",
-        "name": "HomeKit out",
-        "mode": "link",
-        "links": [
-            "9428382ab57f3f5d"
-        ],
-        "x": 760,
-        "y": 120,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "faf503bfdd48519a",
-        "type": "function",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "command_dc_dimmer",
-        "func": "// Initialize global status if it doesn't exist\nif (!global.get('status')) {\n    global.set('status', { lights: {} });\n}\n\n// Get or initialize the lights status\nlet status = global.get('status') || { lights: {} };\nif (!status.lights) {\n    status.lights = {};\n}\n\n// Log incoming message for debugging\n//node.warn(\"Incoming message: \" + JSON.stringify(msg));\n\n// Parse the topic to get the instance number\nlet instance = parseInt(msg.topic.split('_')[0]);\nlet command = msg.payload;\n\n// Determine brightness based on command\nlet brightness = 0;\nif (command === 'ON') {\n    brightness = 100;\n} else if (command === 'dim') {\n    // If dim command, use previous brightness or default to 50%\n    brightness = (status.lights[instance] && status.lights[instance].brightness) || 50;\n} else if (command === 'OFF') {\n    brightness = 0;\n}\n\n// Initialize the light instance if it doesn't exist\nif (!status.lights[instance]) {\n    status.lights[instance] = {\n        state: command,\n        brightness: brightness\n    };\n}\n\n// Update global status\nstatus.lights[instance].state = command;\nstatus.lights[instance].brightness = brightness;\nglobal.set('status', status);\n\n// Prepare CAN message\nconst prio = 6;\nconst dgnhi = '1FE';\nconst dgnlo = 'DB';\nconst srcAD = 99;\n\n// Convert brightness to RV-C format (0-200)\nlet rvcBrightness = Math.min(Math.max(brightness * 2, 0), 200);\nlet rvcCommand = 0; // Set Level(delay)\nlet duration = 255;\n\ntry {\n    // Calculate CAN ID\n    const binCanId = parseInt(prio).toString(2).padStart(3, '0') +\n                     parseInt(dgnhi, 16).toString(2).padStart(16, '0') +\n                     parseInt(dgnlo, 16).toString(2).padStart(8, '0') +\n                     parseInt(srcAD).toString(2).padStart(8, '0');\n\n    const hexCanId = parseInt(binCanId, 2).toString(16).toUpperCase().padStart(8, '0');\n\n    // Prepare data bytes\n    const hexData = `${instance.toString(16).padStart(2, '0')}FF${\n        rvcBrightness.toString(16).padStart(2, '0')}${\n        rvcCommand.toString(16).padStart(2, '0')}${\n        duration.toString(16).padStart(2, '0')}00FFFF`;\n\n    // Create the command string for socketcan\n    const canCommand = `${hexCanId}#${hexData}`;\n\n    // Log the outgoing command for debugging\n    //node.warn(\"Outgoing CAN command: \" + canCommand);\n    msg.payload = canCommand;\n    return msg;\n\n} catch (error) {\n    node.error(\"Error processing CAN message: \" + error.message);\n    return null;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 700,
-        "y": 380,
-        "wires": [
-            [
-                "7c30a3bc33fa2315",
-                "1bf17ae955275cf0"
-            ]
-        ]
-    },
-    {
-        "id": "107cff91357ef6da",
-        "type": "function",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "HomeKit Out",
-        "func": "msg = {\n    \"topic\": msg.topic,\n    \"payload\": msg.payload.On ? \"ON\" : \"OFF\"\n};\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 410,
-        "y": 380,
-        "wires": [
-            [
-                "9104e3fb894083ee",
-                "faf503bfdd48519a"
-            ]
-        ]
-    },
-    {
-        "id": "9104e3fb894083ee",
-        "type": "debug",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "Homekit Out",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 490,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "b7cc11c60eb56768",
-        "type": "link in",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "RVC In",
-        "links": [],
-        "x": 500,
-        "y": 320,
-        "wires": [
-            [
-                "faf503bfdd48519a"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "7c30a3bc33fa2315",
-        "type": "debug",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "command_dc_dimmer",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "9428382ab57f3f5d",
-        "type": "link in",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "HomeKit out v2",
-        "links": [
-            "cb7cb161a1362911"
-        ],
-        "x": 190,
-        "y": 380,
-        "wires": [
-            [
-                "107cff91357ef6da"
-            ]
-        ],
-        "l": true
-    },
-    {
-        "id": "1bf17ae955275cf0",
-        "type": "link out",
-        "z": "ee904ab46f56578e",
-        "g": "0b18891888586798",
-        "name": "MQTT out: Retain FALSE",
-        "mode": "link",
-        "links": [
-            "74329f13cbbc528a"
-        ],
-        "x": 970,
-        "y": 380,
-        "wires": [],
-        "l": true
     }
 ]
