@@ -141,7 +141,12 @@
             "5f6336442bfb9808",
             "8f99241c9a1cfbde",
             "01b53bba61cb7227",
-            "cfa01b55c1dabc91"
+            "cfa01b55c1dabc91",
+            "55640379de4c7c83",
+            "0a94b43570ec00da",
+            "5ab813557f305e79",
+            "cd0e10af5a3a5ec9",
+            "21be2ec94622a98d"
         ],
         "x": 134,
         "y": 559,
@@ -1244,7 +1249,7 @@
         "z": "3470febb2cd6e952",
         "g": "da39e5020d511fa6",
         "name": "Create Shade",
-        "func": "/***********************************************************\n * Create Home Assistant MQTT Discovery for RV-C Shades\n * Creates a dedicated 'cover' entity for each shade instance.\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The shade instance ID (1-250)\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object' || typeof msg.payload.instance !== 'number') {\n    node.error(\"Input payload must be an object with a numeric 'instance' property.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// RV-C valid instance range: 1-250\n// Silently ignore special RV-C status/error values (251-255)\nif (instance < 1 || instance > 250) {\n    if (instance < 251) { // Only warn for invalid user-range instances\n        node.warn(`Instance ${instance} is outside the valid RV-C range (1-250). Cover will not be created.`);\n    }\n    return null;\n}\n\n// --- MQTT Discovery Configuration for a Cover Entity ---\n\nconst entityId = `shade_${instance}`;\nconst discoveryTopic = `homeassistant/cover/${entityId}/config`;\nconst commandTopic = `homeassistant/cover/${entityId}/set`; // Topic HA will send commands to\n\n// Shared device identifier for grouping all entities under RV Link\nconst deviceInfo = {\n    name: \"RV Link\",\n    identifiers: [\"rv_link\"],\n    manufacturer: \"RV Link\"\n};\n\nconst stateTopic = `homeassistant/cover/${entityId}/state`;\n\nconst discoveryPayload = {\n    name: `Shade ${instance}`,\n    unique_id: `shade_${instance}`,\n    device: deviceInfo,\n    icon: \"mdi:window-shutter\",\n    command_topic: commandTopic,\n    payload_open: \"OPEN\",\n    payload_close: \"CLOSE\",\n    payload_stop: \"STOP\",\n    state_topic: stateTopic,\n    position_topic: stateTopic,\n    // Cover entity states\n    state_opening: \"opening\",\n    state_closing: \"closing\",\n    state_open: \"open\",\n    state_closed: \"closed\",\n    // Position support (keeps both buttons enabled)\n    value_template: \"{{ value_json.state }}\",\n    position_template: \"{{ value_json.position | int }}\",\n    optimistic: false // No longer optimistic\n};\n\n// Return the discovery message\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(discoveryPayload);\nmsg.retain = true;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Create Home Assistant MQTT Discovery for RV-C Shades\n * Creates a dedicated 'cover' entity for each shade instance.\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The shade instance ID (1-250)\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object' || typeof msg.payload.instance !== 'number') {\n    node.error(\"Input payload must be an object with a numeric 'instance' property.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// RV-C valid instance range: 1-250\n// Silently ignore special RV-C status/error values (251-255)\nif (instance < 1 || instance > 250) {\n    if (instance < 251) { // Only warn for invalid user-range instances\n        node.warn(`Instance ${instance} is outside the valid RV-C range (1-250). Cover will not be created.`);\n    }\n    return null;\n}\n\n// --- MQTT Discovery Configuration for a Cover Entity ---\n\nconst entityId = `shade_${instance}`;\nconst discoveryTopic = `homeassistant/cover/${entityId}/config`;\nconst commandTopic = `homeassistant/cover/${entityId}/set`; // Topic HA will send commands to\n\n// Shared device identifier for grouping all entities under RV Link\nconst deviceInfo = {\n    name: \"RV Link\",\n    identifiers: [\"rv_link\"],\n    manufacturer: \"RV Link\"\n};\n\nconst stateTopic = `homeassistant/cover/${entityId}/state`;\n\nconst discoveryPayload = {\n    name: `Shade ${instance}`,\n    unique_id: `shade_${instance}`,\n    default_entity_id: `cover.${entityId}`,\n    device: deviceInfo,\n    icon: \"mdi:window-shutter\",\n    command_topic: commandTopic,\n    payload_open: \"OPEN\",\n    payload_close: \"CLOSE\",\n    payload_stop: \"STOP\",\n    state_topic: stateTopic,\n    position_topic: stateTopic,\n    // Cover entity states\n    state_opening: \"opening\",\n    state_closing: \"closing\",\n    state_open: \"open\",\n    state_closed: \"closed\",\n    // Position support (keeps both buttons enabled)\n    value_template: \"{{ value_json.state }}\",\n    position_template: \"{{ value_json.position | int }}\",\n    optimistic: false\n};\n\n// Return the discovery message\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(discoveryPayload);\nmsg.retain = true;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2805,7 +2810,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode WINDOW_SHADE_CONTROL_STATUS",
-        "func": "// WINDOW_SHADE_CONTROL_STATUS Decoder - Complete RV-C Implementation\n// Decodes WINDOW_SHADE_CONTROL_STATUS messages per RV-C specification Section 6.39.2\n// Handles window shade operating status, motor control, and position information\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === WINDOW_SHADE_CONTROL_STATUS Specific Decoders ===\n\nfunction decodeInstance(value) {\n    // Window shade instance mapping\n    if (value >= 1 && value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 0) {\n        return \"All Instances\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeGroupDetails(value) {\n    // Group membership bitmap decoding\n    if (value === 0xFF) {\n        return { type: 'special', description: 'No data' };\n    }\n    if (value === 0x00) {\n        return { type: 'special', description: 'Member of all groups' };\n    }\n\n    const groups = [];\n    for (let bit = 0; bit < 7; bit++) {\n        if (!(value & (1 << bit))) {\n            groups.push(bit + 1);\n        }\n    }\n\n    if (groups.length > 0) {\n        return {\n            type: 'standard',\n            groups: groups,\n            description: `Groups: ${groups.join(', ')}`\n        };\n    } else {\n        return {\n            type: 'standard',\n            groups: [],\n            description: \"No group membership\"\n        };\n    }\n}\n\nfunction decodeOperatingStatus(value) {\n    // Operating status (motor duty) as percentage per Table 5.3\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Value Changing\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeLockStatus(value) {\n    // Lock status (bits 0-1)\n    const lockMap = {\n        0: \"Load is unlocked\",\n        1: \"Load is locked\",\n        3: \"Lock command not supported\"\n    };\n    return lockMap[value] || `Unknown Lock Status ${value}`;\n}\n\nfunction decodeMotorStatus(value) {\n    // Motor status (bits 2-3)\n    const motorMap = {\n        0: \"Neither 'Forward' nor 'Reverse' output is on\",\n        1: \"Either 'Forward' or 'Reverse' output is on (Motor active)\"\n    };\n    return motorMap[value] || `Unknown Motor Status ${value}`;\n}\n\nfunction decodeForwardStatus(value) {\n    // Forward status (bits 4-5)\n    const forwardMap = {\n        0: \"'Forward' output not on\",\n        1: \"'Forward' output is on (Shade raising/opening)\"\n    };\n    return forwardMap[value] || `Unknown Forward Status ${value}`;\n}\n\nfunction decodeReverseStatus(value) {\n    // Reverse status (bits 6-7)\n    const reverseMap = {\n        0: \"'Reverse' output not on\",\n        1: \"'Reverse' output is on (Shade lowering/closing)\"\n    };\n    return reverseMap[value] || `Unknown Reverse Status ${value}`;\n}\n\nfunction decodeDuration(value) {\n    // Duration decoding\n    if (value === 0) {\n        return \"Delay/duration expired\";\n    } else if (value >= 1 && value <= 239) {\n        return `${value} seconds remaining`;\n    } else if (value === 240) {\n        return \"240 or more seconds remaining\";\n    } else if (value === 255) {\n        return \"No delay/duration active\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeLastCommand(value) {\n    // Last command executed mapping per Table 6.39.3c\n    const commandMap = {\n        4: \"Stop\",\n        129: \"Forward (Open Shade)\", // 0x81\n        65: \"Reverse (Close Shade)\", // 0x41\n        133: \"Toggle Forward\", // 0x85\n        69: \"Toggle Reverse\", // 0x45\n        16: \"Tilt\", // 0x10\n        33: \"Lock\", // 0x21\n        34: \"Unlock\" // 0x22\n    };\n    return commandMap[value] || `Unknown Command ${value}`;\n}\n\nfunction decodeOvercurrentStatus(value) {\n    // Overcurrent status (bits 0-1)\n    const overcurrentMap = {\n        0: \"Load output not in overcurrent\",\n        1: \"Load output has drawn overcurrent\",\n        3: \"Overcurrent status unavailable or not supported\"\n    };\n    return overcurrentMap[value] || `Unknown Overcurrent Status ${value}`;\n}\n\nfunction decodeOverrideStatus(value) {\n    // Override status (bits 2-3)\n    const overrideMap = {\n        0: \"External override is inactive\",\n        1: \"External override is active\",\n        3: \"Override status is unavailable or not supported\"\n    };\n    return overrideMap[value] || `Unknown Override Status ${value}`;\n}\n\nfunction decodeDisableStatus(value, disableNumber) {\n    // Disable status for Disable1 (bits 4-5) or Disable2 (bits 6-7)\n    const disableMap = {\n        0: `Disable ${disableNumber} is not active`,\n        1: `Disable ${disableNumber} is active`,\n        3: `Disable ${disableNumber} is not supported`\n    };\n    return disableMap[value] || `Unknown Disable${disableNumber} Status ${value}`;\n}\n\n// === Main Decode Function ===\n\nfunction decodeWindowShadeControlStatusMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"WINDOW_SHADE_CONTROL_STATUS\"\n    };\n\n    if (data.length < 7) {\n        return { error: \"Invalid data length for WINDOW_SHADE_CONTROL_STATUS - expected at least 7 bytes\" };\n    }\n\n    // Byte 0: Instance\n    result.instance = decodeInstance(data[0]);\n\n    // Byte 1: Group\n    const groupDetails = decodeGroupDetails(data[1]);\n    result.group_description = groupDetails.description;\n    if (groupDetails.groups) {\n        result.groups = groupDetails.groups;\n    }\n\n    // Byte 2: Operating Status (Motor Duty)\n    result.operating_status = decodeOperatingStatus(data[2]);\n\n    // Byte 3: Lock Status, Motor Status, Forward Status, Reverse Status\n    const byte3 = data[3];\n    const lockStatusRaw = decodeBits(byte3, 0, 1);\n    const motorStatusRaw = decodeBits(byte3, 2, 3);\n    const forwardStatusRaw = decodeBits(byte3, 4, 5);\n    const reverseStatusRaw = decodeBits(byte3, 6, 7);\n\n    result.lock_status = decodeLockStatus(lockStatusRaw);\n    result.motor_status = decodeMotorStatus(motorStatusRaw);\n    result.forward_status = decodeForwardStatus(forwardStatusRaw);\n    result.reverse_status = decodeReverseStatus(reverseStatusRaw);\n\n    // Byte 4: Duration\n    result.duration = decodeDuration(data[4]);\n\n    // Byte 5: Last Command\n    result.last_command = decodeLastCommand(data[5]);\n\n    // Byte 6: Overcurrent Status, Override Status, Disable1 Status, Disable2 Status\n    const byte6 = data[6];\n    const overcurrentStatusRaw = decodeBits(byte6, 0, 1);\n    const overrideStatusRaw = decodeBits(byte6, 2, 3);\n    const disable1StatusRaw = decodeBits(byte6, 4, 5);\n    const disable2StatusRaw = decodeBits(byte6, 6, 7);\n\n    result.overcurrent_status = decodeOvercurrentStatus(overcurrentStatusRaw);\n    result.override_status = decodeOverrideStatus(overrideStatusRaw);\n    result.disable1_status = decodeDisableStatus(disable1StatusRaw, 1);\n    result.disable2_status = decodeDisableStatus(disable2StatusRaw, 2);\n\n    // Raw values for debugging\n    result.raw_instance = data[0];\n    result.raw_group = data[1];\n    result.raw_operating_status = data[2];\n    result.raw_byte3 = byte3;\n    result.raw_lock_status = lockStatusRaw;\n    result.raw_motor_status = motorStatusRaw;\n    result.raw_forward_status = forwardStatusRaw;\n    result.raw_reverse_status = reverseStatusRaw;\n    result.raw_duration = data[4];\n    result.raw_last_command = data[5];\n    result.raw_byte6 = byte6;\n    result.raw_overcurrent_status = overcurrentStatusRaw;\n    result.raw_override_status = overrideStatusRaw;\n    result.raw_disable1_status = disable1StatusRaw;\n    result.raw_disable2_status = disable2StatusRaw;\n\n    // Add convenience fields for Home Assistant integration\n    result.is_locked = lockStatusRaw === 1;\n    result.motor_active = motorStatusRaw === 1;\n    result.shade_opening = forwardStatusRaw === 1;\n    result.shade_closing = reverseStatusRaw === 1;\n    result.shade_moving = result.motor_active;\n    result.has_overcurrent = overcurrentStatusRaw === 1;\n    result.override_active = overrideStatusRaw === 1;\n    result.disable1_active = disable1StatusRaw === 1;\n    result.disable2_active = disable2StatusRaw === 1;\n    result.any_disable_active = result.disable1_active || result.disable2_active;\n\n    // Determine shade position status\n    if (typeof result.operating_status === 'number') {\n        result.shade_position_percent = result.operating_status;\n        result.shade_fully_open = result.operating_status >= 99;\n        result.shade_fully_closed = result.operating_status <= 1;\n        result.shade_partially_open = result.operating_status > 1 && result.operating_status < 99;\n    } else {\n        result.shade_position_percent = null;\n        result.shade_fully_open = false;\n        result.shade_fully_closed = false;\n        result.shade_partially_open = false;\n    }\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the WINDOW_SHADE_CONTROL_STATUS message\nlet decodedData;\nif (dgn === '1FEDE') {\n    decodedData = decodeWindowShadeControlStatusMessage(dgn, dataBytes);\n} else {\n    decodedData = { error: `Decoder for DGN ${dgn} is not implemented.` };\n}\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// WINDOW_SHADE_CONTROL_STATUS Decoder - Complete RV-C Implementation\n// Decodes WINDOW_SHADE_CONTROL_STATUS messages per RV-C specification Section 6.39.2\n// Handles window shade operating status, motor control, and position information\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === WINDOW_SHADE_CONTROL_STATUS Specific Decoders ===\n\nfunction decodeInstance(value) {\n    // Window shade instance mapping\n    if (value >= 1 && value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 0) {\n        return \"All Instances\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeGroupDetails(value) {\n    // Group membership bitmap decoding\n    if (value === 0xFF) {\n        return { type: 'special', description: 'No data' };\n    }\n    if (value === 0x00) {\n        return { type: 'special', description: 'Member of all groups' };\n    }\n\n    const groups = [];\n    for (let bit = 0; bit < 7; bit++) {\n        if (!(value & (1 << bit))) {\n            groups.push(bit + 1);\n        }\n    }\n\n    if (groups.length > 0) {\n        return {\n            type: 'standard',\n            groups: groups,\n            description: `Groups: ${groups.join(', ')}`\n        };\n    } else {\n        return {\n            type: 'standard',\n            groups: [],\n            description: \"No group membership\"\n        };\n    }\n}\n\nfunction decodeOperatingStatus(value) {\n    // Operating status (motor duty) as percentage per Table 5.3\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Value Changing\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeLockStatus(value) {\n    // Lock status (bits 0-1)\n    const lockMap = {\n        0: \"Load is unlocked\",\n        1: \"Load is locked\",\n        3: \"Lock command not supported\"\n    };\n    return lockMap[value] || `Unknown Lock Status ${value}`;\n}\n\nfunction decodeMotorStatus(value) {\n    // Motor status (bits 2-3)\n    const motorMap = {\n        0: \"Neither 'Forward' nor 'Reverse' output is on\",\n        1: \"Either 'Forward' or 'Reverse' output is on (Motor active)\"\n    };\n    return motorMap[value] || `Unknown Motor Status ${value}`;\n}\n\nfunction decodeForwardStatus(value) {\n    // Forward status (bits 4-5)\n    const forwardMap = {\n        0: \"'Forward' output not on\",\n        1: \"'Forward' output is on (Shade raising/opening)\"\n    };\n    return forwardMap[value] || `Unknown Forward Status ${value}`;\n}\n\nfunction decodeReverseStatus(value) {\n    // Reverse status (bits 6-7)\n    const reverseMap = {\n        0: \"'Reverse' output not on\",\n        1: \"'Reverse' output is on (Shade lowering/closing)\"\n    };\n    return reverseMap[value] || `Unknown Reverse Status ${value}`;\n}\n\nfunction decodeDuration(value) {\n    // Duration decoding\n    if (value === 0) {\n        return \"Delay/duration expired\";\n    } else if (value >= 1 && value <= 239) {\n        return `${value} seconds remaining`;\n    } else if (value === 240) {\n        return \"240 or more seconds remaining\";\n    } else if (value === 255) {\n        return \"No delay/duration active\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeLastCommand(value) {\n    // Last command executed mapping per Table 6.39.3c\n    const commandMap = {\n        4: \"Stop\",\n        129: \"Forward (Open Shade)\", // 0x81\n        65: \"Reverse (Close Shade)\", // 0x41\n        133: \"Toggle Forward\", // 0x85\n        69: \"Toggle Reverse\", // 0x45\n        16: \"Tilt\", // 0x10\n        33: \"Lock\", // 0x21\n        34: \"Unlock\" // 0x22\n    };\n    return commandMap[value] || `Unknown Command ${value}`;\n}\n\nfunction decodeOvercurrentStatus(value) {\n    // Overcurrent status (bits 0-1)\n    const overcurrentMap = {\n        0: \"Load output not in overcurrent\",\n        1: \"Load output has drawn overcurrent\",\n        3: \"Overcurrent status unavailable or not supported\"\n    };\n    return overcurrentMap[value] || `Unknown Overcurrent Status ${value}`;\n}\n\nfunction decodeOverrideStatus(value) {\n    // Override status (bits 2-3)\n    const overrideMap = {\n        0: \"External override is inactive\",\n        1: \"External override is active\",\n        3: \"Override status is unavailable or not supported\"\n    };\n    return overrideMap[value] || `Unknown Override Status ${value}`;\n}\n\nfunction decodeDisableStatus(value, disableNumber) {\n    // Disable status for Disable1 (bits 4-5) or Disable2 (bits 6-7)\n    const disableMap = {\n        0: `Disable ${disableNumber} is not active`,\n        1: `Disable ${disableNumber} is active`,\n        3: `Disable ${disableNumber} is not supported`\n    };\n    return disableMap[value] || `Unknown Disable${disableNumber} Status ${value}`;\n}\n\n// === Main Decode Function ===\n\nfunction decodeWindowShadeControlStatusMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"WINDOW_SHADE_CONTROL_STATUS\"\n    };\n\n    if (data.length < 7) {\n        return { error: \"Invalid data length for WINDOW_SHADE_CONTROL_STATUS - expected at least 7 bytes\" };\n    }\n\n    // Byte 0: Instance\n    result.instance = decodeInstance(data[0]);\n\n    // Byte 1: Group\n    const groupDetails = decodeGroupDetails(data[1]);\n    result.group_description = groupDetails.description;\n    if (groupDetails.groups) {\n        result.groups = groupDetails.groups;\n    }\n\n    // Byte 2: Operating Status (Motor Duty)\n    result.operating_status = decodeOperatingStatus(data[2]);\n\n    // Byte 3: Lock Status, Motor Status, Forward Status, Reverse Status\n    const byte3 = data[3];\n    const lockStatusRaw = decodeBits(byte3, 0, 1);\n    const motorStatusRaw = decodeBits(byte3, 2, 3);\n    const forwardStatusRaw = decodeBits(byte3, 4, 5);\n    const reverseStatusRaw = decodeBits(byte3, 6, 7);\n\n    result.lock_status = decodeLockStatus(lockStatusRaw);\n    result.motor_status = decodeMotorStatus(motorStatusRaw);\n    result.forward_status = decodeForwardStatus(forwardStatusRaw);\n    result.reverse_status = decodeReverseStatus(reverseStatusRaw);\n\n    // Byte 4: Duration\n    result.duration = decodeDuration(data[4]);\n\n    // Byte 5: Last Command\n    result.last_command = decodeLastCommand(data[5]);\n\n    // Byte 6: Overcurrent Status, Override Status, Disable1 Status, Disable2 Status\n    const byte6 = data[6];\n    const overcurrentStatusRaw = decodeBits(byte6, 0, 1);\n    const overrideStatusRaw = decodeBits(byte6, 2, 3);\n    const disable1StatusRaw = decodeBits(byte6, 4, 5);\n    const disable2StatusRaw = decodeBits(byte6, 6, 7);\n\n    result.overcurrent_status = decodeOvercurrentStatus(overcurrentStatusRaw);\n    result.override_status = decodeOverrideStatus(overrideStatusRaw);\n    result.disable1_status = decodeDisableStatus(disable1StatusRaw, 1);\n    result.disable2_status = decodeDisableStatus(disable2StatusRaw, 2);\n\n    // Raw values for debugging\n    result.raw_instance = data[0];\n    result.raw_group = data[1];\n    result.raw_operating_status = data[2];\n    result.raw_byte3 = byte3;\n    result.raw_lock_status = lockStatusRaw;\n    result.raw_motor_status = motorStatusRaw;\n    result.raw_forward_status = forwardStatusRaw;\n    result.raw_reverse_status = reverseStatusRaw;\n    result.raw_duration = data[4];\n    result.raw_last_command = data[5];\n    result.raw_byte6 = byte6;\n    result.raw_overcurrent_status = overcurrentStatusRaw;\n    result.raw_override_status = overrideStatusRaw;\n    result.raw_disable1_status = disable1StatusRaw;\n    result.raw_disable2_status = disable2StatusRaw;\n\n    // Add convenience fields for Home Assistant integration\n    result.is_locked = lockStatusRaw === 1;\n    result.motor_active = motorStatusRaw === 1;\n    result.shade_opening = forwardStatusRaw === 1;\n    result.shade_closing = reverseStatusRaw === 1;\n    result.shade_moving = result.shade_opening || result.shade_closing;\n    result.has_overcurrent = overcurrentStatusRaw === 1;\n    result.override_active = overrideStatusRaw === 1;\n    result.disable1_active = disable1StatusRaw === 1;\n    result.disable2_active = disable2StatusRaw === 1;\n    result.any_disable_active = result.disable1_active || result.disable2_active;\n\n    // Determine shade position status\n    if (typeof result.operating_status === 'number') {\n        result.shade_position_percent = result.operating_status;\n        result.shade_fully_open = result.operating_status >= 99;\n        result.shade_fully_closed = result.operating_status <= 1;\n        result.shade_partially_open = result.operating_status > 1 && result.operating_status < 99;\n    } else {\n        result.shade_position_percent = null;\n        result.shade_fully_open = false;\n        result.shade_fully_closed = false;\n        result.shade_partially_open = false;\n    }\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the WINDOW_SHADE_CONTROL_STATUS message\nlet decodedData;\nif (dgn === '1FEDE') {\n    decodedData = decodeWindowShadeControlStatusMessage(dgn, dataBytes);\n\n    // --- UPDATED FILTERING LOGIC ---\n    // Filter out messages that are either from an inactive instance OR are invalid/non-compliant.\n    // 1. Inactive: Operating Status is \"Not Available\" (raw value 255).\n    // 2. Invalid: Last Command is 0, which is not a defined command in the RV-C spec.\n    if (decodedData.raw_operating_status === 255 || decodedData.raw_last_command === 0) {\n        let reason = (decodedData.raw_operating_status === 255) ? \"Inactive (Status Not Available)\" : \"Invalid (Last Command is 0)\";\n        node.debug(`Filtering out instance ${decodedData.instance}: ${reason}`);\n        return null; // Stop the message from continuing.\n    }\n    // --- END OF UPDATED BLOCK ---\n\n} else {\n    decodedData = { error: `Decoder for DGN ${dgn} is not implemented.` };\n}\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3113,7 +3118,8 @@
                 "a2dad25eb05117f7",
                 "fc66c16576e28548",
                 "c6fb02a17f709e08",
-                "a6594a9464d8fe4e"
+                "a6594a9464d8fe4e",
+                "55640379de4c7c83"
             ]
         ]
     },
@@ -3418,7 +3424,7 @@
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
         "name": "Unique UNKNOWN",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUNKNOWN = flow.get(\"uniqueUNKNOWN\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload);\n\n// Check if it's a new unique message\nif (!uniqueUNKNOWN.includes(newMsgStr)) {\n    uniqueUNKNOWN.push(newMsgStr);\n    flow.set(\"uniqueUNKNOWN\", uniqueUNKNOWN);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUNKNOWN = flow.get(\"uniqueUNKNOWN\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUNKNOWN.includes(newMsgStr)) {\n    uniqueUNKNOWN.push(newMsgStr);\n    flow.set(\"uniqueUNKNOWN\", uniqueUNKNOWN);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3735,7 +3741,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "AQUAHOT",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3921,7 +3927,6 @@
         "id": "3f5eb271f702c8f3",
         "type": "function",
         "z": "292e70a6ba25b323",
-        "d": true,
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll all shades",
         "func": "// Generates an RV-C \"Request\" message to poll all window shades for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (1FEDE).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;       // Standard priority for requests\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// 1. Build the data payload\n// This is the DGN for WINDOW_SHADE_CONTROL_STATUS (1FEDE), sent in little-endian format (least-significant byte first).\nconst dataPayload = \"DEFE01FFFFFFFF\";\n\n// 2. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayload.toUpperCase()}`;\n\n//node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
@@ -4008,6 +4013,124 @@
         "x": 1180,
         "y": 660,
         "wires": []
+    },
+    {
+        "id": "55640379de4c7c83",
+        "type": "switch",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "",
+        "property": "payload.dgnname",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "FLOOR",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 440,
+        "y": 1040,
+        "wires": [
+            [
+                "0a94b43570ec00da"
+            ]
+        ]
+    },
+    {
+        "id": "0a94b43570ec00da",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "Unique UNKNOWN",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet aquahot = flow.get(\"aquahot\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload);\n\n// Check if it's a new unique message\nif (!aquahot.includes(newMsgStr)) {\n    aquahot.push(newMsgStr);\n    flow.set(\"aquahot\", aquahot);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1020,
+        "wires": [
+            [
+                "5ab813557f305e79"
+            ]
+        ]
+    },
+    {
+        "id": "5ab813557f305e79",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "cd0e10af5a3a5ec9",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "Reset uniqueDecoded",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 660,
+        "y": 1160,
+        "wires": [
+            [
+                "21be2ec94622a98d"
+            ]
+        ]
+    },
+    {
+        "id": "21be2ec94622a98d",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "Reset function",
+        "func": "flow.set(\"aquahot\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 1160,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "802228bc8d89d80a",
