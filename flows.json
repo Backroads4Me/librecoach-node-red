@@ -79,12 +79,14 @@
             "58d9a2789e4a1391",
             "8a5082e9f29a8080",
             "d367ea017bd41347",
-            "778971897d2a7fdc"
+            "778971897d2a7fdc",
+            "1521d3d47869af7c",
+            "ee0c6ca61a8069d5"
         ],
         "x": 74,
-        "y": 59,
+        "y": 19,
         "w": 1172,
-        "h": 282
+        "h": 322
     },
     {
         "id": "3c819b7900145438",
@@ -140,18 +142,21 @@
             "45414bacecada477",
             "5f6336442bfb9808",
             "8f99241c9a1cfbde",
-            "01b53bba61cb7227",
-            "cfa01b55c1dabc91",
             "55640379de4c7c83",
             "0a94b43570ec00da",
             "5ab813557f305e79",
             "cd0e10af5a3a5ec9",
-            "21be2ec94622a98d"
+            "21be2ec94622a98d",
+            "081183d6c363e792",
+            "01b53bba61cb7227",
+            "03744ec33f2e6776",
+            "c781b519a9f9b156",
+            "463dfbbef66b51c2"
         ],
         "x": 134,
-        "y": 559,
-        "w": 1438,
-        "h": 688
+        "y": 533,
+        "w": 1738,
+        "h": 668
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -188,11 +193,12 @@
             "f0083147745c8366",
             "48e3b18cb440da52",
             "25162d774c052102",
-            "32ec19602e928185"
+            "32ec19602e928185",
+            "52e43edcfad810dd"
         ],
         "x": 114,
         "y": 39,
-        "w": 1078,
+        "w": 1092,
         "h": 348
     },
     {
@@ -258,11 +264,12 @@
             "1d2d33ef4e57dd39",
             "f9f3986645a75789",
             "d5b86b351963235f",
-            "b94bb12a8c0a7027"
+            "b94bb12a8c0a7027",
+            "942c2aa2bb3167c9"
         ],
         "x": 114,
         "y": 439,
-        "w": 1078,
+        "w": 1112,
         "h": 328
     },
     {
@@ -280,11 +287,12 @@
             "f9a04003db7d8e4a",
             "fa9fcf7b64a31948",
             "927340668e7942e4",
-            "ac41981e9754eca5"
+            "ac41981e9754eca5",
+            "8eb8085bb7cfee43"
         ],
         "x": 114,
         "y": 819,
-        "w": 1078,
+        "w": 1112,
         "h": 328
     },
     {
@@ -307,8 +315,8 @@
         ],
         "x": 114,
         "y": 1199,
-        "w": 992,
-        "h": 348
+        "w": 1112,
+        "h": 368
     },
     {
         "id": "5d1ecae7ac09586c",
@@ -326,13 +334,12 @@
             "b6d90639c3fc122c",
             "86fa588a8393f6de",
             "d68c2206e3379850",
-            "a1c297b2d8067a0b",
             "64578fa414def60a",
             "0d54f0db9a010394"
         ],
-        "x": 108,
+        "x": 114,
         "y": 1599,
-        "w": 1178,
+        "w": 1112,
         "h": 368
     },
     {
@@ -348,11 +355,10 @@
         "nodes": [
             "a4028527eb23fa04",
             "092c751dcdd12270",
-            "c781b519a9f9b156",
             "eea1641469efb23f"
         ],
-        "x": 1014,
-        "y": 1079,
+        "x": 1314,
+        "y": 799,
         "w": 532,
         "h": 142
     },
@@ -389,11 +395,11 @@
         "nodes": [
             "1e93f7b73c40091a",
             "38606e245b70b98e",
-            "d0150fd6556514e6",
-            "8f7381d08bf2b8a8"
+            "8f7381d08bf2b8a8",
+            "d0150fd6556514e6"
         ],
-        "x": 1014,
-        "y": 899,
+        "x": 1314,
+        "y": 999,
         "w": 532,
         "h": 142
     },
@@ -452,8 +458,8 @@
             "d574ead42dd36caa",
             "21799a7e71f6c5b4"
         ],
-        "x": 154,
-        "y": 1379,
+        "x": 694,
+        "y": 1399,
         "w": 472,
         "h": 142
     },
@@ -462,7 +468,7 @@
         "type": "group",
         "z": "3470febb2cd6e952",
         "g": "5d1ecae7ac09586c",
-        "name": "Rest unique battery list",
+        "name": "Rest unique list",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -472,8 +478,114 @@
             "738718a321d185e7",
             "b9f27aaa32da92c0"
         ],
-        "x": 134,
+        "x": 694,
         "y": 1799,
+        "w": 472,
+        "h": 142
+    },
+    {
+        "id": "081183d6c363e792",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Reset unique COMMAND",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "b2cbbdbaab1fc227",
+            "f96e5b3b013a2b8f",
+            "bc59e15bf069f17d"
+        ],
+        "x": 1314,
+        "y": 559,
+        "w": 532,
+        "h": 142
+    },
+    {
+        "id": "84183171172657f8",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Water pump",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "bc627a6a37117bc0",
+            "efb5c968a0a43c7d",
+            "5a307ecdca9415b1",
+            "c3c4a8bcea0243e9",
+            "141bdcfc9aec9232",
+            "77cecc17525bec45",
+            "9d4030e23837c8c6"
+        ],
+        "x": 114,
+        "y": 2019,
+        "w": 1092,
+        "h": 348
+    },
+    {
+        "id": "77cecc17525bec45",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "Reset unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "3e1cb0098e246ca4",
+            "876c4f2ff7fb1ae4",
+            "99381e18a0d5f318"
+        ],
+        "x": 694,
+        "y": 2199,
+        "w": 472,
+        "h": 142
+    },
+    {
+        "id": "ad77b71440e42dc4",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Autofill",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "cff02a511add6887",
+            "93a2783b5bb8d93d",
+            "2f36862dec231b98",
+            "5004281b11ec3bd7",
+            "89855c1c4c586196",
+            "2a121d2dbd94eecd",
+            "dd0bc2a54fe2a072"
+        ],
+        "x": 114,
+        "y": 2419,
+        "w": 1092,
+        "h": 348
+    },
+    {
+        "id": "2a121d2dbd94eecd",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "Reset unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "4119a569e77d3350",
+            "f6151272dcfe1559",
+            "d192b275aac0824e"
+        ],
+        "x": 694,
+        "y": 2599,
         "w": 472,
         "h": 142
     },
@@ -542,7 +654,8 @@
         "y": 180,
         "wires": [
             [
-                "a37da245aba53b96"
+                "a37da245aba53b96",
+                "1521d3d47869af7c"
             ]
         ],
         "l": true
@@ -553,7 +666,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "Encode switch command",
-        "func": "// Encodes an HA switch command to an RV-C DC_DIMMER_COMMAND_2\n// Outputs in standard CAN bus format for a 'can/send' topic.\n//\n// Handles DC_DIMMER_STATUS_3 entities (prefix: \"switch\")\n// Uses \"Set Level\" command for reliable ON/OFF control\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x00; // 0x00 is \"Set Level\" command\nconst LEVEL_ON = 200;     // 200 = 100% brightness\nconst LEVEL_OFF = 0;      // 0 = 0% brightness (OFF)\nconst NON_GROUP = 0xFF;   // 0xFF = Non-group command\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or fallback to Null address\nconst PRIORITY = 6;       // Standard priority for commands\nconst DGN = \"1FEDB\";      // DC_DIMMER_COMMAND_2\n\n// Get pre-parsed instance and command from the decoder function\nconst instance = msg.instance;\nconst state = msg.command; // Will be \"ON\" or \"OFF\"\n\nif (typeof instance !== 'number' || instance < 1 || instance > 250) {\n    node.warn(`[encode_switch_command] Invalid or missing instance number in msg.instance: ${instance}`);\n    return null;\n}\n\n// Determine the desired level from the command\nlet desiredLevel;\n\nif (state === \"ON\") {\n    desiredLevel = LEVEL_ON;\n} else if (state === \"OFF\") {\n    desiredLevel = LEVEL_OFF;\n} else {\n    node.warn(`[encode_switch_command] Invalid command: \"${state}\". Expected \"ON\" or \"OFF\".`);\n    return null;\n}\n\n// Build the 8-byte data payload per RV-C DC_DIMMER_COMMAND_2 specification\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = instance;        // Byte 1: Instance Number (1-250)\ndataBytes[1] = NON_GROUP;       // Byte 2: Group (0xFF = non-group command)\ndataBytes[2] = desiredLevel;    // Byte 3: Desired Level/Brightness (0-200)\ndataBytes[3] = RVC_COMMAND;     // Byte 4: Command (0x00 = Set Level)\ndataBytes[4] = 0xFF;            // Byte 5: Delay/Duration (0xFF = Not Available)\ndataBytes[5] = 0x00;            // Byte 6: Interlock (0x00 = No Interlock)\ndataBytes[6] = 0x00;            // Byte 7: Ramp Time (0x00 = Instant)\ndataBytes[7] = 0xFF;            // Byte 8: Reserved (0xFF = Not Available)\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// Construct the CAN ID\n// CAN ID format: Priority (3 bits) + DGN (18 bits) + Source Address (8 bits)\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\n// Debug output\nnode.warn(`[encode_switch_command] Instance ${instance} → ${state} (Level=${desiredLevel}) | CAN: ${msg.payload}`);\n\nreturn msg;\n",
+        "func": "// Encodes an HA switch command to an RV-C DC_DIMMER_COMMAND_2\n// Outputs in standard CAN bus format for a 'can/send' topic.\n//\n// Handles DC_DIMMER_STATUS_3 entities (prefix: \"switch\")\n// Uses \"Set Level\" command for reliable ON/OFF control\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x00; // 0x00 is \"Set Level\" command\nconst LEVEL_ON = 200;     // 200 = 100% brightness\nconst LEVEL_OFF = 0;      // 0 = 0% brightness (OFF)\nconst NON_GROUP = 0xFF;   // 0xFF = Non-group command\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // Use claimed address or fallback to Null address\nconst PRIORITY = 6;       // Standard priority for commands\nconst DGN = \"1FEDB\";      // DC_DIMMER_COMMAND_2\n\n// Get pre-parsed instance and command from the decoder function\nconst instance = msg.instance;\nconst state = msg.command; // Will be \"ON\" or \"OFF\"\n\nif (typeof instance !== 'number' || instance < 1 || instance > 250) {\n    node.warn(`[encode_switch_command] Invalid or missing instance number in msg.instance: ${instance}`);\n    return null;\n}\n\n// Determine the desired level from the command\nlet desiredLevel;\n\nif (state === \"ON\") {\n    desiredLevel = LEVEL_ON;\n} else if (state === \"OFF\") {\n    desiredLevel = LEVEL_OFF;\n} else {\n    node.warn(`[encode_switch_command] Invalid command: \"${state}\". Expected \"ON\" or \"OFF\".`);\n    return null;\n}\n\n// Build the 8-byte data payload per RV-C DC_DIMMER_COMMAND_2 specification\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = instance;        // Byte 1: Instance Number (1-250)\ndataBytes[1] = NON_GROUP;       // Byte 2: Group (0xFF = non-group command)\ndataBytes[2] = desiredLevel;    // Byte 3: Desired Level/Brightness (0-200)\ndataBytes[3] = RVC_COMMAND;     // Byte 4: Command (0x00 = Set Level)\ndataBytes[4] = 0xFF;            // Byte 5: Delay/Duration (0xFF = Not Available)\ndataBytes[5] = 0x00;            // Byte 6: Interlock (0x00 = No Interlock)\ndataBytes[6] = 0x00;            // Byte 7: Ramp Time (0x00 = Instant)\ndataBytes[7] = 0xFF;            // Byte 8: Reserved (0xFF = Not Available)\n\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n// Construct the CAN ID\n// CAN ID format: Priority (3 bits) + DGN (18 bits) + Source Address (8 bits)\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\n// Debug output\n//node.warn(`[encode_switch_command] Instance ${instance} → ${state} (Level=${desiredLevel}) | CAN: ${msg.payload}`);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -629,7 +742,8 @@
         "y": 180,
         "wires": [
             [
-                "85de1b537d9b8b35"
+                "85de1b537d9b8b35",
+                "ee0c6ca61a8069d5"
             ],
             [
                 "927786f8f3f21075"
@@ -676,7 +790,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "HA command",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -773,6 +887,42 @@
         "wires": []
     },
     {
+        "id": "1521d3d47869af7c",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "HA in",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "ee0c6ca61a8069d5",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "HA Decoded",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 60,
+        "wires": []
+    },
+    {
         "id": "d3a13b531babee66",
         "type": "link out",
         "z": "3470febb2cd6e952",
@@ -782,7 +932,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1030,
+        "x": 1070,
         "y": 80,
         "wires": [],
         "l": true
@@ -792,11 +942,11 @@
         "type": "link in",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "SWITCH",
+        "name": "DC_DIMMER_STATUS_3",
         "links": [
             "7af7fb2178a714cf"
         ],
-        "x": 200,
+        "x": 250,
         "y": 80,
         "wires": [
             [
@@ -819,7 +969,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 500,
         "y": 140,
         "wires": [
             [
@@ -840,7 +990,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 500,
         "y": 80,
         "wires": [
             [
@@ -854,18 +1004,19 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Create Switch",
-        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch\", \"pump\", \"autofill\"];\nif (commandableTypes.includes(deviceType)) {\n    // RV-C valid instance range: 1-250\n    // Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\n    if (instance < 1 || instance > 250) {\n        // Silently ignore special RV-C status values - these aren't real devices\n        if (instance >= 251 && instance <= 255) {\n            return null;\n        }\n        node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration with HA component mapping\nlet prefix;\nlet displayPrefix;\nlet icon;\nlet componentType;\n\nswitch (deviceType) {\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        componentType = \"switch\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        componentType = \"switch\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        componentType = \"switch\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n\n    // Device information\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Unified MQTT Discovery for Home Assistant\n * Creates switch entities for multiple device types with appropriate prefixes\n * Handles switches, pumps, and autofill devices\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.device_type (String): Device type (\"switch\", \"pump\", \"autofill\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\nconst commandableTypes = [\"switch\", \"pump\", \"autofill\"];\nif (commandableTypes.includes(deviceType)) {\n    // RV-C valid instance range: 1-250\n    // Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\n    if (instance < 1 || instance > 250) {\n        // Silently ignore special RV-C status values - these aren't real devices\n        if (instance >= 251 && instance <= 255) {\n            return null;\n        }\n        node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a ${deviceType}. Entity will not be created.`);\n        return null;\n    }\n}\n\n// Device type configuration with HA component mapping\nlet prefix;\nlet displayPrefix;\nlet icon;\nlet componentType;\n\nswitch (deviceType) {\n    case \"switch\":\n        prefix = \"switch\";\n        displayPrefix = \"Switch\";\n        icon = \"mdi:light-recessed\";\n        componentType = \"switch\";\n        break;\n    case \"pump\":\n        prefix = \"pump\";\n        displayPrefix = \"Pump\";\n        icon = \"mdi:water-pump\";\n        componentType = \"switch\";\n        break;\n    case \"autofill\":\n        prefix = \"autofill\";\n        displayPrefix = \"Autofill\";\n        icon = \"mdi:water-plus\";\n        componentType = \"switch\";\n        break;\n    default:\n        node.error(`Unsupported device_type: ${deviceType}`, msg);\n        return null;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\"\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 760,
         "y": 140,
         "wires": [
             [
-                "d3a13b531babee66"
+                "d3a13b531babee66",
+                "52e43edcfad810dd"
             ]
         ]
     },
@@ -942,18 +1093,19 @@
         "z": "3470febb2cd6e952",
         "g": "97615854748deb3d",
         "name": "Create Lock",
-        "func": "/***********************************************************\n * Lock MQTT Discovery for Home Assistant\n * Creates a lock entity for each lock instance\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The lock instance ID (1-250)\n * - msg.payload.device_type (String): Device type (\"lock\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\n// Verify device type is lock\nif (deviceType !== 'lock') {\n    node.error(`Expected device_type 'lock', got '${deviceType}'.`, msg);\n    return null;\n}\n\n// RV-C valid instance range: 1-250\n// Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\nif (instance < 1 || instance > 250) {\n    // Silently ignore special RV-C status values - these aren't real devices\n    if (instance >= 251 && instance <= 255) {\n        return null;\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a lock. Entity will not be created.`);\n    return null;\n}\n\nconst prefix = \"lock\";\nconst displayPrefix = \"Lock\";\nconst componentType = \"lock\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: \"mdi:lock\",\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"LOCK\" and \"UNLOCK\" commands look like (simple strings)\n    payload_lock: \"LOCK\",\n    payload_unlock: \"UNLOCK\",\n\n    // State values that will be received from status updates\n    state_locked: \"LOCKED\",\n    state_unlocked: \"UNLOCKED\",\n\n    // Set optimistic to false so the lock state only changes\n    // when a status message is received from the RV-C bus\n    optimistic: false,\n\n    // Device information - grouped under RV Link\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: [\"rv_link\"]\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;\n",
+        "func": "/***********************************************************\n * Lock MQTT Discovery for Home Assistant\n * Creates a lock entity for each lock instance\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The lock instance ID (1-250)\n * - msg.payload.device_type (String): Device type (\"lock\")\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst deviceType = msg.payload.device_type;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof deviceType !== 'string') {\n    node.error(\"Input missing 'device_type' (string).\", msg);\n    return null;\n}\n\n// Verify device type is lock\nif (deviceType !== 'lock') {\n    node.error(`Expected device_type 'lock', got '${deviceType}'.`, msg);\n    return null;\n}\n\n// RV-C valid instance range: 1-250\n// Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\nif (instance < 1 || instance > 250) {\n    // Silently ignore special RV-C status values - these aren't real devices\n    if (instance >= 251 && instance <= 255) {\n        return null;\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a lock. Entity will not be created.`);\n    return null;\n}\n\nconst prefix = \"lock\";\nconst displayPrefix = \"Lock\";\nconst componentType = \"lock\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: \"mdi:lock\",\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"LOCK\" and \"UNLOCK\" commands look like (simple strings)\n    payload_lock: \"LOCK\",\n    payload_unlock: \"UNLOCK\",\n\n    // State values that will be received from status updates\n    state_locked: \"LOCKED\",\n    state_unlocked: \"UNLOCKED\",\n\n    // Set optimistic to false so the lock state only changes\n    // when a status message is received from the RV-C bus\n    optimistic: false\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\nmsg.deviceType = deviceType;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
+        "x": 750,
         "y": 540,
         "wires": [
             [
-                "b94bb12a8c0a7027"
+                "b94bb12a8c0a7027",
+                "942c2aa2bb3167c9"
             ]
         ]
     },
@@ -970,7 +1122,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
+        "x": 490,
         "y": 480,
         "wires": [
             [
@@ -1010,7 +1162,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
+        "x": 490,
         "y": 540,
         "wires": [
             [
@@ -1028,7 +1180,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 990,
+        "x": 1090,
         "y": 480,
         "wires": [],
         "l": true
@@ -1180,7 +1332,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
+        "x": 470,
         "y": 860,
         "wires": [
             [
@@ -1220,7 +1372,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
+        "x": 480,
         "y": 920,
         "wires": [
             [
@@ -1238,7 +1390,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 990,
+        "x": 1090,
         "y": 860,
         "wires": [],
         "l": true
@@ -1249,18 +1401,19 @@
         "z": "3470febb2cd6e952",
         "g": "da39e5020d511fa6",
         "name": "Create Shade",
-        "func": "/***********************************************************\n * Create Home Assistant MQTT Discovery for RV-C Shades\n * Creates a dedicated 'cover' entity for each shade instance.\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The shade instance ID (1-250)\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object' || typeof msg.payload.instance !== 'number') {\n    node.error(\"Input payload must be an object with a numeric 'instance' property.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// RV-C valid instance range: 1-250\n// Silently ignore special RV-C status/error values (251-255)\nif (instance < 1 || instance > 250) {\n    if (instance < 251) { // Only warn for invalid user-range instances\n        node.warn(`Instance ${instance} is outside the valid RV-C range (1-250). Cover will not be created.`);\n    }\n    return null;\n}\n\n// --- MQTT Discovery Configuration for a Cover Entity ---\n\nconst entityId = `shade_${instance}`;\nconst discoveryTopic = `homeassistant/cover/${entityId}/config`;\nconst commandTopic = `homeassistant/cover/${entityId}/set`; // Topic HA will send commands to\n\n// Shared device identifier for grouping all entities under RV Link\nconst deviceInfo = {\n    name: \"RV Link\",\n    identifiers: [\"rv_link\"],\n    manufacturer: \"RV Link\"\n};\n\nconst stateTopic = `homeassistant/cover/${entityId}/state`;\n\nconst discoveryPayload = {\n    name: `Shade ${instance}`,\n    unique_id: `shade_${instance}`,\n    default_entity_id: `cover.${entityId}`,\n    device: deviceInfo,\n    icon: \"mdi:window-shutter\",\n    command_topic: commandTopic,\n    payload_open: \"OPEN\",\n    payload_close: \"CLOSE\",\n    payload_stop: \"STOP\",\n    state_topic: stateTopic,\n    position_topic: stateTopic,\n    // Cover entity states\n    state_opening: \"opening\",\n    state_closing: \"closing\",\n    state_open: \"open\",\n    state_closed: \"closed\",\n    // Position support (keeps both buttons enabled)\n    value_template: \"{{ value_json.state }}\",\n    position_template: \"{{ value_json.position | int }}\",\n    optimistic: false\n};\n\n// Return the discovery message\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(discoveryPayload);\nmsg.retain = true;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Create Home Assistant MQTT Discovery for RV-C Shades\n * Creates a dedicated 'cover' entity for each shade instance.\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The shade instance ID (1-250)\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object' || typeof msg.payload.instance !== 'number') {\n    node.error(\"Input payload must be an object with a numeric 'instance' property.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// RV-C valid instance range: 1-250\n// Silently ignore special RV-C status/error values (251-255)\nif (instance < 1 || instance > 250) {\n    if (instance < 251) { // Only warn for invalid user-range instances\n        node.warn(`Instance ${instance} is outside the valid RV-C range (1-250). Cover will not be created.`);\n    }\n    return null;\n}\n\n// --- MQTT Discovery Configuration for a Cover Entity ---\n\nconst entityId = `shade_${instance}`;\nconst discoveryTopic = `homeassistant/cover/${entityId}/config`;\nconst commandTopic = `homeassistant/cover/${entityId}/set`; // Topic HA will send commands to\n\nconst stateTopic = `homeassistant/cover/${entityId}/state`;\n\nconst discoveryPayload = {\n    name: `Shade ${instance}`,\n    unique_id: `shade_${instance}`,\n    default_entity_id: `cover.${entityId}`,\n    icon: \"mdi:window-shutter\",\n    command_topic: commandTopic,\n    payload_open: \"OPEN\",\n    payload_close: \"CLOSE\",\n    payload_stop: \"STOP\",\n    state_topic: stateTopic,\n    position_topic: stateTopic,\n    // Cover entity states\n    state_opening: \"opening\",\n    state_closing: \"closing\",\n    state_open: \"open\",\n    state_closed: \"closed\",\n    // Position support (keeps both buttons enabled)\n    value_template: \"{{ value_json.state }}\",\n    position_template: \"{{ value_json.position | int }}\",\n    optimistic: false\n};\n\n// Return the discovery message\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(discoveryPayload);\nmsg.retain = true;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 760,
         "y": 920,
         "wires": [
             [
-                "927340668e7942e4"
+                "927340668e7942e4",
+                "8eb8085bb7cfee43"
             ]
         ]
     },
@@ -1274,7 +1427,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 970,
+        "x": 1090,
         "y": 1240,
         "wires": [],
         "l": true
@@ -1325,14 +1478,14 @@
         "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Create Tank",
-        "func": "/***********************************************************\n * Tank MQTT Discovery for Home Assistant\n * Creates a sensor entity based on tank type input.\n * Expects msg.payload to be a tank type string (e.g., \"fresh\", \"gray\", \"black\", \"lpg\").\n * Example Input: msg.payload = \"fresh\"\n * Resulting Entity ID: tank_fresh\n ***********************************************************/\n\n// Accept numeric instance ID from unique_tank.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to single-word tank type and display name\nconst tankTypeMap = {\n    0: { type: \"fresh\", name: \"Fresh Water\" },\n    1: { type: \"gray\", name: \"Gray Water\" },\n    2: { type: \"black\", name: \"Black Water\" },\n    3: { type: \"lpg\", name: \"LPG\" },\n    4: { type: \"fuel\", name: \"Fuel\" },\n    5: { type: \"hot\", name: \"Hot Water\" },\n    6: { type: \"hydraulic\", name: \"Hydraulic Fluid\" },\n    7: { type: \"livewell\", name: \"Live Well\" },\n    8: { type: \"ballast\", name: \"Ballast\" },\n    9: { type: \"oil\", name: \"Oil\" },\n    10: { type: \"coolant\", name: \"Coolant\" },\n    11: { type: \"def\", name: \"DEF\" },\n    12: { type: \"air\", name: \"Air\" },\n    13: { type: \"fresh2\", name: \"Fresh Water 2\" },\n    14: { type: \"gray2\", name: \"Gray Water 2\" },\n    15: { type: \"black2\", name: \"Black Water 2\" },\n    251: { type: \"error\", name: \"Error\" },\n    252: { type: \"notsupported\", name: \"Not Supported\" },\n    253: { type: \"outofrange\", name: \"Out of Range\" },\n    254: { type: \"reserved\", name: \"Reserved\" },\n    255: { type: \"notavailable\", name: \"Not Available\" }\n};\n\nconst tankInfo = tankTypeMap[instanceId] || { type: \"other\", name: `Unknown Tank ${instanceId}` };\nconst tankType = tankInfo.type;\nconst displayName = tankInfo.name;\n\nconst entityId = `tank_${tankType}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:water-percent\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"%\",\n    value_template: \"{{ value | float }}\", // Ensure it's parsed as a number\n\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Tank MQTT Discovery for Home Assistant\n * Creates a sensor entity based on tank type input.\n * Expects msg.payload to be a tank type string (e.g., \"fresh\", \"gray\", \"black\", \"lpg\").\n * Example Input: msg.payload = \"fresh\"\n * Resulting Entity ID: tank_fresh\n ***********************************************************/\n\n// Accept numeric instance ID from unique_tank.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to single-word tank type and display name\nconst tankTypeMap = {\n    0: { type: \"fresh\", name: \"Fresh Water\" },\n    1: { type: \"gray\", name: \"Gray Water\" },\n    2: { type: \"black\", name: \"Black Water\" },\n    3: { type: \"lpg\", name: \"LPG\" },\n    4: { type: \"fuel\", name: \"Fuel\" },\n    5: { type: \"hot\", name: \"Hot Water\" },\n    6: { type: \"hydraulic\", name: \"Hydraulic Fluid\" },\n    7: { type: \"livewell\", name: \"Live Well\" },\n    8: { type: \"ballast\", name: \"Ballast\" },\n    9: { type: \"oil\", name: \"Oil\" },\n    10: { type: \"coolant\", name: \"Coolant\" },\n    11: { type: \"def\", name: \"DEF\" },\n    12: { type: \"air\", name: \"Air\" },\n    13: { type: \"fresh2\", name: \"Fresh Water 2\" },\n    14: { type: \"gray2\", name: \"Gray Water 2\" },\n    15: { type: \"black2\", name: \"Black Water 2\" },\n    251: { type: \"error\", name: \"Error\" },\n    252: { type: \"notsupported\", name: \"Not Supported\" },\n    253: { type: \"outofrange\", name: \"Out of Range\" },\n    254: { type: \"reserved\", name: \"Reserved\" },\n    255: { type: \"notavailable\", name: \"Not Available\" }\n};\n\nconst tankInfo = tankTypeMap[instanceId] || { type: \"other\", name: `Unknown Tank ${instanceId}` };\nconst tankType = tankInfo.type;\nconst displayName = tankInfo.name;\n\nconst entityId = `tank_${tankType}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:water-percent\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"%\",\n    value_template: \"{{ value | float }}\" // Ensure it's parsed as a number\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
+        "x": 770,
         "y": 1320,
         "wires": [
             [
@@ -1363,8 +1516,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 270,
-        "y": 1480,
+        "x": 810,
+        "y": 1500,
         "wires": [
             [
                 "d574ead42dd36caa"
@@ -1384,8 +1537,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 1480,
+        "x": 1060,
+        "y": 1500,
         "wires": [
             []
         ]
@@ -1399,8 +1552,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 250,
-        "y": 1420,
+        "x": 790,
+        "y": 1440,
         "wires": [
             [
                 "d574ead42dd36caa"
@@ -1434,7 +1587,7 @@
         "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
-        "name": "Create mqtt",
+        "name": "Create tank",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -1443,7 +1596,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 930,
+        "x": 1050,
         "y": 1320,
         "wires": []
     },
@@ -1458,7 +1611,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1150,
+        "x": 1090,
         "y": 1640,
         "wires": [],
         "l": true
@@ -1469,15 +1622,16 @@
         "z": "3470febb2cd6e952",
         "d": true,
         "g": "5d1ecae7ac09586c",
-        "name": "DC_SOURCE_STATUS",
+        "name": "DC_SOURCE_STATUS_1",
         "links": [
             "bff245b2ca47ef79"
         ],
-        "x": 280,
+        "x": 250,
         "y": 1640,
         "wires": [
             [
-                "a1c297b2d8067a0b"
+                "2c1151c97bb185f2",
+                "b6d90639c3fc122c"
             ]
         ],
         "l": true
@@ -1496,7 +1650,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
+        "x": 490,
         "y": 1640,
         "wires": [
             [
@@ -1518,7 +1672,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 500,
         "y": 1720,
         "wires": [
             [
@@ -1533,14 +1687,14 @@
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Create Battery",
-        "func": "/***********************************************************\n * Battery MQTT Discovery for Home Assistant\n * Creates a sensor entity based on battery instance input.\n * Expects msg.payload to be a number (e.g., 1) or DC instance string (e.g., \"Main House Battery Bank\").\n * Example Input: msg.payload = 1 or msg.payload = \"Main House Battery Bank\"\n * Resulting Entity ID: battery_1, battery_2, etc.\n ***********************************************************/\n\n// Accept numeric instance ID from unique_batteries.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to entity suffix and display name per RV-C specification\nconst batteryMap = {\n    0: { suffix: \"0\", name: \"Invalid\" },\n    1: { suffix: \"house\", name: \"Main House Battery\" },\n    2: { suffix: \"chassis\", name: \"Chassis Battery\" },\n    3: { suffix: \"house2\", name: \"Secondary House Battery\" },\n    4: { suffix: \"generator\", name: \"Generator Battery\" }\n};\n\n// For instances 5-250, use generic \"battery_X\" naming\nlet entitySuffix;\nlet displayName;\nif (instanceId >= 5 && instanceId <= 250) {\n    entitySuffix = instanceId.toString();\n    displayName = `Battery ${instanceId}`;\n} else {\n    const batteryInfo = batteryMap[instanceId] || { suffix: instanceId.toString(), name: `Unknown Battery ${instanceId}` };\n    entitySuffix = batteryInfo.suffix;\n    displayName = batteryInfo.name;\n}\n\nconst entityId = `battery_${entitySuffix}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:home-battery-outline\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"V\",\n    device_class: \"voltage\",\n    value_template: \"{{ value | float | round(2) }}\",\n\n    device: {\n        name: \"RV Link\",\n        manufacturer: \"RV Link\",\n        identifiers: \"rv_link\"\n    }\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Battery MQTT Discovery for Home Assistant\n * Creates a sensor entity based on battery instance input.\n * Expects msg.payload to be a number (e.g., 1) or DC instance string (e.g., \"Main House Battery Bank\").\n * Example Input: msg.payload = 1 or msg.payload = \"Main House Battery Bank\"\n * Resulting Entity ID: battery_1, battery_2, etc.\n ***********************************************************/\n\n// Accept numeric instance ID from unique_batteries.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to entity suffix and display name per RV-C specification\nconst batteryMap = {\n    0: { suffix: \"0\", name: \"Invalid\" },\n    1: { suffix: \"house\", name: \"Main House Battery\" },\n    2: { suffix: \"chassis\", name: \"Chassis Battery\" },\n    3: { suffix: \"house2\", name: \"Secondary House Battery\" },\n    4: { suffix: \"generator\", name: \"Generator Battery\" }\n};\n\n// For instances 5-250, use generic \"battery_X\" naming\nlet entitySuffix;\nlet displayName;\nif (instanceId >= 5 && instanceId <= 250) {\n    entitySuffix = instanceId.toString();\n    displayName = `Battery ${instanceId}`;\n} else {\n    const batteryInfo = batteryMap[instanceId] || { suffix: instanceId.toString(), name: `Unknown Battery ${instanceId}` };\n    entitySuffix = batteryInfo.suffix;\n    displayName = batteryInfo.name;\n}\n\nconst entityId = `battery_${entitySuffix}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:home-battery-outline\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"V\",\n    device_class: \"voltage\",\n    value_template: \"{{ value | float | round(2) }}\"\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = JSON.stringify(payload);\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
+        "x": 780,
         "y": 1720,
         "wires": [
             [
@@ -1572,7 +1726,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 250,
+        "x": 810,
         "y": 1900,
         "wires": [
             [
@@ -1594,7 +1748,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 1060,
         "y": 1900,
         "wires": [
             []
@@ -1609,44 +1763,14 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 320,
+        "x": 820,
         "y": 1840,
         "wires": [
-            []
+            [
+                "738718a321d185e7"
+            ]
         ],
         "l": true
-    },
-    {
-        "id": "a1c297b2d8067a0b",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "d": true,
-        "g": "5d1ecae7ac09586c",
-        "name": "",
-        "property": "payload.dgnName",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "DC_SOURCE_STATUS_1",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 470,
-        "y": 1640,
-        "wires": [
-            [
-                "2c1151c97bb185f2",
-                "b6d90639c3fc122c"
-            ],
-            []
-        ]
     },
     {
         "id": "64578fa414def60a",
@@ -1656,8 +1780,8 @@
         "g": "5d1ecae7ac09586c",
         "name": "DC_SOURCE_STATUS types",
         "info": "DC_SOURCE_STATUS_1: This is the most basic status message. It provides the fundamental electrical readings: \n\nDC Voltage and DC Current. A positive current value indicates the source is discharging (power flowing out), while a negative value indicates it is charging.\n\nDC_SOURCE_STATUS_2: This message adds thermal and capacity information. It reports the \n\nSource Temperature, the battery's State of Charge (SOC) as a percentage, and the estimated Time Remaining until the battery is either full or empty.\n\nDC_SOURCE_STATUS_3: This provides more nuanced details about the battery's long-term health and capacity. It includes the \n\nState of Health (SOH), Capacity Remaining in amp-hours, and Relative Capacity, which is the state of charge adjusted for the state of health.\n\n\nDC_SOURCE_STATUS_5: This message is for high-precision measurement. It reports the \n\nDC Voltage with 0.001 V precision, allowing for more accurate remote voltage sensing without needing dedicated wires.",
-        "x": 940,
-        "y": 1860,
+        "x": 300,
+        "y": 1800,
         "wires": []
     },
     {
@@ -1665,7 +1789,7 @@
         "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "5d1ecae7ac09586c",
-        "name": "Create mqtt",
+        "name": "Create battery",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -1674,8 +1798,428 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1110,
+        "x": 1060,
         "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "8eb8085bb7cfee43",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "da39e5020d511fa6",
+        "name": "Create shade",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "942c2aa2bb3167c9",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "97615854748deb3d",
+        "name": "Create lock",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "52e43edcfad810dd",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "Create switch",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "bc627a6a37117bc0",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 1070,
+        "y": 2060,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "efb5c968a0a43c7d",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "WATER_PUMP_STATUS",
+        "links": [
+            "295d4bc9058dab71"
+        ],
+        "x": 250,
+        "y": 2060,
+        "wires": [
+            [
+                "5a307ecdca9415b1",
+                "c3c4a8bcea0243e9"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "5a307ecdca9415b1",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "Unique water pump",
+        "func": "// Retrieve existing battery instances from flow context, or initialize as empty array\nlet uniqueWaterPump = flow.get(\"uniqueWaterPump\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.dc_instance_id;\n\n// Check if this instance ID has been seen before\nif (!uniqueWaterPump.includes(instanceId)) {\n    uniqueWaterPump.push(instanceId);\n    flow.set(\"uniqueWaterPump\", uniqueWaterPump);\n\n    // Pass the instance ID to create_battery.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 2120,
+        "wires": [
+            [
+                "141bdcfc9aec9232"
+            ]
+        ]
+    },
+    {
+        "id": "c3c4a8bcea0243e9",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "Water Pump Status",
+        "func": "",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 2060,
+        "wires": [
+            [
+                "bc627a6a37117bc0"
+            ]
+        ]
+    },
+    {
+        "id": "141bdcfc9aec9232",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "Create water pump",
+        "func": "",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 2120,
+        "wires": [
+            [
+                "bc627a6a37117bc0",
+                "9d4030e23837c8c6"
+            ]
+        ]
+    },
+    {
+        "id": "3e1cb0098e246ca4",
+        "type": "inject",
+        "z": "3470febb2cd6e952",
+        "g": "77cecc17525bec45",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 810,
+        "y": 2300,
+        "wires": [
+            [
+                "876c4f2ff7fb1ae4"
+            ]
+        ]
+    },
+    {
+        "id": "876c4f2ff7fb1ae4",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "77cecc17525bec45",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueWaterPump\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 2300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "99381e18a0d5f318",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "77cecc17525bec45",
+        "name": "Reset water pump",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 810,
+        "y": 2240,
+        "wires": [
+            [
+                "876c4f2ff7fb1ae4"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "9d4030e23837c8c6",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "84183171172657f8",
+        "name": "Create water pump",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 2120,
+        "wires": []
+    },
+    {
+        "id": "cff02a511add6887",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 1070,
+        "y": 2460,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "93a2783b5bb8d93d",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "AUTOFILL_STATUS",
+        "links": [
+            "b87fcd5e60905824"
+        ],
+        "x": 230,
+        "y": 2460,
+        "wires": [
+            [
+                "2f36862dec231b98",
+                "5004281b11ec3bd7"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "2f36862dec231b98",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "Unique autofill",
+        "func": "// Retrieve existing battery instances from flow context, or initialize as empty array\nlet uniqueAutofill = flow.get(\"uniqueAutofill\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.dc_instance_id;\n\n// Check if this instance ID has been seen before\nif (!uniqueAutofill.includes(instanceId)) {\n    uniqueAutofill.push(instanceId);\n    flow.set(\"uniqueAutofill\", uniqueAutofill);\n\n    // Pass the instance ID to create_battery.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 2520,
+        "wires": [
+            [
+                "89855c1c4c586196"
+            ]
+        ]
+    },
+    {
+        "id": "5004281b11ec3bd7",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "Autofill status",
+        "func": "",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 2460,
+        "wires": [
+            [
+                "cff02a511add6887"
+            ]
+        ]
+    },
+    {
+        "id": "89855c1c4c586196",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "Create autofill",
+        "func": "",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 2520,
+        "wires": [
+            [
+                "cff02a511add6887",
+                "dd0bc2a54fe2a072"
+            ]
+        ]
+    },
+    {
+        "id": "4119a569e77d3350",
+        "type": "inject",
+        "z": "3470febb2cd6e952",
+        "g": "2a121d2dbd94eecd",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 810,
+        "y": 2700,
+        "wires": [
+            [
+                "f6151272dcfe1559"
+            ]
+        ]
+    },
+    {
+        "id": "f6151272dcfe1559",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "2a121d2dbd94eecd",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueAutofill\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 2700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d192b275aac0824e",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "2a121d2dbd94eecd",
+        "name": "Reset autofill",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 790,
+        "y": 2640,
+        "wires": [
+            [
+                "f6151272dcfe1559"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "dd0bc2a54fe2a072",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "ad77b71440e42dc4",
+        "name": "Create switch",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 2520,
         "wires": []
     },
     {
@@ -1722,8 +2266,8 @@
                 "vt": "str"
             },
             {
-                "t": "cont",
-                "v": "DC_SOURCE_STATUS",
+                "t": "eq",
+                "v": "DC_SOURCE_STATUS_1",
                 "vt": "str"
             },
             {
@@ -1822,12 +2366,17 @@
                 "vt": "str"
             },
             {
+                "t": "cont",
+                "v": "DC_SOURCE_STATUS",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 28,
+        "outputs": 29,
         "x": 420,
         "y": 220,
         "wires": [
@@ -1911,6 +2460,9 @@
                 "f945d56c437bfb38"
             ],
             [
+                "40bc1ec5180b6589"
+            ],
+            [
                 "b797e5a52b6db5b4"
             ]
         ]
@@ -1931,7 +2483,7 @@
         "y": 100,
         "wires": [
             [
-                "7af7fb2178a714cf"
+                "b87fcd5e60905824"
             ]
         ]
     },
@@ -2025,7 +2577,7 @@
         "y": 40,
         "wires": [
             [
-                "7af7fb2178a714cf"
+                "295d4bc9058dab71"
             ]
         ]
     },
@@ -2423,7 +2975,7 @@
         "id": "010c5119a7e833b2",
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
-        "name": "Decode DC_SOURCE_STATUS",
+        "name": "Decode DC_SOURCE_STATUS_1",
         "func": "// Corrected RV-C DC_SOURCE_STATUS Decoder for Node-RED\n// Decodes DC_SOURCE_STATUS messages 1, 2, and 3 based on their DGN.\n// Input: msg.payload with {dgn, dataPayload}\n// Output: msg.payload with decoded fields\n\n// === Helper Functions (Largely from your original code) ===\n\n// Decodes a bitfield from within a byte\nfunction decodeBits(byte, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (byte & mask) >> startBit;\n}\n\n// Decodes the DC Instance (Byte 0)\nfunction decodeDCInstance(value) {\n    const dcInstances = {\n        0: \"Invalid\",\n        1: \"Main House Battery Bank\",\n        2: \"Chassis Start Battery\",\n        3: \"Secondary House Battery Bank\",\n        4: \"Generator Starter Battery\"\n    };\n    // Per the spec, 5-250 are valid \"Other\" instances \n    if (value >= 5 && value <= 250) {\n        return `Other DC Instance ${value}`;\n    }\n    return dcInstances[value] || `Unknown DC Instance ${value}`;\n}\n\n// Decodes the Device Priority (Byte 1)\nfunction decodeDevicePriority(value) {\n    const priorities = {\n        20: \"Voltmeter\",\n        40: \"Voltmeter/Ammeter\",\n        60: \"Inverter\",\n        80: \"Charger\",\n        100: \"Inverter/Charger\",\n        120: \"Battery SOC/BMS Device\"\n    };\n    return priorities[value] || `Unknown Priority ${value}`;\n}\n\n// Decodes DC Voltage (uint16)\nfunction decodeDCVoltage(value) {\n    // NOTE: This logic is based on your original function, assuming a 0.05V resolution\n    // from the unprovided \"Table 5.3\" referenced in the spec.\n    if (value <= 64000) return parseFloat((value * 0.05).toFixed(2));\n    if (value === 65535) return \"Not Available\";\n    return \"Invalid\";\n}\n\n// Decodes DC Current (32-bit signed)\nfunction decodeDCCurrent32bit(value) {\n    // NOTE: This logic is based on your original function, assuming a 0.05A resolution\n    // from the unprovided \"Table 5.3\" referenced in the spec.\n    if (value === 4294967295) return \"Not Available\";\n\n    // Convert 32-bit unsigned to signed\n    if (value > 2147483647) {\n        value = value - 4294967296;\n    }\n\n    // The spec does not define the range for current, using your original logic.\n    return parseFloat((value * 0.05).toFixed(2));\n}\n\n// Decodes Temperature (uint16)\nfunction decodeTemperature(value) {\n    // This is for the uint16 version in STATUS_2 [cite: 72]\n    // The spec does not define the scaling for this field, assuming offset of -40 C.\n    if (value <= 64000) return (value * 0.03125) - 273; // Example scaling\n    if (value === 65535) return \"Not Available\";\n    return \"Invalid\";\n}\n\n// Decodes State of Charge / Health / Relative Capacity (uint8)\nfunction decodePercentage(value) {\n    // 0.5% per step from your original function.\n    if (value <= 200) return parseFloat((value * 0.5).toFixed(1));\n    if (value === 255) return \"Not Available\";\n    return \"Invalid\";\n}\n\n\n// === DGN-Specific Decoders ===\n\nfunction decodeDCSourceStatus1(data) {\n    if (data.length < 8) return { error: \"Invalid data length for STATUS_1\" };\n\n    const result = { dgn_name: \"DC_SOURCE_STATUS_1\" };\n\n    result.dc_instance_id = data[0]; // Raw numeric instance ID\n    result.dc_instance = decodeDCInstance(data[0]);\n    result.device_priority = decodeDevicePriority(data[1]);\n\n    const voltage = (data[3] << 8) | data[2];\n    result.dc_voltage_V = decodeDCVoltage(voltage);\n\n    const current = (data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4];\n    result.dc_current_A = decodeDCCurrent32bit(current);\n\n    return result;\n}\n\nfunction decodeDCSourceStatus2(data) {\n    if (data.length < 8) return { error: \"Invalid data length for STATUS_2\" };\n\n    const result = { dgn_name: \"DC_SOURCE_STATUS_2\" };\n\n    result.dc_instance_id = data[0]; // Raw numeric instance ID\n    result.dc_instance = decodeDCInstance(data[0]);\n    result.device_priority = decodeDevicePriority(data[1]);\n\n    const temp = (data[3] << 8) | data[2];\n    result.source_temp_C = decodeTemperature(temp);\n\n    result.state_of_charge_percent = decodePercentage(data[4]);\n\n    const time = (data[6] << 8) | data[5];\n    result.time_remaining_min = (time <= 64000) ? time : \"Not Available\";\n\n    const interp = decodeBits(data[7], 0, 1);\n    const interpMap = { 0: \"Time to Empty\", 1: \"Time to Full\", 3: \"Not Available\" };\n    result.time_remaining_interpretation = interpMap[interp] || \"Reserved\";\n\n    return result;\n}\n\nfunction decodeDCSourceStatus3(data) {\n    if (data.length < 8) return { error: \"Invalid data length for STATUS_3\" };\n\n    const result = { dgn_name: \"DC_SOURCE_STATUS_3\" };\n\n    result.dc_instance_id = data[0]; // Raw numeric instance ID\n    result.dc_instance = decodeDCInstance(data[0]);\n    result.device_priority = decodeDevicePriority(data[1]);\n    result.state_of_health_percent = decodePercentage(data[2]);\n\n    const cap = (data[4] << 8) | data[3];\n    result.capacity_remaining_Ah = (cap <= 64000) ? cap : \"Not Available\";\n\n    result.relative_capacity_percent = decodePercentage(data[5]);\n\n    const ripple = (data[7] << 8) | data[6];\n    result.ac_rms_ripple_mV = (ripple <= 65530) ? ripple : \"Not Available\";\n\n    return result;\n}\n\n// === Main Router Function ===\n\nfunction decodeDCSourceMessage(dgn, data) {\n    switch (dgn) {\n        case '1FFFD':\n            return decodeDCSourceStatus1(data);\n        case '1FFFC':\n            return decodeDCSourceStatus2(data);\n        case '1FFFB':\n            return decodeDCSourceStatus3(data);\n        default:\n            return {\n                dgn: dgn,\n                error: `Unsupported DGN for DC_SOURCE_STATUS decoding.`\n            };\n    }\n}\n\n// === Main Node-RED Logic ===\n\nconst incomingPayload = msg.payload;\nif (!incomingPayload || !incomingPayload.dgn || !incomingPayload.dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Convert hex payload to byte array\nconst dataBytes = [];\nfor (let i = 0; i < incomingPayload.dataPayload.length; i += 2) {\n    dataBytes.push(parseInt(incomingPayload.dataPayload.substring(i, i + 2), 16));\n}\n\n// Decode the message by routing to the correct function based on DGN\nconst decodedData = decodeDCSourceMessage(incomingPayload.dgn, dataBytes);\n\n// Merge the original payload and the newly decoded data\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up by removing the raw hex payload\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -2431,7 +2983,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
+        "x": 900,
         "y": 400,
         "wires": [
             [
@@ -2730,12 +3282,12 @@
         "id": "bff245b2ca47ef79",
         "type": "link out",
         "z": "3e5f038a4f5a8b9a",
-        "name": "DC_SOURCE_STATUS",
+        "name": "DC_SOURCE_STATUS_1",
         "mode": "link",
         "links": [
             "663120adc5ec254f"
         ],
-        "x": 1330,
+        "x": 1340,
         "y": 400,
         "wires": [],
         "l": true
@@ -2744,13 +3296,13 @@
         "id": "7af7fb2178a714cf",
         "type": "link out",
         "z": "3e5f038a4f5a8b9a",
-        "name": "SWITCH",
+        "name": "DC_DIMMER_STATUS_3",
         "mode": "link",
         "links": [
             "7313d7c724d31538"
         ],
-        "x": 1280,
-        "y": 120,
+        "x": 1330,
+        "y": 160,
         "wires": [],
         "l": true
     },
@@ -2872,6 +3424,51 @@
         "y": 220,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "b87fcd5e60905824",
+        "type": "link out",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "AUTOFILL_STATUS",
+        "mode": "link",
+        "links": [
+            "93a2783b5bb8d93d"
+        ],
+        "x": 1320,
+        "y": 100,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "295d4bc9058dab71",
+        "type": "link out",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "WATER_PUMP_STATUS",
+        "mode": "link",
+        "links": [
+            "efb5c968a0a43c7d"
+        ],
+        "x": 1330,
+        "y": 40,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "40bc1ec5180b6589",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "DC_SOURCE_STATUS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 1600,
+        "wires": []
     },
     {
         "id": "7e609140970f546c",
@@ -3006,7 +3603,9 @@
             "d4ef1d361f084b58",
             "ea29386f9f8682bc",
             "b94bb12a8c0a7027",
-            "927340668e7942e4"
+            "927340668e7942e4",
+            "bc627a6a37117bc0",
+            "cff02a511add6887"
         ],
         "x": 270,
         "y": 340,
@@ -3292,8 +3891,8 @@
                 "vt": "str"
             },
             {
-                "t": "eq",
-                "v": "DC_DIMMER_COMMAND_2",
+                "t": "cont",
+                "v": "COMMAND",
                 "vt": "str"
             },
             {
@@ -3332,7 +3931,7 @@
                 "02bdfc59de71b5a5"
             ],
             [
-                "cfa01b55c1dabc91"
+                "03744ec33f2e6776"
             ],
             [
                 "45414bacecada477"
@@ -3347,7 +3946,7 @@
                 "c781b519a9f9b156"
             ],
             [
-                "d0150fd6556514e6"
+                "463dfbbef66b51c2"
             ]
         ]
     },
@@ -3374,7 +3973,7 @@
         "type": "inject",
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
-        "name": "Reset uniqueDecoded",
+        "name": "Reset unique",
         "props": [
             {
                 "p": "payload"
@@ -3391,8 +3990,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1160,
-        "y": 1120,
+        "x": 1430,
+        "y": 840,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -3412,8 +4011,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1400,
-        "y": 1120,
+        "x": 1700,
+        "y": 840,
         "wires": [
             []
         ]
@@ -3422,7 +4021,7 @@
         "id": "c781b519a9f9b156",
         "type": "function",
         "z": "292e70a6ba25b323",
-        "g": "9dd6a98018824be9",
+        "g": "f09f79586501cb0b",
         "name": "Unique UNKNOWN",
         "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUNKNOWN = flow.get(\"uniqueUNKNOWN\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUNKNOWN.includes(newMsgStr)) {\n    uniqueUNKNOWN.push(newMsgStr);\n    flow.set(\"uniqueUNKNOWN\", uniqueUNKNOWN);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
@@ -3431,8 +4030,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1130,
-        "y": 1180,
+        "x": 1150,
+        "y": 900,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -3453,8 +4052,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1410,
-        "y": 1180,
+        "x": 1710,
+        "y": 900,
         "wires": []
     },
     {
@@ -3775,8 +4374,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1130,
-        "y": 940,
+        "x": 1430,
+        "y": 1040,
         "wires": [
             [
                 "38606e245b70b98e"
@@ -3796,8 +4395,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1400,
-        "y": 940,
+        "x": 1700,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -3807,7 +4406,7 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "01b53bba61cb7227",
-        "name": "Unique decoded messages",
+        "name": "Unique otherwise",
         "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDecoded = flow.get(\"uniqueDecoded\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload);\n\n// Check if it's a new unique message\nif (!uniqueDecoded.includes(newMsgStr)) {\n    uniqueDecoded.push(newMsgStr);\n    flow.set(\"uniqueDecoded\", uniqueDecoded);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
@@ -3815,8 +4414,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1160,
-        "y": 1000,
+        "x": 1430,
+        "y": 1100,
         "wires": [
             [
                 "8f7381d08bf2b8a8"
@@ -3837,8 +4436,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1410,
-        "y": 1000,
+        "x": 1710,
+        "y": 1100,
         "wires": []
     },
     {
@@ -3905,7 +4504,6 @@
         "id": "695ef0ed6d78a244",
         "type": "function",
         "z": "292e70a6ba25b323",
-        "d": true,
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll all locks",
         "func": "// Generates an RV-C \"Request\" message to poll all locks for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (1FEE5).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;       // Standard priority for requests\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// 1. Build the data payload\n// This is the DGN for LOCK_STATUS (1FEE5), sent in little-endian format (least-significant byte first).\nconst dataPayload = \"E5FE01FFFFFFFF\";\n\n// 2. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayload.toUpperCase()}`;\n\n//node.warn(`[Poll Locks] Sending global request for lock status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
@@ -3929,7 +4527,7 @@
         "z": "292e70a6ba25b323",
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll all shades",
-        "func": "// Generates an RV-C \"Request\" message to poll all window shades for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (1FEDE).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;       // Standard priority for requests\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// 1. Build the data payload\n// This is the DGN for WINDOW_SHADE_CONTROL_STATUS (1FEDE), sent in little-endian format (least-significant byte first).\nconst dataPayload = \"DEFE01FFFFFFFF\";\n\n// 2. Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayload.toUpperCase()}`;\n\n//node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
+        "func": "// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // 0xFE\nconst PRIORITY = 6;\nconst REQUESTED_DGN = \"01FEDE\"; // The DGN for WINDOW_SHADE_CONTROL_STATUS\nconst BROADCAST_ADDRESS = 255;  // The destination address for a global request (0xFF)\n\n// --- Logic ---\n\n// 1. Build the data payload\n// The payload is the DGN being requested, sent in 3-byte little-endian format.\n// The remaining 5 bytes are padded with 0xFF.\nconst requestedDgnInt = parseInt(REQUESTED_DGN, 16);\nconst dataPayloadBytes = new Uint8Array(8);\ndataPayloadBytes.fill(0xFF); // Pad the entire payload with 0xFF first\ndataPayloadBytes[0] = requestedDgnInt & 0xFF;         // Byte 1: DE\ndataPayloadBytes[1] = (requestedDgnInt >> 8) & 0xFF;  // Byte 2: FE\ndataPayloadBytes[2] = (requestedDgnInt >> 16) & 0xFF; // Byte 3: 01\nconst dataPayloadHex = Array.from(dataPayloadBytes).map(b => b.toString(16).padStart(2, '0')).join('');\n\n// 2. Determine the PGN for the request message itself\n// A J1939 request PGN is 0xEA00. The destination address is placed in the second byte.\nconst requestPgn = 0xEA00 | BROADCAST_ADDRESS; // This results in 0xEAFF\n\n// 3. Construct the full 29-bit CAN ID from its parts\n// Formula: (Priority << 26) | (PGN << 8) | Source Address\nconst canIdInt = (PRIORITY << 26) | (requestPgn << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 4. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayloadHex.toUpperCase()}`;\n\n// node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3956,7 +4554,9 @@
             "54c6beb1daaa00bb",
             "b9f27aaa32da92c0",
             "e8b62c33eab8e3ac",
-            "84e908d542084d74"
+            "84e908d542084d74",
+            "99381e18a0d5f318",
+            "d192b275aac0824e"
         ],
         "x": 1400,
         "y": 1540,
@@ -3995,24 +4595,6 @@
                 "1e244bad0304bb74"
             ]
         ]
-    },
-    {
-        "id": "cfa01b55c1dabc91",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "DC_DIMMER_COMMAND_2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1180,
-        "y": 660,
-        "wires": []
     },
     {
         "id": "55640379de4c7c83",
@@ -4131,6 +4713,112 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "b2cbbdbaab1fc227",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "g": "081183d6c363e792",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1430,
+        "y": 600,
+        "wires": [
+            [
+                "f96e5b3b013a2b8f"
+            ]
+        ]
+    },
+    {
+        "id": "f96e5b3b013a2b8f",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "081183d6c363e792",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueCommand\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1700,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "03744ec33f2e6776",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Unique COMMAND",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommand = flow.get(\"uniqueCommand\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueCommand.includes(newMsgStr)) {\n    uniqueCommand.push(newMsgStr);\n    flow.set(\"uniqueCommand\", uniqueCommand);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 660,
+        "wires": [
+            [
+                "bc59e15bf069f17d"
+            ]
+        ]
+    },
+    {
+        "id": "bc59e15bf069f17d",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "081183d6c363e792",
+        "name": "New COMMAND",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1710,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "463dfbbef66b51c2",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Otherwsie",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 960,
+        "wires": []
     },
     {
         "id": "802228bc8d89d80a",
