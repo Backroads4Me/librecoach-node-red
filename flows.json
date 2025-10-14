@@ -81,14 +81,16 @@
             "778971897d2a7fdc",
             "1521d3d47869af7c",
             "32c25c048171f507",
-            "b218acd7a76ad3cd",
             "86a191e1f24d802a",
-            "6caa3004cf7712dc"
+            "35cca4d6a74b4522",
+            "de1097844db8a89c",
+            "0e1b7a76dcf4c40d",
+            "de06dace3383b270"
         ],
         "x": 34,
         "y": 59,
         "w": 1372,
-        "h": 302
+        "h": 502
     },
     {
         "id": "3c819b7900145438",
@@ -112,7 +114,8 @@
             "4ad3b304d4f1e27b",
             "d34a8c1fd2cc4320",
             "74329f13cbbc528a",
-            "1ac6e0fa1cbb3852"
+            "1ac6e0fa1cbb3852",
+            "0e65ff3bc0a0795c"
         ],
         "x": 134,
         "y": 59,
@@ -156,7 +159,12 @@
             "9c4e4196e56cc471",
             "3d5ce3e925ee2f04",
             "c4216c430d06083f",
-            "d623e8f9cb820257"
+            "d623e8f9cb820257",
+            "597a7040dc74661e",
+            "c4a55c4919dae17e",
+            "0ab32e9042f61be5",
+            "c6555f4b9b146fcf",
+            "a68556652ac7e90b"
         ],
         "x": 134,
         "y": 519,
@@ -200,12 +208,16 @@
             "25162d774c052102",
             "32ec19602e928185",
             "52e43edcfad810dd",
-            "0382f3241d457778"
+            "2d6bf3e8aa77a8c6",
+            "4d7e38077918190f",
+            "85dabd5afaf4b17d",
+            "9c61a141b8525561",
+            "b549c88f03eaf9e3"
         ],
         "x": 114,
-        "y": 39,
+        "y": -21,
         "w": 1092,
-        "h": 348
+        "h": 408
     },
     {
         "id": "04e375b0c463df72",
@@ -654,7 +666,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "Decode HA command",
-        "func": "// Parse Home Assistant MQTT command topics\n// Handles covers, locks, and simple switches/lights.\n\n// --- Cover entities ---\nconst rvcTopicMatch = msg.topic.match(/^homeassistant\\/cover\\/shade_(\\d+)\\/set$/);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(/^homeassistant\\/lock\\/lock_(\\d+)\\/set$/);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities ---\nconst topicParts = msg.topic.split('/');\nif (topicParts[0] !== 'homeassistant' || (topicParts[1] !== 'switch' && topicParts[1] !== 'light') || topicParts[3] !== 'set' || topicParts.length !== 4) {\n    return null; // Not a topic we handle\n}\n\nconst entityId = topicParts[2];\nconst command = String(msg.payload).toUpperCase();\n\n// === Special handling for 'water_pump' and 'autofill' ===\nif (entityId === 'water_pump' || entityId === 'autofill') {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n} else {\n    // === Generic handling for all other switches/lights ===\n    const entityIdParts = entityId.split('_');\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n\n    if (isNaN(instanceNum)) { return null; }\n\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join('_');\n}\n\n// Assign final properties to the message\nmsg.entityType = topicParts[1]; // CORRECTED: Dynamically sets \"light\" or \"switch\"\nmsg.entityId = entityId;\nmsg.command = command;\n\nreturn msg;",
+        "func": "// Parse Home Assistant MQTT command topics\n// Handles covers, locks, and simple switches/lights.\n\n// --- Cover entities ---\nconst rvcTopicMatch = msg.topic.match(/^homeassistant\\/cover\\/shade_(\\d+)\\/set$/);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(/^homeassistant\\/lock\\/lock_(\\d+)\\/set$/);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Fan entities ---\nconst fanTopicMatch = msg.topic.match(/^homeassistant\\/fan\\/switch_(\\d+)\\/set$/);\nif (fanTopicMatch) {\n    const instance = parseInt(fanTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"fan\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"fan\";\n    msg.entityId = `switch_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities ---\nconst topicParts = msg.topic.split('/');\nif (topicParts[0] !== 'homeassistant' || (topicParts[1] !== 'switch' && topicParts[1] !== 'light') || topicParts[3] !== 'set' || topicParts.length !== 4) {\n    return null; // Not a topic we handle\n}\n\nconst entityId = topicParts[2];\nconst command = String(msg.payload).toUpperCase();\n\n// === Special handling for 'water_pump' and 'autofill' ===\nif (entityId === 'water_pump' || entityId === 'autofill') {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n} else {\n    // === Generic handling for all other switches/lights ===\n    const entityIdParts = entityId.split('_');\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n\n    if (isNaN(instanceNum)) { return null; }\n\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join('_');\n}\n\n// Assign final properties to the message\nmsg.entityType = topicParts[1]; // CORRECTED: Dynamically sets \"light\" or \"switch\"\nmsg.entityId = entityId;\nmsg.command = command;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -739,12 +751,17 @@
                 "vt": "str"
             },
             {
+                "t": "eq",
+                "v": "fan",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 6,
+        "outputs": 7,
         "x": 570,
         "y": 200,
         "wires": [
@@ -762,6 +779,10 @@
             ],
             [
                 "d367ea017bd41347"
+            ],
+            [
+                "35cca4d6a74b4522",
+                "0e1b7a76dcf4c40d"
             ],
             [
                 "778971897d2a7fdc"
@@ -796,7 +817,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "HA command",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -889,7 +910,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 860,
-        "y": 320,
+        "y": 360,
         "wires": []
     },
     {
@@ -929,26 +950,6 @@
         "wires": []
     },
     {
-        "id": "b218acd7a76ad3cd",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "d": true,
-        "g": "aea9d97e0563bd83",
-        "name": "Decode HA command",
-        "func": "// Parse Home Assistant MQTT command topics\n// Handles covers, locks, and switches, with special logic for water_pump and autofill.\n\n// --- (Cover and Lock logic is unchanged) ---\nconst rvcTopicMatch = msg.topic.match(/^homeassistant\\/cover\\/shade_(\\d+)\\/set$/);\nif (rvcTopicMatch) { /* ... */ return msg; }\nconst lockTopicMatch = msg.topic.match(/^homeassistant\\/lock\\/lock_(\\d+)\\/set$/);\nif (lockTopicMatch) { /* ... */ return msg; }\n\n// --- Switch entities ---\nconst topicParts = msg.topic.split('/');\nif (topicParts[0] !== 'homeassistant' || topicParts[1] !== 'switch' || topicParts[3] !== 'set' || topicParts.length !== 4) {\n    return null;\n}\n\nconst entityId = topicParts[2];\nconst command = (typeof msg.payload === 'string') ? msg.payload.toUpperCase() : String(msg.payload).toUpperCase();\n\n// === Special handling for 'water_pump' ===\nif (entityId === 'water_pump') {\n    msg.entityType = 'switch';\n    msg.entityId = 'water_pump';\n    msg.entityPrefix = 'water_pump';\n    msg.instance = 'water_pump';\n    msg.command = command;\n    msg.routingKey = 'water_pump';\n    return msg;\n}\n\n// === Special handling for 'autofill' ===\nif (entityId === 'autofill') {\n    msg.entityType = 'switch';\n    msg.entityId = 'autofill';\n    msg.entityPrefix = 'autofill';\n    msg.instance = 'autofill';\n    msg.command = command;\n    msg.routingKey = 'autofill';\n    return msg;\n}\n\n// === Generic handling for ALL OTHER switches ===\nlet instance, entityPrefix;\nconst lastUnderscoreIndex = entityId.lastIndexOf('_');\nif (lastUnderscoreIndex !== -1) {\n    const potentialInstanceStr = entityId.substring(lastUnderscoreIndex + 1);\n    const potentialInstanceNum = parseInt(potentialInstanceStr, 10);\n    if (!isNaN(potentialInstanceNum)) {\n        instance = potentialInstanceNum;\n        entityPrefix = entityId.substring(0, lastUnderscoreIndex);\n    } else {\n        instance = entityId;\n        entityPrefix = entityId;\n    }\n} else {\n    instance = entityId;\n    entityPrefix = entityId;\n}\nmsg.entityType = 'switch';\nmsg.entityId = entityId;\nmsg.entityPrefix = entityPrefix;\nmsg.instance = instance;\nmsg.command = command;\nmsg.routingKey = entityPrefix;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 320,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "86a191e1f24d802a",
         "type": "function",
         "z": "b3d80c5dc947ec88",
@@ -971,30 +972,10 @@
         ]
     },
     {
-        "id": "6caa3004cf7712dc",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "Decode HA command",
-        "func": "// Parse Home Assistant MQTT command topics\n// Handles covers, locks, and simple switches/lights.\n\n// --- Cover entities ---\nconst rvcTopicMatch = msg.topic.match(/^homeassistant\\/cover\\/shade_(\\d+)\\/set$/);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(/^homeassistant\\/lock\\/lock_(\\d+)\\/set$/);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities ---\nconst topicParts = msg.topic.split('/');\nif (topicParts[0] !== 'homeassistant' || (topicParts[1] !== 'switch' && topicParts[1] !== 'light') || topicParts[3] !== 'set' || topicParts.length !== 4) {\n    return null; // Not a topic we handle\n}\n\nconst entityId = topicParts[2];\nconst command = String(msg.payload).toUpperCase();\n\n// === Special handling for 'water_pump' and 'autofill' ===\nif (entityId === 'water_pump' || entityId === 'autofill') {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n} else {\n    // === Generic handling for all other switches/lights ===\n    const entityIdParts = entityId.split('_');\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n\n    if (isNaN(instanceNum)) { return null; }\n\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join('_');\n}\n\n// Assign final properties to the message\nmsg.entityType = topicParts[1]; // CORRECTED: Dynamically sets \"light\" or \"switch\"\nmsg.entityId = entityId;\nmsg.command = command;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 260,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "a5aea8c0bff6b19a",
         "type": "inject",
         "z": "b3d80c5dc947ec88",
-        "d": true,
-        "name": "",
+        "name": "unlock",
         "props": [
             {
                 "p": "payload"
@@ -1009,7 +990,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "can/send",
-        "payload": "19FEDB91#26FFC822FF00FFFF",
+        "payload": "19FEDB9D#30FFC822FF00FFFF",
         "payloadType": "str",
         "x": 880,
         "y": 460,
@@ -1018,6 +999,281 @@
                 "6aa079d768e1571c"
             ]
         ]
+    },
+    {
+        "id": "43cefecaebfe0d94",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "name": "lock",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDB9D#30FFC821FF00FFFF",
+        "payloadType": "str",
+        "x": 870,
+        "y": 520,
+        "wires": [
+            [
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "35cca4d6a74b4522",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "Encode fan command",
+        "func": "// Persistent RV-C Command Function\n// Repeatedly sends UNLOCK + ACTION until a confirmation status is received or a timeout occurs.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst RETRY_INTERVAL_MS = 250; // How often to resend commands (in milliseconds)\nconst TIMEOUT_MS = 5000;       // How long to try before giving up (in milliseconds)\n\n// --- Helper: Clears any running timers and state ---\nfunction stopAndClear(context) {\n    const intervalId = context.get('intervalId');\n    if (intervalId) {\n        clearInterval(intervalId);\n    }\n    const timeoutId = context.get('timeoutId');\n    if (timeoutId) {\n        clearTimeout(timeoutId);\n    }\n    context.set('activeCommand', null);\n    context.set('intervalId', null);\n    context.set('timeoutId', null);\n}\n\n// --- Helper: Builds the CAN message payload ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n    const PRIORITY = 6;\n    const DGN = \"1FEDB\";\n    const dataBytes = [instance, 0xFF, desiredLevel, commandCode, 0xFF, 0x00, 0xFF, 0xFF];\n    const dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n    const dgnInt = parseInt(DGN, 16);\n    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n    const canIdHex = canIdInt.toString(16).padStart(8, '0');\n    return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// --- Main Logic ---\n\n// Case 1: Incoming message is a new command to execute.\nif (msg.command && msg.instance !== undefined) {\n    //node.warn(`[Persistent Command] Received new command for instance ${msg.instance} to turn ${msg.command}`);\n    stopAndClear(context); // Clear any previous running commands\n\n    const activeCommand = {\n        instance: msg.instance,\n        command: msg.command\n    };\n    context.set('activeCommand', activeCommand);\n\n    // Function to send the UNLOCK + ACTION sequence\n    const sendCommandSequence = () => {\n        const unlockPayload = buildCanMessage(activeCommand.instance, 0xC8, 0x22); // UNLOCK\n        const actionPayload = buildCanMessage(activeCommand.instance, (activeCommand.command === \"ON\" ? 0xC8 : 0xFF), (activeCommand.command === \"ON\" ? 0x01 : 0x03));\n\n        // Send both messages out of the function's output\n        node.send({ topic: \"can/send\", payload: unlockPayload });\n        node.send({ topic: \"can/send\", payload: actionPayload });\n        //node.warn(`[Persistent Command] Sent UNLOCK/ACTION for instance ${activeCommand.instance}`);\n    };\n\n    // Start the retry loop\n    const intervalId = setInterval(sendCommandSequence, RETRY_INTERVAL_MS);\n    context.set('intervalId', intervalId);\n\n    // Immediately send the first command sequence without waiting for the interval\n    sendCommandSequence();\n\n    // Set a timeout to stop the loop if no confirmation is received\n    const timeoutId = setTimeout(() => {\n        node.warn(`[Persistent Command] TIMEOUT for instance ${activeCommand.instance}. State was not confirmed.`);\n        stopAndClear(context);\n    }, TIMEOUT_MS);\n    context.set('timeoutId', timeoutId);\n\n    return null; // Stop the original message from passing through\n}\n\n// Case 2: Incoming message is a status update (already filtered by switch node for DGN 1FEDA)\nelse if (msg.payload) {\n    const activeCommand = context.get('activeCommand');\n\n    // If we are not waiting for a command confirmation, ignore the status.\n    if (!activeCommand) {\n        return null;\n    }\n\n    // Extract status data from payload\n    const statusInstance = msg.payload.instance;\n    const statusOperating = msg.payload.operating_status;\n    const targetStatus = (activeCommand.command === \"ON\") ? 100 : 0;\n\n    // Check if the status message is for the instance we are controlling\n    // and if the operating status matches our desired state\n    if (statusInstance === activeCommand.instance && statusOperating === targetStatus) {\n        //node.warn(`[Persistent Command] SUCCESS for instance ${activeCommand.instance}. State confirmed (status=${statusOperating}).`);\n        stopAndClear(context);\n    }\n\n    return null; // Stop the status message from passing through\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 320,
+        "wires": [
+            [
+                "c19a749621bffe0c",
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "519e05523856f31a",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "name": "Encode fan command",
+        "func": "// Encodes HA fan commands (ON/OFF) to RV-C DC_DIMMER_COMMAND_2\n// Implements two-message sequence: UNLOCK + ACTION\n// Returns array of two messages for sequential transmission\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\"; // DC_DIMMER_COMMAND_2\n\n// RV-C Command Codes\nconst CMD_ON = 0x01;        // Turn on at 100%\nconst CMD_OFF = 0x03;       // Turn off\nconst CMD_UNLOCK = 0x22;    // Remove lock condition\n\n// Standard Parameters\nconst BRIGHTNESS_100 = 0xC8;  // 200 decimal = 100% brightness\nconst NO_DATA = 0xFF;\nconst NON_GROUP = 0xFF;\nconst NO_DELAY = 0xFF;\nconst NO_INTERLOCK = 0x00;\nconst NO_RAMP = 0xFF;\nconst RESERVED = 0xFF;\n\n// 1. Validate and extract input\nconst instance = msg.instance;\nconst command = msg.command; // \"ON\" or \"OFF\"\n\nif (typeof instance !== 'number' || instance < 1 || instance > 250) {\n    node.warn(`[encode_fan_command] Invalid instance: ${instance}. Must be 1-250.`);\n    return null;\n}\n\nif (command !== 'ON' && command !== 'OFF') {\n    node.warn(`[encode_fan_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\".`);\n    return null;\n}\n\n// 2. Helper function to build CAN message\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n    // Build 8-byte data payload\n    const dataBytes = [\n        instance,           // Byte 0: Instance Number\n        NON_GROUP,         // Byte 1: Group (non-group)\n        desiredLevel,      // Byte 2: Desired Level\n        commandCode,       // Byte 3: Command Code\n        NO_DELAY,          // Byte 4: Delay/Duration\n        NO_INTERLOCK,      // Byte 5: Interlock\n        NO_RAMP,           // Byte 6: Ramp Time\n        RESERVED           // Byte 7: Reserved\n    ];\n\n    const dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\n    // Construct CAN ID: Priority (3 bits) + DGN (18 bits) + Source Address (8 bits)\n    const dgnInt = parseInt(DGN, 16);\n    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n    const canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n    return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// 3. Build Message 1: UNLOCK\n// Always use 100% brightness in unlock message\nconst unlockMessage = {\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, BRIGHTNESS_100, CMD_UNLOCK)\n};\n\n// 4. Build Message 2: ACTION (ON or OFF)\nlet actionMessage;\nif (command === 'ON') {\n    // ON: Use 100% brightness\n    actionMessage = {\n        topic: \"can/send\",\n        payload: buildCanMessage(instance, BRIGHTNESS_100, CMD_ON)\n    };\n} else {\n    // OFF: Use NO_DATA for desired level\n    actionMessage = {\n        topic: \"can/send\",\n        payload: buildCanMessage(instance, NO_DATA, CMD_OFF)\n    };\n}\n\n// 5. Debug output\nnode.warn(`[encode_fan_command] Instance ${instance} ${command}:`);\nnode.warn(`  UNLOCK: ${unlockMessage.payload}`);\nnode.warn(`  ACTION: ${actionMessage.payload}`);\n\n// 6. Send both messages sequentially using node.send()\n// This ensures both messages go to the same output port in order\nnode.send(unlockMessage);\n\nsetTimeout(function () {\n    node.send(actionMessage);\n}, 5); // 5 milliseconds\n\n// Return null to prevent duplicate sending\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "de1097844db8a89c",
+        "type": "link in",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "DC_DIMMER_STATUS_3",
+        "links": [
+            "7af7fb2178a714cf"
+        ],
+        "x": 490,
+        "y": 340,
+        "wires": [
+            [
+                "35cca4d6a74b4522",
+                "de06dace3383b270"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "6ec722a7d1af9cc2",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "name": "unlock",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDBDF#30FFC822FF00FFFF",
+        "payloadType": "str",
+        "x": 870,
+        "y": 580,
+        "wires": [
+            [
+                "6aa079d768e1571c",
+                "83eeac475fc95531"
+            ]
+        ]
+    },
+    {
+        "id": "dbb4542bb641e2e8",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "name": "lock",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDB9D#30FFC821FF00FFFF",
+        "payloadType": "str",
+        "x": 860,
+        "y": 640,
+        "wires": [
+            [
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "8ad58670540b1697",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "name": "off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDBDF#30FFFF03FF00FFFF",
+        "payloadType": "str",
+        "x": 870,
+        "y": 700,
+        "wires": [
+            [
+                "6aa079d768e1571c",
+                "83eeac475fc95531"
+            ]
+        ]
+    },
+    {
+        "id": "0995d0edb3821d32",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "name": "on",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FEDBDF#30FFC801FF00FFFF",
+        "payloadType": "str",
+        "x": 870,
+        "y": 760,
+        "wires": [
+            [
+                "6aa079d768e1571c",
+                "83eeac475fc95531"
+            ]
+        ]
+    },
+    {
+        "id": "83eeac475fc95531",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "680a80e7221f5b82",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "name": "Encode fan command",
+        "func": "// Persistent RV-C Command Function (v5 - Event-Driven)\n// Uses a state machine to intelligently respond to single status updates.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst TIMEOUT_MS = 5000; // How long to wait for a response before giving up.\n\n// --- Helper: Clears any running timers and state ---\nfunction stopAndClear(context, node) {\n    const timeoutId = context.get('timeoutId');\n    if (timeoutId) {\n        clearTimeout(timeoutId);\n    }\n    context.set('activeCommand', null);\n    context.set('timeoutId', null);\n}\n\n// --- Helper: Builds the CAN message payload ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n    const PRIORITY = 6;\n    const DGN = \"1FEDB\";\n    const dataBytes = [instance, 0xFF, desiredLevel, commandCode, 0xFF, 0x00, 0xFF, 0xFF];\n    const dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n    const dgnInt = parseInt(DGN, 16);\n    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n    const canIdHex = canIdInt.toString(16).padStart(8, '0');\n    return { topic: \"can/send\", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` };\n}\n\n// --- Main Logic ---\n\n// Case 1: Incoming message is a new command to execute.\nif (msg.command && msg.instance) {\n    stopAndClear(context, node); // Clear any previous attempts\n\n    const activeCommand = {\n        instance: msg.instance,\n        command: msg.command,\n        targetStatus: (msg.command === \"ON\") ? 100 : 0,\n        state: 'AWAITING_UNLOCK' // Initial state\n    };\n    context.set('activeCommand', activeCommand);\n\n    node.warn(`[State Machine] Starting command for instance ${msg.instance}. State: AWAITING_UNLOCK.`);\n    \n    // Send a SINGLE UNLOCK command to start the process.\n    node.send(buildCanMessage(activeCommand.instance, 0xC8, 0x22));\n\n    // Set a timeout for the entire operation.\n    const timeoutId = setTimeout(() => {\n        const currentCommand = context.get('activeCommand');\n        if(currentCommand) {\n            node.error(`[State Machine] TIMEOUT for instance ${currentCommand.instance}. Last state: ${currentCommand.state}.`);\n            stopAndClear(context, node);\n        }\n    }, TIMEOUT_MS);\n    context.set('timeoutId', timeoutId);\n\n    return null;\n}\n\n// Case 2: Incoming message is a status update.\nelse if (msg.dgn === \"1FEDA\") {\n    let activeCommand = context.get('activeCommand');\n    // Ignore status if we're not in an active command cycle or if it's for the wrong instance.\n    if (!activeCommand || msg.instance !== activeCommand.instance) {\n        return null; \n    }\n\n    // State 1: We are waiting for unlock confirmation.\n    if (activeCommand.state === 'AWAITING_UNLOCK' && msg.lock_status === \"Unlocked\") {\n        node.warn(`[State Machine] Instance ${activeCommand.instance} is Unlocked. Sending ACTION command.`);\n        activeCommand.state = 'AWAITING_ACTION'; // Advance to the next state.\n        context.set('activeCommand', activeCommand);\n        \n        // Send a SINGLE ACTION command.\n        const actionMsg = buildCanMessage(activeCommand.instance, (activeCommand.command === \"ON\" ? 0xC8 : 0xFF), (activeCommand.command === \"ON\" ? 0x01 : 0x03));\n        node.send(actionMsg);\n    }\n    \n    // State 2: We are waiting for the final action confirmation.\n    else if (activeCommand.state === 'AWAITING_ACTION' && msg.operating_status === activeCommand.targetStatus) {\n        node.warn(`[State Machine] SUCCESS for instance ${activeCommand.instance}. Final state confirmed.`);\n        stopAndClear(context, node); // Our work is done.\n    }\n    \n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0e1b7a76dcf4c40d",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "de06dace3383b270",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "debug 9",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 400,
+        "wires": []
     },
     {
         "id": "d3a13b531babee66",
@@ -1048,7 +1304,8 @@
         "wires": [
             [
                 "f0083147745c8366",
-                "48e3b18cb440da52"
+                "48e3b18cb440da52",
+                "4d7e38077918190f"
             ]
         ],
         "l": true
@@ -1080,7 +1337,7 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Dc_dimmer status",
-        "func": "/***********************************************************\n * HA Status Updater for DC Dimmer (DC_DIMMER_STATUS_3)\n * Routes to HA switch entities with \"switch\" prefix\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n * - msg.payload.load_status (String): Load status from DC_DIMMER_STATUS_3\n ***********************************************************/\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst statusValue = msg.payload.load_status;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof statusValue !== 'string') {\n    node.error(\"DC_DIMMER_STATUS_3 missing 'load_status' (string).\", msg);\n    return null;\n}\n\n// DC Dimmer: Check if load_status contains \"Off\"\nconst haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n// Construct the MQTT topic with \"switch\" prefix\nconst stateTopic = `homeassistant/switch/switch_${instance}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\nmsg.payload = haStatus; // The payload is just the string \"ON\" or \"OFF\"\nmsg.retain = true; // Retain the status so HA shows the correct state after a restart\n\nreturn msg;\n",
+        "func": "// status_dc_dimmer_3.js\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst statusValue = msg.payload.load_status;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof statusValue !== 'string') {\n    node.error(\"DC_DIMMER_STATUS_3 missing 'load_status' (string).\", msg);\n    return null;\n}\n\n// DC Dimmer: Check if load_status contains \"Off\"\nconst haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n// Get the override list to determine the correct component type\nconst overrides = global.get('entityOverrides') || {};\nconst componentType = overrides[instance] || 'light'; // Default to 'light'\n\n// Construct the MQTT topic with the correct component type\nconst stateTopic = `homeassistant/${componentType}/switch_${instance}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\nmsg.retain = true; // Retain the status so HA shows the correct state after a restart\n\n// Format the payload based on the component type\nif (componentType === 'fan') {\n    // Fans expect a JSON payload because of the state_value_template\n    msg.payload = { \"state\": haStatus };\n} else {\n    // Lights and switches work with a simple string\n    msg.payload = haStatus;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1091,7 +1348,9 @@
         "y": 80,
         "wires": [
             [
-                "d3a13b531babee66"
+                "d3a13b531babee66",
+                "85dabd5afaf4b17d",
+                "b549c88f03eaf9e3"
             ]
         ]
     },
@@ -1101,7 +1360,7 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Create dc_dimmer",
-        "func": "/***********************************************************\n * MQTT Discovery for DC Dimmer (DC_DIMMER_STATUS_3)\n * Creates switch entities for DC dimmer/light control\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (instance < 1 || instance > 250) {\n    if (instance >= 251 && instance <= 255) {\n        return null;\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a switch. Entity will not be created.`);\n    return null;\n}\n\n// Device configuration\nconst prefix = \"switch\";\nconst displayPrefix = \"Switch\";\nconst icon = \"mdi:light-recessed\";\nconst componentType = \"light\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: icon,\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n    payload_on: \"ON\",\n    payload_off: \"OFF\"\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true;\n\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\n\nreturn msg;",
+        "func": "// create_dc_dimmer_3.js\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (instance < 1 || instance > 250) {\n    if (instance >= 251 && instance <= 255) {\n        return null;\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a switch. Entity will not be created.`);\n    return null;\n}\n\n// Get the override list and check for an entry for this instance\nconst overrides = global.get('entityOverrides') || {};\nconst componentType = overrides[instance] || 'light'; // Default to 'light' if no override exists\n\n// Device configuration\nconst prefix = \"switch\";\nconst displayPrefix = \"Switch\";\nconst icon = (componentType === 'fan') ? 'mdi:fan' : 'mdi:light-recessed';\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    name: displayName,\n    unique_id: entityId,\n    icon: icon,\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n    state_value_template: \"{{ value_json.state }}\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\"\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true;\n\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2158,7 +2417,7 @@
         "z": "3470febb2cd6e952",
         "g": "ad77b71440e42dc4",
         "name": "Unique autofill",
-        "func": "// Retrieve existing autofill instances from flow context.\nlet uniqueAutofills = flow.get(\"uniqueAutofills\") || [];\n\n// The instance is now a string identifier, e.g., \"autofill\"\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueAutofills.includes(instanceName)) {\n    uniqueAutofills.push(instanceName);\n    flow.set(\"uniqueAutofills\", uniqueAutofills);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;",
+        "func": "// Retrieve existing autofill instances from flow context.\nlet uniqueAutofill = flow.get(\"uniqueAutofill\") || [];\n\n// The instance is now a string identifier, e.g., \"autofill\"\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueAutofill.includes(instanceName)) {\n    uniqueAutofill.push(instanceName);\n    flow.set(\"uniqueAutofill\", uniqueAutofill);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2320,23 +2579,109 @@
         "wires": []
     },
     {
-        "id": "0382f3241d457778",
-        "type": "function",
+        "id": "2d6bf3e8aa77a8c6",
+        "type": "debug",
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
-        "name": "Create dc_dimmer",
-        "func": "/***********************************************************\n * MQTT Discovery for DC Dimmer (DC_DIMMER_STATUS_3)\n * Creates switch entities for DC dimmer/light control\n *\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The device instance ID\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\n// RV-C valid instance range: 1-250\n// Special values: 251=Error, 252=Not Supported, 253=Out of Range, 254=Reserved, 255=Not Available\nif (instance < 1 || instance > 250) {\n    // Silently ignore special RV-C status values - these aren't real devices\n    if (instance >= 251 && instance <= 255) {\n        return null;\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for a switch. Entity will not be created.`);\n    return null;\n}\n\n// Device configuration\nconst prefix = \"switch\";\nconst displayPrefix = \"Switch\";\nconst icon = \"mdi:light-recessed\";\nconst componentType = \"switch\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `${componentType}.${entityId}`,\n    icon: icon,\n\n    // Topics for Home Assistant to use\n    command_topic: commandTopic,\n    state_topic: stateTopic,\n\n    // Define what \"ON\" and \"OFF\" look like\n    payload_on: \"ON\",\n    payload_off: \"OFF\"\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "name": "Potty Vent",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "4d7e38077918190f",
+        "type": "switch",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "",
+        "property": "payload.instance",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "48",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
         "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 770,
-        "y": 200,
+        "x": 470,
+        "y": 40,
         "wires": [
-            []
+            [
+                "2d6bf3e8aa77a8c6"
+            ]
         ]
+    },
+    {
+        "id": "85dabd5afaf4b17d",
+        "type": "switch",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "48",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 620,
+        "y": 20,
+        "wires": [
+            [
+                "9c61a141b8525561"
+            ]
+        ]
+    },
+    {
+        "id": "9c61a141b8525561",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "b549c88f03eaf9e3",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "debug 6",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 100,
+        "wires": []
     },
     {
         "id": "9f88f215f3f07227",
@@ -2504,7 +2849,8 @@
                 "96c3c21a4dd0b9bd"
             ],
             [
-                "4a6d57460d64c76f"
+                "4a6d57460d64c76f",
+                "053e299d3d70fda6"
             ],
             [
                 "3b2f348b9326267c"
@@ -3415,7 +3761,8 @@
         "name": "DC_DIMMER_STATUS_3",
         "mode": "link",
         "links": [
-            "7313d7c724d31538"
+            "7313d7c724d31538",
+            "de1097844db8a89c"
         ],
         "x": 1330,
         "y": 160,
@@ -3587,6 +3934,159 @@
         "wires": []
     },
     {
+        "id": "5338010f54f09962",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "debug 5",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 220,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "053e299d3d70fda6",
+        "type": "switch",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "",
+        "property": "payload.originalMessage",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "19FEDA8A#307E00FDFF2100FF",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "19FEDA8A#307EC8FCFF0104FF",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "19FEDA8A#307EC8FDFF2114FF",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "19FEDB9D#30",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 200,
+        "y": 40,
+        "wires": [
+            [
+                "3b43dcad53b402f8"
+            ],
+            [
+                "03c839a10e489269"
+            ],
+            [
+                "c4d5f67b8daa6aaa",
+                "56f44f78d4628d56"
+            ],
+            [
+                "5338010f54f09962"
+            ]
+        ]
+    },
+    {
+        "id": "3b43dcad53b402f8",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "OFF",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.operating_status",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 260,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "03c839a10e489269",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "ON",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.operating_status",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 210,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c4d5f67b8daa6aaa",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "ON2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 90,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "56f44f78d4628d56",
+        "type": "function",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "Decode DC_DIMMER_STATUS_3",
+        "func": "// DC_DIMMER_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes DC_DIMMER_STATUS_1/2/3 messages per RV-C specification\n// Handles RGB/RGBW dimmer loads with brightness, current, and fault monitoring\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === DC_DIMMER_STATUS Specific Decoders ===\n\nfunction decodeDimmerInstance(value) {\n    // Dimmer instance interpretation per RV-C spec\n    if (value === 0) {\n        return \"Invalid\";\n    } else if (value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeBrightnessLevel(value) {\n    // Brightness level (0-200% per Table 5.3)\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeDCCurrent(value) {\n    // DC Current per Table 5.3 (0.05A resolution for small currents)\n    if (value <= 250) {\n        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeChannelFault(value) {\n    // Channel fault status (2-bit field)\n    const faultStates = {\n        0: \"No Fault\",\n        1: \"Undercurrent (Open Circuit)\",\n        2: \"Overcurrent\",\n        3: \"Reserved\"\n    };\n    return faultStates[value] || \"Unknown\";\n}\n\nfunction decodeFaultByte(value) {\n    // Decode fault bits from byte 5 (STATUS_2)\n    const masterFault = decodeBits(value, 0, 1);\n    const redFault = decodeBits(value, 2, 3);\n    const greenFault = decodeBits(value, 4, 5);\n    const blueFault = decodeBits(value, 6, 7);\n\n    const faults = [];\n    if (masterFault > 0) faults.push(`Master: ${decodeChannelFault(masterFault)}`);\n    if (redFault > 0) faults.push(`Red: ${decodeChannelFault(redFault)}`);\n    if (greenFault > 0) faults.push(`Green: ${decodeChannelFault(greenFault)}`);\n    if (blueFault > 0) faults.push(`Blue: ${decodeChannelFault(blueFault)}`);\n\n    return {\n        fault_summary: faults.length > 0 ? faults.join(\", \") : \"No Faults\",\n        master_fault: decodeChannelFault(masterFault),\n        red_fault: decodeChannelFault(redFault),\n        green_fault: decodeChannelFault(greenFault),\n        blue_fault: decodeChannelFault(blueFault),\n        any_fault: faults.length > 0\n    };\n}\n\nfunction decodeGroupBitmap(value) {\n    // Group membership bitmap (7 groups max)\n    if (value === 0) {\n        return \"All Groups\";\n    } else if (value === 255) {\n        return \"No Data\";\n    }\n\n    const groups = [];\n    for (let i = 1; i <= 7; i++) {\n        const groupBit = 1 << i;\n        if (!(value & groupBit)) { // Inverted logic - 0 means member\n            groups.push(i);\n        }\n    }\n\n    return groups.length > 0 ? `Groups: ${groups.join(\", \")}` : \"No Groups\";\n}\n\nfunction decodeOperatingStatus(value) {\n    // Operating status for STATUS_3\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step\n    } else if (value === 251) {\n        return \"Value Changing (Ramp)\";\n    } else if (value === 252) {\n        return \"Output Flashing\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte3(value) {\n    // Decode status bits from byte 3 (STATUS_3)\n    const lockStatus = decodeBits(value, 0, 1);\n    const overcurrentStatus = decodeBits(value, 2, 3);\n    const overrideStatus = decodeBits(value, 4, 5);\n    const enableStatus = decodeBits(value, 6, 7);\n\n    const lockStates = [\"Unlocked\", \"Locked\", \"Reserved\", \"Not Supported\"];\n    const statusStates = [\"Normal/Inactive\", \"Active/Abnormal\", \"Reserved\", \"Not Supported\"];\n    const enableStates = [\"Enabled\", \"Disabled\", \"Reserved\", \"Not Supported\"];\n\n    return {\n        lock_status: lockStates[lockStatus] || \"Unknown\",\n        overcurrent_status: statusStates[overcurrentStatus] || \"Unknown\",\n        override_status: statusStates[overrideStatus] || \"Unknown\",\n        enable_status: enableStates[enableStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeLastCommand(value) {\n    // Last executed command (STATUS_3)\n    const commands = {\n        0: \"Set Brightness\",\n        1: \"ON\",\n        2: \"ON Delay\",\n        3: \"OFF\",\n        4: \"Stop\",\n        5: \"Toggle\",\n        6: \"Memory OFF\",\n        7: \"Save Scene\",\n        11: \"Ramp Brightness\",\n        12: \"Ramp Toggle\",\n        13: \"Ramp Up\",\n        14: \"Ramp Down\",\n        15: \"Ramp Up/Down\",\n        16: \"Ramp Up/Down Toggle\",\n        21: \"Lock\",\n        22: \"Unlock\",\n        31: \"Flash\",\n        32: \"Flash Momentary\",\n        33: \"Flash Pattern\",\n        34: \"Scene Recall\",\n        35: \"Scene Store\",\n        36: \"Group Command\",\n        37: \"Reset\",\n        38: \"Factory Reset\",\n        39: \"Calibrate\",\n        40: \"Test Mode\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return commands[value] || `Unknown Command ${value}`;\n}\n\nfunction decodeDelayDuration(value) {\n    // Delay/Duration field (STATUS_3)\n    if (value === 0) {\n        return \"Expired\";\n    } else if (value <= 240) {\n        return `${value} seconds`;\n    } else if (value >= 241 && value <= 250) {\n        return `${value - 236} minutes`; // 241-250 = 5-14 minutes\n    } else if (value === 252) {\n        return \"Flashing\";\n    } else if (value === 253) {\n        return \">240 seconds\";\n    } else if (value === 255) {\n        return \"No delay active\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeStatus3Byte6(value) {\n    // Decode status bits from byte 6 (STATUS_3)\n    const interlockStatus = decodeBits(value, 0, 1);\n    const loadStatus = decodeBits(value, 2, 3);\n    const undercurrentStatus = decodeBits(value, 6, 7);\n\n    const interlockStates = [\"Not Active\", \"Active\", \"Reserved\", \"Not Supported\"];\n    const loadStates = [\"Off (status=0)\", \"On (status>0 or flashing)\", \"Reserved\", \"Reserved\"];\n    const undercurrentStates = [\"Normal\", \"Active\", \"Timeout Error\", \"Not Supported\"];\n\n    return {\n        interlock_status: interlockStates[interlockStatus] || \"Unknown\",\n        load_status: loadStates[loadStatus] || \"Unknown\",\n        undercurrent_status: undercurrentStates[undercurrentStatus] || \"Unknown\"\n    };\n}\n\nfunction decodeUint16(data, startByte) {\n    // Decode 16-bit value (little-endian)\n    if (!data || startByte + 1 >= data.length) {\n        return 65535; // Not available\n    }\n    return data[startByte] | (data[startByte + 1] << 8);\n}\n\n// === Main Decode Function ===\n\nfunction decodeDCDimmerMessage(dgn, data) {\n    // Map DGN hex codes to specific names for unified routing\n    let dgnName = \"DC_DIMMER_STATUS\"; // fallback\n    const dgnHex = dgn.toUpperCase();\n    if (dgnHex === \"1FFBB\") {\n        dgnName = \"DC_DIMMER_STATUS_1\";\n    } else if (dgnHex === \"1FFBA\") {\n        dgnName = \"DC_DIMMER_STATUS_2\";\n    } else if (dgnHex === \"1FEDA\") {\n        dgnName = \"DC_DIMMER_STATUS_3\";\n    }\n\n    const result = {\n        dgn: dgn,\n        dgn_name: dgnName\n    };\n\n    // Determine which STATUS message based on DGN and decode accordingly\n\n    if (dgnHex === \"1FFBB\") {\n        // DC_DIMMER_STATUS_1 - Brightness levels and timing\n        result.status_type = \"STATUS_1\";\n\n        if (data.length >= 7) {\n            result.instance = data[0];\n            result.instance_name = decodeDimmerInstance(data[0]);\n            result.master_brightness = decodeBrightnessLevel(data[1]);\n            result.red_brightness = decodeBrightnessLevel(data[2]);\n            result.green_brightness = decodeBrightnessLevel(data[3]);\n            result.blue_brightness = decodeBrightnessLevel(data[4]);\n\n            // Byte 5: On/Off Duration (4 bits each)\n            result.on_duration = decodeBits(data[5], 0, 3); // 0-14 seconds\n            result.off_duration = decodeBits(data[5], 4, 7); // 0-14 seconds\n\n            if (data.length > 6) {\n                result.white_brightness = decodeBrightnessLevel(data[6]);\n            }\n        }\n\n    } else if (dgnHex === \"1FFBA\") {\n        // DC_DIMMER_STATUS_2 - Current measurements and faults\n        result.status_type = \"STATUS_2\";\n\n        if (data.length >= 8) {\n            result.instance = data[0];\n            result.instance_name = decodeDimmerInstance(data[0]);\n            result.red_current = decodeDCCurrent(data[2]);\n            result.green_current = decodeDCCurrent(data[3]);\n            result.blue_current = decodeDCCurrent(data[4]);\n\n            // Byte 5: Fault bits\n            const faultInfo = decodeFaultByte(data[5]);\n            Object.assign(result, faultInfo);\n\n            if (data.length > 6) {\n                result.white_current = decodeDCCurrent(data[6]);\n            }\n\n            if (data.length > 7) {\n                // Byte 7: White fault (bits 0-1)\n                const whiteFault = decodeBits(data[7], 0, 1);\n                result.white_fault = decodeChannelFault(whiteFault);\n            }\n        }\n\n    } else if (dgnHex === \"1FEDA\") {\n        // DC_DIMMER_STATUS_3 - Comprehensive operational status\n        result.status_type = \"STATUS_3\";\n\n        if (data.length >= 8) {\n            result.instance = data[0];\n            result.instance_name = decodeDimmerInstance(data[0]);\n            result.group_membership = decodeGroupBitmap(data[1]);\n            result.operating_status = decodeOperatingStatus(data[2]);\n\n            // Byte 3: Status bits\n            const status3Info = decodeStatus3Byte3(data[3]);\n            Object.assign(result, status3Info);\n\n            result.delay_duration = decodeDelayDuration(data[4]);\n            result.last_command = decodeLastCommand(data[5]);\n\n            // Byte 6: More status bits\n            const status6Info = decodeStatus3Byte6(data[6]);\n            Object.assign(result, status6Info);\n\n            result.master_memory_value = decodeBrightnessLevel(data[7]);\n        }\n    }\n\n    // Validate instance - DC Dimmer valid instances are 1-250\n    if (result.instance < 1 || result.instance > 250) {\n        node.warn(`Invalid DC dimmer instance: ${result.instance} (${result.instance_name}) - message ignored`);\n        return null;\n    }\n\n    // Add convenience fields\n    if (result.master_brightness !== undefined) {\n        result.dimmer_on = typeof result.master_brightness === 'number' && result.master_brightness > 0;\n    }\n\n    if (result.operating_status !== undefined) {\n        result.dimmer_active = typeof result.operating_status === 'number' && result.operating_status > 0;\n    }\n\n    if (result.any_fault !== undefined) {\n        result.dimmer_healthy = !result.any_fault;\n    }\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the DC_DIMMER_STATUS message\nconst decodedData = decodeDCDimmerMessage(dgn, dataBytes);\n\n// Handle null return (invalid instance filtered out)\nif (!decodedData) {\n    return null;\n}\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Keep dataPayload in case downstream nodes need it\n// (Removed deletion to prevent issues with message reprocessing)\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 520,
+        "wires": [
+            [
+                "712978fef3ed7a58"
+            ]
+        ]
+    },
+    {
+        "id": "712978fef3ed7a58",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 520,
+        "wires": []
+    },
+    {
         "id": "7e609140970f546c",
         "type": "inject",
         "z": "292e70a6ba25b323",
@@ -3703,8 +4203,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 400,
+        "x": 520,
+        "y": 380,
         "wires": []
     },
     {
@@ -3834,7 +4334,8 @@
                 "fc66c16576e28548",
                 "c6fb02a17f709e08",
                 "a6594a9464d8fe4e",
-                "55640379de4c7c83"
+                "55640379de4c7c83",
+                "597a7040dc74661e"
             ]
         ]
     },
@@ -4581,7 +5082,7 @@
         "wires": [
             [
                 "1ac6e0fa1cbb3852",
-                "e7ae35364ce60f3f"
+                "0e65ff3bc0a0795c"
             ]
         ],
         "l": true
@@ -5098,6 +5599,204 @@
         ]
     },
     {
+        "id": "0e65ff3bc0a0795c",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "3c819b7900145438",
+        "name": "MQTT out",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a8270d966963d3b1",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "name": "HA entity type change",
+        "topic": "entity",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1000,
+        "y": 220,
+        "wires": [
+            [
+                "2d165c0688ac59fa"
+            ]
+        ]
+    },
+    {
+        "id": "b2f162c2ad5b42c0",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "name": "HA entity type change",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1280,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2d165c0688ac59fa",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "name": "Entity override",
+        "func": "// Check if payload exists and is an object\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn(\"STOPPED: msg.payload is not a valid object. Check the JSON node.\");\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst entityType = msg.payload.entity_type;\n\n// Check if the required properties have the correct data types\nif (typeof instance === 'number' && typeof entityType === 'string') {\n    const overrides = global.get('entityOverrides') || {};\n    overrides[instance] = entityType;\n    global.set('entityOverrides', overrides);\n\n} else {\n    node.warn(`STOPPED: Validation failed. Type of 'instance' is [${typeof instance}]. Type of 'entity_type' is [${typeof entityType}].`);\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 220,
+        "wires": [
+            [
+                "b2f162c2ad5b42c0"
+            ]
+        ]
+    },
+    {
+        "id": "597a7040dc74661e",
+        "type": "switch",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "",
+        "property": "payload.originalMessage",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "19FEDB9D#30FFC821FF00FFFF",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "19FEDB9D#30FFC822FF00FFFF",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "19FEDB9D#30FFC801FF00FFFF",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "19FEDB9D#30FF",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 850,
+        "y": 980,
+        "wires": [
+            [
+                "0ab32e9042f61be5"
+            ],
+            [
+                "c6555f4b9b146fcf"
+            ],
+            [
+                "c4a55c4919dae17e"
+            ],
+            [
+                "a68556652ac7e90b"
+            ]
+        ]
+    },
+    {
+        "id": "c4a55c4919dae17e",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "ON",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "0ab32e9042f61be5",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "LOCK",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "c6555f4b9b146fcf",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "UNLOCK",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "a68556652ac7e90b",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "OFF",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 1200,
+        "wires": []
+    },
+    {
         "id": "802228bc8d89d80a",
         "type": "inject",
         "z": "222c995b7790b8de",
@@ -5203,7 +5902,7 @@
         "props": [
             {
                 "p": "type",
-                "v": "switch",
+                "v": "light",
                 "vt": "str"
             },
             {
@@ -5233,12 +5932,12 @@
         "props": [
             {
                 "p": "type",
-                "v": "sensor",
+                "v": "fan",
                 "vt": "str"
             },
             {
                 "p": "entityId",
-                "v": "battery_1",
+                "v": "switch_48",
                 "vt": "str"
             }
         ],
@@ -5316,6 +6015,66 @@
         "topic": "",
         "x": 270,
         "y": 480,
+        "wires": [
+            [
+                "356ca3617c50f06b"
+            ]
+        ]
+    },
+    {
+        "id": "4d88ec01113af59e",
+        "type": "inject",
+        "z": "222c995b7790b8de",
+        "name": "Delete switch",
+        "props": [
+            {
+                "p": "type",
+                "v": "light",
+                "vt": "str"
+            },
+            {
+                "p": "entityId",
+                "v": "switch_30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 270,
+        "y": 560,
+        "wires": [
+            [
+                "356ca3617c50f06b"
+            ]
+        ]
+    },
+    {
+        "id": "9d62fba1dbc11071",
+        "type": "inject",
+        "z": "222c995b7790b8de",
+        "name": "Delete sensor",
+        "props": [
+            {
+                "p": "type",
+                "v": "fan",
+                "vt": "str"
+            },
+            {
+                "p": "entityId",
+                "v": "switch_30",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 270,
+        "y": 620,
         "wires": [
             [
                 "356ca3617c50f06b"
