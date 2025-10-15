@@ -1,13 +1,8 @@
 {
     "name": "RV-Link",
-    "description": "A Node-RED Project",
+    "description": "A Node-Project for controlling and monitoring RV systems.",
     "version": "0.0.1",
-    "dependencies": {
-        "node-red-contrib-home-assistant-websocket": "~0.77.2",
-        "node-red-contrib-homekit-bridged": "1.7.3",
-        "node-red-contrib-simple-gate": "~0.5.2",
-        "node-red-node-rbe": "~0.5.0"
-    },
+    "dependencies": {},
     "node-red": {
         "settings": {
             "flowFile": "flows.json",
