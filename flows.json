@@ -3462,8 +3462,7 @@
         "name": "DC_DIMMER_STATUS_3",
         "mode": "link",
         "links": [
-            "7313d7c724d31538",
-            "de1097844db8a89c"
+            "7313d7c724d31538"
         ],
         "x": 1330,
         "y": 160,
