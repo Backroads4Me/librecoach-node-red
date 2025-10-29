@@ -81,12 +81,13 @@
             "778971897d2a7fdc",
             "1521d3d47869af7c",
             "32c25c048171f507",
-            "86a191e1f24d802a"
+            "86a191e1f24d802a",
+            "ed9920dce79a233a"
         ],
         "x": 34,
         "y": 59,
         "w": 1372,
-        "h": 342
+        "h": 362
     },
     {
         "id": "3c819b7900145438",
@@ -199,7 +200,7 @@
             "a9779b1f38edf18d"
         ],
         "x": 114,
-        "y": -21,
+        "y": 39,
         "w": 1092,
         "h": 408
     },
@@ -272,7 +273,7 @@
             "942c2aa2bb3167c9"
         ],
         "x": 114,
-        "y": 439,
+        "y": 479,
         "w": 1112,
         "h": 328
     },
@@ -295,7 +296,7 @@
             "8eb8085bb7cfee43"
         ],
         "x": 114,
-        "y": 819,
+        "y": 839,
         "w": 1112,
         "h": 328
     },
@@ -342,7 +343,7 @@
             "0d54f0db9a010394"
         ],
         "x": 114,
-        "y": 1599,
+        "y": 1619,
         "w": 1112,
         "h": 368
     },
@@ -365,7 +366,7 @@
             "81de1ec667d84484"
         ],
         "x": 114,
-        "y": 2019,
+        "y": 2039,
         "w": 1092,
         "h": 348
     },
@@ -428,7 +429,7 @@
             "e8b62c33eab8e3ac"
         ],
         "x": 694,
-        "y": 219,
+        "y": 279,
         "w": 472,
         "h": 142
     },
@@ -469,7 +470,7 @@
             "54c6beb1daaa00bb"
         ],
         "x": 694,
-        "y": 599,
+        "y": 639,
         "w": 472,
         "h": 142
     },
@@ -489,7 +490,7 @@
             "84e908d542084d74"
         ],
         "x": 694,
-        "y": 979,
+        "y": 999,
         "w": 472,
         "h": 142
     },
@@ -529,7 +530,7 @@
             "b9f27aaa32da92c0"
         ],
         "x": 694,
-        "y": 1799,
+        "y": 1819,
         "w": 472,
         "h": 142
     },
@@ -569,7 +570,7 @@
             "99381e18a0d5f318"
         ],
         "x": 694,
-        "y": 2199,
+        "y": 2219,
         "w": 472,
         "h": 142
     },
@@ -611,6 +612,49 @@
         "x": 1314,
         "y": 739,
         "w": 512,
+        "h": 142
+    },
+    {
+        "id": "8da591d6205a352e",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Floor heat",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "f0ba2779795efdae",
+            "bd2d1b59183b99bb",
+            "aa518caf7366cec9",
+            "f183a66e28426985",
+            "b3e18602b6affaf5",
+            "1f7fde87c1ab1f51",
+            "6e53b4f33db9f29c"
+        ],
+        "x": 1434,
+        "y": 39,
+        "w": 1092,
+        "h": 348
+    },
+    {
+        "id": "1f7fde87c1ab1f51",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "Reset unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "a9069efd6410088f",
+            "7a0956cdace18b52",
+            "893d80d1125057e8"
+        ],
+        "x": 2014,
+        "y": 219,
+        "w": 472,
         "h": 142
     },
     {
@@ -735,12 +779,17 @@
                 "vt": "str"
             },
             {
+                "t": "eq",
+                "v": "floor_heat",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 6,
+        "outputs": 7,
         "x": 570,
         "y": 200,
         "wires": [
@@ -758,6 +807,9 @@
             ],
             [
                 "d367ea017bd41347"
+            ],
+            [
+                "ed9920dce79a233a"
             ],
             [
                 "778971897d2a7fdc"
@@ -885,7 +937,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 860,
-        "y": 360,
+        "y": 380,
         "wires": []
     },
     {
@@ -947,6 +999,27 @@
         ]
     },
     {
+        "id": "ed9920dce79a233a",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "Encode floor heat command",
+        "func": "// Encodes HA climate entity commands to RV-C FLOOR_HEAT_COMMAND (DGN 1FEFBh)\n// Handles mode commands (\"off\", \"heat\") and temperature commands (numbers)\n// Outputs in standard CAN bus format for 'can/send' topic.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEFB\";\n\n// --- Input (assumed to be set by a prior node) ---\n// msg.instance: (Number) The instance ID, e.g., 1\n// msg.command: (String or Number) The command from HA, e.g., \"off\", \"heat\", or 72\n\nconst instance = msg.instance;\nconst command = msg.command;\n\nif (typeof instance !== 'number' || instance < 1 || instance > 250) {\n    node.warn(`[encode_floor_heat] Invalid instance: ${instance}`);\n    return null;\n}\n\n// 1. Build the 8-byte data payload (default 0xFF = no change)\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = instance; // Byte 0: Instance\n\n// 2. Parse command from HA\nif (command === 'off') {\n    // Set Desired Operating Status (bits 2-3) to 00b (Off)\n    // We also set mode to 00b (Auto) and other bits to 0\n    dataBytes[1] = 0x00; // 00000000b\n\n} else if (command === 'heat') {\n    // Set Desired Operating Status (bits 2-3) to 01b (On)\n    // And Desired Operating Mode (bits 0-1) to 00b (Automatic)\n    dataBytes[1] = 0x04; // 00000100b\n\n} else if (typeof command === 'number' || !isNaN(parseFloat(command))) {\n    // This is a temperature set point command.\n    const tempF = parseFloat(command);\n\n    // Convert F -> C -> K -> RV-C uint16 value\n    // Spec: uint16, 0.03125°C res, -273.15°C offset\n    const tempC = (tempF - 32) * 5.0 / 9.0;\n    const tempK = tempC + 273.15;\n    const rvcValue = Math.round(tempK / 0.03125);\n\n    if (rvcValue >= 0 && rvcValue <= 65530) {\n        dataBytes[2] = rvcValue & 0xFF;         // Low byte\n        dataBytes[3] = (rvcValue >> 8) & 0xFF;  // High byte\n    } else {\n        node.warn(`[encode_floor_heat] Temp ${tempF}F is out of range.`);\n        return null;\n    }\n\n} else {\n    node.warn('[encode_floor_heat] Unknown command: ' + command);\n    return null;\n}\n\n// 3. Format the final CAN message\nconst dataHex = dataBytes.map(byte => byte.toString(16).padStart(2, '0')).join('');\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 320,
+        "wires": [
+            [
+                "c19a749621bffe0c"
+            ]
+        ]
+    },
+    {
         "id": "d3a13b531babee66",
         "type": "link out",
         "z": "3470febb2cd6e952",
@@ -957,7 +1030,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1070,
-        "y": 80,
+        "y": 140,
         "wires": [],
         "l": true
     },
@@ -971,7 +1044,7 @@
             "7af7fb2178a714cf"
         ],
         "x": 250,
-        "y": 80,
+        "y": 140,
         "wires": [
             [
                 "f0083147745c8366",
@@ -987,7 +1060,7 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Unique dc_dimmer",
-        "func": "// Retrieve existing DC dimmer instances from flow context, or initialize as empty array\nlet uniqueDcDimmers = flow.get(\"uniqueDcDimmers\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueDcDimmers.includes(instanceId)) {\n    uniqueDcDimmers.push(instanceId);\n    flow.set(\"uniqueDcDimmers\", uniqueDcDimmers);\n\n    // Pass the instance ID to create_dc_dimmer_3.js\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "func": "const uniqueKey = \"uniqueDcDimmers\";\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (instanceId != null && !uniqueList.includes(instanceId)) {\n    uniqueList.push(instanceId);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance ID to the next function\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -995,7 +1068,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 140,
+        "y": 200,
         "wires": [
             [
                 "25162d774c052102"
@@ -1016,7 +1089,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 80,
+        "y": 140,
         "wires": [
             [
                 "d3a13b531babee66",
@@ -1038,7 +1111,7 @@
         "finalize": "",
         "libs": [],
         "x": 770,
-        "y": 140,
+        "y": 200,
         "wires": [
             [
                 "d3a13b531babee66",
@@ -1069,7 +1142,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 810,
-        "y": 320,
+        "y": 380,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1090,7 +1163,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 320,
+        "y": 380,
         "wires": [
             []
         ]
@@ -1105,7 +1178,7 @@
             "1e244bad0304bb74"
         ],
         "x": 810,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1127,7 +1200,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 540,
+        "y": 580,
         "wires": [
             [
                 "b94bb12a8c0a7027",
@@ -1149,7 +1222,7 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "b94bb12a8c0a7027"
@@ -1166,7 +1239,7 @@
             "f00adfe38f0e26b5"
         ],
         "x": 220,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "c853244d3f2e753d",
@@ -1189,7 +1262,7 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 540,
+        "y": 580,
         "wires": [
             [
                 "f9f3986645a75789"
@@ -1207,7 +1280,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1090,
-        "y": 480,
+        "y": 520,
         "wires": [],
         "l": true
     },
@@ -1234,7 +1307,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 810,
-        "y": 700,
+        "y": 740,
         "wires": [
             [
                 "d240e935bd38ebd0"
@@ -1255,7 +1328,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 700,
+        "y": 740,
         "wires": [
             []
         ]
@@ -1270,7 +1343,7 @@
             "1e244bad0304bb74"
         ],
         "x": 790,
-        "y": 640,
+        "y": 680,
         "wires": [
             [
                 "d240e935bd38ebd0"
@@ -1301,7 +1374,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 810,
-        "y": 1080,
+        "y": 1100,
         "wires": [
             [
                 "81bed51dd2f37032"
@@ -1322,7 +1395,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 1080,
+        "y": 1100,
         "wires": [
             []
         ]
@@ -1337,7 +1410,7 @@
             "1e244bad0304bb74"
         ],
         "x": 790,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             [
                 "81bed51dd2f37032"
@@ -1359,7 +1432,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 860,
+        "y": 880,
         "wires": [
             [
                 "927340668e7942e4"
@@ -1376,7 +1449,7 @@
             "4ab29d3dd1da32a5"
         ],
         "x": 220,
-        "y": 860,
+        "y": 880,
         "wires": [
             [
                 "ad388870b71549ef",
@@ -1391,7 +1464,7 @@
         "z": "3470febb2cd6e952",
         "g": "da39e5020d511fa6",
         "name": "Unique shade",
-        "func": "let uniqueShades = flow.get(\"uniqueShades\") || []\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueShades.includes(instanceId)) {\n    uniqueShades.push(instanceId);\n    flow.set(\"uniqueShades\", uniqueShades);\n\n    return {\n        payload: {\n            instance: instanceId,\n            device_type: \"shade\"\n        }\n    };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "func": "const uniqueKey = \"uniqueShades\";\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (instanceId != null && !uniqueList.includes(instanceId)) {\n    uniqueList.push(instanceId);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance ID to the next function\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1399,7 +1472,7 @@
         "finalize": "",
         "libs": [],
         "x": 480,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "ac41981e9754eca5"
@@ -1417,7 +1490,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1090,
-        "y": 860,
+        "y": 880,
         "wires": [],
         "l": true
     },
@@ -1435,7 +1508,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "927340668e7942e4",
@@ -1504,7 +1577,7 @@
         "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Create Tank",
-        "func": "/***********************************************************\n * Tank MQTT Discovery for Home Assistant\n * Creates a sensor entity based on tank type input.\n * Expects msg.payload to be a tank type string (e.g., \"fresh\", \"gray\", \"black\", \"lpg\").\n * Example Input: msg.payload = \"fresh\"\n * Resulting Entity ID: tank_fresh\n ***********************************************************/\n\n// Accept numeric instance ID from unique_tank.js\nif (typeof msg.payload !== 'number') {\n    node.error(\"Input payload must be a number (instance ID).\", msg);\n    return null;\n}\n\nconst instanceId = msg.payload;\n\n// Map instance ID to single-word tank type and display name\nconst tankTypeMap = {\n    0: { type: \"fresh\", name: \"Fresh Water\" },\n    1: { type: \"gray\", name: \"Gray Water\" },\n    2: { type: \"black\", name: \"Black Water\" },\n    3: { type: \"lpg\", name: \"LPG\" },\n    4: { type: \"fuel\", name: \"Fuel\" },\n    5: { type: \"hot\", name: \"Hot Water\" },\n    6: { type: \"hydraulic\", name: \"Hydraulic Fluid\" },\n    7: { type: \"livewell\", name: \"Live Well\" },\n    8: { type: \"ballast\", name: \"Ballast\" },\n    9: { type: \"oil\", name: \"Oil\" },\n    10: { type: \"coolant\", name: \"Coolant\" },\n    11: { type: \"def\", name: \"DEF\" },\n    12: { type: \"air\", name: \"Air\" },\n    13: { type: \"fresh2\", name: \"Fresh Water 2\" },\n    14: { type: \"gray2\", name: \"Gray Water 2\" },\n    15: { type: \"black2\", name: \"Black Water 2\" },\n    251: { type: \"error\", name: \"Error\" },\n    252: { type: \"notsupported\", name: \"Not Supported\" },\n    253: { type: \"outofrange\", name: \"Out of Range\" },\n    254: { type: \"reserved\", name: \"Reserved\" },\n    255: { type: \"notavailable\", name: \"Not Available\" }\n};\n\nconst tankInfo = tankTypeMap[instanceId] || { type: \"other\", name: `Unknown Tank ${instanceId}` };\nconst tankType = tankInfo.type;\nconst displayName = tankInfo.name;\n\nconst entityId = `tank_${tankType}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:water-percent\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"%\",\n    value_template: \"{{ value | float }}\" // Ensure it's parsed as a number\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
+        "func": "/***********************************************************\n * Tank MQTT Discovery for Home Assistant\n * Creates a sensor entity based on tank type input.\n * Expects msg.payload to be a tank type string (e.g., \"fresh\", \"gray\", \"black\", \"lpg\").\n * Example Input: msg.payload = \"fresh\"\n * Resulting Entity ID: tank_fresh\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\n// Map instance ID to single-word tank type and display name\nconst tankTypeMap = {\n    0: { type: \"fresh\", name: \"Fresh Water\" },\n    1: { type: \"gray\", name: \"Gray Water\" },\n    2: { type: \"black\", name: \"Black Water\" },\n    3: { type: \"lpg\", name: \"LPG\" },\n    4: { type: \"fuel\", name: \"Fuel\" },\n    5: { type: \"hot\", name: \"Hot Water\" },\n    6: { type: \"hydraulic\", name: \"Hydraulic Fluid\" },\n    7: { type: \"livewell\", name: \"Live Well\" },\n    8: { type: \"ballast\", name: \"Ballast\" },\n    9: { type: \"oil\", name: \"Oil\" },\n    10: { type: \"coolant\", name: \"Coolant\" },\n    11: { type: \"def\", name: \"DEF\" },\n    12: { type: \"air\", name: \"Air\" },\n    13: { type: \"fresh2\", name: \"Fresh Water 2\" },\n    14: { type: \"gray2\", name: \"Gray Water 2\" },\n    15: { type: \"black2\", name: \"Black Water 2\" },\n    251: { type: \"error\", name: \"Error\" },\n    252: { type: \"notsupported\", name: \"Not Supported\" },\n    253: { type: \"outofrange\", name: \"Out of Range\" },\n    254: { type: \"reserved\", name: \"Reserved\" },\n    255: { type: \"notavailable\", name: \"Not Available\" }\n};\n\nconst tankInfo = tankTypeMap[instance] || { type: \"other\", name: `Unknown Tank ${instance}` };\nconst tankType = tankInfo.type;\nconst displayName = tankInfo.name;\n\nconst entityId = `tank_${tankType}`;\nconst componentType = \"sensor\";\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\nconst payload = {\n    // Basic entity information\n    name: displayName,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    icon: \"mdi:water-percent\",\n\n    // Topics for Home Assistant to use\n    state_topic: stateTopic,\n\n    // Sensor configuration\n    unit_of_measurement: \"%\",\n    value_template: \"{{ value | float }}\" // Ensure it's parsed as a number\n\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\n// (Optional) Add helper properties for debugging or downstream use\nmsg.stateTopic = stateTopic;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1593,7 +1666,7 @@
         "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Unique tanks",
-        "func": "// Retrieve existing tank instances from flow context, or initialize as empty array\nlet uniqueTanks = flow.get(\"uniqueTanks\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueTanks.includes(instanceId)) {\n    uniqueTanks.push(instanceId);\n    flow.set(\"uniqueTanks\", uniqueTanks);\n\n    // Pass the instance ID to create_tank.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "func": "const uniqueKey = \"uniqueTanks\";\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (instanceId != null && !uniqueList.includes(instanceId)) {\n    uniqueList.push(instanceId);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance ID to the next function\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1638,7 +1711,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1090,
-        "y": 1640,
+        "y": 1660,
         "wires": [],
         "l": true
     },
@@ -1653,7 +1726,7 @@
             "bff245b2ca47ef79"
         ],
         "x": 250,
-        "y": 1640,
+        "y": 1660,
         "wires": [
             [
                 "2c1151c97bb185f2",
@@ -1677,7 +1750,7 @@
         "finalize": "",
         "libs": [],
         "x": 500,
-        "y": 1640,
+        "y": 1660,
         "wires": [
             [
                 "ea29386f9f8682bc"
@@ -1691,7 +1764,7 @@
         "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Unique batteries",
-        "func": "// Retrieve existing battery instances from flow context, or initialize as empty array\nlet uniqueBatteries = flow.get(\"uniqueBatteries\") || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (!uniqueBatteries.includes(instanceId)) {\n    uniqueBatteries.push(instanceId);\n    flow.set(\"uniqueBatteries\", uniqueBatteries);\n\n    // Pass the instance ID to create_battery.js\n    return { payload: instanceId };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "func": "const uniqueKey = \"uniqueBatteries\";\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (instanceId != null && !uniqueList.includes(instanceId)) {\n    uniqueList.push(instanceId);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance ID to the next function\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1699,7 +1772,7 @@
         "finalize": "",
         "libs": [],
         "x": 500,
-        "y": 1720,
+        "y": 1740,
         "wires": [
             [
                 "86fa588a8393f6de"
@@ -1721,7 +1794,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 1720,
+        "y": 1740,
         "wires": [
             [
                 "ea29386f9f8682bc",
@@ -1753,7 +1826,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 810,
-        "y": 1900,
+        "y": 1920,
         "wires": [
             [
                 "738718a321d185e7"
@@ -1775,7 +1848,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 1900,
+        "y": 1920,
         "wires": [
             []
         ]
@@ -1790,7 +1863,7 @@
             "1e244bad0304bb74"
         ],
         "x": 820,
-        "y": 1840,
+        "y": 1860,
         "wires": [
             [
                 "738718a321d185e7"
@@ -1807,7 +1880,7 @@
         "name": "DC_SOURCE_STATUS types",
         "info": "DC_SOURCE_STATUS_1: This is the most basic status message. It provides the fundamental electrical readings: \n\nDC Voltage and DC Current. A positive current value indicates the source is discharging (power flowing out), while a negative value indicates it is charging.\n\nDC_SOURCE_STATUS_2: This message adds thermal and capacity information. It reports the \n\nSource Temperature, the battery's State of Charge (SOC) as a percentage, and the estimated Time Remaining until the battery is either full or empty.\n\nDC_SOURCE_STATUS_3: This provides more nuanced details about the battery's long-term health and capacity. It includes the \n\nState of Health (SOH), Capacity Remaining in amp-hours, and Relative Capacity, which is the state of charge adjusted for the state of health.\n\n\nDC_SOURCE_STATUS_5: This message is for high-precision measurement. It reports the \n\nDC Voltage with 0.001 V precision, allowing for more accurate remote voltage sensing without needing dedicated wires.",
         "x": 300,
-        "y": 1800,
+        "y": 1820,
         "wires": []
     },
     {
@@ -1825,7 +1898,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1060,
-        "y": 1720,
+        "y": 1740,
         "wires": []
     },
     {
@@ -1843,7 +1916,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1060,
-        "y": 920,
+        "y": 940,
         "wires": []
     },
     {
@@ -1861,7 +1934,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1050,
-        "y": 540,
+        "y": 580,
         "wires": []
     },
     {
@@ -1879,7 +1952,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1040,
-        "y": 140,
+        "y": 200,
         "wires": []
     },
     {
@@ -1893,7 +1966,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1070,
-        "y": 2060,
+        "y": 2080,
         "wires": [],
         "l": true
     },
@@ -1907,7 +1980,7 @@
             "295d4bc9058dab71"
         ],
         "x": 250,
-        "y": 2060,
+        "y": 2080,
         "wires": [
             [
                 "5a307ecdca9415b1",
@@ -1922,7 +1995,7 @@
         "z": "3470febb2cd6e952",
         "g": "84183171172657f8",
         "name": "Unique water pump",
-        "func": "// Retrieve existing water pump instances from flow context.\nlet uniqueWaterPumps = flow.get(\"uniqueWaterPumps\") || [];\n\n// The instance is now a string identifier, e.g., \"water_pump\"\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueWaterPumps.includes(instanceName)) {\n    uniqueWaterPumps.push(instanceName);\n    flow.set(\"uniqueWaterPumps\", uniqueWaterPumps);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;",
+        "func": "const uniqueKey = \"uniqueWaterPumps\";\n\n// Retrieve existing instances from flow context\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Get instance name from message payload\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueList.includes(instanceName)) {\n    uniqueList.push(instanceName);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1930,7 +2003,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 2120,
+        "y": 2140,
         "wires": [
             [
                 "141bdcfc9aec9232"
@@ -1951,7 +2024,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 2060,
+        "y": 2080,
         "wires": [
             [
                 "bc627a6a37117bc0"
@@ -1972,7 +2045,7 @@
         "finalize": "",
         "libs": [],
         "x": 770,
-        "y": 2120,
+        "y": 2140,
         "wires": [
             [
                 "bc627a6a37117bc0",
@@ -2003,7 +2076,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 810,
-        "y": 2300,
+        "y": 2320,
         "wires": [
             [
                 "876c4f2ff7fb1ae4"
@@ -2024,7 +2097,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 2300,
+        "y": 2320,
         "wires": [
             []
         ]
@@ -2039,7 +2112,7 @@
             "1e244bad0304bb74"
         ],
         "x": 810,
-        "y": 2240,
+        "y": 2260,
         "wires": [
             [
                 "876c4f2ff7fb1ae4"
@@ -2087,7 +2160,7 @@
         "z": "3470febb2cd6e952",
         "g": "ad77b71440e42dc4",
         "name": "Unique autofill",
-        "func": "// Retrieve existing autofill instances from flow context.\nlet uniqueAutofill = flow.get(\"uniqueAutofill\") || [];\n\n// The instance is now a string identifier, e.g., \"autofill\"\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueAutofill.includes(instanceName)) {\n    uniqueAutofill.push(instanceName);\n    flow.set(\"uniqueAutofill\", uniqueAutofill);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;",
+        "func": "const uniqueKey = \"uniqueAutofill\";\n\n// Retrieve existing instances from flow context\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Get instance name from message payload\nconst instanceName = msg.payload.instance;\n\n// Check if this instance name has been seen before\nif (instanceName && !uniqueList.includes(instanceName)) {\n    uniqueList.push(instanceName);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance name to the creation function\n    return { payload: { instance: instanceName } };\n}\n\n// Return nothing if duplicate instance\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2245,7 +2318,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1050,
-        "y": 2120,
+        "y": 2140,
         "wires": []
     },
     {
@@ -2263,7 +2336,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 400,
-        "y": 240,
+        "y": 300,
         "wires": []
     },
     {
@@ -2293,7 +2366,7 @@
         "repair": false,
         "outputs": 3,
         "x": 230,
-        "y": 280,
+        "y": 340,
         "wires": [
             [
                 "2d6bf3e8aa77a8c6"
@@ -2325,7 +2398,7 @@
         "repair": false,
         "outputs": 1,
         "x": 620,
-        "y": 20,
+        "y": 80,
         "wires": [
             [
                 "9c61a141b8525561"
@@ -2347,7 +2420,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 750,
-        "y": 20,
+        "y": 80,
         "wires": []
     },
     {
@@ -2365,7 +2438,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 400,
-        "y": 280,
+        "y": 340,
         "wires": []
     },
     {
@@ -2382,7 +2455,190 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 400,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f0ba2779795efdae",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 2390,
+        "y": 80,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "bd2d1b59183b99bb",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "FLOOR_HEAT_STATUS",
+        "links": [
+            "db73295f937c90a1"
+        ],
+        "x": 1570,
+        "y": 80,
+        "wires": [
+            [
+                "aa518caf7366cec9",
+                "f183a66e28426985"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "aa518caf7366cec9",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "Unique floor heat",
+        "func": "const uniqueKey = \"uniqueFloorHeat\";\n\n// Retrieve existing instances from flow context, or initialize as empty array\nlet uniqueList = flow.get(uniqueKey) || [];\n\n// Track by numeric instance ID for true uniqueness\nlet instanceId = msg.payload.instance;\n\n// Check if this instance ID has been seen before\nif (instanceId != null && !uniqueList.includes(instanceId)) {\n    uniqueList.push(instanceId);\n    flow.set(uniqueKey, uniqueList);\n\n    // Pass the instance ID to the next function\n    return { payload: { instance: instanceId } };\n}\n\n// Return nothing if duplicate instance\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 140,
+        "wires": [
+            [
+                "b3e18602b6affaf5"
+            ]
+        ]
+    },
+    {
+        "id": "f183a66e28426985",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "Floor heat status",
+        "func": "/***********************************************************\n * HA Floor Heat Status Updater\n * Takes decoded JSON payload and sends status\n * to the Home Assistant MQTT state topic for climate entities.\n ***********************************************************/\n\n// Validate instance - must be a valid number (1-250)\nif (typeof msg.payload.instance !== 'number') {\n    // Silently ignore messages with invalid instance values\n    return null;\n}\n\nconst instance = msg.payload.instance;\nif (instance < 1 || instance > 250) {\n    return null; // Not a valid instance\n}\n\n// Create the state topic for this climate instance\nconst stateTopic = `homeassistant/climate/floor_heat_${instance}/state`;\n\nconst haPayload = {};\n\n// 1. Determine Mode (off/heat)\n// We use 'operating_status' as the main on/off control\nif (msg.payload.operating_status === \"On\") {\n    haPayload.mode = \"heat\";\n} else if (msg.payload.operating_status === \"Off\") {\n    haPayload.mode = \"off\";\n}\n\n// 2. Determine Action (idle/heating)\n// 'heat_element_status' tells us if it's actively heating\nif (msg.payload.heat_element_status === \"On\") {\n    haPayload.action = \"heating\";\n} else {\n    // idle if off, or on but not actively heating (met setpoint)\n    haPayload.action = \"idle\";\n}\n\n// 3. Get Current Temperature\nif (typeof msg.payload.measured_temperature === 'number') {\n    haPayload.current_temperature = msg.payload.measured_temperature;\n}\n\n// 4. Get Target Temperature (Set Point)\nif (typeof msg.payload.set_point === 'number') {\n    haPayload.temperature = msg.payload.set_point;\n}\n\nmsg.topic = stateTopic;\nmsg.payload = haPayload; // Payload is a JSON object\nmsg.retain = true; // Retain the status\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 80,
+        "wires": [
+            [
+                "f0ba2779795efdae"
+            ]
+        ]
+    },
+    {
+        "id": "b3e18602b6affaf5",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "Create floor heat",
+        "func": "/***********************************************************\n * Floor Heat MQTT Discovery for Home Assistant\n * Creates a climate entity for each floor heat instance\n * Expects input msg.payload to be an object with:\n * - msg.payload.instance (Number): The floor heat instance ID (1-250)\n ***********************************************************/\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\n// RV-C valid instance range: 1-250\nif (instance < 1 || instance > 250) {\n    if (instance >= 251 && instance <= 255) {\n        return null; // Silently ignore special RV-C status values\n    }\n    node.warn(`Instance ${instance} is outside the valid RV-C instance range (1-250) for floor heat. Entity will not be created.`);\n    return null;\n}\n\nconst prefix = \"floor_heat\";\nconst displayPrefix = \"Floor Heat\";\nconst componentType = \"climate\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst modeCommandTopic = `homeassistant/${componentType}/${entityId}/set_mode`;\nconst tempCommandTopic = `homeassistant/${componentType}/${entityId}/set_temp`;\n\n// MQTT Discovery payload\nconst payload = {\n    name: displayName,\n    unique_id: entityId,\n    icon: \"mdi:floor-heating\",\n\n    // State topics (all read from one JSON payload)\n    mode_state_topic: stateTopic,\n    mode_state_template: \"{{ value_json.mode }}\",\n    temperature_state_topic: stateTopic,\n    temperature_state_template: \"{{ value_json.temperature }}\", // Set point\n    current_temperature_topic: stateTopic,\n    current_temperature_template: \"{{ value_json.current_temperature }}\", // Measured\n    action_topic: stateTopic,\n    action_template: \"{{ value_json.action }}\", // e.g., \"heating\" or \"idle\"\n\n    // Command topics\n    mode_command_topic: modeCommandTopic,\n    temperature_command_topic: tempCommandTopic,\n\n    // Supported modes, based on FLOOR_HEAT_COMMAND\n    // We map \"heat\" to RV-C \"Automatic\" mode\n    modes: [\"off\", \"heat\"],\n    \n    temperature_unit: \"F\", // Assuming Fahrenheit, as per your decoder logic\n    min_temp: 50,\n    max_temp: 85,\n    precision: 0.1\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.retain = true; // IMPORTANT: Ensures HA rediscovers on restart\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 140,
+        "wires": [
+            [
+                "f0ba2779795efdae",
+                "6e53b4f33db9f29c"
+            ]
+        ]
+    },
+    {
+        "id": "a9069efd6410088f",
+        "type": "inject",
+        "z": "3470febb2cd6e952",
+        "g": "1f7fde87c1ab1f51",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 2130,
         "y": 320,
+        "wires": [
+            [
+                "7a0956cdace18b52"
+            ]
+        ]
+    },
+    {
+        "id": "7a0956cdace18b52",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "1f7fde87c1ab1f51",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueFloorHeat\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2380,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "893d80d1125057e8",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "1f7fde87c1ab1f51",
+        "name": "Reset floor heat",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 2120,
+        "y": 260,
+        "wires": [
+            [
+                "7a0956cdace18b52"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "6e53b4f33db9f29c",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "8da591d6205a352e",
+        "name": "Create floor heat",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2370,
+        "y": 140,
         "wires": []
     },
     {
@@ -2782,28 +3038,11 @@
         ]
     },
     {
-        "id": "aefff6ed9ffdb709",
-        "type": "debug",
-        "z": "3e5f038a4f5a8b9a",
-        "name": "FLOOR_HEAT_STATUS",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1330,
-        "y": 640,
-        "wires": []
-    },
-    {
         "id": "cd9d55c23ebcee86",
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "Decode FLOOR_HEAT_STATUS",
-        "func": "// FLOOR_HEAT_STATUS Decoder (Updated with Flat Output) - Complete RV-C Implementation\n// Decodes FLOOR_HEAT_STATUS messages per RV-C specification\n// Handles floor heating system control and status\n// Input: msg.payload with {dgn, dataPayload, ...other fields}\n// Output: msg.payload with decoded fields merged at top level\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n    const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n    return (value & mask) >> startBit;\n}\n\n// === FLOOR_HEAT_STATUS Specific Decoders ===\n\nfunction decodeFloorHeatInstance(value) {\n    // Floor heat instance mapping\n    if (value <= 200) {\n        return value; // Direct instance number\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeOperatingState(value) {\n    // Operating state mapping per RV-C specification\n    const states = {\n        0: \"Off\",\n        1: \"On\",\n        2: \"Heating\",\n        3: \"Standby\",\n        4: \"Test\",\n        5: \"Fault\",\n        6: \"Maintenance Required\",\n        251: \"Error\",\n        252: \"Not Supported\",\n        253: \"Out of Range\",\n        254: \"Reserved\",\n        255: \"Not Available\"\n    };\n\n    return states[value] || `Unknown State ${value}`;\n}\n\nfunction decodeHeatingLevel(value) {\n    // Heating level as percentage\n    if (value <= 200) {\n        return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 252) {\n        return \"Not Supported\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTemperature(value, isCelsius = false) {\n    // Temperature decoding for FLOOR_HEAT_STATUS uint16 values\n    // RV-C spec: 0.03125°C resolution with -273°C offset\n    // Special cases: 0 = Not Available, very low values likely invalid\n    if (value === 0) {\n        return \"Not Available\";\n    } else if (value <= 65530) {\n        const tempK = value * 0.03125; // Kelvin\n        const tempC = tempK - 273.15; // Convert to Celsius\n\n        // Sanity check: if temperature is extremely low, likely invalid data\n        if (tempC < -100) {\n            return \"Invalid Reading\";\n        }\n\n        if (isCelsius) {\n            return parseFloat(tempC.toFixed(1));\n        } else {\n            // Convert to Fahrenheit: F = C * 9/5 + 32\n            return parseFloat(((tempC * 9/5) + 32).toFixed(1));\n        }\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeSetpoint(value, isCelsius = false) {\n    // Temperature setpoint - same format as measured temperature\n    // RV-C spec: 0.03125°C resolution with -273°C offset\n    // Special cases: 0 = Not Available, very low values likely invalid\n    if (value === 0) {\n        return \"Not Available\";\n    } else if (value <= 65530) {\n        const tempK = value * 0.03125; // Kelvin\n        const tempC = tempK - 273.15; // Convert to Celsius\n\n        // Sanity check: if temperature is extremely low, likely invalid data\n        if (tempC < -100) {\n            return \"Invalid Reading\";\n        }\n\n        if (isCelsius) {\n            return parseFloat(tempC.toFixed(1));\n        } else {\n            // Convert to Fahrenheit\n            return parseFloat(((tempC * 9/5) + 32).toFixed(1));\n        }\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeTimer(value) {\n    // Timer in minutes\n    if (value <= 600) {\n        return value; // Minutes\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodePower(value) {\n    // Power consumption in watts\n    if (value <= 65000) {\n        return value; // Watts\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\nfunction decodeSystemStatus(value) {\n    // System status bit field\n    // Handle special values first\n    if (value === 255) {\n        return \"Not Available\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 0) {\n        return \"Normal\";\n    }\n\n    const statusBits = [];\n\n    if (value & 0x01) statusBits.push(\"Heating Active\");\n    if (value & 0x02) statusBits.push(\"Timer Active\");\n    if (value & 0x04) statusBits.push(\"Temperature Sensor OK\");\n    if (value & 0x08) statusBits.push(\"Overtemperature\");\n    if (value & 0x10) statusBits.push(\"Overcurrent\");\n    if (value & 0x20) statusBits.push(\"Communication Fault\");\n    if (value & 0x40) statusBits.push(\"Service Required\");\n    if (value & 0x80) statusBits.push(\"System Fault\");\n\n    return statusBits.length > 0 ? statusBits.join(\", \") : \"Normal\";\n}\n\n\n// === Main Decode Function ===\n\nfunction decodeFloorHeatMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"FLOOR_HEAT_STATUS\"\n    };\n\n    // Decode based on floor heat format (8 bytes)\n    if (data.length >= 8) {\n        // Byte 0: Instance\n        result.instance = decodeFloorHeatInstance(data[0]);\n\n        // Byte 1: Operating State\n        result.operating_state = decodeOperatingState(data[1]);\n\n        // Byte 2: Heating Level\n        result.heating_level = decodeHeatingLevel(data[2]);\n\n        // Bytes 3-4: Measured Temperature (uint16, little-endian)\n        const tempRaw = data[3] | (data[4] << 8);\n        result.measured_temperature = decodeTemperature(tempRaw);\n\n        // Bytes 5-6: Set Point (uint16, little-endian)\n        const setpointRaw = data[5] | (data[6] << 8);\n        result.set_point = decodeSetpoint(setpointRaw);\n\n        // Byte 7: System Status\n        if (data.length > 7) {\n            result.system_status = decodeSystemStatus(data[7]);\n        }\n\n        // Raw values for debugging\n        result.raw_instance = data[0];\n        result.raw_operating_state = data[1];\n        result.raw_heating_level = data[2];\n        result.raw_temperature = tempRaw;\n        result.raw_setpoint = setpointRaw;\n        if (data.length > 7) {\n            result.raw_system_status = data[7];\n        }\n    }\n\n    // Add convenience fields\n    result.floor_heat_active = result.operating_state &&\n                              (result.operating_state.includes(\"On\") || result.operating_state.includes(\"Heating\"));\n    result.floor_heat_available = result.system_status &&\n                                 !result.system_status.includes(\"System Fault\") &&\n                                 result.system_status !== \"Not Available\";\n    result.heating_active = result.operating_state && result.operating_state.includes(\"Heating\");\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the FLOOR_HEAT_STATUS message\nconst decodedData = decodeFloorHeatMessage(dgn, dataBytes);\n\n// Handle decode errors\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
+        "func": "// FLOOR_HEAT_STATUS Decoder\n\nfunction decodeFloorHeatInstance(value) {\n    // Per Table 5.3 (Standard_Physical_Units.pdf, pg 2) \n    if (value === 0) {\n        return \"all\"; // \n    } else if (value <= 250) {\n        return value; // Direct instance number\n    } else if (value === 254) {\n        return \"Out of range / not configured\"; // \n    } else if (value === 255) {\n        return \"Data not available\"; // \n    }\n    // Values 251-253 are not defined in this standard\n    return \"Reserved/Invalid\";\n}\n\n/**\n * Decodes Operating Mode from Byte 1, Bits 0-1 \n */\nfunction decodeOperatingMode(value) {\n    const modes = {\n        0: \"Automatic\", // 00b \n        1: \"Manual\"     // 01b \n    };\n    return modes[value] || \"Reserved\";\n}\n\n/**\n * Decodes Operating Status from Byte 1, Bits 2-3 \n */\nfunction decodeOperatingStatus(value) {\n    const states = {\n        0: \"Off\", // 00b \n        1: \"On\"   // 01b \n    };\n    return states[value] || \"Reserved\";\n}\n\n/**\n * Decodes Heat Element Status from Byte 1, Bits 4-5 \n */\nfunction decodeHeatElementStatus(value) {\n    const states = {\n        0: \"Off\", // 00b \n        1: \"On\"   // 01b \n    };\n    return states[value] || \"Reserved\";\n}\n\n/**\n * Decodes Schedule Mode from Byte 1, Bits 6-7 \n */\nfunction decodeScheduleMode(value) {\n    const modes = {\n        0: \"Disabled\", // 00b \n        1: \"Enabled\"   // 01b \n    };\n    return modes[value] || \"Reserved\";\n}\n\n/**\n * Decodes a standard RV-C temperature value (uint16).\n * Uses 0.03125°C resolution (per RVC spec) with -273.15°C offset (Kelvin).\n */\nfunction decodeTemperature(value, isCelsius = false) {\n    if (value === 0) {\n        return \"Not Available\";\n    } else if (value <= 65530) {\n        const tempK = value * 0.03125; // Kelvin\n        const tempC = tempK - 273.15; // Convert to Celsius\n\n        if (isCelsius) {\n            return parseFloat(tempC.toFixed(1));\n        } else {\n            // Convert to Fahrenheit: F = C * 9/5 + 32\n            return parseFloat(((tempC * 9 / 5) + 32).toFixed(1));\n        }\n    } else if (value === 65533) {\n        return \"Out of Range\";\n    } else if (value === 65534) {\n        return \"Reserved\";\n    } else if (value === 65535) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\n/**\n * Decodes the dead band value from Byte 6.\n * (I haven't seen this used; logic is DGN-specific)\n */\nfunction decodeDeadband(value) {\n    // Spec: Precision = 0.1°C, Value range = 0.0 to 25.0°C \n    if (value <= 250) {\n        return parseFloat((value * 0.1).toFixed(1)); // 0.1°C\n    } else if (value === 251) {\n        return \"Error\";\n    } else if (value === 253) {\n        return \"Out of Range\";\n    } else if (value === 254) {\n        return \"Reserved\";\n    } else if (value === 255) {\n        return \"Not Available\";\n    }\n    return \"Invalid\";\n}\n\n// === Main Decode Function ===\n\nfunction decodeFloorHeatMessage(dgn, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: \"FLOOR_HEAT_STATUS\"\n    };\n\n    // Spec defines 7 bytes (0-6) \n    if (data.length < 7) {\n        result.decoding_error = \"Payload too short. Expected 7 bytes for 1FEFCh.\";\n        return result; // Return error object to allow debugging\n    }\n\n    // Byte 0: Instance \n    result.instance = decodeFloorHeatInstance(data[0]);\n    result.raw_instance = data[0];\n\n    // Check if the instance is a valid number.\n    // If it's a string (\"all\", \"Data not available\", etc.), return null to filter.\n    if (typeof result.instance !== 'number') {\n        //node.warn(`Message filtered: Instance is not a valid number (${result.instance}).`);\n        return null;\n    }\n\n    // Byte 1: Bit-packed fields \n    const byte1 = data[1];\n    result.operating_mode = decodeOperatingMode(byte1 & 0x03);         // Bits 0-1\n    result.operating_status = decodeOperatingStatus((byte1 >> 2) & 0x03); // Bits 2-3\n    result.heat_element_status = decodeHeatElementStatus((byte1 >> 4) & 0x03); // Bits 4-5\n    result.schedule_mode = decodeScheduleMode((byte1 >> 6) & 0x03);   // Bits 6-7\n    result.raw_byte1 = byte1;\n\n    // Bytes 2-3: Measured Temperature (uint16, little-endian) \n    const tempRaw = data[2] | (data[3] << 8);\n    result.measured_temperature = decodeTemperature(tempRaw);\n    result.raw_temperature = tempRaw;\n\n    // Bytes 4-5: Set Point (uint16, little-endian) \n    const setpointRaw = data[4] | (data[5] << 8);\n    // Use the same decodeTemperature function for the set point\n    result.set_point = decodeTemperature(setpointRaw);\n    result.raw_setpoint = setpointRaw;\n\n    // Byte 6: Dead band (uint8) \n    result.dead_band_c = decodeDeadband(data[6]);\n    result.raw_dead_band = data[6];\n\n    // Byte 7: Not defined in the spec table \n    if (data.length > 7) {\n        result.raw_byte7 = data[7];\n    }\n\n    // Add convenience fields\n    result.floor_heat_on = result.operating_status === \"On\";\n    result.heating_active = result.heat_element_status === \"On\";\n    result.floor_heat_available = result.instance !== \"Not Available\" &&\n        result.instance !== \"Error\" &&\n        result.instance !== \"Not Supported\";\n\n    return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== 'object') {\n    node.warn('Invalid payload: expected object');\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dataPayload } = incomingPayload;\n\nif (!dgn || !dataPayload) {\n    node.warn('Missing required fields: dgn and/or dataPayload');\n    return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof dataPayload !== 'string' || dataPayload.length % 2 !== 0) {\n    node.warn('Invalid dataPayload: must be even-length hex string');\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < dataPayload.length; i += 2) {\n    const hexByte = dataPayload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in dataPayload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\n// Decode the FLOOR_HEAT_STATUS message\nconst decodedData = decodeFloorHeatMessage(dgn, dataBytes);\n\n// If decodeFloorHeatMessage returned null (e.g., invalid instance),\n// stop the flow here by returning null.\nif (decodedData === null) {\n    return null;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.dataPayload;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2814,7 +3053,7 @@
         "y": 640,
         "wires": [
             [
-                "aefff6ed9ffdb709"
+                "db73295f937c90a1"
             ]
         ]
     },
@@ -3634,6 +3873,20 @@
         "wires": []
     },
     {
+        "id": "db73295f937c90a1",
+        "type": "link out",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "FLOOR_HEAT_STATUS",
+        "mode": "link",
+        "links": [
+            "bd2d1b59183b99bb"
+        ],
+        "x": 1330,
+        "y": 640,
+        "wires": [],
+        "l": true
+    },
+    {
         "id": "7e609140970f546c",
         "type": "inject",
         "z": "292e70a6ba25b323",
@@ -3721,6 +3974,7 @@
         "id": "cacf35b859af22a9",
         "type": "mqtt out",
         "z": "292e70a6ba25b323",
+        "d": true,
         "g": "3c819b7900145438",
         "name": "MQTT Out: Retain TRUE",
         "topic": "",
@@ -3768,7 +4022,8 @@
             "b94bb12a8c0a7027",
             "927340668e7942e4",
             "bc627a6a37117bc0",
-            "cff02a511add6887"
+            "cff02a511add6887",
+            "f0ba2779795efdae"
         ],
         "x": 270,
         "y": 320,
@@ -4235,7 +4490,8 @@
         "name": "STATUS out",
         "mode": "link",
         "links": [
-            "fbc5efde2c447eda"
+            "fbc5efde2c447eda",
+            "2b4e3e2fa5ac1687"
         ],
         "x": 1130,
         "y": 620,
@@ -4545,6 +4801,7 @@
         "id": "1ac6e0fa1cbb3852",
         "type": "mqtt out",
         "z": "292e70a6ba25b323",
+        "d": true,
         "g": "3c819b7900145438",
         "name": "MQTT Out: Retain FALSE",
         "topic": "",
@@ -4657,7 +4914,8 @@
             "99381e18a0d5f318",
             "b9f27aaa32da92c0",
             "d192b275aac0824e",
-            "e8b62c33eab8e3ac"
+            "e8b62c33eab8e3ac",
+            "893d80d1125057e8"
         ],
         "x": 1400,
         "y": 1620,
@@ -4949,7 +5207,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 940,
+        "x": 1100,
         "y": 560,
         "wires": []
     },
