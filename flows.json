@@ -396,33 +396,6 @@
         "h": 348
     },
     {
-        "id": "8da591d6205a352e",
-        "type": "group",
-        "z": "3470febb2cd6e952",
-        "name": "Floor heat",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "f0ba2779795efdae",
-            "bd2d1b59183b99bb",
-            "aa518caf7366cec9",
-            "f183a66e28426985",
-            "b3e18602b6affaf5",
-            "1f7fde87c1ab1f51",
-            "6e53b4f33db9f29c",
-            "ee5f54f521f5ecda",
-            "cd4ce201cf6c3c35",
-            "5aa079ea85cca5b0",
-            "1a10fdc6f9970a2f"
-        ],
-        "x": 1434,
-        "y": -1,
-        "w": 1092,
-        "h": 622
-    },
-    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -647,7 +620,7 @@
         "id": "1f7fde87c1ab1f51",
         "type": "group",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Reset unique list",
         "style": {
             "stroke": "#ffffff",
@@ -659,7 +632,7 @@
             "893d80d1125057e8"
         ],
         "x": 2014,
-        "y": 219,
+        "y": 199,
         "w": 472,
         "h": 142
     },
@@ -667,7 +640,7 @@
         "id": "ee5f54f521f5ecda",
         "type": "group",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Reset floor levels (Don't do this)",
         "style": {
             "stroke": "#ffffff",
@@ -678,9 +651,33 @@
             "870bf91817db9d08"
         ],
         "x": 1494,
-        "y": 279,
+        "y": 259,
         "w": 412,
         "h": 82
+    },
+    {
+        "id": "daeff1de077d7dbb",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Floor heat",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "f0ba2779795efdae",
+            "bd2d1b59183b99bb",
+            "aa518caf7366cec9",
+            "f183a66e28426985",
+            "b3e18602b6affaf5",
+            "1f7fde87c1ab1f51",
+            "6e53b4f33db9f29c",
+            "ee5f54f521f5ecda"
+        ],
+        "x": 1434,
+        "y": 19,
+        "w": 1092,
+        "h": 348
     },
     {
         "id": "80727e60a251c36c",
@@ -2488,14 +2485,14 @@
         "id": "f0ba2779795efdae",
         "type": "link out",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
         "x": 2390,
-        "y": 80,
+        "y": 60,
         "wires": [],
         "l": true
     },
@@ -2503,18 +2500,17 @@
         "id": "bd2d1b59183b99bb",
         "type": "link in",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "FLOOR_HEAT_STATUS",
         "links": [
             "db73295f937c90a1"
         ],
         "x": 1570,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
                 "aa518caf7366cec9",
-                "f183a66e28426985",
-                "e3f64f273f5bdaa5"
+                "f183a66e28426985"
             ]
         ],
         "l": true
@@ -2523,7 +2519,7 @@
         "id": "aa518caf7366cec9",
         "type": "function",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Unique floor heat",
         "func": "// unique_floor_heat.js\n//\n// Combines instance and level discovery into a single node.\n// 1. Tracks unique instances in session context (\"uniqueFloorHeat\").\n// 2. Tracks unique levels in PERSISTENT context (\"uniqueFloorHeatLevels\").\n\n// --- Configuration ---\nconst instanceKey = \"uniqueFloorHeat\"; // Session-only\nconst levelsKey = \"uniqueFloorHeatLevels\"; // Persistent\n\n// --- 1. Get data from payload ---\nconst instanceId = msg.payload.instance;\nconst raw_setpoint = msg.payload.raw_setpoint;\nconst schedule_mode = msg.payload.schedule_mode; // \"Enabled\" or \"Disabled\"\n\n// --- 2. Validate input ---\nif (typeof instanceId !== 'number') {\n    return null; // No instance, can't proceed\n}\n\n// We only want to discover a level if:\n// 1. The setpoint is > 1 (to filter \"Off\" and test values)\n// 2. The schedule_mode is \"Enabled\"\nconst isValidLevel = (\n    typeof raw_setpoint === 'number' &&\n    raw_setpoint > 1 &&\n    schedule_mode === \"Enabled\"\n);\n\n// --- 3. Get context lists ---\nlet instanceList = flow.get(instanceKey) || [];\nlet levelList = global.get(levelsKey, \"file\") || [];\n\nlet isNewInstance = false;\nlet isNewLevel = false;\n\n// --- 4. Process Instance ---\nif (!instanceList.includes(instanceId)) {\n    isNewInstance = true;\n    instanceList.push(instanceId);\n    flow.set(instanceKey, instanceList); // Save to session context\n}\n\n// --- 5. Process Level ---\n// This block will now ONLY run if isValidLevel is true\nif (isValidLevel && !levelList.includes(raw_setpoint)) {\n    isNewLevel = true;\n    levelList.push(raw_setpoint);\n    levelList.sort((a, b) => a - b);\n    global.set(levelsKey, levelList, \"file\"); // Save to persistent context\n    node.log(`Discovered new floor heat level: ${raw_setpoint}`);\n}\n\n// --- 6. Output Logic ---\nif (!isNewInstance && !isNewLevel) {\n    return null; // Nothing new, stop here\n}\n\nif (isNewLevel) {\n    //node.warn(`New level found. Sending config updates for all known instances: ${instanceList.join(', ')}`);\n\n    let outputs = [];\n    for (const inst of instanceList) {\n        outputs.push({ payload: { instance: inst } });\n    }\n    return outputs;\n}\n\nif (isNewInstance) {\n    return { payload: { instance: instanceId } };\n}\n\nreturn null;",
         "outputs": 1,
@@ -2533,7 +2529,7 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 140,
+        "y": 120,
         "wires": [
             [
                 "b3e18602b6affaf5"
@@ -2544,7 +2540,7 @@
         "id": "f183a66e28426985",
         "type": "function",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Floor heat status",
         "func": "// status_floor_heat.js\n//\n// Sends current climate state to Home Assistant and updates critical context.\n\nconst payload = msg.payload;\nconst instance = payload.instance;\nconst raw_setpoint = payload.raw_setpoint;\n\n// --- Level Map ---\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\") || {};\n\n// Determine the preset mode early\nconst presetMode = levelMap[raw_setpoint]?.preset || \"store\";\nconst isStorePreset = presetMode === \"store\";\n\n// --- Climate Status ---\nconst climatePayload = {};\nclimatePayload.measured_temperature = payload.measured_temperature;\nclimatePayload.preset_mode = presetMode;\n\n// Mode (Strictly controlled by operating status and schedule status)\nlet climateMode;\nif (payload.operating_status === \"Off\") {\n    climateMode = \"off\";\n} else {\n    // If the system is ON, mode is \"auto\" only if the schedule is enabled, otherwise \"heat\"\n    climateMode = payload.schedule_mode === \"Enabled\" ? \"auto\" : \"heat\";\n}\nclimatePayload.mode = climateMode;\n\n// Action (idle when off, store, or heating)\nlet action;\nif (payload.operating_status === \"Off\") {\n    action = \"off\";\n} else if (isStorePreset) {\n    action = \"idle\";\n} else {\n    action = payload.heating_active ? \"heating\" : \"idle\";\n}\nclimatePayload.action = action;\n\n// --- Update Context ---\n\n// 1. Save schedule state\nconst scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;\nglobal.set(scheduleContextKey, payload.schedule_mode === \"Enabled\", \"file\");\n\n// 2. NEW: Save the currently active preset name for command encoder use\nconst currentPresetKey = `floorHeat_${instance}_CurrentPreset`;\nglobal.set(currentPresetKey, presetMode, \"file\");\n\n\n// --- Create MQTT messages ---\nconst climateEntityId = `floor_heat_${instance}`;\nconst climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;\nconst climateMsg = {\n    topic: climateStateTopic,\n    payload: {\n        measured_temperature: payload.measured_temperature,\n        preset_mode: presetMode,\n        mode: climateMode,\n        action: action\n    }\n};\n\n// We return only the climate message\nreturn [[climateMsg]];",
         "outputs": 1,
@@ -2554,11 +2550,10 @@
         "finalize": "",
         "libs": [],
         "x": 1830,
-        "y": 80,
+        "y": 60,
         "wires": [
             [
-                "f0ba2779795efdae",
-                "1a10fdc6f9970a2f"
+                "f0ba2779795efdae"
             ]
         ]
     },
@@ -2566,9 +2561,9 @@
         "id": "b3e18602b6affaf5",
         "type": "function",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Create floor heat",
-        "func": "// create_floor_heat.js\n//\n// Creates ONLY the climate entity.\n\nconst instance = msg.payload.instance;\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\n// --- Get Discovered Levels ---\nconst levelsKey = \"uniqueFloorHeatLevels\";\nconst levels = global.get(levelsKey, \"file\") || [];\n\n// --- Build Preset List and Map ---\nlet levelMap = {};\nlet presetList = [];\nlet levelCounter = 1;\n\n// The 'unique' node sorts the list, so the lowest value is always first.\n// Get the lowest level (\"Store\").\nconst lowestLevelRaw = levels.length > 0 ? levels[0] : null;\n\n// Helper to decode RVC raw value to Fahrenheit (assuming it's available or implemented elsewhere)\nconst decodeTempFromRaw = (rawValue) => {\n    if (rawValue === 0 || rawValue > 65530) return 0;\n    const tempK = rawValue * 0.03125;\n    const tempC = tempK - 273.15;\n    return parseFloat(((tempC * 9 / 5) + 32).toFixed(1));\n};\n\nfor (const rawVal of levels) {\n    let name;\n    let tempF = decodeTempFromRaw(rawVal);\n    \n    // Check if the current value is the lowest one we found\n    if (rawVal === lowestLevelRaw) {\n        name = \"store\"; // Dynamically assigned to the lowest value\n    } else {\n        name = `level_${levelCounter++}`;\n    }\n\n    // Store both directions of the map for easier lookups\n    const levelInfo = { preset: name, rawValue: rawVal, temp: tempF };\n    \n    presetList.push(name);\n    levelMap[name] = levelInfo; // Map preset name to all info\n    levelMap[rawVal] = levelInfo; // Map raw value to all info (for status script)\n}\nglobal.set(\"floorHeatLevelMap\", levelMap, \"file\");\n\n// --- Entity 1: Climate ---\nconst climateEntityId = `floor_heat_${instance}`;\nconst climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;\nconst climateDiscoveryTopic = `homeassistant/climate/${climateEntityId}/config`;\n\nconst climatePayload = {\n    name: `Floor Heat ${instance}`,\n    unique_id: climateEntityId,\n    icon: \"mdi:heating-coil\",\n\n    current_temperature_topic: climateStateTopic,\n    current_temperature_template: \"{{ value_json.measured_temperature }}\",\n\n    mode_state_topic: climateStateTopic,\n    mode_state_template: \"{{ value_json.mode }}\",\n\n    preset_mode_state_topic: climateStateTopic,\n    preset_mode_value_template: \"{{ value_json.preset_mode }}\",\n\n    mode_command_topic: `homeassistant/climate/${climateEntityId}/set_mode`,\n    modes: [\"off\", \"heat\", \"auto\"], // \"auto\" is for schedule ON\n\n    preset_mode_command_topic: `homeassistant/climate/${climateEntityId}/set_preset_mode`,\n    preset_modes: presetList,\n\n    temperature_unit: \"F\"\n};\n\n// --- Prepare Output Message ---\nconst climateMsg = {\n    topic: climateDiscoveryTopic,\n    payload: climatePayload\n};\n\n// Return only the climate discovery message\nreturn [[climateMsg]];",
+        "func": "// create_floor_heat.js\n//\n// Creates ONLY the climate entity.\n\nconst instance = msg.payload.instance;\nif (typeof instance !== 'number') {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\n// --- Get Discovered Levels ---\nconst levelsKey = \"uniqueFloorHeatLevels\";\nconst levels = global.get(levelsKey, \"file\") || [];\n\n// --- Build Preset List and Map ---\nlet levelMap = {};\nlet presetList = [];\nlet levelCounter = 1;\n\n// The 'unique' node sorts the list, so the lowest value is always first.\n// Get the lowest level (\"Store\").\nconst lowestLevelRaw = levels.length > 0 ? levels[0] : null;\n\n// Helper to decode RVC raw value to Fahrenheit (assuming it's available or implemented elsewhere)\nconst decodeTempFromRaw = (rawValue) => {\n    if (rawValue === 0 || rawValue > 65530) return 0;\n    const tempK = rawValue * 0.03125;\n    const tempC = tempK - 273.15;\n    return parseFloat(((tempC * 9 / 5) + 32).toFixed(1));\n};\n\nfor (const rawVal of levels) {\n    let name;\n    let tempF = decodeTempFromRaw(rawVal);\n\n    // Check if the current value is the lowest one we found\n    if (rawVal === lowestLevelRaw) {\n        name = \"store\"; // Dynamically assigned to the lowest value\n    } else {\n        name = `level_${levelCounter++}`;\n    }\n\n    // Store both directions of the map for easier lookups\n    const levelInfo = { preset: name, rawValue: rawVal, temp: tempF };\n\n    presetList.push(name);\n    levelMap[name] = levelInfo; // Map preset name to all info\n    levelMap[rawVal] = levelInfo; // Map raw value to all info (for status script)\n}\nglobal.set(\"floorHeatLevelMap\", levelMap, \"file\");\n\n// --- Entity 1: Climate ---\nconst climateEntityId = `floor_heat_${instance}`;\nconst climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;\nconst climateDiscoveryTopic = `homeassistant/climate/${climateEntityId}/config`;\n\nconst climatePayload = {\n    name: `Floor Heat ${instance}`,\n    unique_id: climateEntityId,\n    icon: \"mdi:heating-coil\",\n\n    current_temperature_topic: climateStateTopic,\n    current_temperature_template: \"{{ value_json.measured_temperature }}\",\n\n    mode_state_topic: climateStateTopic,\n    mode_state_template: \"{{ value_json.mode }}\",\n\n    preset_mode_state_topic: climateStateTopic,\n    preset_mode_value_template: \"{{ value_json.preset_mode }}\",\n\n    mode_command_topic: `homeassistant/climate/${climateEntityId}/set_mode`,\n    modes: [\"off\", \"heat\", \"auto\"], // \"auto\" is for schedule ON\n\n    preset_mode_command_topic: `homeassistant/climate/${climateEntityId}/set_preset_mode`,\n    preset_modes: presetList,\n\n    temperature_unit: \"F\"\n};\n\n// --- Prepare Output Message ---\nconst climateMsg = {\n    topic: climateDiscoveryTopic,\n    payload: climatePayload\n};\n\n// Return only the climate discovery message\nreturn [[climateMsg]];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2576,7 +2571,7 @@
         "finalize": "",
         "libs": [],
         "x": 2110,
-        "y": 140,
+        "y": 120,
         "wires": [
             [
                 "f0ba2779795efdae",
@@ -2607,7 +2602,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 2130,
-        "y": 320,
+        "y": 300,
         "wires": [
             [
                 "7a0956cdace18b52"
@@ -2628,7 +2623,7 @@
         "finalize": "",
         "libs": [],
         "x": 2380,
-        "y": 320,
+        "y": 300,
         "wires": [
             []
         ]
@@ -2643,7 +2638,7 @@
             "1e244bad0304bb74"
         ],
         "x": 2120,
-        "y": 260,
+        "y": 240,
         "wires": [
             [
                 "7a0956cdace18b52"
@@ -2655,7 +2650,7 @@
         "id": "6e53b4f33db9f29c",
         "type": "debug",
         "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
+        "g": "daeff1de077d7dbb",
         "name": "Create floor heat",
         "active": false,
         "tosidebar": true,
@@ -2666,7 +2661,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 2370,
-        "y": 140,
+        "y": 120,
         "wires": []
     },
     {
@@ -2692,7 +2687,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1610,
-        "y": 320,
+        "y": 300,
         "wires": [
             [
                 "870bf91817db9d08"
@@ -2713,223 +2708,10 @@
         "finalize": "",
         "libs": [],
         "x": 1800,
-        "y": 320,
+        "y": 300,
         "wires": [
             []
         ]
-    },
-    {
-        "id": "e3f64f273f5bdaa5",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "name": "",
-        "property": "payload.instance",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "3",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 1830,
-        "y": 480,
-        "wires": [
-            [
-                "74e9b3d485eb5735"
-            ],
-            [
-                "5aa079ea85cca5b0"
-            ],
-            [
-                "cd4ce201cf6c3c35"
-            ]
-        ]
-    },
-    {
-        "id": "74e9b3d485eb5735",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "name": "Floor Heat 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2040,
-        "y": 480,
-        "wires": []
-    },
-    {
-        "id": "da37ca2cff193df6",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "name": "function 1",
-        "func": "// Read all your persistent context values\nconst levelList = global.get(\"uniqueFloorHeatLevels\", \"file\");\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\");\nconst instanceList = flow.get(\"uniqueFloorHeat\"); // memory\n\nmsg.payload = {\n    levelList: levelList,\n    levelMap: levelMap,\n    instanceList: instanceList\n};\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1860,
-        "y": 840,
-        "wires": [
-            [
-                "957a1cce5fc519c4",
-                "9cdde5d38e985fcc",
-                "b4dd91b512e049fa"
-            ]
-        ]
-    },
-    {
-        "id": "f7c4163bb54a8306",
-        "type": "inject",
-        "z": "3470febb2cd6e952",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 1660,
-        "y": 840,
-        "wires": [
-            [
-                "da37ca2cff193df6"
-            ]
-        ]
-    },
-    {
-        "id": "957a1cce5fc519c4",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "name": "uniqueFloorHeatLevels",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.levelList",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2090,
-        "y": 780,
-        "wires": []
-    },
-    {
-        "id": "9cdde5d38e985fcc",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "name": "floorHeatLevelMap",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.levelMap",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2070,
-        "y": 840,
-        "wires": []
-    },
-    {
-        "id": "b4dd91b512e049fa",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "name": "uniqueFloorHeat",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload.instanceList",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2070,
-        "y": 900,
-        "wires": []
-    },
-    {
-        "id": "5aa079ea85cca5b0",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
-        "name": "Floor Heat 2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2030,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "cd4ce201cf6c3c35",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
-        "name": "Floor Heat 3",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2030,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "1a10fdc6f9970a2f",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "8da591d6205a352e",
-        "name": "debug 7",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2060,
-        "y": 40,
-        "wires": []
     },
     {
         "id": "9f88f215f3f07227",
