@@ -83,12 +83,14 @@
             "32c25c048171f507",
             "86a191e1f24d802a",
             "ed9920dce79a233a",
-            "a8882b1f35300448"
+            "a8882b1f35300448",
+            "df1a21e8d68bc7ea",
+            "ae2d2a4f790d7cf9"
         ],
         "x": 34,
         "y": 59,
         "w": 1372,
-        "h": 402
+        "h": 662
     },
     {
         "id": "3c819b7900145438",
@@ -1122,6 +1124,66 @@
         "wires": [
             [
                 "c19a749621bffe0c",
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "df1a21e8d68bc7ea",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FED99F#FF7EC8FFFFFF00FF",
+        "payloadType": "str",
+        "x": 930,
+        "y": 620,
+        "wires": [
+            [
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "ae2d2a4f790d7cf9",
+        "type": "inject",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "can/send",
+        "payload": "19FED99F#FF7E00FFFFFF00FF",
+        "payloadType": "str",
+        "x": 1060,
+        "y": 680,
+        "wires": [
+            [
                 "6aa079d768e1571c"
             ]
         ]
@@ -4749,7 +4811,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "Decode RVC CAN",
-        "func": "// RVC CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgnName) and decoding (dataPayload).\n// Input: msg.payload (string) - e.g., \"19FEDA8C#3AFF00FDFF2100FF\"\n// Output: msg.payload (object) with essential fields\n\nconst originalMessage = msg.payload;\n\n// 1. Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// 2. Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\nconst canIdHex = parts[0];\nconst dataPayload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// 3. Determine the DGN and its name\nlet dgn = ((canIdNum >> 8) & 0x1FFFF).toString(16).toUpperCase();\nlet dgnName = dgnMap.get(dgn);\n\n// Fallback logic for alternate DGN formats\nif (!dgnName && dgn.length === 4) {\n    const alternateDgn = '1' + dgn;\n    const alternateName = dgnMap.get(alternateDgn);\n    if (alternateName) {\n        dgn = alternateDgn;\n        dgnName = alternateName;\n    }\n}\n\nif (!dgnName) {\n    if (dgn === 'EF64') {\n        dgnName = \"AQUAHOT_COMMAND\";\n    } else if (dgn === 'EF9F') {\n        dgnName = \"AQUAHOT_STATUS\";\n    } else if (dgn === 'EF4D') {\n        dgnName = \"AQUAHOT_THERMOSTAT_STATUS\";\n    } else if (dgn === 'E8FF') {\n        dgnName = \"TIME\";\n    } else if (dgn.startsWith('EF')) {\n        dgnName = \"PROPRIETARY\";\n    }\n}\n\n// Default to UNKNOWN if no name is found\nif (!dgnName) {\n    dgnName = \"UNKNOWN\";\n}\n\n// 4. Create the simplified output object\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    dataPayload: dataPayload\n};\n\nreturn msg;",
+        "func": "// RVC CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgnName) and decoding (dataPayload).\n\nconst originalMessage = msg.payload;\n\n// 1. Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// 2. Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\nconst canIdHex = parts[0];\nconst dataPayload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// 3. Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xFF;  // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xFF;   // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n    pgn = '0' + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xF0) {  // PDU1 format\n    if (pf === 0xEF) {\n        // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n        lookupPgn = pgn;\n    } else if (pf === 0xEC || pf === 0xEB) {\n        // Exception: Multi-packet transport uses FF\n        lookupPgn = pf.toString(16).toUpperCase() + 'FF';\n    } else {\n        // Standard PDU1: Replace PS with 00\n        lookupPgn = pf.toString(16).toUpperCase() + '00';\n    }\n    // Ensure 4 characters\n    while (lookupPgn.length < 4) {\n        lookupPgn = '0' + lookupPgn;\n    }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgnName;\n\n// --- DGN Conversion and Primary Lookup ---\n// If the PGN is in the FE/FF range, convert it to the 5-digit RV-C DGN (1F prefix)\n// for primary map lookup. This handles 1FECA, 1FFA9, etc.\nif (dgn.startsWith('FE') || dgn.startsWith('FF')) {\n    dgn = '1' + lookupPgn;\n    dgnName = dgnMap.get(dgn); // Use the 5-digit key for lookup\n} else {\n    // For all other PGNs (like 00F7, EF4D), use the 4-digit PGN for lookup\n    dgnName = dgnMap.get(dgn);\n}\n\n\n// 4. Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgnName) {\n    if (pgn === 'EF64') {\n        dgnName = \"AQUAHOT_COMMAND\";\n    } else if (pgn === 'EF9F') {\n        dgnName = \"AQUAHOT_STATUS\";\n    } else if (pgn === 'EF4D') {\n        dgnName = \"AQUAHOT_THERMOSTAT_STATUS\";\n    }\n}\n\n// 5. Final output\nif (!dgnName) {\n    dgnName = \"UNKNOWN\";\n}\n\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgnName: dgnName,\n    dataPayload: dataPayload\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4936,6 +4998,16 @@
             },
             {
                 "t": "eq",
+                "v": "ACKNOWLEDGEMENT",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "REQUEST_FOR_DGN",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
                 "v": "TIME",
                 "vt": "str"
             },
@@ -4975,10 +5047,12 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 10,
+        "outputs": 12,
         "x": 1690,
         "y": 520,
         "wires": [
+            [],
+            [],
             [],
             [],
             [],
@@ -5388,7 +5462,7 @@
         "z": "292e70a6ba25b323",
         "g": "8ef86a1c4b59d8e1",
         "name": "Poll shades",
-        "func": "// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // 0xFE\nconst PRIORITY = 6;\nconst REQUESTED_DGN = \"01FEDE\"; // The DGN for WINDOW_SHADE_CONTROL_STATUS\nconst BROADCAST_ADDRESS = 255;  // The destination address for a global request (0xFF)\n\n// --- Logic ---\n\n// 1. Build the data payload\n// The payload is the DGN being requested, sent in 3-byte little-endian format.\n// The remaining 5 bytes are padded with 0xFF.\nconst requestedDgnInt = parseInt(REQUESTED_DGN, 16);\nconst dataPayloadBytes = new Uint8Array(8);\ndataPayloadBytes.fill(0xFF); // Pad the entire payload with 0xFF first\ndataPayloadBytes[0] = requestedDgnInt & 0xFF;         // Byte 1: DE\ndataPayloadBytes[1] = (requestedDgnInt >> 8) & 0xFF;  // Byte 2: FE\ndataPayloadBytes[2] = (requestedDgnInt >> 16) & 0xFF; // Byte 3: 01\nconst dataPayloadHex = Array.from(dataPayloadBytes).map(b => b.toString(16).padStart(2, '0')).join('');\n\n// 2. Determine the PGN for the request message itself\n// A J1939 request PGN is 0xEA00. The destination address is placed in the second byte.\nconst requestPgn = 0xEA00 | BROADCAST_ADDRESS; // This results in 0xEAFF\n\n// 3. Construct the full 29-bit CAN ID from its parts\n// Formula: (Priority << 26) | (PGN << 8) | Source Address\nconst canIdInt = (PRIORITY << 26) | (requestPgn << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 4. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayloadHex.toUpperCase()}`;\n\n// node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;\n",
+        "func": "// Generates an RV-C \"Request\" message to poll all window shades for their status.\n// DGN 18EAFF is a broadcast request.\n// Payload contains the DGN of the status to be returned (01FEDE).\n\n// --- Configuration ---\n// The source address of this Node-RED system.\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // 0xFE\nconst PRIORITY = 6;       // Standard priority for requests (Included in 18EAFF)\nconst DGN = \"18EAFF\";     // DGN for a broadcast request message\n\n// The DGN for WINDOW_SHADE_CONTROL_STATUS\nconst REQUESTED_DGN = \"01FEDE\";\n\n// 1. Build the data payload\n// The payload is the DGN being requested, sent in 3-byte little-endian format.\n// The remaining 5 bytes are padded with 0xFF.\nconst requestedDgnInt = parseInt(REQUESTED_DGN, 16);\nconst dataPayloadBytes = new Uint8Array(8);\ndataPayloadBytes.fill(0xFF); // Pad the entire payload with 0xFF first\ndataPayloadBytes[0] = requestedDgnInt & 0xFF;         // Byte 1: DE\ndataPayloadBytes[1] = (requestedDgnInt >> 8) & 0xFF;  // Byte 2: FE\ndataPayloadBytes[2] = (requestedDgnInt >> 16) & 0xFF; // Byte 3: 01\nconst dataPayloadHex = Array.from(dataPayloadBytes).map(b => b.toString(16).padStart(2, '0')).join('');\n\n// 2. Construct the CAN ID\n// Combine the DGN (which already includes Priority 6 and PGN 0xEAFF) with the Source Address.\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, '0');\n\n// 3. Construct the final output message in CAN bus format\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataPayloadHex.toUpperCase()}`;\n\n// node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
