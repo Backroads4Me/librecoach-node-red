@@ -32,6 +32,14 @@
         "env": []
     },
     {
+        "id": "7ecdba18640c1184",
+        "type": "tab",
+        "label": "Command",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "222c995b7790b8de",
         "type": "tab",
         "label": "Delete HA Entity",
@@ -115,13 +123,12 @@
             "0e65ff3bc0a0795c",
             "9e9b11b9441e51db",
             "54cd7e4a8959a77c",
-            "32add109922d428a",
-            "a194cbb881028938"
+            "32add109922d428a"
         ],
         "x": 134,
         "y": 59,
         "w": 732,
-        "h": 682
+        "h": 482
     },
     {
         "id": "f09f79586501cb0b",
@@ -143,18 +150,17 @@
             "c6fb02a17f709e08",
             "2fcbc4d630144362",
             "a6594a9464d8fe4e",
-            "9dd6a98018824be9",
             "02bdfc59de71b5a5",
             "45414bacecada477",
-            "081183d6c363e792",
             "463dfbbef66b51c2",
             "9c4e4196e56cc471",
-            "54c9dde7767b8935"
+            "4fa9b9fdc36c83da",
+            "9dd6a98018824be9"
         ],
         "x": 934,
-        "y": 53,
-        "w": 1758,
-        "h": 768
+        "y": 279,
+        "w": 1558,
+        "h": 582
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -171,8 +177,8 @@
             "b797e5a52b6db5b4",
             "48e6dda2b2d9575e"
         ],
-        "x": 34,
-        "y": 739,
+        "x": 734,
+        "y": 1819,
         "w": 492,
         "h": 142
     },
@@ -457,7 +463,7 @@
         "type": "group",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "Reset unique UNKNOWN",
+        "name": "Rest unique list",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -468,9 +474,9 @@
             "eea1641469efb23f",
             "c781b519a9f9b156"
         ],
-        "x": 2094,
-        "y": 79,
-        "w": 532,
+        "x": 1914,
+        "y": 639,
+        "w": 552,
         "h": 142
     },
     {
@@ -574,27 +580,6 @@
         "h": 142
     },
     {
-        "id": "081183d6c363e792",
-        "type": "group",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "Reset unique COMMAND",
-        "style": {
-            "stroke": "#ffffff",
-            "label": true
-        },
-        "nodes": [
-            "b2cbbdbaab1fc227",
-            "f96e5b3b013a2b8f",
-            "bc59e15bf069f17d",
-            "03744ec33f2e6776"
-        ],
-        "x": 2094,
-        "y": 439,
-        "w": 532,
-        "h": 142
-    },
-    {
         "id": "77cecc17525bec45",
         "type": "group",
         "z": "3470febb2cd6e952",
@@ -639,7 +624,7 @@
         "type": "group",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "Reset unique Proprietary",
+        "name": "Rest unique list",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -650,9 +635,9 @@
             "5968e8ee034f8751",
             "3d5ce3e925ee2f04"
         ],
-        "x": 2094,
-        "y": 619,
-        "w": 512,
+        "x": 1914,
+        "y": 459,
+        "w": 552,
         "h": 142
     },
     {
@@ -715,11 +700,30 @@
         "h": 142
     },
     {
+        "id": "081183d6c363e792",
+        "type": "group",
+        "z": "7ecdba18640c1184",
+        "name": "Rest unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "b2cbbdbaab1fc227",
+            "f96e5b3b013a2b8f",
+            "bc59e15bf069f17d",
+            "03744ec33f2e6776"
+        ],
+        "x": 674,
+        "y": 519,
+        "w": 532,
+        "h": 142
+    },
+    {
         "id": "54c9dde7767b8935",
         "type": "group",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "Reset unique DC_DIMMER_COMMAND",
+        "z": "7ecdba18640c1184",
+        "name": "Rest unique list",
         "style": {
             "stroke": "#ffffff",
             "label": true
@@ -730,9 +734,29 @@
             "0f09356f283bfae7",
             "54bee06f72b5c1f5"
         ],
-        "x": 2094,
-        "y": 259,
+        "x": 674,
+        "y": 159,
         "w": 572,
+        "h": 142
+    },
+    {
+        "id": "ea5519f0372a650f",
+        "type": "group",
+        "z": "7ecdba18640c1184",
+        "name": "Rest unique list",
+        "style": {
+            "stroke": "#ffffff",
+            "label": true
+        },
+        "nodes": [
+            "738e5a8857696209",
+            "dc9f6facce21379f",
+            "d825c1e1a2850fa5",
+            "c95a503942e20c78"
+        ],
+        "x": 674,
+        "y": 339,
+        "w": 552,
         "h": 142
     },
     {
@@ -1180,13 +1204,23 @@
         "topic": "can/send",
         "payload": "19FED99F#FF7E00FFFFFF00FF",
         "payloadType": "str",
-        "x": 1060,
+        "x": 930,
         "y": 680,
         "wires": [
             [
                 "6aa079d768e1571c"
             ]
         ]
+    },
+    {
+        "id": "d0143932939c8262",
+        "type": "comment",
+        "z": "b3d80c5dc947ec88",
+        "name": "Panel Lights",
+        "info": "all panel lights\nOFF\n19FED99F#FF7E00FFFFFF00FF\n\nON\n19FED99F#FF7EC8FFFFFF00FF\n\n\ntoggle bed panel lights\n19FED997#FF7D00FFFFFF00FF\n",
+        "x": 1610,
+        "y": 280,
+        "wires": []
     },
     {
         "id": "d3a13b531babee66",
@@ -2026,6 +2060,7 @@
         "id": "b9f27aaa32da92c0",
         "type": "link in",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "d68c2206e3379850",
         "name": "Reset batteries",
         "links": [
@@ -2056,6 +2091,7 @@
         "id": "0d54f0db9a010394",
         "type": "debug",
         "z": "3470febb2cd6e952",
+        "d": true,
         "g": "5d1ecae7ac09586c",
         "name": "Create battery",
         "active": false,
@@ -3318,6 +3354,21 @@
             },
             {
                 "t": "eq",
+                "v": "FLOOR_HEAT_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "AQUAHOT_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "AQUAHOT_THERMOSTAT_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
                 "v": "THERMOSTAT_STATUS_1",
                 "vt": "str"
             },
@@ -3333,17 +3384,7 @@
             },
             {
                 "t": "eq",
-                "v": "FLOOR_HEAT_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
                 "v": "FURNACE_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "AQUAHOT_STATUS",
                 "vt": "str"
             },
             {
@@ -3359,11 +3400,6 @@
             {
                 "t": "eq",
                 "v": "GENERATOR_DEMAND_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "ATS_AC_STATUS",
                 "vt": "str"
             },
             {
@@ -3402,6 +3438,11 @@
                 "vt": "str"
             },
             {
+                "t": "cont",
+                "v": "ATS_AC_STATUS",
+                "vt": "str"
+            },
+            {
                 "t": "eq",
                 "v": "SOLAR_EQUALIZATION_CONFIGURATION_STATUS",
                 "vt": "str"
@@ -3422,11 +3463,6 @@
                 "vt": "str"
             },
             {
-                "t": "eq",
-                "v": "AQUAHOT_THERMOSTAT_STATUS",
-                "vt": "str"
-            },
-            {
                 "t": "else"
             }
         ],
@@ -3434,7 +3470,7 @@
         "repair": false,
         "outputs": 31,
         "x": 420,
-        "y": 260,
+        "y": 780,
         "wires": [
             [],
             [
@@ -3459,6 +3495,15 @@
                 "010c5119a7e833b2"
             ],
             [
+                "cd9d55c23ebcee86"
+            ],
+            [
+                "5e7062bde869c7a5"
+            ],
+            [
+                "871009c15ad9a99b"
+            ],
+            [
                 "ccec30ad0f32bbdf"
             ],
             [
@@ -3468,13 +3513,7 @@
                 "1bb521d55aeb5eba"
             ],
             [
-                "cd9d55c23ebcee86"
-            ],
-            [
                 "d76a4a48e1beaed6"
-            ],
-            [
-                "5e7062bde869c7a5"
             ],
             [
                 "6b27f0f99ea11a72"
@@ -3484,9 +3523,6 @@
             ],
             [
                 "e5d61c5724c6ed1b"
-            ],
-            [
-                "bacdea9854675b01"
             ],
             [
                 "f171dcbe8b5d2e05"
@@ -3510,6 +3546,9 @@
                 "a0357de00b26b002"
             ],
             [
+                "bacdea9854675b01"
+            ],
+            [
                 "0ecfccb41b17f21b"
             ],
             [
@@ -3520,9 +3559,6 @@
             ],
             [
                 "40bc1ec5180b6589"
-            ],
-            [
-                "7a5c6ea317e733bf"
             ],
             [
                 "b797e5a52b6db5b4"
@@ -3657,7 +3693,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1370,
-        "y": 580,
+        "y": 760,
         "wires": []
     },
     {
@@ -3673,7 +3709,7 @@
         "finalize": "",
         "libs": [],
         "x": 930,
-        "y": 580,
+        "y": 760,
         "wires": [
             [
                 "b9d5913b9730b3e0"
@@ -3693,7 +3729,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 640,
+        "y": 460,
         "wires": [
             [
                 "db73295f937c90a1"
@@ -3714,7 +3750,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1340,
-        "y": 520,
+        "y": 700,
         "wires": []
     },
     {
@@ -3730,7 +3766,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 520,
+        "y": 700,
         "wires": [
             [
                 "e06ff8584295e0bd"
@@ -3751,7 +3787,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1330,
-        "y": 820,
+        "y": 880,
         "wires": []
     },
     {
@@ -3767,7 +3803,7 @@
         "finalize": "",
         "libs": [],
         "x": 890,
-        "y": 820,
+        "y": 880,
         "wires": [
             [
                 "6a02f9f3c2b95dcc"
@@ -3787,7 +3823,7 @@
         "finalize": "",
         "libs": [],
         "x": 910,
-        "y": 880,
+        "y": 940,
         "wires": [
             [
                 "6b903512de37f1ad"
@@ -3808,7 +3844,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1340,
-        "y": 880,
+        "y": 940,
         "wires": []
     },
     {
@@ -3824,7 +3860,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 1000,
+        "y": 1480,
         "wires": [
             [
                 "f80a9416a8e18e46"
@@ -3845,7 +3881,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1310,
-        "y": 1000,
+        "y": 1480,
         "wires": []
     },
     {
@@ -3955,7 +3991,7 @@
         "finalize": "",
         "libs": [],
         "x": 930,
-        "y": 940,
+        "y": 1000,
         "wires": [
             [
                 "51e87f869d6aa2c5"
@@ -3976,7 +4012,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1360,
-        "y": 940,
+        "y": 1000,
         "wires": []
     },
     {
@@ -4143,7 +4179,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "9d90b7163a12d5ed"
@@ -4164,7 +4200,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1320,
-        "y": 700,
+        "y": 820,
         "wires": []
     },
     {
@@ -4175,8 +4211,8 @@
         "links": [
             "02bdfc59de71b5a5"
         ],
-        "x": 220,
-        "y": 260,
+        "x": 240,
+        "y": 780,
         "wires": [
             [
                 "9f88f215f3f07227"
@@ -4206,8 +4242,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 160,
-        "y": 780,
+        "x": 860,
+        "y": 1860,
         "wires": [
             [
                 "09640adb1fd08fbb"
@@ -4227,8 +4263,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 780,
+        "x": 1080,
+        "y": 1860,
         "wires": [
             []
         ]
@@ -4246,8 +4282,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 160,
-        "y": 840,
+        "x": 840,
+        "y": 1920,
         "wires": [
             [
                 "48e6dda2b2d9575e"
@@ -4268,8 +4304,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 390,
-        "y": 840,
+        "x": 1090,
+        "y": 1920,
         "wires": []
     },
     {
@@ -4286,7 +4322,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1340,
-        "y": 460,
+        "y": 640,
         "wires": []
     },
     {
@@ -4302,7 +4338,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 460,
+        "y": 640,
         "wires": [
             [
                 "d0e2cc417cf65b90"
@@ -4365,7 +4401,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 960,
-        "y": 1480,
+        "y": 1540,
         "wires": []
     },
     {
@@ -4382,7 +4418,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 870,
-        "y": 1540,
+        "y": 1600,
         "wires": []
     },
     {
@@ -4399,7 +4435,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 870,
-        "y": 1600,
+        "y": 1660,
         "wires": []
     },
     {
@@ -4512,7 +4548,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 870,
-        "y": 1660,
+        "y": 1720,
         "wires": []
     },
     {
@@ -4525,7 +4561,7 @@
             "bd2d1b59183b99bb"
         ],
         "x": 1330,
-        "y": 640,
+        "y": 460,
         "wires": [],
         "l": true
     },
@@ -4542,7 +4578,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 760,
+        "y": 520,
         "wires": [
             [
                 "b6c72de91f6e7ec7"
@@ -4559,12 +4595,12 @@
             "2ee0ed60af1beb40"
         ],
         "x": 1320,
-        "y": 760,
+        "y": 520,
         "wires": [],
         "l": true
     },
     {
-        "id": "7a5c6ea317e733bf",
+        "id": "871009c15ad9a99b",
         "type": "debug",
         "z": "3e5f038a4f5a8b9a",
         "name": "AQUAHOT_THERMOSTAT_STATUS",
@@ -4577,7 +4613,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 910,
-        "y": 1720,
+        "y": 580,
         "wires": []
     },
     {
@@ -5017,18 +5053,13 @@
                 "vt": "str"
             },
             {
-                "t": "eq",
-                "v": "UNKNOWN",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "DC_DIMMER_COMMAND",
-                "vt": "str"
-            },
-            {
                 "t": "cont",
                 "v": "COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ADDRESS_CLAIMED",
                 "vt": "str"
             },
             {
@@ -5038,7 +5069,7 @@
             },
             {
                 "t": "eq",
-                "v": "ADDRESS_CLAIMED",
+                "v": "UNKNOWN",
                 "vt": "str"
             },
             {
@@ -5047,7 +5078,7 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 12,
+        "outputs": 11,
         "x": 1690,
         "y": 520,
         "wires": [
@@ -5060,19 +5091,16 @@
                 "02bdfc59de71b5a5"
             ],
             [
-                "c781b519a9f9b156"
+                "4fa9b9fdc36c83da"
             ],
             [
-                "54bee06f72b5c1f5"
-            ],
-            [
-                "03744ec33f2e6776"
+                "45414bacecada477"
             ],
             [
                 "3d5ce3e925ee2f04"
             ],
             [
-                "45414bacecada477"
+                "c781b519a9f9b156"
             ],
             [
                 "463dfbbef66b51c2"
@@ -5101,8 +5129,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2210,
-        "y": 120,
+        "x": 2030,
+        "y": 680,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -5115,15 +5143,15 @@
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
         "name": "Reset function",
-        "func": "flow.set(\"uniqueUNKNOWN\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "func": "flow.set(\"uniqueUnknown\", []);\nreturn null;  // Nothing needs to go downstream\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2480,
-        "y": 120,
+        "x": 2300,
+        "y": 680,
         "wires": [
             []
         ]
@@ -5133,16 +5161,16 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
-        "name": "Unique UNKNOWN",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUNKNOWN = flow.get(\"uniqueUNKNOWN\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUNKNOWN.includes(newMsgStr)) {\n    uniqueUNKNOWN.push(newMsgStr);\n    flow.set(\"uniqueUNKNOWN\", uniqueUNKNOWN);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "name": "Unique Unknown",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUnknown = flow.get(\"uniqueUnknown\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUnknown.includes(newMsgStr)) {\n    uniqueUnknown.push(newMsgStr);\n    flow.set(\"uniqueUnknown\", uniqueUnknown);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2210,
-        "y": 180,
+        "x": 2030,
+        "y": 740,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -5154,7 +5182,7 @@
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
-        "name": "New UNKNOWN",
+        "name": "New Unknown DGN",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -5163,8 +5191,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2490,
-        "y": 180,
+        "x": 2320,
+        "y": 740,
         "wires": []
     },
     {
@@ -5177,8 +5205,8 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 1910,
-        "y": 140,
+        "x": 1990,
+        "y": 320,
         "wires": [],
         "l": true
     },
@@ -5312,8 +5340,8 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 1940,
-        "y": 720,
+        "x": 2020,
+        "y": 400,
         "wires": [],
         "l": true
     },
@@ -5537,99 +5565,11 @@
         ]
     },
     {
-        "id": "b2cbbdbaab1fc227",
-        "type": "inject",
-        "z": "292e70a6ba25b323",
-        "g": "081183d6c363e792",
-        "name": "Reset unique",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 2210,
-        "y": 480,
-        "wires": [
-            [
-                "f96e5b3b013a2b8f"
-            ]
-        ]
-    },
-    {
-        "id": "f96e5b3b013a2b8f",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "081183d6c363e792",
-        "name": "Reset function",
-        "func": "flow.set(\"uniqueCommand\", []);\nreturn null;  // Nothing needs to go downstream\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 2480,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "03744ec33f2e6776",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "081183d6c363e792",
-        "name": "Unique COMMAND",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommand = flow.get(\"uniqueCommand\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueCommand.includes(newMsgStr)) {\n    uniqueCommand.push(newMsgStr);\n    flow.set(\"uniqueCommand\", uniqueCommand);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 2210,
-        "y": 540,
-        "wires": [
-            [
-                "bc59e15bf069f17d"
-            ]
-        ]
-    },
-    {
-        "id": "bc59e15bf069f17d",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "g": "081183d6c363e792",
-        "name": "New COMMAND",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2490,
-        "y": 540,
-        "wires": []
-    },
-    {
         "id": "463dfbbef66b51c2",
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "Otherwsie",
+        "name": "Otherwsie dgnName",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -5638,8 +5578,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1860,
-        "y": 780,
+        "x": 2020,
+        "y": 820,
         "wires": []
     },
     {
@@ -5689,7 +5629,7 @@
         "type": "inject",
         "z": "292e70a6ba25b323",
         "g": "9c4e4196e56cc471",
-        "name": "Reset Proprietary",
+        "name": "Reset unique",
         "props": [
             {
                 "p": "payload"
@@ -5706,8 +5646,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2220,
-        "y": 660,
+        "x": 2030,
+        "y": 500,
         "wires": [
             [
                 "9f47dc231ecd50cd"
@@ -5727,8 +5667,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2480,
-        "y": 660,
+        "x": 2300,
+        "y": 500,
         "wires": [
             []
         ]
@@ -5738,7 +5678,7 @@
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "9c4e4196e56cc471",
-        "name": "New Proprietary",
+        "name": "New Proprietary DGN",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -5747,8 +5687,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2480,
-        "y": 720,
+        "x": 2320,
+        "y": 560,
         "wires": []
     },
     {
@@ -5764,8 +5704,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2210,
-        "y": 720,
+        "x": 2030,
+        "y": 560,
         "wires": [
             [
                 "5968e8ee034f8751"
@@ -5855,11 +5795,47 @@
         "wires": []
     },
     {
-        "id": "a194cbb881028938",
-        "type": "inject",
+        "id": "922f2738c2000150",
+        "type": "function",
         "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
-        "name": "",
+        "g": "8ef86a1c4b59d8e1",
+        "name": "Poll Aqua-Hot",
+        "func": "// I wasn't able to get an Aqua-Hot polling message to work so sending Engine OFF command to force repsonse.\n\nconst PGN_INT = 0xEF64;\nconst DA = 0x9F;\nconst PRIORITY = 6;\nconst CONTROL_BYTE = 0xAB;\nconst ENGINE_OFF_BYTE = 0x3F;\n\n// 1. Calculate CAN ID (Results in 1AEF649F)\n// (P << 26) | (PGN << 8) | DA \nconst canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DA;\nconst canIdHex = canIdInt.toString(16).toUpperCase().padStart(8, '0');\n\n// 2. Build Payload (AB3FFFFFFFFFFFFF)\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = CONTROL_BYTE;\ndataBytes[1] = ENGINE_OFF_BYTE;\nconst dataHex = dataBytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');\n\n// 3. Set Message\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex}#${dataHex}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1380,
+        "y": 1340,
+        "wires": [
+            [
+                "a2334b77d3764815"
+            ]
+        ]
+    },
+    {
+        "id": "4fa9b9fdc36c83da",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "COMMAND out",
+        "mode": "link",
+        "links": [
+            "00b1afc9a96aca8e"
+        ],
+        "x": 2000,
+        "y": 360,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "b2cbbdbaab1fc227",
+        "type": "inject",
+        "z": "7ecdba18640c1184",
+        "g": "081183d6c363e792",
+        "name": "Reset unique",
         "props": [
             {
                 "p": "payload"
@@ -5873,21 +5849,80 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "can/send",
-        "payload": "6FFFF69F#0100FFFFFFFFFFFF",
-        "payloadType": "str",
-        "x": 500,
-        "y": 700,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 790,
+        "y": 560,
         "wires": [
             [
-                "1ac6e0fa1cbb3852"
+                "f96e5b3b013a2b8f"
+            ]
+        ]
+    },
+    {
+        "id": "f96e5b3b013a2b8f",
+        "type": "function",
+        "z": "7ecdba18640c1184",
+        "g": "081183d6c363e792",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueCommand\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bc59e15bf069f17d",
+        "type": "debug",
+        "z": "7ecdba18640c1184",
+        "g": "081183d6c363e792",
+        "name": "New COMMAND",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1070,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "03744ec33f2e6776",
+        "type": "function",
+        "z": "7ecdba18640c1184",
+        "g": "081183d6c363e792",
+        "name": "Unique COMMAND",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommand = flow.get(\"uniqueCommand\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgnName);\n\n// Check if it's a new unique message\nif (!uniqueCommand.includes(newMsgStr)) {\n    uniqueCommand.push(newMsgStr);\n    flow.set(\"uniqueCommand\", uniqueCommand);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 620,
+        "wires": [
+            [
+                "bc59e15bf069f17d"
             ]
         ]
     },
     {
         "id": "86dc00dfc2dbcd9e",
         "type": "inject",
-        "z": "292e70a6ba25b323",
+        "z": "7ecdba18640c1184",
+        "d": true,
         "g": "54c9dde7767b8935",
         "name": "Reset unique",
         "props": [
@@ -5906,8 +5941,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2210,
-        "y": 300,
+        "x": 790,
+        "y": 200,
         "wires": [
             [
                 "4f86998be2551032"
@@ -5917,18 +5952,19 @@
     {
         "id": "4f86998be2551032",
         "type": "function",
-        "z": "292e70a6ba25b323",
+        "z": "7ecdba18640c1184",
+        "d": true,
         "g": "54c9dde7767b8935",
         "name": "Reset function",
-        "func": "flow.set(\"uniqueDC_DIMMER_COMMAND\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "func": "global.set(\"uniqueDcDimmerCmd\", []);\nreturn null;  // Nothing needs to go downstream\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2480,
-        "y": 300,
+        "x": 1060,
+        "y": 200,
         "wires": [
             []
         ]
@@ -5936,7 +5972,8 @@
     {
         "id": "0f09356f283bfae7",
         "type": "debug",
-        "z": "292e70a6ba25b323",
+        "z": "7ecdba18640c1184",
+        "d": true,
         "g": "54c9dde7767b8935",
         "name": "New DC_DIMMER cmd",
         "active": true,
@@ -5947,25 +5984,26 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2510,
-        "y": 360,
+        "x": 1090,
+        "y": 260,
         "wires": []
     },
     {
         "id": "54bee06f72b5c1f5",
         "type": "function",
-        "z": "292e70a6ba25b323",
+        "z": "7ecdba18640c1184",
+        "d": true,
         "g": "54c9dde7767b8935",
         "name": "Unique DC_DIMMER cmd",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDC_DIMMER_COMMAND = flow.get(\"uniqueDC_DIMMER_COMMAND\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueDC_DIMMER_COMMAND.includes(newMsgStr)) {\n    uniqueDC_DIMMER_COMMAND.push(newMsgStr);\n    flow.set(\"uniqueDC_DIMMER_COMMAND\", uniqueDC_DIMMER_COMMAND);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDcDimmerCmd = global.get(\"uniqueDcDimmerCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dataPayload);\n\n// Check if it's a new unique message\nif (!uniqueDcDimmerCmd.includes(newMsgStr)) {\n    uniqueDcDimmerCmd.push(newMsgStr);\n    global.set(\"uniqueDcDimmerCmd\", uniqueDcDimmerCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2230,
-        "y": 360,
+        "x": 810,
+        "y": 260,
         "wires": [
             [
                 "0f09356f283bfae7"
@@ -5973,23 +6011,182 @@
         ]
     },
     {
-        "id": "922f2738c2000150",
+        "id": "00b1afc9a96aca8e",
+        "type": "link in",
+        "z": "7ecdba18640c1184",
+        "name": "COMMAND in",
+        "links": [
+            "4fa9b9fdc36c83da"
+        ],
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "c063a09a82cdd204"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "c063a09a82cdd204",
+        "type": "switch",
+        "z": "7ecdba18640c1184",
+        "name": "COMMAND",
+        "property": "payload.dgnName",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "DC_DIMMER_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "GENERIC_INDICATOR_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "WATER_PUMP_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "WINDOW_SHADE_CONTROL_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "LOCK_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "AUTOFILL_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "FLOOR_HEAT_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "AQUAHOT_COMMAND",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 9,
+        "x": 490,
+        "y": 360,
+        "wires": [
+            [
+                "54bee06f72b5c1f5"
+            ],
+            [
+                "c95a503942e20c78"
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                "03744ec33f2e6776"
+            ]
+        ]
+    },
+    {
+        "id": "738e5a8857696209",
+        "type": "inject",
+        "z": "7ecdba18640c1184",
+        "g": "ea5519f0372a650f",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 790,
+        "y": 380,
+        "wires": [
+            [
+                "dc9f6facce21379f"
+            ]
+        ]
+    },
+    {
+        "id": "dc9f6facce21379f",
         "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "8ef86a1c4b59d8e1",
-        "name": "Poll Aqua-Hot",
-        "func": "// I wasn't able to get an Aqua-Hot polling message to work so sending Engine OFF command to force repsonse.\n\nconst PGN_INT = 0xEF64;\nconst DA = 0x9F;\nconst PRIORITY = 6;\nconst CONTROL_BYTE = 0xAB;\nconst ENGINE_OFF_BYTE = 0x3F;\n\n// 1. Calculate CAN ID (Results in 1AEF649F)\n// (P << 26) | (PGN << 8) | DA \nconst canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DA;\nconst canIdHex = canIdInt.toString(16).toUpperCase().padStart(8, '0');\n\n// 2. Build Payload (AB3FFFFFFFFFFFFF)\nconst dataBytes = new Array(8).fill(0xFF);\ndataBytes[0] = CONTROL_BYTE;\ndataBytes[1] = ENGINE_OFF_BYTE;\nconst dataHex = dataBytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');\n\n// 3. Set Message\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex}#${dataHex}`;\n\nreturn msg;",
+        "z": "7ecdba18640c1184",
+        "g": "ea5519f0372a650f",
+        "name": "Reset function",
+        "func": "global.set(\"uniqueGenericCmd\", []);\nreturn null;  // Nothing needs to go downstream\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1380,
-        "y": 1340,
+        "x": 1060,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d825c1e1a2850fa5",
+        "type": "debug",
+        "z": "7ecdba18640c1184",
+        "g": "ea5519f0372a650f",
+        "name": "New GENERIC cmd",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c95a503942e20c78",
+        "type": "function",
+        "z": "7ecdba18640c1184",
+        "g": "ea5519f0372a650f",
+        "name": "Unique GENERIC cmd",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueGenericCmd = global.get(\"uniqueGenericCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dataPayload);\n\n// Check if it's a new unique message\nif (!uniqueGenericCmd.includes(newMsgStr)) {\n    uniqueGenericCmd.push(newMsgStr);\n    global.set(\"uniqueGenericCmd\", uniqueGenericCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 440,
         "wires": [
             [
-                "a2334b77d3764815"
+                "d825c1e1a2850fa5"
             ]
         ]
     },
