@@ -256,7 +256,7 @@
             "ba0c52ff61838986",
             "922f2738c2000150"
         ],
-        "x": 134,
+        "x": 154,
         "y": 1019,
         "w": 1652,
         "h": 402
@@ -3167,7 +3167,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
+        "x": 500,
         "y": 2200,
         "wires": []
     },
@@ -3205,7 +3205,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
+        "x": 500,
         "y": 2240,
         "wires": []
     },
@@ -3243,7 +3243,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
+        "x": 500,
         "y": 2280,
         "wires": []
     },
@@ -3260,7 +3260,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 480,
+        "x": 500,
         "y": 2320,
         "wires": []
     },
@@ -3417,7 +3417,7 @@
         "type": "switch",
         "z": "3e5f038a4f5a8b9a",
         "name": "STATUS",
-        "property": "payload.dgnName",
+        "property": "payload.dgn_name",
         "propertyType": "msg",
         "rules": [
             {
@@ -4407,7 +4407,7 @@
         "z": "3e5f038a4f5a8b9a",
         "g": "eb51c1f2d0d389d1",
         "name": "Unique STATUS",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDecodedStatus = flow.get(\"uniqueDecodedStatus\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgnName);\n\n// Check if it's a new unique message\nif (!uniqueDecodedStatus.includes(newMsgStr)) {\n    uniqueDecodedStatus.push(newMsgStr);\n    flow.set(\"uniqueDecodedStatus\", uniqueDecodedStatus);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDecodedStatus = flow.get(\"uniqueDecodedStatus\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn_name);\n\n// Check if it's a new unique message\nif (!uniqueDecodedStatus.includes(newMsgStr)) {\n    uniqueDecodedStatus.push(newMsgStr);\n    flow.set(\"uniqueDecodedStatus\", uniqueDecodedStatus);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5135,16 +5135,16 @@
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "dataPayload",
+        "name": "data_payload",
         "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload.dataPayload",
+        "complete": "payload.data_payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1470,
+        "x": 1480,
         "y": 600,
         "wires": []
     },
@@ -5171,16 +5171,16 @@
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "dgnName",
+        "name": "dgn_name",
         "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload.dgnName",
+        "complete": "payload.dgn_name",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1460,
+        "x": 1470,
         "y": 440,
         "wires": []
     },
@@ -5262,7 +5262,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "",
-        "property": "payload.dgnName",
+        "property": "payload.dgn_name",
         "propertyType": "msg",
         "rules": [
             {
@@ -5493,7 +5493,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 300,
+        "x": 320,
         "y": 1060,
         "wires": [
             [
@@ -5514,7 +5514,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 720,
         "y": 1060,
         "wires": [
             [
@@ -5541,7 +5541,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 850,
+        "x": 870,
         "y": 1140,
         "wires": [
             [
@@ -5562,7 +5562,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 520,
         "y": 1140,
         "wires": [
             [
@@ -5597,7 +5597,7 @@
         "links": [
             "45414bacecada477"
         ],
-        "x": 260,
+        "x": 280,
         "y": 1140,
         "wires": [
             [
@@ -5616,7 +5616,7 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1650,
+        "x": 1670,
         "y": 1060,
         "wires": [],
         "l": true
@@ -5634,7 +5634,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1080,
+        "x": 1100,
         "y": 1140,
         "wires": [
             [
@@ -5698,7 +5698,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1390,
+        "x": 1410,
         "y": 1140,
         "wires": [
             [
@@ -5719,7 +5719,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1360,
+        "x": 1380,
         "y": 1180,
         "wires": [
             [
@@ -5740,7 +5740,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1370,
+        "x": 1390,
         "y": 1220,
         "wires": [
             [
@@ -5766,7 +5766,7 @@
             "893d80d1125057e8",
             "aa12f93df2087d62"
         ],
-        "x": 1400,
+        "x": 1420,
         "y": 1380,
         "wires": [],
         "l": true
@@ -5793,7 +5793,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1110,
+        "x": 1130,
         "y": 1240,
         "wires": [
             [
@@ -5812,7 +5812,7 @@
         "type": "debug",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "Otherwsie dgnName",
+        "name": "Otherwise dgn_name",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -5838,7 +5838,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1380,
+        "x": 1400,
         "y": 1260,
         "wires": [
             [
@@ -5859,7 +5859,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1370,
+        "x": 1390,
         "y": 1300,
         "wires": [
             [
@@ -6050,7 +6050,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1380,
+        "x": 1400,
         "y": 1340,
         "wires": [
             [
@@ -6146,7 +6146,7 @@
         "z": "7ecdba18640c1184",
         "g": "081183d6c363e792",
         "name": "Unique COMMAND",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommand = flow.get(\"uniqueCommand\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgnName);\n\n// Check if it's a new unique message\nif (!uniqueCommand.includes(newMsgStr)) {\n    uniqueCommand.push(newMsgStr);\n    flow.set(\"uniqueCommand\", uniqueCommand);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueCommand = flow.get(\"uniqueCommand\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn_name);\n\n// Check if it's a new unique message\nif (!uniqueCommand.includes(newMsgStr)) {\n    uniqueCommand.push(newMsgStr);\n    flow.set(\"uniqueCommand\", uniqueCommand);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6238,7 +6238,7 @@
         "d": true,
         "g": "54c9dde7767b8935",
         "name": "Unique DC_DIMMER cmd",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDcDimmerCmd = global.get(\"uniqueDcDimmerCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dataPayload);\n\n// Check if it's a new unique message\nif (!uniqueDcDimmerCmd.includes(newMsgStr)) {\n    uniqueDcDimmerCmd.push(newMsgStr);\n    global.set(\"uniqueDcDimmerCmd\", uniqueDcDimmerCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueDcDimmerCmd = global.get(\"uniqueDcDimmerCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.data_payload);\n\n// Check if it's a new unique message\nif (!uniqueDcDimmerCmd.includes(newMsgStr)) {\n    uniqueDcDimmerCmd.push(newMsgStr);\n    global.set(\"uniqueDcDimmerCmd\", uniqueDcDimmerCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6275,7 +6275,7 @@
         "type": "switch",
         "z": "7ecdba18640c1184",
         "name": "COMMAND",
-        "property": "payload.dgnName",
+        "property": "payload.dgn_name",
         "propertyType": "msg",
         "rules": [
             {
@@ -6418,7 +6418,7 @@
         "z": "7ecdba18640c1184",
         "g": "ea5519f0372a650f",
         "name": "Unique GENERIC cmd",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueGenericCmd = global.get(\"uniqueGenericCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dataPayload);\n\n// Check if it's a new unique message\nif (!uniqueGenericCmd.includes(newMsgStr)) {\n    uniqueGenericCmd.push(newMsgStr);\n    global.set(\"uniqueGenericCmd\", uniqueGenericCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
+        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueGenericCmd = global.get(\"uniqueGenericCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.data_payload);\n\n// Check if it's a new unique message\nif (!uniqueGenericCmd.includes(newMsgStr)) {\n    uniqueGenericCmd.push(newMsgStr);\n    global.set(\"uniqueGenericCmd\", uniqueGenericCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
