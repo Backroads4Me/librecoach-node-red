@@ -1274,7 +1274,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2030,
-        "y": 135,
+        "y": 120,
         "wires": []
     },
     {
@@ -5056,7 +5056,10 @@
             "1c1403c14b577fb4",
             "12a57f6a07d0bf1a",
             "9a0578bc94187110",
-            "4b8ac359c84436ab"
+            "4b8ac359c84436ab",
+            "8b77941aa1b2b8d7",
+            "b89191cdcfbddde9",
+            "9dfc606306fdbbcd"
         ],
         "x": 290,
         "y": 760,
@@ -6139,7 +6142,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 710,
-        "y": 114,
+        "y": 107,
         "wires": []
     },
     {
@@ -6211,7 +6214,7 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "export_config_group_001",
-        "name": "Create config URL sensor",
+        "name": "Create export status sensor",
         "func": "// Creates Export Status sensor entity via MQTT Discovery\n// Triggered at startup to register the export status sensor in Home Assistant\n\nconst componentType = \"sensor\";\nconst entityId = \"librecoach_export_status\";\nconst displayName = \"LibreCoach Export Status\";\nconst icon = \"mdi:file-export\";\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = \"librecoach/export/status\";\n\n// MQTT Discovery payload\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  object_id: entityId,\n  icon: icon,\n  state_topic: stateTopic,\n  device: {\n    identifiers: [\"librecoach-system\"],\n    name: \"LibreCoach System\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Prepare the message for MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Status sensor created\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -6219,7 +6222,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
+        "x": 720,
         "y": 2060,
         "wires": [
             [
@@ -6277,7 +6280,7 @@
         "z": "292e70a6ba25b323",
         "g": "export_config_group_001",
         "name": "Store RV info",
-        "func": "// Stores RV info values from text input entities to flow context\n// Input: msg.topic = \"librecoach/rv_info/{field}/set\"\n//        msg.payload = value string\n// Output: Republishes to state topic for HA sync\n\n// Parse the topic to get the field name\nconst topicMatch = msg.topic.match(/^librecoach\\/rv_info\\/(\\w+)\\/set$/);\nif (!topicMatch) {\n  node.warn(`Unexpected topic format: ${msg.topic}`);\n  return null;\n}\n\nconst field = topicMatch[1];\nconst value = String(msg.payload).trim();\n\n// Valid fields\nconst validFields = [\"rv_manufacturer\", \"rv_model\", \"rv_year\", \"rv_other\"];\nif (!validFields.includes(field)) {\n  node.warn(`Unknown RV info field: ${field}`);\n  return null;\n}\n\n// Get current RV info from flow context or initialize\nlet rvInfo = flow.get(\"rvInfo\") || {\n  rv_manufacturer: \"\",\n  rv_model: \"\",\n  rv_year: \"\",\n  rv_other: \"\",\n};\n\n// Update the field\nrvInfo[field] = value;\n\n// Store back to flow context\nflow.set(\"rvInfo\", rvInfo);\n\n// Republish to state topic for HA to confirm the update\nmsg.topic = `librecoach/rv_info/${field}`;\nmsg.payload = value;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: `${field}: ${value}` });\n\nreturn msg;\n",
+        "func": "// Stores RV info values from text input entities to flow context\n// Input: msg.topic = \"librecoach/rv_info/{field}/set\"\n//        msg.payload = value string\n// Output: Republishes to state topic for HA sync\n\n// Parse the topic to get the field name\nconst topicMatch = msg.topic.match(/^librecoach\\/rv_info\\/(\\w+)\\/set$/);\nif (!topicMatch) {\n  node.warn(`Unexpected topic format: ${msg.topic}`);\n  return null;\n}\n\nconst field = topicMatch[1];\nconst value = String(msg.payload).trim();\n\n// Valid fields\nconst validFields = [\"rv_manufacturer\", \"rv_model\", \"rv_year\", \"rv_other\"];\nif (!validFields.includes(field)) {\n  node.warn(`Unknown RV info field: ${field}`);\n  return null;\n}\n\n// Get current RV info from flow context or initialize\nlet rvInfo = flow.get(\"rvInfo\") || {\n  rv_manufacturer: \"\",\n  rv_model: \"\",\n  rv_year: \"\",\n  rv_other: \"\",\n};\n\n// Update the field\nrvInfo[field] = value;\n\n// Store back to flow context\nflow.set(\"rvInfo\", rvInfo);\n\n// Republish to state topic for HA to confirm the update\nmsg.topic = `librecoach/rv_info/${field}`;\nmsg.payload = value;\n\nnode.status({ fill: \"green\", shape: \"dot\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6297,15 +6300,15 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "export_config_group_001",
-        "name": "Read RV info & setup",
-        "func": "// Reads RV info and sets up HA API request configuration\n\n// Get HA configuration from environment or use defaults\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n  node.error(\"HA_TOKEN not configured. Set it in Node-RED environment variables or flow context.\", msg);\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No HA token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  \"Authorization\": `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\"\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || null,\n  model: rvInfo.rv_model || null,\n  year: rvInfo.rv_year || null,\n  vin: rvInfo.rv_vin || null,\n};\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Starting export\" });\n\nreturn msg;",
+        "name": "Read RV info",
+        "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n//\n// Required Configuration:\n// - HA_BASE_URL: Home Assistant base URL (env var or defaults to http://homeassistant.local:8123)\n// - HA_TOKEN: Long-lived access token (env var or flow.get(\"haToken\"))\n\n// Get HA configuration from environment or use defaults\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n  node.error(\"HA_TOKEN not configured. Set it in Node-RED environment variables or flow context.\", msg);\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No HA token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  \"Authorization\": `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\"\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || null,\n  model: rvInfo.rv_model || null,\n  year: rvInfo.rv_year || null,\n  vin: rvInfo.rv_vin || null,\n};\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Starting export\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 470,
         "y": 2220,
         "wires": [
             [
@@ -7015,7 +7018,7 @@
         "z": "222c995b7790b8de",
         "content": "# Delete HA Entity\n## Purpose\nRemoves devices from Home Assistant when they're no longer needed.\n\n## What Happens Here\n### Entity Removal\nWhen a device needs to be removed from Home Assistant, this flow sends a special \"delete\" message that tells Home Assistant to remove the device from your dashboard.\n\n### When It's Used\n- Troubleshooting: Removing and re-discovering a device that isn't working correctly\n- Reconfiguration: Cleaning up after changes to your RV's systems\n- Cleanup: Removing test devices or devices that no longer exist\n\n## In Simple Terms\nThink of this flow as an eraser. If something on your dashboard needs to go away - maybe a device was replaced or you're starting fresh - this flow cleans it up so you can start over.",
         "x": 1870,
-        "y": 314,
+        "y": 331,
         "wires": []
     },
     {
