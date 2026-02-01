@@ -555,7 +555,7 @@
             "c53cf5f35f59ccd6",
             "86d67a80f1ca910f"
         ],
-        "x": 174,
+        "x": 154,
         "y": 1859,
         "w": 2232,
         "h": 462
@@ -1274,7 +1274,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2030,
-        "y": 120,
+        "y": 225,
         "wires": []
     },
     {
@@ -3457,7 +3457,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 266,
+        "y": 279,
         "wires": []
     },
     {
@@ -4913,7 +4913,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2060,
-        "y": 267,
+        "y": 256,
         "wires": []
     },
     {
@@ -5056,10 +5056,7 @@
             "1c1403c14b577fb4",
             "12a57f6a07d0bf1a",
             "9a0578bc94187110",
-            "4b8ac359c84436ab",
-            "8b77941aa1b2b8d7",
-            "b89191cdcfbddde9",
-            "9dfc606306fdbbcd"
+            "4b8ac359c84436ab"
         ],
         "x": 290,
         "y": 760,
@@ -5876,7 +5873,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "Otherwise dgn_name",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -6141,8 +6138,8 @@
         "type": "note",
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
-        "x": 710,
-        "y": 107,
+        "x": 730,
+        "y": 193,
         "wires": []
     },
     {
@@ -6157,7 +6154,7 @@
         "once": true,
         "onceDelay": "5",
         "topic": "",
-        "x": 350,
+        "x": 330,
         "y": 1960,
         "wires": [
             [
@@ -6180,7 +6177,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 680,
         "y": 1900,
         "wires": [
             [
@@ -6201,7 +6198,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 680,
         "y": 1980,
         "wires": [
             [
@@ -6222,7 +6219,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 700,
         "y": 2060,
         "wires": [
             [
@@ -6244,7 +6241,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 270,
+        "x": 250,
         "y": 2220,
         "wires": [
             [
@@ -6266,7 +6263,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 270,
+        "x": 250,
         "y": 2280,
         "wires": [
             [
@@ -6287,7 +6284,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
+        "x": 450,
         "y": 2280,
         "wires": [
             [
@@ -6308,7 +6305,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
+        "x": 450,
         "y": 2220,
         "wires": [
             [
@@ -6333,7 +6330,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 740,
+        "x": 720,
         "y": 2220,
         "wires": [
             [
@@ -6354,7 +6351,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
+        "x": 940,
         "y": 2220,
         "wires": [
             [
@@ -6375,7 +6372,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
+        "x": 1160,
         "y": 2220,
         "wires": [
             [
@@ -6396,7 +6393,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1410,
+        "x": 1390,
         "y": 2220,
         "wires": [
             [
@@ -6414,7 +6411,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 770,
+        "x": 750,
         "y": 2280,
         "wires": [],
         "l": true
@@ -6429,7 +6426,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1130,
+        "x": 1110,
         "y": 1980,
         "wires": [],
         "l": true
@@ -6446,7 +6443,7 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 1600,
+        "x": 1580,
         "y": 2220,
         "wires": [
             [
@@ -6467,7 +6464,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1800,
+        "x": 1780,
         "y": 2220,
         "wires": [
             [
@@ -6486,7 +6483,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 2070,
+        "x": 2050,
         "y": 2220,
         "wires": [],
         "l": true
@@ -6504,7 +6501,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2070,
+        "x": 2050,
         "y": 2120,
         "wires": [
             [
@@ -6529,7 +6526,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 2310,
+        "x": 2290,
         "y": 2120,
         "wires": [
             []
@@ -6911,7 +6908,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nEverythign here is a work in progress and not yet ready for use.",
         "x": 1650,
-        "y": 200.00000381469727,
+        "y": 226.00000381469727,
         "wires": []
     },
     {
