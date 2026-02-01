@@ -1,9 +1,10 @@
 {
     "name": "LibreCoach",
     "description": "A Node-RED project for controlling and monitoring RV systems. Visit LibreCoach.com for more information.",
-    "version": "0.0.1",
+    "version": "0.1.0",
+    "license": "GPL-3.0-or-later",
     "dependencies": {
-        "node-red-contrib-markdown-note": "1.0.8"
+        "node-red-contrib-markdown-note": "1.1.1"
     },
     "node-red": {
         "settings": {
