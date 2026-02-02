@@ -534,6 +534,43 @@
         "h": 142
     },
     {
+        "id": "export_config_group_001",
+        "type": "group",
+        "z": "bfa6336b0d45dc23",
+        "name": "Export Configuration",
+        "style": {
+            "stroke": "#3d85c6",
+            "label": true
+        },
+        "nodes": [
+            "export_inject_startup_001",
+            "export_func_button_001",
+            "export_func_rv_helpers_001",
+            "export_func_url_sensor_001",
+            "export_mqtt_in_trigger_001",
+            "export_mqtt_in_rv_info_001",
+            "export_func_store_rv_001",
+            "export_func_read_rv_001",
+            "export_http_states_001",
+            "export_func_store_states_001",
+            "export_func_build_001",
+            "export_func_publish_url_001",
+            "12a57f6a07d0bf1a",
+            "9a0578bc94187110",
+            "de184f27cbcc117f",
+            "6a42bdb0b01fd971",
+            "4b8ac359c84436ab",
+            "c53cf5f35f59ccd6",
+            "86d67a80f1ca910f",
+            "e29b274d6e30a418",
+            "d3e93c83e7582188"
+        ],
+        "x": 74,
+        "y": 199,
+        "w": 2212,
+        "h": 442
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -773,43 +810,6 @@
         "y": 2119,
         "w": 472,
         "h": 142
-    },
-    {
-        "id": "export_config_group_001",
-        "type": "group",
-        "z": "bfa6336b0d45dc23",
-        "name": "Export Configuration",
-        "style": {
-            "stroke": "#3d85c6",
-            "label": true
-        },
-        "nodes": [
-            "export_inject_startup_001",
-            "export_func_button_001",
-            "export_func_rv_helpers_001",
-            "export_func_url_sensor_001",
-            "export_mqtt_in_trigger_001",
-            "export_mqtt_in_rv_info_001",
-            "export_func_store_rv_001",
-            "export_func_read_rv_001",
-            "export_http_states_001",
-            "export_func_store_states_001",
-            "export_func_build_001",
-            "export_func_publish_url_001",
-            "12a57f6a07d0bf1a",
-            "9a0578bc94187110",
-            "de184f27cbcc117f",
-            "6a42bdb0b01fd971",
-            "4b8ac359c84436ab",
-            "c53cf5f35f59ccd6",
-            "86d67a80f1ca910f",
-            "e29b274d6e30a418",
-            "d3e93c83e7582188"
-        ],
-        "x": 74,
-        "y": 199,
-        "w": 2212,
-        "h": 442
     },
     {
         "id": "80727e60a251c36c",
@@ -1293,8 +1293,8 @@
         "type": "note",
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
-        "x": 2030,
-        "y": 180,
+        "x": 2010,
+        "y": 240,
         "wires": []
     },
     {
@@ -6159,7 +6159,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 179,
+        "y": 172,
         "wires": []
     },
     {
@@ -6706,7 +6706,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 360,
-        "y": 100,
+        "y": 113,
         "wires": []
     },
     {
@@ -7139,9 +7139,9 @@
         "id": "a0edf7c28fbc0de9",
         "type": "note",
         "z": "bfa6336b0d45dc23",
-        "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
-        "x": 280,
-        "y": 113,
+        "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.\n\nThis functionality requires creating a Long-lived access token in HA and setting the HA_TOKEN global env variable",
+        "x": 470,
+        "y": 120,
         "wires": []
     }
 ]
