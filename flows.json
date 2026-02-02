@@ -53,7 +53,7 @@
         "z": "292e70a6ba25b323",
         "name": "Load RV-C Dgn Names",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -73,7 +73,7 @@
         "z": "b3d80c5dc947ec88",
         "name": "Home Assistant message encoding",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -106,7 +106,7 @@
         "z": "292e70a6ba25b323",
         "name": "MQTT",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -136,7 +136,7 @@
         "z": "292e70a6ba25b323",
         "name": "CAN message routing",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -168,7 +168,7 @@
         "z": "3e5f038a4f5a8b9a",
         "name": "Reset unique STATUS list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -188,7 +188,7 @@
         "z": "3470febb2cd6e952",
         "name": "Switches",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -216,7 +216,7 @@
         "z": "222c995b7790b8de",
         "name": "Delete Home Assistant Entity",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -238,7 +238,7 @@
         "z": "292e70a6ba25b323",
         "name": "Claim CAN source address",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -269,7 +269,7 @@
         "z": "3470febb2cd6e952",
         "name": "Locks",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -292,7 +292,7 @@
         "z": "3470febb2cd6e952",
         "name": "Shades",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -315,7 +315,7 @@
         "z": "3470febb2cd6e952",
         "name": "Tanks",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -339,7 +339,7 @@
         "z": "3470febb2cd6e952",
         "name": "Batteries",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -364,7 +364,7 @@
         "z": "3470febb2cd6e952",
         "name": "Water pump",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -388,7 +388,7 @@
         "z": "3470febb2cd6e952",
         "name": "Autofill",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -412,7 +412,7 @@
         "z": "3470febb2cd6e952",
         "name": "Floor heat",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -437,7 +437,7 @@
         "z": "3470febb2cd6e952",
         "name": "Aqua-Hot",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -471,7 +471,7 @@
         "z": "7ecdba18640c1184",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -491,7 +491,7 @@
         "z": "7ecdba18640c1184",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -511,7 +511,7 @@
         "z": "7ecdba18640c1184",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -567,7 +567,7 @@
         "g": "f09f79586501cb0b",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -588,7 +588,7 @@
         "g": "e2dc4d711cc9dc94",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -608,7 +608,7 @@
         "g": "97615854748deb3d",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -628,7 +628,7 @@
         "g": "da39e5020d511fa6",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -648,7 +648,7 @@
         "g": "067069104a82b459",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -668,7 +668,7 @@
         "g": "5d1ecae7ac09586c",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -688,7 +688,7 @@
         "g": "84183171172657f8",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -708,7 +708,7 @@
         "g": "ad77b71440e42dc4",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -728,7 +728,7 @@
         "g": "f09f79586501cb0b",
         "name": "Rest unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -749,7 +749,7 @@
         "g": "daeff1de077d7dbb",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -769,7 +769,7 @@
         "g": "daeff1de077d7dbb",
         "name": "Reset floor levels (Don't do this)",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -788,7 +788,7 @@
         "g": "9c7621e8a8850053",
         "name": "Reset unique list",
         "style": {
-            "stroke": "#ffffff",
+            "stroke": "#777777",
             "label": true
         },
         "nodes": [
@@ -839,6 +839,16 @@
             {
                 "name": "HA_TOKEN",
                 "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiOTljMGY5NTlhNTY0N2I3YjhjZjgyZDAyN2NiMzY1MSIsImlhdCI6MTc2OTU4OTEzMCwiZXhwIjoyMDg0OTQ5MTMwfQ.WJjrbgn5pQ9poppTF534uAHSb9otkgVmApONm1ltb9w",
+                "type": "str"
+            },
+            {
+                "name": "MQTT_USER",
+                "value": "librecoach",
+                "type": "str"
+            },
+            {
+                "name": "MQTT_PASS",
+                "value": "One23four",
                 "type": "str"
             }
         ],
@@ -1274,7 +1284,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2030,
-        "y": 225,
+        "y": 195,
         "wires": []
     },
     {
@@ -3457,7 +3467,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 279,
+        "y": 292,
         "wires": []
     },
     {
@@ -4913,7 +4923,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2060,
-        "y": 256,
+        "y": 245,
         "wires": []
     },
     {
@@ -6139,7 +6149,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 193,
+        "y": 186,
         "wires": []
     },
     {
@@ -6906,9 +6916,9 @@
         "id": "2895a1affba0f279",
         "type": "note",
         "z": "7ecdba18640c1184",
-        "content": "# 🚧 Under Construction 🚧\nEverythign here is a work in progress and not yet ready for use.",
-        "x": 1650,
-        "y": 226.00000381469727,
+        "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
+        "x": 1620,
+        "y": 239.00000381469727,
         "wires": []
     },
     {
@@ -7014,8 +7024,8 @@
         "type": "note",
         "z": "222c995b7790b8de",
         "content": "# Delete HA Entity\n## Purpose\nRemoves devices from Home Assistant when they're no longer needed.\n\n## What Happens Here\n### Entity Removal\nWhen a device needs to be removed from Home Assistant, this flow sends a special \"delete\" message that tells Home Assistant to remove the device from your dashboard.\n\n### When It's Used\n- Troubleshooting: Removing and re-discovering a device that isn't working correctly\n- Reconfiguration: Cleaning up after changes to your RV's systems\n- Cleanup: Removing test devices or devices that no longer exist\n\n## In Simple Terms\nThink of this flow as an eraser. If something on your dashboard needs to go away - maybe a device was replaced or you're starting fresh - this flow cleans it up so you can start over.",
-        "x": 1870,
-        "y": 331,
+        "x": 1710,
+        "y": 280,
         "wires": []
     },
     {
