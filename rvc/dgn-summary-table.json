@@ -1197,25 +1197,25 @@
         "DGN": "GENERIC_ACFAULT_CONFIGURATION_STATUS_1",
         "Hex": "1FEB7",
         "Decimal": 130743,
-        "Section": "6.21.8.3"
+        "Section": "6.21.6"
     },
     {
         "DGN": "GENERIC_ACFAULT_CONFIGURATION_STATUS_2",
         "Hex": "1FEB6",
         "Decimal": 130742,
-        "Section": "6.21.8.3"
+        "Section": "6.21.6"
     },
     {
         "DGN": "GENERIC_ACFAULT_CONFIGURATION_COMMAND_1",
         "Hex": "1FEB5",
         "Decimal": 130741,
-        "Section": "6.21.8.3"
+        "Section": "6.21.6"
     },
     {
         "DGN": "GENERIC_ACFAULT_CONFIGURATION_COMMAND_2",
         "Hex": "1FEB4",
         "Decimal": 130740,
-        "Section": "6.21.8.3"
+        "Section": "6.21.6"
     },
     {
         "DGN": "SOLAR_CONTROLLER_STATUS_1",
