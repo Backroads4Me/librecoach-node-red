@@ -820,6 +820,41 @@
         "h": 142
     },
     {
+        "id": "8aac091f0fffbf22",
+        "type": "group",
+        "z": "1fde0c4ffb03727e",
+        "name": "Victron GX device configuration",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "903a7fac6108ac58",
+            "d1a2b3c4e5f67801",
+            "d1a2b3c4e5f67802",
+            "d1a2b3c4e5f67803",
+            "d1a2b3c4e5f67804",
+            "d1a2b3c4e5f67805",
+            "d1a2b3c4e5f67806",
+            "f02388263a927736",
+            "49a3398527345004",
+            "1a548b4f42a93938",
+            "3057b4acf81dc8db",
+            "e1032a6a79ae3e4c",
+            "36f5f1a727dfd1ca",
+            "f9d1a59e25ce32dd",
+            "ea38d37ac8c3ab57",
+            "d1a2b3c4e5f6780b",
+            "d1a2b3c4e5f6780c",
+            "2ff7b2c41ee41253",
+            "1284b5e380db32be"
+        ],
+        "x": 174,
+        "y": 139,
+        "w": 1512,
+        "h": 482
+    },
+    {
         "id": "80727e60a251c36c",
         "type": "mqtt-broker",
         "name": "Mosquitto",
@@ -1333,7 +1368,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 180,
+        "y": 150,
         "wires": []
     },
     {
@@ -3516,7 +3551,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 292,
+        "y": 305,
         "wires": []
     },
     {
@@ -4972,7 +5007,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2060,
-        "y": 245,
+        "y": 234,
         "wires": []
     },
     {
@@ -6198,7 +6233,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 165,
+        "y": 158,
         "wires": []
     },
     {
@@ -6745,7 +6780,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 360,
-        "y": 113,
+        "y": 126,
         "wires": []
     },
     {
@@ -7180,14 +7215,16 @@
         "z": "bfa6336b0d45dc23",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.\n\nThis functionality requires creating a Long-lived access token in HA and setting the HA_TOKEN global env variable",
         "x": 470,
-        "y": 129,
+        "y": 138,
         "wires": []
     },
     {
         "id": "f02388263a927736",
         "type": "mqtt out",
         "z": "1fde0c4ffb03727e",
-        "name": "Victron Out",
+        "d": true,
+        "g": "8aac091f0fffbf22",
+        "name": "Victron Out: Retain false",
         "topic": "",
         "qos": "",
         "retain": "false",
@@ -7197,14 +7234,15 @@
         "correl": "",
         "expiry": "",
         "broker": "68237e1473ec01aa",
-        "x": 1850,
-        "y": 140,
+        "x": 1310,
+        "y": 420,
         "wires": []
     },
     {
         "id": "903a7fac6108ac58",
         "type": "mqtt in",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Victron In",
         "topic": "N/+/#",
         "qos": "2",
@@ -7214,8 +7252,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 500,
-        "y": 400,
+        "x": 260,
+        "y": 240,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
@@ -7226,6 +7264,7 @@
         "id": "3057b4acf81dc8db",
         "type": "mqtt in",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Victron Instance",
         "topic": "N/+/system/0/Serial",
         "qos": "2",
@@ -7235,8 +7274,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 520,
-        "y": 140,
+        "x": 280,
+        "y": 420,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -7247,6 +7286,7 @@
         "id": "e1032a6a79ae3e4c",
         "type": "function",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Save Victron Instance",
         "func": "const portalId = msg.payload.value;\nconst currentId = global.get(\"victronPortalId\");\n\n// Always update the global context to be safe\nglobal.set(\"victronPortalId\", portalId);\n\n// Only change the UI status if it's a new discovery or first run\nif (portalId !== currentId) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"New ID Discovered: \" + portalId });\n} else {\n    node.status({ fill: \"blue\", shape: \"ring\", text: \"ID Verified: \" + portalId });\n}\n\nreturn msg;",
         "outputs": 1,
@@ -7255,8 +7295,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
-        "y": 140,
+        "x": 520,
+        "y": 420,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -7267,6 +7307,7 @@
         "id": "36f5f1a727dfd1ca",
         "type": "function",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Victron keep alive",
         "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -7275,11 +7316,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 240,
+        "x": 790,
+        "y": 500,
         "wires": [
             [
-                "b24e984b2b3c4e21"
+                "f02388263a927736"
             ]
         ]
     },
@@ -7287,6 +7328,7 @@
         "id": "f9d1a59e25ce32dd",
         "type": "inject",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Repeat",
         "props": [
             {
@@ -7304,8 +7346,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 520,
-        "y": 240,
+        "x": 280,
+        "y": 500,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -7313,41 +7355,10 @@
         ]
     },
     {
-        "id": "b24e984b2b3c4e21",
-        "type": "link out",
-        "z": "1fde0c4ffb03727e",
-        "name": "Victron out",
-        "mode": "link",
-        "links": [
-            "0d6a35080dbcfd5b"
-        ],
-        "x": 970,
-        "y": 240,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "0d6a35080dbcfd5b",
-        "type": "link in",
-        "z": "1fde0c4ffb03727e",
-        "name": "Victron out",
-        "links": [
-            "b24e984b2b3c4e21",
-            "76b6c711c7f68344"
-        ],
-        "x": 1660,
-        "y": 140,
-        "wires": [
-            [
-                "f02388263a927736"
-            ]
-        ],
-        "l": true
-    },
-    {
         "id": "ea38d37ac8c3ab57",
         "type": "function",
         "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
         "name": "Get all Victron devices",
         "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -7356,42 +7367,29 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 140,
+        "x": 780,
+        "y": 420,
         "wires": [
             [
-                "76b6c711c7f68344"
+                "f02388263a927736"
             ]
         ]
-    },
-    {
-        "id": "76b6c711c7f68344",
-        "type": "link out",
-        "z": "1fde0c4ffb03727e",
-        "name": "Victron out",
-        "mode": "link",
-        "links": [
-            "0d6a35080dbcfd5b"
-        ],
-        "x": 1250,
-        "y": 140,
-        "wires": [],
-        "l": true
     },
     {
         "id": "d1a2b3c4e5f67801",
         "type": "function",
         "z": "1fde0c4ffb03727e",
-        "name": "decode_victron_mqtt",
-        "func": "// Decode Victron MQTT topic and payload into standardized message\r\n\r\n// === Gate: Require active Victron portal ID ===\r\n\r\nconst victronPortalId = global.get(\"victronPortalId\");\r\nif (!victronPortalId) {\r\n  return null;\r\n}\r\n\r\n// === Parse MQTT Topic ===\r\n\r\nconst topic = msg.topic;\r\nif (!topic || typeof topic !== \"string\") {\r\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\r\n  return null;\r\n}\r\n\r\nconst parts = topic.split(\"/\");\r\nif (parts.length < 5) {\r\n  node.warn(`decode_victron_mqtt: Topic too short: ${topic}`);\r\n  return null;\r\n}\r\n\r\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\r\nconst serviceType = parts[2];\r\nconst instance = parts[3];\r\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\r\n\r\n// === Extract Value ===\r\n\r\nlet value;\r\nconst incomingPayload = msg.payload;\r\n\r\nif (typeof incomingPayload === \"string\") {\r\n  try {\r\n    const parsed = JSON.parse(incomingPayload);\r\n    value = parsed.value !== undefined ? parsed.value : parsed;\r\n  } catch (e) {\r\n    value = incomingPayload;\r\n  }\r\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\r\n  value = incomingPayload.value !== undefined ? incomingPayload.value : incomingPayload;\r\n} else {\r\n  value = incomingPayload;\r\n}\r\n\r\n// === Look Up Definition in victronMap ===\r\n\r\nconst victronMap = global.get(\"victronMap\");\r\nlet unit = \"\";\r\nlet dataType = \"\";\r\nlet scale = \"\";\r\nlet access = \"\";\r\n\r\nif (victronMap && victronMap.has(serviceType)) {\r\n  const pathMap = victronMap.get(serviceType);\r\n  if (pathMap.has(dbusPath)) {\r\n    const def = pathMap.get(dbusPath);\r\n    unit = def.unit || \"\";\r\n    dataType = def.type || \"\";\r\n    scale = def.scale || \"\";\r\n    access = def.access || \"\";\r\n  }\r\n}\r\n\r\n// === Determine Routing Key ===\r\n\r\nlet routingKey = \"default\";\r\nif (serviceType === \"system\" && instance === \"0\" && dbusPath === \"/Batteries\") {\r\n  routingKey = \"batteries\";\r\n}\r\n\r\n// === Build Standardized Output ===\r\n\r\nmsg.payload = {\r\n  service_type: serviceType,\r\n  instance: instance,\r\n  dbus_path: dbusPath,\r\n  value: value,\r\n  unit: unit,\r\n  data_type: dataType,\r\n  scale: scale,\r\n  access: access,\r\n  routing_key: routingKey,\r\n};\r\n\r\nreturn msg;\r\n",
+        "g": "8aac091f0fffbf22",
+        "name": "Decode Victron MQTT",
+        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// === Gate: Require active Victron portal ID ===\n\nconst victronPortalId = global.get(\"victronPortalId\");\nif (!victronPortalId) {\n  return null;\n}\n\n// === Parse MQTT Topic ===\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") {\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\n  return null;\n}\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) {\n  // Silently drop system notifications (e.g., N/{id}/full_publish_completed)\n  return null;\n}\n\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === Extract Value ===\n\nlet value;\nconst incomingPayload = msg.payload;\n\nif (typeof incomingPayload === \"string\") {\n  try {\n    const parsed = JSON.parse(incomingPayload);\n    value = parsed.value !== undefined ? parsed.value : parsed;\n  } catch (e) {\n    value = incomingPayload;\n  }\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\n  value = incomingPayload.value !== undefined ? incomingPayload.value : incomingPayload;\n} else {\n  value = incomingPayload;\n}\n\n// === Look Up Definition in victronMap ===\n\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\";\nlet dataType = \"\";\nlet scale = \"\";\nlet access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const pathMap = victronMap.get(serviceType);\n  if (pathMap.has(dbusPath)) {\n    const def = pathMap.get(dbusPath);\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === Determine Routing Key ===\n\nlet routingKey = \"default\";\nif (serviceType === \"system\" && instance === \"0\" && dbusPath === \"/Batteries\") {\n  routingKey = \"batteries\";\n}\n\n// === Build Standardized Output ===\n\nmsg.payload = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: value,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  routing_key: routingKey,\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 400,
+        "x": 520,
+        "y": 240,
         "wires": [
             [
                 "d1a2b3c4e5f67802"
@@ -7402,7 +7400,8 @@
         "id": "d1a2b3c4e5f67802",
         "type": "switch",
         "z": "1fde0c4ffb03727e",
-        "name": "Route Victron",
+        "g": "8aac091f0fffbf22",
+        "name": "",
         "property": "payload.routing_key",
         "propertyType": "msg",
         "rules": [
@@ -7418,8 +7417,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 940,
-        "y": 400,
+        "x": 750,
+        "y": 240,
         "wires": [
             [
                 "d1a2b3c4e5f67803"
@@ -7434,19 +7433,20 @@
         "id": "d1a2b3c4e5f67803",
         "type": "function",
         "z": "1fde0c4ffb03727e",
-        "name": "decode_victron_batteries",
-        "func": "// Decode Victron /Batteries array into individual battery HA discovery + state messages\r\n\r\nconst incomingPayload = msg.payload;\r\nconst batteries = incomingPayload.value;\r\n\r\nif (!Array.isArray(batteries)) {\r\n  node.warn(\"decode_victron_batteries: Expected array in payload.value\");\r\n  return null;\r\n}\r\n\r\n// Sensor definitions for each battery\r\nconst sensorDefs = {\r\n  voltage: { key: \"voltage\", device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\r\n  current: { key: \"current\", device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\r\n  power: { key: \"power\", device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\r\n  soc: { key: \"soc\", device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\r\n  state: { key: \"state\", device_class: null, unit: null, icon: \"mdi:battery-heart-variant\" },\r\n  temperature: { key: \"temperature\", device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\r\n};\r\n\r\nconst msgs = [];\r\n\r\nfor (const bat of batteries) {\r\n  if (!bat.id) continue;\r\n\r\n  // Generate safe ID from battery id (replace dots/colons with underscores)\r\n  const safeId = String(bat.id).replace(/[.:]/g, \"_\");\r\n  const batteryName = bat.name || `Battery ${safeId}`;\r\n\r\n  for (const [sensorName, def] of Object.entries(sensorDefs)) {\r\n    // Skip sensors that don't exist on this battery\r\n    if (bat[def.key] === undefined) continue;\r\n\r\n    const entityId = `victron_battery_${safeId}_${sensorName}`;\r\n    const discoveryTopic = `homeassistant/sensor/${entityId}/config`;\r\n    const stateTopic = `homeassistant/sensor/${entityId}/state`;\r\n\r\n    // Build Jinja2 value_template to extract this battery's value from the array\r\n    const valueTemplate =\r\n      `{{ value_json | selectattr('id', 'equalto', '${bat.id}') ` +\r\n      `| map(attribute='${def.key}') | first | default('unknown') }}`;\r\n\r\n    const discoveryPayload = {\r\n      name: `${batteryName} ${sensorName.charAt(0).toUpperCase() + sensorName.slice(1)}`,\r\n      unique_id: entityId,\r\n      default_entity_id: `sensor.${entityId}`,\r\n      icon: def.icon,\r\n      state_topic: msg.topic,\r\n      value_template: valueTemplate,\r\n      device: {\r\n        identifiers: [`victron-battery-${safeId}`],\r\n        name: `Victron: ${batteryName}`,\r\n        manufacturer: \"Victron Energy\",\r\n      },\r\n    };\r\n\r\n    // Add device_class and unit only if defined\r\n    if (def.device_class) {\r\n      discoveryPayload.device_class = def.device_class;\r\n      discoveryPayload.state_class = \"measurement\";\r\n    }\r\n    if (def.unit) {\r\n      discoveryPayload.unit_of_measurement = def.unit;\r\n    }\r\n\r\n    msgs.push({\r\n      topic: discoveryTopic,\r\n      payload: discoveryPayload,\r\n      retain: true,\r\n    });\r\n  }\r\n}\r\n\r\nif (msgs.length === 0) {\r\n  return null;\r\n}\r\n\r\nreturn [msgs];\r\n",
+        "g": "8aac091f0fffbf22",
+        "name": "Decode Victron batteries",
+        "func": "// Decode Victron /Batteries array into individual battery HA discovery + state messages\n\nconst incomingPayload = msg.payload;\nconst batteries = incomingPayload.value;\n\nif (!Array.isArray(batteries)) {\n  node.warn(\"decode_victron_batteries: Expected array in payload.value\");\n  return null;\n}\n\n// Sensor definitions for each battery\nconst sensorDefs = {\n  voltage: { key: \"voltage\", device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\n  current: { key: \"current\", device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  power: { key: \"power\", device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  soc: { key: \"soc\", device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  state: { key: \"state\", device_class: null, unit: null, icon: \"mdi:battery-heart-variant\" },\n  temperature: { key: \"temperature\", device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\n};\n\nconst msgs = [];\n\nfor (const bat of batteries) {\n  if (!bat.id) continue;\n\n  // Generate safe ID from battery id (replace dots/colons with underscores)\n  const safeId = String(bat.id).replace(/[.:]/g, \"_\");\n  const batteryName = bat.name || `Battery ${safeId}`;\n\n  for (const [sensorName, def] of Object.entries(sensorDefs)) {\n    // Skip sensors that don't exist on this battery\n    if (bat[def.key] === undefined) continue;\n\n    const entityId = `victron_battery_${safeId}_${sensorName}`;\n    const discoveryTopic = `homeassistant/sensor/${entityId}/config`;\n    const stateTopic = `homeassistant/sensor/${entityId}/state`;\n\n    // Build Jinja2 value_template to extract this battery's value from the array\n    const valueTemplate =\n      `{{ value_json | selectattr('id', 'equalto', '${bat.id}') ` +\n      `| map(attribute='${def.key}') | first | default('unknown') }}`;\n\n    const discoveryPayload = {\n      name: `${batteryName} ${sensorName.charAt(0).toUpperCase() + sensorName.slice(1)}`,\n      unique_id: entityId,\n      default_entity_id: `sensor.${entityId}`,\n      icon: def.icon,\n      state_topic: msg.topic,\n      value_template: valueTemplate,\n      device: {\n        identifiers: [`victron-battery-${safeId}`],\n        name: `Victron: ${batteryName}`,\n        manufacturer: \"Victron Energy\",\n      },\n    };\n\n    // Add device_class and unit only if defined\n    if (def.device_class) {\n      discoveryPayload.device_class = def.device_class;\n      discoveryPayload.state_class = \"measurement\";\n    }\n    if (def.unit) {\n      discoveryPayload.unit_of_measurement = def.unit;\n    }\n\n    msgs.push({\n      topic: discoveryTopic,\n      payload: discoveryPayload,\n      retain: true,\n    });\n  }\n}\n\nif (msgs.length === 0) {\n  return null;\n}\n\nreturn [msgs];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
-        "y": 340,
+        "x": 1010,
+        "y": 180,
         "wires": [
             [
-                "d1a2b3c4e5f67809"
+                "49a3398527345004"
             ]
         ]
     },
@@ -7454,16 +7454,17 @@
         "id": "d1a2b3c4e5f67804",
         "type": "function",
         "z": "1fde0c4ffb03727e",
-        "name": "unique_victron",
-        "func": "// Unique Filter for Victron entities\r\n\r\n// Retrieve existing Victron entities from flow context, or initialize as empty array\r\nlet uniqueVictron = flow.get(\"uniqueVictron\") || [];\r\n\r\nconst serviceType = msg.payload.service_type;\r\nconst instance = msg.payload.instance;\r\nconst dbusPath = msg.payload.dbus_path;\r\n\r\n// Build unique key\r\nconst key = `${serviceType}_${instance}_${dbusPath}`;\r\n\r\n// Check if this entity has been seen before\r\nif (!uniqueVictron.includes(key)) {\r\n  uniqueVictron.push(key);\r\n  flow.set(\"uniqueVictron\", uniqueVictron);\r\n\r\n  return {\r\n    payload: {\r\n      service_type: serviceType,\r\n      instance: instance,\r\n      dbus_path: dbusPath,\r\n      unit: msg.payload.unit,\r\n      value: msg.payload.value,\r\n    },\r\n  };\r\n}\r\n\r\n// Return nothing if duplicate\r\nreturn null;\r\n",
+        "g": "8aac091f0fffbf22",
+        "name": "Unique Victron",
+        "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = flow.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  flow.set(\"uniqueVictron\", uniqueVictron);\n\n  return {\n    payload: {\n      service_type: serviceType,\n      instance: instance,\n      dbus_path: dbusPath,\n      unit: msg.payload.unit,\n      value: msg.payload.value,\n    },\n  };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1160,
-        "y": 420,
+        "x": 980,
+        "y": 240,
         "wires": [
             [
                 "d1a2b3c4e5f67805"
@@ -7474,19 +7475,20 @@
         "id": "d1a2b3c4e5f67805",
         "type": "function",
         "z": "1fde0c4ffb03727e",
-        "name": "create_victron",
-        "func": "// Creates Sensor entity for Victron via MQTT Discovery\r\n\r\n// Validate input structure\r\nif (!msg.payload || typeof msg.payload !== \"object\") {\r\n  node.error(\"Input payload must be an object.\", msg);\r\n  return null;\r\n}\r\n\r\nconst { service_type, instance, dbus_path, unit } = msg.payload;\r\n\r\n// Validate required fields\r\nif (!service_type || !instance || !dbus_path) {\r\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\r\n  return null;\r\n}\r\n\r\n// === Unit to HA Metadata Mapping ===\r\n\r\nconst unitMap = {\r\n  \"V DC\": { device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\r\n  \"V AC\": { device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\r\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\r\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\r\n  \"W\": { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\r\n  \"kWh\": { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\r\n  \"Ah\": { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\r\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\r\n  \"Degrees celsius\": { device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\r\n  \"Degrees Celsius\": { device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\r\n  \"Hz\": { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\r\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\r\n  \"RPM\": { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\r\n  \"seconds\": { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\r\n  \"VA\": { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\r\n};\r\n\r\n// === Device Grouping by Service Type ===\r\n\r\nconst deviceMap = {\r\n  \"battery\": { name: \"Victron: Battery\", id: \"victron-battery\" },\r\n  \"solarcharger\": { name: \"Victron: Solar Charger\", id: \"victron-solar\" },\r\n  \"vebus\": { name: \"Victron: Inverter/Charger\", id: \"victron-vebus\" },\r\n  \"system\": { name: \"Victron: System\", id: \"victron-system\" },\r\n  \"tank\": { name: \"Victron: Tank\", id: \"victron-tank\" },\r\n  \"temperature\": { name: \"Victron: Temperature\", id: \"victron-temperature\" },\r\n  \"gps\": { name: \"Victron: GPS\", id: \"victron-gps\" },\r\n  \"genset\": { name: \"Victron: Generator\", id: \"victron-genset\" },\r\n  \"pvinverter\": { name: \"Victron: PV Inverter\", id: \"victron-pvinverter\" },\r\n  \"grid\": { name: \"Victron: Grid Meter\", id: \"victron-grid\" },\r\n  \"charger\": { name: \"Victron: Charger\", id: \"victron-charger\" },\r\n  \"inverter\": { name: \"Victron: Inverter\", id: \"victron-inverter\" },\r\n  \"digitalinput\": { name: \"Victron: Digital Input\", id: \"victron-digitalinput\" },\r\n  \"motordrive\": { name: \"Victron: Motor Drive\", id: \"victron-motordrive\" },\r\n};\r\n\r\n// === Build Entity ID ===\r\n\r\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\r\nconst safePath = dbus_path\r\n  .replace(/^\\//, \"\")\r\n  .replace(/\\//g, \"_\")\r\n  .toLowerCase();\r\n\r\nconst entityId = `victron_${service_type}_${instance}_${safePath}`;\r\nconst componentType = \"sensor\";\r\n\r\n// === Build Friendly Name ===\r\n\r\n// Convert /Dc/0/Voltage → \"DC 0 Voltage\"\r\nconst friendlyName = dbus_path\r\n  .replace(/^\\//, \"\")\r\n  .replace(/\\//g, \" \")\r\n  .replace(/([a-z])([A-Z])/g, \"$1 $2\");\r\n\r\n// === Determine HA Metadata ===\r\n\r\nlet haMetadata = unitMap[unit];\r\nlet isEnum = false;\r\n\r\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\r\nif (!haMetadata && unit && unit.includes(\"=\")) {\r\n  isEnum = true;\r\n  haMetadata = { device_class: null, unit: null, icon: \"mdi:information-outline\" };\r\n}\r\n\r\n// Fallback for unknown units\r\nif (!haMetadata) {\r\n  haMetadata = { device_class: null, unit: unit || null, icon: \"mdi:information-outline\" };\r\n}\r\n\r\n// === Build Discovery Topic and State Topic ===\r\n\r\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\r\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\r\n\r\n// === Build Device Info ===\r\n\r\nconst deviceInfo = deviceMap[service_type] || {\r\n  name: `Victron: ${service_type}`,\r\n  id: `victron-${service_type}`,\r\n};\r\n\r\n// === Build Discovery Payload ===\r\n\r\nconst payload = {\r\n  name: friendlyName,\r\n  unique_id: entityId,\r\n  default_entity_id: `sensor.${entityId}`,\r\n  icon: haMetadata.icon,\r\n  state_topic: stateTopic,\r\n  value_template: \"{{ value_json.value }}\",\r\n  device: {\r\n    identifiers: [deviceInfo.id],\r\n    name: deviceInfo.name,\r\n    manufacturer: \"Victron Energy\",\r\n  },\r\n};\r\n\r\n// Add device_class if defined\r\nif (haMetadata.device_class) {\r\n  payload.device_class = haMetadata.device_class;\r\n  payload.state_class = \"measurement\";\r\n}\r\n\r\n// Add unit_of_measurement if defined (not for enums)\r\nif (haMetadata.unit) {\r\n  payload.unit_of_measurement = haMetadata.unit;\r\n}\r\n\r\n// For enum values, build a Jinja2 template to map numeric values to labels\r\nif (isEnum) {\r\n  const enumParts = unit.split(\";\").map((p) => p.trim());\r\n  const mappings = {};\r\n  for (const part of enumParts) {\r\n    const [val, label] = part.split(\"=\");\r\n    if (val !== undefined && label !== undefined) {\r\n      mappings[val.trim()] = label.trim();\r\n    }\r\n  }\r\n\r\n  // Build Jinja2 map template\r\n  const mapEntries = Object.entries(mappings)\r\n    .map(([k, v]) => `'${k}': '${v}'`)\r\n    .join(\", \");\r\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\r\n}\r\n\r\n// Prepare final message\r\nmsg.topic = discoveryTopic;\r\nmsg.payload = payload;\r\nmsg.stateTopic = stateTopic;\r\n\r\nreturn msg;\r\n",
+        "g": "8aac091f0fffbf22",
+        "name": "Create Victron",
+        "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst { service_type, instance, dbus_path, unit } = msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": { device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\n  \"V AC\": { device_class: \"voltage\", unit: \"V\", icon: \"mdi:flash\" },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  \"W\": { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  \"kWh\": { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  \"Ah\": { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": { device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\n  \"Degrees Celsius\": { device_class: \"temperature\", unit: \"°C\", icon: \"mdi:thermometer\" },\n  \"Hz\": { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  \"RPM\": { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  \"seconds\": { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  \"VA\": { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n};\n\n// === Device Grouping by Service Type ===\n\nconst deviceMap = {\n  \"battery\": { name: \"Victron: Battery\", id: \"victron-battery\" },\n  \"solarcharger\": { name: \"Victron: Solar Charger\", id: \"victron-solar\" },\n  \"vebus\": { name: \"Victron: Inverter/Charger\", id: \"victron-vebus\" },\n  \"system\": { name: \"Victron: System\", id: \"victron-system\" },\n  \"tank\": { name: \"Victron: Tank\", id: \"victron-tank\" },\n  \"temperature\": { name: \"Victron: Temperature\", id: \"victron-temperature\" },\n  \"gps\": { name: \"Victron: GPS\", id: \"victron-gps\" },\n  \"genset\": { name: \"Victron: Generator\", id: \"victron-genset\" },\n  \"pvinverter\": { name: \"Victron: PV Inverter\", id: \"victron-pvinverter\" },\n  \"grid\": { name: \"Victron: Grid Meter\", id: \"victron-grid\" },\n  \"charger\": { name: \"Victron: Charger\", id: \"victron-charger\" },\n  \"inverter\": { name: \"Victron: Inverter\", id: \"victron-inverter\" },\n  \"digitalinput\": { name: \"Victron: Digital Input\", id: \"victron-digitalinput\" },\n  \"motordrive\": { name: \"Victron: Motor Drive\", id: \"victron-motordrive\" },\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nconst safePath = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nconst entityId = `victron_${service_type}_${instance}_${safePath}`;\nconst componentType = \"sensor\";\n\n// === Build Friendly Name ===\n\n// Convert /Dc/0/Voltage → \"DC 0 Voltage\"\nconst friendlyName = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \" \")\n  .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[unit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && unit && unit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = { device_class: null, unit: null, icon: \"mdi:information-outline\" };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = { device_class: null, unit: unit || null, icon: \"mdi:information-outline\" };\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Device Info ===\n\nconst deviceInfo = deviceMap[service_type] || {\n  name: `Victron: ${service_type}`,\n  id: `victron-${service_type}`,\n};\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  default_entity_id: `sensor.${entityId}`,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [deviceInfo.id],\n    name: deviceInfo.name,\n    manufacturer: \"Victron Energy\",\n  },\n};\n\n// Add device_class if defined\nif (haMetadata.device_class) {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined (not for enums)\nif (haMetadata.unit) {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum) {\n  const enumParts = unit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n}\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1370,
-        "y": 420,
+        "x": 1260,
+        "y": 240,
         "wires": [
             [
-                "d1a2b3c4e5f67807"
+                "49a3398527345004"
             ]
         ]
     },
@@ -7494,81 +7496,86 @@
         "id": "d1a2b3c4e5f67806",
         "type": "function",
         "z": "1fde0c4ffb03727e",
-        "name": "status_victron",
-        "func": "// HA Status Updater for Victron\r\n\r\nconst incomingPayload = msg.payload;\r\n\r\n// Gate: skip null/undefined values\r\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\r\n  return null;\r\n}\r\n\r\nconst { service_type, instance, dbus_path, value } = incomingPayload;\r\n\r\n// Validate required fields\r\nif (!service_type || !instance || !dbus_path) {\r\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\r\n  return null;\r\n}\r\n\r\n// === Build Entity ID (same logic as create_victron.js) ===\r\n\r\nconst safePath = dbus_path\r\n  .replace(/^\\//, \"\")\r\n  .replace(/\\//g, \"_\")\r\n  .toLowerCase();\r\n\r\nconst entityId = `victron_${service_type}_${instance}_${safePath}`;\r\n\r\n// === Build State Topic ===\r\n\r\nconst stateTopic = `homeassistant/sensor/${entityId}/state`;\r\n\r\n// === Format Value ===\r\n\r\n// Wrap in JSON object to match value_template: \"{{ value_json.value }}\"\r\nmsg.topic = stateTopic;\r\nmsg.payload = { value: value };\r\n\r\nreturn msg;\r\n",
+        "g": "8aac091f0fffbf22",
+        "name": "Status Victron",
+        "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined values\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Build Entity ID (same logic as create_victron.js) ===\n\nconst safePath = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nconst entityId = `victron_${service_type}_${instance}_${safePath}`;\n\n// === Build State Topic ===\n\nconst stateTopic = `homeassistant/sensor/${entityId}/state`;\n\n// === Format Value ===\n\n// Wrap in JSON object to match value_template: \"{{ value_json.value }}\"\nmsg.topic = stateTopic;\nmsg.payload = { value: value };\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1160,
-        "y": 500,
+        "x": 980,
+        "y": 300,
         "wires": [
             [
-                "d1a2b3c4e5f67808"
+                "f02388263a927736"
             ]
         ]
     },
     {
-        "id": "d1a2b3c4e5f67807",
+        "id": "d1a2b3c4e5f6780b",
+        "type": "file in",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Read Victron CSV",
+        "filename": "/config/projects/librecoach-node-red/rvc/victron_attributes.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "allProps": false,
+        "x": 510,
+        "y": 580,
+        "wires": [
+            [
+                "d1a2b3c4e5f6780c"
+            ]
+        ]
+    },
+    {
+        "id": "d1a2b3c4e5f6780c",
+        "type": "function",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Store Victron map",
+        "func": "// Parse Victron attributes CSV and store as nested Map in global context\n\nconst csvText = msg.payload;\n\nif (!csvText || typeof csvText !== \"string\") {\n  node.warn(\"store_victron_map: No CSV data received\");\n  return null;\n}\n\nconst lines = csvText.split(\"\\n\").filter((line) => line.trim().length > 0);\n\n// Build nested Map: serviceType → Map(path → { type, unit, scale, access })\nconst victronMap = new Map();\n\nfor (const line of lines) {\n  const parts = line.split(\",\");\n  if (parts.length < 8) continue;\n\n  const [service, path, type, unit, register, dataType, scale, access] =\n    parts.map((p) => p.trim());\n\n  // Strip \"com.victronenergy.\" prefix to get short service type\n  const serviceType = service.replace(\"com.victronenergy.\", \"\");\n\n  if (!victronMap.has(serviceType)) {\n    victronMap.set(serviceType, new Map());\n  }\n\n  victronMap.get(serviceType).set(path, {\n    type,\n    unit,\n    scale,\n    access,\n  });\n}\n\n// Store in global context\nglobal.set(\"victronMap\", victronMap);\n\n// Count total records across all service types\nlet totalRecords = 0;\nfor (const [, pathMap] of victronMap) {\n  totalRecords += pathMap.size;\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Loaded ${totalRecords} attributes across ${victronMap.size} services`,\n});\n\nreturn null;\n",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "49a3398527345004",
         "type": "mqtt out",
         "z": "1fde0c4ffb03727e",
-        "name": "HA Discovery (retain)",
+        "d": true,
+        "g": "8aac091f0fffbf22",
+        "name": "Victron Out: Retain true",
         "topic": "",
-        "qos": "0",
+        "qos": "",
         "retain": "true",
         "respTopic": "",
         "contentType": "",
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "80727e60a251c36c",
-        "x": 1590,
-        "y": 420,
+        "broker": "68237e1473ec01aa",
+        "x": 1550,
+        "y": 180,
         "wires": []
     },
     {
-        "id": "d1a2b3c4e5f67808",
-        "type": "mqtt out",
-        "z": "1fde0c4ffb03727e",
-        "name": "HA State",
-        "topic": "",
-        "qos": "0",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "80727e60a251c36c",
-        "x": 1370,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "d1a2b3c4e5f67809",
-        "type": "mqtt out",
-        "z": "1fde0c4ffb03727e",
-        "name": "HA Batteries (retain)",
-        "topic": "",
-        "qos": "0",
-        "retain": "true",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "80727e60a251c36c",
-        "x": 1430,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "d1a2b3c4e5f6780a",
+        "id": "1a548b4f42a93938",
         "type": "inject",
         "z": "1fde0c4ffb03727e",
-        "name": "Load Victron CSV",
+        "g": "8aac091f0fffbf22",
+        "name": "Load on Start",
         "props": [
             {
                 "p": "payload"
@@ -7581,12 +7588,12 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.5",
+        "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 530,
-        "y": 660,
+        "x": 300,
+        "y": 580,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -7594,38 +7601,42 @@
         ]
     },
     {
-        "id": "d1a2b3c4e5f6780b",
-        "type": "file in",
+        "id": "2ff7b2c41ee41253",
+        "type": "mqtt in",
         "z": "1fde0c4ffb03727e",
-        "name": "Read Victron CSV",
-        "filename": "/config/projects/librecoach-node-red/rvc/victron_attributes.csv",
-        "filenameType": "str",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "allProps": false,
-        "x": 740,
-        "y": 660,
+        "g": "8aac091f0fffbf22",
+        "name": "Victron In",
+        "topic": "N/+/+/+/ProductId",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "68237e1473ec01aa",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 280,
+        "y": 340,
         "wires": [
             [
-                "d1a2b3c4e5f6780c"
+                "1284b5e380db32be"
             ]
         ]
     },
     {
-        "id": "d1a2b3c4e5f6780c",
-        "type": "function",
+        "id": "1284b5e380db32be",
+        "type": "debug",
         "z": "1fde0c4ffb03727e",
-        "name": "store_victron_map",
-        "func": "// Parse Victron attributes CSV and store as nested Map in global context\r\n\r\nconst csvText = msg.payload;\r\n\r\nif (!csvText || typeof csvText !== \"string\") {\r\n  node.warn(\"store_victron_map: No CSV data received\");\r\n  return null;\r\n}\r\n\r\nconst lines = csvText.split(\"\\n\").filter((line) => line.trim().length > 0);\r\n\r\n// Build nested Map: serviceType → Map(path → { type, unit, scale, access })\r\nconst victronMap = new Map();\r\n\r\nfor (const line of lines) {\r\n  const parts = line.split(\",\");\r\n  if (parts.length < 8) continue;\r\n\r\n  const [service, path, type, unit, register, dataType, scale, access] =\r\n    parts.map((p) => p.trim());\r\n\r\n  // Strip \"com.victronenergy.\" prefix to get short service type\r\n  const serviceType = service.replace(\"com.victronenergy.\", \"\");\r\n\r\n  if (!victronMap.has(serviceType)) {\r\n    victronMap.set(serviceType, new Map());\r\n  }\r\n\r\n  victronMap.get(serviceType).set(path, {\r\n    type,\r\n    unit,\r\n    scale,\r\n    access,\r\n  });\r\n}\r\n\r\n// Store in global context\r\nglobal.set(\"victronMap\", victronMap);\r\n\r\n// Count total records across all service types\r\nlet totalRecords = 0;\r\nfor (const [, pathMap] of victronMap) {\r\n  totalRecords += pathMap.size;\r\n}\r\n\r\nnode.status({\r\n  fill: \"green\",\r\n  shape: \"dot\",\r\n  text: `Loaded ${totalRecords} attributes across ${victronMap.size} services`,\r\n});\r\n\r\nreturn null;\r\n",
-        "outputs": 0,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 970,
-        "y": 660,
+        "g": "8aac091f0fffbf22",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 340,
         "wires": []
     }
 ]
