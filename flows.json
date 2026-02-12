@@ -1333,7 +1333,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 195,
+        "y": 180,
         "wires": []
     },
     {
@@ -7180,7 +7180,7 @@
         "z": "bfa6336b0d45dc23",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.\n\nThis functionality requires creating a Long-lived access token in HA and setting the HA_TOKEN global env variable",
         "x": 470,
-        "y": 120,
+        "y": 129,
         "wires": []
     },
     {
@@ -7255,7 +7255,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 880,
+        "x": 900,
         "y": 400,
         "wires": []
     },
