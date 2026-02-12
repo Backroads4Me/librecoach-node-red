@@ -579,6 +579,47 @@
         "h": 442
     },
     {
+        "id": "8aac091f0fffbf22",
+        "type": "group",
+        "z": "1fde0c4ffb03727e",
+        "name": "Victron GX device configuration",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "903a7fac6108ac58",
+            "d1a2b3c4e5f67801",
+            "d1a2b3c4e5f67802",
+            "d1a2b3c4e5f67803",
+            "d1a2b3c4e5f67804",
+            "d1a2b3c4e5f67805",
+            "d1a2b3c4e5f67806",
+            "1a548b4f42a93938",
+            "3057b4acf81dc8db",
+            "e1032a6a79ae3e4c",
+            "36f5f1a727dfd1ca",
+            "f9d1a59e25ce32dd",
+            "ea38d37ac8c3ab57",
+            "d1a2b3c4e5f6780b",
+            "d1a2b3c4e5f6780c",
+            "2ff7b2c41ee41253",
+            "1284b5e380db32be",
+            "91acab65854ccca6",
+            "3e956d9c25de906b",
+            "9b74be05afac8132",
+            "3ffa68cfd2195db1",
+            "bd38c37850a3e832",
+            "86ab41ab0a2ff264",
+            "f77df5b83c49ac26",
+            "c80ea298a37232a2"
+        ],
+        "x": 174,
+        "y": 79,
+        "w": 1498,
+        "h": 568
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -820,39 +861,24 @@
         "h": 142
     },
     {
-        "id": "8aac091f0fffbf22",
+        "id": "3ffa68cfd2195db1",
         "type": "group",
         "z": "1fde0c4ffb03727e",
-        "name": "Victron GX device configuration",
+        "g": "8aac091f0fffbf22",
+        "name": "Rest unique list",
         "style": {
             "stroke": "#777777",
             "label": true
         },
         "nodes": [
-            "903a7fac6108ac58",
-            "d1a2b3c4e5f67801",
-            "d1a2b3c4e5f67802",
-            "d1a2b3c4e5f67803",
-            "d1a2b3c4e5f67804",
-            "d1a2b3c4e5f67805",
-            "d1a2b3c4e5f67806",
-            "f02388263a927736",
-            "49a3398527345004",
-            "1a548b4f42a93938",
-            "3057b4acf81dc8db",
-            "e1032a6a79ae3e4c",
-            "36f5f1a727dfd1ca",
-            "f9d1a59e25ce32dd",
-            "ea38d37ac8c3ab57",
-            "d1a2b3c4e5f6780b",
-            "d1a2b3c4e5f6780c",
-            "2ff7b2c41ee41253",
-            "1284b5e380db32be"
+            "ce787dfcc75988be",
+            "9401b2d19494b1c2",
+            "2343c8c12f2081fa"
         ],
-        "x": 174,
-        "y": 139,
-        "w": 1512,
-        "h": 482
+        "x": 1174,
+        "y": 479,
+        "w": 472,
+        "h": 142
     },
     {
         "id": "80727e60a251c36c",
@@ -1368,7 +1394,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 150,
+        "y": 210,
         "wires": []
     },
     {
@@ -3551,7 +3577,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 305,
+        "y": 318,
         "wires": []
     },
     {
@@ -5007,7 +5033,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2060,
-        "y": 234,
+        "y": 223,
         "wires": []
     },
     {
@@ -5150,7 +5176,8 @@
             "1c1403c14b577fb4",
             "12a57f6a07d0bf1a",
             "9a0578bc94187110",
-            "4b8ac359c84436ab"
+            "4b8ac359c84436ab",
+            "bd38c37850a3e832"
         ],
         "x": 290,
         "y": 760,
@@ -5827,7 +5854,8 @@
         "name": "MQTT out: Retain FALSE",
         "links": [
             "a2334b77d3764815",
-            "6aa079d768e1571c"
+            "6aa079d768e1571c",
+            "86ab41ab0a2ff264"
         ],
         "x": 290,
         "y": 880,
@@ -5918,7 +5946,8 @@
             "d192b275aac0824e",
             "e8b62c33eab8e3ac",
             "893d80d1125057e8",
-            "aa12f93df2087d62"
+            "aa12f93df2087d62",
+            "2343c8c12f2081fa"
         ],
         "x": 1420,
         "y": 1520,
@@ -6233,7 +6262,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 158,
+        "y": 151,
         "wires": []
     },
     {
@@ -7219,30 +7248,11 @@
         "wires": []
     },
     {
-        "id": "f02388263a927736",
-        "type": "mqtt out",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "HA Out: Retain false",
-        "topic": "",
-        "qos": "",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "80727e60a251c36c",
-        "x": 1310,
-        "y": 420,
-        "wires": []
-    },
-    {
         "id": "903a7fac6108ac58",
         "type": "mqtt in",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Victron In",
+        "name": "Victron all",
         "topic": "N/+/#",
         "qos": "2",
         "datatype": "auto-detect",
@@ -7319,7 +7329,7 @@
         "y": 500,
         "wires": [
             [
-                "f02388263a927736"
+                "c80ea298a37232a2"
             ]
         ]
     },
@@ -7366,11 +7376,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
+        "x": 800,
         "y": 420,
         "wires": [
             [
-                "f02388263a927736"
+                "c80ea298a37232a2"
             ]
         ]
     },
@@ -7445,7 +7455,8 @@
         "y": 180,
         "wires": [
             [
-                "49a3398527345004"
+                "3e956d9c25de906b",
+                "bd38c37850a3e832"
             ]
         ]
     },
@@ -7466,7 +7477,8 @@
         "y": 240,
         "wires": [
             [
-                "d1a2b3c4e5f67805"
+                "d1a2b3c4e5f67805",
+                "9b74be05afac8132"
             ]
         ]
     },
@@ -7487,7 +7499,8 @@
         "y": 240,
         "wires": [
             [
-                "49a3398527345004"
+                "91acab65854ccca6",
+                "bd38c37850a3e832"
             ]
         ]
     },
@@ -7508,7 +7521,8 @@
         "y": 300,
         "wires": [
             [
-                "f02388263a927736"
+                "86ab41ab0a2ff264",
+                "f77df5b83c49ac26"
             ]
         ]
     },
@@ -7550,25 +7564,6 @@
         "wires": []
     },
     {
-        "id": "49a3398527345004",
-        "type": "mqtt out",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "HA Out: Retain true",
-        "topic": "",
-        "qos": "",
-        "retain": "true",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "80727e60a251c36c",
-        "x": 1550,
-        "y": 180,
-        "wires": []
-    },
-    {
         "id": "1a548b4f42a93938",
         "type": "inject",
         "z": "1fde0c4ffb03727e",
@@ -7603,7 +7598,7 @@
         "type": "mqtt in",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Victron In",
+        "name": "Victron devices",
         "topic": "N/+/+/+/ProductId",
         "qos": "2",
         "datatype": "auto-detect",
@@ -7626,14 +7621,202 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "Store Victron devices",
-        "x": 470,
-        "y": 340,
-        "wires": [],
         "func": "// Store active Victron device instances from ProductId topics\r\n// Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductId\r\n\r\nconst topic = msg.topic;\r\nif (!topic) return null;\r\n\r\nconst parts = topic.split(\"/\");\r\nif (parts.length < 5) return null;\r\n\r\nconst serviceType = parts[2];\r\nconst instance = parts[3];\r\nconst key = `${serviceType}_${instance}`;\r\n\r\n// Get or initialize the active devices set (stored as array for context compatibility)\r\nlet victronDevices = global.get(\"victronDevices\") || [];\r\n\r\nif (!victronDevices.includes(key)) {\r\n  victronDevices.push(key);\r\n  global.set(\"victronDevices\", victronDevices);\r\n}\r\n\r\nnode.status({\r\n  fill: \"green\",\r\n  shape: \"dot\",\r\n  text: `${victronDevices.length} active devices`,\r\n});\r\n\r\nreturn null;\r\n",
         "outputs": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": []
+        "libs": [],
+        "x": 520,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "91acab65854ccca6",
+        "type": "debug",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Create Victron",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "3e956d9c25de906b",
+        "type": "debug",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Decode Victron batteries",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9b74be05afac8132",
+        "type": "debug",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Unique Victron",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "ce787dfcc75988be",
+        "type": "inject",
+        "z": "1fde0c4ffb03727e",
+        "g": "3ffa68cfd2195db1",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1290,
+        "y": 580,
+        "wires": [
+            [
+                "9401b2d19494b1c2"
+            ]
+        ]
+    },
+    {
+        "id": "9401b2d19494b1c2",
+        "type": "function",
+        "z": "1fde0c4ffb03727e",
+        "g": "3ffa68cfd2195db1",
+        "name": "Reset function",
+        "func": "flow.set(\"uniqueVictron\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1540,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2343c8c12f2081fa",
+        "type": "link in",
+        "z": "1fde0c4ffb03727e",
+        "g": "3ffa68cfd2195db1",
+        "name": "Reset Victron",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 1270,
+        "y": 520,
+        "wires": [
+            [
+                "9401b2d19494b1c2"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "bd38c37850a3e832",
+        "type": "link out",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 1530,
+        "y": 180,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "86ab41ab0a2ff264",
+        "type": "link out",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "MQTT out: Retain FALSE",
+        "mode": "link",
+        "links": [
+            "74329f13cbbc528a"
+        ],
+        "x": 1290,
+        "y": 300,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "f77df5b83c49ac26",
+        "type": "debug",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Status Victron",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c80ea298a37232a2",
+        "type": "mqtt out",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Victron out",
+        "topic": "",
+        "qos": "",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "68237e1473ec01aa",
+        "x": 1070,
+        "y": 420,
+        "wires": []
     }
 ]
