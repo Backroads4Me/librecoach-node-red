@@ -214,15 +214,14 @@
             "48e3b18cb440da52",
             "25162d774c052102",
             "32ec19602e928185",
-            "52e43edcfad810dd",
             "2d6bf3e8aa77a8c6",
             "4d7e38077918190f",
             "bc185e54ce871b11",
             "a9779b1f38edf18d",
             "0a397108bc1143ea"
         ],
-        "x": 114,
-        "y": 99,
+        "x": 134,
+        "y": 139,
         "w": 1092,
         "h": 348
     },
@@ -649,8 +648,8 @@
             "6e2b753c50d28b2b",
             "e8b62c33eab8e3ac"
         ],
-        "x": 694,
-        "y": 279,
+        "x": 714,
+        "y": 319,
         "w": 472,
         "h": 142
     },
@@ -964,7 +963,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "Decode HA command",
-        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n    /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n    /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n    const instance = parseInt(climatePresetMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = \"SET_PRESET\";\n    msg.value = String(msg.payload); // e.g., \"Level 5\"\n    return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n    const instance = parseInt(climateTopicMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n    return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n    /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n    const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"aquahot\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"light\";\n    msg.entityId = `aquahot_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n    topicParts.length === 4 &&\n    topicParts[0] === \"homeassistant\" &&\n    (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n    topicParts[3] === \"set\"\n) {\n    const entityId = topicParts[2];\n    const command = String(msg.payload).toUpperCase();\n    msg.entityType = topicParts[1];\n    msg.entityId = entityId;\n    msg.command = command;\n\n    if (entityId === \"water_pump\" || entityId === \"autofill\") {\n        msg.instance = entityId;\n        msg.routingKey = entityId;\n    } else {\n        const entityIdParts = entityId.split(\"_\");\n        const instanceStr = entityIdParts[entityIdParts.length - 1];\n        const instanceNum = parseInt(instanceStr, 10);\n        if (isNaN(instanceNum)) {\n            node.warn(`Could not parse instance number from entityId: ${entityId}`);\n            return null;\n        }\n        msg.instance = instanceNum;\n        msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n    }\n    return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
+        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n    /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n    /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n    const instance = parseInt(climatePresetMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = \"SET_PRESET\";\n    msg.value = String(msg.payload); // e.g., \"Level 5\"\n    return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n    const instance = parseInt(climateTopicMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n    return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n    /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n    const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"aquahot\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"light\";\n    msg.entityId = `aquahot_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n    topicParts.length === 4 &&\n    topicParts[0] === \"homeassistant\" &&\n    (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n    topicParts[3] === \"set\"\n) {\n    const entityId = topicParts[2];\n    msg.entityType = topicParts[1];\n    msg.entityId = entityId;\n\n    // Handle JSON payloads from dimmable lights (JSON schema entities)\n    try {\n        const parsed = JSON.parse(msg.payload);\n        if (typeof parsed === \"object\" && parsed !== null) {\n            msg.payload = parsed;\n            msg.command = parsed.state ? parsed.state.toUpperCase() : \"ON\";\n        } else {\n            msg.command = String(msg.payload).toUpperCase();\n        }\n    } catch (e) {\n        // Simple string payload (non-dimmable lights)\n        msg.command = String(msg.payload).toUpperCase();\n    }\n\n    if (entityId === \"water_pump\" || entityId === \"autofill\") {\n        msg.instance = entityId;\n        msg.routingKey = entityId;\n    } else {\n        const entityIdParts = entityId.split(\"_\");\n        const instanceStr = entityIdParts[entityIdParts.length - 1];\n        const instanceNum = parseInt(instanceStr, 10);\n        if (isNaN(instanceNum)) {\n            node.warn(`Could not parse instance number from entityId: ${entityId}`);\n            return null;\n        }\n        msg.instance = instanceNum;\n        msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n    }\n    return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1122,7 +1121,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "HA command",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1260,7 +1259,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "Encode dc_dimmer_command_2",
-        "func": "// Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)\n\n// --- Configuration ---\nconst RVC_COMMAND = 0x05; // Toggle command\nconst CMD_UNLOCK = 0x22; // Remove lock condition\nconst LEVEL_ON = 250; // Brightness level (0xFA)\nconst NON_GROUP = 0xff;\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command; // \"ON\" or \"OFF\"\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n    node.warn(`[encode_dc_dimmer_command_2] Invalid instance: ${instance}`);\n    return null;\n}\n\n// --- Command Mapping ---\n// Toggle command uses same payload for ON and OFF\nconst desiredLevel = LEVEL_ON;\n\n// --- Helper Functions ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n    const dataBytes = new Array(8).fill(0xff);\n    dataBytes[0] = instance; // Byte 0: Instance\n    dataBytes[1] = NON_GROUP; // Byte 1: Group (non-group)\n    dataBytes[2] = desiredLevel; // Byte 2: Desired Level\n    dataBytes[3] = commandCode; // Byte 3: Command\n    dataBytes[4] = 0xff; // Byte 4: Delay/Duration\n    dataBytes[5] = 0x00; // Byte 5: Interlock\n    dataBytes[6] = 0xff; // Byte 6: Ramp Time\n    dataBytes[7] = 0xff; // Byte 7: Reserved\n\n    const dataHex = dataBytes\n        .map((byte) => byte.toString(16).padStart(2, \"0\"))\n        .join(\"\");\n\n    const dgnInt = parseInt(DGN, 16);\n    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n    const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n    return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// --- Build Payload ---\n// Message 1: UNLOCK\nconst unlockMessage = {\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),\n};\n\n// Message 2: TOGGLE\nconst toggleMessage = {\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, desiredLevel, RVC_COMMAND),\n};\n\n// --- Return Message ---\n// Send both messages sequentially\nnode.send(unlockMessage);\nnode.send(toggleMessage);\n\n// Return null to prevent duplicate sending\nreturn null;\n",
+        "func": "// Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)\n\n// --- Configuration ---\nconst CMD_SET_BRIGHTNESS = 0x00;\nconst CMD_ON = 0x01;\nconst CMD_OFF = 0x03;\nconst CMD_UNLOCK = 0x22;\nconst LEVEL_FULL_ON = 200;\nconst NON_GROUP = 0xff;\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n  node.warn(`[encode_dc_dimmer_command_2] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Parse Command ---\n// All lights use JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightness = msg.payload.brightness;\n\n// Check if this is a dimmable light\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nconst isDimmable = dimmableLights.includes(instance);\n\n// --- Command Mapping ---\nlet commandCode, desiredLevel;\n\nif (command === \"OFF\") {\n  commandCode = CMD_OFF;\n  desiredLevel = 0;\n} else if (command === \"ON\" && brightness !== undefined && brightness > 0) {\n  // Brightness command: map 0-100 to 0-200 RV-C scale\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(brightness * 2);\n} else if (isDimmable) {\n  // Dimmable light toggled ON without brightness — recall last known level\n  const lastBrightness = global.get(\"dimmerBrightness_\" + instance) || 100;\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(lastBrightness * 2);\n} else {\n  // Non-dimmable light — full on\n  commandCode = CMD_ON;\n  desiredLevel = LEVEL_FULL_ON;\n}\n\n// --- Helper Functions ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[0] = instance; // Byte 0: Instance\n  dataBytes[1] = NON_GROUP; // Byte 1: Group (non-group)\n  dataBytes[2] = desiredLevel; // Byte 2: Desired Level\n  dataBytes[3] = commandCode; // Byte 3: Command\n  dataBytes[4] = 0xff; // Byte 4: Delay/Duration\n  dataBytes[5] = 0x00; // Byte 5: Interlock\n  dataBytes[6] = 0xff; // Byte 6: Ramp Time\n  dataBytes[7] = 0xff; // Byte 7: Reserved\n\n  const dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n  const dgnInt = parseInt(DGN, 16);\n  const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n  return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// --- Store last brightness for dimmable recall ---\nif (brightness !== undefined && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness);\n}\n\n// --- Build and Send ---\n// Message 1: UNLOCK\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),\n});\n\n// Message 2: Command\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, commandCode),\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1401,8 +1400,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1070,
-        "y": 140,
+        "x": 1090,
+        "y": 180,
         "wires": [],
         "l": true
     },
@@ -1415,8 +1414,8 @@
         "links": [
             "7af7fb2178a714cf"
         ],
-        "x": 250,
-        "y": 140,
+        "x": 270,
+        "y": 180,
         "wires": [
             [
                 "f0083147745c8366",
@@ -1439,8 +1438,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 200,
+        "x": 540,
+        "y": 240,
         "wires": [
             [
                 "25162d774c052102"
@@ -1453,18 +1452,21 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Status DC dimmer 3",
-        "func": "// HA Status Updater for DC Dimmer\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.error(\"Input payload must be an object.\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance;\nconst statusValue = msg.payload.load_status;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n    node.error(\"Input missing 'instance' (number).\", msg);\n    return null;\n}\n\nif (typeof statusValue !== \"string\") {\n    node.error(\"Input missing 'load_status' (string).\", msg);\n    return null;\n}\n\n// DC Dimmer: Check if load_status contains \"Off\"\nconst haStatus = statusValue.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n// Construct the MQTT topic\nconst stateTopic = `homeassistant/light/switch_${instance}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\n\n// Lights and switches work with a simple string\nmsg.payload = haStatus;\n\nreturn msg;\n",
-        "outputs": 1,
+        "func": "// HA Status Updater for DC Dimmer\n// Output 1: MQTT state update (always JSON)\n// Output 2: Re-creation trigger (when new dimmable light detected)\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return [null, null];\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n  node.error(\"Input missing 'instance' (number).\", msg);\n  return [null, null];\n}\n\n// Check dimmable status\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nlet isDimmable = dimmableLights.includes(instance);\nlet recreateMsg = null;\n\n// Construct the MQTT topic\nconst stateTopic = `homeassistant/light/switch_${instance}/state`;\n\nlet haStatus;\nlet brightness;\n\n// Helper: mark instance as dimmable and trigger re-creation\nfunction markDimmable() {\n  if (!isDimmable) {\n    dimmableLights.push(instance);\n    global.set(\"dimmableLights\", dimmableLights, \"file\");\n    isDimmable = true;\n    recreateMsg = { payload: { instance: instance } };\n  }\n}\n\nif (msg.payload.master_brightness !== undefined) {\n  // STATUS_1 message: has master_brightness (0-100%)\n  brightness = msg.payload.master_brightness;\n  haStatus = brightness > 0 ? \"ON\" : \"OFF\";\n\n  // Detect dimmable: brightness between 1-99% (exclusive of 0 and 100)\n  if (brightness > 0 && brightness < 100) {\n    markDimmable();\n  }\n} else if (typeof msg.payload.load_status === \"string\") {\n  // STATUS_3 message: has load_status and operating_status\n  haStatus = msg.payload.load_status.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n  const opStatus = msg.payload.operating_status;\n\n  // Detect dimmable from STATUS_3:\n  // - \"Value Changing (Ramp)\" means actively dimming\n  // - Numeric value between 1-99% means dimmed level\n  if (opStatus === \"Value Changing (Ramp)\") {\n    markDimmable();\n  } else if (typeof opStatus === \"number\" && opStatus > 0 && opStatus < 100) {\n    markDimmable();\n  }\n\n  // Report brightness for already-dimmable lights (full 0-100% range)\n  if (isDimmable && typeof opStatus === \"number\") {\n    brightness = opStatus;\n  }\n} else {\n  node.error(\"Input missing 'master_brightness' or 'load_status'.\", msg);\n  return [null, null];\n}\n\n// Store last brightness for dimmable recall on toggle\nif (isDimmable && typeof brightness === \"number\" && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness);\n}\n\n// Build JSON state payload (always JSON for all lights)\nconst stateObj = { state: haStatus };\n\nif (isDimmable && haStatus === \"ON\") {\n  stateObj.color_mode = \"brightness\";\n}\nif (isDimmable && brightness !== undefined) {\n  stateObj.brightness = brightness;\n}\n\n// Prepare the state message\nconst stateMsg = {\n  topic: stateTopic,\n  payload: JSON.stringify(stateObj),\n};\n\nreturn [stateMsg, recreateMsg];\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 140,
+        "x": 540,
+        "y": 180,
         "wires": [
             [
                 "0a397108bc1143ea"
+            ],
+            [
+                "25162d774c052102"
             ]
         ]
     },
@@ -1474,19 +1476,18 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "Create DC dimmer 3",
-        "func": "// Creates Switch entity for DC DIMMER\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n  node.error(\"Input missing 'instance' (number).\", msg);\n  return null;\n}\n\nif (instance < 1 || instance > 250) {\n  if (instance >= 251 && instance <= 255) {\n    return null;\n  }\n  node.warn(\n    `Instance ${instance} is outside the valid RV-C instance range (1-250) for a switch. Entity will not be created.`,\n  );\n  return null;\n}\n\n// Device configuration\nconst componentType = \"light\";\nconst prefix = \"switch\";\nconst displayPrefix = \"Switch\";\nconst icon = \"mdi:light-recessed\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  default_entity_id: `${componentType}.${entityId}`,\n  icon: icon,\n  command_topic: commandTopic,\n  state_topic: stateTopic,\n  payload_on: \"ON\",\n  payload_off: \"OFF\",\n\n  // Link entities to a common device for better HA grouping\n  device: {\n    identifiers: [\"librecoach-switches\"],\n    name: \"LibreCoach: Switches\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "func": "// Creates Light entity for DC DIMMER\n// Always uses JSON schema. Dimmable lights get brightness support.\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n  node.error(\"Input missing 'instance' (number).\", msg);\n  return null;\n}\n\nif (instance < 1 || instance > 250) {\n  if (instance >= 251 && instance <= 255) {\n    return null;\n  }\n  node.warn(\n    `Instance ${instance} is outside the valid RV-C instance range (1-250) for a switch. Entity will not be created.`,\n  );\n  return null;\n}\n\n// Check if this instance has been detected as dimmable\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nconst isDimmable = dimmableLights.includes(instance);\n\n// Device configuration\nconst componentType = \"light\";\nconst prefix = \"switch\";\nconst displayPrefix = \"Switch\";\nconst icon = \"mdi:light-recessed\";\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\nconst displayName = `${displayPrefix} ${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload — always JSON schema\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  default_entity_id: `${componentType}.${entityId}`,\n  icon: icon,\n  schema: \"json\",\n  command_topic: commandTopic,\n  state_topic: stateTopic,\n\n  // Link entities to a common device for better HA grouping\n  device: {\n    identifiers: [\"librecoach-switches\"],\n    name: \"LibreCoach: Switches\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\nif (isDimmable) {\n  payload.brightness = true;\n  payload.brightness_scale = 100;\n  payload.supported_color_modes = [\"brightness\"];\n}\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nmsg.stateTopic = stateTopic;\nmsg.commandTopic = commandTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 200,
+        "x": 800,
+        "y": 240,
         "wires": [
             [
-                "d3a13b531babee66",
-                "52e43edcfad810dd"
+                "d3a13b531babee66"
             ]
         ]
     },
@@ -1512,8 +1513,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 810,
-        "y": 380,
+        "x": 830,
+        "y": 420,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -1533,8 +1534,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1060,
-        "y": 380,
+        "x": 1080,
+        "y": 420,
         "wires": [
             []
         ]
@@ -1548,8 +1549,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 810,
-        "y": 320,
+        "x": 830,
+        "y": 360,
         "wires": [
             [
                 "6e2b753c50d28b2b"
@@ -2301,24 +2302,6 @@
         "wires": []
     },
     {
-        "id": "52e43edcfad810dd",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "Create switch",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1040,
-        "y": 200,
-        "wires": []
-    },
-    {
         "id": "bc627a6a37117bc0",
         "type": "link out",
         "z": "3470febb2cd6e952",
@@ -2698,8 +2681,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 400,
-        "y": 300,
+        "x": 420,
+        "y": 340,
         "wires": []
     },
     {
@@ -2728,8 +2711,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 230,
-        "y": 340,
+        "x": 250,
+        "y": 380,
         "wires": [
             [
                 "2d6bf3e8aa77a8c6"
@@ -2756,8 +2739,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 400,
-        "y": 340,
+        "x": 420,
+        "y": 380,
         "wires": []
     },
     {
@@ -2773,8 +2756,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 400,
-        "y": 380,
+        "x": 420,
+        "y": 420,
         "wires": []
     },
     {
@@ -3515,8 +3498,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 730,
-        "y": 140,
+        "x": 790,
+        "y": 180,
         "wires": [
             [
                 "d3a13b531babee66"
@@ -3571,7 +3554,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 318,
+        "y": 319,
         "wires": []
     },
     {
@@ -5026,8 +5009,8 @@
         "type": "note",
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
-        "x": 2060,
-        "y": 212,
+        "x": 2000,
+        "y": 247,
         "wires": []
     },
     {
@@ -6256,7 +6239,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 144,
+        "y": 220,
         "wires": []
     },
     {
@@ -6807,7 +6790,7 @@
         "z": "222c995b7790b8de",
         "content": "# Delete HA Entity\n## Purpose\nRemoves devices from Home Assistant when they're no longer needed.\n\n## What Happens Here\n### Entity Removal\nWhen a device needs to be removed from Home Assistant, this flow sends a special \"delete\" message that tells Home Assistant to remove the device from your dashboard.\n\n### When It's Used\n- Troubleshooting: Removing and re-discovering a device that isn't working correctly\n- Reconfiguration: Cleaning up after changes to your RV's systems\n- Cleanup: Removing test devices or devices that no longer exist\n\n## In Simple Terms\nThink of this flow as an eraser. If something on your dashboard needs to go away - maybe a device was replaced or you're starting fresh - this flow cleans it up so you can start over.",
         "x": 1710,
-        "y": 280,
+        "y": 297,
         "wires": []
     },
     {
@@ -7247,7 +7230,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 360,
-        "y": 126,
+        "y": 139,
         "wires": []
     },
     {
