@@ -4,6 +4,9 @@ LibreCoach is a comprehensive Node-RED based system for monitoring and controlli
 
 For more information, visit [LibreCoach.com](https://librecoach.com)
 
+## Contributing
+All contributions require signing the Contributor License Agreement (CLA) before a PR can be merged. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## License
 
 This project is licensed under the **GNU General Public License v3.0 (GPL-3.0-only)**.
