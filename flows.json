@@ -42,7 +42,7 @@
     {
         "id": "bfa6336b0d45dc23",
         "type": "tab",
-        "label": "Beta testing: Templates",
+        "label": "Templates",
         "disabled": false,
         "info": "",
         "env": []
@@ -570,7 +570,7 @@
             "7bfcacac5168c527"
         ],
         "x": 94,
-        "y": 259,
+        "y": 119,
         "w": 2072,
         "h": 282
     },
@@ -874,6 +874,38 @@
         "h": 142
     },
     {
+        "id": "3296e5f0fcd2c737",
+        "type": "group",
+        "z": "bfa6336b0d45dc23",
+        "name": "Import Configuration",
+        "style": {
+            "stroke": "#3d85c6",
+            "label": true
+        },
+        "nodes": [
+            "0bd062c51b9e4b8b",
+            "83e45c7061bd9e49",
+            "a439179f7b78685a",
+            "c2e0c58f22ff4794",
+            "55dd74b672a2f509",
+            "080d3da2e1d0d2ff",
+            "50bc401ae974546e",
+            "40e089e9bdbb5373",
+            "6ea3c976edca4420",
+            "0d5ca59cd7836171",
+            "96eef400b4adf26d",
+            "d3b9548ea352bc6c",
+            "6fe721da58a82100",
+            "e686216d7dd9f13c",
+            "ac639050da7648b9",
+            "8337a7f0dd0435d6"
+        ],
+        "x": 94,
+        "y": 599,
+        "w": 1992,
+        "h": 282
+    },
+    {
         "id": "80727e60a251c36c",
         "type": "mqtt-broker",
         "name": "Mosquitto",
@@ -908,11 +940,6 @@
         "id": "f32f7fc67467278b",
         "type": "global-config",
         "env": [
-            {
-                "name": "HA_TOKEN",
-                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiOTljMGY5NTlhNTY0N2I3YjhjZjgyZDAyN2NiMzY1MSIsImlhdCI6MTc2OTU4OTEzMCwiZXhwIjoyMDg0OTQ5MTMwfQ.WJjrbgn5pQ9poppTF534uAHSb9otkgVmApONm1ltb9w",
-                "type": "str"
-            },
             {
                 "name": "MQTT_USER",
                 "value": "librecoach",
@@ -1387,7 +1414,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 180,
+        "y": 150,
         "wires": []
     },
     {
@@ -6854,7 +6881,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "export_func_read_rv_001"
@@ -6876,7 +6903,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 500,
+        "y": 360,
         "wires": [
             [
                 "export_func_store_rv_001"
@@ -6897,7 +6924,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 500,
+        "y": 360,
         "wires": [
             [
                 "12a57f6a07d0bf1a"
@@ -6910,7 +6937,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
         "name": "Read RV info",
-        "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n//\n// Required Configuration:\n// - HA_BASE_URL: Home Assistant base URL (env var or defaults to http://homeassistant.local:8123)\n// - HA_TOKEN: Long-lived access token (env var or flow.get(\"haToken\"))\n\n// Get HA configuration from environment or use defaults\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n  node.error(\"HA_TOKEN not configured. Set it in Node-RED environment variables or flow context.\", msg);\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No HA token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  \"Authorization\": `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\"\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || null,\n  model: rvInfo.rv_model || null,\n  year: rvInfo.rv_year || null,\n  vin: rvInfo.rv_vin || null,\n};\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Starting export\" });\n\nreturn msg;\n",
+        "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n//\n// Required Configuration:\n// - SUPERVISOR_TOKEN: Supervisor-managed token injected into the add-on environment\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.error(\n    \"SUPERVISOR_TOKEN not configured. Ensure the add-on provides it.\",\n    msg,\n  );\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No Supervisor token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || null,\n  model: rvInfo.rv_model || null,\n  year: rvInfo.rv_year || null,\n  vin: rvInfo.rv_vin || null,\n};\n\nnode.status({ fill: \"blue\", shape: \"dot\", text: \"Starting export\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6918,7 +6945,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "export_http_states_001"
@@ -6943,7 +6970,7 @@
         "senderr": false,
         "headers": [],
         "x": 560,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "export_func_store_states_001"
@@ -6964,7 +6991,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "export_func_build_001"
@@ -6985,7 +7012,7 @@
         "finalize": "",
         "libs": [],
         "x": 970,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "export_func_publish_url_001"
@@ -7006,7 +7033,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "de184f27cbcc117f"
@@ -7024,7 +7051,7 @@
             "f658418a7b9b4857"
         ],
         "x": 590,
-        "y": 500,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -7039,7 +7066,7 @@
             "f658418a7b9b4857"
         ],
         "x": 830,
-        "y": 360,
+        "y": 220,
         "wires": [],
         "l": true
     },
@@ -7056,7 +7083,7 @@
         "overwriteFile": "true",
         "encoding": "none",
         "x": 1380,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "6a42bdb0b01fd971"
@@ -7077,7 +7104,7 @@
         "finalize": "",
         "libs": [],
         "x": 1580,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "4b8ac359c84436ab",
@@ -7096,7 +7123,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1850,
-        "y": 500,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -7106,7 +7133,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
         "name": "Send export noitification",
-        "func": "// Sends persistent notification to HA when export completes\n// Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)\n// Output: msg configured for HTTP Request to HA notification service\n\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n  node.warn(\"No HA token - skipping notification\");\n  return null;\n}\n\nconst downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;\n\nmsg.url = `${haBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Export Complete\",\n  message: `[Download ${filename}](${downloadUrl})`,\n  notification_id: \"librecoach_export\",\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Notification sent\",\n});\n\nreturn msg;\n",
+        "func": "// Sends persistent notification to HA when export completes\n// Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)\n// Output: msg configured for HTTP Request to HA notification service\n\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\nconst haApiBaseUrl = \"http://supervisor/core\";\nconst haPublicBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.warn(\"No Supervisor token - skipping notification\");\n  return null;\n}\n\nconst downloadUrl = `${haPublicBaseUrl}/local/librecoach_download.html`;\n\nmsg.url = `${haApiBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Export Complete\",\n  message: `[Download ${filename}](${downloadUrl})`,\n  notification_id: \"librecoach_export\",\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Notification sent\",\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7114,7 +7141,7 @@
         "finalize": "",
         "libs": [],
         "x": 1850,
-        "y": 440,
+        "y": 300,
         "wires": [
             [
                 "86d67a80f1ca910f"
@@ -7139,19 +7166,10 @@
         "senderr": false,
         "headers": [],
         "x": 2070,
-        "y": 440,
+        "y": 300,
         "wires": [
             []
         ]
-    },
-    {
-        "id": "a0edf7c28fbc0de9",
-        "type": "note",
-        "z": "bfa6336b0d45dc23",
-        "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.\n\nThis functionality requires creating a Long-lived access token in HA and setting the HA_TOKEN global env variable",
-        "x": 470,
-        "y": 147,
-        "wires": []
     },
     {
         "id": "5f4e13ced8032d25",
@@ -7167,7 +7185,7 @@
         "finalize": "",
         "libs": [],
         "x": 570,
-        "y": 360,
+        "y": 220,
         "wires": [
             [
                 "9a0578bc94187110"
@@ -7189,7 +7207,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 170,
-        "y": 360,
+        "y": 220,
         "wires": [
             [
                 "5f4e13ced8032d25"
@@ -7206,7 +7224,7 @@
             "cd0fc7e2bec3ae86"
         ],
         "x": 330,
-        "y": 300,
+        "y": 160,
         "wires": [
             [
                 "5f4e13ced8032d25"
@@ -7218,6 +7236,7 @@
         "id": "0bd062c51b9e4b8b",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Serve import page",
         "func": "// Serves the LibreCoach configuration import upload page\n// Input: HTTP In GET /librecoach/import\n// Output: msg.payload = HTML string for HTTP Response\n\nmsg.payload = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>LibreCoach — Import Configuration</title>\n<style>\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body {\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n    background: #1a1a2e; color: #e0e0e0; padding: 2rem;\n    display: flex; justify-content: center; min-height: 100vh;\n  }\n  .container { max-width: 560px; width: 100%; }\n  h1 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1.5rem; }\n  .subtitle { color: #888; margin-bottom: 1.5rem; font-size: 0.9rem; }\n  .upload-area {\n    border: 2px dashed #444; border-radius: 8px; padding: 2rem;\n    text-align: center; margin-bottom: 1rem; transition: border-color 0.2s;\n  }\n  .upload-area.has-file { border-color: #4fc3f7; }\n  input[type=\"file\"] { margin: 0.5rem 0; }\n  .preview {\n    background: #16213e; border-radius: 8px; padding: 1rem;\n    margin-bottom: 1rem; display: none;\n  }\n  .preview.visible { display: block; }\n  .preview h3 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1rem; }\n  .preview-row { display: flex; justify-content: space-between; padding: 0.25rem 0; }\n  .preview-label { color: #888; }\n  .preview-value { color: #e0e0e0; font-weight: 500; }\n  .error-text { color: #ef5350; }\n  button {\n    background: #4fc3f7; color: #1a1a2e; border: none; border-radius: 6px;\n    padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600;\n    cursor: pointer; width: 100%; transition: opacity 0.2s;\n  }\n  button:disabled { opacity: 0.4; cursor: not-allowed; }\n  button:hover:not(:disabled) { opacity: 0.85; }\n  .results {\n    background: #16213e; border-radius: 8px; padding: 1rem;\n    margin-top: 1rem; display: none;\n  }\n  .results.visible { display: block; }\n  .results h3 { margin-bottom: 0.5rem; font-size: 1rem; }\n  .results.success h3 { color: #66bb6a; }\n  .results.failure h3 { color: #ef5350; }\n  .spinner { display: inline-block; width: 18px; height: 18px;\n    border: 2px solid #4fc3f7; border-top-color: transparent;\n    border-radius: 50%; animation: spin 0.8s linear infinite;\n    vertical-align: middle; margin-right: 0.5rem;\n  }\n  @keyframes spin { to { transform: rotate(360deg); } }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <h1>Import Configuration</h1>\n  <p class=\"subtitle\">Restore customized entity names from a LibreCoach export file.</p>\n\n  <div class=\"upload-area\" id=\"uploadArea\">\n    <p>Select a LibreCoach export JSON file</p>\n    <input type=\"file\" id=\"fileInput\" accept=\".json\">\n  </div>\n\n  <div class=\"preview\" id=\"preview\">\n    <h3>File Preview</h3>\n    <div id=\"previewContent\"></div>\n  </div>\n\n  <button id=\"importBtn\" disabled>Import</button>\n\n  <div class=\"results\" id=\"results\">\n    <h3 id=\"resultsTitle\"></h3>\n    <div id=\"resultsContent\"></div>\n  </div>\n</div>\n\n<script>\n  const fileInput = document.getElementById(\"fileInput\");\n  const uploadArea = document.getElementById(\"uploadArea\");\n  const preview = document.getElementById(\"preview\");\n  const previewContent = document.getElementById(\"previewContent\");\n  const importBtn = document.getElementById(\"importBtn\");\n  const results = document.getElementById(\"results\");\n  const resultsTitle = document.getElementById(\"resultsTitle\");\n  const resultsContent = document.getElementById(\"resultsContent\");\n\n  let parsedConfig = null;\n\n  fileInput.addEventListener(\"change\", function () {\n    const file = this.files[0];\n    if (!file) return;\n\n    const reader = new FileReader();\n    reader.onload = function (e) {\n      try {\n        const data = JSON.parse(e.target.result);\n        if (!data.entities || typeof data.entities !== \"object\") {\n          showPreviewError(\"Invalid file: missing 'entities' key.\");\n          return;\n        }\n\n        parsedConfig = data;\n        const allEntities = Object.keys(data.entities);\n        const customized = allEntities.filter(function (id) {\n          const ent = data.entities[id];\n          return ent.friendly_name && ent.original_name &&\n                 ent.friendly_name !== ent.original_name;\n        });\n\n        let html = \"\";\n        html += row(\"Export Date\", data.export_date || \"Unknown\");\n        html += row(\"Total Entities\", allEntities.length);\n        html += row(\"Customized Names\", customized.length);\n        if (customized.length === 0) {\n          html += '<p class=\"error-text\" style=\"margin-top:0.5rem\">' +\n                  \"No customized names found — nothing to import.</p>\";\n        }\n\n        previewContent.innerHTML = html;\n        preview.classList.add(\"visible\");\n        uploadArea.classList.add(\"has-file\");\n        importBtn.disabled = customized.length === 0;\n        results.classList.remove(\"visible\");\n      } catch (err) {\n        showPreviewError(\"Could not parse JSON: \" + err.message);\n      }\n    };\n    reader.readAsText(file);\n  });\n\n  function showPreviewError(msg) {\n    previewContent.innerHTML = '<p class=\"error-text\">' + msg + \"</p>\";\n    preview.classList.add(\"visible\");\n    importBtn.disabled = true;\n    parsedConfig = null;\n  }\n\n  function row(label, value) {\n    return '<div class=\"preview-row\">' +\n           '<span class=\"preview-label\">' + label + \"</span>\" +\n           '<span class=\"preview-value\">' + value + \"</span></div>\";\n  }\n\n  importBtn.addEventListener(\"click\", function () {\n    if (!parsedConfig) return;\n    importBtn.disabled = true;\n    importBtn.innerHTML = '<span class=\"spinner\"></span>Importing…';\n    results.classList.remove(\"visible\", \"success\", \"failure\");\n\n    fetch(\"/librecoach/import\", {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(parsedConfig),\n    })\n    .then(function (res) { return res.json(); })\n    .then(function (data) {\n      resultsTitle.textContent = data.error ? \"Import Failed\" : \"Import Complete\";\n      results.classList.add(data.error ? \"failure\" : \"success\");\n\n      if (data.error) {\n        resultsContent.innerHTML = '<p class=\"error-text\">' + data.error + \"</p>\";\n      } else {\n        let html = \"\";\n        html += row(\"Updated\", data.updated || 0);\n        html += row(\"Skipped (not in HA)\", data.skipped || 0);\n        html += row(\"Failed\", data.failed || 0);\n        resultsContent.innerHTML = html;\n      }\n      results.classList.add(\"visible\");\n    })\n    .catch(function (err) {\n      resultsTitle.textContent = \"Import Failed\";\n      results.classList.add(\"failure\", \"visible\");\n      resultsContent.innerHTML = '<p class=\"error-text\">' + err.message + \"</p>\";\n    })\n    .finally(function () {\n      importBtn.innerHTML = \"Import\";\n      importBtn.disabled = false;\n    });\n  });\n</script>\n</body>\n</html>`;\n\nmsg.headers = { \"Content-Type\": \"text/html\" };\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Page served\" });\n\nreturn msg;\n",
         "outputs": 1,
@@ -7226,8 +7245,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
-        "y": 660,
+        "x": 370,
+        "y": 640,
         "wires": [
             [
                 "40e089e9bdbb5373"
@@ -7238,16 +7257,17 @@
         "id": "83e45c7061bd9e49",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Validate import",
-        "func": "// Validates incoming import JSON and prepares HA states request\n// Input: msg.payload = parsed JSON body from POST /librecoach/import\n// Output 1: valid → msg configured for GET /api/states (with msg.importConfig)\n// Output 2: error → msg.payload = error JSON for HTTP Response\n\nconst data = msg.payload;\n\n// Validate structure\nif (!data || typeof data !== \"object\") {\n    msg.payload = { error: \"Invalid request: expected a JSON object.\" };\n    msg.statusCode = 400;\n    return [null, msg];\n}\n\nif (!data.entities || typeof data.entities !== \"object\") {\n    msg.payload = { error: \"Invalid file: missing 'entities' key.\" };\n    msg.statusCode = 400;\n    return [null, msg];\n}\n\n// Check HA token\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n    msg.payload = { error: \"Server configuration error: no HA token available.\" };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Filter to only customized entities (friendly_name != original_name)\nconst allEntities = Object.values(data.entities);\nconst customized = [];\nlet skippedUnchanged = 0;\n\nfor (const entity of allEntities) {\n    if (\n        entity.friendly_name &&\n        entity.original_name &&\n        entity.friendly_name !== entity.original_name\n    ) {\n        customized.push({\n            entity_id: entity.entity_id,\n            friendly_name: entity.friendly_name,\n        });\n    } else {\n        skippedUnchanged++;\n    }\n}\n\n// Store import data for downstream nodes\nmsg.importConfig = {\n    customized: customized,\n    skippedUnchanged: skippedUnchanged,\n    totalInFile: allEntities.length,\n};\n\n// Set up GET /api/states request\nmsg.url = `${haBaseUrl}/api/states`;\nmsg.method = \"GET\";\nmsg.headers = {\n    Authorization: `Bearer ${haToken}`,\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = \"\";\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${customized.length} customized of ${allEntities.length}`,\n});\n\nreturn [msg, null];\n",
+        "func": "// Validates incoming import JSON and prepares HA states request\n// Input: msg.payload = parsed JSON body from POST /librecoach/import\n// Output 1: valid -> msg configured for GET /api/states (with msg.importConfig)\n// Output 2: error -> msg.payload = error JSON for HTTP Response\n\nconst data = msg.payload;\n\n// Validate structure\nif (!data || typeof data !== \"object\") {\n    msg.payload = { error: \"Invalid request: expected a JSON object.\" };\n    msg.statusCode = 400;\n    return [null, msg];\n}\n\nif (!data.entities || typeof data.entities !== \"object\") {\n    msg.payload = { error: \"Invalid file: missing 'entities' key.\" };\n    msg.statusCode = 400;\n    return [null, msg];\n}\n\n// Check Supervisor token\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n    msg.payload = {\n        error: \"Server configuration error: no Supervisor token available.\",\n    };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Filter to only customized entities (friendly_name != original_name)\nconst allEntities = Object.values(data.entities);\nconst customized = [];\nlet skippedUnchanged = 0;\n\nfor (const entity of allEntities) {\n    if (\n        entity.friendly_name &&\n        entity.original_name &&\n        entity.friendly_name !== entity.original_name\n    ) {\n        customized.push({\n            entity_id: entity.entity_id,\n            friendly_name: entity.friendly_name,\n        });\n    } else {\n        skippedUnchanged++;\n    }\n}\n\n// Store import data for downstream nodes\nmsg.importConfig = {\n    customized: customized,\n    skippedUnchanged: skippedUnchanged,\n    totalInFile: allEntities.length,\n};\n\n// Set up GET /api/states request\nmsg.url = `${haBaseUrl}/api/states`;\nmsg.method = \"GET\";\nmsg.headers = {\n    Authorization: `Bearer ${haToken}`,\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = \"\";\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${customized.length} customized of ${allEntities.length}`,\n});\n\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 740,
+        "x": 360,
+        "y": 760,
         "wires": [
             [
                 "6ea3c976edca4420"
@@ -7261,6 +7281,7 @@
         "id": "a439179f7b78685a",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Build import plan",
         "func": "// Cross-references import entities with current HA entities\n// Input:\n//   msg.payload = array of state objects from GET /api/states\n//   msg.importConfig = { customized, skippedUnchanged, totalInFile }\n// Output 1: msg.payload = array of { entity_id, friendly_name } for Split pipeline\n// Output 2: msg.payload = early HTTP response when no entities to update\n\nconst states = msg.payload;\nconst config = msg.importConfig;\n\nif (!Array.isArray(states) || !config) {\n    msg.payload = { error: \"Failed to retrieve HA states.\" };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Build set of entity IDs currently in HA\nconst haEntityIds = new Set(states.map((s) => s.entity_id));\n\n// Cross-reference: only include entities that exist in HA\nconst toUpdate = [];\nlet skippedMissing = 0;\n\nfor (const entity of config.customized) {\n    if (haEntityIds.has(entity.entity_id)) {\n        toUpdate.push(entity);\n    } else {\n        skippedMissing++;\n    }\n}\n\n// Store counts for summarize_import\nmsg.importCounts = {\n    totalInFile: config.totalInFile,\n    skippedUnchanged: config.skippedUnchanged,\n    skippedMissing: skippedMissing,\n    toUpdate: toUpdate.length,\n};\n\nif (toUpdate.length === 0) {\n    msg.payload = {\n        updated: 0,\n        skipped: skippedMissing + config.skippedUnchanged,\n        failed: 0,\n        message: \"No matching entities found in HA to update.\",\n    };\n    msg.statusCode = 200;\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"Nothing to update\" });\n    return [null, msg];\n}\n\nmsg.payload = toUpdate;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${toUpdate.length} to update, ${skippedMissing} missing`,\n});\n\nreturn [msg, null];\n",
         "outputs": 2,
@@ -7269,8 +7290,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
-        "y": 740,
+        "x": 790,
+        "y": 720,
         "wires": [
             [
                 "0d5ca59cd7836171"
@@ -7284,16 +7305,17 @@
         "id": "c2e0c58f22ff4794",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Prepare registry update",
-        "func": "// Prepares HA entity registry update for a single entity (runs after Split)\n// Input: msg.payload = { entity_id, friendly_name }\n// Output: msg configured for HTTP Request POST to entity registry API\n\nconst entity = msg.payload;\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nmsg.url = `${haBaseUrl}/api/config/entity_registry/${entity.entity_id}`;\nmsg.method = \"POST\";\nmsg.headers = {\n    Authorization: `Bearer ${haToken}`,\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n    name: entity.friendly_name,\n};\n\n// Preserve entity_id for result tracking\nmsg.entityId = entity.entity_id;\n\nreturn msg;\n",
+        "func": "// Prepares HA entity registry update for a single entity (runs after Split)\n// Input: msg.payload = { entity_id, friendly_name }\n// Output: msg configured for HTTP Request POST to entity registry API\n\nconst entity = msg.payload;\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nmsg.url = `${haBaseUrl}/api/config/entity_registry/${entity.entity_id}`;\nmsg.method = \"POST\";\nmsg.headers = {\n    Authorization: `Bearer ${haToken}`,\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n    name: entity.friendly_name,\n};\n\n// Preserve entity_id for result tracking\nmsg.entityId = entity.entity_id;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1130,
-        "y": 740,
+        "x": 1190,
+        "y": 700,
         "wires": [
             [
                 "96eef400b4adf26d"
@@ -7304,16 +7326,17 @@
         "id": "55dd74b672a2f509",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Notify import URL",
-        "func": "// Sends persistent notification with import page link when import button is pressed\n// Input: MQTT message from librecoach/import/trigger\n// Output: msg configured for HTTP Request to HA persistent notification\n\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst nrBaseUrl = env.get(\"NR_BASE_URL\") || \"http://homeassistant.local:1880\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nif (!haToken) {\n  node.warn(\"No HA token — skipping import notification\");\n  return null;\n}\n\nconst importUrl = `${nrBaseUrl}/librecoach/import`;\n\nmsg.url = `${haBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Import\",\n  message: `Upload a configuration file to restore entity names.\\n\\n[Open Import Page](${importUrl})`,\n  notification_id: \"librecoach_import\",\n};\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Notification sent\" });\n\nreturn msg;\n",
+        "func": "// Sends persistent notification with import page link when import button is pressed\n// Input: MQTT message from librecoach/import/trigger\n// Output: msg configured for HTTP Request to HA persistent notification\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst nrBaseUrl = env.get(\"NR_BASE_URL\") || \"http://homeassistant.local:1880\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.warn(\"No Supervisor token - skipping import notification\");\n  return null;\n}\n\nconst importUrl = `${nrBaseUrl}/librecoach/import`;\n\nmsg.url = `${haBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Import\",\n  message: `Upload a configuration file to restore entity names.\\n\\n[Open Import Page](${importUrl})`,\n  notification_id: \"librecoach_import\",\n};\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Notification sent\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
-        "y": 880,
+        "x": 370,
+        "y": 840,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -7324,22 +7347,23 @@
         "id": "080d3da2e1d0d2ff",
         "type": "function",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "Summarize import",
-        "func": "// Summarizes import results after all entity registry updates complete\n// Input: msg.payload = array of HTTP Response objects (from Join after Split)\n//        msg.importCounts = { totalInFile, skippedUnchanged, skippedMissing, toUpdate }\n// Output 1: JSON result for HTTP Response\n// Output 2: msg configured for HA persistent notification\n\nconst responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\nconst counts = msg.importCounts || {};\n\nlet updated = 0;\nlet failed = 0;\n\nfor (const res of responses) {\n    if (res && res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {\n        updated++;\n    } else {\n        failed++;\n    }\n}\n\nconst skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing || 0);\n\n// Output 1: HTTP Response to browser\nconst httpResult = {\n    updated: updated,\n    skipped: skipped,\n    failed: failed,\n};\n\nconst httpMsg = {\n    payload: httpResult,\n    statusCode: 200,\n};\n\n// Output 2: HA persistent notification\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"HA_TOKEN\") || flow.get(\"haToken\");\n\nlet notifyMsg = null;\n\nif (haToken) {\n    notifyMsg = {\n        url: `${haBaseUrl}/api/services/persistent_notification/create`,\n        method: \"POST\",\n        headers: {\n            Authorization: `Bearer ${haToken}`,\n            \"Content-Type\": \"application/json\",\n        },\n        payload: {\n            title: \"LibreCoach Import Complete\",\n            message: `Updated: ${updated}\\nSkipped: ${skipped}\\nFailed: ${failed}`,\n            notification_id: \"librecoach_import_result\",\n        },\n    };\n}\n\nnode.status({\n    fill: failed > 0 ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: `${updated} updated, ${skipped} skipped, ${failed} failed`,\n});\n\nreturn [httpMsg, notifyMsg];\n",
+        "func": "// Summarizes import results after all entity registry updates complete\n// Input: msg.payload = array of HTTP Response objects (from Join after Split)\n//        msg.importCounts = { totalInFile, skippedUnchanged, skippedMissing, toUpdate }\n// Output 1: msg configured for HA persistent notification\n// Output 2: JSON result for HTTP Response\n\nconst responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\nconst counts = msg.importCounts || {};\n\nlet updated = 0;\nlet failed = 0;\n\nfor (const res of responses) {\n    if (res && res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {\n        updated++;\n    } else {\n        failed++;\n    }\n}\n\nconst skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing || 0);\n\n// Output 2: HTTP Response to browser\nconst httpResult = {\n    updated: updated,\n    skipped: skipped,\n    failed: failed,\n};\n\nconst httpMsg = {\n    payload: httpResult,\n    statusCode: 200,\n};\n\n// Output 1: HA persistent notification\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nlet notifyMsg = null;\n\nif (haToken) {\n    notifyMsg = {\n        url: `${haBaseUrl}/api/services/persistent_notification/create`,\n        method: \"POST\",\n        headers: {\n            Authorization: `Bearer ${haToken}`,\n            \"Content-Type\": \"application/json\",\n        },\n        payload: {\n            title: \"LibreCoach Import Complete\",\n            message: `Updated: ${updated}\\nSkipped: ${skipped}\\nFailed: ${failed}`,\n            notification_id: \"librecoach_import_result\",\n        },\n    };\n}\n\nnode.status({\n    fill: failed > 0 ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: `${updated} updated, ${skipped} skipped, ${failed} failed`,\n});\n\nreturn [notifyMsg, httpMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1710,
-        "y": 740,
+        "x": 1750,
+        "y": 700,
         "wires": [
             [
-                "6fe721da58a82100"
+                "e686216d7dd9f13c"
             ],
             [
-                "e686216d7dd9f13c"
+                "6fe721da58a82100"
             ]
         ]
     },
@@ -7347,17 +7371,19 @@
         "id": "50bc401ae974546e",
         "type": "http in",
         "z": "bfa6336b0d45dc23",
-        "name": "Get import",
+        "g": "3296e5f0fcd2c737",
+        "name": "http in",
         "url": "/librecoach/import",
         "method": "get",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 100,
-        "y": 660,
+        "x": 170,
+        "y": 700,
         "wires": [
             [
-                "0bd062c51b9e4b8b"
+                "0bd062c51b9e4b8b",
+                "83e45c7061bd9e49"
             ]
         ]
     },
@@ -7365,35 +7391,19 @@
         "id": "40e089e9bdbb5373",
         "type": "http response",
         "z": "bfa6336b0d45dc23",
-        "name": "",
+        "g": "3296e5f0fcd2c737",
+        "name": "http response",
         "statusCode": "",
         "headers": {},
-        "x": 470,
-        "y": 660,
+        "x": 580,
+        "y": 640,
         "wires": []
-    },
-    {
-        "id": "2f13c84b2e6d8789",
-        "type": "http in",
-        "z": "bfa6336b0d45dc23",
-        "name": "Get import",
-        "url": "/librecoach/import",
-        "method": "get",
-        "upload": false,
-        "skipBodyParsing": false,
-        "swaggerDoc": "",
-        "x": 100,
-        "y": 740,
-        "wires": [
-            [
-                "83e45c7061bd9e49"
-            ]
-        ]
     },
     {
         "id": "6ea3c976edca4420",
         "type": "http request",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -7406,8 +7416,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 490,
-        "y": 740,
+        "x": 570,
+        "y": 700,
         "wires": [
             [
                 "a439179f7b78685a"
@@ -7418,6 +7428,7 @@
         "id": "0d5ca59cd7836171",
         "type": "split",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -7426,8 +7437,8 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 910,
-        "y": 740,
+        "x": 990,
+        "y": 700,
         "wires": [
             [
                 "c2e0c58f22ff4794"
@@ -7438,6 +7449,7 @@
         "id": "96eef400b4adf26d",
         "type": "http request",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -7450,8 +7462,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1360,
-        "y": 740,
+        "x": 1410,
+        "y": 700,
         "wires": [
             [
                 "d3b9548ea352bc6c"
@@ -7462,6 +7474,7 @@
         "id": "d3b9548ea352bc6c",
         "type": "join",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "mode": "auto",
         "build": "object",
@@ -7475,8 +7488,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 1530,
-        "y": 740,
+        "x": 1570,
+        "y": 700,
         "wires": [
             [
                 "080d3da2e1d0d2ff"
@@ -7487,17 +7500,19 @@
         "id": "6fe721da58a82100",
         "type": "http response",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1930,
-        "y": 820,
+        "x": 1970,
+        "y": 780,
         "wires": []
     },
     {
         "id": "e686216d7dd9f13c",
         "type": "http request",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -7510,8 +7525,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1950,
-        "y": 740,
+        "x": 1990,
+        "y": 700,
         "wires": [
             []
         ]
@@ -7520,6 +7535,7 @@
         "id": "ac639050da7648b9",
         "type": "mqtt in",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "HA in",
         "topic": "librecoach/import/trigger",
         "qos": "2",
@@ -7529,8 +7545,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 90,
-        "y": 880,
+        "x": 170,
+        "y": 840,
         "wires": [
             [
                 "55dd74b672a2f509"
@@ -7541,6 +7557,7 @@
         "id": "8337a7f0dd0435d6",
         "type": "http request",
         "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
         "name": "",
         "method": "use",
         "ret": "obj",
@@ -7553,8 +7570,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 490,
-        "y": 880,
+        "x": 570,
+        "y": 840,
         "wires": [
             []
         ]
