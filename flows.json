@@ -79,7 +79,7 @@
             "c78420a075d43408"
         ],
         "x": 154,
-        "y": 1739,
+        "y": 1899,
         "w": 852,
         "h": 82
     },
@@ -274,7 +274,7 @@
             "922f2738c2000150"
         ],
         "x": 154,
-        "y": 1259,
+        "y": 1099,
         "w": 1652,
         "h": 402
     },
@@ -559,18 +559,14 @@
             "export_func_build_001",
             "export_func_publish_url_001",
             "12a57f6a07d0bf1a",
-            "9a0578bc94187110",
             "de184f27cbcc117f",
             "c53cf5f35f59ccd6",
-            "86d67a80f1ca910f",
-            "5f4e13ced8032d25",
-            "efacd6ad7853e68b",
-            "7bfcacac5168c527"
+            "47f3c921ae62126a"
         ],
         "x": 94,
-        "y": 119,
+        "y": 259,
         "w": 1812,
-        "h": 302
+        "h": 162
     },
     {
         "id": "8aac091f0fffbf22",
@@ -634,11 +630,11 @@
             "6fe721da58a82100",
             "e686216d7dd9f13c",
             "ac639050da7648b9",
-            "8337a7f0dd0435d6",
             "dda95ad4c2e65ea7",
             "48af3768692e8e47",
             "616a7d5b8036c0b5",
-            "6a3efcac3894a63f"
+            "6a3efcac3894a63f",
+            "47ac3adc971d73eb"
         ],
         "x": 94,
         "y": 519,
@@ -658,11 +654,13 @@
             "012b02175347902e",
             "d6680567062a0908",
             "0a63b31d61802934",
-            "cd0fc7e2bec3ae86"
+            "5f4e13ced8032d25",
+            "efacd6ad7853e68b",
+            "e663fd10970c345a"
         ],
         "x": 154,
-        "y": 1039,
-        "w": 772,
+        "y": 1559,
+        "w": 992,
         "h": 142
     },
     {
@@ -925,6 +923,25 @@
         "y": 579,
         "w": 472,
         "h": 142
+    },
+    {
+        "id": "efe52fc701f550cf",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "Notifications",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "dd199275f909301f",
+            "a1e89f48333c8256",
+            "8337a7f0dd0435d6"
+        ],
+        "x": 154,
+        "y": 1759,
+        "w": 652,
+        "h": 82
     },
     {
         "id": "80727e60a251c36c",
@@ -4564,7 +4581,8 @@
         "z": "3e5f038a4f5a8b9a",
         "name": "STATUS in",
         "links": [
-            "02bdfc59de71b5a5"
+            "02bdfc59de71b5a5",
+            "08e6e468b3a48d2f"
         ],
         "x": 240,
         "y": 820,
@@ -5114,7 +5132,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 1780,
+        "y": 1940,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -5134,7 +5152,7 @@
         "sendError": false,
         "allProps": false,
         "x": 480,
-        "y": 1780,
+        "y": 1940,
         "wires": [
             [
                 "c78420a075d43408"
@@ -5155,7 +5173,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 1780,
+        "y": 1940,
         "wires": []
     },
     {
@@ -5168,7 +5186,7 @@
         "action": "",
         "pretty": false,
         "x": 690,
-        "y": 1780,
+        "y": 1940,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -5731,7 +5749,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 320,
-        "y": 1300,
+        "y": 1140,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -5752,7 +5770,7 @@
         "finalize": "",
         "libs": [],
         "x": 720,
-        "y": 1300,
+        "y": 1140,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -5779,7 +5797,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 870,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -5800,7 +5818,7 @@
         "finalize": "",
         "libs": [],
         "x": 520,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -5835,7 +5853,7 @@
             "45414bacecada477"
         ],
         "x": 280,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -5854,7 +5872,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1670,
-        "y": 1300,
+        "y": 1140,
         "wires": [],
         "l": true
     },
@@ -5872,7 +5890,7 @@
         "finalize": "",
         "libs": [],
         "x": 1100,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "a2334b77d3764815",
@@ -5937,7 +5955,7 @@
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 1380,
+        "y": 1220,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -5958,7 +5976,7 @@
         "finalize": "",
         "libs": [],
         "x": 1380,
-        "y": 1420,
+        "y": 1260,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -5979,7 +5997,7 @@
         "finalize": "",
         "libs": [],
         "x": 1390,
-        "y": 1460,
+        "y": 1300,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -6006,7 +6024,7 @@
             "2343c8c12f2081fa"
         ],
         "x": 1420,
-        "y": 1620,
+        "y": 1460,
         "wires": [],
         "l": true
     },
@@ -6033,7 +6051,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1130,
-        "y": 1480,
+        "y": 1320,
         "wires": [
             [
                 "73abad3deeed31e8",
@@ -6078,7 +6096,7 @@
         "finalize": "",
         "libs": [],
         "x": 1400,
-        "y": 1500,
+        "y": 1340,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -6099,7 +6117,7 @@
         "finalize": "",
         "libs": [],
         "x": 1390,
-        "y": 1540,
+        "y": 1380,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -6290,7 +6308,7 @@
         "finalize": "",
         "libs": [],
         "x": 1400,
-        "y": 1580,
+        "y": 1420,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -6318,7 +6336,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 192,
+        "y": 185,
         "wires": []
     },
     {
@@ -6344,7 +6362,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 1100,
+        "y": 1600,
         "wires": [
             [
                 "d6680567062a0908"
@@ -6357,21 +6375,21 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "Create user toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Victron Integration Toggle ===\n\nconst victronEnabled = global.get(\"victronEnabled\", \"file\");\nconst victronState = victronEnabled === false ? \"OFF\" : \"ON\";\n\nif (victronEnabled === undefined) {\n  global.set(\"victronEnabled\", true, \"file\");\n}\n\nmessages.push({\n  topic: \"homeassistant/switch/victron_integration/config\",\n  payload: {\n    name: \"Victron Integration\",\n    unique_id: \"victron_integration\",\n    object_id: \"victron_integration\",\n    icon: \"mdi:alpha-v-box\",\n    command_topic: \"librecoach/victron/enabled/set\",\n    state_topic: \"librecoach/victron/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/victron/enabled/state\",\n  payload: victronState,\n});\n\n// === Beta Testing Toggle ===\n\nconst betaEnabled = global.get(\"betaEnabled\", \"file\");\nconst betaState = betaEnabled === true ? \"ON\" : \"OFF\";\n\nif (betaEnabled === undefined) {\n  global.set(\"betaEnabled\", false, \"file\");\n}\n\nmessages.push({\n  topic: \"homeassistant/switch/librecoach_beta_testing/config\",\n  payload: {\n    name: \"Beta Testing\",\n    unique_id: \"librecoach_beta_testing\",\n    object_id: \"librecoach_beta_testing\",\n    icon: \"mdi:test-tube\",\n    command_topic: \"librecoach/beta/enabled/set\",\n    state_topic: \"librecoach/beta/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/beta/enabled/state\",\n  payload: betaState,\n});\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Victron: ${victronState}, Beta: ${betaState}`,\n});\n\n// Output 1: Toggle configs + states to MQTT Retain TRUE\n// Output 2: Beta state trigger to handle_beta_toggle (creates beta entities if enabled)\nreturn [messages, { payload: betaState }];\n",
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Victron Integration Toggle ===\n\nconst victronEnabled = global.get(\"victronEnabled\", \"file\");\nconst victronState = victronEnabled === false ? \"OFF\" : \"ON\";\n\nif (victronEnabled === undefined) {\n  global.set(\"victronEnabled\", true, \"file\");\n}\n\nmessages.push({\n  topic: \"homeassistant/switch/victron_integration/config\",\n  payload: {\n    name: \"Enable Victron Integration\",\n    unique_id: \"victron_integration\",\n    object_id: \"victron_integration\",\n    icon: \"mdi:alpha-v-box\",\n    command_topic: \"librecoach/victron/enabled/set\",\n    state_topic: \"librecoach/victron/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/victron/enabled/state\",\n  payload: victronState,\n});\n\n// === Beta Testing Toggle ===\n\nconst betaEnabled = global.get(\"betaEnabled\", \"file\");\nconst betaState = (betaEnabled === true) ? \"ON\" : \"OFF\"; // Keep for status/output even if hidden\n\nif (betaEnabled === undefined) {\n  global.set(\"betaEnabled\", false, \"file\");\n}\n\n// UNCOMMENT THIS SECTION TO ENABLE BETA TOGGLE\n/*\nmessages.push({\n  topic: \"homeassistant/switch/librecoach_testing_beta/config\",\n  payload: {\n    name: \"Testing (Beta)\",\n    unique_id: \"librecoach_testing_beta\",\n    object_id: \"librecoach_testing_beta\",\n    icon: \"mdi:test-tube\",\n    command_topic: \"librecoach/beta/enabled/set\",\n    state_topic: \"librecoach/beta/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/beta/enabled/state\",\n  payload: betaState,\n});\n*/\n// UNCOMMENT ABOVE TO ENABLE BETA TOGGLE\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  { id: \"rv_manufacturer\", name: \"RV Manufacturer\", icon: \"mdi:factory\", max: 50 },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n    // REMOVE THIS LINE TO ENABLE BETA TOGGLE\n  \"homeassistant/switch/librecoach_testing_beta/config\", // Hide current Beta Toggle (until feature needed)\n  // REMOVE ABOVE LINE TO ENABLE BETA TOGGLE\n\n  \"homeassistant/switch/librecoach_beta_testing/config\", // Old Beta Toggle ID (keep deleted)\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Victron: ${victronState}, Beta: ${betaState}`,\n});\n\n// Output 1: Toggle configs + states to MQTT Retain TRUE\n// Output 2: Beta state trigger to handle_beta_toggle (creates beta entities if enabled)\nreturn [messages, { payload: betaState }];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 1100,
+        "x": 490,
+        "y": 1600,
         "wires": [
             [
                 "0a63b31d61802934"
             ],
             [
-                "cd0fc7e2bec3ae86"
+                "5f4e13ced8032d25"
             ]
         ]
     },
@@ -6385,23 +6403,133 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 790,
-        "y": 1080,
+        "x": 1010,
+        "y": 1600,
         "wires": [],
         "l": true
     },
     {
-        "id": "cd0fc7e2bec3ae86",
+        "id": "5f4e13ced8032d25",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f81ca31c89243206",
+        "name": "Handle beta toggle",
+        "func": "// Handles ON/OFF commands for Beta Testing toggle\n// Output 1: MQTT Retain TRUE (entity creation/deletion + state)\n// Output 2: Notification Payload (for notify_user)\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst command = (msg.payload || \"\").toString().toUpperCase().trim();\nconst stateTopic = \"librecoach/beta/enabled/state\";\nconst messages = [];\n\n// === Example: How to create/delete entities dynamically ===\n/*\nconst betaEntities = [\n  // Example: Export Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_export_config\",\n    name: \"Export LibreCoach Configuration\",\n    icon: \"mdi:download\",\n    extra: {\n      command_topic: \"librecoach/export/trigger\",\n    },\n  },\n\n  // Example: Import Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_import_config\",\n    name: \"Import LibreCoach Configuration\",\n    icon: \"mdi:upload\",\n    extra: {\n      command_topic: \"librecoach/import/trigger\",\n    },\n  },\n\n  // Example: RV Info text helpers\n  {\n    component: \"text\",\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_manufacturer\",\n      command_topic: \"librecoach/rv_info/rv_manufacturer/set\",\n      retain: true,\n      max: 50,\n    },\n  },\n  // Add more as needed...\n];\n\nif (command === \"ON\") {\n  // Create entities\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({\n      topic: discoveryTopic,\n      payload: {\n        name: entity.name,\n        unique_id: entity.id,\n        object_id: entity.id,\n        icon: entity.icon,\n        device: device,\n        ...entity.extra,\n      },\n    });\n\n    // Send initial state to avoid \"unknown\" status\n    if (entity.extra && entity.extra.state_topic) {\n      let currentValue = global.get(entity.id, \"file\") || \"\";\n      if (currentValue.toLowerCase() === \"unknown\") {\n        currentValue = \"\";\n      }\n      messages.push({\n        topic: entity.extra.state_topic,\n        payload: currentValue,\n        retain: true,\n      });\n    }\n  }\n}\n\nif (command === \"OFF\") {\n  // Delete entities (empty payload)\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({ topic: discoveryTopic, payload: \"\" });\n  }\n}\n*/\n\nif (command === \"ON\") {\n  // Notify user that no beta features are active (send to Output 2)\n  const notificationMsg = {\n    payload: {\n      title: \"LibreCoach Beta\",\n      message: \"No features are currently in Beta testing.\",\n      notification_id: \"librecoach_beta_status\",\n    },\n  };\n\n  // Auto-off: Reset the toggle immediately (Output 1)\n  messages.push({ topic: \"librecoach/beta/enabled/set\", payload: \"OFF\" });\n  messages.push({ topic: stateTopic, payload: \"OFF\" });\n\n  node.status({ fill: \"yellow\", shape: \"dot\", text: \"No active beta features\" });\n\n  // Return: [Output 1 (Array of MQTT msgs), Output 2 (Single Notification msg)]\n  return [messages, notificationMsg];\n}\n\nif (command === \"OFF\") {\n  // Just confirm state\n  global.set(\"betaEnabled\", false, \"file\");\n  messages.push({ topic: stateTopic, payload: \"OFF\" });\n  node.status({ fill: \"grey\", shape: \"dot\", text: \"Beta disabled\" });\n  return [messages, null];\n}\n\n// Unknown command — ignore\nnode.warn(`handle_beta_toggle: Unknown command \"${command}\"`);\nreturn null;\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1660,
+        "wires": [
+            [
+                "0a63b31d61802934"
+            ],
+            [
+                "e663fd10970c345a"
+            ]
+        ]
+    },
+    {
+        "id": "efacd6ad7853e68b",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "f81ca31c89243206",
+        "name": "HA in",
+        "topic": "librecoach/beta/enabled/set",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 1660,
+        "wires": [
+            [
+                "5f4e13ced8032d25"
+            ]
+        ]
+    },
+    {
+        "id": "dd199275f909301f",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "efe52fc701f550cf",
+        "name": "Notify user",
+        "func": "// Centralized Notification Handler\n// Input: msg.payload with { title, message, notification_id }\n// Output: msg configured for HTTP Request to HA notification service\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n    node.warn(\"No Supervisor token - skipping notification\");\n    return null;\n}\n\nconst payload = msg.payload || {};\n\nif (!payload.title || !payload.message) {\n    node.warn(\"Notification missing title or message\");\n    return null;\n}\n\nmsg.url = `${haBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n    Authorization: `Bearer ${haToken}`,\n    \"Content-Type\": \"application/json\",\n};\n\nmsg.payload = {\n    title: payload.title,\n    message: payload.message,\n    notification_id: payload.notification_id || \"librecoach_notification\",\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1800,
+        "wires": [
+            [
+                "8337a7f0dd0435d6"
+            ]
+        ]
+    },
+    {
+        "id": "a1e89f48333c8256",
+        "type": "link in",
+        "z": "292e70a6ba25b323",
+        "g": "efe52fc701f550cf",
+        "name": "Notify user",
+        "links": [
+            "47f3c921ae62126a",
+            "47ac3adc971d73eb",
+            "e663fd10970c345a"
+        ],
+        "x": 240,
+        "y": 1800,
+        "wires": [
+            [
+                "dd199275f909301f"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "8337a7f0dd0435d6",
+        "type": "http request",
+        "z": "292e70a6ba25b323",
+        "g": "efe52fc701f550cf",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 710,
+        "y": 1800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e663fd10970c345a",
         "type": "link out",
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
-        "name": "Handle Beta toggle",
+        "name": "Notify user",
         "mode": "link",
         "links": [
-            "7bfcacac5168c527"
+            "a1e89f48333c8256"
         ],
-        "x": 770,
-        "y": 1140,
+        "x": 970,
+        "y": 1660,
         "wires": [],
         "l": true
     },
@@ -6991,7 +7119,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
         "name": "Read RV info",
-        "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n//\n// Required Configuration:\n// - SUPERVISOR_TOKEN: Supervisor-managed token injected into the add-on environment\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.error(\n    \"SUPERVISOR_TOKEN not configured. Ensure the add-on provides it.\",\n    msg,\n  );\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No Supervisor token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || null,\n  model: rvInfo.rv_model || null,\n  year: rvInfo.rv_year || null,\n  other: rvInfo.rv_other || null,\n};\n\nreturn msg;\n",
+        "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.error(\n    \"SUPERVISOR_TOKEN not configured. Ensure the add-on provides it.\",\n    msg,\n  );\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No Supervisor token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || \"Unknown\",\n  model: rvInfo.rv_model || \"Unknown\",\n  year: rvInfo.rv_year || \"Unknown\",\n  other: rvInfo.rv_other || \"Unknown\",\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7058,7 +7186,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
         "name": "Export HA Config",
-        "func": "// Builds export configuration from Home Assistant states\n// Input:\n//   msg.states - Array from /api/states\n//   msg.rvInfo - Object with RV metadata (manufacturer, model, year, other)\n// Output:\n//   msg.payload - JSON configuration object for file write\n//\n// Note: Area assignments require WebSocket API and are not included in this export.\n// Friendly names are extracted from entity attributes.\n\n// LibreCoach entity patterns to match\nconst ENTITY_PATTERNS = [\n  /^light\\.switch_\\d+$/,\n  /^cover\\.shade_\\d+$/,\n  /^lock\\.lock_\\d+$/,\n  /^switch\\.water_pump$/,\n  /^switch\\.autofill$/,\n  /^sensor\\.\\w+_tank$/,\n  /^sensor\\.\\w+_battery$/,\n  /^climate\\.floor_heat_\\d+$/,\n  /^light\\.aquahot_(burner|ac_1|ac_2|engine)$/,\n];\n\n// Validate inputs\nif (!msg.states || !Array.isArray(msg.states)) {\n  node.error(\"Input missing 'states' array from /api/states\", msg);\n  return null;\n}\n\n// Filter and process LibreCoach entities\nconst entities = {};\n\nfor (const state of msg.states) {\n  const entityId = state.entity_id;\n\n  // Check if entity matches any LibreCoach pattern\n  const isLibreCoachEntity = ENTITY_PATTERNS.some((pattern) =>\n    pattern.test(entityId),\n  );\n\n  if (!isLibreCoachEntity) {\n    continue;\n  }\n\n  // Extract entity details from attributes\n  const attributes = state.attributes || {};\n  const friendlyName = attributes.friendly_name || entityId;\n\n  // Skip entities with the default HA-generated name (not user-customized)\n  if (friendlyName.startsWith(\"LibreCoach: \")) {\n    continue;\n  }\n\n  // Determine device class and instance\n  const parts = entityId.split(\".\");\n  const domain = parts[0];\n  const entityName = parts[1];\n\n  // Extract instance number or identifier\n  let instance = null;\n  const instanceMatch = entityName.match(/_(\\d+)$/);\n  if (instanceMatch) {\n    instance = parseInt(instanceMatch[1], 10);\n  } else if (entityName === \"water_pump\" || entityName === \"autofill\") {\n    instance = entityName;\n  } else {\n    // Handle aquahot entities like aquahot_burner\n    const aquahotMatch = entityName.match(\n      /^aquahot_(burner|ac_1|ac_2|engine)$/,\n    );\n    if (aquahotMatch) {\n      instance = aquahotMatch[1];\n    }\n  }\n\n  // Determine original name (what LibreCoach created)\n  let originalName = entityName\n    .replace(/_/g, \" \")\n    .replace(/\\b\\w/g, (c) => c.toUpperCase());\n\n  // Build entity export object\n  entities[entityId] = {\n    entity_id: entityId,\n    original_name: originalName,\n    friendly_name: friendlyName,\n    device_class: domain,\n    instance: instance,\n  };\n}\n\n// Build final export object\nconst exportConfig = {\n  export_date: new Date().toISOString(),\n  rv_info: msg.rvInfo || {\n    manufacturer: null,\n    model: null,\n    year: null,\n    other: null,\n  },\n  entities: entities,\n};\n\n// Pass export config object to next node (for Data URI creation)\nmsg.exportConfig = exportConfig;\n\n// Build dynamic filename from RV info fields\nconst rvInfo = msg.rvInfo || {};\nconst filenameParts = [\"manufacturer\", \"model\", \"year\", \"other\"]\n  .map((key) => (rvInfo[key] || \"\").toString().trim())\n  .filter((val) => val.length > 0)\n  .map((val) => val.replace(/\\s+/g, \"-\"));\n\nmsg.exportFilename =\n  filenameParts.length > 0\n    ? filenameParts.join(\"_\") + \".json\"\n    : \"librecoach_config.json\";\n\n// Include entity count for logging\nconst entityCount = Object.keys(entities).length;\nnode.status({ fill: \"green\", shape: \"dot\", text: `${entityCount} entities` });\n\nreturn msg;\n",
+        "func": "// Builds export configuration from Home Assistant states\n// Input:\n//   msg.states - Array from /api/states\n//   msg.rvInfo - Object with RV metadata (manufacturer, model, year, other)\n// Output: msg.exportConfig (object), msg.exportFilename (string)\n\nconst ENTITY_PATTERNS = [\n  /^light\\.switch_\\d+$/,\n  /^cover\\.shade_\\d+$/,\n  /^lock\\.lock_\\d+$/,\n  /^switch\\.water_pump$/,\n  /^switch\\.autofill$/,\n  /^sensor\\.\\w+_tank$/,\n  /^sensor\\.\\w+_battery$/,\n  /^climate\\.floor_heat_\\d+$/,\n  /^light\\.aquahot_(burner|ac_1|ac_2|engine)$/,\n];\n\nif (!msg.states || !Array.isArray(msg.states)) {\n  node.error(\"Input missing 'states' array from /api/states\", msg);\n  return null;\n}\n\nconst entities = {};\n\nfor (const state of msg.states) {\n  const entityId = state.entity_id;\n\n  const isLibreCoachEntity = ENTITY_PATTERNS.some((pattern) =>\n    pattern.test(entityId),\n  );\n\n  if (!isLibreCoachEntity) {\n    continue;\n  }\n\n  const attributes = state.attributes || {};\n  const friendlyName = attributes.friendly_name || entityId;\n\n  // Skip entities with the default HA-generated name (not user-customized)\n  if (friendlyName.startsWith(\"LibreCoach: \")) {\n    continue;\n  }\n\n  const parts = entityId.split(\".\");\n  const domain = parts[0];\n  const entityName = parts[1];\n\n  let instance = null;\n  const instanceMatch = entityName.match(/_(\\d+)$/);\n  if (instanceMatch) {\n    instance = parseInt(instanceMatch[1], 10);\n  } else if (entityName === \"water_pump\" || entityName === \"autofill\") {\n    instance = entityName;\n  } else {\n    const aquahotMatch = entityName.match(\n      /^aquahot_(burner|ac_1|ac_2|engine)$/,\n    );\n    if (aquahotMatch) {\n      instance = aquahotMatch[1];\n    }\n  }\n\n  let originalName = entityName\n    .replace(/_/g, \" \")\n    .replace(/\\b\\w/g, (c) => c.toUpperCase());\n\n  entities[entityId] = {\n    entity_id: entityId,\n    original_name: originalName,\n    friendly_name: friendlyName,\n    device_class: domain,\n    instance: instance,\n  };\n}\n\nconst exportConfig = {\n  export_date: new Date().toISOString(),\n  rv_info: msg.rvInfo || {\n    manufacturer: \"Unknown\",\n    model: \"Unknown\",\n    year: \"Unknown\",\n    other: \"Unknown\",\n  },\n  entities: entities,\n};\n\nmsg.exportConfig = exportConfig;\n\nconst rvInfo = msg.rvInfo || {};\nconst filenameParts = [\"manufacturer\", \"model\", \"year\", \"other\"]\n  .map((key) => (rvInfo[key] || \"\").toString().trim())\n  .filter((val) => val.length > 0 && val !== \"Unknown\")\n  .map((val) => val.replace(/\\s+/g, \"-\"));\n\nmsg.exportFilename =\n  filenameParts.length > 0\n    ? filenameParts.join(\"_\") + \".json\"\n    : \"librecoach_config.json\";\n\nconst entityCount = Object.keys(entities).length;\nnode.status({ fill: \"green\", shape: \"dot\", text: `${entityCount} entities` });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7110,21 +7238,6 @@
         "l": true
     },
     {
-        "id": "9a0578bc94187110",
-        "type": "link out",
-        "z": "bfa6336b0d45dc23",
-        "g": "export_config_group_001",
-        "name": "MQTT out: Retain TRUE",
-        "mode": "link",
-        "links": [
-            "f658418a7b9b4857"
-        ],
-        "x": 830,
-        "y": 220,
-        "wires": [],
-        "l": true
-    },
-    {
         "id": "de184f27cbcc117f",
         "type": "file",
         "z": "bfa6336b0d45dc23",
@@ -7149,105 +7262,21 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
-        "name": "Send export noitification",
-        "func": "// Sends persistent notification to HA when export completes\n// Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)\n// Output: msg configured for HTTP Request to HA notification service\n\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\n// Store filename in flow context for the download endpoint\nflow.set(\"exportFilename\", filename);\n\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.warn(\"No Supervisor token - skipping notification\");\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No Supervisor Token\" });\n  return null;\n}\n\nconst downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;\n\nmsg.url = \"http://supervisor/core/api/services/persistent_notification/create\";\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Export Complete\",\n  message: `<a href=\"${downloadUrl}\" target=\"_blank\">Download ${filename}</a>`,\n  notification_id: \"librecoach_export\",\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Notification sent\",\n});\n\nreturn msg;\n",
+        "name": "Notify export url",
+        "func": "// Stores filename and prepares notification payload\n// Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)\n// Output: msg.payload configured for notify_user\n\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\n// Store filename in flow context for the download endpoint\nflow.set(\"exportFilename\", filename);\n\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;\n\nmsg.payload = {\n  title: \"LibreCoach Export Complete\",\n  message: `<a href=\"${downloadUrl}\" target=\"_blank\">Download ${filename}</a>`,\n  notification_id: \"librecoach_export\",\n  data: {\n    filename: filename\n  }\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Notification prepared\",\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1590,
+        "x": 1560,
         "y": 300,
         "wires": [
             [
-                "86d67a80f1ca910f"
+                "47f3c921ae62126a"
             ]
         ]
-    },
-    {
-        "id": "86d67a80f1ca910f",
-        "type": "http request",
-        "z": "bfa6336b0d45dc23",
-        "g": "export_config_group_001",
-        "name": "",
-        "method": "use",
-        "ret": "txt",
-        "paytoqs": "body",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 1810,
-        "y": 300,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5f4e13ced8032d25",
-        "type": "function",
-        "z": "bfa6336b0d45dc23",
-        "g": "export_config_group_001",
-        "name": "Handle beta toggle",
-        "func": "// Handles ON/OFF commands for Beta Testing toggle\n// Single output → MQTT Retain TRUE (entity creation/deletion + state)\n//\n// Beta entity registry — add new beta features here.\n// Each entry needs: component, id, name, icon, and any component-specific fields.\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst betaEntities = [\n  // Export Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_export_config\",\n    name: \"Export LibreCoach Configuration\",\n    icon: \"mdi:download\",\n    extra: {\n      command_topic: \"librecoach/export/trigger\",\n    },\n  },\n\n  // Import Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_import_config\",\n    name: \"Import LibreCoach Configuration\",\n    icon: \"mdi:upload\",\n    extra: {\n      command_topic: \"librecoach/import/trigger\",\n    },\n  },\n  // RV Info text helpers\n  {\n    component: \"text\",\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_manufacturer\",\n      command_topic: \"librecoach/rv_info/rv_manufacturer/set\",\n      retain: true,\n      max: 50,\n    },\n  },\n  {\n    component: \"text\",\n    id: \"rv_model\",\n    name: \"RV Model\",\n    icon: \"mdi:rv-truck\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_model\",\n      command_topic: \"librecoach/rv_info/rv_model/set\",\n      retain: true,\n      max: 50,\n    },\n  },\n  {\n    component: \"text\",\n    id: \"rv_year\",\n    name: \"RV Year\",\n    icon: \"mdi:calendar\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_year\",\n      command_topic: \"librecoach/rv_info/rv_year/set\",\n      retain: true,\n      max: 4,\n    },\n  },\n  {\n    component: \"text\",\n    id: \"rv_other\",\n    name: \"RV Other\",\n    icon: \"mdi:note-text\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_other\",\n      command_topic: \"librecoach/rv_info/rv_other/set\",\n      retain: true,\n      max: 100,\n    },\n  },\n];\n\nconst command = (msg.payload || \"\").toString().toUpperCase().trim();\nconst stateTopic = \"librecoach/beta/enabled/state\";\nconst messages = [];\n\nif (command === \"ON\") {\n  // === Enable Beta Features ===\n  global.set(\"betaEnabled\", true, \"file\");\n\n  // Create all beta entities\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({\n      topic: discoveryTopic,\n      payload: {\n        name: entity.name,\n        unique_id: entity.id,\n        object_id: entity.id,\n        icon: entity.icon,\n        device: device,\n        ...entity.extra,\n      },\n    });\n  }\n\n  messages.push({ topic: stateTopic, payload: \"ON\" });\n\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: `Beta enabled — ${betaEntities.length} entities created`,\n  });\n\n  return [messages];\n}\n\nif (command === \"OFF\") {\n  // === Disable Beta Features ===\n  global.set(\"betaEnabled\", false, \"file\");\n\n  // Delete all beta entities (empty retained payload removes from HA)\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({ topic: discoveryTopic, payload: \"\" });\n  }\n\n  messages.push({ topic: stateTopic, payload: \"OFF\" });\n\n  node.status({\n    fill: \"grey\",\n    shape: \"dot\",\n    text: `Beta disabled — ${betaEntities.length} entities removed`,\n  });\n\n  return [messages];\n}\n\n// Unknown command — ignore\nnode.warn(`handle_beta_toggle: Unknown command \"${command}\"`);\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 570,
-        "y": 220,
-        "wires": [
-            [
-                "9a0578bc94187110"
-            ]
-        ]
-    },
-    {
-        "id": "efacd6ad7853e68b",
-        "type": "mqtt in",
-        "z": "bfa6336b0d45dc23",
-        "g": "export_config_group_001",
-        "name": "HA in",
-        "topic": "librecoach/beta/enabled/set",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 170,
-        "y": 220,
-        "wires": [
-            [
-                "5f4e13ced8032d25"
-            ]
-        ]
-    },
-    {
-        "id": "7bfcacac5168c527",
-        "type": "link in",
-        "z": "bfa6336b0d45dc23",
-        "g": "export_config_group_001",
-        "name": "Handle Beta toggle",
-        "links": [
-            "cd0fc7e2bec3ae86"
-        ],
-        "x": 330,
-        "y": 160,
-        "wires": [
-            [
-                "5f4e13ced8032d25"
-            ]
-        ],
-        "l": true
     },
     {
         "id": "0bd062c51b9e4b8b",
@@ -7345,7 +7374,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
         "name": "Notify import URL",
-        "func": "// Creates HA persistent notification with link to the import page\n// Input: MQTT trigger from librecoach/import/trigger\n// Output: msg configured for HTTP Request to HA notification service\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.warn(\"No Supervisor token - skipping notification\");\n  return null;\n}\n\nconst nrBaseUrl = (\n  env.get(\"NR_BASE_URL\") || \"http://homeassistant.local:1880\"\n).trim();\nconst importUrl = `${nrBaseUrl.replace(/\\/+$/, \"\")}/endpoint/librecoach/import`;\n\nmsg.url = `${haBaseUrl}/api/services/persistent_notification/create`;\nmsg.method = \"POST\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n  title: \"LibreCoach Import\",\n  message: `Upload a configuration file to restore entity names.\\n\\n[Open Import Page](${importUrl})`,\n  notification_id: \"librecoach_import\",\n};\n\nreturn msg;\n",
+        "func": "// Prepares notification payload for Import\n// Input: MQTT trigger from librecoach/import/trigger\n// Output: msg.payload configured for notify_user\n\nconst nrBaseUrl = \"http://homeassistant.local:1880\";\nconst importUrl = `${nrBaseUrl}/endpoint/librecoach/import`;\n\nmsg.payload = {\n  title: \"LibreCoach Import\",\n  message: `Upload a configuration file to restore entity names.\\n\\n[Open Import Page](${importUrl})`,\n  notification_id: \"librecoach_import\",\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7356,7 +7385,7 @@
         "y": 840,
         "wires": [
             [
-                "8337a7f0dd0435d6"
+                "47ac3adc971d73eb"
             ]
         ]
     },
@@ -7549,29 +7578,6 @@
         ]
     },
     {
-        "id": "8337a7f0dd0435d6",
-        "type": "http request",
-        "z": "bfa6336b0d45dc23",
-        "g": "3296e5f0fcd2c737",
-        "name": "",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 570,
-        "y": 840,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "dda95ad4c2e65ea7",
         "type": "http response",
         "z": "bfa6336b0d45dc23",
@@ -7644,6 +7650,36 @@
                 "d3b9548ea352bc6c"
             ]
         ]
+    },
+    {
+        "id": "47f3c921ae62126a",
+        "type": "link out",
+        "z": "bfa6336b0d45dc23",
+        "g": "export_config_group_001",
+        "name": "Notify user",
+        "mode": "link",
+        "links": [
+            "a1e89f48333c8256"
+        ],
+        "x": 1810,
+        "y": 300,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "47ac3adc971d73eb",
+        "type": "link out",
+        "z": "bfa6336b0d45dc23",
+        "g": "3296e5f0fcd2c737",
+        "name": "Notify user",
+        "mode": "link",
+        "links": [
+            "a1e89f48333c8256"
+        ],
+        "x": 570,
+        "y": 840,
+        "wires": [],
+        "l": true
     },
     {
         "id": "b2cbbdbaab1fc227",
