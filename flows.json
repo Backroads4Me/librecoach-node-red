@@ -664,6 +664,25 @@
         "h": 142
     },
     {
+        "id": "efe52fc701f550cf",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "Notifications",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "dd199275f909301f",
+            "a1e89f48333c8256",
+            "8337a7f0dd0435d6"
+        ],
+        "x": 154,
+        "y": 1759,
+        "w": 652,
+        "h": 82
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -923,25 +942,6 @@
         "y": 579,
         "w": 472,
         "h": 142
-    },
-    {
-        "id": "efe52fc701f550cf",
-        "type": "group",
-        "z": "292e70a6ba25b323",
-        "name": "Notifications",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "dd199275f909301f",
-            "a1e89f48333c8256",
-            "8337a7f0dd0435d6"
-        ],
-        "x": 154,
-        "y": 1759,
-        "w": 652,
-        "h": 82
     },
     {
         "id": "80727e60a251c36c",
@@ -1482,7 +1482,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 90,
+        "y": 75,
         "wires": []
     },
     {
@@ -4581,8 +4581,7 @@
         "z": "3e5f038a4f5a8b9a",
         "name": "STATUS in",
         "links": [
-            "02bdfc59de71b5a5",
-            "08e6e468b3a48d2f"
+            "02bdfc59de71b5a5"
         ],
         "x": 240,
         "y": 820,
@@ -5248,7 +5247,6 @@
             "f0ba2779795efdae",
             "1c1403c14b577fb4",
             "12a57f6a07d0bf1a",
-            "9a0578bc94187110",
             "bd38c37850a3e832",
             "88eba1965c640949",
             "0a63b31d61802934"
@@ -7329,7 +7327,7 @@
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
         "name": "Build import plan",
-        "func": "// Cross-references import entities with current HA entities\n// Input:\n//   msg.payload = array of state objects from GET /api/states\n//   msg.importConfig = { customized, skippedUnchanged, totalInFile }\n// Output 1: msg.payload = array of { entity_id, friendly_name } for Split pipeline\n// Output 2: msg.payload = early HTTP response when no entities to update\n\nconst states = msg.payload;\nconst config = msg.importConfig;\n\nif (!Array.isArray(states) || !config) {\n    msg.payload = { error: \"Failed to retrieve HA states.\" };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Build set of entity IDs currently in HA\nconst haEntityIds = new Set(states.map((s) => s.entity_id));\n\n// Cross-reference: only include entities that exist in HA\nconst toUpdate = [];\nlet skippedMissing = 0;\n\nfor (const entity of config.customized) {\n    if (haEntityIds.has(entity.entity_id)) {\n        toUpdate.push(entity);\n    } else {\n        skippedMissing++;\n    }\n}\n\n// Store counts for summarize_import\nmsg.importCounts = {\n    totalInFile: config.totalInFile,\n    skippedUnchanged: config.skippedUnchanged,\n    skippedMissing: skippedMissing,\n    toUpdate: toUpdate.length,\n};\n\nif (toUpdate.length === 0) {\n    msg.payload = {\n        updated: 0,\n        skipped: skippedMissing + config.skippedUnchanged,\n        failed: 0,\n        message: \"No matching entities found in HA to update.\",\n    };\n    msg.statusCode = 200;\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"Nothing to update\" });\n    return [null, msg];\n}\n\nmsg.payload = toUpdate;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${toUpdate.length} to update, ${skippedMissing} missing`,\n});\n\nreturn [msg, null];\n",
+        "func": "// Cross-references import entities with current HA entities\n// Input:\n//   msg.payload = array of state objects from GET /api/states\n//   msg.importConfig = { customized, skippedUnchanged, totalInFile }\n// Output 1: msg.payload = array of { entity_id, friendly_name } for Split pipeline\n// Output 2: msg.payload = early HTTP response when no entities to update\n\nconst states = msg.payload;\nconst config = msg.importConfig;\n\nif (!Array.isArray(states) || !config) {\n    msg.payload = { error: \"Failed to retrieve HA states.\" };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Build set of entity IDs currently in HA\nconst haEntityIds = new Set(states.map((s) => s.entity_id));\n\n// Cross-reference: only include entities that exist in HA\nconst toUpdate = [];\nlet skippedMissing = 0;\n\nfor (const entity of config.customized) {\n    if (haEntityIds.has(entity.entity_id)) {\n        toUpdate.push(entity);\n    } else {\n        skippedMissing++;\n    }\n}\n\n// Store counts for summarize_import\nmsg.importCounts = {\n    totalInFile: config.totalInFile,\n    skippedUnchanged: config.skippedUnchanged,\n    skippedMissing: skippedMissing,\n    toUpdate: toUpdate.length,\n};\n\nif (toUpdate.length === 0) {\n    msg.payload = {\n        updated: 0,\n        skipped: skippedMissing + config.skippedUnchanged,\n        failed: 0,\n        message: \"No matching entities found in HA to update.\",\n    };\n    msg.statusCode = 200;\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"Nothing to update\" });\n    return [null, msg];\n}\n\nmsg.payload = toUpdate;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${toUpdate.length} to update, ${skippedMissing} skipped`,\n});\n\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
