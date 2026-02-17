@@ -6402,7 +6402,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 178,
+        "y": 171,
         "wires": []
     },
     {
@@ -7226,7 +7226,7 @@
         "z": "e3804d2dd0b81928",
         "g": "65587a19852a1225",
         "name": "Micro-Air in",
-        "topic": "librecoach/ble/microair/${mac}/set",
+        "topic": "homeassistant/climate/+/+/set",
         "qos": "2",
         "datatype": "json",
         "broker": "80727e60a251c36c",
@@ -7248,7 +7248,7 @@
         "z": "e3804d2dd0b81928",
         "g": "65587a19852a1225",
         "name": "encode_microair_command",
-        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{mac}_{zone}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{mac}_{zone}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, {mac}, zone, {z}\n// 0         1      2     3\nconst mac = subParts[1];\nconst zone = parseInt(subParts[3]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    change.mode = val;\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    change.fan_mode = val;\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
+        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\n// Find \"zone\" keyword to split MAC from zone number\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    change.mode = val;\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    change.fan_mode = val;\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
