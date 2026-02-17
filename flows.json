@@ -1156,7 +1156,7 @@
         "z": "292e70a6ba25b323",
         "g": "9cfcca5efde78052",
         "name": "Read DGN table",
-        "filename": "/config/projects/librecoach-node-red/rvc/dgn-summary-table.json",
+        "filename": "/config/projects/librecoach-node-red/data/dgn-summary-table.json",
         "filenameType": "str",
         "format": "utf8",
         "chunk": false,
@@ -2348,7 +2348,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 200,
+        "y": 193,
         "wires": []
     },
     {
@@ -6805,7 +6805,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "Read Victron CSV",
-        "filename": "/config/projects/librecoach-node-red/rvc/victron_attributes.csv",
+        "filename": "/config/projects/librecoach-node-red/data/victron_attributes.csv",
         "filenameType": "str",
         "format": "utf8",
         "chunk": false,
@@ -7027,8 +7027,8 @@
         "z": "1fde0c4ffb03727e",
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
-        "x": 620,
-        "y": 401,
+        "x": 640,
+        "y": 460,
         "wires": []
     },
     {
