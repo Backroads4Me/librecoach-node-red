@@ -3,6 +3,9 @@
 This repository is part of the LibreCoach project. Contributions require signing the Contributor License Agreement (CLA) before a PR can be merged.
 
 Scope: The CLA applies to contributions in this repository.
+This repository is part of the LibreCoach project. Contributions require signing the Contributor License Agreement (CLA) before a PR can be merged.
+
+Scope: The CLA applies to contributions in this repository.
 
 The CLA check is managed via CLA Assistant:
 https://cla-assistant.io/
