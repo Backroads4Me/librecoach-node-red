@@ -7228,7 +7228,7 @@
         "name": "Micro-Air in",
         "topic": "homeassistant/climate/+/+/set",
         "qos": "2",
-        "datatype": "json",
+        "datatype": "auto-detect",
         "broker": "80727e60a251c36c",
         "nl": false,
         "rap": true,
