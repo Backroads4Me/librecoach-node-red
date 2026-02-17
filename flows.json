@@ -702,17 +702,19 @@
             "c92f3be74ab20d69",
             "78058c1b20751a76",
             "950e9ce654224317",
-            "cd4c55cd4f675905"
+            "cd4c55cd4f675905",
+            "65587a19852a1225"
         ],
-        "x": 114,
+        "x": 108,
         "y": 79,
-        "w": 1332,
-        "h": 348
+        "w": 1228,
+        "h": 488
     },
     {
         "id": "65587a19852a1225",
         "type": "group",
         "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
         "name": "Micro-Air command",
         "style": {
             "stroke": "#777777",
@@ -723,8 +725,8 @@
             "e1cc8c52948f9b2a",
             "52b505b69f88888d"
         ],
-        "x": 114,
-        "y": 519,
+        "x": 134,
+        "y": 459,
         "w": 792,
         "h": 82
     },
@@ -1004,8 +1006,8 @@
             "205af5b7fa62d8ac",
             "a58b5f05c8346eab"
         ],
-        "x": 774,
-        "y": 259,
+        "x": 804,
+        "y": 279,
         "w": 472,
         "h": 142
     },
@@ -7064,7 +7066,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 430,
         "y": 160,
         "wires": [
             [
@@ -7085,7 +7087,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
+        "x": 660,
         "y": 160,
         "wires": [
             [
@@ -7118,8 +7120,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 890,
-        "y": 360,
+        "x": 920,
+        "y": 380,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -7139,8 +7141,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1140,
-        "y": 360,
+        "x": 1170,
+        "y": 380,
         "wires": [
             []
         ]
@@ -7154,8 +7156,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 880,
-        "y": 300,
+        "x": 910,
+        "y": 320,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -7176,7 +7178,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1030,
+        "x": 920,
         "y": 120,
         "wires": [
             [
@@ -7197,8 +7199,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
-        "y": 180,
+        "x": 920,
+        "y": 200,
         "wires": [
             [
                 "950e9ce654224317"
@@ -7215,7 +7217,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1310,
+        "x": 1200,
         "y": 160,
         "wires": [],
         "l": true
@@ -7234,8 +7236,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 210,
-        "y": 560,
+        "x": 230,
+        "y": 500,
         "wires": [
             [
                 "e1cc8c52948f9b2a"
@@ -7248,15 +7250,15 @@
         "z": "e3804d2dd0b81928",
         "g": "65587a19852a1225",
         "name": "encode_microair_command",
-        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\n// Find \"zone\" keyword to split MAC from zone number\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    change.mode = val;\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    change.fan_mode = val;\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
+        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\n// Find \"zone\" keyword to split MAC from zone number\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n    off: 0,\n    fan_only: 1,\n    cool: 2,\n    heat: 5,\n    dry: 6,\n    auto: 11,\n};\n\nconst FAN_MAP = {\n    off: 0,\n    low: 1,\n    high: 2,\n    medium: 3,\n    auto: 128,\n};\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    // Map to MicroAir integer\n    if (val in MODE_MAP) {\n        change.mode = MODE_MAP[val];\n    } else {\n        // Fallback or ignore?\n        // If it's already a number, pass it through??\n        // Assume string for now.\n        return null;\n    }\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n    change.autoHeat_sp = temp;\n    change.autoCool_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    if (val in FAN_MAP) {\n        change.fan_mode = FAN_MAP[val];\n    } else {\n        return null;\n    }\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 560,
+        "x": 500,
+        "y": 500,
         "wires": [
             [
                 "52b505b69f88888d"
@@ -7273,8 +7275,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 770,
-        "y": 560,
+        "x": 790,
+        "y": 500,
         "wires": [],
         "l": true
     },
