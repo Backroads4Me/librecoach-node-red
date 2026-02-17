@@ -40,6 +40,14 @@
         "env": []
     },
     {
+        "id": "e3804d2dd0b81928",
+        "type": "tab",
+        "label": "Micro-Air",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "bfa6336b0d45dc23",
         "type": "tab",
         "label": "Templates",
@@ -79,7 +87,7 @@
             "c78420a075d43408"
         ],
         "x": 154,
-        "y": 1899,
+        "y": 1839,
         "w": 852,
         "h": 82
     },
@@ -139,12 +147,14 @@
             "0e65ff3bc0a0795c",
             "9e9b11b9441e51db",
             "54cd7e4a8959a77c",
-            "32add109922d428a"
+            "32add109922d428a",
+            "21029b71ed58348c",
+            "c9d298bbaa855984"
         ],
         "x": 154,
         "y": 399,
         "w": 732,
-        "h": 522
+        "h": 602
     },
     {
         "id": "f09f79586501cb0b",
@@ -596,15 +606,12 @@
             "3ffa68cfd2195db1",
             "bd38c37850a3e832",
             "86ab41ab0a2ff264",
-            "c80ea298a37232a2",
-            "f6a25a558d4a42f6",
-            "9172107991ff8aa6",
-            "88eba1965c640949"
+            "c80ea298a37232a2"
         ],
         "x": 94,
         "y": 59,
         "w": 1398,
-        "h": 688
+        "h": 608
     },
     {
         "id": "3296e5f0fcd2c737",
@@ -653,15 +660,12 @@
         "nodes": [
             "012b02175347902e",
             "d6680567062a0908",
-            "0a63b31d61802934",
-            "5f4e13ced8032d25",
-            "efacd6ad7853e68b",
-            "e663fd10970c345a"
+            "0a63b31d61802934"
         ],
         "x": 154,
         "y": 1559,
-        "w": 992,
-        "h": 142
+        "w": 732,
+        "h": 82
     },
     {
         "id": "efe52fc701f550cf",
@@ -678,7 +682,7 @@
             "8337a7f0dd0435d6"
         ],
         "x": 154,
-        "y": 1759,
+        "y": 1699,
         "w": 652,
         "h": 82
     },
@@ -939,9 +943,71 @@
             "2343c8c12f2081fa"
         ],
         "x": 994,
-        "y": 579,
+        "y": 499,
         "w": 472,
         "h": 142
+    },
+    {
+        "id": "cd4c55cd4f675905",
+        "type": "group",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Rest unique list",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "36941b7928b35ae1",
+            "205af5b7fa62d8ac",
+            "a58b5f05c8346eab"
+        ],
+        "x": 774,
+        "y": 259,
+        "w": 472,
+        "h": 142
+    },
+    {
+        "id": "fe7cf55a75689b88",
+        "type": "group",
+        "z": "e3804d2dd0b81928",
+        "name": "Micro-Air status",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "d5cb654b4dad986f",
+            "ae5fb4f1c3213c0a",
+            "ba611b1fa95bf468",
+            "c92f3be74ab20d69",
+            "78058c1b20751a76",
+            "950e9ce654224317",
+            "cd4c55cd4f675905"
+        ],
+        "x": 114,
+        "y": 79,
+        "w": 1332,
+        "h": 348
+    },
+    {
+        "id": "65587a19852a1225",
+        "type": "group",
+        "z": "e3804d2dd0b81928",
+        "name": "Micro-Air command",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "f937b8d3f3e0c24e",
+            "e1cc8c52948f9b2a",
+            "52b505b69f88888d"
+        ],
+        "x": 114,
+        "y": 519,
+        "w": 792,
+        "h": 82
     },
     {
         "id": "80727e60a251c36c",
@@ -1482,7 +1548,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 75,
+        "y": 60,
         "wires": []
     },
     {
@@ -5131,7 +5197,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 1940,
+        "y": 1880,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -5151,7 +5217,7 @@
         "sendError": false,
         "allProps": false,
         "x": 480,
-        "y": 1940,
+        "y": 1880,
         "wires": [
             [
                 "c78420a075d43408"
@@ -5172,7 +5238,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 1940,
+        "y": 1880,
         "wires": []
     },
     {
@@ -5185,7 +5251,7 @@
         "action": "",
         "pretty": false,
         "x": 690,
-        "y": 1940,
+        "y": 1880,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -5249,7 +5315,9 @@
             "12a57f6a07d0bf1a",
             "bd38c37850a3e832",
             "88eba1965c640949",
-            "0a63b31d61802934"
+            "0a63b31d61802934",
+            "950e9ce654224317",
+            "26961402db67156f"
         ],
         "x": 290,
         "y": 760,
@@ -5927,7 +5995,8 @@
         "links": [
             "a2334b77d3764815",
             "6aa079d768e1571c",
-            "86ab41ab0a2ff264"
+            "86ab41ab0a2ff264",
+            "52b505b69f88888d"
         ],
         "x": 290,
         "y": 880,
@@ -6019,7 +6088,9 @@
             "e8b62c33eab8e3ac",
             "893d80d1125057e8",
             "aa12f93df2087d62",
-            "2343c8c12f2081fa"
+            "2343c8c12f2081fa",
+            "a58b5f05c8346eab",
+            "31a156b7617e2e6f"
         ],
         "x": 1420,
         "y": 1460,
@@ -6334,7 +6405,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 185,
+        "y": 178,
         "wires": []
     },
     {
@@ -6373,7 +6444,7 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "Create user toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n   \"homeassistant/switch/victron_integration/config\", \n   \"homeassistant/switch/librecoach_testing_beta/config\",\n   \"homeassistant/switch/librecoach_beta_testing/config\"\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\n// Output: Toggle configs + states to MQTT Retain TRUE\nreturn messages;\n",
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6398,7 +6469,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1010,
+        "x": 750,
         "y": 1600,
         "wires": [],
         "l": true
@@ -6417,7 +6488,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 1800,
+        "y": 1740,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -6436,7 +6507,7 @@
             "e663fd10970c345a"
         ],
         "x": 240,
-        "y": 1800,
+        "y": 1740,
         "wires": [
             [
                 "dd199275f909301f"
@@ -6462,25 +6533,51 @@
         "senderr": false,
         "headers": [],
         "x": 710,
-        "y": 1800,
+        "y": 1740,
         "wires": [
             []
         ]
     },
     {
-        "id": "e663fd10970c345a",
-        "type": "link out",
+        "id": "21029b71ed58348c",
+        "type": "mqtt in",
         "z": "292e70a6ba25b323",
-        "g": "f81ca31c89243206",
-        "name": "Notify user",
-        "mode": "link",
-        "links": [
-            "a1e89f48333c8256"
-        ],
-        "x": 970,
-        "y": 1660,
-        "wires": [],
-        "l": true
+        "g": "3c819b7900145438",
+        "name": "Config in",
+        "topic": "librecoach/config/#",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 960,
+        "wires": [
+            [
+                "c9d298bbaa855984"
+            ]
+        ]
+    },
+    {
+        "id": "c9d298bbaa855984",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "3c819b7900145438",
+        "name": "Set config globals",
+        "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 960,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "903a7fac6108ac58",
@@ -6519,7 +6616,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 440,
+        "y": 360,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -6540,7 +6637,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 440,
+        "y": 360,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6561,7 +6658,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6591,7 +6688,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6612,7 +6709,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 440,
+        "y": 360,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6717,7 +6814,7 @@
         "sendError": false,
         "allProps": false,
         "x": 450,
-        "y": 580,
+        "y": 500,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6738,7 +6835,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 580,
+        "y": 500,
         "wires": []
     },
     {
@@ -6764,7 +6861,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 580,
+        "y": 500,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6786,7 +6883,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 680,
+        "y": 600,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -6807,7 +6904,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 680,
+        "y": 600,
         "wires": []
     },
     {
@@ -6833,7 +6930,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1110,
-        "y": 680,
+        "y": 600,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6854,7 +6951,7 @@
         "finalize": "",
         "libs": [],
         "x": 1360,
-        "y": 680,
+        "y": 600,
         "wires": [
             []
         ]
@@ -6869,7 +6966,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1090,
-        "y": 620,
+        "y": 540,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6923,7 +7020,7 @@
         "expiry": "",
         "broker": "68237e1473ec01aa",
         "x": 1030,
-        "y": 440,
+        "y": 360,
         "wires": []
     },
     {
@@ -6933,21 +7030,255 @@
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
         "x": 640,
-        "y": 1321,
+        "y": 1282,
         "wires": []
     },
     {
-        "id": "88eba1965c640949",
+        "id": "d5cb654b4dad986f",
+        "type": "mqtt in",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Micro-Air in",
+        "topic": "librecoach/ble/microair/+/state",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 160,
+        "wires": [
+            [
+                "ae5fb4f1c3213c0a"
+            ]
+        ]
+    },
+    {
+        "id": "ae5fb4f1c3213c0a",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "decode_microair_status",
+        "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n// Payload: JSON { zone: 0, facePlateTemperature: 72, outdoorTemperature: 85, mode: \"cool\", ... }\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\n// librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// Standardize\n// Primary entity is Climate (Zone X)\n// Secondary entities are Sensors (Outdoor, etc.) - maybe distinct messages?\n// Or we emit multiple messages from unique_microair?\n// But decode just standardizes.\n\nconst standardizedMsg = {\n    mac: mac,\n    zone: zone,\n    value: payload,\n    outdoor_temperature: payload.outdoorTemperature,\n};\n\nmsg.payload = standardizedMsg;\nmsg.topic = `librecoach/microair/${mac}/zone/${zone}`; // Internal topic\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 160,
+        "wires": [
+            [
+                "ba611b1fa95bf468"
+            ]
+        ]
+    },
+    {
+        "id": "ba611b1fa95bf468",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "unique_microair",
+        "func": "// Filter duplicate MicroAir status messages and route by type\n// Input: Standardized status object from decode_microair_status.js\n// Output 1: Climate (zone status — triggers create_microair_climate.js)\n// Output 2: Sensor (outdoor temp — triggers create_microair_sensor.js)\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\n// Retrieve existing MicroAir entities from global context, or initialize as empty array\nlet uniqueMicroair = global.get(\"uniqueMicroair\") || [];\nlet listChanged = false;\n\nconst mac = payload.mac;\nconst zone = payload.zone;\n\n// Define distinct keys for Climate and Sensor to ensure independent discovery\nconst climateKey = `microair_${mac}_zone_${zone}_climate`;\nconst sensorKey = `microair_${mac}_zone_${zone}_sensor`;\n\nconst out = [null, null];\n\n// 1. Check Climate Entity\nif (!uniqueMicroair.includes(climateKey)) {\n  uniqueMicroair.push(climateKey);\n  listChanged = true;\n  out[0] = msg; // Send to Output 1 (Climate)\n}\n\n// 2. Check Sensor Entity (Outdoor Temp)\n// Only valid for Zone 0 AND if outdoor_temperature is present\nif (zone === 0 && payload.outdoor_temperature !== undefined) {\n  if (!uniqueMicroair.includes(sensorKey)) {\n    uniqueMicroair.push(sensorKey);\n    listChanged = true;\n    out[1] = msg; // Send to Output 2 (Sensor)\n  }\n}\n\n// Update global context if new devices were found\nif (listChanged) {\n  global.set(\"uniqueMicroair\", uniqueMicroair);\n}\n\n// If either output is non-null, return the array\n// Note: If out[0] is null and out[1] is msg, the array will be [null, msg]\n// Node-RED handles this correctly by sending nothing to output 1 and msg to output 2\nif (out[0] !== null || out[1] !== null) {\n  return out;\n}\n\nreturn null;\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 160,
+        "wires": [
+            [
+                "c92f3be74ab20d69"
+            ],
+            [
+                "78058c1b20751a76"
+            ]
+        ]
+    },
+    {
+        "id": "36941b7928b35ae1",
+        "type": "inject",
+        "z": "e3804d2dd0b81928",
+        "g": "cd4c55cd4f675905",
+        "name": "Reset unique",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 890,
+        "y": 360,
+        "wires": [
+            [
+                "205af5b7fa62d8ac"
+            ]
+        ]
+    },
+    {
+        "id": "205af5b7fa62d8ac",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "cd4c55cd4f675905",
+        "name": "Reset function",
+        "func": "global.set(\"uniqueMicroair\", []);\nreturn null;  // Nothing needs to go downstream\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a58b5f05c8346eab",
+        "type": "link in",
+        "z": "e3804d2dd0b81928",
+        "g": "cd4c55cd4f675905",
+        "name": "Reset Micro-Air",
+        "links": [
+            "1e244bad0304bb74"
+        ],
+        "x": 880,
+        "y": 300,
+        "wires": [
+            [
+                "205af5b7fa62d8ac"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "c92f3be74ab20d69",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "create_microair_climate",
+        "func": "// Create MicroAir Climate Entity\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\nconst mac = payload.mac;\nconst zone = payload.zone;\nconst uniqueId = `microair_${mac}_zone_${zone}`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`; // Bridge sends state here\n\n// Define distinct command topics for Node-RED interception\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode }}\",\n\n  // Temperature\n  temperature_command_topic: tempCommand, // HA uses this for target temp\n  temperature_state_topic: stateTopic,\n  temperature_state_template: \"{{ value_json.facePlateTemperature }}\",\n\n  // Target Temperature\n  target_temperature_command_topic: tempCommand,\n  target_temperature_state_topic: stateTopic,\n  target_temperature_state_template:\n    \"{% if value_json.mode == 'cool' %}{{ value_json.cool_sp }}{% elif value_json.mode == 'heat' %}{{ value_json.heat_sp }}{% else %}{{ value_json.cool_sp }}{% endif %}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode }}\",\n\n  modes: [\"off\", \"cool\", \"heat\", \"auto\", \"dry\", \"fan_only\"],\n  fan_modes: [\"low\", \"medium\", \"high\", \"auto\"],\n\n  min_temp: 60,\n  max_temp: 90,\n  temp_step: 1,\n\n  device: {\n    identifiers: [`librecoach-microair-${mac}`],\n    name: `MicroAir EasyTouch ${mac}`,\n    manufacturer: \"Micro-Air\",\n    model: \"EasyTouch\",\n  },\n\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` }\n  ],\n  availability_mode: \"all\"\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\n// Pass distinct topics for debug/logging if needed, though mostly for Discovery\nmsg.commandTopics = {\n  mode: modeCommand,\n  temp: tempCommand,\n  fan: fanCommand,\n};\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 120,
+        "wires": [
+            [
+                "950e9ce654224317"
+            ]
+        ]
+    },
+    {
+        "id": "78058c1b20751a76",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "create_microair_sensor",
+        "func": "// Create MicroAir Sensor Entities (Outdoor Temp)\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${mac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`;\n\nconst discoveryPayload = {\n  name: `MicroAir Outdoor Temp`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.outdoorTemperature }}\",\n  unit_of_measurement: \"°F\", // Assuming F based on range 60-90\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [`librecoach-microair-${mac}`],\n    name: `MicroAir EasyTouch ${mac}`,\n    manufacturer: \"Micro-Air\",\n    model: \"EasyTouch\",\n  },\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` }\n  ],\n  availability_mode: \"all\"\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 180,
+        "wires": [
+            [
+                "950e9ce654224317"
+            ]
+        ]
+    },
+    {
+        "id": "950e9ce654224317",
         "type": "link out",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
         "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
             "f658418a7b9b4857"
         ],
+        "x": 1310,
+        "y": 160,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "f937b8d3f3e0c24e",
+        "type": "mqtt in",
+        "z": "e3804d2dd0b81928",
+        "g": "65587a19852a1225",
+        "name": "Micro-Air in",
+        "topic": "librecoach/ble/microair/${mac}/set",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 560,
+        "wires": [
+            [
+                "e1cc8c52948f9b2a"
+            ]
+        ]
+    },
+    {
+        "id": "e1cc8c52948f9b2a",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "65587a19852a1225",
+        "name": "encode_microair_command",
+        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{mac}_{zone}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{mac}_{zone}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, {mac}, zone, {z}\n// 0         1      2     3\nconst mac = subParts[1];\nconst zone = parseInt(subParts[3]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    change.mode = val;\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    change.fan_mode = val;\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 560,
+        "wires": [
+            [
+                "52b505b69f88888d"
+            ]
+        ]
+    },
+    {
+        "id": "52b505b69f88888d",
+        "type": "link out",
+        "z": "e3804d2dd0b81928",
+        "g": "65587a19852a1225",
+        "name": "MQTT out: Retain FALSE",
+        "mode": "link",
+        "links": [
+            "74329f13cbbc528a"
+        ],
         "x": 770,
-        "y": 260,
+        "y": 560,
         "wires": [],
         "l": true
     },
@@ -7956,7 +8287,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 360,
-        "y": 165,
+        "y": 178,
         "wires": []
     },
     {
@@ -8125,244 +8456,6 @@
             [
                 "d38c75bc1474be23"
             ]
-        ]
-    },
-    {
-        "id": "3d50ae83b9abd",
-        "type": "mqtt in",
-        "z": "292e70a6ba25b323",
-        "name": "Config: Victron Enabled",
-        "topic": "librecoach/config/victron_enabled",
-        "qos": "1",
-        "datatype": "auto",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 150,
-        "y": 600,
-        "wires": [
-            [
-                "b46753996e6ab"
-            ]
-        ]
-    },
-    {
-        "id": "b46753996e6ab",
-        "type": "change",
-        "z": "292e70a6ba25b323",
-        "name": "Set Global Victron",
-        "rules": [
-            {
-                "t": "set",
-                "p": "victronEnabled",
-                "pt": "global",
-                "to": "$lowercase($string(payload)) = \"true\"",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 600,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "95a96124604d1",
-        "type": "group",
-        "z": "292e70a6ba25b323",
-        "name": "Load LCI Reference",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "c755b1cbd3507",
-            "3b87f6d4a2d08",
-            "faec0aa985948",
-            "d8500232773d8"
-        ],
-        "x": 154,
-        "y": 2049,
-        "w": 600,
-        "h": 80
-    },
-    {
-        "id": "c755b1cbd3507",
-        "type": "inject",
-        "z": "292e70a6ba25b323",
-        "g": "95a96124604d1",
-        "name": "Startup",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 174,
-        "y": 2089,
-        "wires": [
-            [
-                "3b87f6d4a2d08"
-            ]
-        ]
-    },
-    {
-        "id": "3b87f6d4a2d08",
-        "type": "file in",
-        "z": "292e70a6ba25b323",
-        "g": "95a96124604d1",
-        "name": "lci_function_names.json",
-        "filename": "C:\\GitHub\\librecoach-node-red\\rvc\\lci_function_names.json",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 334,
-        "y": 2089,
-        "wires": [
-            [
-                "faec0aa985948"
-            ]
-        ]
-    },
-    {
-        "id": "faec0aa985948",
-        "type": "json",
-        "z": "292e70a6ba25b323",
-        "g": "95a96124604d1",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 504,
-        "y": 2089,
-        "wires": [
-            [
-                "d8500232773d8"
-            ]
-        ]
-    },
-    {
-        "id": "d8500232773d8",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "95a96124604d1",
-        "name": "store_lciMap",
-        "func": "// Parse LCI Function Names JSON and store in global context\r\n\r\nconst data = msg.payload;\r\n\r\nif (!data || typeof data !== \"object\") {\r\n    node.warn(\"store_lciMap: Invalid JSON data received\");\r\n    return null;\r\n}\r\n\r\n// 1. Function Names Map\r\nconst lciMap = new Map();\r\nif (data.function_names) {\r\n    Object.entries(data.function_names).forEach(([id, name]) => {\r\n        // Store keys as integers for easy lookup\r\n        lciMap.set(parseInt(id), name);\r\n    });\r\n}\r\nglobal.set(\"lciMap\", lciMap);\r\n\r\n// 2. Device Types\r\nglobal.set(\"lciDeviceTypes\", data.device_types || {});\r\n\r\n// 3. Categories\r\nglobal.set(\"lciCategories\", data.categories || {});\r\n\r\nconst count = lciMap.size;\r\nnode.status({\r\n    fill: \"green\",\r\n    shape: \"dot\",\r\n    text: `Loaded ${count} LCI functions`\r\n});\r\n\r\nreturn msg;\r\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 654,
-        "y": 2089,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "0d05ae240024d",
-        "type": "http in",
-        "z": "292e70a6ba25b323",
-        "name": "",
-        "url": "/lci/reference",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 174,
-        "y": 2169,
-        "wires": [
-            [
-                "f4e3447d667d7"
-            ]
-        ]
-    },
-    {
-        "id": "f4e3447d667d7",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "name": "Retrieve Globals",
-        "func": "\nconst lciMap = global.get(\"lciMap\");\nconst deviceTypes = global.get(\"lciDeviceTypes\");\nconst categories = global.get(\"lciCategories\");\n\n// Convert Map to Object for JSON serialization\nconst functionNames = {};\nif (lciMap) {\n    for (const [key, value] of lciMap) {\n        functionNames[key] = value;\n    }\n}\n\nmsg.payload = {\n    function_names: functionNames,\n    device_types: deviceTypes,\n    categories: categories\n};\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 404,
-        "y": 2169,
-        "wires": [
-            [
-                "7cb1770aafc33"
-            ]
-        ]
-    },
-    {
-        "id": "7cb1770aafc33",
-        "type": "http response",
-        "z": "292e70a6ba25b323",
-        "name": "",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 654,
-        "y": 2169,
-        "wires": []
-    },
-    {
-        "id": "21029b71ed58348c",
-        "type": "mqtt in",
-        "z": "292e70a6ba25b323",
-        "name": "Config: Beta Enabled",
-        "topic": "librecoach/config/beta_enabled",
-        "qos": "1",
-        "datatype": "auto",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 150,
-        "y": 640,
-        "wires": [
-            [
-                "c85693c746d91aa9"
-            ]
-        ]
-    },
-    {
-        "id": "c85693c746d91aa9",
-        "type": "change",
-        "z": "292e70a6ba25b323",
-        "name": "Set Global Beta",
-        "rules": [
-            {
-                "t": "set",
-                "p": "betaEnabled",
-                "pt": "global",
-                "to": "$lowercase($string(payload)) = \"true\"",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 400,
-        "y": 640,
-        "wires": [
-            []
         ]
     }
 ]
