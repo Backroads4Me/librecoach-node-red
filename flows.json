@@ -6373,8 +6373,8 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "Create user toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Victron Integration Toggle ===\n\nconst victronEnabled = global.get(\"victronEnabled\", \"file\");\nconst victronState = victronEnabled === false ? \"OFF\" : \"ON\";\n\nif (victronEnabled === undefined) {\n  global.set(\"victronEnabled\", true, \"file\");\n}\n\nmessages.push({\n  topic: \"homeassistant/switch/victron_integration/config\",\n  payload: {\n    name: \"Enable Victron Integration\",\n    unique_id: \"victron_integration\",\n    object_id: \"victron_integration\",\n    icon: \"mdi:alpha-v-box\",\n    command_topic: \"librecoach/victron/enabled/set\",\n    state_topic: \"librecoach/victron/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/victron/enabled/state\",\n  payload: victronState,\n});\n\n// === Beta Testing Toggle ===\n\nconst betaEnabled = global.get(\"betaEnabled\", \"file\");\nconst betaState = (betaEnabled === true) ? \"ON\" : \"OFF\"; // Keep for status/output even if hidden\n\nif (betaEnabled === undefined) {\n  global.set(\"betaEnabled\", false, \"file\");\n}\n\n// UNCOMMENT THIS SECTION TO ENABLE BETA TOGGLE\n/*\nmessages.push({\n  topic: \"homeassistant/switch/librecoach_testing_beta/config\",\n  payload: {\n    name: \"Testing (Beta)\",\n    unique_id: \"librecoach_testing_beta\",\n    object_id: \"librecoach_testing_beta\",\n    icon: \"mdi:test-tube\",\n    command_topic: \"librecoach/beta/enabled/set\",\n    state_topic: \"librecoach/beta/enabled/state\",\n    payload_on: \"ON\",\n    payload_off: \"OFF\",\n    device: device,\n  },\n});\n\nmessages.push({\n  topic: \"librecoach/beta/enabled/state\",\n  payload: betaState,\n});\n*/\n// UNCOMMENT ABOVE TO ENABLE BETA TOGGLE\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  { id: \"rv_manufacturer\", name: \"RV Manufacturer\", icon: \"mdi:factory\", max: 50 },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n    // REMOVE THIS LINE TO ENABLE BETA TOGGLE\n  \"homeassistant/switch/librecoach_testing_beta/config\", // Hide current Beta Toggle (until feature needed)\n  // REMOVE ABOVE LINE TO ENABLE BETA TOGGLE\n\n  \"homeassistant/switch/librecoach_beta_testing/config\", // Old Beta Toggle ID (keep deleted)\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Victron: ${victronState}, Beta: ${betaState}`,\n});\n\n// Output 1: Toggle configs + states to MQTT Retain TRUE\n// Output 2: Beta state trigger to handle_beta_toggle (creates beta entities if enabled)\nreturn [messages, { payload: betaState }];\n",
-        "outputs": 2,
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n   \"homeassistant/switch/victron_integration/config\", \n   \"homeassistant/switch/librecoach_testing_beta/config\",\n   \"homeassistant/switch/librecoach_beta_testing/config\"\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\n// Output: Toggle configs + states to MQTT Retain TRUE\nreturn messages;\n",
+        "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -6385,9 +6385,6 @@
         "wires": [
             [
                 "0a63b31d61802934"
-            ],
-            [
-                "5f4e13ced8032d25"
             ]
         ]
     },
@@ -6405,52 +6402,6 @@
         "y": 1600,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "5f4e13ced8032d25",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "f81ca31c89243206",
-        "name": "Handle beta toggle",
-        "func": "// Handles ON/OFF commands for Beta Testing toggle\n// Output 1: MQTT Retain TRUE (entity creation/deletion + state)\n// Output 2: Notification Payload (for notify_user)\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst command = (msg.payload || \"\").toString().toUpperCase().trim();\nconst stateTopic = \"librecoach/beta/enabled/state\";\nconst messages = [];\n\n// === Example: How to create/delete entities dynamically ===\n/*\nconst betaEntities = [\n  // Example: Export Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_export_config\",\n    name: \"Export LibreCoach Configuration\",\n    icon: \"mdi:download\",\n    extra: {\n      command_topic: \"librecoach/export/trigger\",\n    },\n  },\n\n  // Example: Import Configuration button\n  {\n    component: \"button\",\n    id: \"librecoach_import_config\",\n    name: \"Import LibreCoach Configuration\",\n    icon: \"mdi:upload\",\n    extra: {\n      command_topic: \"librecoach/import/trigger\",\n    },\n  },\n\n  // Example: RV Info text helpers\n  {\n    component: \"text\",\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    extra: {\n      state_topic: \"librecoach/rv_info/rv_manufacturer\",\n      command_topic: \"librecoach/rv_info/rv_manufacturer/set\",\n      retain: true,\n      max: 50,\n    },\n  },\n  // Add more as needed...\n];\n\nif (command === \"ON\") {\n  // Create entities\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({\n      topic: discoveryTopic,\n      payload: {\n        name: entity.name,\n        unique_id: entity.id,\n        object_id: entity.id,\n        icon: entity.icon,\n        device: device,\n        ...entity.extra,\n      },\n    });\n\n    // Send initial state to avoid \"unknown\" status\n    if (entity.extra && entity.extra.state_topic) {\n      let currentValue = global.get(entity.id, \"file\") || \"\";\n      if (currentValue.toLowerCase() === \"unknown\") {\n        currentValue = \"\";\n      }\n      messages.push({\n        topic: entity.extra.state_topic,\n        payload: currentValue,\n        retain: true,\n      });\n    }\n  }\n}\n\nif (command === \"OFF\") {\n  // Delete entities (empty payload)\n  for (const entity of betaEntities) {\n    const discoveryTopic = `homeassistant/${entity.component}/${entity.id}/config`;\n    messages.push({ topic: discoveryTopic, payload: \"\" });\n  }\n}\n*/\n\nif (command === \"ON\") {\n  // Notify user that no beta features are active (send to Output 2)\n  const notificationMsg = {\n    payload: {\n      title: \"LibreCoach Beta\",\n      message: \"No features are currently in Beta testing.\",\n      notification_id: \"librecoach_beta_status\",\n    },\n  };\n\n  // Auto-off: Reset the toggle immediately (Output 1)\n  messages.push({ topic: \"librecoach/beta/enabled/set\", payload: \"OFF\" });\n  messages.push({ topic: stateTopic, payload: \"OFF\" });\n\n  node.status({ fill: \"yellow\", shape: \"dot\", text: \"No active beta features\" });\n\n  // Return: [Output 1 (Array of MQTT msgs), Output 2 (Single Notification msg)]\n  return [messages, notificationMsg];\n}\n\nif (command === \"OFF\") {\n  // Just confirm state\n  global.set(\"betaEnabled\", false, \"file\");\n  messages.push({ topic: stateTopic, payload: \"OFF\" });\n  node.status({ fill: \"grey\", shape: \"dot\", text: \"Beta disabled\" });\n  return [messages, null];\n}\n\n// Unknown command — ignore\nnode.warn(`handle_beta_toggle: Unknown command \"${command}\"`);\nreturn null;\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 750,
-        "y": 1660,
-        "wires": [
-            [
-                "0a63b31d61802934"
-            ],
-            [
-                "e663fd10970c345a"
-            ]
-        ]
-    },
-    {
-        "id": "efacd6ad7853e68b",
-        "type": "mqtt in",
-        "z": "292e70a6ba25b323",
-        "g": "f81ca31c89243206",
-        "name": "HA in",
-        "topic": "librecoach/beta/enabled/set",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 230,
-        "y": 1660,
-        "wires": [
-            [
-                "5f4e13ced8032d25"
-            ]
-        ]
     },
     {
         "id": "dd199275f909301f",
@@ -6674,7 +6625,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "Decode Victron MQTT",
-        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// === Gate: Require active Victron portal ID ===\n\nconst victronPortalId = global.get(\"victronPortalId\");\nif (!victronPortalId) {\n  return null;\n}\n\n// === Gate: Require Victron integration enabled ===\n\nconst victronEnabled = global.get(\"victronEnabled\", \"file\");\nif (victronEnabled === false) {\n  return null;\n}\n\n// === Parse MQTT Topic ===\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") {\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\n  return null;\n}\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) {\n  // Silently drop system notifications (e.g., N/{id}/full_publish_completed)\n  return null;\n}\n\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === Gate: Only process data from discovered devices ===\n\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceKey = `${serviceType}_${instance}`;\nif (!victronDevices[deviceKey]) {\n  return null;\n}\n\n// === Path Whitelist ===\n// Only process dashboard-relevant paths to avoid flooding HA with hundreds of entities.\n\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Ac/In/L1/P\",\n    \"/State\",\n  ],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  acload: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  tank: [\n    \"/Level\",\n    \"/Remaining\",\n    \"/FluidType\",\n  ],\n  temperature: [\n    \"/Temperature\",\n    \"/Humidity\",\n  ],\n  digitalinput: [\n    \"/InputState\",\n    \"/Count\",\n  ],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n  ],\n};\n\n// Drop paths not in the whitelist\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) {\n  return null;\n}\n\n// === Extract Value ===\n\nlet value;\nconst incomingPayload = msg.payload;\n\nif (typeof incomingPayload === \"string\") {\n  try {\n    const parsed = JSON.parse(incomingPayload);\n    value = parsed.value !== undefined ? parsed.value : parsed;\n  } catch (e) {\n    value = incomingPayload;\n  }\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\n  value = incomingPayload.value !== undefined ? incomingPayload.value : incomingPayload;\n} else {\n  value = incomingPayload;\n}\n\n// === Gate: Drop null/undefined values ===\n// Cerbo GX publishes null for services that don't exist (e.g., solar when no panels installed).\n// Dropping these prevents phantom entity creation in HA.\n\nif (value === null || value === undefined) {\n  return null;\n}\n\n// === Look Up Definition in victronMap ===\n\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\";\nlet dataType = \"\";\nlet scale = \"\";\nlet access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const pathMap = victronMap.get(serviceType);\n  if (pathMap.has(dbusPath)) {\n    const def = pathMap.get(dbusPath);\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === Determine Routing Key ===\n\nlet routingKey = \"default\";\n\n// === Build Standardized Output ===\n\nconst baseMsg = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: value,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  routing_key: routingKey,\n};\n\nmsg.payload = baseMsg;\n\n// === L1+L2 Power Totals ===\n// When an L1 or L2 power path arrives, store its value and emit a synthetic total.\n\nconst powerTotalPairs = [\n  { l1: \"/Ac/Consumption/L1/Power\", l2: \"/Ac/Consumption/L2/Power\", total: \"/Ac/Consumption/Total/Power\" },\n  { l1: \"/Ac/Grid/L1/Power\", l2: \"/Ac/Grid/L2/Power\", total: \"/Ac/Grid/Total/Power\" },\n  { l1: \"/Ac/ActiveIn/L1/P\", l2: \"/Ac/ActiveIn/L2/P\", total: \"/Ac/ActiveIn/Total/P\" },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `victron_total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    // Store current leg value\n    if (dbusPath === pair.l1) stored.l1 = value;\n    if (dbusPath === pair.l2) stored.l2 = value;\n    flow.set(contextKey, stored);\n\n    // Only emit total when both legs have reported\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      const totalValue = (Number(stored.l1) || 0) + (Number(stored.l2) || 0);\n      const totalMsg = {\n        payload: {\n          service_type: serviceType,\n          instance: instance,\n          dbus_path: pair.total,\n          value: totalValue,\n          unit: unit,\n          data_type: dataType,\n          scale: scale,\n          access: access,\n          routing_key: routingKey,\n        },\n      };\n      node.send(totalMsg);\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
+        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// === Gate: Require active Victron portal ID ===\n\nconst victronPortalId = global.get(\"victronPortalId\");\nif (!victronPortalId) {\n  return null;\n}\n\n// === Gate: Require Victron integration enabled ===\n\nconst victronEnabled = global.get(\"victronEnabled\");\nif (victronEnabled === false) {\n  return null;\n}\n\n// === Parse MQTT Topic ===\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") {\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\n  return null;\n}\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) {\n  // Silently drop system notifications (e.g., N/{id}/full_publish_completed)\n  return null;\n}\n\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === Gate: Only process data from discovered devices ===\n\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceKey = `${serviceType}_${instance}`;\nif (!victronDevices[deviceKey]) {\n  return null;\n}\n\n// === Path Whitelist ===\n// Only process dashboard-relevant paths to avoid flooding HA with hundreds of entities.\n\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Ac/In/L1/P\",\n    \"/State\",\n  ],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  acload: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  tank: [\n    \"/Level\",\n    \"/Remaining\",\n    \"/FluidType\",\n  ],\n  temperature: [\n    \"/Temperature\",\n    \"/Humidity\",\n  ],\n  digitalinput: [\n    \"/InputState\",\n    \"/Count\",\n  ],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n  ],\n};\n\n// Drop paths not in the whitelist\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) {\n  return null;\n}\n\n// === Extract Value ===\n\nlet value;\nconst incomingPayload = msg.payload;\n\nif (typeof incomingPayload === \"string\") {\n  try {\n    const parsed = JSON.parse(incomingPayload);\n    value = parsed.value !== undefined ? parsed.value : parsed;\n  } catch (e) {\n    value = incomingPayload;\n  }\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\n  value = incomingPayload.value !== undefined ? incomingPayload.value : incomingPayload;\n} else {\n  value = incomingPayload;\n}\n\n// === Gate: Drop null/undefined values ===\n// Cerbo GX publishes null for services that don't exist (e.g., solar when no panels installed).\n// Dropping these prevents phantom entity creation in HA.\n\nif (value === null || value === undefined) {\n  return null;\n}\n\n// === Look Up Definition in victronMap ===\n\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\";\nlet dataType = \"\";\nlet scale = \"\";\nlet access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const pathMap = victronMap.get(serviceType);\n  if (pathMap.has(dbusPath)) {\n    const def = pathMap.get(dbusPath);\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === Determine Routing Key ===\n\nlet routingKey = \"default\";\n\n// === Build Standardized Output ===\n\nconst baseMsg = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: value,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  routing_key: routingKey,\n};\n\nmsg.payload = baseMsg;\n\n// === L1+L2 Power Totals ===\n// When an L1 or L2 power path arrives, store its value and emit a synthetic total.\n\nconst powerTotalPairs = [\n  { l1: \"/Ac/Consumption/L1/Power\", l2: \"/Ac/Consumption/L2/Power\", total: \"/Ac/Consumption/Total/Power\" },\n  { l1: \"/Ac/Grid/L1/Power\", l2: \"/Ac/Grid/L2/Power\", total: \"/Ac/Grid/Total/Power\" },\n  { l1: \"/Ac/ActiveIn/L1/P\", l2: \"/Ac/ActiveIn/L2/P\", total: \"/Ac/ActiveIn/Total/P\" },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `victron_total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    // Store current leg value\n    if (dbusPath === pair.l1) stored.l1 = value;\n    if (dbusPath === pair.l2) stored.l2 = value;\n    flow.set(contextKey, stored);\n\n    // Only emit total when both legs have reported\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      const totalValue = (Number(stored.l1) || 0) + (Number(stored.l2) || 0);\n      const totalMsg = {\n        payload: {\n          service_type: serviceType,\n          instance: instance,\n          dbus_path: pair.total,\n          value: totalValue,\n          unit: unit,\n          data_type: dataType,\n          scale: scale,\n          access: access,\n          routing_key: routingKey,\n        },\n      };\n      node.send(totalMsg);\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6984,52 +6935,6 @@
         "x": 640,
         "y": 1321,
         "wires": []
-    },
-    {
-        "id": "f6a25a558d4a42f6",
-        "type": "function",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "Handle Victron toggle",
-        "func": "// Handles ON/OFF commands for Victron Integration toggle\n// Two outputs:\n//   Output 1 → Trigger to Status Victron (when enabling)\n//   Output 2 → MQTT Retain TRUE (entity deletion + state confirmation)\n\nconst command = (msg.payload || \"\").toString().toUpperCase().trim();\nconst stateTopic = \"librecoach/victron/enabled/state\";\n\nif (command === \"ON\") {\n  // === Enable Victron Integration ===\n  global.set(\"victronEnabled\", true, \"file\");\n\n  const stateMsg = { topic: stateTopic, payload: \"ON\" };\n  const triggerMsg = { payload: true };\n\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return [triggerMsg, stateMsg];\n}\n\nif (command === \"OFF\") {\n  // === Disable Victron Integration ===\n\n  // Build entity deletion messages for all tracked discovery topics\n  const discoveryTopics = global.get(\"victronDiscoveryTopics\") || [];\n  const deleteMessages = discoveryTopics.map((topic) => ({\n    topic: topic,\n    payload: \"\",\n  }));\n\n  // Clear tracking arrays\n  global.set(\"uniqueVictron\", []);\n  global.set(\"victronDiscoveryTopics\", []);\n\n  // Persist disabled state\n  global.set(\"victronEnabled\", false, \"file\");\n\n  const stateMsg = { topic: stateTopic, payload: \"OFF\" };\n\n  node.status({\n    fill: \"red\",\n    shape: \"dot\",\n    text: `Disabled — removed ${deleteMessages.length} entities`,\n  });\n\n  // Send deletion messages + state update, all to Retain TRUE\n  return [null, [...deleteMessages, stateMsg]];\n}\n\n// Unknown command — ignore\nnode.warn(`handle_victron_toggle: Unknown command \"${command}\"`);\nreturn null;\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 260,
-        "wires": [
-            [
-                "d1a2b3c4e5f67806"
-            ],
-            [
-                "88eba1965c640949"
-            ]
-        ]
-    },
-    {
-        "id": "9172107991ff8aa6",
-        "type": "mqtt in",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "HA in",
-        "topic": "librecoach/victron/enabled/set",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 170,
-        "y": 260,
-        "wires": [
-            [
-                "f6a25a558d4a42f6"
-            ]
-        ]
     },
     {
         "id": "88eba1965c640949",
@@ -8220,6 +8125,244 @@
             [
                 "d38c75bc1474be23"
             ]
+        ]
+    },
+    {
+        "id": "3d50ae83b9abd",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "name": "Config: Victron Enabled",
+        "topic": "librecoach/config/victron_enabled",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 600,
+        "wires": [
+            [
+                "b46753996e6ab"
+            ]
+        ]
+    },
+    {
+        "id": "b46753996e6ab",
+        "type": "change",
+        "z": "292e70a6ba25b323",
+        "name": "Set Global Victron",
+        "rules": [
+            {
+                "t": "set",
+                "p": "victronEnabled",
+                "pt": "global",
+                "to": "$lowercase($string(payload)) = \"true\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "95a96124604d1",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "Load LCI Reference",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "c755b1cbd3507",
+            "3b87f6d4a2d08",
+            "faec0aa985948",
+            "d8500232773d8"
+        ],
+        "x": 154,
+        "y": 2049,
+        "w": 600,
+        "h": 80
+    },
+    {
+        "id": "c755b1cbd3507",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "g": "95a96124604d1",
+        "name": "Startup",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 174,
+        "y": 2089,
+        "wires": [
+            [
+                "3b87f6d4a2d08"
+            ]
+        ]
+    },
+    {
+        "id": "3b87f6d4a2d08",
+        "type": "file in",
+        "z": "292e70a6ba25b323",
+        "g": "95a96124604d1",
+        "name": "lci_function_names.json",
+        "filename": "C:\\GitHub\\librecoach-node-red\\rvc\\lci_function_names.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 334,
+        "y": 2089,
+        "wires": [
+            [
+                "faec0aa985948"
+            ]
+        ]
+    },
+    {
+        "id": "faec0aa985948",
+        "type": "json",
+        "z": "292e70a6ba25b323",
+        "g": "95a96124604d1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 504,
+        "y": 2089,
+        "wires": [
+            [
+                "d8500232773d8"
+            ]
+        ]
+    },
+    {
+        "id": "d8500232773d8",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "95a96124604d1",
+        "name": "store_lciMap",
+        "func": "// Parse LCI Function Names JSON and store in global context\r\n\r\nconst data = msg.payload;\r\n\r\nif (!data || typeof data !== \"object\") {\r\n    node.warn(\"store_lciMap: Invalid JSON data received\");\r\n    return null;\r\n}\r\n\r\n// 1. Function Names Map\r\nconst lciMap = new Map();\r\nif (data.function_names) {\r\n    Object.entries(data.function_names).forEach(([id, name]) => {\r\n        // Store keys as integers for easy lookup\r\n        lciMap.set(parseInt(id), name);\r\n    });\r\n}\r\nglobal.set(\"lciMap\", lciMap);\r\n\r\n// 2. Device Types\r\nglobal.set(\"lciDeviceTypes\", data.device_types || {});\r\n\r\n// 3. Categories\r\nglobal.set(\"lciCategories\", data.categories || {});\r\n\r\nconst count = lciMap.size;\r\nnode.status({\r\n    fill: \"green\",\r\n    shape: \"dot\",\r\n    text: `Loaded ${count} LCI functions`\r\n});\r\n\r\nreturn msg;\r\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 654,
+        "y": 2089,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0d05ae240024d",
+        "type": "http in",
+        "z": "292e70a6ba25b323",
+        "name": "",
+        "url": "/lci/reference",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 174,
+        "y": 2169,
+        "wires": [
+            [
+                "f4e3447d667d7"
+            ]
+        ]
+    },
+    {
+        "id": "f4e3447d667d7",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "name": "Retrieve Globals",
+        "func": "\nconst lciMap = global.get(\"lciMap\");\nconst deviceTypes = global.get(\"lciDeviceTypes\");\nconst categories = global.get(\"lciCategories\");\n\n// Convert Map to Object for JSON serialization\nconst functionNames = {};\nif (lciMap) {\n    for (const [key, value] of lciMap) {\n        functionNames[key] = value;\n    }\n}\n\nmsg.payload = {\n    function_names: functionNames,\n    device_types: deviceTypes,\n    categories: categories\n};\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 404,
+        "y": 2169,
+        "wires": [
+            [
+                "7cb1770aafc33"
+            ]
+        ]
+    },
+    {
+        "id": "7cb1770aafc33",
+        "type": "http response",
+        "z": "292e70a6ba25b323",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 654,
+        "y": 2169,
+        "wires": []
+    },
+    {
+        "id": "21029b71ed58348c",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "name": "Config: Beta Enabled",
+        "topic": "librecoach/config/beta_enabled",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 640,
+        "wires": [
+            [
+                "c85693c746d91aa9"
+            ]
+        ]
+    },
+    {
+        "id": "c85693c746d91aa9",
+        "type": "change",
+        "z": "292e70a6ba25b323",
+        "name": "Set Global Beta",
+        "rules": [
+            {
+                "t": "set",
+                "p": "betaEnabled",
+                "pt": "global",
+                "to": "$lowercase($string(payload)) = \"true\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 640,
+        "wires": [
+            []
         ]
     }
 ]
