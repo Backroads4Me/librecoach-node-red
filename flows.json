@@ -609,7 +609,7 @@
             "c80ea298a37232a2"
         ],
         "x": 94,
-        "y": 899,
+        "y": 839,
         "w": 1398,
         "h": 608
     },
@@ -987,7 +987,7 @@
             "2343c8c12f2081fa"
         ],
         "x": 994,
-        "y": 1339,
+        "y": 1279,
         "w": 472,
         "h": 142
     },
@@ -1779,7 +1779,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 770,
         "y": 1140,
         "wires": [
             [
@@ -1827,7 +1827,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
+        "x": 570,
         "y": 1220,
         "wires": [
             [
@@ -1892,7 +1892,7 @@
         "z": "292e70a6ba25b323",
         "g": "8ef86a1c4b59d8e1",
         "name": "address_claim_success",
-        "func": "// RV-C Address Claim Success Function\n// Called after 250ms timer expires - finalizes address claim if no conflict lost\n// Reference: RV-C Spec Section 3.3.2 - Source Address Claiming\n//\n// IMPORTANT: This does NOT send a second ADDRESS_CLAIMED message.\n// We already sent ADDRESS_CLAIMED at the start of the process.\n// Success = 250ms timer expires without losing a conflict.\n\n// Get the address we were trying to claim when this timer started\nconst claimedAddress = msg.claiming_address;\n\nif (claimedAddress === undefined || claimedAddress === null) {\n    node.error(\"No address to claim - timer message missing claiming_address\");\n    return null;\n}\n\n// Check if this timer is still valid (claim hasn't been cancelled by monitor)\nconst claimInProgress = flow.get(\"claim_in_progress\");\nif (!claimInProgress) {\n    // Claim was cancelled during the 250ms window (we lost a conflict)\n    node.warn(`Timer expired for address ${claimedAddress}, but claim was cancelled - ignoring`);\n    return null;\n}\n\n// Verify we're still trying to claim the same address\nconst currentClaimingAddress = flow.get(\"claiming_address\");\nif (currentClaimingAddress !== claimedAddress) {\n    node.warn(`Timer expired for address ${claimedAddress}, but we're now trying ${currentClaimingAddress} - ignoring stale timer`);\n    return null;\n}\n\n// SUCCESS! No conflict detected during the 250ms monitoring window\n// Store the claimed address to global context\nglobal.set(\"rvc_source_address\", claimedAddress);\n\n// Clear claiming flags\nflow.set(\"claim_in_progress\", false);\nflow.set(\"claiming_address\", null);\nflow.set(\"our_device_name\", null);\n\n//node.warn(`Successfully claimed address ${claimedAddress} (0x${claimedAddress.toString(16).toUpperCase()})`);\n//node.warn(`Address stored to global.rvc_source_address: ${claimedAddress}`);\n\n// Return null - No CAN message to send\n// We already broadcast ADDRESS_CLAIMED at the beginning of the process\nreturn null;",
+        "func": "// RV-C Address Claim Success Function\n// Called after 250ms timer expires - finalizes address claim if no conflict lost\n// Reference: RV-C Spec Section 3.3.2 - Source Address Claiming\n//\n// IMPORTANT: This does NOT send a second ADDRESS_CLAIMED message.\n// We already sent ADDRESS_CLAIMED at the start of the process.\n// Success = 250ms timer expires without losing a conflict.\n\n// Get the address we were trying to claim when this timer started\nconst claimedAddress = msg.claiming_address;\n\nif (claimedAddress === undefined || claimedAddress === null) {\n  node.error(\"No address to claim - timer message missing claiming_address\");\n  return null;\n}\n\n// Check if this timer is still valid (claim hasn't been cancelled by monitor)\nconst claimInProgress = flow.get(\"claim_in_progress\");\nif (!claimInProgress) {\n  // Claim was cancelled during the 250ms window (we lost a conflict)\n  node.warn(\n    `Timer expired for address ${claimedAddress}, but claim was cancelled - ignoring`,\n  );\n  return null;\n}\n\n// Verify we're still trying to claim the same address\nconst currentClaimingAddress = flow.get(\"claiming_address\");\nif (currentClaimingAddress !== claimedAddress) {\n  node.warn(\n    `Timer expired for address ${claimedAddress}, but we're now trying ${currentClaimingAddress} - ignoring stale timer`,\n  );\n  return null;\n}\n\n// SUCCESS! No conflict detected during the 250ms monitoring window\n// Store the claimed address to global context\nglobal.set(\"rvc_source_address\", claimedAddress);\n\n// Clear claiming flags\nflow.set(\"claim_in_progress\", false);\nflow.set(\"claiming_address\", null);\nflow.set(\"our_device_name\", null);\n\n//node.warn(`Successfully claimed address ${claimedAddress} (0x${claimedAddress.toString(16).toUpperCase()})`);\n//node.warn(`Address stored to global.rvc_source_address: ${claimedAddress}`);\n\n// Return msg to trigger downstream polling\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2107,7 +2107,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1400,
+        "x": 1410,
         "y": 1340,
         "wires": [
             [
@@ -2319,7 +2319,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1400,
+        "x": 1390,
         "y": 1420,
         "wires": [
             [
@@ -2348,7 +2348,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 172,
+        "y": 165,
         "wires": []
     },
     {
@@ -3974,7 +3974,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2000,
-        "y": 398,
+        "y": 387,
         "wires": []
     },
     {
@@ -6141,7 +6141,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 306,
+        "y": 319,
         "wires": []
     },
     {
@@ -6574,7 +6574,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 320,
+        "y": 305,
         "wires": []
     },
     {
@@ -6592,7 +6592,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 940,
+        "y": 880,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
@@ -6614,7 +6614,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1200,
+        "y": 1140,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -6635,7 +6635,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 1200,
+        "y": 1140,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6656,7 +6656,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 1120,
+        "y": 1060,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6686,7 +6686,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 1120,
+        "y": 1060,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6707,7 +6707,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 1200,
+        "y": 1140,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6728,7 +6728,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 940,
+        "y": 880,
         "wires": [
             [
                 "d1a2b3c4e5f67804",
@@ -6750,7 +6750,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 940,
+        "y": 880,
         "wires": [
             [
                 "d1a2b3c4e5f67805"
@@ -6771,7 +6771,7 @@
         "finalize": "",
         "libs": [],
         "x": 1040,
-        "y": 940,
+        "y": 880,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6792,7 +6792,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 1020,
+        "y": 960,
         "wires": [
             [
                 "86ab41ab0a2ff264"
@@ -6812,7 +6812,7 @@
         "sendError": false,
         "allProps": false,
         "x": 450,
-        "y": 1340,
+        "y": 1280,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6833,7 +6833,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 1340,
+        "y": 1280,
         "wires": []
     },
     {
@@ -6859,7 +6859,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 1340,
+        "y": 1280,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6881,7 +6881,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 1440,
+        "y": 1380,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -6902,7 +6902,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 1440,
+        "y": 1380,
         "wires": []
     },
     {
@@ -6928,7 +6928,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1110,
-        "y": 1440,
+        "y": 1380,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6949,7 +6949,7 @@
         "finalize": "",
         "libs": [],
         "x": 1360,
-        "y": 1440,
+        "y": 1380,
         "wires": [
             []
         ]
@@ -6964,7 +6964,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1090,
-        "y": 1380,
+        "y": 1320,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6983,7 +6983,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1330,
-        "y": 940,
+        "y": 880,
         "wires": [],
         "l": true
     },
@@ -6998,7 +6998,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1330,
-        "y": 1020,
+        "y": 960,
         "wires": [],
         "l": true
     },
@@ -7018,7 +7018,7 @@
         "expiry": "",
         "broker": "68237e1473ec01aa",
         "x": 1030,
-        "y": 1200,
+        "y": 1140,
         "wires": []
     },
     {
@@ -7028,7 +7028,7 @@
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
         "x": 640,
-        "y": 343,
+        "y": 460,
         "wires": []
     },
     {
@@ -7287,7 +7287,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 370,
-        "y": 158,
+        "y": 167,
         "wires": []
     },
     {
