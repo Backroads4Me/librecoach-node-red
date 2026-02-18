@@ -281,13 +281,12 @@
             "07b8bcce03f19e8f",
             "d3cc901dd2fbd359",
             "ba0c52ff61838986",
-            "922f2738c2000150",
-            "59cd7a79be5581c7"
+            "922f2738c2000150"
         ],
         "x": 154,
         "y": 1099,
         "w": 1652,
-        "h": 442
+        "h": 402
     },
     {
         "id": "97615854748deb3d",
@@ -1139,7 +1138,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.5",
+        "onceDelay": "0.1",
         "topic": "",
         "payload": "",
         "payloadType": "date",
@@ -2059,7 +2058,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "20",
+        "onceDelay": "30",
         "topic": "",
         "payload": "",
         "payloadType": "date",
@@ -2073,8 +2072,7 @@
                 "1e244bad0304bb74",
                 "d3cc901dd2fbd359",
                 "ba0c52ff61838986",
-                "922f2738c2000150",
-                "59cd7a79be5581c7"
+                "922f2738c2000150"
             ]
         ]
     },
@@ -2519,25 +2517,6 @@
         "libs": [],
         "x": 730,
         "y": 960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "59cd7a79be5581c7",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "8ef86a1c4b59d8e1",
-        "name": "Device Discovery",
-        "func": "node.log(`Device Discovery`);",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1410,
-        "y": 1500,
         "wires": [
             []
         ]
