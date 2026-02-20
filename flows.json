@@ -149,7 +149,8 @@
             "54cd7e4a8959a77c",
             "32add109922d428a",
             "21029b71ed58348c",
-            "c9d298bbaa855984"
+            "c9d298bbaa855984",
+            "88e5fa035bedb48c"
         ],
         "x": 154,
         "y": 399,
@@ -575,7 +576,7 @@
         ],
         "x": 94,
         "y": 239,
-        "w": 1812,
+        "w": 1892,
         "h": 162
     },
     {
@@ -606,12 +607,14 @@
             "3ffa68cfd2195db1",
             "bd38c37850a3e832",
             "86ab41ab0a2ff264",
-            "c80ea298a37232a2"
+            "c80ea298a37232a2",
+            "48292ec85eb70ee5",
+            "8fdd1d506d28b9b6"
         ],
         "x": 94,
-        "y": 839,
-        "w": 1398,
-        "h": 608
+        "y": 799,
+        "w": 1338,
+        "h": 668
     },
     {
         "id": "3296e5f0fcd2c737",
@@ -645,7 +648,7 @@
         ],
         "x": 94,
         "y": 499,
-        "w": 1892,
+        "w": 1872,
         "h": 362
     },
     {
@@ -806,7 +809,7 @@
             "81bed51dd2f37032",
             "84e908d542084d74"
         ],
-        "x": 1974,
+        "x": 1994,
         "y": 1159,
         "w": 472,
         "h": 142
@@ -986,8 +989,8 @@
             "9401b2d19494b1c2",
             "2343c8c12f2081fa"
         ],
-        "x": 994,
-        "y": 1279,
+        "x": 934,
+        "y": 1299,
         "w": 472,
         "h": 142
     },
@@ -2348,7 +2351,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 158,
+        "y": 193,
         "wires": []
     },
     {
@@ -2387,7 +2390,7 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "create_user_toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    object_id: \"librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    object_id: \"librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      object_id: field.id,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    default_entity_id: \"button.librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    default_entity_id: \"button.librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      default_entity_id: `text.${field.id}`,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2507,7 +2510,7 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
-        "name": "Set config globals",
+        "name": "set_config_globals",
         "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -2515,11 +2518,28 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 470,
         "y": 960,
         "wires": [
-            []
+            [
+                "88e5fa035bedb48c"
+            ]
         ]
+    },
+    {
+        "id": "88e5fa035bedb48c",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "3c819b7900145438",
+        "name": "CONFIG_GLOBALS",
+        "mode": "link",
+        "links": [
+            "8fdd1d506d28b9b6"
+        ],
+        "x": 740,
+        "y": 960,
+        "wires": [],
+        "l": true
     },
     {
         "id": "9f88f215f3f07227",
@@ -3974,7 +3994,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2000,
-        "y": 376,
+        "y": 365,
         "wires": []
     },
     {
@@ -4332,7 +4352,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2090,
+        "x": 2110,
         "y": 1260,
         "wires": [
             [
@@ -4353,7 +4373,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2340,
+        "x": 2360,
         "y": 1260,
         "wires": [
             []
@@ -4368,7 +4388,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 2070,
+        "x": 2090,
         "y": 1200,
         "wires": [
             [
@@ -4466,7 +4486,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2040,
+        "x": 2060,
         "y": 1100,
         "wires": [
             [
@@ -4814,7 +4834,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 2100,
+        "x": 2080,
         "y": 1720,
         "wires": [
             [
@@ -4935,7 +4955,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 520,
         "y": 1600,
         "wires": [
             [
@@ -5415,7 +5435,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1780,
+        "x": 1790,
         "y": 600,
         "wires": [
             [
@@ -5627,7 +5647,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 500,
         "y": 2040,
         "wires": [
             [
@@ -5669,7 +5689,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
+        "x": 760,
         "y": 2040,
         "wires": [
             [
@@ -6141,7 +6161,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 332,
+        "y": 280,
         "wires": []
     },
     {
@@ -6574,7 +6594,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 290,
+        "y": 275,
         "wires": []
     },
     {
@@ -6592,7 +6612,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
@@ -6614,7 +6634,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1140,
+        "y": 1180,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -6626,8 +6646,8 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Save Victron Instance",
-        "func": "const portalId = msg.payload.value;\nconst currentId = global.get(\"victronPortalId\");\n\n// Always update the global context to be safe\nglobal.set(\"victronPortalId\", portalId);\n\n// Only change the UI status if it's a new discovery or first run\nif (portalId !== currentId) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"New ID Discovered: \" + portalId });\n} else {\n    node.status({ fill: \"blue\", shape: \"ring\", text: \"ID Verified: \" + portalId });\n}\n\nreturn msg;",
+        "name": "victron_store_instance",
+        "func": "const portalId = msg.payload.value;\nconst currentId = global.get(\"victronPortalId\");\n\n// Always update the global context to be safe\nglobal.set(\"victronPortalId\", portalId);\n\n// Only change the UI status if it's a new discovery or first run\nif (portalId !== currentId) {\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: \"New ID Discovered: \" + portalId,\n  });\n} else {\n  node.status({\n    fill: \"blue\",\n    shape: \"ring\",\n    text: \"ID Verified: \" + portalId,\n  });\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6635,7 +6655,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 1140,
+        "y": 1180,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6647,16 +6667,16 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Victron keep alive",
-        "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;",
+        "name": "victron_keep_alive",
+        "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 1060,
+        "x": 730,
+        "y": 1100,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6686,7 +6706,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 200,
-        "y": 1060,
+        "y": 1100,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6698,16 +6718,16 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Get all Victron devices",
-        "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;",
+        "name": "victron_poll_devices",
+        "func": "const portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
-        "y": 1140,
+        "x": 740,
+        "y": 1180,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6719,7 +6739,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "decode_victron_mqtt",
+        "name": "victron_decode_mqtt",
         "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// === Gate: Require active Victron portal ID ===\n\nconst victronPortalId = global.get(\"victronPortalId\");\nif (!victronPortalId) {\n  return null;\n}\n\n// === Gate: Require Victron integration enabled ===\n\nconst victronEnabled = global.get(\"victronEnabled\");\nif (victronEnabled === false) {\n  return null;\n}\n\n// === Parse MQTT Topic ===\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") {\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\n  return null;\n}\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) {\n  // Silently drop system notifications (e.g., N/{id}/full_publish_completed)\n  return null;\n}\n\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === Gate: Only process data from discovered devices ===\n\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceKey = `${serviceType}_${instance}`;\nif (!victronDevices[deviceKey]) {\n  return null;\n}\n\n// === Path Whitelist ===\n// Only process dashboard-relevant paths to avoid flooding HA with hundreds of entities.\n\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Ac/In/L1/P\",\n    \"/State\",\n  ],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  acload: [\n    \"/Ac/L1/Power\",\n    \"/Ac/L2/Power\",\n    \"/Ac/Power\",\n  ],\n  tank: [\n    \"/Level\",\n    \"/Remaining\",\n    \"/FluidType\",\n  ],\n  temperature: [\n    \"/Temperature\",\n    \"/Humidity\",\n  ],\n  digitalinput: [\n    \"/InputState\",\n    \"/Count\",\n  ],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n  ],\n};\n\n// Drop paths not in the whitelist\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) {\n  return null;\n}\n\n// === Extract Value ===\n\nlet value;\nconst incomingPayload = msg.payload;\n\nif (typeof incomingPayload === \"string\") {\n  try {\n    const parsed = JSON.parse(incomingPayload);\n    value = parsed.value !== undefined ? parsed.value : parsed;\n  } catch (e) {\n    value = incomingPayload;\n  }\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\n  value = incomingPayload.value !== undefined ? incomingPayload.value : incomingPayload;\n} else {\n  value = incomingPayload;\n}\n\n// === Gate: Drop null/undefined values ===\n// Cerbo GX publishes null for services that don't exist (e.g., solar when no panels installed).\n// Dropping these prevents phantom entity creation in HA.\n\nif (value === null || value === undefined) {\n  return null;\n}\n\n// === Look Up Definition in victronMap ===\n\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\";\nlet dataType = \"\";\nlet scale = \"\";\nlet access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const pathMap = victronMap.get(serviceType);\n  if (pathMap.has(dbusPath)) {\n    const def = pathMap.get(dbusPath);\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === Determine Routing Key ===\n\nlet routingKey = \"default\";\n\n// === Build Standardized Output ===\n\nconst baseMsg = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: value,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  routing_key: routingKey,\n};\n\nmsg.payload = baseMsg;\n\n// === L1+L2 Power Totals ===\n// When an L1 or L2 power path arrives, store its value and emit a synthetic total.\n\nconst powerTotalPairs = [\n  { l1: \"/Ac/Consumption/L1/Power\", l2: \"/Ac/Consumption/L2/Power\", total: \"/Ac/Consumption/Total/Power\" },\n  { l1: \"/Ac/Grid/L1/Power\", l2: \"/Ac/Grid/L2/Power\", total: \"/Ac/Grid/Total/Power\" },\n  { l1: \"/Ac/ActiveIn/L1/P\", l2: \"/Ac/ActiveIn/L2/P\", total: \"/Ac/ActiveIn/Total/P\" },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `victron_total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    // Store current leg value\n    if (dbusPath === pair.l1) stored.l1 = value;\n    if (dbusPath === pair.l2) stored.l2 = value;\n    flow.set(contextKey, stored);\n\n    // Only emit total when both legs have reported\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      const totalValue = (Number(stored.l1) || 0) + (Number(stored.l2) || 0);\n      const totalMsg = {\n        payload: {\n          service_type: serviceType,\n          instance: instance,\n          dbus_path: pair.total,\n          value: totalValue,\n          unit: unit,\n          data_type: dataType,\n          scale: scale,\n          access: access,\n          routing_key: routingKey,\n        },\n      };\n      node.send(totalMsg);\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -6728,7 +6748,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "d1a2b3c4e5f67804",
@@ -6741,7 +6761,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "unique_victron",
+        "name": "victron_unique",
         "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = global.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  global.set(\"uniqueVictron\", uniqueVictron);\n\n  // Look up product short name from discovered devices\n  const victronDevices = global.get(\"victronDevices\") || {};\n  const deviceInfo = victronDevices[`${serviceType}_${instance}`];\n  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;\n  const productName = deviceInfo ? deviceInfo.productName : \"\";\n\n  return {\n    payload: {\n      service_type: serviceType,\n      instance: instance,\n      dbus_path: dbusPath,\n      unit: msg.payload.unit,\n      value: msg.payload.value,\n      short_name: shortName,\n      product_name: productName,\n    },\n  };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
@@ -6749,8 +6769,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 880,
+        "x": 720,
+        "y": 920,
         "wires": [
             [
                 "d1a2b3c4e5f67805"
@@ -6762,7 +6782,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "create_victron",
+        "name": "victron_create",
         "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst { service_type, instance, dbus_path, unit, short_name, product_name } =\n  msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"V AC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  W: { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  kWh: { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  Ah: { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  \"Degrees Celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  Hz: { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  RPM: { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  seconds: { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  VA: { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n  L: { device_class: null, unit: \"L\", icon: \"mdi:cup-water\" },\n  \"%RH\": { device_class: \"humidity\", unit: \"%\", icon: \"mdi:water-percent\" },\n  \"%level\": { device_class: null, unit: \"%\", icon: \"mdi:gauge\" },\n};\n\n// === Friendly Name Map ===\n// Maps service_type + dbus_path to clean dashboard names.\n\nconst friendlyNameMap = {\n  // system/0 — GX device data\n  \"system:/Dc/Battery/Soc\": \"Battery State of Charge\",\n  \"system:/Dc/Battery/Voltage\": \"Battery Voltage\",\n  \"system:/Dc/Battery/Current\": \"Battery Current\",\n  \"system:/Dc/Battery/Power\": \"Battery Power\",\n  \"system:/Dc/Battery/Temperature\": \"Battery Temperature\",\n  \"system:/Dc/Pv/Power\": \"Solar Power\",\n  \"system:/Dc/Pv/Current\": \"Solar Current\",\n  \"system:/Ac/Consumption/L1/Power\": \"AC Consumption L1\",\n  \"system:/Ac/Consumption/L2/Power\": \"AC Consumption L2\",\n  \"system:/Ac/Grid/L1/Power\": \"Shore Power L1\",\n  \"system:/Ac/Grid/L2/Power\": \"Shore Power L2\",\n  \"system:/Ac/ActiveIn/ActiveInput\": \"Active AC Input\",\n  \"system:/Ac/ActiveIn/Source\": \"AC Input Source\",\n  \"system:/Dc/System/Power\": \"DC Loads Power\",\n  \"system:/Ac/Consumption/Total/Power\": \"AC Consumption Total\",\n  \"system:/Ac/Grid/Total/Power\": \"Shore Power Total\",\n  // battery\n  \"battery:/Dc/0/Voltage\": \"Battery Voltage\",\n  \"battery:/Dc/0/Current\": \"Battery Current\",\n  \"battery:/Dc/0/Power\": \"Battery Power\",\n  \"battery:/Dc/0/Temperature\": \"Battery Temperature\",\n  \"battery:/Dc/1/Voltage\": \"Auxiliary Battery Voltage\",\n  \"battery:/Soc\": \"Battery SOC\",\n  // solarcharger\n  \"solarcharger:/Yield/Power\": \"Solar Power\",\n  \"solarcharger:/Yield/System\": \"Solar Total Yield\",\n  \"solarcharger:/Dc/0/Voltage\": \"Solar Battery Voltage\",\n  \"solarcharger:/Dc/0/Current\": \"Solar Charge Current\",\n  \"solarcharger:/Pv/V\": \"Solar Panel Voltage\",\n  \"solarcharger:/State\": \"Solar Charger State\",\n  // vebus\n  \"vebus:/Ac/ActiveIn/L1/V\": \"AC Input L1 Voltage\",\n  \"vebus:/Ac/ActiveIn/L1/I\": \"AC Input L1 Current\",\n  \"vebus:/Ac/ActiveIn/L1/P\": \"AC Input L1 Power\",\n  \"vebus:/Ac/ActiveIn/L2/V\": \"AC Input L2 Voltage\",\n  \"vebus:/Ac/ActiveIn/L2/I\": \"AC Input L2 Current\",\n  \"vebus:/Ac/ActiveIn/L2/P\": \"AC Input L2 Power\",\n  \"vebus:/Ac/Out/L1/V\": \"AC Output L1 Voltage\",\n  \"vebus:/Ac/Out/L1/I\": \"AC Output L1 Current\",\n  \"vebus:/Ac/Out/L1/P\": \"AC Output L1 Power\",\n  \"vebus:/Ac/Out/L2/V\": \"AC Output L2 Voltage\",\n  \"vebus:/Ac/Out/L2/I\": \"AC Output L2 Current\",\n  \"vebus:/Ac/Out/L2/P\": \"AC Output L2 Power\",\n  \"vebus:/Ac/ActiveIn/Total/P\": \"AC Input Total Power\",\n  \"vebus:/Ac/Out/Total/P\": \"AC Output Total Power\",\n  \"vebus:/Ac/ActiveIn/CurrentLimit\": \"Shore Power Limit\",\n  \"vebus:/Ac/ActiveIn/L1/F\": \"AC Input Frequency\",\n  \"vebus:/Dc/0/Voltage\": \"Inverter DC Voltage\",\n  \"vebus:/Dc/0/Current\": \"Inverter DC Current\",\n  \"vebus:/Dc/0/Power\": \"Inverter DC Power\",\n  \"vebus:/Dc/0/Temperature\": \"Inverter Temperature\",\n  \"vebus:/State\": \"Inverter State\",\n  \"vebus:/Mode\": \"Inverter Mode\",\n  // charger\n  \"charger:/Dc/0/Voltage\": \"Output Voltage\",\n  \"charger:/Dc/0/Current\": \"Output Current\",\n  \"charger:/Ac/In/L1/P\": \"AC Input Power\",\n  \"charger:/State\": \"Charge State\",\n  // alternator (Orion XS DC-DC)\n  \"alternator:/Dc/0/Voltage\": \"Output Voltage\",\n  \"alternator:/Dc/0/Current\": \"Output Current\",\n  \"alternator:/Dc/0/Power\": \"Output Power\",\n  \"alternator:/Dc/In/V\": \"Input Voltage\",\n  \"alternator:/Dc/In/I\": \"Input Current\",\n  \"alternator:/Dc/In/P\": \"Input Power\",\n  \"alternator:/State\": \"Charge State\",\n  // dcdc\n  \"dcdc:/Dc/0/Voltage\": \"Output Voltage\",\n  \"dcdc:/Dc/0/Current\": \"Output Current\",\n  \"dcdc:/Dc/0/Power\": \"Output Power\",\n  \"dcdc:/Dc/In/V\": \"Input Voltage\",\n  \"dcdc:/Dc/In/I\": \"Input Current\",\n  \"dcdc:/Dc/In/P\": \"Input Power\",\n  \"dcdc:/State\": \"Charge State\",\n  // grid\n  \"grid:/Ac/L1/Power\": \"L1 Power\",\n  \"grid:/Ac/L2/Power\": \"L2 Power\",\n  \"grid:/Ac/Power\": \"Total Power\",\n  // acload\n  \"acload:/Ac/L1/Power\": \"L1 Power\",\n  \"acload:/Ac/L2/Power\": \"L2 Power\",\n  \"acload:/Ac/Power\": \"Total Power\",\n  // tank\n  \"tank:/Level\": \"Level\",\n  \"tank:/Remaining\": \"Remaining\",\n  \"tank:/FluidType\": \"Fluid Type\",\n  // temperature\n  \"temperature:/Temperature\": \"Temperature\",\n  \"temperature:/Humidity\": \"Humidity\",\n  // digitalinput\n  \"digitalinput:/InputState\": \"State\",\n  \"digitalinput:/Count\": \"Count\",\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nlet safePath = dbus_path.replace(/^\\//, \"\").replace(/\\//g, \"_\").toLowerCase();\n\n// === Standardization Rules ===\n\n// 1. Context-aware renaming (only if direction is discernible)\n// Map \"dc_0\" to \"dc_out\" for output-generating devices\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n// Note: solarcharger usually outputs to battery, but has \"pv\" as well.\n// \"dc_0\" on solarcharger is battery connection (output).\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion (single letters)\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Use product short name in entity ID (e.g., smartshunt instead of battery)\nconst deviceName = short_name || service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\nconst componentType = \"sensor\";\n\n// === Build Friendly Name ===\n\nconst nameKey = `${service_type}:${dbus_path}`;\nconst baseName =\n  friendlyNameMap[nameKey] ||\n  dbus_path\n    .replace(/^\\//, \"\")\n    .replace(/\\//g, \" \")\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// Build short display name from first two alpha words of product name\nconst displayName = product_name\n  ? product_name\n    .split(/\\s+/)\n    .filter((w) => /^[a-zA-Z]/.test(w))\n    .slice(0, 2)\n    .join(\" \")\n  : \"\";\n\n// Prefix with device display name (e.g., \"MultiPlus-II — Inverter DC Power\")\n// System service uses \"System\" prefix instead of product name.\nconst prefix = service_type === \"system\" ? \"System\" : displayName;\nconst friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;\n\n// === Unit Override for Paths Missing from Victron CSV ===\n\nconst unitOverrides = {\n  \"/Dc/0/Power\": \"W\",\n  \"/Dc/0/Voltage\": \"V DC\",\n  \"/Dc/0/Current\": \"A DC\",\n  \"/Dc/0/Temperature\": \"Degrees celsius\",\n  \"/Dc/In/V\": \"V DC\",\n  \"/Dc/In/I\": \"A DC\",\n  \"/Dc/In/P\": \"W\",\n  \"/Ac/In/L1/P\": \"W\",\n  \"/Ac/L1/Power\": \"W\",\n  \"/Ac/L2/Power\": \"W\",\n  \"/Ac/Power\": \"W\",\n  \"/Level\": \"%level\",\n  \"/Remaining\": \"L\",\n  \"/Temperature\": \"Degrees celsius\",\n  \"/Humidity\": \"%RH\",\n};\n\nconst effectiveUnit = unit || unitOverrides[dbus_path] || \"\";\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[effectiveUnit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && effectiveUnit && effectiveUnit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = {\n    device_class: null,\n    unit: null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = {\n    device_class: null,\n    unit: effectiveUnit || null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  default_entity_id: `sensor.${entityId}`,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [\"librecoach-victron\"],\n    name: \"LibreCoach: Victron\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Add device_class if defined\nif (haMetadata.device_class) {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined\nif (haMetadata.unit) {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// Apply precision formatting for numeric values\n// Default to 1 decimal place if not specified\nconst precision = haMetadata.precision !== undefined ? haMetadata.precision : 1;\npayload.value_template = `{{ value_json.value | float | round(${precision}) }}`;\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum) {\n  const enumParts = effectiveUnit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n}\n\n// Track discovery topic for cleanup on disable\nlet discoveryTopics = global.get(\"victronDiscoveryTopics\") || [];\ndiscoveryTopics.push(discoveryTopic);\nglobal.set(\"victronDiscoveryTopics\", discoveryTopics);\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -6770,8 +6790,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
-        "y": 880,
+        "x": 1000,
+        "y": 920,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6783,7 +6803,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "status_victron",
+        "name": "victron_status",
         "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined values\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Build Entity ID (same logic as create_victron.js) ===\n\nconst safePathRaw = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nlet safePath = safePathRaw;\n\n// === Standardization Rules (Matches create_victron.js) ===\n\n// 1. Context-aware renaming\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Look up product short name from discovered devices\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceInfo = victronDevices[`${service_type}_${instance}`];\nconst deviceName = deviceInfo ? deviceInfo.shortName : service_type;\n\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build State Topic ===\n\nconst stateTopic = `homeassistant/sensor/${entityId}/state`;\n\n// === Format Value ===\n\n// Wrap in JSON object to match value_template: \"{{ value_json.value }}\"\nmsg.topic = stateTopic;\nmsg.payload = { value: value };\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -6791,8 +6811,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 960,
+        "x": 720,
+        "y": 1000,
         "wires": [
             [
                 "86ab41ab0a2ff264"
@@ -6812,7 +6832,7 @@
         "sendError": false,
         "allProps": false,
         "x": 450,
-        "y": 1280,
+        "y": 1300,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6824,7 +6844,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "store_victron_map",
+        "name": "victron_store_map",
         "func": "// Parse Victron attributes CSV and store as nested Map in global context\n\nconst csvText = msg.payload;\n\nif (!csvText || typeof csvText !== \"string\") {\n  node.warn(\"store_victron_map: No CSV data received\");\n  return null;\n}\n\nconst lines = csvText.split(\"\\n\").filter((line) => line.trim().length > 0);\n\n// Build nested Map: serviceType → Map(path → { type, unit, scale, access })\nconst victronMap = new Map();\n\nfor (const line of lines) {\n  const parts = line.split(\",\");\n  if (parts.length < 8) continue;\n\n  const [service, path, type, unit, register, dataType, scale, access] =\n    parts.map((p) => p.trim());\n\n  // Strip \"com.victronenergy.\" prefix to get short service type\n  const serviceType = service.replace(\"com.victronenergy.\", \"\");\n\n  if (!victronMap.has(serviceType)) {\n    victronMap.set(serviceType, new Map());\n  }\n\n  victronMap.get(serviceType).set(path, {\n    type,\n    unit,\n    scale,\n    access,\n  });\n}\n\n// Store in global context\nglobal.set(\"victronMap\", victronMap);\n\n// Count total records across all service types\nlet totalRecords = 0;\nfor (const [, pathMap] of victronMap) {\n  totalRecords += pathMap.size;\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Loaded ${totalRecords} attributes across ${victronMap.size} services`,\n});\n\nreturn null;\n",
         "outputs": 0,
         "timeout": 0,
@@ -6832,8 +6852,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 1280,
+        "x": 730,
+        "y": 1300,
         "wires": []
     },
     {
@@ -6859,7 +6879,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 1280,
+        "y": 1300,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6881,7 +6901,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 1380,
+        "y": 1400,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -6893,7 +6913,7 @@
         "type": "function",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "store_victron_devices",
+        "name": "victron_store_devices",
         "func": "// Store active Victron device instances from ProductName topics\n// Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst key = `${serviceType}_${instance}`;\n\n// Extract product name from payload\nlet productName = \"\";\nif (typeof msg.payload === \"string\") {\n  try {\n    productName = JSON.parse(msg.payload).value || \"\";\n  } catch (e) {\n    productName = msg.payload;\n  }\n} else if (typeof msg.payload === \"object\" && msg.payload !== null) {\n  productName = msg.payload.value || \"\";\n}\n\n// Build short name from first two alpha words of product name (skip model numbers)\nconst alphaWords = productName\n  .split(/\\s+/)\n  .filter((w) => /^[a-zA-Z]/.test(w));\nconst shortName = alphaWords\n  .slice(0, 2)\n  .join(\"_\")\n  .replace(/[^a-zA-Z0-9_-]/g, \"\")\n  .toLowerCase();\n\n// Get or initialize the active devices object\nlet victronDevices = global.get(\"victronDevices\") || {};\n\n// Store or update device entry\nvictronDevices[key] = {\n  productName: productName,\n  shortName: shortName || serviceType,\n};\n\nglobal.set(\"victronDevices\", victronDevices);\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `${Object.keys(victronDevices).length} active devices`,\n});\n\nreturn null;\n",
         "outputs": 0,
         "timeout": "",
@@ -6902,7 +6922,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 1380,
+        "y": 1400,
         "wires": []
     },
     {
@@ -6927,8 +6947,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1110,
-        "y": 1380,
+        "x": 1050,
+        "y": 1400,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6948,8 +6968,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1360,
-        "y": 1380,
+        "x": 1300,
+        "y": 1400,
         "wires": [
             []
         ]
@@ -6963,8 +6983,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 1090,
-        "y": 1320,
+        "x": 1030,
+        "y": 1340,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6982,8 +7002,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1330,
-        "y": 880,
+        "x": 1290,
+        "y": 920,
         "wires": [],
         "l": true
     },
@@ -6997,8 +7017,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1330,
-        "y": 960,
+        "x": 1290,
+        "y": 1000,
         "wires": [],
         "l": true
     },
@@ -7017,8 +7037,8 @@
         "correl": "",
         "expiry": "",
         "broker": "68237e1473ec01aa",
-        "x": 1030,
-        "y": 1140,
+        "x": 990,
+        "y": 1180,
         "wires": []
     },
     {
@@ -7028,8 +7048,48 @@
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
         "x": 640,
-        "y": 421,
+        "y": 382,
         "wires": []
+    },
+    {
+        "id": "48292ec85eb70ee5",
+        "type": "function",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "victron_handle_toggle",
+        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Two outputs:\n//   Output 1 → Trigger to Status Victron (when enabling)\n//   Output 2 → MQTT Out (entity deletion)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return [{ payload: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\nconst deleteMessages = discoveryTopics.map((topic) => ({\n  topic: topic,\n  payload: \"\",\n}));\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [deleteMessages];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 840,
+        "wires": [
+            [],
+            [
+                "bd38c37850a3e832"
+            ]
+        ]
+    },
+    {
+        "id": "8fdd1d506d28b9b6",
+        "type": "link in",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "CONFIG_GLOBALS",
+        "links": [
+            "88e5fa035bedb48c"
+        ],
+        "x": 210,
+        "y": 840,
+        "wires": [
+            [
+                "48292ec85eb70ee5"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "d5cb654b4dad986f",
@@ -7058,7 +7118,7 @@
         "type": "function",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "decode_microair_status",
+        "name": "microair_decode_status",
         "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n// Payload: JSON { zone: 0, facePlateTemperature: 72, outdoorTemperature: 85, mode: \"cool\", ... }\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\n// librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// Standardize\n// Primary entity is Climate (Zone X)\n// Secondary entities are Sensors (Outdoor, etc.) - maybe distinct messages?\n// Or we emit multiple messages from unique_microair?\n// But decode just standardizes.\n\nconst standardizedMsg = {\n    mac: mac,\n    zone: zone,\n    value: payload,\n    outdoor_temperature: payload.outdoorTemperature,\n};\n\nmsg.payload = standardizedMsg;\nmsg.topic = `librecoach/microair/${mac}/zone/${zone}`; // Internal topic\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7079,7 +7139,7 @@
         "type": "function",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "unique_microair",
+        "name": "microair_unique",
         "func": "// Filter duplicate MicroAir status messages and route by type\n// Input: Standardized status object from decode_microair_status.js\n// Output 1: Climate (zone status — triggers create_microair_climate.js)\n// Output 2: Sensor (outdoor temp — triggers create_microair_sensor.js)\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\n// Retrieve existing MicroAir entities from global context, or initialize as empty array\nlet uniqueMicroair = global.get(\"uniqueMicroair\") || [];\nlet listChanged = false;\n\nconst mac = payload.mac;\nconst zone = payload.zone;\n\n// Define distinct keys for Climate and Sensor to ensure independent discovery\nconst climateKey = `microair_${mac}_zone_${zone}_climate`;\nconst sensorKey = `microair_${mac}_zone_${zone}_sensor`;\n\nconst out = [null, null];\n\n// 1. Check Climate Entity\nif (!uniqueMicroair.includes(climateKey)) {\n  uniqueMicroair.push(climateKey);\n  listChanged = true;\n  out[0] = msg; // Send to Output 1 (Climate)\n}\n\n// 2. Check Sensor Entity (Outdoor Temp)\n// Only valid for Zone 0 AND if outdoor_temperature is present\nif (zone === 0 && payload.outdoor_temperature !== undefined) {\n  if (!uniqueMicroair.includes(sensorKey)) {\n    uniqueMicroair.push(sensorKey);\n    listChanged = true;\n    out[1] = msg; // Send to Output 2 (Sensor)\n  }\n}\n\n// Update global context if new devices were found\nif (listChanged) {\n  global.set(\"uniqueMicroair\", uniqueMicroair);\n}\n\n// If either output is non-null, return the array\n// Note: If out[0] is null and out[1] is msg, the array will be [null, msg]\n// Node-RED handles this correctly by sending nothing to output 1 and msg to output 2\nif (out[0] !== null || out[1] !== null) {\n  return out;\n}\n\nreturn null;\n",
         "outputs": 2,
         "timeout": 0,
@@ -7170,7 +7230,7 @@
         "type": "function",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "create_microair_climate",
+        "name": "microair_create_climate",
         "func": "// Create MicroAir Climate Entity\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`; // Bridge sends state here\n\n// Define distinct command topics for Node-RED interception\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode }}\",\n\n  // Temperature\n  temperature_command_topic: tempCommand, // HA uses this for target temp\n  temperature_state_topic: stateTopic,\n  temperature_state_template: \"{{ value_json.facePlateTemperature }}\",\n\n  // Target Temperature\n  target_temperature_command_topic: tempCommand,\n  target_temperature_state_topic: stateTopic,\n  target_temperature_state_template:\n    \"{% if value_json.mode == 'cool' %}{{ value_json.cool_sp }}{% elif value_json.mode == 'heat' %}{{ value_json.heat_sp }}{% else %}{{ value_json.cool_sp }}{% endif %}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode }}\",\n\n  modes: [\"off\", \"cool\", \"heat\", \"auto\", \"dry\", \"fan_only\"],\n  fan_modes: [\"low\", \"medium\", \"high\", \"auto\"],\n\n  min_temp: 60,\n  max_temp: 90,\n  temp_step: 1,\n\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` }\n  ],\n  availability_mode: \"all\"\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\n// Pass distinct topics for debug/logging if needed, though mostly for Discovery\nmsg.commandTopics = {\n  mode: modeCommand,\n  temp: tempCommand,\n  fan: fanCommand,\n};\nmsg.entityId = entityId;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7191,7 +7251,7 @@
         "type": "function",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "create_microair_sensor",
+        "name": "microair_create_sensor",
         "func": "// Create MicroAir Sensor Entities (Outdoor Temp)\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${safeMac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`;\n\nconst discoveryPayload = {\n  name: `Outdoor Temperature`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template:\n    \"{% if value_json.outdoorTemperature == 255 %}None{% else %}{{ value_json.outdoorTemperature }}{% endif %}\",\n  unit_of_measurement: \"°F\",\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` },\n  ],\n  availability_mode: \"all\",\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7249,7 +7309,7 @@
         "type": "function",
         "z": "e3804d2dd0b81928",
         "g": "65587a19852a1225",
-        "name": "encode_microair_command",
+        "name": "microair_encode_command",
         "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\n// Find \"zone\" keyword to split MAC from zone number\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n    off: 0,\n    fan_only: 1,\n    cool: 2,\n    heat: 5,\n    dry: 6,\n    auto: 11,\n};\n\nconst FAN_MAP = {\n    off: 0,\n    low: 1,\n    high: 2,\n    medium: 3,\n    auto: 128,\n};\n\nif (topic.endsWith(\"/mode/set\")) {\n    // HA sends: \"cool\", \"heat\", \"off\", etc.\n    // Map to MicroAir integer\n    if (val in MODE_MAP) {\n        change.mode = MODE_MAP[val];\n        change.power = 1;\n    } else {\n        // Fallback or ignore?\n        // If it's already a number, pass it through??\n        // Assume string for now.\n        return null;\n    }\n} else if (topic.endsWith(\"/temp/set\")) {\n    // HA sends number: 72\n    // We need to set the correct setpoint (cool_sp or heat_sp).\n    // The bridge doesn't track \"current active setpoint\", it tracks both.\n    // Ideally we'd know the current mode to set only one.\n    // But setting both to the target is a safe fallback for \"Auto\" behavior\n    // or generic \"make it this temp\" logic.\n    // A better approach would be to read the cached state from global context,\n    // but for now, setting both ensures the target is respected regardless of mode.\n    const temp = parseFloat(val);\n    change.cool_sp = temp;\n    change.heat_sp = temp;\n    change.autoHeat_sp = temp;\n    change.autoCool_sp = temp;\n} else if (topic.endsWith(\"/fan/set\")) {\n    // HA sends: \"low\", \"high\", \"auto\"\n    if (val in FAN_MAP) {\n        change.fan_mode = FAN_MAP[val];\n    } else {\n        return null;\n    }\n} else {\n    // Unknown topic suffix\n    return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n    Type: \"Change\",\n    Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7287,7 +7347,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 370,
-        "y": 176,
+        "y": 185,
         "wires": []
     },
     {
@@ -7360,7 +7420,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
-        "name": "read_rv_info",
+        "name": "export_read_rv_info",
         "func": "// Reads RV info and sets up HA API request configuration\n// Input: msg (triggered by export button)\n// Output: msg with rvInfo, headers, and url for first API call\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  node.error(\n    \"SUPERVISOR_TOKEN not configured. Ensure the add-on provides it.\",\n    msg,\n  );\n  node.status({ fill: \"red\", shape: \"ring\", text: \"No Supervisor token\" });\n  return null;\n}\n\n// Store base URL and headers for subsequent HTTP requests\nmsg.haBaseUrl = haBaseUrl;\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\n\n// Set URL for first API call\nmsg.url = `${haBaseUrl}/api/states`;\n\n// Read RV info from flow context\nconst rvInfo = flow.get(\"rvInfo\") || {};\nmsg.rvInfo = {\n  manufacturer: rvInfo.rv_manufacturer || \"Unknown\",\n  model: rvInfo.rv_model || \"Unknown\",\n  year: rvInfo.rv_year || \"Unknown\",\n  other: rvInfo.rv_other || \"Unknown\",\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7368,7 +7428,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 400,
         "y": 280,
         "wires": [
             [
@@ -7393,7 +7453,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 560,
+        "x": 620,
         "y": 280,
         "wires": [
             [
@@ -7406,7 +7466,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
-        "name": "store_ha_states",
+        "name": "export_store_ha_states",
         "func": "// Stores Home Assistant states response\n// Input: msg.payload = response from GET /api/states (array of state objects)\n// Output: msg with states array ready for export function\n\n// Validate response\nif (!msg.payload || !Array.isArray(msg.payload)) {\n  node.error(\"Invalid response from /api/states - expected array\", msg);\n  return null;\n}\n\n// Store states in message for downstream processing\nmsg.states = msg.payload;\n\n// Log count for debugging\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `${msg.states.length} entities`,\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7414,7 +7474,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
+        "x": 850,
         "y": 280,
         "wires": [
             [
@@ -7435,7 +7495,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 970,
+        "x": 1090,
         "y": 280,
         "wires": [
             [
@@ -7448,7 +7508,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
-        "name": "publish_export_url",
+        "name": "export_publish_url",
         "func": "// Writes export config and download page to /homeassistant/www/\n// Input: msg.exportConfig (object from Build Export Config)\n//        msg.exportFilename (dynamic filename from export_ha_config)\n// Output: two messages to File Write node (JSON export + HTML download page)\n\nif (!msg.exportConfig) {\n    node.error(\"Missing exportConfig object\", msg);\n    return null;\n}\n\nconst entityCount = Object.keys(msg.exportConfig.entities || {}).length;\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\n// Message 1: the JSON export file\nconst jsonMsg = {\n    filename: `/homeassistant/www/${filename}`,\n    payload: JSON.stringify(msg.exportConfig, null, 2),\n    entityCount: entityCount,\n    exportFilename: filename,\n};\n\n// Message 2: HTML download page that auto-triggers the file download\nconst htmlMsg = {\n    filename: \"/homeassistant/www/librecoach_download.html\",\n    payload: `<!DOCTYPE html>\n<html><head><title>LibreCoach Download</title></head>\n<body>\n<script>\nvar a = document.createElement(\"a\");\na.href = \"/local/${filename}\";\na.download = \"${filename}\";\ndocument.body.appendChild(a);\na.click();\nsetTimeout(function() { window.close(); }, 1000);\n</script>\n<p>Your download should start automatically. If not, <a href=\"/local/${filename}\" download=\"${filename}\">click here</a>.</p>\n</body></html>`,\n    entityCount: entityCount,\n    exportFilename: filename,\n};\n\nreturn [[jsonMsg, htmlMsg]];\n",
         "outputs": 1,
         "timeout": 0,
@@ -7456,7 +7516,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
+        "x": 1310,
         "y": 280,
         "wires": [
             [
@@ -7491,7 +7551,7 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 1380,
+        "x": 1500,
         "y": 280,
         "wires": [
             [
@@ -7504,7 +7564,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "export_config_group_001",
-        "name": "notify_export_url",
+        "name": "export_notify_url",
         "func": "// Stores filename and prepares notification payload\n// Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)\n// Output: msg.payload configured for notify_user\n\nconst filename = msg.exportFilename || \"librecoach_config.json\";\n\n// Store filename in flow context for the download endpoint\nflow.set(\"exportFilename\", filename);\n\nconst haBaseUrl = env.get(\"HA_BASE_URL\") || \"http://homeassistant.local:8123\";\nconst downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;\n\nmsg.payload = {\n  title: \"LibreCoach Export Complete\",\n  message: `<a href=\"${downloadUrl}\" target=\"_blank\">Download ${filename}</a>`,\n  notification_id: \"librecoach_export\",\n  data: {\n    filename: filename\n  }\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Notification prepared\",\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7512,7 +7572,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1560,
+        "x": 1690,
         "y": 280,
         "wires": [
             [
@@ -7525,7 +7585,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "serve_import_page",
+        "name": "import_create_page",
         "func": "// Serves the LibreCoach configuration import upload page\n// Input: HTTP In GET /librecoach/import\n// Output: msg.payload = HTML string for HTTP Response\n\nmsg.payload = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>LibreCoach — Import Configuration</title>\n<style>\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body {\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n    background: #1a1a2e; color: #e0e0e0; padding: 2rem;\n    display: flex; justify-content: center; min-height: 100vh;\n  }\n  .container { max-width: 560px; width: 100%; }\n  h1 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1.5rem; }\n  .subtitle { color: #888; margin-bottom: 1.5rem; font-size: 0.9rem; }\n  .upload-area {\n    border: 2px dashed #444; border-radius: 8px; padding: 2rem;\n    text-align: center; margin-bottom: 1rem; transition: border-color 0.2s;\n  }\n  .upload-area.has-file { border-color: #4fc3f7; }\n  input[type=\"file\"] { margin: 0.5rem 0; }\n  .preview {\n    background: #16213e; border-radius: 8px; padding: 1rem;\n    margin-bottom: 1rem; display: none;\n  }\n  .preview.visible { display: block; }\n  .preview h3 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1rem; }\n  .preview-row { display: flex; justify-content: space-between; padding: 0.25rem 0; }\n  .preview-label { color: #888; }\n  .preview-value { color: #e0e0e0; font-weight: 500; }\n  .error-text { color: #ef5350; }\n  button {\n    background: #4fc3f7; color: #1a1a2e; border: none; border-radius: 6px;\n    padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600;\n    cursor: pointer; width: 100%; transition: opacity 0.2s;\n  }\n  button:disabled { opacity: 0.4; cursor: not-allowed; }\n  button:hover:not(:disabled) { opacity: 0.85; }\n  .results {\n    background: #16213e; border-radius: 8px; padding: 1rem;\n    margin-top: 1rem; display: none;\n  }\n  .results.visible { display: block; }\n  .results h3 { margin-bottom: 0.5rem; font-size: 1rem; }\n  .results.success h3 { color: #66bb6a; }\n  .results.failure h3 { color: #ef5350; }\n  .spinner { display: inline-block; width: 18px; height: 18px;\n    border: 2px solid #4fc3f7; border-top-color: transparent;\n    border-radius: 50%; animation: spin 0.8s linear infinite;\n    vertical-align: middle; margin-right: 0.5rem;\n  }\n  @keyframes spin { to { transform: rotate(360deg); } }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <h1>Import Configuration</h1>\n  <p class=\"subtitle\">Restore customized entity names from a LibreCoach export file.</p>\n\n  <div class=\"upload-area\" id=\"uploadArea\">\n    <p>Select a LibreCoach export JSON file</p>\n    <input type=\"file\" id=\"fileInput\" accept=\".json\">\n  </div>\n\n  <div class=\"preview\" id=\"preview\">\n    <h3>File Preview</h3>\n    <div id=\"previewContent\"></div>\n  </div>\n\n  <button id=\"importBtn\" disabled>Import</button>\n\n  <div class=\"results\" id=\"results\">\n    <h3 id=\"resultsTitle\"></h3>\n    <div id=\"resultsContent\"></div>\n  </div>\n</div>\n\n<script>\n  const importPostUrl = window.location.href;\n  const fileInput = document.getElementById(\"fileInput\");\n  const uploadArea = document.getElementById(\"uploadArea\");\n  const preview = document.getElementById(\"preview\");\n  const previewContent = document.getElementById(\"previewContent\");\n  const importBtn = document.getElementById(\"importBtn\");\n  const results = document.getElementById(\"results\");\n  const resultsTitle = document.getElementById(\"resultsTitle\");\n  const resultsContent = document.getElementById(\"resultsContent\");\n\n  let parsedConfig = null;\n\n  fileInput.addEventListener(\"change\", function () {\n    const file = this.files[0];\n    if (!file) return;\n\n    const reader = new FileReader();\n    reader.onload = function (e) {\n      try {\n        const data = JSON.parse(e.target.result);\n        if (!data.entities || typeof data.entities !== \"object\") {\n          showPreviewError(\"Invalid file: missing 'entities' key.\");\n          return;\n        }\n\n        parsedConfig = data;\n        const entityCount = Object.keys(data.entities).length;\n\n        let html = \"\";\n        html += row(\"Export Date\", data.export_date || \"Unknown\");\n        if (data.rv_info) {\n          const rv = data.rv_info;\n          const rvLabel = [rv.manufacturer, rv.model, rv.year, rv.other]\n            .filter(Boolean).join(\" \");\n          if (rvLabel) html += row(\"Vehicle\", rvLabel);\n        }\n        html += row(\"Customized Names\", entityCount);\n        if (entityCount === 0) {\n          html += '<p class=\"error-text\" style=\"margin-top:0.5rem\">' +\n                  \"No customized names found — nothing to import.</p>\";\n        }\n\n        previewContent.innerHTML = html;\n        preview.classList.add(\"visible\");\n        uploadArea.classList.add(\"has-file\");\n        importBtn.disabled = entityCount === 0;\n        results.classList.remove(\"visible\");\n      } catch (err) {\n        showPreviewError(\"Could not parse JSON: \" + err.message);\n      }\n    };\n    reader.readAsText(file);\n  });\n\n  function showPreviewError(msg) {\n    previewContent.innerHTML = '<p class=\"error-text\">' + msg + \"</p>\";\n    preview.classList.add(\"visible\");\n    importBtn.disabled = true;\n    parsedConfig = null;\n  }\n\n  function row(label, value) {\n    return '<div class=\"preview-row\">' +\n           '<span class=\"preview-label\">' + label + \"</span>\" +\n           '<span class=\"preview-value\">' + value + \"</span></div>\";\n  }\n\n  importBtn.addEventListener(\"click\", function () {\n    if (!parsedConfig) return;\n    importBtn.disabled = true;\n    importBtn.innerHTML = '<span class=\"spinner\"></span>Importing…';\n    results.classList.remove(\"visible\", \"success\", \"failure\");\n\n    fetch(importPostUrl, {\n      method: \"POST\",\n      headers: { \"Content-Type\": \"application/json\" },\n      body: JSON.stringify(parsedConfig),\n    })\n    .then(function (res) { return res.json(); })\n    .then(function (data) {\n      resultsTitle.textContent = data.error ? \"Import Failed\" : \"Import Complete\";\n      results.classList.add(data.error ? \"failure\" : \"success\");\n\n      if (data.error) {\n        resultsContent.innerHTML = '<p class=\"error-text\">' + data.error + \"</p>\";\n      } else {\n        let html = \"\";\n        html += row(\"Updated\", data.updated || 0);\n        html += row(\"Skipped (not in HA)\", data.skipped || 0);\n        html += row(\"Failed\", data.failed || 0);\n        resultsContent.innerHTML = html;\n      }\n      results.classList.add(\"visible\");\n    })\n    .catch(function (err) {\n      resultsTitle.textContent = \"Import Failed\";\n      results.classList.add(\"failure\", \"visible\");\n      resultsContent.innerHTML = '<p class=\"error-text\">' + err.message + \"</p>\";\n    })\n    .finally(function () {\n      importBtn.innerHTML = \"Import\";\n      importBtn.disabled = false;\n    });\n  });\n</script>\n</body>\n</html>`;\n\nmsg.headers = { \"Content-Type\": \"text/html\" };\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Page served\" });\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7533,7 +7593,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 380,
         "y": 540,
         "wires": [
             [
@@ -7546,7 +7606,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "validate_import",
+        "name": "import_validation",
         "func": "// Validates incoming import JSON and prepares HA states request\n// Input: msg.payload = parsed JSON body from POST /librecoach/import\n// Output 1: valid → msg configured for GET /api/states (with msg.importConfig)\n// Output 2: error → msg.payload = error JSON for HTTP Response\n\nconst data = msg.payload;\n\nif (!data || typeof data !== \"object\") {\n  msg.payload = { error: \"Invalid request: expected a JSON object.\" };\n  msg.statusCode = 400;\n  return [null, msg];\n}\n\nif (!data.entities || typeof data.entities !== \"object\") {\n  msg.payload = { error: \"Invalid file: missing 'entities' key.\" };\n  msg.statusCode = 400;\n  return [null, msg];\n}\n\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nif (!haToken) {\n  msg.payload = {\n    error: \"Server configuration error: no Supervisor token available.\",\n  };\n  msg.statusCode = 500;\n  return [null, msg];\n}\n\nconst allEntities = Object.values(data.entities);\nconst customized = [];\nlet skippedUnchanged = 0;\n\nfor (const entity of allEntities) {\n  if (\n    entity.friendly_name &&\n    entity.original_name &&\n    entity.friendly_name !== entity.original_name\n  ) {\n    customized.push({\n      entity_id: entity.entity_id,\n      friendly_name: entity.friendly_name,\n    });\n  } else {\n    skippedUnchanged++;\n  }\n}\n\nmsg.importConfig = {\n  customized: customized,\n  skippedUnchanged: skippedUnchanged,\n  totalInFile: allEntities.length,\n};\n\nmsg.url = `${haBaseUrl}/api/states`;\nmsg.method = \"GET\";\nmsg.headers = {\n  Authorization: `Bearer ${haToken}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = \"\";\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `${customized.length} customized of ${allEntities.length}`,\n});\n\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": 0,
@@ -7554,7 +7614,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
+        "x": 370,
         "y": 660,
         "wires": [
             [
@@ -7570,7 +7630,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "build_import_plan",
+        "name": "import_build_plan",
         "func": "// Cross-references import entities with current HA entities\n// Input:\n//   msg.payload = array of state objects from GET /api/states\n//   msg.importConfig = { customized, skippedUnchanged, totalInFile }\n// Output 1: msg.payload = array of { entity_id, friendly_name } for Split pipeline\n// Output 2: msg.payload = early HTTP response when no entities to update\n\nconst states = msg.payload;\nconst config = msg.importConfig;\n\nif (!Array.isArray(states) || !config) {\n    msg.payload = { error: \"Failed to retrieve HA states.\" };\n    msg.statusCode = 500;\n    return [null, msg];\n}\n\n// Build set of entity IDs currently in HA\nconst haEntityIds = new Set(states.map((s) => s.entity_id));\n\n// Cross-reference: only include entities that exist in HA\nconst toUpdate = [];\nlet skippedMissing = 0;\n\nfor (const entity of config.customized) {\n    if (haEntityIds.has(entity.entity_id)) {\n        toUpdate.push(entity);\n    } else {\n        skippedMissing++;\n    }\n}\n\n// Store counts for summarize_import\nmsg.importCounts = {\n    totalInFile: config.totalInFile,\n    skippedUnchanged: config.skippedUnchanged,\n    skippedMissing: skippedMissing,\n    toUpdate: toUpdate.length,\n};\n\nif (toUpdate.length === 0) {\n    msg.payload = {\n        updated: 0,\n        skipped: skippedMissing + config.skippedUnchanged,\n        failed: 0,\n        message: \"No matching entities found in HA to update.\",\n    };\n    msg.statusCode = 200;\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"Nothing to update\" });\n    return [null, msg];\n}\n\nmsg.payload = toUpdate;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `${toUpdate.length} to update, ${skippedMissing} skipped`,\n});\n\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": 0,
@@ -7594,7 +7654,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "prepare_registry_update",
+        "name": "import_registry_update",
         "func": "// Prepares HA entity registry update for a single entity (runs after Split)\n// Input: msg.payload = { entity_id, friendly_name }\n// Output: msg configured for ha-api node (WebSocket protocol)\n\nmsg._originalRes = msg.res;\ndelete msg.res;\n\nconst entity = msg.payload;\n\nmsg.entityId = entity.entity_id;\n\nmsg.payload = {\n  protocol: \"websocket\",\n  data: {\n    type: \"config/entity_registry/update\",\n    entity_id: entity.entity_id,\n    name: entity.friendly_name,\n  },\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7602,7 +7662,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
+        "x": 1160,
         "y": 660,
         "wires": [
             [
@@ -7636,7 +7696,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "summarize_import",
+        "name": "Import_summary",
         "func": "// Summarizes import results after all entity registry updates complete\n// Input: msg.payload = array of ha-api WebSocket responses (from Join after Split)\n//        msg.importCounts = { totalInFile, skippedUnchanged, skippedMissing, toUpdate }\n// Output 1: msg configured for HA persistent notification\n// Output 2: JSON result for HTTP Response to browser\n\nmsg.res = msg._originalRes;\ndelete msg._originalRes;\n\nconst responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\nconst counts = msg.importCounts || {};\n\nlet updated = 0;\nlet failed = 0;\n\nfor (const res of responses) {\n    if (res && res.entity_id) {\n        updated++;\n    } else {\n        failed++;\n    }\n}\n\nconst skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing || 0);\n\n// Output 2: HTTP Response to browser\nconst httpMsg = {\n    payload: { updated, skipped, failed },\n    statusCode: 200,\n    res: msg.res,\n};\n\n// Output 1: HA persistent notification\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nlet notifyMsg = null;\n\nif (haToken) {\n    notifyMsg = {\n        url: `${haBaseUrl}/api/services/persistent_notification/create`,\n        method: \"POST\",\n        headers: {\n            Authorization: `Bearer ${haToken}`,\n            \"Content-Type\": \"application/json\",\n        },\n        payload: {\n            title: \"LibreCoach Import Complete\",\n            message: `Updated: ${updated}\\nSkipped: ${skipped}\\nFailed: ${failed}`,\n            notification_id: \"librecoach_import_result\",\n        },\n    };\n}\n\nnode.status({\n    fill: failed > 0 ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: `${updated} updated, ${skipped} skipped, ${failed} failed`,\n});\n\nreturn [notifyMsg, httpMsg];\n",
         "outputs": 2,
         "timeout": 0,
@@ -7644,7 +7704,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1690,
+        "x": 1670,
         "y": 660,
         "wires": [
             [
@@ -7682,7 +7742,7 @@
         "name": "http response",
         "statusCode": "",
         "headers": {},
-        "x": 580,
+        "x": 600,
         "y": 540,
         "wires": []
     },
@@ -7754,7 +7814,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1510,
+        "x": 1490,
         "y": 660,
         "wires": [
             [
@@ -7770,7 +7830,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1870,
+        "x": 1850,
         "y": 720,
         "wires": []
     },
@@ -7791,7 +7851,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1890,
+        "x": 1870,
         "y": 660,
         "wires": [
             []
@@ -7885,7 +7945,7 @@
                 "valueType": "results"
             }
         ],
-        "x": 1370,
+        "x": 1350,
         "y": 660,
         "wires": [
             [
@@ -7903,7 +7963,7 @@
         "links": [
             "a1e89f48333c8256"
         ],
-        "x": 1810,
+        "x": 1890,
         "y": 280,
         "wires": [],
         "l": true
@@ -8295,7 +8355,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 360,
-        "y": 191,
+        "y": 204,
         "wires": []
     },
     {
