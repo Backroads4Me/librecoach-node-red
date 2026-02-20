@@ -7252,7 +7252,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_create_sensor",
-        "func": "// Create MicroAir Sensor Entities (Outdoor Temp)\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${safeMac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`;\n\nconst discoveryPayload = {\n  name: `Outdoor Temperature`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template:\n    \"{% if value_json.outdoorTemperature == 255 %}None{% else %}{{ value_json.outdoorTemperature }}{% endif %}\",\n  unit_of_measurement: \"°F\",\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` },\n  ],\n  availability_mode: \"all\",\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "func": "// Create MicroAir Sensor Entities (Outdoor Temp)\n// Input: Standardized MicroAir status\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${safeMac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/state`;\n\nconst discoveryPayload = {\n  name: `Outdoor Temperature`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template:\n    \"{% if value_json.outdoorTemperature is defined and value_json.outdoorTemperature != 255 %}{{ value_json.outdoorTemperature }}{% else %}None{% endif %}\",\n  unit_of_measurement: \"°F\",\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n  availability: [\n    { topic: `librecoach/bridge/status` },\n    { topic: `librecoach/ble/microair/${mac}/available` },\n  ],\n  availability_mode: \"all\",\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7347,7 +7347,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 370,
-        "y": 185,
+        "y": 194,
         "wires": []
     },
     {
