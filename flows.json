@@ -719,7 +719,7 @@
         "x": 108,
         "y": 359,
         "w": 1244,
-        "h": 608
+        "h": 748
     },
     {
         "id": "65587a19852a1225",
@@ -736,12 +736,13 @@
             "e1cc8c52948f9b2a",
             "52b505b69f88888d",
             "e2335c226769f307",
-            "b104a7e82aefcb21"
+            "b104a7e82aefcb21",
+            "eff96b1a324529c8"
         ],
         "x": 134,
         "y": 819,
         "w": 1192,
-        "h": 122
+        "h": 262
     },
     {
         "id": "9dd6a98018824be9",
@@ -2363,7 +2364,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 191,
+        "y": 177,
         "wires": []
     },
     {
@@ -7380,7 +7381,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_create_climate",
-        "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config from global context for dynamic modes/fans/temp limits\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Unique state topic per zone ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\n\n// Discovery topic for Home Assistant MQTT\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Define distinct command topics for Node-RED interception\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\n// --- Read zone config from cached state for dynamic discovery ---\nconst cachedState = global.get(`microair_${safeMac}_zone_${zone}`) || {};\nconst zoneConfig = global.get(`microair_${safeMac}_zone_${zone}_config`) || {};\n\n// Determine available modes from MAV bitmask (if available)\nconst MODE_NUM_TO_HA = {\n  0: \"off\",\n  1: \"fan_only\",\n  2: \"cool\",\n  5: \"heat\",\n  6: \"dry\",\n  8: \"auto\",\n};\nlet modes = [\"off\", \"cool\", \"heat\", \"auto\", \"dry\", \"fan_only\"]; // defaults\n\n// Determine available fan modes (defaults)\nlet fanModes = [\"low\", \"high\", \"auto\"];\n\n// Determine temp limits from SPL array (defaults: 50-90)\nlet minTemp = 50;\nlet maxTemp = 90;\n\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// Discovery payload\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat/dry)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Temperature limits\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\n// Assign output message\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\n// Pass state and command topics for debugging/logging\nmsg.stateTopic = stateTopic;\nmsg.commandTopics = {\n  mode: modeCommand,\n  temp: tempCommand,\n  tempHigh: tempHighCommand,\n  tempLow: tempLowCommand,\n  fan: fanCommand,\n};\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config from global context for dynamic modes/fans/temp limits\n\nconst payload = msg.payload;\nif (!payload || !payload.mac || payload.zone === undefined) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Unique state topic per zone ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\n\n// Discovery topic for Home Assistant MQTT\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Define distinct command topics for Node-RED interception\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\n// --- Read zone config from cached state for dynamic discovery ---\nconst cachedState = global.get(`microair_${safeMac}_zone_${zone}`) || {};\nconst zoneConfig = global.get(`microair_${safeMac}_zone_${zone}_config`) || {};\n\n// Determine available modes from MAV bitmask (if available)\nconst MODE_NUM_TO_HA = {\n  0: \"off\",\n  1: \"fan_only\",\n  2: \"cool\",\n  5: \"heat\",\n  6: \"dry\",\n  8: \"auto\",\n};\nlet modes = [\"off\", \"cool\", \"heat\", \"auto\", \"dry\", \"fan_only\"]; // defaults\n\n// Determine available fan modes (defaults)\nlet fanModes = [\"off\", \"low\", \"high\", \"auto\"];\n\n// Determine temp limits from SPL array (defaults: 50-90)\nlet minTemp = 50;\nlet maxTemp = 90;\n\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// Discovery payload\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat/dry)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Temperature limits\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\n// Assign output message\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\n// Pass state and command topics for debugging/logging\nmsg.stateTopic = stateTopic;\nmsg.commandTopics = {\n  mode: modeCommand,\n  temp: tempCommand,\n  tempHigh: tempHighCommand,\n  tempLow: tempLowCommand,\n  fan: fanCommand,\n};\nmsg.entityId = entityId;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7496,7 +7497,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 118,
+        "y": 136,
         "wires": []
     },
     {
@@ -7560,7 +7561,8 @@
                 "b104a7e82aefcb21"
             ],
             [
-                "52b505b69f88888d"
+                "52b505b69f88888d",
+                "eff96b1a324529c8"
             ]
         ]
     },
@@ -7578,6 +7580,23 @@
         "y": 860,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "eff96b1a324529c8",
+        "type": "debug",
+        "z": "e3804d2dd0b81928",
+        "g": "65587a19852a1225",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 1040,
+        "wires": []
     },
     {
         "id": "export_mqtt_in_trigger_001",
