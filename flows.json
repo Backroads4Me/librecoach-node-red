@@ -714,14 +714,14 @@
             "cd4c55cd4f675905",
             "65587a19852a1225",
             "599ffbccfb7cd415",
-            "c7c819ee9825d6ee",
             "feeabea8484a11e6",
-            "7605393317b3c471"
+            "7605393317b3c471",
+            "8712d2aef1490acd"
         ],
         "x": 108,
-        "y": 319,
-        "w": 1244,
-        "h": 608
+        "y": 339,
+        "w": 1594,
+        "h": 588
     },
     {
         "id": "65587a19852a1225",
@@ -738,12 +738,13 @@
             "e1cc8c52948f9b2a",
             "52b505b69f88888d",
             "e2335c226769f307",
-            "b104a7e82aefcb21"
+            "b104a7e82aefcb21",
+            "48ec2e810b890589"
         ],
         "x": 134,
-        "y": 779,
-        "w": 1192,
-        "h": 122
+        "y": 679,
+        "w": 1542,
+        "h": 222
     },
     {
         "id": "9dd6a98018824be9",
@@ -1550,11 +1551,6 @@
         "rules": [
             {
                 "t": "eq",
-                "v": "DM-RV",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
                 "v": "DATE_TIME_STATUS",
                 "vt": "str"
             },
@@ -1604,11 +1600,10 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 11,
+        "outputs": 10,
         "x": 1750,
         "y": 640,
         "wires": [
-            [],
             [],
             [],
             [],
@@ -2365,7 +2360,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 200,
+        "y": 220,
         "wires": []
     },
     {
@@ -4008,7 +4003,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 2000,
-        "y": 310,
+        "y": 288,
         "wires": []
     },
     {
@@ -4732,7 +4727,7 @@
         "z": "3470febb2cd6e952",
         "g": "5d1ecae7ac09586c",
         "name": "status_battery",
-        "func": "// HA Status Updater for Battery\n\n// Validate voltage availability - if it's \"Not Available\" string, skip\nif (\n    msg.payload?.dc_voltage_V === \"Not Available\" ||\n    msg.dc_voltage_V === \"Not Available\"\n) {\n    return null; // Stop the flow if voltage data not available\n}\n\n// Extract values with fallback support\nconst dcInstanceId =\n    msg.payload?.instance ?? msg.instance;\nconst voltageValue = msg.payload?.dc_voltage_V ?? msg.dc_voltage_V;\n\n// Validate DC instance ID\nif (dcInstanceId === undefined || dcInstanceId === null) {\n    node.error(\"Input missing 'instance'.\", msg);\n    return null; // Stop the flow\n}\n\n// Map instance ID to entity suffix (must match create_battery.js)\nconst batteryMap = {\n    0: \"0\",\n    1: \"house\",\n    2: \"chassis\",\n    3: \"house2\",\n    4: \"generator\",\n};\n\n// For instances 5-250, use numeric suffix\nlet entitySuffix;\nif (dcInstanceId >= 5 && dcInstanceId <= 250) {\n    entitySuffix = dcInstanceId.toString();\n} else {\n    entitySuffix = batteryMap[dcInstanceId] || dcInstanceId.toString();\n}\n\n// Validate voltage value\nif (typeof voltageValue !== \"number\") {\n    node.error(\"Input missing 'dc_voltage_V' (number).\", msg);\n    return null; // Stop the flow\n}\n\n// Ensure voltage is within reasonable range and round to 2 decimal places\nconst voltage = Math.max(0, Math.min(50, Math.round(voltageValue * 100) / 100));\n\n// Create the state topic for this battery instance\nconst stateTopic = `homeassistant/sensor/battery_${entitySuffix}/state`;\n\nmsg.topic = stateTopic;\nmsg.payload = voltage; // The payload is the numeric voltage value\n\n\n// Add debug information for troubleshooting\nmsg.debug_info = {\n    instance: dcInstanceId,\n    entity_suffix: entitySuffix,\n    calculated_voltage: voltage,\n    raw_voltage_V: voltageValue,\n};\n\nreturn msg;\n",
+        "func": "// HA Status Updater for Battery\n\n// Validate voltage availability - if it's \"Not Available\" string, skip\nif (\n    msg.payload?.dc_voltage_V === \"Not Available\" ||\n    msg.dc_voltage_V === \"Not Available\"\n) {\n    return null; // Stop the flow if voltage data not available\n}\n\n// Extract values with fallback support\nconst dcInstanceId =\n    msg.payload?.instance ?? msg.instance;\nconst voltageValue = msg.payload?.dc_voltage_V ?? msg.dc_voltage_V;\n\n// Validate DC instance ID\nif (dcInstanceId === undefined || dcInstanceId === null) {\n    node.error(\"Input missing 'instance'.\", msg);\n    return null; // Stop the flow\n}\n\n// Map instance ID to entity suffix (must match create_battery.js)\nconst batteryMap = {\n    0: \"0\",\n    1: \"house\",\n    2: \"chassis\",\n    3: \"house2\",\n    4: \"generator\",\n};\n\n// For instances 5-250, use numeric suffix\nlet entitySuffix;\nif (dcInstanceId >= 5 && dcInstanceId <= 250) {\n    entitySuffix = dcInstanceId.toString();\n} else {\n    entitySuffix = batteryMap[dcInstanceId] || dcInstanceId.toString();\n}\n\n// Validate voltage value\nif (typeof voltageValue !== \"number\") {\n    node.error(\"Input missing 'dc_voltage_V' (number).\", msg);\n    return null; // Stop the flow\n}\n\n// Ensure voltage is within reasonable range and round to 1 decimal place\nconst voltage = Math.max(0, Math.min(50, Math.round(voltageValue * 10) / 10));\n\n// Create the state topic for this battery instance\nconst stateTopic = `homeassistant/sensor/battery_${entitySuffix}/state`;\n\nmsg.topic = stateTopic;\nmsg.payload = voltage; // The payload is the numeric voltage value\n\n\n// Add debug information for troubleshooting\nmsg.debug_info = {\n    instance: dcInstanceId,\n    entity_suffix: entitySuffix,\n    calculated_voltage: voltage,\n    raw_voltage_V: voltageValue,\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6175,7 +6170,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 313,
+        "y": 300,
         "wires": []
     },
     {
@@ -6650,7 +6645,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 245,
+        "y": 240,
         "wires": []
     },
     {
@@ -7278,7 +7273,7 @@
         "y": 480,
         "wires": [
             [
-                "c7c819ee9825d6ee"
+                "8712d2aef1490acd"
             ],
             [
                 "ba611b1fa95bf468"
@@ -7498,7 +7493,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 154,
+        "y": 172,
         "wires": []
     },
     {
@@ -7512,35 +7507,9 @@
             "f658418a7b9b4857"
         ],
         "x": 910,
-        "y": 360,
+        "y": 380,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "c7c819ee9825d6ee",
-        "type": "delay",
-        "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "2",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 660,
-        "y": 360,
-        "wires": [
-            [
-                "599ffbccfb7cd415"
-            ]
-        ]
     },
     {
         "id": "e2335c226769f307",
@@ -7559,7 +7528,8 @@
         "y": 840,
         "wires": [
             [
-                "b104a7e82aefcb21"
+                "b104a7e82aefcb21",
+                "48ec2e810b890589"
             ],
             [
                 "52b505b69f88888d"
@@ -7621,6 +7591,45 @@
         "wires": [
             [
                 "ba611b1fa95bf468"
+            ]
+        ]
+    },
+    {
+        "id": "48ec2e810b890589",
+        "type": "debug",
+        "z": "e3804d2dd0b81928",
+        "g": "65587a19852a1225",
+        "name": "microair_optimistic_update",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1510,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "8712d2aef1490acd",
+        "type": "rbe",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 650,
+        "y": 380,
+        "wires": [
+            [
+                "599ffbccfb7cd415"
             ]
         ]
     },
