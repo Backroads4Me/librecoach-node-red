@@ -204,8 +204,8 @@
             "b797e5a52b6db5b4",
             "48e6dda2b2d9575e"
         ],
-        "x": 774,
-        "y": 1999,
+        "x": 694,
+        "y": 1979,
         "w": 492,
         "h": 142
     },
@@ -225,11 +225,8 @@
             "48e3b18cb440da52",
             "25162d774c052102",
             "32ec19602e928185",
-            "2d6bf3e8aa77a8c6",
-            "4d7e38077918190f",
-            "bc185e54ce871b11",
-            "a9779b1f38edf18d",
-            "0a397108bc1143ea"
+            "0a397108bc1143ea",
+            "6f91fc901b5dbf30"
         ],
         "x": 134,
         "y": 139,
@@ -305,8 +302,8 @@
             "f9f3986645a75789",
             "d5b86b351963235f",
             "b94bb12a8c0a7027",
-            "942c2aa2bb3167c9",
-            "8bc261d42b34bf26"
+            "8bc261d42b34bf26",
+            "942c2aa2bb3167c9"
         ],
         "x": 114,
         "y": 559,
@@ -476,22 +473,12 @@
             "2a97f79a308ff4fd",
             "54e6abd033b704f2",
             "08d4c674d7359aee",
-            "8e14c79fdeec919c",
-            "97e39646a29a8c55",
-            "555850888ece5c2e",
-            "f8f8ab87f8e56976",
-            "1a54fd912ec1457b",
-            "200991401297fc91",
-            "e85f1a65658e35b8",
-            "bde0564e43c0c68f",
-            "fd53207a07863f6c",
-            "13bcd21ae463ef4b",
             "baa7afeefe7f84eb"
         ],
         "x": 114,
         "y": 1939,
         "w": 1092,
-        "h": 422
+        "h": 348
     },
     {
         "id": "081183d6c363e792",
@@ -1683,7 +1670,7 @@
         "z": "292e70a6ba25b323",
         "g": "9dd6a98018824be9",
         "name": "unique_unknown",
-        "func": "// Unique Filter for Unknown Messages\n\n// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUNKNOWN = flow.get(\"uniqueUNKNOWN\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUNKNOWN.includes(newMsgStr)) {\n    uniqueUNKNOWN.push(newMsgStr);\n    flow.set(\"uniqueUNKNOWN\", uniqueUNKNOWN);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n",
+        "func": "// Unique Filter for Unknown Messages\n\n// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueUnknown = flow.get(\"uniqueUnknown\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.dgn);\n\n// Check if it's a new unique message\nif (!uniqueUnknown.includes(newMsgStr)) {\n    uniqueUnknown.push(newMsgStr);\n    flow.set(\"uniqueUnknown\", uniqueUnknown);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2360,7 +2347,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 220,
+        "y": 206,
         "wires": []
     },
     {
@@ -2730,8 +2717,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 34,
-        "x": 500,
-        "y": 820,
+        "x": 420,
+        "y": 800,
         "wires": [
             [],
             [
@@ -2847,8 +2834,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 140,
+        "x": 800,
+        "y": 120,
         "wires": [
             [
                 "b87fcd5e60905824"
@@ -2868,8 +2855,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 1160,
+        "x": 1250,
+        "y": 1140,
         "wires": []
     },
     {
@@ -2884,8 +2871,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 1160,
+        "x": 820,
+        "y": 1140,
         "wires": [
             [
                 "19307edfe4e5bd84"
@@ -2905,8 +2892,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 1280,
+        "x": 1250,
+        "y": 1260,
         "wires": []
     },
     {
@@ -2921,8 +2908,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 1280,
+        "x": 820,
+        "y": 1260,
         "wires": [
             [
                 "91cac903d306591a"
@@ -2941,8 +2928,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 80,
+        "x": 820,
+        "y": 60,
         "wires": [
             [
                 "295d4bc9058dab71"
@@ -2962,8 +2949,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1370,
-        "y": 800,
+        "x": 1290,
+        "y": 780,
         "wires": []
     },
     {
@@ -2978,8 +2965,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 800,
+        "x": 840,
+        "y": 780,
         "wires": [
             [
                 "b9d5913b9730b3e0"
@@ -2998,8 +2985,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 500,
+        "x": 810,
+        "y": 480,
         "wires": [
             [
                 "db73295f937c90a1"
@@ -3019,8 +3006,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 740,
+        "x": 1260,
+        "y": 720,
         "wires": []
     },
     {
@@ -3035,8 +3022,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 740,
+        "x": 820,
+        "y": 720,
         "wires": [
             [
                 "e06ff8584295e0bd"
@@ -3056,8 +3043,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 920,
+        "x": 1250,
+        "y": 900,
         "wires": []
     },
     {
@@ -3072,8 +3059,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 920,
+        "x": 810,
+        "y": 900,
         "wires": [
             [
                 "6a02f9f3c2b95dcc"
@@ -3092,8 +3079,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 980,
+        "x": 820,
+        "y": 960,
         "wires": [
             [
                 "6b903512de37f1ad"
@@ -3113,8 +3100,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 980,
+        "x": 1260,
+        "y": 960,
         "wires": []
     },
     {
@@ -3129,8 +3116,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 1520,
+        "x": 800,
+        "y": 1500,
         "wires": [
             [
                 "f80a9416a8e18e46"
@@ -3150,8 +3137,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1310,
-        "y": 1520,
+        "x": 1230,
+        "y": 1500,
         "wires": []
     },
     {
@@ -3166,8 +3153,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 1100,
+        "x": 810,
+        "y": 1080,
         "wires": [
             [
                 "78904d457471d1b2"
@@ -3187,8 +3174,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 1100,
+        "x": 1240,
+        "y": 1080,
         "wires": []
     },
     {
@@ -3203,8 +3190,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 1340,
+        "x": 820,
+        "y": 1320,
         "wires": [
             [
                 "04bc7637ee7139d8"
@@ -3224,8 +3211,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
-        "y": 1340,
+        "x": 1250,
+        "y": 1320,
         "wires": []
     },
     {
@@ -3240,8 +3227,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 380,
+        "x": 800,
+        "y": 360,
         "wires": [
             [
                 "45ae070eafc9a732"
@@ -3260,8 +3247,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 1040,
+        "x": 840,
+        "y": 1020,
         "wires": [
             [
                 "51e87f869d6aa2c5"
@@ -3281,8 +3268,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1360,
-        "y": 1040,
+        "x": 1280,
+        "y": 1020,
         "wires": []
     },
     {
@@ -3297,8 +3284,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 1220,
+        "x": 810,
+        "y": 1200,
         "wires": [
             [
                 "9f3a9fd8a4506e74"
@@ -3318,8 +3305,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 1220,
+        "x": 1240,
+        "y": 1200,
         "wires": []
     },
     {
@@ -3334,8 +3321,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 440,
+        "x": 810,
+        "y": 420,
         "wires": [
             [
                 "bff245b2ca47ef79"
@@ -3354,8 +3341,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 1400,
+        "x": 810,
+        "y": 1380,
         "wires": [
             [
                 "77e3defd386ce8a8"
@@ -3375,8 +3362,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 1400,
+        "x": 1240,
+        "y": 1380,
         "wires": []
     },
     {
@@ -3391,8 +3378,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 1460,
+        "x": 790,
+        "y": 1440,
         "wires": [
             [
                 "fa30f6cf9bede7e9"
@@ -3412,8 +3399,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1300,
-        "y": 1460,
+        "x": 1220,
+        "y": 1440,
         "wires": []
     },
     {
@@ -3428,8 +3415,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
-        "y": 200,
+        "x": 830,
+        "y": 180,
         "wires": [
             [
                 "7af7fb2178a714cf"
@@ -3448,8 +3435,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 860,
+        "x": 810,
+        "y": 840,
         "wires": [
             [
                 "9d90b7163a12d5ed"
@@ -3469,8 +3456,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1320,
-        "y": 860,
+        "x": 1240,
+        "y": 840,
         "wires": []
     },
     {
@@ -3481,8 +3468,8 @@
         "links": [
             "02bdfc59de71b5a5"
         ],
-        "x": 240,
-        "y": 820,
+        "x": 160,
+        "y": 800,
         "wires": [
             [
                 "9f88f215f3f07227"
@@ -3512,8 +3499,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 900,
-        "y": 2040,
+        "x": 820,
+        "y": 2020,
         "wires": [
             [
                 "09640adb1fd08fbb"
@@ -3533,8 +3520,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1120,
-        "y": 2040,
+        "x": 1040,
+        "y": 2020,
         "wires": [
             []
         ]
@@ -3552,8 +3539,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 2100,
+        "x": 800,
+        "y": 2080,
         "wires": [
             [
                 "48e6dda2b2d9575e"
@@ -3574,8 +3561,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1130,
-        "y": 2100,
+        "x": 1050,
+        "y": 2080,
         "wires": []
     },
     {
@@ -3591,8 +3578,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 680,
+        "x": 1260,
+        "y": 660,
         "wires": []
     },
     {
@@ -3607,8 +3594,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 680,
+        "x": 820,
+        "y": 660,
         "wires": [
             [
                 "d0e2cc417cf65b90"
@@ -3624,8 +3611,8 @@
         "links": [
             "61f4573c56915577"
         ],
-        "x": 1300,
-        "y": 380,
+        "x": 1220,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -3638,8 +3625,8 @@
         "links": [
             "663120adc5ec254f"
         ],
-        "x": 1330,
-        "y": 440,
+        "x": 1250,
+        "y": 420,
         "wires": [],
         "l": true
     },
@@ -3652,8 +3639,8 @@
         "links": [
             "7313d7c724d31538"
         ],
-        "x": 1330,
-        "y": 200,
+        "x": 1250,
+        "y": 180,
         "wires": [],
         "l": true
     },
@@ -3670,8 +3657,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
-        "y": 1580,
+        "x": 900,
+        "y": 1560,
         "wires": []
     },
     {
@@ -3687,8 +3674,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 890,
-        "y": 1640,
+        "x": 810,
+        "y": 1620,
         "wires": []
     },
     {
@@ -3704,8 +3691,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 890,
-        "y": 1700,
+        "x": 810,
+        "y": 1680,
         "wires": []
     },
     {
@@ -3720,8 +3707,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 930,
-        "y": 260,
+        "x": 850,
+        "y": 240,
         "wires": [
             [
                 "4ab29d3dd1da32a5"
@@ -3740,8 +3727,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 320,
+        "x": 800,
+        "y": 300,
         "wires": [
             [
                 "f00adfe38f0e26b5"
@@ -3757,8 +3744,8 @@
         "links": [
             "1d2d33ef4e57dd39"
         ],
-        "x": 1300,
-        "y": 320,
+        "x": 1220,
+        "y": 300,
         "wires": [],
         "l": true
     },
@@ -3771,8 +3758,8 @@
         "links": [
             "f9a04003db7d8e4a"
         ],
-        "x": 1310,
-        "y": 260,
+        "x": 1230,
+        "y": 240,
         "wires": [],
         "l": true
     },
@@ -3785,8 +3772,8 @@
         "links": [
             "93a2783b5bb8d93d"
         ],
-        "x": 1320,
-        "y": 140,
+        "x": 1240,
+        "y": 120,
         "wires": [],
         "l": true
     },
@@ -3799,8 +3786,8 @@
         "links": [
             "efb5c968a0a43c7d"
         ],
-        "x": 1330,
-        "y": 80,
+        "x": 1250,
+        "y": 60,
         "wires": [],
         "l": true
     },
@@ -3817,8 +3804,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 890,
-        "y": 1760,
+        "x": 810,
+        "y": 1740,
         "wires": []
     },
     {
@@ -3830,8 +3817,8 @@
         "links": [
             "bd2d1b59183b99bb"
         ],
-        "x": 1330,
-        "y": 500,
+        "x": 1250,
+        "y": 480,
         "wires": [],
         "l": true
     },
@@ -3847,8 +3834,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 560,
+        "x": 810,
+        "y": 540,
         "wires": [
             [
                 "b6c72de91f6e7ec7"
@@ -3864,8 +3851,8 @@
         "links": [
             "2ee0ed60af1beb40"
         ],
-        "x": 1320,
-        "y": 560,
+        "x": 1240,
+        "y": 540,
         "wires": [],
         "l": true
     },
@@ -3882,8 +3869,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 930,
-        "y": 620,
+        "x": 850,
+        "y": 600,
         "wires": []
     },
     {
@@ -3899,8 +3886,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1350,
-        "y": 1820,
+        "x": 1270,
+        "y": 1800,
         "wires": []
     },
     {
@@ -3916,8 +3903,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1350,
-        "y": 1880,
+        "x": 1270,
+        "y": 1860,
         "wires": []
     },
     {
@@ -3933,8 +3920,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 1940,
+        "x": 1260,
+        "y": 1920,
         "wires": []
     },
     {
@@ -3949,8 +3936,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
-        "y": 1880,
+        "x": 830,
+        "y": 1860,
         "wires": [
             [
                 "54c7344ace5b029a"
@@ -3969,8 +3956,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 1820,
+        "x": 840,
+        "y": 1800,
         "wires": [
             [
                 "be1c2b9fdc3dd714"
@@ -3989,8 +3976,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
-        "y": 1940,
+        "x": 830,
+        "y": 1920,
         "wires": [
             [
                 "4a7ebb2b6a783a13"
@@ -4002,8 +3989,8 @@
         "type": "note",
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
-        "x": 2000,
-        "y": 288,
+        "x": 1920,
+        "y": 246,
         "wires": []
     },
     {
@@ -4035,8 +4022,7 @@
         "wires": [
             [
                 "f0083147745c8366",
-                "48e3b18cb440da52",
-                "4d7e38077918190f"
+                "48e3b18cb440da52"
             ]
         ],
         "l": true
@@ -4103,7 +4089,8 @@
         "y": 240,
         "wires": [
             [
-                "d3a13b531babee66"
+                "d3a13b531babee66",
+                "6f91fc901b5dbf30"
             ]
         ]
     },
@@ -4900,24 +4887,6 @@
         "wires": []
     },
     {
-        "id": "942c2aa2bb3167c9",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "97615854748deb3d",
-        "name": "Create lock",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1050,
-        "y": 660,
-        "wires": []
-    },
-    {
         "id": "bc627a6a37117bc0",
         "type": "link out",
         "z": "3470febb2cd6e952",
@@ -5284,99 +5253,6 @@
         "wires": []
     },
     {
-        "id": "2d6bf3e8aa77a8c6",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "Unlocked",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "4d7e38077918190f",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "",
-        "property": "payload.lock_status",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "Unlocked",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "Locked",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 250,
-        "y": 380,
-        "wires": [
-            [
-                "2d6bf3e8aa77a8c6"
-            ],
-            [
-                "bc185e54ce871b11"
-            ],
-            [
-                "a9779b1f38edf18d"
-            ]
-        ]
-    },
-    {
-        "id": "bc185e54ce871b11",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "Locked",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "a9779b1f38edf18d",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "e2dc4d711cc9dc94",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 420,
-        "wires": []
-    },
-    {
         "id": "f0ba2779795efdae",
         "type": "link out",
         "z": "3470febb2cd6e952",
@@ -5637,8 +5513,7 @@
         "wires": [
             [
                 "6841e5cff3b5e0e1",
-                "43cd836c21f66b26",
-                "8e14c79fdeec919c"
+                "43cd836c21f66b26"
             ]
         ],
         "l": true
@@ -5790,231 +5665,6 @@
         "statusType": "auto",
         "x": 1050,
         "y": 2040,
-        "wires": []
-    },
-    {
-        "id": "8e14c79fdeec919c",
-        "type": "switch",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "",
-        "property": "payload.instance",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "burner",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "ac_1",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "ac_2",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "engine",
-                "vt": "str"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 5,
-        "x": 220,
-        "y": 2180,
-        "wires": [
-            [
-                "97e39646a29a8c55"
-            ],
-            [
-                "f8f8ab87f8e56976"
-            ],
-            [
-                "200991401297fc91"
-            ],
-            [
-                "bde0564e43c0c68f"
-            ],
-            [
-                "13bcd21ae463ef4b"
-            ]
-        ]
-    },
-    {
-        "id": "97e39646a29a8c55",
-        "type": "rbe",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 370,
-        "y": 2160,
-        "wires": [
-            [
-                "555850888ece5c2e"
-            ]
-        ]
-    },
-    {
-        "id": "555850888ece5c2e",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "debug 5",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 2160,
-        "wires": []
-    },
-    {
-        "id": "f8f8ab87f8e56976",
-        "type": "rbe",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 370,
-        "y": 2200,
-        "wires": [
-            [
-                "1a54fd912ec1457b"
-            ]
-        ]
-    },
-    {
-        "id": "1a54fd912ec1457b",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "debug 6",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 2200,
-        "wires": []
-    },
-    {
-        "id": "200991401297fc91",
-        "type": "rbe",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 370,
-        "y": 2240,
-        "wires": [
-            [
-                "e85f1a65658e35b8"
-            ]
-        ]
-    },
-    {
-        "id": "e85f1a65658e35b8",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "debug 7",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 2240,
-        "wires": []
-    },
-    {
-        "id": "bde0564e43c0c68f",
-        "type": "rbe",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 370,
-        "y": 2280,
-        "wires": [
-            [
-                "fd53207a07863f6c"
-            ]
-        ]
-    },
-    {
-        "id": "fd53207a07863f6c",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "debug 8",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 2280,
-        "wires": []
-    },
-    {
-        "id": "13bcd21ae463ef4b",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "9c7621e8a8850053",
-        "name": "debug 4",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 2320,
         "wires": []
     },
     {
@@ -6170,7 +5820,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 300,
+        "y": 313,
         "wires": []
     },
     {
@@ -6214,6 +5864,42 @@
                 "927340668e7942e4"
             ]
         ]
+    },
+    {
+        "id": "942c2aa2bb3167c9",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "97615854748deb3d",
+        "name": "Create lock",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "6f91fc901b5dbf30",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "e2dc4d711cc9dc94",
+        "name": "Create light",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 240,
+        "wires": []
     },
     {
         "id": "a37da245aba53b96",
@@ -6645,7 +6331,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 240,
+        "y": 225,
         "wires": []
     },
     {
@@ -7083,8 +6769,8 @@
         "z": "1fde0c4ffb03727e",
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
-        "x": 2020,
-        "y": 440,
+        "x": 2000,
+        "y": 460,
         "wires": []
     },
     {
@@ -7493,7 +7179,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 172,
+        "y": 181,
         "wires": []
     },
     {
