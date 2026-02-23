@@ -283,7 +283,7 @@
         ],
         "x": 154,
         "y": 1099,
-        "w": 1652,
+        "w": 1762,
         "h": 402
     },
     {
@@ -602,7 +602,10 @@
             "eced66f05a1796cd",
             "c02d9fc6bf086fdf",
             "566fce9c860fe37b",
-            "f3f99ba42088c9b1"
+            "f3f99ba42088c9b1",
+            "a95d74d20270f69b",
+            "1e2529650de44a73",
+            "9be2b9ec5c4f51d4"
         ],
         "x": 94,
         "y": 79,
@@ -1772,14 +1775,14 @@
         "z": "292e70a6ba25b323",
         "g": "8ef86a1c4b59d8e1",
         "name": "address_claim_request",
-        "func": "// RV-C Address Claim - Send Initial Claim\n// Generates a persistent unique ID, selects an address, and broadcasts the\n// ADDRESS_CLAIMED message (DGN EE00h) to claim the address.\n\n// --- Step 1: Handle Manual Reset Command (if triggered) ---\nif (msg.topic === \"reset_device_id\") {\n  // Clear the saved unique ID from persistent storage\n  global.set(\"my_persistent_rvc_id\", null);\n  // Reset the address attempt counter to start fresh\n  context.set(\"address_attempt\", null);\n  node.warn(\"Persistent DEVICE_NAME cleared. Generating a new one and starting claim...\");\n  // By not returning, we allow the script to continue and generate a new ID immediately.\n}\n\n\n// --- Configuration ---\nconst STARTING_ADDRESS = 223;\nconst MIN_ADDRESS = 208;\n\n\n// --- Step 2: Create or Retrieve a Persistent Unique DEVICE_NAME ---\nlet uniqueId = global.get(\"my_persistent_rvc_id\");\n\nif (!uniqueId) {\n  // No ID found, so generate a new one.\n  const randomSerial = Math.floor(Math.random() * 0x1FFFFF);\n  const randomSerialHex = randomSerial.toString(16).padStart(6, '0').toUpperCase();\n  uniqueId = \"8000000000\" + randomSerialHex;\n\n  // Save this new ID to the global context for future use.\n  global.set(\"my_persistent_rvc_id\", uniqueId);\n  //node.warn(\"Generated and saved a new persistent DEVICE_NAME: \" + uniqueId);\n}\nconst DEVICE_NAME = uniqueId;\n\n\n// --- Step 3: Select an Address to Claim ---\nconst usedAddresses = new Set(flow.get(\"used_addresses\") || []);\nlet addressToTry = context.get(\"address_attempt\") || STARTING_ADDRESS;\n\nif (msg.topic === \"address_claim_retry\") {\n  addressToTry--;\n  node.warn(`Lost address conflict. Trying next address: ${addressToTry}`);\n}\n\nwhile (usedAddresses.has(addressToTry) && addressToTry >= MIN_ADDRESS) {\n  addressToTry--;\n  node.warn(`Address ${addressToTry + 1} is known to be in use, skipping to ${addressToTry}`);\n}\n\nif (addressToTry < MIN_ADDRESS) {\n  node.error(`Exhausted all addresses in the valid range (${STARTING_ADDRESS}-${MIN_ADDRESS}). Address claiming failed.`);\n  flow.set(\"claim_in_progress\", false);\n  return null;\n}\n\ncontext.set(\"address_attempt\", addressToTry);\n\n\n// --- Step 4: Build and Send the Claim Message ---\nconst DGN = \"EE00\";\nconst priority = 6;\nconst canIdNum = (priority << 26) | (parseInt(DGN, 16) << 8) | addressToTry;\nconst canIdHex = canIdNum.toString(16).padStart(8, '0').toUpperCase();\nconst data_payload = DEVICE_NAME;\nconst canMessage = `${canIdHex}#${data_payload}`;\n\nflow.set(\"claiming_address\", addressToTry);\nflow.set(\"claim_in_progress\", true);\nflow.set(\"our_device_name\", DEVICE_NAME);\n\nmsg.payload = canMessage;\nmsg.topic = \"can/send\";\nmsg.claiming_address = addressToTry;\n\nnode.log(`Attempting to claim address ${addressToTry} (0x${addressToTry.toString(16).toUpperCase()})`);\n\nreturn msg;",
+        "func": "// RV-C Address Claim - Send Initial Claim\n// Generates a persistent unique ID, selects an address, and broadcasts the\n// ADDRESS_CLAIMED message (DGN EE00h) to claim the address.\n\n// --- Step 1: Handle Manual Reset Command (if triggered) ---\nif (msg.topic === \"reset_device_id\") {\n  // Clear the saved unique ID from persistent storage\n  global.set(\"my_persistent_rvc_id\", null, \"file\");\n  // Reset the address attempt counter to start fresh\n  context.set(\"address_attempt\", null);\n  node.warn(\n    \"Persistent DEVICE_NAME cleared. Generating a new one and starting claim...\",\n  );\n  // By not returning, we allow the script to continue and generate a new ID immediately.\n}\n\n// --- Configuration ---\nconst STARTING_ADDRESS = 223;\nconst MIN_ADDRESS = 208;\n\n// --- Step 2: Create or Retrieve a Persistent Unique DEVICE_NAME ---\nlet uniqueId = global.get(\"my_persistent_rvc_id\", \"file\");\n\nif (!uniqueId) {\n  // No ID found, so generate a new one.\n  const randomSerial = Math.floor(Math.random() * 0x1fffff);\n  const randomSerialHex = randomSerial\n    .toString(16)\n    .padStart(6, \"0\")\n    .toUpperCase();\n  uniqueId = \"8000000000\" + randomSerialHex;\n\n  // Save this new ID to the global context for future use.\n  global.set(\"my_persistent_rvc_id\", uniqueId, \"file\");\n  //node.warn(\"Generated and saved a new persistent DEVICE_NAME: \" + uniqueId);\n}\nconst DEVICE_NAME = uniqueId;\n\n// --- Step 3: Select an Address to Claim ---\nconst usedAddresses = new Set(flow.get(\"used_addresses\") || []);\nlet addressToTry = context.get(\"address_attempt\") || STARTING_ADDRESS;\n\nif (msg.topic === \"address_claim_retry\") {\n  addressToTry--;\n  node.warn(`Lost address conflict. Trying next address: ${addressToTry}`);\n}\n\nwhile (usedAddresses.has(addressToTry) && addressToTry >= MIN_ADDRESS) {\n  addressToTry--;\n  node.warn(\n    `Address ${addressToTry + 1} is known to be in use, skipping to ${addressToTry}`,\n  );\n}\n\nif (addressToTry < MIN_ADDRESS) {\n  node.error(\n    `Exhausted all addresses in the valid range (${STARTING_ADDRESS}-${MIN_ADDRESS}). Address claiming failed.`,\n  );\n  flow.set(\"claim_in_progress\", false);\n  return null;\n}\n\ncontext.set(\"address_attempt\", addressToTry);\n\n// --- Step 4: Build and Send the Claim Message ---\nconst DGN = \"EE00\";\nconst priority = 6;\nconst canIdNum = (priority << 26) | (parseInt(DGN, 16) << 8) | addressToTry;\nconst canIdHex = canIdNum.toString(16).padStart(8, \"0\").toUpperCase();\nconst data_payload = DEVICE_NAME;\nconst canMessage = `${canIdHex}#${data_payload}`;\n\nflow.set(\"claiming_address\", addressToTry);\nflow.set(\"claim_in_progress\", true);\nflow.set(\"our_device_name\", DEVICE_NAME);\n\nmsg.payload = canMessage;\nmsg.topic = \"can/send\";\nmsg.claiming_address = addressToTry;\n\nnode.log(\n  `Attempting to claim address ${addressToTry} (0x${addressToTry.toString(16).toUpperCase()})`,\n);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
+        "x": 790,
         "y": 1140,
         "wires": [
             [
@@ -1806,7 +1809,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 870,
+        "x": 970,
         "y": 1220,
         "wires": [
             [
@@ -1881,7 +1884,7 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1670,
+        "x": 1780,
         "y": 1140,
         "wires": [],
         "l": true
@@ -1899,7 +1902,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1100,
+        "x": 1210,
         "y": 1220,
         "wires": [
             [
@@ -1964,7 +1967,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1410,
+        "x": 1520,
         "y": 1220,
         "wires": [
             [
@@ -1985,7 +1988,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1380,
+        "x": 1490,
         "y": 1260,
         "wires": [
             [
@@ -2006,7 +2009,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1390,
+        "x": 1500,
         "y": 1300,
         "wires": [
             [
@@ -2034,7 +2037,7 @@
             "2343c8c12f2081fa",
             "a58b5f05c8346eab"
         ],
-        "x": 1420,
+        "x": 1530,
         "y": 1460,
         "wires": [],
         "l": true
@@ -2061,7 +2064,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1130,
+        "x": 1240,
         "y": 1320,
         "wires": [
             [
@@ -2106,7 +2109,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1410,
+        "x": 1520,
         "y": 1340,
         "wires": [
             [
@@ -2127,7 +2130,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1390,
+        "x": 1500,
         "y": 1380,
         "wires": [
             [
@@ -2318,7 +2321,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1390,
+        "x": 1500,
         "y": 1420,
         "wires": [
             [
@@ -2347,7 +2350,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 199,
+        "y": 192,
         "wires": []
     },
     {
@@ -3990,7 +3993,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 1920,
-        "y": 246,
+        "y": 235,
         "wires": []
     },
     {
@@ -4054,7 +4057,7 @@
         "z": "3470febb2cd6e952",
         "g": "e2dc4d711cc9dc94",
         "name": "status_dc_dimmer_3",
-        "func": "// HA Status Updater for DC Dimmer\n// Output 1: MQTT state update (always JSON)\n// Output 2: Re-creation trigger (when new dimmable light detected)\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return [null, null];\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n  node.error(\"Input missing 'instance' (number).\", msg);\n  return [null, null];\n}\n\n// Check dimmable status\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nlet isDimmable = dimmableLights.includes(instance);\nlet recreateMsg = null;\n\n// Construct the MQTT topic\nconst stateTopic = `homeassistant/light/switch_${instance}/state`;\n\nlet haStatus;\nlet brightness;\n\n// Helper: mark instance as dimmable and trigger re-creation\nfunction markDimmable() {\n  if (!isDimmable) {\n    dimmableLights.push(instance);\n    global.set(\"dimmableLights\", dimmableLights, \"file\");\n    isDimmable = true;\n    recreateMsg = { payload: { instance: instance } };\n  }\n}\n\nif (msg.payload.master_brightness !== undefined) {\n  // STATUS_1 message: has master_brightness (0-100%)\n  brightness = msg.payload.master_brightness;\n  haStatus = brightness > 0 ? \"ON\" : \"OFF\";\n\n  // Detect dimmable: brightness between 1-99% (exclusive of 0 and 100)\n  if (brightness > 0 && brightness < 100) {\n    markDimmable();\n  }\n} else if (typeof msg.payload.load_status === \"string\") {\n  // STATUS_3 message: has load_status and operating_status\n  haStatus = msg.payload.load_status.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n  const opStatus = msg.payload.operating_status;\n\n  // Detect dimmable from STATUS_3:\n  // - \"Value Changing (Ramp)\" means actively dimming\n  // - Numeric value between 1-99% means dimmed level\n  if (opStatus === \"Value Changing (Ramp)\") {\n    markDimmable();\n  } else if (typeof opStatus === \"number\" && opStatus > 0 && opStatus < 100) {\n    markDimmable();\n  }\n\n  // Report brightness for already-dimmable lights (full 0-100% range)\n  if (isDimmable && typeof opStatus === \"number\") {\n    brightness = opStatus;\n  }\n} else {\n  node.error(\"Input missing 'master_brightness' or 'load_status'.\", msg);\n  return [null, null];\n}\n\n// Store last brightness for dimmable recall on toggle\nif (isDimmable && typeof brightness === \"number\" && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness);\n}\n\n// Build JSON state payload (always JSON for all lights)\nconst stateObj = { state: haStatus };\n\nif (isDimmable && haStatus === \"ON\") {\n  stateObj.color_mode = \"brightness\";\n} else if (!isDimmable && haStatus === \"ON\") {\n  stateObj.color_mode = \"onoff\";\n}\nif (isDimmable && brightness !== undefined) {\n  stateObj.brightness = brightness;\n}\n\n// Prepare the state message\nconst stateMsg = {\n  topic: stateTopic,\n  payload: JSON.stringify(stateObj),\n};\n\nreturn [stateMsg, recreateMsg];\n",
+        "func": "// HA Status Updater for DC Dimmer\n// Output 1: MQTT state update (always JSON)\n// Output 2: Re-creation trigger (when new dimmable light detected)\n\n// Validate basic input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return [null, null];\n}\n\nconst instance = msg.payload.instance;\n\n// Validate required fields\nif (typeof instance !== \"number\") {\n  node.error(\"Input missing 'instance' (number).\", msg);\n  return [null, null];\n}\n\n// Check dimmable status\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nlet isDimmable = dimmableLights.includes(instance);\nlet recreateMsg = null;\n\n// Construct the MQTT topic\nconst stateTopic = `homeassistant/light/switch_${instance}/state`;\n\nlet haStatus;\nlet brightness;\n\n// Helper: mark instance as dimmable and trigger re-creation\nfunction markDimmable() {\n  if (!isDimmable) {\n    dimmableLights.push(instance);\n    global.set(\"dimmableLights\", dimmableLights, \"file\");\n    isDimmable = true;\n    recreateMsg = { payload: { instance: instance } };\n  }\n}\n\nif (msg.payload.master_brightness !== undefined) {\n  // STATUS_1 message: has master_brightness (0-100%)\n  brightness = msg.payload.master_brightness;\n  haStatus = brightness > 0 ? \"ON\" : \"OFF\";\n\n  // Detect dimmable: brightness between 1-99% (exclusive of 0 and 100)\n  if (brightness > 0 && brightness < 100) {\n    markDimmable();\n  }\n} else if (typeof msg.payload.load_status === \"string\") {\n  // STATUS_3 message: has load_status and operating_status\n  haStatus = msg.payload.load_status.includes(\"Off\") ? \"OFF\" : \"ON\";\n\n  const opStatus = msg.payload.operating_status;\n\n  // Detect dimmable from STATUS_3:\n  // - \"Value Changing (Ramp)\" means actively dimming\n  // - Numeric value between 1-99% means dimmed level\n  if (opStatus === \"Value Changing (Ramp)\") {\n    markDimmable();\n  } else if (typeof opStatus === \"number\" && opStatus > 0 && opStatus < 100) {\n    markDimmable();\n  }\n\n  // Report brightness for already-dimmable lights (full 0-100% range)\n  if (isDimmable && typeof opStatus === \"number\") {\n    brightness = opStatus;\n  }\n} else {\n  node.error(\"Input missing 'master_brightness' or 'load_status'.\", msg);\n  return [null, null];\n}\n\n// Store last brightness for dimmable recall on toggle\nif (isDimmable && typeof brightness === \"number\" && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness, \"file\");\n}\n\n// Build JSON state payload (always JSON for all lights)\nconst stateObj = { state: haStatus };\n\nif (isDimmable && haStatus === \"ON\") {\n  stateObj.color_mode = \"brightness\";\n} else if (!isDimmable && haStatus === \"ON\") {\n  stateObj.color_mode = \"onoff\";\n}\nif (isDimmable && brightness !== undefined) {\n  stateObj.brightness = brightness;\n}\n\n// Prepare the state message\nconst stateMsg = {\n  topic: stateTopic,\n  payload: JSON.stringify(stateObj),\n};\n\nreturn [stateMsg, recreateMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -5820,7 +5823,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1790,
-        "y": 313,
+        "y": 326,
         "wires": []
     },
     {
@@ -6203,7 +6206,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_dc_dimmer_command_2",
-        "func": "// Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)\n\n// --- Configuration ---\nconst CMD_SET_BRIGHTNESS = 0x00;\nconst CMD_ON = 0x01;\nconst CMD_OFF = 0x03;\nconst CMD_STOP = 0x04;\nconst CMD_RAMP_UP_DOWN = 0x15;\nconst CMD_UNLOCK = 0x22;\nconst LEVEL_FULL_ON = 200;\nconst NON_GROUP = 0xff;\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n  node.warn(`[encode_dc_dimmer_command_2] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Parse Command ---\n// All lights use JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightness = msg.payload.brightness;\n\n// Check if this is a dimmable light\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nconst isDimmable = dimmableLights.includes(instance);\n\n// --- Command Mapping ---\nlet commandCode, desiredLevel;\n\nif (command === \"OFF\") {\n  commandCode = CMD_OFF;\n  desiredLevel = 0;\n} else if (command === \"ON\" && brightness !== undefined && brightness > 0) {\n  // Brightness command: map 0-100 to 0-200 RV-C scale\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(brightness * 2);\n} else if (isDimmable) {\n  // Dimmable light toggled ON without brightness — recall last known level\n  const lastBrightness = global.get(\"dimmerBrightness_\" + instance) || 100;\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(lastBrightness * 2);\n} else {\n  // Non-dimmable light — full on\n  commandCode = CMD_ON;\n  desiredLevel = LEVEL_FULL_ON;\n}\n\n// --- Helper Functions ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[0] = instance; // Byte 0: Instance\n  dataBytes[1] = NON_GROUP; // Byte 1: Group (non-group)\n  dataBytes[2] = desiredLevel; // Byte 2: Desired Level\n  dataBytes[3] = commandCode; // Byte 3: Command\n  dataBytes[4] = 0xff; // Byte 4: Delay/Duration\n  dataBytes[5] = 0x00; // Byte 5: Interlock\n  dataBytes[6] = 0xff; // Byte 6: Ramp Time\n  dataBytes[7] = 0xff; // Byte 7: Reserved\n\n  const dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n  const dgnInt = parseInt(DGN, 16);\n  const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n  return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// --- Store last brightness for dimmable recall ---\nif (brightness !== undefined && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness);\n}\n\n// --- Build and Send ---\n// Message 1: UNLOCK\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),\n});\n\n// Message 2: Command\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, commandCode),\n});\n\n// Messages 3-4: Save brightness to dimmer memory (dimmable lights only)\n// After SET_BRIGHTNESS, send Ramp Up/Down + Stop to trigger memory save.\nif (isDimmable && commandCode === CMD_SET_BRIGHTNESS && desiredLevel > 0) {\n  node.send({\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, 0, CMD_RAMP_UP_DOWN),\n  });\n  node.send({\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, 0, CMD_STOP),\n  });\n}\n\nreturn null;\n",
+        "func": "// Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)\n\n// --- Configuration ---\nconst CMD_SET_BRIGHTNESS = 0x00;\nconst CMD_ON = 0x01;\nconst CMD_OFF = 0x03;\nconst CMD_STOP = 0x04;\nconst CMD_RAMP_UP_DOWN = 0x15;\nconst CMD_UNLOCK = 0x22;\nconst LEVEL_FULL_ON = 200;\nconst NON_GROUP = 0xff;\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n  node.warn(`[encode_dc_dimmer_command_2] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Parse Command ---\n// All lights use JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightness = msg.payload.brightness;\n\n// Check if this is a dimmable light\nconst dimmableLights = global.get(\"dimmableLights\", \"file\") || [];\nconst isDimmable = dimmableLights.includes(instance);\n\n// --- Command Mapping ---\nlet commandCode, desiredLevel;\n\nif (command === \"OFF\") {\n  commandCode = CMD_OFF;\n  desiredLevel = 0;\n} else if (command === \"ON\" && brightness !== undefined && brightness > 0) {\n  // Brightness command: map 0-100 to 0-200 RV-C scale\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(brightness * 2);\n} else if (isDimmable) {\n  // Dimmable light toggled ON without brightness — recall last known level\n  const lastBrightness =\n    global.get(\"dimmerBrightness_\" + instance, \"file\") || 100;\n  commandCode = CMD_SET_BRIGHTNESS;\n  desiredLevel = Math.round(lastBrightness * 2);\n} else {\n  // Non-dimmable light — full on\n  commandCode = CMD_ON;\n  desiredLevel = LEVEL_FULL_ON;\n}\n\n// --- Helper Functions ---\nfunction buildCanMessage(instance, desiredLevel, commandCode) {\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[0] = instance; // Byte 0: Instance\n  dataBytes[1] = NON_GROUP; // Byte 1: Group (non-group)\n  dataBytes[2] = desiredLevel; // Byte 2: Desired Level\n  dataBytes[3] = commandCode; // Byte 3: Command\n  dataBytes[4] = 0xff; // Byte 4: Delay/Duration\n  dataBytes[5] = 0x00; // Byte 5: Interlock\n  dataBytes[6] = 0xff; // Byte 6: Ramp Time\n  dataBytes[7] = 0xff; // Byte 7: Reserved\n\n  const dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n  const dgnInt = parseInt(DGN, 16);\n  const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n  return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n}\n\n// --- Store last brightness for dimmable recall ---\nif (brightness !== undefined && brightness > 0) {\n  global.set(\"dimmerBrightness_\" + instance, brightness, \"file\");\n}\n\n// --- Build and Send ---\n// Message 1: UNLOCK\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),\n});\n\n// Message 2: Command\nnode.send({\n  topic: \"can/send\",\n  payload: buildCanMessage(instance, desiredLevel, commandCode),\n});\n\n// Messages 3-4: Save brightness to dimmer memory (dimmable lights only)\n// After SET_BRIGHTNESS, send Ramp Up/Down + Stop to trigger memory save.\nif (isDimmable && commandCode === CMD_SET_BRIGHTNESS && desiredLevel > 0) {\n  node.send({\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, 0, CMD_RAMP_UP_DOWN),\n  });\n  node.send({\n    topic: \"can/send\",\n    payload: buildCanMessage(instance, 0, CMD_STOP),\n  });\n}\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6331,7 +6334,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2010,
-        "y": 225,
+        "y": 210,
         "wires": []
     },
     {
@@ -6352,7 +6355,7 @@
         "y": 200,
         "wires": [
             [
-                "d1a2b3c4e5f67801"
+                "a95d74d20270f69b"
             ]
         ]
     },
@@ -6374,7 +6377,7 @@
         "y": 460,
         "wires": [
             [
-                "e1032a6a79ae3e4c"
+                "1e2529650de44a73"
             ]
         ]
     },
@@ -6391,7 +6394,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
+        "x": 560,
         "y": 460,
         "wires": [
             [
@@ -6412,7 +6415,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 810,
         "y": 380,
         "wires": [
             [
@@ -6463,7 +6466,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 820,
         "y": 460,
         "wires": [
             [
@@ -6484,7 +6487,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
+        "x": 540,
         "y": 200,
         "wires": [
             [
@@ -6506,7 +6509,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 800,
         "y": 200,
         "wires": [
             [
@@ -6520,7 +6523,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_create",
-        "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst {\n  service_type,\n  instance,\n  dbus_path,\n  unit,\n  short_name,\n  product_name,\n  writable,\n} = msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"V AC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  W: { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  kWh: { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  Ah: { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  \"Degrees Celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  Hz: { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  RPM: { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  seconds: { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  VA: { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n  L: { device_class: null, unit: \"L\", icon: \"mdi:cup-water\" },\n  \"%RH\": { device_class: \"humidity\", unit: \"%\", icon: \"mdi:water-percent\" },\n  \"%level\": { device_class: null, unit: \"%\", icon: \"mdi:gauge\" },\n};\n\n// === Friendly Name Map ===\n// Maps service_type + dbus_path to clean dashboard names.\n\nconst friendlyNameMap = {\n  // system/0 — GX device data\n  \"system:/Dc/Battery/Soc\": \"Battery State of Charge\",\n  \"system:/Dc/Battery/Voltage\": \"Battery Voltage\",\n  \"system:/Dc/Battery/Current\": \"Battery Current\",\n  \"system:/Dc/Battery/Power\": \"Battery Power\",\n  \"system:/Dc/Battery/Temperature\": \"Battery Temperature\",\n  \"system:/Dc/Pv/Power\": \"Solar Power\",\n  \"system:/Dc/Pv/Current\": \"Solar Current\",\n  \"system:/Ac/Consumption/L1/Power\": \"AC Consumption L1\",\n  \"system:/Ac/Consumption/L2/Power\": \"AC Consumption L2\",\n  \"system:/Ac/Grid/L1/Power\": \"Shore Power L1\",\n  \"system:/Ac/Grid/L2/Power\": \"Shore Power L2\",\n  \"system:/Ac/ActiveIn/ActiveInput\": \"Active AC Input\",\n  \"system:/Ac/ActiveIn/Source\": \"AC Input Source\",\n  \"system:/Dc/System/Power\": \"DC Loads Power\",\n  \"system:/Ac/Consumption/Total/Power\": \"AC Consumption Total\",\n  \"system:/Ac/Grid/Total/Power\": \"Shore Power Total\",\n  \"system:/Relay/0/State\": \"Relay 1\",\n  \"system:/Relay/1/State\": \"Relay 2\",\n  // battery\n  \"battery:/Dc/0/Voltage\": \"Battery Voltage\",\n  \"battery:/Dc/0/Current\": \"Battery Current\",\n  \"battery:/Dc/0/Power\": \"Battery Power\",\n  \"battery:/Dc/0/Temperature\": \"Battery Temperature\",\n  \"battery:/Dc/1/Voltage\": \"Auxiliary Battery Voltage\",\n  \"battery:/Soc\": \"Battery SOC\",\n  // solarcharger\n  \"solarcharger:/Yield/Power\": \"Solar Power\",\n  \"solarcharger:/Yield/System\": \"Solar Total Yield\",\n  \"solarcharger:/Dc/0/Voltage\": \"Solar Battery Voltage\",\n  \"solarcharger:/Dc/0/Current\": \"Solar Charge Current\",\n  \"solarcharger:/Pv/V\": \"Solar Panel Voltage\",\n  \"solarcharger:/State\": \"Solar Charger State\",\n  // vebus\n  \"vebus:/Ac/ActiveIn/L1/V\": \"AC Input L1 Voltage\",\n  \"vebus:/Ac/ActiveIn/L1/I\": \"AC Input L1 Current\",\n  \"vebus:/Ac/ActiveIn/L1/P\": \"AC Input L1 Power\",\n  \"vebus:/Ac/ActiveIn/L2/V\": \"AC Input L2 Voltage\",\n  \"vebus:/Ac/ActiveIn/L2/I\": \"AC Input L2 Current\",\n  \"vebus:/Ac/ActiveIn/L2/P\": \"AC Input L2 Power\",\n  \"vebus:/Ac/Out/L1/V\": \"AC Output L1 Voltage\",\n  \"vebus:/Ac/Out/L1/I\": \"AC Output L1 Current\",\n  \"vebus:/Ac/Out/L1/P\": \"AC Output L1 Power\",\n  \"vebus:/Ac/Out/L2/V\": \"AC Output L2 Voltage\",\n  \"vebus:/Ac/Out/L2/I\": \"AC Output L2 Current\",\n  \"vebus:/Ac/Out/L2/P\": \"AC Output L2 Power\",\n  \"vebus:/Ac/ActiveIn/Total/P\": \"AC Input Total Power\",\n  \"vebus:/Ac/Out/Total/P\": \"AC Output Total Power\",\n  \"vebus:/Ac/ActiveIn/CurrentLimit\": \"Shore Power Limit\",\n  \"vebus:/Ac/ActiveIn/L1/F\": \"AC Input Frequency\",\n  \"vebus:/Dc/0/Voltage\": \"Inverter DC Voltage\",\n  \"vebus:/Dc/0/Current\": \"Inverter DC Current\",\n  \"vebus:/Dc/0/Power\": \"Inverter DC Power\",\n  \"vebus:/Dc/0/Temperature\": \"Inverter Temperature\",\n  \"vebus:/State\": \"Inverter State\",\n  \"vebus:/Mode\": \"Inverter Mode\",\n  \"vebus:/Relay/0/State\": \"Inverter Relay\",\n  // charger\n  \"charger:/Dc/0/Voltage\": \"Output Voltage\",\n  \"charger:/Dc/0/Current\": \"Output Current\",\n  \"charger:/Ac/In/L1/P\": \"AC Input Power\",\n  \"charger:/State\": \"Charge State\",\n  // alternator (Orion XS DC-DC)\n  \"alternator:/Dc/0/Voltage\": \"Output Voltage\",\n  \"alternator:/Dc/0/Current\": \"Output Current\",\n  \"alternator:/Dc/0/Power\": \"Output Power\",\n  \"alternator:/Dc/In/V\": \"Input Voltage\",\n  \"alternator:/Dc/In/I\": \"Input Current\",\n  \"alternator:/Dc/In/P\": \"Input Power\",\n  \"alternator:/State\": \"Charge State\",\n  // dcdc\n  \"dcdc:/Dc/0/Voltage\": \"Output Voltage\",\n  \"dcdc:/Dc/0/Current\": \"Output Current\",\n  \"dcdc:/Dc/0/Power\": \"Output Power\",\n  \"dcdc:/Dc/In/V\": \"Input Voltage\",\n  \"dcdc:/Dc/In/I\": \"Input Current\",\n  \"dcdc:/Dc/In/P\": \"Input Power\",\n  \"dcdc:/State\": \"Charge State\",\n  // grid\n  \"grid:/Ac/L1/Power\": \"L1 Power\",\n  \"grid:/Ac/L2/Power\": \"L2 Power\",\n  \"grid:/Ac/Power\": \"Total Power\",\n  // acload\n  \"acload:/Ac/L1/Power\": \"L1 Power\",\n  \"acload:/Ac/L2/Power\": \"L2 Power\",\n  \"acload:/Ac/Power\": \"Total Power\",\n  // tank\n  \"tank:/Level\": \"Level\",\n  \"tank:/Remaining\": \"Remaining\",\n  \"tank:/FluidType\": \"Fluid Type\",\n  // temperature\n  \"temperature:/Temperature\": \"Temperature\",\n  \"temperature:/Humidity\": \"Humidity\",\n  // digitalinput\n  \"digitalinput:/InputState\": \"State\",\n  \"digitalinput:/Count\": \"Count\",\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nlet safePath = dbus_path.replace(/^\\//, \"\").replace(/\\//g, \"_\").toLowerCase();\n\n// === Standardization Rules ===\n\n// 1. Context-aware renaming (only if direction is discernible)\n// Map \"dc_0\" to \"dc_out\" for output-generating devices\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n// Note: solarcharger usually outputs to battery, but has \"pv\" as well.\n// \"dc_0\" on solarcharger is battery connection (output).\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion (single letters)\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Use product short name in entity ID (e.g., smartshunt instead of battery)\nconst deviceName = short_name || service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build Friendly Name ===\n\nconst nameKey = `${service_type}:${dbus_path}`;\nconst baseName =\n  friendlyNameMap[nameKey] ||\n  dbus_path\n    .replace(/^\\//, \"\")\n    .replace(/\\//g, \" \")\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// Build short display name from first two alpha words of product name\nconst displayName = product_name\n  ? product_name\n      .split(/\\s+/)\n      .filter((w) => /^[a-zA-Z]/.test(w))\n      .slice(0, 2)\n      .join(\" \")\n  : \"\";\n\n// Prefix with device display name (e.g., \"MultiPlus-II — Inverter DC Power\")\n// System service uses \"System\" prefix instead of product name.\nconst prefix = service_type === \"system\" ? \"System\" : displayName;\nconst friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;\n\n// === Unit Override for Paths Missing from Victron CSV ===\n\nconst unitOverrides = {\n  \"/Dc/0/Power\": \"W\",\n  \"/Dc/0/Voltage\": \"V DC\",\n  \"/Dc/0/Current\": \"A DC\",\n  \"/Dc/0/Temperature\": \"Degrees celsius\",\n  \"/Dc/In/V\": \"V DC\",\n  \"/Dc/In/I\": \"A DC\",\n  \"/Dc/In/P\": \"W\",\n  \"/Ac/In/L1/P\": \"W\",\n  \"/Ac/L1/Power\": \"W\",\n  \"/Ac/L2/Power\": \"W\",\n  \"/Ac/Power\": \"W\",\n  \"/Level\": \"%level\",\n  \"/Remaining\": \"L\",\n  \"/Temperature\": \"Degrees celsius\",\n  \"/Humidity\": \"%RH\",\n};\n\nconst effectiveUnit = unit || unitOverrides[dbus_path] || \"\";\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[effectiveUnit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && effectiveUnit && effectiveUnit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = {\n    device_class: null,\n    unit: null,\n    icon: dbus_path.includes(\"/Relay/\")\n      ? \"mdi:toggle-switch-outline\"\n      : \"mdi:information-outline\",\n  };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = {\n    device_class: null,\n    unit: effectiveUnit || null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// === Determine HA Component Type ===\n\nlet componentType = \"sensor\";\nif (writable && isEnum) {\n  if (dbus_path.includes(\"/Relay/\")) {\n    componentType = \"switch\";\n  } else {\n    componentType = \"select\";\n  }\n} else if (writable && !isEnum) {\n  componentType = \"number\";\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [\"librecoach-victron\"],\n    name: \"LibreCoach: Victron\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Add component-specific parameters\nif (\n  componentType === \"number\" ||\n  componentType === \"select\" ||\n  componentType === \"switch\"\n) {\n  payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;\n  payload.optimistic = true;\n}\n\nif (componentType === \"switch\") {\n  payload.payload_on = \"1\";\n  payload.payload_off = \"0\";\n  payload.state_on = \"ON\";\n  payload.state_off = \"OFF\";\n  payload.optimistic = false;\n  payload.value_template =\n    \"{{ 'ON' if value_json.value | int == 1 else 'OFF' }}\";\n} else if (componentType === \"number\") {\n  // Safe defaults for unknown numeric writable paths\n  payload.min = 0;\n  payload.max = 100;\n  payload.step = 0.5;\n\n  // Specific overrides based on path\n  if (dbus_path.endsWith(\"/Soc\")) {\n    payload.max = 100;\n    payload.step = 1;\n  } else if (dbus_path.endsWith(\"/CurrentLimit\")) {\n    payload.max = 100;\n    payload.step = 0.5;\n    payload.mode = \"box\";\n  }\n}\n\n// Add device_class if defined\nif (haMetadata.device_class && componentType !== \"select\") {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined (excluding select)\nif (haMetadata.unit && componentType !== \"select\") {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// Apply precision formatting for numeric values (excluding switches & selects)\nif (componentType === \"sensor\" || componentType === \"number\") {\n  // Default to 1 decimal place if not specified\n  const precision =\n    haMetadata.precision !== undefined ? haMetadata.precision : 1;\n  payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;\n}\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum && componentType === \"select\") {\n  const enumParts = effectiveUnit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n\n  if (componentType === \"select\") {\n    payload.options = Object.values(mappings);\n  }\n}\n\n// Track discovery topic for cleanup on disable (file store — survives restarts)\nlet discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\ndiscoveryTopics.push(discoveryTopic);\nglobal.set(\"victronDiscoveryTopics\", discoveryTopics, \"file\");\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\n// Send cleanup payloads for obsolete component types so they don't linger in HA\nif (dbus_path.endsWith(\"/CurrentLimit\")) {\n  node.send({ topic: `homeassistant/select/${entityId}/config`, payload: \"\" });\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n} else if (dbus_path.includes(\"/Relay/\")) {\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n}\n\nreturn msg;\n",
+        "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst {\n  service_type,\n  instance,\n  dbus_path,\n  unit,\n  short_name,\n  product_name,\n  writable,\n} = msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"V AC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  W: { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  kWh: { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  Ah: { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  \"Degrees Celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  Hz: { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  RPM: { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  seconds: { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  VA: { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n  L: { device_class: null, unit: \"L\", icon: \"mdi:cup-water\" },\n  \"%RH\": { device_class: \"humidity\", unit: \"%\", icon: \"mdi:water-percent\" },\n  \"%level\": { device_class: null, unit: \"%\", icon: \"mdi:gauge\" },\n};\n\n// === Friendly Name Map ===\n// Maps service_type + dbus_path to clean dashboard names.\n\nconst friendlyNameMap = {\n  // system/0 — GX device data\n  \"system:/Dc/Battery/Soc\": \"Battery State of Charge\",\n  \"system:/Dc/Battery/Voltage\": \"Battery Voltage\",\n  \"system:/Dc/Battery/Current\": \"Battery Current\",\n  \"system:/Dc/Battery/Power\": \"Battery Power\",\n  \"system:/Dc/Battery/Temperature\": \"Battery Temperature\",\n  \"system:/Dc/Pv/Power\": \"Solar Power\",\n  \"system:/Dc/Pv/Current\": \"Solar Current\",\n  \"system:/Ac/Consumption/L1/Power\": \"AC Consumption L1\",\n  \"system:/Ac/Consumption/L2/Power\": \"AC Consumption L2\",\n  \"system:/Ac/Grid/L1/Power\": \"Shore Power L1\",\n  \"system:/Ac/Grid/L2/Power\": \"Shore Power L2\",\n  \"system:/Ac/ActiveIn/ActiveInput\": \"Active AC Input\",\n  \"system:/Ac/ActiveIn/Source\": \"AC Input Source\",\n  \"system:/Dc/System/Power\": \"DC Loads Power\",\n  \"system:/Ac/Consumption/Total/Power\": \"AC Consumption Total\",\n  \"system:/Ac/Grid/Total/Power\": \"Shore Power Total\",\n  \"system:/Relay/0/State\": \"Relay 1\",\n  \"system:/Relay/1/State\": \"Relay 2\",\n  // battery\n  \"battery:/Dc/0/Voltage\": \"Battery Voltage\",\n  \"battery:/Dc/0/Current\": \"Battery Current\",\n  \"battery:/Dc/0/Power\": \"Battery Power\",\n  \"battery:/Dc/0/Temperature\": \"Battery Temperature\",\n  \"battery:/Dc/1/Voltage\": \"Auxiliary Battery Voltage\",\n  \"battery:/Soc\": \"Battery SOC\",\n  // solarcharger\n  \"solarcharger:/Yield/Power\": \"Solar Power\",\n  \"solarcharger:/Yield/System\": \"Solar Total Yield\",\n  \"solarcharger:/Dc/0/Voltage\": \"Solar Battery Voltage\",\n  \"solarcharger:/Dc/0/Current\": \"Solar Charge Current\",\n  \"solarcharger:/Pv/V\": \"Solar Panel Voltage\",\n  \"solarcharger:/State\": \"Solar Charger State\",\n  // vebus\n  \"vebus:/Ac/ActiveIn/L1/V\": \"AC Input L1 Voltage\",\n  \"vebus:/Ac/ActiveIn/L1/I\": \"AC Input L1 Current\",\n  \"vebus:/Ac/ActiveIn/L1/P\": \"AC Input L1 Power\",\n  \"vebus:/Ac/ActiveIn/L2/V\": \"AC Input L2 Voltage\",\n  \"vebus:/Ac/ActiveIn/L2/I\": \"AC Input L2 Current\",\n  \"vebus:/Ac/ActiveIn/L2/P\": \"AC Input L2 Power\",\n  \"vebus:/Ac/Out/L1/V\": \"AC Output L1 Voltage\",\n  \"vebus:/Ac/Out/L1/I\": \"AC Output L1 Current\",\n  \"vebus:/Ac/Out/L1/P\": \"AC Output L1 Power\",\n  \"vebus:/Ac/Out/L2/V\": \"AC Output L2 Voltage\",\n  \"vebus:/Ac/Out/L2/I\": \"AC Output L2 Current\",\n  \"vebus:/Ac/Out/L2/P\": \"AC Output L2 Power\",\n  \"vebus:/Ac/ActiveIn/Total/P\": \"AC Input Total Power\",\n  \"vebus:/Ac/Out/Total/P\": \"AC Output Total Power\",\n  \"vebus:/Ac/ActiveIn/CurrentLimit\": \"Shore Power Limit\",\n  \"vebus:/Ac/ActiveIn/L1/F\": \"AC Input Frequency\",\n  \"vebus:/Dc/0/Voltage\": \"Inverter DC Voltage\",\n  \"vebus:/Dc/0/Current\": \"Inverter DC Current\",\n  \"vebus:/Dc/0/Power\": \"Inverter DC Power\",\n  \"vebus:/Dc/0/Temperature\": \"Inverter Temperature\",\n  \"vebus:/State\": \"Inverter State\",\n  \"vebus:/Mode\": \"Inverter Mode\",\n  \"vebus:/Relay/0/State\": \"Inverter Relay\",\n  // charger\n  \"charger:/Dc/0/Voltage\": \"Output Voltage\",\n  \"charger:/Dc/0/Current\": \"Output Current\",\n  \"charger:/Ac/In/L1/P\": \"AC Input Power\",\n  \"charger:/State\": \"Charge State\",\n  // alternator (Orion XS DC-DC)\n  \"alternator:/Dc/0/Voltage\": \"Output Voltage\",\n  \"alternator:/Dc/0/Current\": \"Output Current\",\n  \"alternator:/Dc/0/Power\": \"Output Power\",\n  \"alternator:/Dc/In/V\": \"Input Voltage\",\n  \"alternator:/Dc/In/I\": \"Input Current\",\n  \"alternator:/Dc/In/P\": \"Input Power\",\n  \"alternator:/State\": \"Charge State\",\n  // dcdc\n  \"dcdc:/Dc/0/Voltage\": \"Output Voltage\",\n  \"dcdc:/Dc/0/Current\": \"Output Current\",\n  \"dcdc:/Dc/0/Power\": \"Output Power\",\n  \"dcdc:/Dc/In/V\": \"Input Voltage\",\n  \"dcdc:/Dc/In/I\": \"Input Current\",\n  \"dcdc:/Dc/In/P\": \"Input Power\",\n  \"dcdc:/State\": \"Charge State\",\n  // grid\n  \"grid:/Ac/L1/Power\": \"L1 Power\",\n  \"grid:/Ac/L2/Power\": \"L2 Power\",\n  \"grid:/Ac/Power\": \"Total Power\",\n  // acload\n  \"acload:/Ac/L1/Power\": \"L1 Power\",\n  \"acload:/Ac/L2/Power\": \"L2 Power\",\n  \"acload:/Ac/Power\": \"Total Power\",\n  // tank\n  \"tank:/Level\": \"Level\",\n  \"tank:/Remaining\": \"Remaining\",\n  \"tank:/FluidType\": \"Fluid Type\",\n  // temperature\n  \"temperature:/Temperature\": \"Temperature\",\n  \"temperature:/Humidity\": \"Humidity\",\n  // digitalinput\n  \"digitalinput:/InputState\": \"State\",\n  \"digitalinput:/Count\": \"Count\",\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nlet safePath = dbus_path.replace(/^\\//, \"\").replace(/\\//g, \"_\").toLowerCase();\n\n// === Standardization Rules ===\n\n// 1. Context-aware renaming (only if direction is discernible)\n// Map \"dc_0\" to \"dc_out\" for output-generating devices\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n// Note: solarcharger usually outputs to battery, but has \"pv\" as well.\n// \"dc_0\" on solarcharger is battery connection (output).\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion (single letters)\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Use product short name in entity ID (e.g., smartshunt instead of battery)\nconst deviceName = short_name || service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build Friendly Name ===\n\nconst nameKey = `${service_type}:${dbus_path}`;\nconst baseName =\n  friendlyNameMap[nameKey] ||\n  dbus_path\n    .replace(/^\\//, \"\")\n    .replace(/\\//g, \" \")\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// Build short display name from first two alpha words of product name\nconst displayName = product_name\n  ? product_name\n    .split(/\\s+/)\n    .filter((w) => /^[a-zA-Z]/.test(w))\n    .slice(0, 2)\n    .join(\" \")\n  : \"\";\n\n// Prefix with device display name (e.g., \"MultiPlus-II — Inverter DC Power\")\n// System service uses \"System\" prefix instead of product name.\nconst prefix = service_type === \"system\" ? \"System\" : displayName;\nconst friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;\n\n// === Unit Override for Paths Missing from Victron CSV ===\n\nconst unitOverrides = {\n  \"/Dc/0/Power\": \"W\",\n  \"/Dc/0/Voltage\": \"V DC\",\n  \"/Dc/0/Current\": \"A DC\",\n  \"/Dc/0/Temperature\": \"Degrees celsius\",\n  \"/Dc/In/V\": \"V DC\",\n  \"/Dc/In/I\": \"A DC\",\n  \"/Dc/In/P\": \"W\",\n  \"/Ac/In/L1/P\": \"W\",\n  \"/Ac/L1/Power\": \"W\",\n  \"/Ac/L2/Power\": \"W\",\n  \"/Ac/Power\": \"W\",\n  \"/Level\": \"%level\",\n  \"/Remaining\": \"L\",\n  \"/Temperature\": \"Degrees celsius\",\n  \"/Humidity\": \"%RH\",\n};\n\nconst effectiveUnit = unit || unitOverrides[dbus_path] || \"\";\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[effectiveUnit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && effectiveUnit && effectiveUnit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = {\n    device_class: null,\n    unit: null,\n    icon: dbus_path.includes(\"/Relay/\")\n      ? \"mdi:toggle-switch-outline\"\n      : \"mdi:information-outline\",\n  };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = {\n    device_class: null,\n    unit: effectiveUnit || null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// === Determine HA Component Type ===\n\nlet componentType = \"sensor\";\nif (writable && isEnum) {\n  if (dbus_path.includes(\"/Relay/\")) {\n    componentType = \"switch\";\n  } else {\n    componentType = \"select\";\n  }\n} else if (writable && !isEnum) {\n  componentType = \"number\";\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [\"librecoach-victron\"],\n    name: \"LibreCoach: Victron\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Add component-specific parameters\nif (\n  componentType === \"number\" ||\n  componentType === \"select\" ||\n  componentType === \"switch\"\n) {\n  payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;\n  payload.optimistic = true;\n}\n\nif (componentType === \"switch\") {\n  payload.payload_on = \"1\";\n  payload.payload_off = \"0\";\n  payload.state_on = \"ON\";\n  payload.state_off = \"OFF\";\n  payload.optimistic = false;\n  payload.value_template =\n    \"{{ 'ON' if value_json.value | int == 1 else 'OFF' }}\";\n} else if (componentType === \"number\") {\n  // Safe defaults for unknown numeric writable paths\n  payload.min = 0;\n  payload.max = 100;\n  payload.step = 0.5;\n\n  // Specific overrides based on path\n  if (dbus_path.endsWith(\"/Soc\")) {\n    payload.max = 100;\n    payload.step = 1;\n  } else if (dbus_path.endsWith(\"/CurrentLimit\")) {\n    payload.max = 100;\n    payload.step = 0.5;\n    payload.mode = \"box\";\n  }\n}\n\n// Add device_class if defined\nif (haMetadata.device_class && componentType !== \"select\") {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined (excluding select)\nif (haMetadata.unit && componentType !== \"select\") {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// Apply precision formatting for numeric values (excluding switches & selects)\nif (componentType === \"sensor\" || componentType === \"number\") {\n  // Default to 1 decimal place if not specified\n  const precision =\n    haMetadata.precision !== undefined ? haMetadata.precision : 1;\n  payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;\n}\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum && componentType === \"select\") {\n  const enumParts = effectiveUnit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n\n  if (componentType === \"select\") {\n    payload.options = Object.values(mappings);\n  }\n}\n\n// Track discovery topic for cleanup on disable (file store — survives restarts)\n// Clear stale memory-store copy if present\nif (global.get(\"victronDiscoveryTopics\")) {\n  global.set(\"victronDiscoveryTopics\", undefined);\n}\nlet discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\nif (!discoveryTopics.includes(discoveryTopic)) {\n  discoveryTopics.push(discoveryTopic);\n  global.set(\"victronDiscoveryTopics\", discoveryTopics, \"file\");\n}\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\n// Send cleanup payloads for obsolete component types so they don't linger in HA\nif (dbus_path.endsWith(\"/CurrentLimit\")) {\n  node.send({ topic: `homeassistant/select/${entityId}/config`, payload: \"\" });\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n} else if (dbus_path.includes(\"/Relay/\")) {\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6548,7 +6551,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 800,
         "y": 280,
         "wires": [
             [
@@ -6568,7 +6571,7 @@
         "chunk": false,
         "sendError": false,
         "allProps": false,
-        "x": 450,
+        "x": 470,
         "y": 660,
         "wires": [
             [
@@ -6641,7 +6644,7 @@
         "y": 760,
         "wires": [
             [
-                "1284b5e380db32be"
+                "9be2b9ec5c4f51d4"
             ]
         ]
     },
@@ -6658,7 +6661,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
+        "x": 740,
         "y": 760,
         "wires": []
     },
@@ -6759,7 +6762,7 @@
         "correl": "",
         "expiry": "",
         "broker": "68237e1473ec01aa",
-        "x": 990,
+        "x": 1250,
         "y": 460,
         "wires": []
     },
@@ -6770,7 +6773,7 @@
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
         "x": 2000,
-        "y": 421,
+        "y": 382,
         "wires": []
     },
     {
@@ -6847,7 +6850,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 840,
         "y": 560,
         "wires": [
             [
@@ -6919,6 +6922,69 @@
         "y": 560,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "a95d74d20270f69b",
+        "type": "rbe",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "d1a2b3c4e5f67801"
+            ]
+        ]
+    },
+    {
+        "id": "1e2529650de44a73",
+        "type": "rbe",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "e1032a6a79ae3e4c"
+            ]
+        ]
+    },
+    {
+        "id": "9be2b9ec5c4f51d4",
+        "type": "rbe",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 430,
+        "y": 760,
+        "wires": [
+            [
+                "1284b5e380db32be"
+            ]
+        ]
     },
     {
         "id": "d5cb654b4dad986f",
