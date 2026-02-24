@@ -205,7 +205,7 @@
             "48e6dda2b2d9575e"
         ],
         "x": 694,
-        "y": 1979,
+        "y": 2039,
         "w": 492,
         "h": 142
     },
@@ -376,12 +376,14 @@
             "d68c2206e3379850",
             "64578fa414def60a",
             "0d54f0db9a010394",
-            "ccc056e90ff9e046"
+            "ccc056e90ff9e046",
+            "936af6d306df76af",
+            "03d75239926b1616"
         ],
         "x": 1394,
-        "y": 1479,
+        "y": 1379,
         "w": 1112,
-        "h": 368
+        "h": 468
     },
     {
         "id": "84183171172657f8",
@@ -706,12 +708,15 @@
             "feeabea8484a11e6",
             "7605393317b3c471",
             "42b9f8eb50c5dced",
-            "1d254f4668711731"
+            "1d254f4668711731",
+            "2f91d31ed0be26b1",
+            "bb154cf7301d6fa7",
+            "dbc862c066d96221"
         ],
         "x": 114,
-        "y": 299,
+        "y": 279,
         "w": 1438,
-        "h": 468
+        "h": 488
     },
     {
         "id": "65587a19852a1225",
@@ -2348,7 +2353,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 200,
+        "y": 151,
         "wires": []
     },
     {
@@ -2531,7 +2536,8 @@
         "name": "CONFIG_GLOBALS",
         "mode": "link",
         "links": [
-            "8fdd1d506d28b9b6"
+            "8fdd1d506d28b9b6",
+            "bb154cf7301d6fa7"
         ],
         "x": 740,
         "y": 960,
@@ -2638,6 +2644,11 @@
             },
             {
                 "t": "eq",
+                "v": "AGS_CRITERION_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
                 "v": "CHARGER_STATUS",
                 "vt": "str"
             },
@@ -2717,7 +2728,7 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 34,
+        "outputs": 35,
         "x": 420,
         "y": 800,
         "wires": [
@@ -2772,6 +2783,9 @@
             ],
             [
                 "e5d61c5724c6ed1b"
+            ],
+            [
+                "85484e307c2cde85"
             ],
             [
                 "f171dcbe8b5d2e05"
@@ -2857,7 +2871,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1140,
+        "y": 1200,
         "wires": []
     },
     {
@@ -2873,7 +2887,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1140,
+        "y": 1200,
         "wires": [
             [
                 "19307edfe4e5bd84"
@@ -2894,7 +2908,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1260,
+        "y": 1320,
         "wires": []
     },
     {
@@ -2910,7 +2924,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1260,
+        "y": 1320,
         "wires": [
             [
                 "91cac903d306591a"
@@ -3118,7 +3132,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 1500,
+        "y": 1560,
         "wires": [
             [
                 "f80a9416a8e18e46"
@@ -3139,7 +3153,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1230,
-        "y": 1500,
+        "y": 1560,
         "wires": []
     },
     {
@@ -3155,7 +3169,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1080,
+        "y": 1140,
         "wires": [
             [
                 "78904d457471d1b2"
@@ -3176,7 +3190,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1080,
+        "y": 1140,
         "wires": []
     },
     {
@@ -3192,7 +3206,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1320,
+        "y": 1380,
         "wires": [
             [
                 "04bc7637ee7139d8"
@@ -3213,7 +3227,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1320,
+        "y": 1380,
         "wires": []
     },
     {
@@ -3286,7 +3300,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1200,
+        "y": 1260,
         "wires": [
             [
                 "9f3a9fd8a4506e74"
@@ -3307,7 +3321,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1200,
+        "y": 1260,
         "wires": []
     },
     {
@@ -3343,7 +3357,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1380,
+        "y": 1440,
         "wires": [
             [
                 "77e3defd386ce8a8"
@@ -3364,7 +3378,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1380,
+        "y": 1440,
         "wires": []
     },
     {
@@ -3380,7 +3394,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 1440,
+        "y": 1500,
         "wires": [
             [
                 "fa30f6cf9bede7e9"
@@ -3401,7 +3415,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1220,
-        "y": 1440,
+        "y": 1500,
         "wires": []
     },
     {
@@ -3501,7 +3515,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 820,
-        "y": 2020,
+        "y": 2080,
         "wires": [
             [
                 "09640adb1fd08fbb"
@@ -3522,7 +3536,7 @@
         "finalize": "",
         "libs": [],
         "x": 1040,
-        "y": 2020,
+        "y": 2080,
         "wires": [
             []
         ]
@@ -3541,7 +3555,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 2080,
+        "y": 2140,
         "wires": [
             [
                 "48e6dda2b2d9575e"
@@ -3563,7 +3577,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1050,
-        "y": 2080,
+        "y": 2140,
         "wires": []
     },
     {
@@ -3659,7 +3673,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 900,
-        "y": 1560,
+        "y": 1620,
         "wires": []
     },
     {
@@ -3676,7 +3690,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1620,
+        "y": 1680,
         "wires": []
     },
     {
@@ -3693,7 +3707,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1680,
+        "y": 1740,
         "wires": []
     },
     {
@@ -3806,7 +3820,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1740,
+        "y": 1800,
         "wires": []
     },
     {
@@ -3888,7 +3902,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1270,
-        "y": 1800,
+        "y": 1860,
         "wires": []
     },
     {
@@ -3905,7 +3919,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1270,
-        "y": 1860,
+        "y": 1920,
         "wires": []
     },
     {
@@ -3922,7 +3936,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1260,
-        "y": 1920,
+        "y": 1980,
         "wires": []
     },
     {
@@ -3938,7 +3952,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 1860,
+        "y": 1920,
         "wires": [
             [
                 "54c7344ace5b029a"
@@ -3958,7 +3972,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 1800,
+        "y": 1860,
         "wires": [
             [
                 "be1c2b9fdc3dd714"
@@ -3978,7 +3992,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 1920,
+        "y": 1980,
         "wires": [
             [
                 "4a7ebb2b6a783a13"
@@ -3991,7 +4005,24 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 1920,
-        "y": 224,
+        "y": 202,
+        "wires": []
+    },
+    {
+        "id": "85484e307c2cde85",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "AGS_CRITERION_STATUS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 1080,
         "wires": []
     },
     {
@@ -4704,7 +4735,8 @@
         "wires": [
             [
                 "2c1151c97bb185f2",
-                "b6d90639c3fc122c"
+                "b6d90639c3fc122c",
+                "03d75239926b1616"
             ]
         ],
         "l": true
@@ -4726,7 +4758,8 @@
         "y": 1520,
         "wires": [
             [
-                "ccc056e90ff9e046"
+                "ccc056e90ff9e046",
+                "936af6d306df76af"
             ]
         ]
     },
@@ -5821,7 +5854,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
         "x": 1770,
-        "y": 280,
+        "y": 306,
         "wires": []
     },
     {
@@ -5900,6 +5933,40 @@
         "statusType": "auto",
         "x": 1050,
         "y": 240,
+        "wires": []
+    },
+    {
+        "id": "936af6d306df76af",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "5d1ecae7ac09586c",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1950,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "03d75239926b1616",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "5d1ecae7ac09586c",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1610,
+        "y": 1420,
         "wires": []
     },
     {
@@ -6332,7 +6399,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
         "x": 2030,
-        "y": 240,
+        "y": 210,
         "wires": []
     },
     {
@@ -6521,7 +6588,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_create",
-        "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst {\n  service_type,\n  instance,\n  dbus_path,\n  unit,\n  short_name,\n  product_name,\n  writable,\n} = msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"V AC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  W: { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  kWh: { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  Ah: { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  \"Degrees Celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  Hz: { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  RPM: { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  seconds: { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  VA: { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n  L: { device_class: null, unit: \"L\", icon: \"mdi:cup-water\" },\n  \"%RH\": { device_class: \"humidity\", unit: \"%\", icon: \"mdi:water-percent\" },\n  \"%level\": { device_class: null, unit: \"%\", icon: \"mdi:gauge\" },\n};\n\n// === Friendly Name Map ===\n// Maps service_type + dbus_path to clean dashboard names.\n\nconst friendlyNameMap = {\n  // system/0 — GX device data\n  \"system:/Dc/Battery/Soc\": \"Battery State of Charge\",\n  \"system:/Dc/Battery/Voltage\": \"Battery Voltage\",\n  \"system:/Dc/Battery/Current\": \"Battery Current\",\n  \"system:/Dc/Battery/Power\": \"Battery Power\",\n  \"system:/Dc/Battery/Temperature\": \"Battery Temperature\",\n  \"system:/Dc/Pv/Power\": \"Solar Power\",\n  \"system:/Dc/Pv/Current\": \"Solar Current\",\n  \"system:/Ac/Consumption/L1/Power\": \"AC Consumption L1\",\n  \"system:/Ac/Consumption/L2/Power\": \"AC Consumption L2\",\n  \"system:/Ac/Grid/L1/Power\": \"Shore Power L1\",\n  \"system:/Ac/Grid/L2/Power\": \"Shore Power L2\",\n  \"system:/Ac/ActiveIn/ActiveInput\": \"Active AC Input\",\n  \"system:/Ac/ActiveIn/Source\": \"AC Input Source\",\n  \"system:/Dc/System/Power\": \"DC Loads Power\",\n  \"system:/Ac/Consumption/Total/Power\": \"AC Consumption Total\",\n  \"system:/Ac/Grid/Total/Power\": \"Shore Power Total\",\n  \"system:/Relay/0/State\": \"Relay 1\",\n  \"system:/Relay/1/State\": \"Relay 2\",\n  // battery\n  \"battery:/Dc/0/Voltage\": \"Battery Voltage\",\n  \"battery:/Dc/0/Current\": \"Battery Current\",\n  \"battery:/Dc/0/Power\": \"Battery Power\",\n  \"battery:/Dc/0/Temperature\": \"Battery Temperature\",\n  \"battery:/Dc/1/Voltage\": \"Auxiliary Battery Voltage\",\n  \"battery:/Soc\": \"Battery SOC\",\n  // solarcharger\n  \"solarcharger:/Yield/Power\": \"Solar Power\",\n  \"solarcharger:/Yield/System\": \"Solar Total Yield\",\n  \"solarcharger:/Dc/0/Voltage\": \"Solar Battery Voltage\",\n  \"solarcharger:/Dc/0/Current\": \"Solar Charge Current\",\n  \"solarcharger:/Pv/V\": \"Solar Panel Voltage\",\n  \"solarcharger:/State\": \"Solar Charger State\",\n  // vebus\n  \"vebus:/Ac/ActiveIn/L1/V\": \"AC Input L1 Voltage\",\n  \"vebus:/Ac/ActiveIn/L1/I\": \"AC Input L1 Current\",\n  \"vebus:/Ac/ActiveIn/L1/P\": \"AC Input L1 Power\",\n  \"vebus:/Ac/ActiveIn/L2/V\": \"AC Input L2 Voltage\",\n  \"vebus:/Ac/ActiveIn/L2/I\": \"AC Input L2 Current\",\n  \"vebus:/Ac/ActiveIn/L2/P\": \"AC Input L2 Power\",\n  \"vebus:/Ac/Out/L1/V\": \"AC Output L1 Voltage\",\n  \"vebus:/Ac/Out/L1/I\": \"AC Output L1 Current\",\n  \"vebus:/Ac/Out/L1/P\": \"AC Output L1 Power\",\n  \"vebus:/Ac/Out/L2/V\": \"AC Output L2 Voltage\",\n  \"vebus:/Ac/Out/L2/I\": \"AC Output L2 Current\",\n  \"vebus:/Ac/Out/L2/P\": \"AC Output L2 Power\",\n  \"vebus:/Ac/ActiveIn/Total/P\": \"AC Input Total Power\",\n  \"vebus:/Ac/Out/Total/P\": \"AC Output Total Power\",\n  \"vebus:/Ac/ActiveIn/CurrentLimit\": \"Shore Power Limit\",\n  \"vebus:/Ac/ActiveIn/L1/F\": \"AC Input Frequency\",\n  \"vebus:/Dc/0/Voltage\": \"Inverter DC Voltage\",\n  \"vebus:/Dc/0/Current\": \"Inverter DC Current\",\n  \"vebus:/Dc/0/Power\": \"Inverter DC Power\",\n  \"vebus:/Dc/0/Temperature\": \"Inverter Temperature\",\n  \"vebus:/State\": \"Inverter State\",\n  \"vebus:/Mode\": \"Inverter Mode\",\n  \"vebus:/Relay/0/State\": \"Inverter Relay\",\n  // charger\n  \"charger:/Dc/0/Voltage\": \"Output Voltage\",\n  \"charger:/Dc/0/Current\": \"Output Current\",\n  \"charger:/Ac/In/L1/P\": \"AC Input Power\",\n  \"charger:/State\": \"Charge State\",\n  // alternator (Orion XS DC-DC)\n  \"alternator:/Dc/0/Voltage\": \"Output Voltage\",\n  \"alternator:/Dc/0/Current\": \"Output Current\",\n  \"alternator:/Dc/0/Power\": \"Output Power\",\n  \"alternator:/Dc/In/V\": \"Input Voltage\",\n  \"alternator:/Dc/In/I\": \"Input Current\",\n  \"alternator:/Dc/In/P\": \"Input Power\",\n  \"alternator:/State\": \"Charge State\",\n  // dcdc\n  \"dcdc:/Dc/0/Voltage\": \"Output Voltage\",\n  \"dcdc:/Dc/0/Current\": \"Output Current\",\n  \"dcdc:/Dc/0/Power\": \"Output Power\",\n  \"dcdc:/Dc/In/V\": \"Input Voltage\",\n  \"dcdc:/Dc/In/I\": \"Input Current\",\n  \"dcdc:/Dc/In/P\": \"Input Power\",\n  \"dcdc:/State\": \"Charge State\",\n  // grid\n  \"grid:/Ac/L1/Power\": \"L1 Power\",\n  \"grid:/Ac/L2/Power\": \"L2 Power\",\n  \"grid:/Ac/Power\": \"Total Power\",\n  // acload\n  \"acload:/Ac/L1/Power\": \"L1 Power\",\n  \"acload:/Ac/L2/Power\": \"L2 Power\",\n  \"acload:/Ac/Power\": \"Total Power\",\n  // tank\n  \"tank:/Level\": \"Level\",\n  \"tank:/Remaining\": \"Remaining\",\n  \"tank:/FluidType\": \"Fluid Type\",\n  // temperature\n  \"temperature:/Temperature\": \"Temperature\",\n  \"temperature:/Humidity\": \"Humidity\",\n  // digitalinput\n  \"digitalinput:/InputState\": \"State\",\n  \"digitalinput:/Count\": \"Count\",\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nlet safePath = dbus_path.replace(/^\\//, \"\").replace(/\\//g, \"_\").toLowerCase();\n\n// === Standardization Rules ===\n\n// 1. Context-aware renaming (only if direction is discernible)\n// Map \"dc_0\" to \"dc_out\" for output-generating devices\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n// Note: solarcharger usually outputs to battery, but has \"pv\" as well.\n// \"dc_0\" on solarcharger is battery connection (output).\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion (single letters)\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Use product short name in entity ID (e.g., smartshunt instead of battery)\nconst deviceName = short_name || service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build Friendly Name ===\n\nconst nameKey = `${service_type}:${dbus_path}`;\nconst baseName =\n  friendlyNameMap[nameKey] ||\n  dbus_path\n    .replace(/^\\//, \"\")\n    .replace(/\\//g, \" \")\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// Build short display name from first two alpha words of product name\nconst displayName = product_name\n  ? product_name\n    .split(/\\s+/)\n    .filter((w) => /^[a-zA-Z]/.test(w))\n    .slice(0, 2)\n    .join(\" \")\n  : \"\";\n\n// Prefix with device display name (e.g., \"MultiPlus-II — Inverter DC Power\")\n// System service uses \"System\" prefix instead of product name.\nconst prefix = service_type === \"system\" ? \"System\" : displayName;\nconst friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;\n\n// === Unit Override for Paths Missing from Victron CSV ===\n\nconst unitOverrides = {\n  \"/Dc/0/Power\": \"W\",\n  \"/Dc/0/Voltage\": \"V DC\",\n  \"/Dc/0/Current\": \"A DC\",\n  \"/Dc/0/Temperature\": \"Degrees celsius\",\n  \"/Dc/In/V\": \"V DC\",\n  \"/Dc/In/I\": \"A DC\",\n  \"/Dc/In/P\": \"W\",\n  \"/Ac/In/L1/P\": \"W\",\n  \"/Ac/L1/Power\": \"W\",\n  \"/Ac/L2/Power\": \"W\",\n  \"/Ac/Power\": \"W\",\n  \"/Level\": \"%level\",\n  \"/Remaining\": \"L\",\n  \"/Temperature\": \"Degrees celsius\",\n  \"/Humidity\": \"%RH\",\n};\n\nconst effectiveUnit = unit || unitOverrides[dbus_path] || \"\";\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[effectiveUnit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && effectiveUnit && effectiveUnit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = {\n    device_class: null,\n    unit: null,\n    icon: dbus_path.includes(\"/Relay/\")\n      ? \"mdi:toggle-switch-outline\"\n      : \"mdi:information-outline\",\n  };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = {\n    device_class: null,\n    unit: effectiveUnit || null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// === Determine HA Component Type ===\n\nlet componentType = \"sensor\";\nif (writable && isEnum) {\n  if (dbus_path.includes(\"/Relay/\")) {\n    componentType = \"switch\";\n  } else {\n    componentType = \"select\";\n  }\n} else if (writable && !isEnum) {\n  componentType = \"number\";\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [\"librecoach-victron\"],\n    name: \"LibreCoach: Victron\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Add component-specific parameters\nif (\n  componentType === \"number\" ||\n  componentType === \"select\" ||\n  componentType === \"switch\"\n) {\n  payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;\n  payload.optimistic = true;\n}\n\nif (componentType === \"switch\") {\n  payload.payload_on = \"1\";\n  payload.payload_off = \"0\";\n  payload.state_on = \"ON\";\n  payload.state_off = \"OFF\";\n  payload.optimistic = false;\n  payload.value_template =\n    \"{{ 'ON' if value_json.value | int == 1 else 'OFF' }}\";\n} else if (componentType === \"number\") {\n  // Safe defaults for unknown numeric writable paths\n  payload.min = 0;\n  payload.max = 100;\n  payload.step = 0.5;\n\n  // Specific overrides based on path\n  if (dbus_path.endsWith(\"/Soc\")) {\n    payload.max = 100;\n    payload.step = 1;\n  } else if (dbus_path.endsWith(\"/CurrentLimit\")) {\n    payload.max = 100;\n    payload.step = 0.5;\n    payload.mode = \"box\";\n  }\n}\n\n// Add device_class if defined\nif (haMetadata.device_class && componentType !== \"select\") {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined (excluding select)\nif (haMetadata.unit && componentType !== \"select\") {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// Apply precision formatting for numeric values (excluding switches & selects)\nif (componentType === \"sensor\" || componentType === \"number\") {\n  // Default to 1 decimal place if not specified\n  const precision =\n    haMetadata.precision !== undefined ? haMetadata.precision : 1;\n  payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;\n}\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum && componentType === \"select\") {\n  const enumParts = effectiveUnit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n\n  if (componentType === \"select\") {\n    payload.options = Object.values(mappings);\n  }\n}\n\n// Track discovery topic for cleanup on disable (file store — survives restarts)\n// Clear stale memory-store copy if present\nif (global.get(\"victronDiscoveryTopics\")) {\n  global.set(\"victronDiscoveryTopics\", undefined);\n}\nlet discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\nif (!discoveryTopics.includes(discoveryTopic)) {\n  discoveryTopics.push(discoveryTopic);\n  global.set(\"victronDiscoveryTopics\", discoveryTopics, \"file\");\n}\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\n// Send cleanup payloads for obsolete component types so they don't linger in HA\nif (dbus_path.endsWith(\"/CurrentLimit\")) {\n  node.send({ topic: `homeassistant/select/${entityId}/config`, payload: \"\" });\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n} else if (dbus_path.includes(\"/Relay/\")) {\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n}\n\nreturn msg;\n",
+        "func": "// Creates Sensor entity for Victron via MQTT Discovery\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.error(\"Input payload must be an object.\", msg);\n  return null;\n}\n\nconst {\n  service_type,\n  instance,\n  dbus_path,\n  unit,\n  short_name,\n  product_name,\n  writable,\n} = msg.payload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Unit to HA Metadata Mapping ===\n\nconst unitMap = {\n  \"V DC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"V AC\": {\n    device_class: \"voltage\",\n    unit: \"V\",\n    icon: \"mdi:flash\",\n    precision: 1,\n  },\n  \"A DC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-dc\" },\n  \"A AC\": { device_class: \"current\", unit: \"A\", icon: \"mdi:current-ac\" },\n  W: { device_class: \"power\", unit: \"W\", icon: \"mdi:flash\" },\n  kWh: { device_class: \"energy\", unit: \"kWh\", icon: \"mdi:lightning-bolt\" },\n  Ah: { device_class: null, unit: \"Ah\", icon: \"mdi:battery-charging\" },\n  \"%\": { device_class: \"battery\", unit: \"%\", icon: \"mdi:battery\" },\n  \"Degrees celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  \"Degrees Celsius\": {\n    device_class: \"temperature\",\n    unit: \"°C\",\n    icon: \"mdi:thermometer\",\n  },\n  Hz: { device_class: \"frequency\", unit: \"Hz\", icon: \"mdi:sine-wave\" },\n  \"m/s\": { device_class: \"speed\", unit: \"m/s\", icon: \"mdi:speedometer\" },\n  RPM: { device_class: null, unit: \"RPM\", icon: \"mdi:engine\" },\n  seconds: { device_class: \"duration\", unit: \"s\", icon: \"mdi:timer\" },\n  VA: { device_class: \"apparent_power\", unit: \"VA\", icon: \"mdi:flash\" },\n  L: { device_class: null, unit: \"L\", icon: \"mdi:cup-water\" },\n  \"%RH\": { device_class: \"humidity\", unit: \"%\", icon: \"mdi:water-percent\" },\n  \"%level\": { device_class: null, unit: \"%\", icon: \"mdi:gauge\" },\n};\n\n// === Friendly Name Map ===\n// Maps service_type + dbus_path to clean dashboard names.\n\nconst friendlyNameMap = {\n  // system/0 — GX device data\n  \"system:/Dc/Battery/Soc\": \"Battery State of Charge\",\n  \"system:/Dc/Battery/Voltage\": \"Battery Voltage\",\n  \"system:/Dc/Battery/Current\": \"Battery Current\",\n  \"system:/Dc/Battery/Power\": \"Battery Power\",\n  \"system:/Dc/Battery/Temperature\": \"Battery Temperature\",\n  \"system:/Dc/Pv/Power\": \"Solar Power\",\n  \"system:/Dc/Pv/Current\": \"Solar Current\",\n  \"system:/Ac/Consumption/L1/Power\": \"AC Consumption L1\",\n  \"system:/Ac/Consumption/L2/Power\": \"AC Consumption L2\",\n  \"system:/Ac/Grid/L1/Power\": \"Shore Power L1\",\n  \"system:/Ac/Grid/L2/Power\": \"Shore Power L2\",\n  \"system:/Ac/ActiveIn/ActiveInput\": \"Active AC Input\",\n  \"system:/Ac/ActiveIn/Source\": \"AC Input Source\",\n  \"system:/Dc/System/Power\": \"DC Loads Power\",\n  \"system:/Ac/Consumption/Total/Power\": \"AC Consumption Total\",\n  \"system:/Ac/Grid/Total/Power\": \"Shore Power Total\",\n  \"system:/Relay/0/State\": \"Relay 1\",\n  \"system:/Relay/1/State\": \"Relay 2\",\n  // battery\n  \"battery:/Dc/0/Voltage\": \"Battery Voltage\",\n  \"battery:/Dc/0/Current\": \"Battery Current\",\n  \"battery:/Dc/0/Power\": \"Battery Power\",\n  \"battery:/Dc/0/Temperature\": \"Battery Temperature\",\n  \"battery:/Dc/1/Voltage\": \"Auxiliary Battery Voltage\",\n  \"battery:/Soc\": \"Battery SOC\",\n  // solarcharger\n  \"solarcharger:/Yield/Power\": \"Solar Power\",\n  \"solarcharger:/Yield/System\": \"Solar Total Yield\",\n  \"solarcharger:/Dc/0/Voltage\": \"Solar Battery Voltage\",\n  \"solarcharger:/Dc/0/Current\": \"Solar Charge Current\",\n  \"solarcharger:/Pv/V\": \"Solar Panel Voltage\",\n  \"solarcharger:/State\": \"Solar Charger State\",\n  // vebus\n  \"vebus:/Ac/ActiveIn/L1/V\": \"AC Input L1 Voltage\",\n  \"vebus:/Ac/ActiveIn/L1/I\": \"AC Input L1 Current\",\n  \"vebus:/Ac/ActiveIn/L1/P\": \"AC Input L1 Power\",\n  \"vebus:/Ac/ActiveIn/L2/V\": \"AC Input L2 Voltage\",\n  \"vebus:/Ac/ActiveIn/L2/I\": \"AC Input L2 Current\",\n  \"vebus:/Ac/ActiveIn/L2/P\": \"AC Input L2 Power\",\n  \"vebus:/Ac/Out/L1/V\": \"AC Output L1 Voltage\",\n  \"vebus:/Ac/Out/L1/I\": \"AC Output L1 Current\",\n  \"vebus:/Ac/Out/L1/P\": \"AC Output L1 Power\",\n  \"vebus:/Ac/Out/L2/V\": \"AC Output L2 Voltage\",\n  \"vebus:/Ac/Out/L2/I\": \"AC Output L2 Current\",\n  \"vebus:/Ac/Out/L2/P\": \"AC Output L2 Power\",\n  \"vebus:/Ac/ActiveIn/Total/P\": \"AC Input Total Power\",\n  \"vebus:/Ac/Out/Total/P\": \"AC Output Total Power\",\n  \"vebus:/Ac/ActiveIn/CurrentLimit\": \"Shore Power Limit\",\n  \"vebus:/Ac/ActiveIn/L1/F\": \"AC Input Frequency\",\n  \"vebus:/Dc/0/Voltage\": \"Inverter DC Voltage\",\n  \"vebus:/Dc/0/Current\": \"Inverter DC Current\",\n  \"vebus:/Dc/0/Power\": \"Inverter DC Power\",\n  \"vebus:/Dc/0/Temperature\": \"Inverter Temperature\",\n  \"vebus:/State\": \"Inverter State\",\n  \"vebus:/Mode\": \"Inverter Mode\",\n  \"vebus:/Relay/0/State\": \"Inverter Relay\",\n  // charger\n  \"charger:/Dc/0/Voltage\": \"Output Voltage\",\n  \"charger:/Dc/0/Current\": \"Output Current\",\n  \"charger:/Ac/In/L1/P\": \"AC Input Power\",\n  \"charger:/State\": \"Charge State\",\n  // alternator (Orion XS DC-DC)\n  \"alternator:/Dc/0/Voltage\": \"Output Voltage\",\n  \"alternator:/Dc/0/Current\": \"Output Current\",\n  \"alternator:/Dc/0/Power\": \"Output Power\",\n  \"alternator:/Dc/In/V\": \"Input Voltage\",\n  \"alternator:/Dc/In/I\": \"Input Current\",\n  \"alternator:/Dc/In/P\": \"Input Power\",\n  \"alternator:/State\": \"Charge State\",\n  // dcdc\n  \"dcdc:/Dc/0/Voltage\": \"Output Voltage\",\n  \"dcdc:/Dc/0/Current\": \"Output Current\",\n  \"dcdc:/Dc/0/Power\": \"Output Power\",\n  \"dcdc:/Dc/In/V\": \"Input Voltage\",\n  \"dcdc:/Dc/In/I\": \"Input Current\",\n  \"dcdc:/Dc/In/P\": \"Input Power\",\n  \"dcdc:/State\": \"Charge State\",\n  // grid\n  \"grid:/Ac/L1/Power\": \"L1 Power\",\n  \"grid:/Ac/L2/Power\": \"L2 Power\",\n  \"grid:/Ac/Power\": \"Total Power\",\n  // acload\n  \"acload:/Ac/L1/Power\": \"L1 Power\",\n  \"acload:/Ac/L2/Power\": \"L2 Power\",\n  \"acload:/Ac/Power\": \"Total Power\",\n  // tank\n  \"tank:/Level\": \"Level\",\n  \"tank:/Remaining\": \"Remaining\",\n  \"tank:/FluidType\": \"Fluid Type\",\n  // temperature\n  \"temperature:/Temperature\": \"Temperature\",\n  \"temperature:/Humidity\": \"Humidity\",\n  // digitalinput\n  \"digitalinput:/InputState\": \"State\",\n  \"digitalinput:/Count\": \"Count\",\n};\n\n// === Build Entity ID ===\n\n// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage\nlet safePath = dbus_path.replace(/^\\//, \"\").replace(/\\//g, \"_\").toLowerCase();\n\n// === Standardization Rules ===\n\n// 1. Context-aware renaming (only if direction is discernible)\n// Map \"dc_0\" to \"dc_out\" for output-generating devices\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n// Note: solarcharger usually outputs to battery, but has \"pv\" as well.\n// \"dc_0\" on solarcharger is battery connection (output).\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion (single letters)\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Use product short name in entity ID (e.g., smartshunt instead of battery)\nconst deviceName = short_name || service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build Friendly Name ===\n\nconst nameKey = `${service_type}:${dbus_path}`;\nconst baseName =\n  friendlyNameMap[nameKey] ||\n  dbus_path\n    .replace(/^\\//, \"\")\n    .replace(/\\//g, \" \")\n    .replace(/([a-z])([A-Z])/g, \"$1 $2\");\n\n// Build short display name from first two alpha words of product name\nconst displayName = product_name\n  ? product_name\n    .split(/\\s+/)\n    .filter((w) => /^[a-zA-Z]/.test(w))\n    .slice(0, 2)\n    .join(\" \")\n  : \"\";\n\n// Prefix with device display name (e.g., \"MultiPlus-II — Inverter DC Power\")\n// System service uses \"System\" prefix instead of product name.\nconst prefix = service_type === \"system\" ? \"System\" : displayName;\nconst friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;\n\n// === Unit Override for Paths Missing from Victron CSV ===\n\nconst unitOverrides = {\n  \"/Dc/0/Power\": \"W\",\n  \"/Dc/0/Voltage\": \"V DC\",\n  \"/Dc/0/Current\": \"A DC\",\n  \"/Dc/0/Temperature\": \"Degrees celsius\",\n  \"/Dc/In/V\": \"V DC\",\n  \"/Dc/In/I\": \"A DC\",\n  \"/Dc/In/P\": \"W\",\n  \"/Ac/In/L1/P\": \"W\",\n  \"/Ac/L1/Power\": \"W\",\n  \"/Ac/L2/Power\": \"W\",\n  \"/Ac/Power\": \"W\",\n  \"/Level\": \"%level\",\n  \"/Remaining\": \"L\",\n  \"/Temperature\": \"Degrees celsius\",\n  \"/Humidity\": \"%RH\",\n};\n\nconst effectiveUnit = unit || unitOverrides[dbus_path] || \"\";\n\n// === Determine HA Metadata ===\n\nlet haMetadata = unitMap[effectiveUnit];\nlet isEnum = false;\n\n// Check if unit is an enum string (e.g., \"0=Off;1=On;2=Error\")\nif (!haMetadata && effectiveUnit && effectiveUnit.includes(\"=\")) {\n  isEnum = true;\n  haMetadata = {\n    device_class: null,\n    unit: null,\n    icon: dbus_path.includes(\"/Relay/\")\n      ? \"mdi:toggle-switch-outline\"\n      : \"mdi:information-outline\",\n  };\n}\n\n// Fallback for unknown units\nif (!haMetadata) {\n  haMetadata = {\n    device_class: null,\n    unit: effectiveUnit || null,\n    icon: \"mdi:information-outline\",\n  };\n}\n\n// === Determine HA Component Type ===\n\nlet componentType = \"sensor\";\nif (writable && isEnum) {\n  if (dbus_path.includes(\"/Relay/\")) {\n    componentType = \"switch\";\n  } else {\n    componentType = \"select\";\n  }\n} else if (writable && !isEnum) {\n  componentType = \"number\";\n}\n\n// === Build Discovery Topic and State Topic ===\n\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Build Discovery Payload ===\n\nconst payload = {\n  name: friendlyName,\n  unique_id: entityId,\n  icon: haMetadata.icon,\n  state_topic: stateTopic,\n  value_template: \"{{ value_json.value }}\",\n  device: {\n    identifiers: [\"librecoach-victron\"],\n    name: \"LibreCoach: Victron\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Add component-specific parameters\nif (\n  componentType === \"number\" ||\n  componentType === \"select\" ||\n  componentType === \"switch\"\n) {\n  payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;\n  payload.optimistic = true;\n}\n\nif (componentType === \"switch\") {\n  payload.payload_on = \"1\";\n  payload.payload_off = \"0\";\n  payload.state_on = \"ON\";\n  payload.state_off = \"OFF\";\n  payload.optimistic = false;\n  payload.value_template =\n    \"{{ 'ON' if value_json.value | int == 1 else 'OFF' }}\";\n} else if (componentType === \"number\") {\n  // Safe defaults for unknown numeric writable paths\n  payload.min = 0;\n  payload.max = 100;\n  payload.step = 0.5;\n\n  // Specific overrides based on path\n  if (dbus_path.endsWith(\"/Soc\")) {\n    payload.max = 100;\n    payload.step = 1;\n  } else if (dbus_path.endsWith(\"/CurrentLimit\")) {\n    payload.max = 100;\n    payload.step = 0.5;\n    payload.mode = \"box\";\n  }\n}\n\n// Add device_class if defined\nif (haMetadata.device_class && componentType !== \"select\") {\n  payload.device_class = haMetadata.device_class;\n  payload.state_class = \"measurement\";\n}\n\n// Add unit_of_measurement if defined (excluding select)\nif (haMetadata.unit && componentType !== \"select\") {\n  payload.unit_of_measurement = haMetadata.unit;\n}\n\n// Apply precision formatting for numeric values (excluding switches & selects)\nif (componentType === \"sensor\" || componentType === \"number\") {\n  // Default to 1 decimal place if not specified\n  const precision =\n    haMetadata.precision !== undefined ? haMetadata.precision : 1;\n  payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;\n}\n\n// For enum values, build a Jinja2 template to map numeric values to labels\nif (isEnum && componentType === \"select\") {\n  const enumParts = effectiveUnit.split(\";\").map((p) => p.trim());\n  const mappings = {};\n  for (const part of enumParts) {\n    const [val, label] = part.split(\"=\");\n    if (val !== undefined && label !== undefined) {\n      mappings[val.trim()] = label.trim();\n    }\n  }\n\n  // Build Jinja2 map template\n  const mapEntries = Object.entries(mappings)\n    .map(([k, v]) => `'${k}': '${v}'`)\n    .join(\", \");\n  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;\n\n  if (componentType === \"select\") {\n    payload.options = Object.values(mappings);\n  }\n}\n\n// Track discovery topic for cleanup on disable (file store — survives restarts)\nlet discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\nif (!discoveryTopics.includes(discoveryTopic)) {\n  discoveryTopics.push(discoveryTopic);\n  global.set(\"victronDiscoveryTopics\", discoveryTopics, \"file\");\n}\n\n// Prepare final message\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\nmsg.stateTopic = stateTopic;\n\n// Send cleanup payloads for obsolete component types so they don't linger in HA\nif (dbus_path.endsWith(\"/CurrentLimit\")) {\n  node.send({ topic: `homeassistant/select/${entityId}/config`, payload: \"\" });\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n} else if (dbus_path.includes(\"/Relay/\")) {\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6769,9 +6836,9 @@
         "type": "note",
         "z": "1fde0c4ffb03727e",
         "name": "",
-        "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
-        "x": 2020,
-        "y": 440,
+        "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
+        "x": 1710,
+        "y": 217.00000762939453,
         "wires": []
     },
     {
@@ -6780,7 +6847,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_handle_toggle",
-        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// One output → MQTT Out (entity deletion on disable; nothing on enable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\nconst deleteMessages = discoveryTopics.map((topic) => ({\n  topic: topic,\n  payload: \"\",\n}));\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\nglobal.set(\"victronPortalId\", null);\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [deleteMessages];\n",
+        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// One output → MQTT Out (entity deletion on disable; nothing on enable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send({ topic: topic, payload: \"\" });\n});\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\nglobal.set(\"victronPortalId\", null);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7012,7 +7079,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_decode_status",
-        "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\n// Expecting: librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// --- Cache zone state for command encoding ---\nconst safeMac = mac.replace(/:/g, \"_\");\nglobal.set(`microair_${safeMac}_zone_${zone}`, payload);\n\n// --- Observe max fan speed (accumulate over time) ---\nconst maxSpeedKey = `microair_${safeMac}_zone_${zone}_maxfan`;\nlet prevMax = global.get(maxSpeedKey, \"file\") || 0;\nconst fanFields = [\n  payload.fan_mode_num,\n  payload.cool_fan_mode_num,\n  payload.heat_fan_mode_num,\n  payload.auto_fan_mode_num,\n  payload.furnace_fan_mode_num,\n];\nlet currentMax = prevMax;\nfor (const v of fanFields) {\n  if (typeof v === \"number\" && v < 128 && v > currentMax) {\n    currentMax = v;\n  }\n}\nif (currentMax > prevMax) {\n  global.set(maxSpeedKey, currentMax, \"file\");\n}\n\n// --- 1. Send standardized internal message ---\nconst standardizedMsg = {\n  mac: mac,\n  zone: zone,\n  value: payload, // full original payload\n  outdoor_temperature: payload.outdoorTemperature,\n  max_fan_speed: currentMax,\n  max_fan_changed: currentMax > prevMax,\n};\n\nconst internalMsg = {\n  topic: `librecoach/microair/${mac}/zone/${zone}`,\n  payload: standardizedMsg,\n};\n\n// --- 2. Send original payload to per-zone HA state topic (stringified) ---\nconst haStateMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(payload), // <--- critical fix\n};\n\n// Return both messages\nreturn [haStateMsg, internalMsg];\n",
+        "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n\nconst topic = msg.topic;\nif (!topic) return null;\n\n// Handle add-on config toggle for status display and flow gating\nif (topic === \"librecoach/config/microair_enabled\") {\n  const enabled = msg.payload.toString() === \"true\";\n  global.set(\"microairEnabled\", enabled, \"file\");\n  if (enabled) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  } else {\n    node.status({ fill: \"red\", shape: \"ring\", text: \"Disabled\" });\n  }\n  return null;\n}\n\n// Drop incoming BLE data if the integration is disabled\nif (global.get(\"microairEnabled\", \"file\") === false) {\n  return null;\n}\n\nconst parts = topic.split(\"/\");\n// Expecting: librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// --- Cache zone state for command encoding ---\nconst safeMac = mac.replace(/:/g, \"_\");\nglobal.set(`microair_${safeMac}_zone_${zone}`, payload, \"file\");\n\n// --- Observe max fan speed (accumulate over time) ---\nconst maxSpeedKey = `microair_${safeMac}_zone_${zone}_maxfan`;\nlet prevMax = global.get(maxSpeedKey, \"file\") || 0;\nconst fanFields = [\n  payload.fan_mode_num,\n  payload.cool_fan_mode_num,\n  payload.heat_fan_mode_num,\n  payload.auto_fan_mode_num,\n  payload.furnace_fan_mode_num,\n];\nlet currentMax = prevMax;\nfor (const v of fanFields) {\n  if (typeof v === \"number\" && v < 128 && v > currentMax) {\n    currentMax = v;\n  }\n}\nif (currentMax > prevMax) {\n  global.set(maxSpeedKey, currentMax, \"file\");\n}\n\n// --- 1. Send standardized internal message ---\nconst standardizedMsg = {\n  mac: mac,\n  zone: zone,\n  value: payload, // full original payload\n  outdoor_temperature: payload.outdoorTemperature,\n  max_fan_speed: currentMax,\n  max_fan_changed: currentMax > prevMax,\n};\n\nconst internalMsg = {\n  topic: `librecoach/microair/${mac}/zone/${zone}`,\n  payload: standardizedMsg,\n};\n\n// --- 2. Send original payload to per-zone HA state topic (stringified) ---\nconst haStateMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(payload), // <--- critical fix\n};\n\n// Return both messages\nreturn [haStateMsg, internalMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -7127,7 +7194,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_create_climate",
-        "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config (MAV, SPL) and observed max fan speed\n// for dynamic modes, fan modes, and temperature limits\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Per-zone state and config topics ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Command topics\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\n// --- Read cached config and observed capabilities ---\nconst zoneConfig =\n  global.get(`microair_${safeMac}_zone_${zone}_config`, \"file\") || {};\nconst maxFanSpeed =\n  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, \"file\") || 2;\n\n// --- Determine available modes ---\n// Always include these base modes; MAV only removes modes we're sure aren't supported\nlet modes = [\"off\", \"cool\", \"heat\", \"fan_only\"];\n\n// Add auto if supported (MAV bits 8-11)\n// Add dry if supported (MAV bit 6)\n// Default: include both unless MAV explicitly excludes them\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  // Auto modes: bits 8, 9, 10, 11\n  if (mav & (0x100 | 0x200 | 0x400 | 0x800)) {\n    modes.push(\"auto\");\n  }\n  // Dry mode: bit 6\n  if (mav & 0x40) {\n    modes.push(\"dry\");\n  }\n} else {\n  // No config yet — include everything as default\n  modes.push(\"auto\", \"dry\");\n}\n\n// --- Determine fan modes from observed max speed ---\nlet fanModes;\nif (maxFanSpeed >= 3) {\n  // 3-speed system\n  fanModes = [\"low\", \"medium\", \"high\", \"auto\"];\n} else {\n  // 2-speed system (default)\n  fanModes = [\"low\", \"high\", \"auto\"];\n}\n\n// --- Determine temp limits from SPL ---\nlet minTemp = 50;\nlet maxTemp = 90;\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// --- Discovery payload ---\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat/dry)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Temperature limits\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config (MAV, SPL) and observed max fan speed\n// for dynamic modes, fan modes, and temperature limits\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Per-zone state and config topics ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Command topics\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\n\n// --- Read cached config and observed capabilities ---\nconst zoneConfig =\n  global.get(`microair_${safeMac}_zone_${zone}_config`, \"file\") || {};\nconst maxFanSpeed =\n  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, \"file\") || 2;\n\n// --- Determine available modes ---\n// Always include these base modes; MAV only removes modes we're sure aren't supported\nlet modes = [\"off\", \"cool\", \"heat\", \"fan_only\"];\n\n// Add auto if supported (MAV bits 8-11)\n// Add dry if supported (MAV bit 6)\n// Default: include both unless MAV explicitly excludes them\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  // Auto modes: bits 8, 9, 10, 11\n  if (mav & (0x100 | 0x200 | 0x400 | 0x800)) {\n    modes.push(\"auto\");\n  }\n  // Dry mode: bit 6\n  if (mav & 0x40) {\n    modes.push(\"dry\");\n  }\n} else {\n  // No config yet — include everything as default\n  modes.push(\"auto\", \"dry\");\n}\n\n// --- Determine fan modes from observed max speed ---\nlet fanModes;\nif (maxFanSpeed >= 3) {\n  // 3-speed system\n  fanModes = [\"low\", \"medium\", \"high\", \"auto\"];\n} else {\n  // 2-speed system (default)\n  fanModes = [\"low\", \"high\", \"auto\"];\n}\n\n// --- Determine temp limits from SPL ---\nlet minTemp = 50;\nlet maxTemp = 90;\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// --- Discovery payload ---\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat/dry)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Temperature limits\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\nmsg.entityId = entityId;\n\n// Track discovery topic for cleanup when disabled\nlet discoveryTopics = global.get(\"microairDiscoveryTopics\", \"file\") || [];\nif (!discoveryTopics.includes(discoveryTopic)) {\n  discoveryTopics.push(discoveryTopic);\n  global.set(\"microairDiscoveryTopics\", discoveryTopics, \"file\");\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7148,7 +7215,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_create_sensor",
-        "func": "// Create MicroAir Outdoor Temp sensor\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${safeMac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/0/state`;\n\nconst discoveryPayload = {\n  name: `Outdoor Temperature`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template:\n    \"{% if value_json.outdoorTemperature is defined and value_json.outdoorTemperature != 255 %}{{ value_json.outdoorTemperature }}{% else %}None{% endif %}\",\n  unit_of_measurement: \"°F\",\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\nreturn msg;\n",
+        "func": "// Create MicroAir Outdoor Temp sensor\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\n// Only create outdoor sensor for Zone 0 (or duplicative?)\nif (payload.zone !== 0) return null;\n\nconst uniqueId = `microair_${safeMac}_outdoor_temp`;\nconst entityId = uniqueId;\n\nconst discoveryTopic = `homeassistant/sensor/${entityId}/config`;\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/0/state`;\n\nconst discoveryPayload = {\n  name: `Outdoor Temperature`,\n  unique_id: uniqueId,\n  state_topic: stateTopic,\n  value_template:\n    \"{% if value_json.outdoorTemperature is defined and value_json.outdoorTemperature != 255 %}{{ value_json.outdoorTemperature }}{% else %}None{% endif %}\",\n  unit_of_measurement: \"°F\",\n  device_class: \"temperature\",\n  icon: \"mdi:thermometer\",\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"LibreCoach: Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nmsg.topic = discoveryTopic;\nmsg.payload = discoveryPayload;\n\nmsg.stateTopic = stateTopic;\nmsg.entityId = entityId;\n\n// Track discovery topic for cleanup when disabled\nlet discoveryTopics = global.get(\"microairDiscoveryTopics\", \"file\") || [];\nif (!discoveryTopics.includes(discoveryTopic)) {\n  discoveryTopics.push(discoveryTopic);\n  global.set(\"microairDiscoveryTopics\", discoveryTopics, \"file\");\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7206,7 +7273,7 @@
         "z": "e3804d2dd0b81928",
         "g": "65587a19852a1225",
         "name": "microair_encode_command",
-        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n// Reads cached zone state from global context for mode-aware encoding\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// Read cached zone state for mode-aware encoding\nconst cached = global.get(`microair_${safeMac}_zone_${zone}`) || {};\nconst currentMode = cached.mode || \"off\";\nconst currentModeNum = cached.mode_num || 0;\n\n// Read observed max fan speed for dynamic mapping\nconst maxFanSpeed =\n  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, \"file\") || 2;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n  off: 0,\n  fan_only: 1,\n  cool: 2,\n  heat: 5,\n  dry: 6,\n  auto: 11,\n};\n\n// Dynamic fan map based on observed speed count\nconst FAN_MAP =\n  maxFanSpeed >= 3\n    ? { low: 1, medium: 2, high: 3, auto: 128 } // 3-speed\n    : { low: 1, high: 2, auto: 128 }; // 2-speed\n\nif (topic.endsWith(\"/mode/set\")) {\n  // HA sends: \"cool\", \"heat\", \"off\", etc.\n  if (val in MODE_MAP) {\n    change.mode = MODE_MAP[val];\n    change.power = 1;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // HA sends number: 72\n  // Set only the setpoint for the current HVAC mode\n  const temp = parseFloat(val);\n  if (currentMode === \"cool\") {\n    change.cool_sp = temp;\n  } else if (currentMode === \"heat\") {\n    change.heat_sp = temp;\n  } else if (currentMode === \"dry\") {\n    change.dry_sp = temp;\n  } else if (currentMode === \"auto\") {\n    // HA MQTT climate sends a single temp for auto mode via this topic.\n    // Set both setpoints — HA should use temp_high/temp_low topics for\n    // separate auto setpoints, but fallback keeps behavior reasonable.\n    change.autoCool_sp = temp;\n    change.autoHeat_sp = temp;\n  } else {\n    // Fallback: set cool_sp as default\n    change.cool_sp = temp;\n  }\n} else if (topic.endsWith(\"/temp_high/set\")) {\n  // Auto mode high setpoint (cool target)\n  change.autoCool_sp = parseFloat(val);\n} else if (topic.endsWith(\"/temp_low/set\")) {\n  // Auto mode low setpoint (heat target)\n  change.autoHeat_sp = parseFloat(val);\n} else if (topic.endsWith(\"/fan/set\")) {\n  // HA sends: \"low\", \"high\", \"medium\", \"auto\"\n  if (!(val in FAN_MAP)) return null;\n\n  const fanValue = FAN_MAP[val];\n\n  // Use mode-specific fan key based on current HVAC mode\n  if (currentMode === \"fan_only\") {\n    // Fan-only mode doesn't support auto — default to max speed\n    change.fanOnly = fanValue === 128 ? maxFanSpeed : fanValue;\n  } else if (currentMode === \"cool\" || currentMode === \"dry\") {\n    change.coolFan = fanValue;\n  } else if (currentMode === \"heat\") {\n    // Gas furnace (mode 3,4) vs electric heat (mode 5,6,7,12)\n    if (currentModeNum === 3 || currentModeNum === 4) {\n      change.gasFan = fanValue;\n    } else {\n      change.eleFan = fanValue;\n    }\n  } else if (currentMode === \"auto\") {\n    change.autoFan = fanValue;\n  } else {\n    // Fallback: use coolFan\n    change.coolFan = fanValue;\n  }\n} else {\n  // Unknown topic suffix\n  return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n  Type: \"Change\",\n  Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
+        "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n// Reads cached zone state from global context for mode-aware encoding\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// Read cached zone state for mode-aware encoding\nconst cached = global.get(`microair_${safeMac}_zone_${zone}`, \"file\") || {};\nconst currentMode = cached.mode || \"off\";\nconst currentModeNum = cached.mode_num || 0;\n\n// Read observed max fan speed for dynamic mapping\nconst maxFanSpeed =\n  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, \"file\") || 2;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n  off: 0,\n  fan_only: 1,\n  cool: 2,\n  heat: 5,\n  dry: 6,\n  auto: 11,\n};\n\n// Dynamic fan map based on observed speed count\nconst FAN_MAP =\n  maxFanSpeed >= 3\n    ? { low: 1, medium: 2, high: 3, auto: 128 } // 3-speed\n    : { low: 1, high: 2, auto: 128 }; // 2-speed\n\nif (topic.endsWith(\"/mode/set\")) {\n  // HA sends: \"cool\", \"heat\", \"off\", etc.\n  if (val in MODE_MAP) {\n    change.mode = MODE_MAP[val];\n    change.power = 1;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // HA sends number: 72\n  // Set only the setpoint for the current HVAC mode\n  const temp = parseFloat(val);\n  if (currentMode === \"cool\") {\n    change.cool_sp = temp;\n  } else if (currentMode === \"heat\") {\n    change.heat_sp = temp;\n  } else if (currentMode === \"dry\") {\n    change.dry_sp = temp;\n  } else if (currentMode === \"auto\") {\n    // HA MQTT climate sends a single temp for auto mode via this topic.\n    // Set both setpoints — HA should use temp_high/temp_low topics for\n    // separate auto setpoints, but fallback keeps behavior reasonable.\n    change.autoCool_sp = temp;\n    change.autoHeat_sp = temp;\n  } else {\n    // Fallback: set cool_sp as default\n    change.cool_sp = temp;\n  }\n} else if (topic.endsWith(\"/temp_high/set\")) {\n  // Auto mode high setpoint (cool target)\n  change.autoCool_sp = parseFloat(val);\n} else if (topic.endsWith(\"/temp_low/set\")) {\n  // Auto mode low setpoint (heat target)\n  change.autoHeat_sp = parseFloat(val);\n} else if (topic.endsWith(\"/fan/set\")) {\n  // HA sends: \"low\", \"high\", \"medium\", \"auto\"\n  if (!(val in FAN_MAP)) return null;\n\n  const fanValue = FAN_MAP[val];\n\n  // Use mode-specific fan key based on current HVAC mode\n  if (currentMode === \"fan_only\") {\n    // Fan-only mode doesn't support auto — default to max speed\n    change.fanOnly = fanValue === 128 ? maxFanSpeed : fanValue;\n  } else if (currentMode === \"cool\" || currentMode === \"dry\") {\n    change.coolFan = fanValue;\n  } else if (currentMode === \"heat\") {\n    // Gas furnace (mode 3,4) vs electric heat (mode 5,6,7,12)\n    if (currentModeNum === 3 || currentModeNum === 4) {\n      change.gasFan = fanValue;\n    } else {\n      change.eleFan = fanValue;\n    }\n  } else if (currentMode === \"auto\") {\n    change.autoFan = fanValue;\n  } else {\n    // Fallback: use coolFan\n    change.coolFan = fanValue;\n  }\n} else {\n  // Unknown topic suffix\n  return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n  Type: \"Change\",\n  Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\n// --- 4. Node Status Update ---\nconst changesStr = Object.entries(change)\n  .filter(([k]) => k !== \"zone\")\n  .map(([k, v]) => `${k}=${v}`)\n  .join(\", \");\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set ${safeMac} zone ${zone}: ${changesStr}`,\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7242,7 +7309,7 @@
         "z": "e3804d2dd0b81928",
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
-        "x": 390,
+        "x": 410,
         "y": 160,
         "wires": []
     },
@@ -7257,7 +7324,7 @@
             "f658418a7b9b4857"
         ],
         "x": 930,
-        "y": 340,
+        "y": 320,
         "wires": [],
         "l": true
     },
@@ -7382,6 +7449,71 @@
         "wires": [
             [
                 "ae5fb4f1c3213c0a"
+            ]
+        ]
+    },
+    {
+        "id": "2f91d31ed0be26b1",
+        "type": "function",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "microair_handle_toggle",
+        "func": "// Handles enable/disable of MicroAir integration via addon config\n// Input: msg from librecoach/config/microair_enabled (\"true\" / \"false\")\n// One output → MQTT Out (entity deletion on disable; nothing on enable)\n\n// Only handle microair_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"microair_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"microairDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send({ topic: topic, payload: \"\" });\n});\n\n// Clear persisted tracking state\nglobal.set(\"microairDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueMicroair\", []);\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 320,
+        "wires": [
+            [
+                "599ffbccfb7cd415"
+            ]
+        ]
+    },
+    {
+        "id": "bb154cf7301d6fa7",
+        "type": "link in",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "CONFIG_GLOBALS",
+        "links": [
+            "88e5fa035bedb48c"
+        ],
+        "x": 230,
+        "y": 320,
+        "wires": [
+            [
+                "dbc862c066d96221"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "dbc862c066d96221",
+        "type": "delay",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 420,
+        "y": 320,
+        "wires": [
+            [
+                "2f91d31ed0be26b1"
             ]
         ]
     },
