@@ -2358,7 +2358,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 126,
+        "y": 139,
         "wires": []
     },
     {
@@ -7118,7 +7118,7 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "Micro-Air in",
-        "topic": "librecoach/ble/microair/+/state",
+        "topic": "librecoach/ble/microair/+/+/+/state",
         "qos": "2",
         "datatype": "json",
         "broker": "80727e60a251c36c",
@@ -7371,7 +7371,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 120,
+        "y": 129,
         "wires": []
     },
     {
