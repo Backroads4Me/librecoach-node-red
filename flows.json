@@ -713,12 +713,14 @@
             "2f91d31ed0be26b1",
             "bb154cf7301d6fa7",
             "dbc862c066d96221",
-            "eef231d415615180"
+            "eef231d415615180",
+            "cdc4754f4c43430d",
+            "1d411b577497f7ae"
         ],
         "x": 114,
-        "y": 279,
+        "y": 259,
         "w": 1438,
-        "h": 488
+        "h": 508
     },
     {
         "id": "65587a19852a1225",
@@ -6840,7 +6842,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 191,
+        "y": 208,
         "wires": []
     },
     {
@@ -7484,7 +7486,9 @@
         "x": 630,
         "y": 320,
         "wires": [
-            [],
+            [
+                "cdc4754f4c43430d"
+            ],
             [
                 "599ffbccfb7cd415"
             ]
@@ -7547,13 +7551,46 @@
         "septopics": true,
         "property": "payload",
         "topi": "payload.zone",
-        "x": 410,
+        "x": 430,
         "y": 440,
         "wires": [
             [
                 "ae5fb4f1c3213c0a"
             ]
         ]
+    },
+    {
+        "id": "cdc4754f4c43430d",
+        "type": "link out",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Reset Microair filters",
+        "mode": "link",
+        "links": [
+            "1d411b577497f7ae"
+        ],
+        "x": 900,
+        "y": 300,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "1d411b577497f7ae",
+        "type": "link in",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Reset Microair filters",
+        "links": [
+            "cdc4754f4c43430d"
+        ],
+        "x": 230,
+        "y": 520,
+        "wires": [
+            [
+                "eef231d415615180"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "export_mqtt_in_trigger_001",
