@@ -710,18 +710,14 @@
             "599ffbccfb7cd415",
             "feeabea8484a11e6",
             "7605393317b3c471",
-            "42b9f8eb50c5dced",
-            "1d254f4668711731",
             "2f91d31ed0be26b1",
             "bb154cf7301d6fa7",
-            "dbc862c066d96221",
-            "3fce6baff2c6b823",
-            "bcd0945994e6b063"
+            "dbc862c066d96221"
         ],
         "x": 114,
-        "y": 239,
+        "y": 279,
         "w": 1438,
-        "h": 528
+        "h": 488
     },
     {
         "id": "65587a19852a1225",
@@ -7130,7 +7126,7 @@
         "y": 440,
         "wires": [
             [
-                "1d254f4668711731"
+                "ae5fb4f1c3213c0a"
             ]
         ]
     },
@@ -7446,7 +7442,7 @@
         "y": 600,
         "wires": [
             [
-                "42b9f8eb50c5dced"
+                "7605393317b3c471"
             ]
         ]
     },
@@ -7472,48 +7468,6 @@
         ]
     },
     {
-        "id": "42b9f8eb50c5dced",
-        "type": "rbe",
-        "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 410,
-        "y": 600,
-        "wires": [
-            [
-                "7605393317b3c471"
-            ]
-        ]
-    },
-    {
-        "id": "1d254f4668711731",
-        "type": "rbe",
-        "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "payload.zone",
-        "x": 410,
-        "y": 440,
-        "wires": [
-            [
-                "ae5fb4f1c3213c0a"
-            ]
-        ]
-    },
-    {
         "id": "2f91d31ed0be26b1",
         "type": "function",
         "z": "e3804d2dd0b81928",
@@ -7529,9 +7483,7 @@
         "x": 630,
         "y": 320,
         "wires": [
-            [
-                "3fce6baff2c6b823"
-            ],
+            [],
             [
                 "599ffbccfb7cd415"
             ]
@@ -7580,40 +7532,6 @@
                 "2f91d31ed0be26b1"
             ]
         ]
-    },
-    {
-        "id": "3fce6baff2c6b823",
-        "type": "link out",
-        "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
-        "name": "Reset Micro-Air filters",
-        "mode": "link",
-        "links": [
-            "bcd0945994e6b063"
-        ],
-        "x": 900,
-        "y": 280,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "bcd0945994e6b063",
-        "type": "link in",
-        "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
-        "name": "Reset Micro-Air filters",
-        "links": [
-            "3fce6baff2c6b823"
-        ],
-        "x": 240,
-        "y": 520,
-        "wires": [
-            [
-                "1d254f4668711731",
-                "42b9f8eb50c5dced"
-            ]
-        ],
-        "l": true
     },
     {
         "id": "export_mqtt_in_trigger_001",
