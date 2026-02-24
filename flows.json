@@ -87,7 +87,7 @@
             "c78420a075d43408"
         ],
         "x": 154,
-        "y": 1839,
+        "y": 1719,
         "w": 852,
         "h": 82
     },
@@ -680,8 +680,8 @@
             "a1e89f48333c8256",
             "8337a7f0dd0435d6"
         ],
-        "x": 154,
-        "y": 1699,
+        "x": 1014,
+        "y": 1559,
         "w": 652,
         "h": 82
     },
@@ -702,22 +702,21 @@
             "78058c1b20751a76",
             "950e9ce654224317",
             "cd4c55cd4f675905",
-            "65587a19852a1225",
             "599ffbccfb7cd415",
             "feeabea8484a11e6",
             "7605393317b3c471",
-            "8712d2aef1490acd"
+            "42b9f8eb50c5dced",
+            "1d254f4668711731"
         ],
-        "x": 108,
-        "y": 339,
-        "w": 1594,
-        "h": 588
+        "x": 114,
+        "y": 299,
+        "w": 1438,
+        "h": 468
     },
     {
         "id": "65587a19852a1225",
         "type": "group",
         "z": "e3804d2dd0b81928",
-        "g": "fe7cf55a75689b88",
         "name": "Micro-Air command",
         "style": {
             "stroke": "#777777",
@@ -728,13 +727,12 @@
             "e1cc8c52948f9b2a",
             "52b505b69f88888d",
             "e2335c226769f307",
-            "b104a7e82aefcb21",
-            "48ec2e810b890589"
+            "b104a7e82aefcb21"
         ],
-        "x": 134,
-        "y": 679,
-        "w": 1542,
-        "h": 222
+        "x": 114,
+        "y": 879,
+        "w": 1192,
+        "h": 122
     },
     {
         "id": "9dd6a98018824be9",
@@ -1012,7 +1010,7 @@
             "205af5b7fa62d8ac",
             "a58b5f05c8346eab"
         ],
-        "x": 804,
+        "x": 1054,
         "y": 599,
         "w": 472,
         "h": 142
@@ -1149,7 +1147,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 1880,
+        "y": 1760,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -1169,7 +1167,7 @@
         "sendError": false,
         "allProps": false,
         "x": 480,
-        "y": 1880,
+        "y": 1760,
         "wires": [
             [
                 "c78420a075d43408"
@@ -1190,7 +1188,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 1880,
+        "y": 1760,
         "wires": []
     },
     {
@@ -1203,7 +1201,7 @@
         "action": "",
         "pretty": false,
         "x": 690,
-        "y": 1880,
+        "y": 1760,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -2350,7 +2348,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
         "x": 730,
-        "y": 192,
+        "y": 200,
         "wires": []
     },
     {
@@ -2389,7 +2387,7 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "create_user_toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    default_entity_id: \"button.librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n    entity_category: \"diagnostic\",\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    default_entity_id: \"button.librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n    entity_category: \"diagnostic\",\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      default_entity_id: `text.${field.id}`,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n      entity_category: \"config\",\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    default_entity_id: \"button.librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    default_entity_id: \"button.librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      default_entity_id: `text.${field.id}`,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2432,8 +2430,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 1740,
+        "x": 1330,
+        "y": 1600,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -2450,8 +2448,8 @@
             "47f3c921ae62126a",
             "47ac3adc971d73eb"
         ],
-        "x": 240,
-        "y": 1740,
+        "x": 1100,
+        "y": 1600,
         "wires": [
             [
                 "dd199275f909301f"
@@ -2476,8 +2474,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 710,
-        "y": 1740,
+        "x": 1570,
+        "y": 1600,
         "wires": [
             []
         ]
@@ -3993,7 +3991,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
         "x": 1920,
-        "y": 235,
+        "y": 224,
         "wires": []
     },
     {
@@ -5822,8 +5820,8 @@
         "type": "note",
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
-        "x": 1790,
-        "y": 326,
+        "x": 1770,
+        "y": 280,
         "wires": []
     },
     {
@@ -6333,8 +6331,8 @@
         "type": "note",
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
-        "x": 2010,
-        "y": 210,
+        "x": 2030,
+        "y": 240,
         "wires": []
     },
     {
@@ -6772,8 +6770,8 @@
         "z": "1fde0c4ffb03727e",
         "name": "",
         "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as your LibreCoach system (Wi-Fi or Ethernet)\n- Access to the GX device's touchscreen or Remote Console\n\n## Step 1: Set the Network Security Profile\nThe GX device has a security setting that controls how other devices connect to it. For the simplest setup, you'll set this to allow local connections without encryption.\n\n**On the GX device, navigate to:**\n\n> **Settings → General → Access & Security → Local network security profile**\n\nSet it to **Unsecured**.\n\n## Step 2: Enable MQTT\nNow tell the GX device to share its data over MQTT.\n\n**On the GX device, navigate to:**\n\n> **Settings → Integrations → MQTT Access**\n\nToggle it to **Enabled**.\n\nThat's it — your Victron GX device is now broadcasting data that LibreCoach can pick up.\n\n## Step 3: Restart Node-RED\nAfter enabling MQTT on the GX device, restart Node-RED so LibreCoach picks up the new connection.\n\n1. In Home Assistant, go to **Settings → Apps**\n2. Find **Node-RED** and click on it\n3. Click **Restart**\n\nWithin a few moments, Victron data should begin appearing in Home Assistant.",
-        "x": 2000,
-        "y": 382,
+        "x": 2020,
+        "y": 440,
         "wires": []
     },
     {
@@ -7001,10 +6999,10 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 480,
+        "y": 440,
         "wires": [
             [
-                "ae5fb4f1c3213c0a"
+                "1d254f4668711731"
             ]
         ]
     },
@@ -7021,11 +7019,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 480,
+        "x": 590,
+        "y": 440,
         "wires": [
             [
-                "8712d2aef1490acd"
+                "599ffbccfb7cd415"
             ],
             [
                 "ba611b1fa95bf468"
@@ -7045,8 +7043,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 480,
+        "x": 880,
+        "y": 440,
         "wires": [
             [
                 "c92f3be74ab20d69"
@@ -7078,7 +7076,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 920,
+        "x": 1170,
         "y": 700,
         "wires": [
             [
@@ -7099,7 +7097,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
+        "x": 1420,
         "y": 700,
         "wires": [
             []
@@ -7114,7 +7112,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 910,
+        "x": 1160,
         "y": 640,
         "wires": [
             [
@@ -7136,8 +7134,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
-        "y": 440,
+        "x": 1130,
+        "y": 400,
         "wires": [
             [
                 "950e9ce654224317"
@@ -7157,8 +7155,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
-        "y": 520,
+        "x": 1130,
+        "y": 480,
         "wires": [
             [
                 "950e9ce654224317"
@@ -7175,8 +7173,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1190,
-        "y": 480,
+        "x": 1410,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -7194,8 +7192,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
-        "y": 840,
+        "x": 210,
+        "y": 940,
         "wires": [
             [
                 "e1cc8c52948f9b2a"
@@ -7215,8 +7213,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 840,
+        "x": 500,
+        "y": 940,
         "wires": [
             [
                 "e2335c226769f307"
@@ -7233,8 +7231,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1190,
-        "y": 860,
+        "x": 1170,
+        "y": 960,
         "wires": [],
         "l": true
     },
@@ -7245,7 +7243,7 @@
         "name": "",
         "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 181,
+        "y": 160,
         "wires": []
     },
     {
@@ -7258,8 +7256,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 910,
-        "y": 380,
+        "x": 930,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -7276,12 +7274,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 840,
+        "x": 820,
+        "y": 940,
         "wires": [
             [
-                "b104a7e82aefcb21",
-                "48ec2e810b890589"
+                "b104a7e82aefcb21"
             ],
             [
                 "52b505b69f88888d"
@@ -7298,8 +7295,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1190,
-        "y": 820,
+        "x": 1170,
+        "y": 920,
         "wires": [],
         "l": true
     },
@@ -7318,10 +7315,10 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 640,
+        "y": 600,
         "wires": [
             [
-                "7605393317b3c471"
+                "42b9f8eb50c5dced"
             ]
         ]
     },
@@ -7338,8 +7335,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 640,
+        "x": 590,
+        "y": 600,
         "wires": [
             [
                 "ba611b1fa95bf468"
@@ -7347,25 +7344,7 @@
         ]
     },
     {
-        "id": "48ec2e810b890589",
-        "type": "debug",
-        "z": "e3804d2dd0b81928",
-        "g": "65587a19852a1225",
-        "name": "microair_optimistic_update",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1510,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "8712d2aef1490acd",
+        "id": "42b9f8eb50c5dced",
         "type": "rbe",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
@@ -7377,11 +7356,32 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 650,
-        "y": 380,
+        "x": 390,
+        "y": 600,
         "wires": [
             [
-                "599ffbccfb7cd415"
+                "7605393317b3c471"
+            ]
+        ]
+    },
+    {
+        "id": "1d254f4668711731",
+        "type": "rbe",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "payload.zone",
+        "x": 390,
+        "y": 440,
+        "wires": [
+            [
+                "ae5fb4f1c3213c0a"
             ]
         ]
     },
