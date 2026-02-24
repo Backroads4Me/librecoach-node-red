@@ -86,8 +86,8 @@
             "cd670f6465b6374b",
             "c78420a075d43408"
         ],
-        "x": 154,
-        "y": 1719,
+        "x": 114,
+        "y": 1579,
         "w": 852,
         "h": 82
     },
@@ -120,7 +120,7 @@
             "ae2d2a4f790d7cf9"
         ],
         "x": 114,
-        "y": 59,
+        "y": 259,
         "w": 1372,
         "h": 562
     },
@@ -152,8 +152,8 @@
             "c9d298bbaa855984",
             "88e5fa035bedb48c"
         ],
-        "x": 154,
-        "y": 399,
+        "x": 114,
+        "y": 259,
         "w": 732,
         "h": 602
     },
@@ -184,8 +184,8 @@
             "4fa9b9fdc36c83da",
             "9dd6a98018824be9"
         ],
-        "x": 994,
-        "y": 399,
+        "x": 954,
+        "y": 259,
         "w": 1558,
         "h": 582
     },
@@ -250,8 +250,8 @@
             "8c13a65ec0410f0d",
             "9539a951b2c7a1a9"
         ],
-        "x": 134,
-        "y": 99,
+        "x": 114,
+        "y": 219,
         "w": 772,
         "h": 262
     },
@@ -281,8 +281,8 @@
             "ba0c52ff61838986",
             "922f2738c2000150"
         ],
-        "x": 154,
-        "y": 1099,
+        "x": 114,
+        "y": 959,
         "w": 1762,
         "h": 402
     },
@@ -607,12 +607,15 @@
             "f3f99ba42088c9b1",
             "a95d74d20270f69b",
             "1e2529650de44a73",
-            "9be2b9ec5c4f51d4"
+            "9be2b9ec5c4f51d4",
+            "71ac45fb64bf70c9",
+            "db3ce2f66f852ca6",
+            "b1b68ff387e01a3a"
         ],
-        "x": 94,
-        "y": 79,
+        "x": 114,
+        "y": 299,
         "w": 1338,
-        "h": 748
+        "h": 802
     },
     {
         "id": "3296e5f0fcd2c737",
@@ -663,8 +666,8 @@
             "d6680567062a0908",
             "0a63b31d61802934"
         ],
-        "x": 154,
-        "y": 1559,
+        "x": 114,
+        "y": 1419,
         "w": 732,
         "h": 82
     },
@@ -682,8 +685,8 @@
             "a1e89f48333c8256",
             "8337a7f0dd0435d6"
         ],
-        "x": 1014,
-        "y": 1559,
+        "x": 974,
+        "y": 1419,
         "w": 652,
         "h": 82
     },
@@ -711,12 +714,14 @@
             "1d254f4668711731",
             "2f91d31ed0be26b1",
             "bb154cf7301d6fa7",
-            "dbc862c066d96221"
+            "dbc862c066d96221",
+            "3fce6baff2c6b823",
+            "bcd0945994e6b063"
         ],
         "x": 114,
-        "y": 279,
+        "y": 239,
         "w": 1438,
-        "h": 488
+        "h": 528
     },
     {
         "id": "65587a19852a1225",
@@ -755,8 +760,8 @@
             "eea1641469efb23f",
             "c781b519a9f9b156"
         ],
-        "x": 1974,
-        "y": 759,
+        "x": 1934,
+        "y": 619,
         "w": 552,
         "h": 142
     },
@@ -916,8 +921,8 @@
             "5968e8ee034f8751",
             "3d5ce3e925ee2f04"
         ],
-        "x": 1974,
-        "y": 579,
+        "x": 1934,
+        "y": 439,
         "w": 552,
         "h": 142
     },
@@ -995,8 +1000,8 @@
             "9401b2d19494b1c2",
             "2343c8c12f2081fa"
         ],
-        "x": 934,
-        "y": 659,
+        "x": 954,
+        "y": 879,
         "w": 472,
         "h": 142
     },
@@ -1151,8 +1156,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 280,
-        "y": 1760,
+        "x": 240,
+        "y": 1620,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -1171,8 +1176,8 @@
         "chunk": false,
         "sendError": false,
         "allProps": false,
-        "x": 480,
-        "y": 1760,
+        "x": 440,
+        "y": 1620,
         "wires": [
             [
                 "c78420a075d43408"
@@ -1192,8 +1197,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 1760,
+        "x": 860,
+        "y": 1620,
         "wires": []
     },
     {
@@ -1205,8 +1210,8 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 690,
-        "y": 1760,
+        "x": 650,
+        "y": 1620,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -1228,8 +1233,8 @@
         "correl": "",
         "expiry": "",
         "broker": "80727e60a251c36c",
-        "x": 750,
-        "y": 760,
+        "x": 710,
+        "y": 620,
         "wires": []
     },
     {
@@ -1246,8 +1251,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 540,
-        "y": 800,
+        "x": 500,
+        "y": 660,
         "wires": []
     },
     {
@@ -1275,8 +1280,8 @@
             "599ffbccfb7cd415",
             "b104a7e82aefcb21"
         ],
-        "x": 290,
-        "y": 760,
+        "x": 250,
+        "y": 620,
         "wires": [
             [
                 "cacf35b859af22a9",
@@ -1299,8 +1304,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
-        "y": 520,
+        "x": 190,
+        "y": 380,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -1318,8 +1323,8 @@
         "links": [
             "a3b957142479c075"
         ],
-        "x": 690,
-        "y": 620,
+        "x": 650,
+        "y": 480,
         "wires": [],
         "l": true
     },
@@ -1337,8 +1342,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
-        "y": 460,
+        "x": 190,
+        "y": 320,
         "wires": [
             [
                 "958fed9f12301f59",
@@ -1356,8 +1361,8 @@
         "links": [
             "2fcbc4d630144362"
         ],
-        "x": 700,
-        "y": 480,
+        "x": 660,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -1374,8 +1379,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
-        "y": 640,
+        "x": 1230,
+        "y": 500,
         "wires": [
             [
                 "ac47ce53a9fc3f21",
@@ -1403,8 +1408,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1520,
-        "y": 760,
+        "x": 1480,
+        "y": 620,
         "wires": []
     },
     {
@@ -1421,8 +1426,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
-        "y": 720,
+        "x": 1500,
+        "y": 580,
         "wires": []
     },
     {
@@ -1439,8 +1444,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1510,
-        "y": 520,
+        "x": 1470,
+        "y": 380,
         "wires": []
     },
     {
@@ -1457,8 +1462,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1530,
-        "y": 560,
+        "x": 1490,
+        "y": 420,
         "wires": []
     },
     {
@@ -1475,8 +1480,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
-        "y": 480,
+        "x": 1500,
+        "y": 340,
         "wires": []
     },
     {
@@ -1493,8 +1498,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
-        "y": 600,
+        "x": 1500,
+        "y": 460,
         "wires": []
     },
     {
@@ -1511,8 +1516,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1510,
-        "y": 680,
+        "x": 1470,
+        "y": 540,
         "wires": []
     },
     {
@@ -1524,8 +1529,8 @@
         "links": [
             "958fed9f12301f59"
         ],
-        "x": 1070,
-        "y": 640,
+        "x": 1030,
+        "y": 500,
         "wires": [
             [
                 "8d7d5d3ea117cf79"
@@ -1594,8 +1599,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 10,
-        "x": 1750,
-        "y": 640,
+        "x": 1710,
+        "y": 500,
         "wires": [
             [],
             [],
@@ -1643,8 +1648,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2090,
-        "y": 800,
+        "x": 2050,
+        "y": 660,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -1664,8 +1669,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2360,
-        "y": 800,
+        "x": 2320,
+        "y": 660,
         "wires": [
             []
         ]
@@ -1683,8 +1688,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2090,
-        "y": 860,
+        "x": 2050,
+        "y": 720,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -1705,8 +1710,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2380,
-        "y": 860,
+        "x": 2340,
+        "y": 720,
         "wires": []
     },
     {
@@ -1719,8 +1724,8 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 2050,
-        "y": 440,
+        "x": 2010,
+        "y": 300,
         "wires": [],
         "l": true
     },
@@ -1738,8 +1743,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 560,
+        "x": 650,
+        "y": 420,
         "wires": []
     },
     {
@@ -1764,8 +1769,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 320,
-        "y": 1140,
+        "x": 280,
+        "y": 1000,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1785,8 +1790,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
-        "y": 1140,
+        "x": 750,
+        "y": 1000,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -1812,8 +1817,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 970,
-        "y": 1220,
+        "x": 930,
+        "y": 1080,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -1833,8 +1838,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
-        "y": 1220,
+        "x": 530,
+        "y": 1080,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1854,8 +1859,8 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 2080,
-        "y": 520,
+        "x": 2040,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -1868,8 +1873,8 @@
         "links": [
             "45414bacecada477"
         ],
-        "x": 280,
-        "y": 1220,
+        "x": 240,
+        "y": 1080,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -1887,8 +1892,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 1780,
-        "y": 1140,
+        "x": 1740,
+        "y": 1000,
         "wires": [],
         "l": true
     },
@@ -1905,8 +1910,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1210,
-        "y": 1220,
+        "x": 1170,
+        "y": 1080,
         "wires": [
             [
                 "a2334b77d3764815",
@@ -1932,8 +1937,8 @@
         "correl": "",
         "expiry": "",
         "broker": "80727e60a251c36c",
-        "x": 750,
-        "y": 880,
+        "x": 710,
+        "y": 740,
         "wires": []
     },
     {
@@ -1947,8 +1952,8 @@
             "6aa079d768e1571c",
             "52b505b69f88888d"
         ],
-        "x": 290,
-        "y": 880,
+        "x": 250,
+        "y": 740,
         "wires": [
             [
                 "1ac6e0fa1cbb3852",
@@ -1970,8 +1975,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1520,
-        "y": 1220,
+        "x": 1480,
+        "y": 1080,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1991,8 +1996,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1490,
-        "y": 1260,
+        "x": 1450,
+        "y": 1120,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2012,8 +2017,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1500,
-        "y": 1300,
+        "x": 1460,
+        "y": 1160,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2040,8 +2045,8 @@
             "2343c8c12f2081fa",
             "a58b5f05c8346eab"
         ],
-        "x": 1530,
-        "y": 1460,
+        "x": 1490,
+        "y": 1320,
         "wires": [],
         "l": true
     },
@@ -2067,8 +2072,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1240,
-        "y": 1320,
+        "x": 1200,
+        "y": 1180,
         "wires": [
             [
                 "73abad3deeed31e8",
@@ -2095,8 +2100,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2080,
-        "y": 940,
+        "x": 2040,
+        "y": 800,
         "wires": []
     },
     {
@@ -2112,8 +2117,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1520,
-        "y": 1340,
+        "x": 1480,
+        "y": 1200,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2133,8 +2138,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1500,
-        "y": 1380,
+        "x": 1460,
+        "y": 1240,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2163,8 +2168,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2090,
-        "y": 620,
+        "x": 2050,
+        "y": 480,
         "wires": [
             [
                 "9f47dc231ecd50cd"
@@ -2184,8 +2189,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2360,
-        "y": 620,
+        "x": 2320,
+        "y": 480,
         "wires": [
             []
         ]
@@ -2204,8 +2209,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2380,
-        "y": 680,
+        "x": 2340,
+        "y": 540,
         "wires": []
     },
     {
@@ -2221,8 +2226,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2090,
-        "y": 680,
+        "x": 2050,
+        "y": 540,
         "wires": [
             [
                 "5968e8ee034f8751"
@@ -2243,8 +2248,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 540,
-        "y": 840,
+        "x": 500,
+        "y": 700,
         "wires": []
     },
     {
@@ -2261,8 +2266,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
-        "y": 580,
+        "x": 190,
+        "y": 440,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -2284,8 +2289,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
-        "y": 640,
+        "x": 190,
+        "y": 500,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -2307,8 +2312,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 440,
+        "x": 660,
+        "y": 300,
         "wires": []
     },
     {
@@ -2324,8 +2329,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1500,
-        "y": 1420,
+        "x": 1460,
+        "y": 1280,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2342,8 +2347,8 @@
         "links": [
             "00b1afc9a96aca8e"
         ],
-        "x": 2060,
-        "y": 480,
+        "x": 2020,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -2351,9 +2356,9 @@
         "id": "8504190e422dfe4c",
         "type": "note",
         "z": "292e70a6ba25b323",
-        "content": "# Config\n## Purpose\nGets everything ready when the system starts up and periodically checks for devices.\n\n### System Startup\nWhen Node-RED starts, this flow loads the \"dictionary\" of device types - a list that tells the system how to recognize different RV devices like lights, pumps, and thermostats.\n\n### Device Discovery\nThe system periodically sends out \"roll call\" messages asking devices to report in. This is how LibreCoach finds out what's installed in your RV - lights, shades, locks, tanks, etc.\n\n### Network Identity\nSets up LibreCoach's identity on your RV's network so other devices know who's asking for information.",
-        "x": 730,
-        "y": 151,
+        "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
+        "x": 410,
+        "y": 100,
         "wires": []
     },
     {
@@ -2378,8 +2383,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 280,
-        "y": 1600,
+        "x": 240,
+        "y": 1460,
         "wires": [
             [
                 "d6680567062a0908"
@@ -2399,8 +2404,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
-        "y": 1600,
+        "x": 450,
+        "y": 1460,
         "wires": [
             [
                 "0a63b31d61802934"
@@ -2417,8 +2422,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 750,
-        "y": 1600,
+        "x": 710,
+        "y": 1460,
         "wires": [],
         "l": true
     },
@@ -2435,8 +2440,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1330,
-        "y": 1600,
+        "x": 1290,
+        "y": 1460,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -2453,8 +2458,8 @@
             "47f3c921ae62126a",
             "47ac3adc971d73eb"
         ],
-        "x": 1100,
-        "y": 1600,
+        "x": 1060,
+        "y": 1460,
         "wires": [
             [
                 "dd199275f909301f"
@@ -2479,8 +2484,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1570,
-        "y": 1600,
+        "x": 1530,
+        "y": 1460,
         "wires": [
             []
         ]
@@ -2499,8 +2504,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 240,
-        "y": 960,
+        "x": 200,
+        "y": 820,
         "wires": [
             [
                 "c9d298bbaa855984"
@@ -2512,7 +2517,7 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
-        "name": "set_config_globals",
+        "name": "store_config_globals",
         "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -2520,8 +2525,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 960,
+        "x": 440,
+        "y": 820,
         "wires": [
             [
                 "88e5fa035bedb48c"
@@ -2539,8 +2544,8 @@
             "8fdd1d506d28b9b6",
             "bb154cf7301d6fa7"
         ],
-        "x": 740,
-        "y": 960,
+        "x": 700,
+        "y": 820,
         "wires": [],
         "l": true
     },
@@ -4003,9 +4008,9 @@
         "id": "88fb7ba5374d2d47",
         "type": "note",
         "z": "3e5f038a4f5a8b9a",
-        "content": "# Status\n## Purpose\nListens to your RV's network and translates device messages into readable information.\n\n### Receiving Messages\nYour RV devices constantly broadcast their status - lights report if they're on or off, tanks report their levels,\nthermostats report temperatures. This flow catches all those messages.\n\n### Translation\nRV messages arrive as technical codes and numbers. This flow translates them into meaningful information:\n- 1FEDA becomes \"Light Status\"\n- 0x64 becomes \"100% brightness\"\n- 0x02 becomes \"Tank is 50% full\"\n\n### Routing\nDifferent device types need different translators. This flow sorts incoming messages and sends each one to the right decoder:\n- Light messages go to the light decoder\n- Tank messages go to the tank decoder\n- Thermostat messages go to the thermostat decoder",
-        "x": 1920,
-        "y": 202,
+        "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
+        "x": 310,
+        "y": 140,
         "wires": []
     },
     {
@@ -5852,9 +5857,9 @@
         "id": "aa5a6c1369214561",
         "type": "note",
         "z": "3470febb2cd6e952",
-        "content": "# HA Entities\n## Purpose\nCreates devices in Home Assistant and keeps them updated with current status.\n\n### Device Creation\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\nEach device type gets the right kind of control:\n- Lights get on/off switches\n- Shades get open/close/stop buttons\n- Locks get lock/unlock buttons\n- Tanks get level displays\n\n### Status Updates\nEvery time a device reports its status, this flow updates Home Assistant:\n- Light turned on? Update the switch to show \"ON\"\n- Tank level changed? Update the gauge to show the new level\n- Thermostat reading changed? Update the temperature display",
-        "x": 1770,
-        "y": 306,
+        "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
+        "x": 1730,
+        "y": 189,
         "wires": []
     },
     {
@@ -5983,7 +5988,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 200,
+        "y": 400,
         "wires": [
             [
                 "89946e1c7a570ed0",
@@ -6001,7 +6006,7 @@
             "64c5e5cfd4382453"
         ],
         "x": 190,
-        "y": 200,
+        "y": 400,
         "wires": [
             [
                 "a37da245aba53b96",
@@ -6021,7 +6026,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1350,
-        "y": 180,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -6077,7 +6082,7 @@
         "repair": false,
         "outputs": 8,
         "x": 650,
-        "y": 200,
+        "y": 400,
         "wires": [
             [
                 "86a191e1f24d802a"
@@ -6119,7 +6124,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 160,
+        "y": 360,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -6142,7 +6147,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1320,
-        "y": 120,
+        "y": 320,
         "wires": []
     },
     {
@@ -6159,7 +6164,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 200,
+        "y": 400,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -6181,7 +6186,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 240,
+        "y": 440,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -6203,7 +6208,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 280,
+        "y": 480,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -6226,7 +6231,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 940,
-        "y": 420,
+        "y": 620,
         "wires": []
     },
     {
@@ -6244,7 +6249,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 310,
-        "y": 120,
+        "y": 320,
         "wires": []
     },
     {
@@ -6262,7 +6267,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 580,
-        "y": 100,
+        "y": 300,
         "wires": []
     },
     {
@@ -6279,7 +6284,7 @@
         "finalize": "",
         "libs": [],
         "x": 1020,
-        "y": 120,
+        "y": 320,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -6301,7 +6306,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 320,
+        "y": 520,
         "wires": [
             [
                 "c19a749621bffe0c",
@@ -6323,7 +6328,7 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 360,
+        "y": 560,
         "wires": [
             [
                 "c19a749621bffe0c",
@@ -6355,7 +6360,7 @@
         "payload": "19FED99F#FF7EC8FFFFFF00FF",
         "payloadType": "str",
         "x": 1110,
-        "y": 520,
+        "y": 720,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -6386,7 +6391,7 @@
         "payload": "19FED99F#FF7E00FFFFFF00FF",
         "payloadType": "str",
         "x": 1110,
-        "y": 580,
+        "y": 780,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -6397,9 +6402,9 @@
         "id": "9f10dee2300ff666",
         "type": "note",
         "z": "b3d80c5dc947ec88",
-        "content": "# HA Commands\n## Purpose\nSends your commands from Home Assistant to the actual devices in your RV.\n\n### Receiving Your Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door - this flow receives that request.\n\n### Command Routing\nDifferent devices need different command formats. This flow figures out what type of device you're controlling and routes the command appropriately:\n\n### Translation to RV Language\nYour tap of \"Turn On\" needs to be converted into the technical format your RV understands.\nThis flow builds the proper command message with all the right codes and parameters.\n\n### Sending to Your RV\nThe completed command is sent out to your RV's network where the actual device receives it and takes action.",
-        "x": 2030,
-        "y": 210,
+        "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
+        "x": 420,
+        "y": 120,
         "wires": []
     },
     {
@@ -6416,8 +6421,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 200,
+        "x": 210,
+        "y": 420,
         "wires": [
             [
                 "a95d74d20270f69b"
@@ -6438,8 +6443,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 200,
-        "y": 460,
+        "x": 220,
+        "y": 680,
         "wires": [
             [
                 "1e2529650de44a73"
@@ -6459,8 +6464,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
-        "y": 460,
+        "x": 580,
+        "y": 680,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6480,8 +6485,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
-        "y": 380,
+        "x": 830,
+        "y": 600,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6510,8 +6515,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 200,
-        "y": 380,
+        "x": 540,
+        "y": 600,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6531,8 +6536,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
-        "y": 460,
+        "x": 840,
+        "y": 680,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6552,8 +6557,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 200,
+        "x": 560,
+        "y": 420,
         "wires": [
             [
                 "d1a2b3c4e5f67804",
@@ -6574,8 +6579,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 200,
+        "x": 820,
+        "y": 420,
         "wires": [
             [
                 "d1a2b3c4e5f67805"
@@ -6595,8 +6600,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
-        "y": 200,
+        "x": 1020,
+        "y": 420,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6616,8 +6621,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 280,
+        "x": 820,
+        "y": 500,
         "wires": [
             [
                 "566fce9c860fe37b"
@@ -6636,8 +6641,8 @@
         "chunk": false,
         "sendError": false,
         "allProps": false,
-        "x": 470,
-        "y": 660,
+        "x": 490,
+        "y": 880,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6657,8 +6662,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 660,
+        "x": 750,
+        "y": 880,
         "wires": []
     },
     {
@@ -6683,8 +6688,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 220,
-        "y": 660,
+        "x": 240,
+        "y": 880,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6705,8 +6710,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 760,
+        "x": 240,
+        "y": 980,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -6726,8 +6731,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 760,
+        "x": 760,
+        "y": 980,
         "wires": []
     },
     {
@@ -6752,8 +6757,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1050,
-        "y": 760,
+        "x": 1070,
+        "y": 980,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6773,8 +6778,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1300,
-        "y": 760,
+        "x": 1320,
+        "y": 980,
         "wires": [
             []
         ]
@@ -6788,8 +6793,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 1030,
-        "y": 700,
+        "x": 1050,
+        "y": 920,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6807,8 +6812,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1290,
-        "y": 200,
+        "x": 1310,
+        "y": 420,
         "wires": [],
         "l": true
     },
@@ -6827,8 +6832,8 @@
         "correl": "",
         "expiry": "",
         "broker": "68237e1473ec01aa",
-        "x": 1250,
-        "y": 460,
+        "x": 1270,
+        "y": 680,
         "wires": []
     },
     {
@@ -6836,9 +6841,9 @@
         "type": "note",
         "z": "1fde0c4ffb03727e",
         "name": "",
-        "content": "## For the Victron functionality to work you'll need\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
-        "x": 1710,
-        "y": 217.00000762939453,
+        "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
+        "x": 350,
+        "y": 157,
         "wires": []
     },
     {
@@ -6847,16 +6852,19 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_handle_toggle",
-        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// One output → MQTT Out (entity deletion on disable; nothing on enable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send({ topic: topic, payload: \"\" });\n});\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\nglobal.set(\"victronPortalId\", null);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn null;\n",
-        "outputs": 1,
+        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → Filter nodes (reset on enable)\n// Output 2 → MQTT Out (entity deletion on disable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [{ reset: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\nglobal.set(\"victronPortalId\", null);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 120,
+        "x": 1040,
+        "y": 340,
         "wires": [
+            [
+                "71ac45fb64bf70c9"
+            ],
             [
                 "bd38c37850a3e832"
             ]
@@ -6871,8 +6879,8 @@
         "links": [
             "88e5fa035bedb48c"
         ],
-        "x": 210,
-        "y": 120,
+        "x": 230,
+        "y": 340,
         "wires": [
             [
                 "c02d9fc6bf086fdf"
@@ -6894,8 +6902,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 200,
-        "y": 560,
+        "x": 220,
+        "y": 780,
         "wires": [
             [
                 "eced66f05a1796cd"
@@ -6915,8 +6923,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 560,
+        "x": 860,
+        "y": 780,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6944,8 +6952,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 420,
-        "y": 120,
+        "x": 440,
+        "y": 340,
         "wires": [
             [
                 "48292ec85eb70ee5"
@@ -6965,8 +6973,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
-        "y": 280,
+        "x": 1030,
+        "y": 500,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6983,8 +6991,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1290,
-        "y": 560,
+        "x": 1310,
+        "y": 780,
         "wires": [],
         "l": true
     },
@@ -7001,8 +7009,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 350,
-        "y": 200,
+        "x": 370,
+        "y": 420,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
@@ -7022,8 +7030,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 370,
-        "y": 460,
+        "x": 390,
+        "y": 680,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -7043,13 +7051,67 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 430,
-        "y": 760,
+        "x": 450,
+        "y": 980,
         "wires": [
             [
                 "1284b5e380db32be"
             ]
         ]
+    },
+    {
+        "id": "71ac45fb64bf70c9",
+        "type": "link out",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Reset Victron filters",
+        "mode": "link",
+        "links": [
+            "db3ce2f66f852ca6",
+            "b1b68ff387e01a3a",
+            "04f33e8640566c26"
+        ],
+        "x": 1290,
+        "y": 340,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "db3ce2f66f852ca6",
+        "type": "link in",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Reset Victron filters",
+        "links": [
+            "71ac45fb64bf70c9"
+        ],
+        "x": 230,
+        "y": 540,
+        "wires": [
+            [
+                "a95d74d20270f69b",
+                "1e2529650de44a73"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "b1b68ff387e01a3a",
+        "type": "link in",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Reset Victron filters",
+        "links": [
+            "71ac45fb64bf70c9"
+        ],
+        "x": 230,
+        "y": 1060,
+        "wires": [
+            [
+                "9be2b9ec5c4f51d4"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "d5cb654b4dad986f",
@@ -7086,7 +7148,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 590,
+        "x": 630,
         "y": 440,
         "wires": [
             [
@@ -7308,9 +7370,9 @@
         "type": "note",
         "z": "e3804d2dd0b81928",
         "name": "",
-        "content": "## For the Micro-Air functionality to work you'll need\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
-        "x": 410,
-        "y": 160,
+        "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
+        "x": 390,
+        "y": 120,
         "wires": []
     },
     {
@@ -7323,8 +7385,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 930,
-        "y": 320,
+        "x": 910,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -7402,7 +7464,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 590,
+        "x": 630,
         "y": 600,
         "wires": [
             [
@@ -7423,7 +7485,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 390,
+        "x": 410,
         "y": 600,
         "wires": [
             [
@@ -7444,7 +7506,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "payload.zone",
-        "x": 390,
+        "x": 410,
         "y": 440,
         "wires": [
             [
@@ -7458,8 +7520,8 @@
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
         "name": "microair_handle_toggle",
-        "func": "// Handles enable/disable of MicroAir integration via addon config\n// Input: msg from librecoach/config/microair_enabled (\"true\" / \"false\")\n// One output → MQTT Out (entity deletion on disable; nothing on enable)\n\n// Only handle microair_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"microair_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"microairDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return null;\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send({ topic: topic, payload: \"\" });\n});\n\n// Clear persisted tracking state\nglobal.set(\"microairDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueMicroair\", []);\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn null;\n",
-        "outputs": 1,
+        "func": "// Handles enable/disable of MicroAir integration via addon config\n// Input: msg from librecoach/config/microair_enabled (\"true\" / \"false\")\n// Output 1 → Filter nodes (reset on enable)\n// Output 2 → MQTT Out (entity deletion on disable)\n\n// Only handle microair_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"microair_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [{ reset: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"microairDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"microairDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueMicroair\", []);\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7468,6 +7530,9 @@
         "x": 630,
         "y": 320,
         "wires": [
+            [
+                "3fce6baff2c6b823"
+            ],
             [
                 "599ffbccfb7cd415"
             ]
@@ -7516,6 +7581,40 @@
                 "2f91d31ed0be26b1"
             ]
         ]
+    },
+    {
+        "id": "3fce6baff2c6b823",
+        "type": "link out",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Reset Micro-Air filters",
+        "mode": "link",
+        "links": [
+            "bcd0945994e6b063"
+        ],
+        "x": 900,
+        "y": 280,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "bcd0945994e6b063",
+        "type": "link in",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "Reset Micro-Air filters",
+        "links": [
+            "3fce6baff2c6b823"
+        ],
+        "x": 240,
+        "y": 520,
+        "wires": [
+            [
+                "1d254f4668711731",
+                "42b9f8eb50c5dced"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "export_mqtt_in_trigger_001",
@@ -8521,8 +8620,8 @@
         "type": "note",
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
-        "x": 360,
-        "y": 230,
+        "x": 320,
+        "y": 200,
         "wires": []
     },
     {
@@ -8548,8 +8647,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 250,
-        "y": 140,
+        "x": 230,
+        "y": 260,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -8569,8 +8668,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 200,
+        "x": 460,
+        "y": 320,
         "wires": [
             [
                 "d38c75bc1474be23"
@@ -8587,8 +8686,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 770,
-        "y": 200,
+        "x": 750,
+        "y": 320,
         "wires": [],
         "l": true
     },
@@ -8615,8 +8714,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 250,
-        "y": 200,
+        "x": 230,
+        "y": 320,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -8627,9 +8726,9 @@
         "id": "69c114a873c4c716",
         "type": "note",
         "z": "222c995b7790b8de",
-        "content": "# Delete HA Entity\n## Purpose\nRemoves devices from Home Assistant when they're no longer needed.\n\n## What Happens Here\n### Entity Removal\nWhen a device needs to be removed from Home Assistant, this flow sends a special \"delete\" message that tells Home Assistant to remove the device from your dashboard.\n\n### When It's Used\n- Troubleshooting: Removing and re-discovering a device that isn't working correctly\n- Reconfiguration: Cleaning up after changes to your RV's systems\n- Cleanup: Removing test devices or devices that no longer exist\n\n## In Simple Terms\nThink of this flow as an eraser. If something on your dashboard needs to go away - maybe a device was replaced or you're starting fresh - this flow cleans it up so you can start over.",
-        "x": 1630,
-        "y": 357,
+        "content": "# Delete HA Entity\nRemoves devices from Home Assistant when they're no longer needed.",
+        "x": 370,
+        "y": 100,
         "wires": []
     },
     {
@@ -8655,8 +8754,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 240,
-        "y": 260,
+        "x": 220,
+        "y": 380,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -8685,8 +8784,8 @@
         "topic": "homeassistant/sensor/librecoach_system_librecoach_config_download/config",
         "payload": "",
         "payloadType": "str",
-        "x": 230,
-        "y": 320,
+        "x": 210,
+        "y": 440,
         "wires": [
             [
                 "d38c75bc1474be23"
