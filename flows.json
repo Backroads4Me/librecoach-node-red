@@ -2358,7 +2358,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 100,
+        "y": 126,
         "wires": []
     },
     {
@@ -6478,7 +6478,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_keep_alive",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6529,7 +6529,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_poll_devices",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    node.status({ fill: \"green\", shape: \"ring\", text: \"Keep-Alive Sent\" });\n    return msg;\n}\nreturn null;\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6843,7 +6843,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 157,
+        "y": 191,
         "wires": []
     },
     {
@@ -6852,7 +6852,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_handle_toggle",
-        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → Filter nodes (reset on enable)\n// Output 2 → MQTT Out (entity deletion on disable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [{ reset: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\nglobal.set(\"victronPortalId\", null);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
+        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → Filter nodes (reset on enable)\n// Output 2 → MQTT Out (entity deletion on disable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [{ reset: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nglobal.set(\"uniqueVictron\", []);\nglobal.set(\"victronDevices\", {});\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -7068,8 +7068,7 @@
         "mode": "link",
         "links": [
             "db3ce2f66f852ca6",
-            "b1b68ff387e01a3a",
-            "04f33e8640566c26"
+            "b1b68ff387e01a3a"
         ],
         "x": 1290,
         "y": 340,
