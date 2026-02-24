@@ -603,19 +603,21 @@
             "0b4d0850eae8a0b4",
             "eced66f05a1796cd",
             "c02d9fc6bf086fdf",
-            "566fce9c860fe37b",
             "f3f99ba42088c9b1",
             "a95d74d20270f69b",
             "1e2529650de44a73",
             "9be2b9ec5c4f51d4",
             "71ac45fb64bf70c9",
             "db3ce2f66f852ca6",
-            "b1b68ff387e01a3a"
+            "b1b68ff387e01a3a",
+            "0b2b4c52d68092cc",
+            "6ba061be2ab168c5",
+            "70c7d357a6f48e4a"
         ],
         "x": 114,
         "y": 299,
         "w": 1338,
-        "h": 802
+        "h": 842
     },
     {
         "id": "3296e5f0fcd2c737",
@@ -739,7 +741,7 @@
             "b104a7e82aefcb21"
         ],
         "x": 114,
-        "y": 879,
+        "y": 859,
         "w": 1192,
         "h": 122
     },
@@ -1000,7 +1002,7 @@
             "2343c8c12f2081fa"
         ],
         "x": 954,
-        "y": 879,
+        "y": 919,
         "w": 472,
         "h": 142
     },
@@ -1188,8 +1190,8 @@
         "type": "function",
         "z": "292e70a6ba25b323",
         "g": "9cfcca5efde78052",
-        "name": "store_dgnMap",
-        "func": "// Convert the data to a Map when initially storing it\nconst dgnMap = new Map(\n  msg.payload.map((entry) => [entry.Hex.toString().toUpperCase(), entry.DGN]),\n);\n\n// Store the Map in global context\nglobal.set(\"dgnMap\", dgnMap);\n\n// Count the number of records\nconst decoderCount = dgnMap.size;\n\n// Update the node status to indicate success\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Config loaded, ${decoderCount} records`,\n});\nreturn null;\n",
+        "name": "store_dgn_map",
+        "func": "// Convert the data to a Map when initially storing it\nconst dgnMap = new Map(\n  msg.payload.map((entry) => [entry.Hex.toString().toUpperCase(), entry.DGN]),\n);\n\n// Store the Map in global context\nglobal.set(\"dgnMap\", dgnMap);\n\n// Count the number of records\nconst decoderCount = dgnMap.size;\n\n// Update the node status to indicate success\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Reference loaded\",\n});\nreturn null;\n",
         "outputs": 0,
         "timeout": "",
         "noerr": 0,
@@ -2357,7 +2359,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 139,
+        "y": 152,
         "wires": []
     },
     {
@@ -6443,7 +6445,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 680,
+        "y": 580,
         "wires": [
             [
                 "1e2529650de44a73"
@@ -6456,20 +6458,16 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_store_instance",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = msg.payload.value;\nconst currentId = global.get(\"victronPortalId\");\n\n// Always update the global context to be safe\nglobal.set(\"victronPortalId\", portalId);\n\n// Only change the UI status if it's a new discovery or first run\nif (portalId !== currentId) {\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: \"New ID Discovered: \" + portalId,\n  });\n} else {\n  node.status({\n    fill: \"blue\",\n    shape: \"ring\",\n    text: \"ID Verified: \" + portalId,\n  });\n}\n\nreturn msg;\n",
-        "outputs": 1,
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = msg.payload.value;\n\n// Store the ID in global context\nglobal.set(\"victronPortalId\", portalId);\n\nnode.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: portalId,\n});\n",
+        "outputs": 0,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 580,
-        "y": 680,
-        "wires": [
-            [
-                "ea38d37ac8c3ab57"
-            ]
-        ]
+        "x": 620,
+        "y": 580,
+        "wires": []
     },
     {
         "id": "36f5f1a727dfd1ca",
@@ -6485,7 +6483,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 600,
+        "y": 660,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6514,8 +6512,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 540,
-        "y": 600,
+        "x": 220,
+        "y": 660,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6536,7 +6534,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 680,
+        "y": 720,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6549,7 +6547,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_decode_mqtt",
-        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// === Gate: Require Victron integration enabled ===\n\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) {\n  return null;\n}\n\n// === Parse MQTT Topic ===\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") {\n  node.warn(\"decode_victron_mqtt: Missing or invalid msg.topic\");\n  return null;\n}\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) {\n  // Silently drop system notifications (e.g., N/{id}/full_publish_completed)\n  return null;\n}\n\n// Topic format: N/{portalId}/{serviceType}/{instance}/{path...}\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === Gate: Only process data from discovered devices ===\n\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceKey = `${serviceType}_${instance}`;\nif (!victronDevices[deviceKey]) {\n  return null;\n}\n\n// === Path Whitelist ===\n// Only process dashboard-relevant paths to avoid flooding HA with hundreds of entities.\n\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n    \"/Relay/0/State\",\n    \"/Relay/1/State\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\"/Dc/0/Voltage\", \"/Dc/0/Current\", \"/Ac/In/L1/P\", \"/State\"],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  acload: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  tank: [\"/Level\", \"/Remaining\", \"/FluidType\"],\n  temperature: [\"/Temperature\", \"/Humidity\"],\n  digitalinput: [\"/InputState\", \"/Count\"],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n    \"/Relay/0/State\",\n  ],\n};\n\n// Drop paths not in the whitelist\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) {\n  return null;\n}\n\n// === Extract Value ===\n\nlet value;\nconst incomingPayload = msg.payload;\n\nif (typeof incomingPayload === \"string\") {\n  try {\n    const parsed = JSON.parse(incomingPayload);\n    value = parsed.value !== undefined ? parsed.value : parsed;\n  } catch (e) {\n    value = incomingPayload;\n  }\n} else if (typeof incomingPayload === \"object\" && incomingPayload !== null) {\n  value =\n    incomingPayload.value !== undefined\n      ? incomingPayload.value\n      : incomingPayload;\n} else {\n  value = incomingPayload;\n}\n\n// === Gate: Drop null/undefined values ===\n// Cerbo GX publishes null for services that don't exist (e.g., solar when no panels installed).\n// Dropping these prevents phantom entity creation in HA.\n\nif (value === null || value === undefined) {\n  return null;\n}\n\n// === Look Up Definition in victronMap ===\n\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\";\nlet dataType = \"\";\nlet scale = \"\";\nlet access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const pathMap = victronMap.get(serviceType);\n  if (pathMap.has(dbusPath)) {\n    const def = pathMap.get(dbusPath);\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === Determine Routing Key ===\n\nlet routingKey = \"default\";\n\n// === Build Standardized Output ===\n\nconst baseMsg = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: value,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  routing_key: routingKey,\n  writable: access === \"W\" || access === \"RW\",\n};\n\nmsg.payload = baseMsg;\n\n// === L1+L2 Power Totals ===\n// When an L1 or L2 power path arrives, store its value and emit a synthetic total.\n\nconst powerTotalPairs = [\n  {\n    l1: \"/Ac/Consumption/L1/Power\",\n    l2: \"/Ac/Consumption/L2/Power\",\n    total: \"/Ac/Consumption/Total/Power\",\n  },\n  {\n    l1: \"/Ac/Grid/L1/Power\",\n    l2: \"/Ac/Grid/L2/Power\",\n    total: \"/Ac/Grid/Total/Power\",\n  },\n  {\n    l1: \"/Ac/ActiveIn/L1/P\",\n    l2: \"/Ac/ActiveIn/L2/P\",\n    total: \"/Ac/ActiveIn/Total/P\",\n  },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `victron_total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    // Store current leg value\n    if (dbusPath === pair.l1) stored.l1 = value;\n    if (dbusPath === pair.l2) stored.l2 = value;\n    flow.set(contextKey, stored);\n\n    // Only emit total when both legs have reported\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      const totalValue = (Number(stored.l1) || 0) + (Number(stored.l2) || 0);\n      const totalMsg = {\n        payload: {\n          service_type: serviceType,\n          instance: instance,\n          dbus_path: pair.total,\n          value: totalValue,\n          unit: unit,\n          data_type: dataType,\n          scale: scale,\n          access: access,\n          routing_key: routingKey,\n        },\n      };\n      node.send(totalMsg);\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
+        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// Optimized Decode: Rounds, Filters, and calculates Totals early\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === 1. Path Whitelist Gate ===\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n    \"/Relay/0/State\",\n    \"/Relay/1/State\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\"/Dc/0/Voltage\", \"/Dc/0/Current\", \"/Ac/In/L1/P\", \"/State\"],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  acload: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  tank: [\"/Level\", \"/Remaining\", \"/FluidType\"],\n  temperature: [\"/Temperature\", \"/Humidity\"],\n  digitalinput: [\"/InputState\", \"/Count\"],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n    \"/Relay/0/State\",\n  ],\n};\n\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;\n\n// === 2. Device Discovery Gate ===\nconst victronDevices = global.get(\"victronDevices\") || {};\nif (!victronDevices[`${serviceType}_${instance}`]) return null;\n\n// === 3. Value Extraction & Early Rounding ===\nlet rawValue;\ntry {\n  const parsed =\n    typeof msg.payload === \"string\" ? JSON.parse(msg.payload) : msg.payload;\n  rawValue = parsed && parsed.value !== undefined ? parsed.value : parsed;\n} catch (e) {\n  rawValue = msg.payload;\n}\n\nif (rawValue === null || rawValue === undefined) return null;\n\nlet processedValue = rawValue;\nif (typeof rawValue === \"number\") {\n  const decimals = dbusPath.toLowerCase().includes(\"soc\") ? 0 : 1;\n  processedValue =\n    Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);\n}\n\n// === 4. Early RBE Filter ===\nconst cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;\nif (flow.get(cacheKey) === processedValue) return null;\nflow.set(cacheKey, processedValue);\n\n// === 5. Map Lookup ===\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\",\n  dataType = \"\",\n  scale = \"\",\n  access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const def = victronMap.get(serviceType).get(dbusPath);\n  if (def) {\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === 6. Build Standardized Payload (Removed routing_key) ===\nconst basePayload = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: processedValue,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  writable: access === \"W\" || access === \"RW\",\n};\n\nmsg.payload = basePayload;\n\n// === 7. Synthetic Totals (using node.send) ===\nconst powerTotalPairs = [\n  {\n    l1: \"/Ac/Consumption/L1/Power\",\n    l2: \"/Ac/Consumption/L2/Power\",\n    total: \"/Ac/Consumption/Total/Power\",\n  },\n  {\n    l1: \"/Ac/Grid/L1/Power\",\n    l2: \"/Ac/Grid/L2/Power\",\n    total: \"/Ac/Grid/Total/Power\",\n  },\n  {\n    l1: \"/Ac/ActiveIn/L1/P\",\n    l2: \"/Ac/ActiveIn/L2/P\",\n    total: \"/Ac/ActiveIn/Total/P\",\n  },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    if (dbusPath === pair.l1) stored.l1 = processedValue;\n    if (dbusPath === pair.l2) stored.l2 = processedValue;\n    flow.set(contextKey, stored);\n\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      node.send({\n        payload: {\n          ...basePayload,\n          dbus_path: pair.total,\n          value: (Number(stored.l1) || 0) + (Number(stored.l2) || 0),\n        },\n      });\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6613,7 +6611,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_status",
-        "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined values\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// Validate required fields\nif (!service_type || !instance || !dbus_path) {\n  node.error(\"Input missing service_type, instance, or dbus_path.\", msg);\n  return null;\n}\n\n// === Build Entity ID (same logic as create_victron.js) ===\n\nconst safePathRaw = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nlet safePath = safePathRaw;\n\n// === Standardization Rules (Matches create_victron.js) ===\n\n// 1. Context-aware renaming\nif (\n  [\"charger\", \"dcdc\", \"alternator\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\nif (service_type === \"solarcharger\" && safePath.includes(\"dc_0\")) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\n// 2. Term normalization\nsafePath = safePath.replace(\"_activein\", \"_in\");\nsafePath = safePath.replace(\"_active_in\", \"_in\");\nsafePath = safePath.replace(\"_active_input\", \"_in\");\n\n// 3. Suffix expansion\nif (safePath.endsWith(\"_p\")) {\n  safePath = safePath.slice(0, -2) + \"_power\";\n} else if (safePath.endsWith(\"_v\")) {\n  safePath = safePath.slice(0, -2) + \"_voltage\";\n} else if (safePath.endsWith(\"_i\")) {\n  safePath = safePath.slice(0, -2) + \"_current\";\n} else if (safePath.endsWith(\"_f\")) {\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n}\n\n// 4. Specific \"total_power\" enforcement\nif (safePath.endsWith(\"_total_p\")) {\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\n} else if (safePath.endsWith(\"_ac_power\")) {\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\n} else if (safePath === \"ac_power\") {\n  safePath = \"ac_total_power\";\n}\n\n// Look up product short name from discovered devices\nconst victronDevices = global.get(\"victronDevices\") || {};\nconst deviceInfo = victronDevices[`${service_type}_${instance}`];\nconst deviceName = deviceInfo ? deviceInfo.shortName : service_type;\n\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// === Build State Topic ===\n\n// Determine component type from context (writable paths use number/select)\nconst writableNumberPaths = [\"/Ac/ActiveIn/CurrentLimit\"];\nconst writableSelectPaths = [\"/Mode\"];\n\nlet componentType = \"sensor\";\nif (writableNumberPaths.includes(dbus_path)) componentType = \"number\";\nif (writableSelectPaths.includes(dbus_path)) componentType = \"select\";\nif (dbus_path.includes(\"/Relay/\")) componentType = \"switch\";\n\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// === Format Value ===\n\nlet formattedValue = value;\n\n// Wrap in JSON object to match value_template: \"{{ value_json.value }}\"\nmsg.topic = stateTopic;\nmsg.payload = { value: formattedValue };\n\nreturn msg;\n",
+        "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined values\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// 1. Context-Aware Rounding (Filter Logic)\nlet roundedValue = value;\nif (typeof value === \"number\") {\n  // Round SOC to whole numbers, everything else to 1 decimal\n  const decimals = dbus_path.toLowerCase().includes(\"soc\") ? 0 : 1;\n  const factor = Math.pow(10, decimals);\n  roundedValue = Math.round(value * factor) / factor;\n}\n\n// 2. Report by Exception (Filter Logic)\nconst lastValues = context.get(\"lastValues\") || {};\nconst cacheKey = `${service_type}_${instance}_${dbus_path}`;\n\nif (lastValues[cacheKey] === roundedValue) {\n  return null; // Block if rounded value hasn't changed\n}\nlastValues[cacheKey] = roundedValue;\ncontext.set(\"lastValues\", lastValues);\n\n// 3. Build Entity ID (Status Logic)\nconst safePathRaw = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nlet safePath = safePathRaw;\n\n// Standardization Rules\nif (\n  [\"charger\", \"dcdc\", \"alternator\", \"solarcharger\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\nsafePath = safePath\n  .replace(\"_activein\", \"_in\")\n  .replace(\"_active_in\", \"_in\")\n  .replace(\"_active_input\", \"_in\");\n\n// Suffix expansion\nif (safePath.endsWith(\"_p\")) safePath = safePath.slice(0, -2) + \"_power\";\nelse if (safePath.endsWith(\"_v\")) safePath = safePath.slice(0, -2) + \"_voltage\";\nelse if (safePath.endsWith(\"_i\")) safePath = safePath.slice(0, -2) + \"_current\";\nelse if (safePath.endsWith(\"_f\"))\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n\n// Total power enforcement\nif (safePath.endsWith(\"_total_p\"))\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\nelse if (safePath.endsWith(\"_ac_power\"))\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\nelse if (safePath === \"ac_power\") safePath = \"ac_total_power\";\n\n// Look up product name\nconst victronDevices = global.get(\"victronDevices\", \"file\") || {};\nconst deviceInfo = victronDevices[`${service_type}_${instance}`];\nconst deviceName = deviceInfo ? deviceInfo.shortName : service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// 4. Determine Component Type & Topic\nlet componentType = \"sensor\";\nif (dbus_path === \"/Ac/ActiveIn/CurrentLimit\") componentType = \"number\";\nelse if (dbus_path === \"/Mode\") componentType = \"select\";\nelse if (dbus_path.includes(\"/Relay/\")) componentType = \"switch\";\n\n// 5. Build Final Message\nmsg.topic = `homeassistant/${componentType}/${entityId}/state`;\nmsg.payload = { value: roundedValue };\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6624,7 +6622,7 @@
         "y": 500,
         "wires": [
             [
-                "566fce9c860fe37b"
+                "bd38c37850a3e832"
             ]
         ]
     },
@@ -6641,7 +6639,7 @@
         "sendError": false,
         "allProps": false,
         "x": 490,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6654,7 +6652,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_store_map",
-        "func": "// Parse Victron attributes CSV and store as nested Map in global context\n\nconst csvText = msg.payload;\n\nif (!csvText || typeof csvText !== \"string\") {\n  node.warn(\"store_victron_map: No CSV data received\");\n  return null;\n}\n\nconst lines = csvText.split(\"\\n\").filter((line) => line.trim().length > 0);\n\n// Build nested Map: serviceType → Map(path → { type, unit, scale, access })\nconst victronMap = new Map();\n\nfor (const line of lines) {\n  const parts = line.split(\",\");\n  if (parts.length < 8) continue;\n\n  const [service, path, type, unit, register, dataType, scale, access] =\n    parts.map((p) => p.trim());\n\n  // Strip \"com.victronenergy.\" prefix to get short service type\n  const serviceType = service.replace(\"com.victronenergy.\", \"\");\n\n  if (!victronMap.has(serviceType)) {\n    victronMap.set(serviceType, new Map());\n  }\n\n  victronMap.get(serviceType).set(path, {\n    type,\n    unit,\n    scale,\n    access,\n  });\n}\n\n// Store in global context\nglobal.set(\"victronMap\", victronMap);\n\n// Count total records across all service types\nlet totalRecords = 0;\nfor (const [, pathMap] of victronMap) {\n  totalRecords += pathMap.size;\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Loaded ${totalRecords} attributes across ${victronMap.size} services`,\n});\n\nreturn null;\n",
+        "func": "// Parse Victron attributes CSV and store as nested Map in global context\n\nconst csvText = msg.payload;\n\nif (!csvText || typeof csvText !== \"string\") {\n  node.warn(\"store_victron_map: No CSV data received\");\n  return null;\n}\n\nconst lines = csvText.split(\"\\n\").filter((line) => line.trim().length > 0);\n\n// Build nested Map: serviceType → Map(path → { type, unit, scale, access })\nconst victronMap = new Map();\n\nfor (const line of lines) {\n  const parts = line.split(\",\");\n  if (parts.length < 8) continue;\n\n  const [service, path, type, unit, register, dataType, scale, access] =\n    parts.map((p) => p.trim());\n\n  // Strip \"com.victronenergy.\" prefix to get short service type\n  const serviceType = service.replace(\"com.victronenergy.\", \"\");\n\n  if (!victronMap.has(serviceType)) {\n    victronMap.set(serviceType, new Map());\n  }\n\n  victronMap.get(serviceType).set(path, {\n    type,\n    unit,\n    scale,\n    access,\n  });\n}\n\n// Store in global context\nglobal.set(\"victronMap\", victronMap);\n\n// Count total records across all service types\nlet totalRecords = 0;\nfor (const [, pathMap] of victronMap) {\n  totalRecords += pathMap.size;\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Reference loaded\",\n});\n\nreturn null;\n",
         "outputs": 0,
         "timeout": 0,
         "noerr": 0,
@@ -6662,7 +6660,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 880,
+        "y": 920,
         "wires": []
     },
     {
@@ -6688,7 +6686,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6710,7 +6708,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 240,
-        "y": 980,
+        "y": 1020,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -6731,7 +6729,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 980,
+        "y": 1020,
         "wires": []
     },
     {
@@ -6757,7 +6755,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1070,
-        "y": 980,
+        "y": 1020,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6778,7 +6776,7 @@
         "finalize": "",
         "libs": [],
         "x": 1320,
-        "y": 980,
+        "y": 1020,
         "wires": [
             []
         ]
@@ -6793,7 +6791,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1050,
-        "y": 920,
+        "y": 960,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6812,7 +6810,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1310,
-        "y": 420,
+        "y": 460,
         "wires": [],
         "l": true
     },
@@ -6832,7 +6830,7 @@
         "expiry": "",
         "broker": "68237e1473ec01aa",
         "x": 1270,
-        "y": 680,
+        "y": 720,
         "wires": []
     },
     {
@@ -6842,7 +6840,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 208,
+        "y": 160,
         "wires": []
     },
     {
@@ -6858,7 +6856,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
+        "x": 1000,
         "y": 340,
         "wires": [
             [
@@ -6901,8 +6899,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 780,
+        "x": 210,
+        "y": 840,
         "wires": [
             [
                 "eced66f05a1796cd"
@@ -6922,8 +6920,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 780,
+        "x": 840,
+        "y": 840,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6960,27 +6958,6 @@
         ]
     },
     {
-        "id": "566fce9c860fe37b",
-        "type": "function",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "victron_status_filter",
-        "func": "// Filter: round to 1 decimal (whole number for SOC), block if unchanged\nconst lastValues = context.get(\"lastValues\") || {};\nconst topic = msg.topic;\nconst newValue = msg.payload.value;\n\n// Non-numeric values: pass through on change only\nif (typeof newValue !== \"number\") {\n  if (lastValues[topic] !== newValue) {\n    lastValues[topic] = newValue;\n    context.set(\"lastValues\", lastValues);\n    return msg;\n  }\n  return null;\n}\n\n// Round: whole number for SOC, 1 decimal for everything else\nconst decimals = topic.includes(\"_soc\") ? 0 : 1;\nconst factor = Math.pow(10, decimals);\nconst rounded = Math.round(newValue * factor) / factor;\nconst lastValue = lastValues[topic];\n\nif (lastValue === undefined || rounded !== lastValue) {\n  lastValues[topic] = rounded;\n  context.set(\"lastValues\", lastValues);\n  msg.payload = { value: rounded };\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1030,
-        "y": 500,
-        "wires": [
-            [
-                "bd38c37850a3e832"
-            ]
-        ]
-    },
-    {
         "id": "f3f99ba42088c9b1",
         "type": "link out",
         "z": "1fde0c4ffb03727e",
@@ -6991,7 +6968,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1310,
-        "y": 780,
+        "y": 820,
         "wires": [],
         "l": true
     },
@@ -7029,8 +7006,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 390,
-        "y": 680,
+        "x": 430,
+        "y": 580,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -7051,7 +7028,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 450,
-        "y": 980,
+        "y": 1020,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -7084,7 +7061,7 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 540,
+        "y": 500,
         "wires": [
             [
                 "a95d74d20270f69b",
@@ -7103,13 +7080,103 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 1060,
+        "y": 1100,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
             ]
         ],
         "l": true
+    },
+    {
+        "id": "0b2b4c52d68092cc",
+        "type": "inject",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Load on Start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "18",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 700,
+        "wires": [
+            [
+                "ea38d37ac8c3ab57"
+            ]
+        ]
+    },
+    {
+        "id": "6ba061be2ab168c5",
+        "type": "inject",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Load on Start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "48",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 340,
+        "y": 740,
+        "wires": [
+            [
+                "ea38d37ac8c3ab57"
+            ]
+        ]
+    },
+    {
+        "id": "70c7d357a6f48e4a",
+        "type": "inject",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Load on Start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "63",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 400,
+        "y": 780,
+        "wires": [
+            [
+                "ea38d37ac8c3ab57"
+            ]
+        ]
     },
     {
         "id": "d5cb654b4dad986f",
@@ -7320,7 +7387,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 940,
+        "y": 920,
         "wires": [
             [
                 "e1cc8c52948f9b2a"
@@ -7341,7 +7408,7 @@
         "finalize": "",
         "libs": [],
         "x": 500,
-        "y": 940,
+        "y": 920,
         "wires": [
             [
                 "e2335c226769f307"
@@ -7359,7 +7426,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1170,
-        "y": 960,
+        "y": 940,
         "wires": [],
         "l": true
     },
@@ -7370,7 +7437,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 129,
+        "y": 138,
         "wires": []
     },
     {
@@ -7402,7 +7469,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 940,
+        "y": 920,
         "wires": [
             [
                 "b104a7e82aefcb21"
@@ -7423,7 +7490,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1170,
-        "y": 920,
+        "y": 900,
         "wires": [],
         "l": true
     },
