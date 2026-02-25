@@ -4011,7 +4011,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 140,
+        "y": 157,
         "wires": []
     },
     {
@@ -5353,7 +5353,7 @@
         "z": "3470febb2cd6e952",
         "g": "daeff1de077d7dbb",
         "name": "status_floor_heat",
-        "func": "// HA Status Updater for Floor Heat\n\nconst payload = msg.payload;\nconst instance = payload.instance;\nconst raw_setpoint = payload.raw_setpoint;\n\n// --- Level Map ---\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\") || {};\n\n// Determine the preset mode early\nconst presetMode = levelMap[raw_setpoint]?.preset || \"store\";\nconst isStorePreset = presetMode === \"store\";\n\n// --- Climate Status ---\nconst climatePayload = {};\nclimatePayload.measured_temperature = payload.measured_temperature;\nclimatePayload.preset_mode = presetMode;\n\n// Mode (Strictly controlled by operating status and schedule status)\nlet climateMode;\nif (payload.operating_status === \"Off\") {\n  climateMode = \"off\";\n} else {\n  // If the system is ON, mode is \"auto\" only if the schedule is enabled, otherwise \"heat\"\n  climateMode = payload.schedule_mode === \"Enabled\" ? \"auto\" : \"heat\";\n}\nclimatePayload.mode = climateMode;\n\n// Action (idle when off, store, or heating)\nlet action;\nif (payload.operating_status === \"Off\") {\n  action = \"off\";\n} else if (isStorePreset) {\n  action = \"idle\";\n} else {\n  action = payload.heating_active ? \"heating\" : \"idle\";\n}\nclimatePayload.action = action;\n\n// --- Update Context ---\n\n// Save schedule state\nconst scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;\nglobal.set(scheduleContextKey, payload.schedule_mode === \"Enabled\", \"file\");\n\n// Save the currently active preset name for command encoder use\nconst currentPresetKey = `floorHeat_${instance}_CurrentPreset`;\nglobal.set(currentPresetKey, presetMode, \"file\");\n\n// --- Create MQTT message ---\nconst climateEntityId = `floor_heat_${instance}`;\nconst climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;\n\nmsg.topic = climateStateTopic;\nmsg.payload = {\n  measured_temperature: payload.measured_temperature,\n  preset_mode: presetMode,\n  mode: climateMode,\n  action: action,\n};\n\nreturn msg;\n",
+        "func": "// HA Status Updater for Floor Heat\n\nconst payload = msg.payload;\nconst instance = payload.instance;\nconst raw_setpoint = payload.raw_setpoint;\n\n// --- Level Map ---\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\") || {};\n\n// Determine the preset mode early\n// \"store\" (lowest level) maps to HA's built-in \"none\" preset\nconst rawPreset = levelMap[raw_setpoint]?.preset || \"store\";\nconst presetMode = rawPreset === \"store\" ? \"none\" : rawPreset;\nconst isStorePreset = rawPreset === \"store\";\n\n// --- Climate Status ---\nconst climatePayload = {};\nclimatePayload.measured_temperature = payload.measured_temperature;\nclimatePayload.preset_mode = presetMode;\n\n// Mode (Strictly controlled by operating status and schedule status)\nlet climateMode;\nif (payload.operating_status === \"Off\") {\n  climateMode = \"off\";\n} else {\n  // If the system is ON, mode is \"auto\" only if the schedule is enabled, otherwise \"heat\"\n  climateMode = payload.schedule_mode === \"Enabled\" ? \"auto\" : \"heat\";\n}\nclimatePayload.mode = climateMode;\n\n// Action (idle when off, store, or heating)\nlet action;\nif (payload.operating_status === \"Off\") {\n  action = \"off\";\n} else if (isStorePreset) {\n  action = \"idle\";\n} else {\n  action = payload.heating_active ? \"heating\" : \"idle\";\n}\nclimatePayload.action = action;\n\n// --- Update Context ---\n\n// Save schedule state\nconst scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;\nglobal.set(scheduleContextKey, payload.schedule_mode === \"Enabled\", \"file\");\n\n// Save the currently active preset name for command encoder use (internal name, not HA name)\nconst currentPresetKey = `floorHeat_${instance}_CurrentPreset`;\nglobal.set(currentPresetKey, rawPreset, \"file\");\n\n// --- Create MQTT message ---\nconst climateEntityId = `floor_heat_${instance}`;\nconst climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;\n\nmsg.topic = climateStateTopic;\nmsg.payload = {\n  measured_temperature: payload.measured_temperature,\n  preset_mode: presetMode,\n  mode: climateMode,\n  action: action,\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6405,7 +6405,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 120,
+        "y": 140,
         "wires": []
     },
     {
@@ -6840,7 +6840,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 160,
+        "y": 177,
         "wires": []
     },
     {
@@ -7437,7 +7437,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 138,
+        "y": 147,
         "wires": []
     },
     {
