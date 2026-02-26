@@ -87,7 +87,7 @@
             "c78420a075d43408"
         ],
         "x": 114,
-        "y": 1579,
+        "y": 1559,
         "w": 852,
         "h": 82
     },
@@ -182,12 +182,14 @@
             "463dfbbef66b51c2",
             "9c4e4196e56cc471",
             "4fa9b9fdc36c83da",
-            "9dd6a98018824be9"
+            "9dd6a98018824be9",
+            "534281eb59433da1",
+            "dbbf39b309416ca1"
         ],
         "x": 954,
-        "y": 259,
-        "w": 1558,
-        "h": 582
+        "y": 239,
+        "w": 1358,
+        "h": 622
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -746,6 +748,29 @@
         "h": 122
     },
     {
+        "id": "1250cab4e8633d65",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "Recording unknown DGNs",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "ff7901a611c1e1aa",
+            "880ca1b6bf10b8d2",
+            "4bea6d59dec3cdde",
+            "f3ee6dc19b0155a0",
+            "cfa55144f4a17a5c",
+            "cd73ee739dad9f59",
+            "dca8346e061f1d42"
+        ],
+        "x": 114,
+        "y": 1699,
+        "w": 772,
+        "h": 182
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -761,8 +786,8 @@
             "eea1641469efb23f",
             "c781b519a9f9b156"
         ],
-        "x": 1934,
-        "y": 619,
+        "x": 1734,
+        "y": 639,
         "w": 552,
         "h": 142
     },
@@ -922,8 +947,8 @@
             "5968e8ee034f8751",
             "3d5ce3e925ee2f04"
         ],
-        "x": 1934,
-        "y": 439,
+        "x": 1734,
+        "y": 419,
         "w": 552,
         "h": 142
     },
@@ -1158,7 +1183,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 1620,
+        "y": 1600,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -1178,7 +1203,7 @@
         "sendError": false,
         "allProps": false,
         "x": 440,
-        "y": 1620,
+        "y": 1600,
         "wires": [
             [
                 "c78420a075d43408"
@@ -1199,7 +1224,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 1620,
+        "y": 1600,
         "wires": []
     },
     {
@@ -1212,7 +1237,7 @@
         "action": "",
         "pretty": false,
         "x": 650,
-        "y": 1620,
+        "y": 1600,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -1279,7 +1304,9 @@
             "950e9ce654224317",
             "f3f99ba42088c9b1",
             "599ffbccfb7cd415",
-            "b104a7e82aefcb21"
+            "b104a7e82aefcb21",
+            "dca8346e061f1d42",
+            "dbbf39b309416ca1"
         ],
         "x": 250,
         "y": 620,
@@ -1373,15 +1400,15 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "decode_rvc_can",
-        "func": "// decode_rvc_can.js\n// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== 'string') {\n    node.warn(\"Invalid message payload: expected string, got \" + typeof originalMessage);\n    return null;\n}\nconst dgnMap = global.get('dgnMap');\nif (!dgnMap) {\n    node.error(\"dgnMap not found in global context. Ensure the map is initialized.\");\n    return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split('#');\nif (parts.length !== 2) {\n    node.warn(\"Invalid CAN message format: \" + originalMessage);\n    return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n    node.warn(\"Invalid CAN ID: \" + canIdHex);\n    return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xFF;  // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xFF;   // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n    pgn = '0' + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xF0) {  // PDU1 format\n    if (pf === 0xEF) {\n        // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n        lookupPgn = pgn;\n    } else if (pf === 0xEC || pf === 0xEB) {\n        // Exception: Multi-packet transport uses FF\n        lookupPgn = pf.toString(16).toUpperCase() + 'FF';\n    } else {\n        // Standard PDU1: Replace PS with 00\n        lookupPgn = pf.toString(16).toUpperCase() + '00';\n    }\n    // Ensure 4 characters\n    while (lookupPgn.length < 4) {\n        lookupPgn = '0' + lookupPgn;\n    }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// If the PGN is in the FE/FF range, convert it to the 5-digit RV-C DGN (1F prefix)\n// for primary map lookup. This handles 1FECA, 1FFA9, etc.\nif (dgn.startsWith('FE') || dgn.startsWith('FF')) {\n    dgn = '1' + lookupPgn;\n    dgn_name = dgnMap.get(dgn); // Use the 5-digit key for lookup\n} else {\n    // For all other PGNs (like 00F7, EF4D), use the 4-digit PGN for lookup\n    dgn_name = dgnMap.get(dgn);\n}\n\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n    if (pgn === 'EF64') {\n        dgn_name = \"AQUAHOT_COMMAND\";\n    } else if (pgn === 'EF9F') {\n        dgn_name = \"AQUAHOT_STATUS\";\n    } else if (pgn === 'EF4D') {\n        dgn_name = \"AQUAHOT_THERMOSTAT_STATUS\";\n    }\n}\n\n// Final output\nif (!dgn_name) {\n    dgn_name = \"UNKNOWN\";\n}\n\nmsg.payload = {\n    originalMessage: originalMessage,\n    dgn: dgn,\n    dgn_name: dgn_name,\n    data_payload: data_payload\n};\n\nreturn msg;\n",
+        "func": "// decode_rvc_can.js\n// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// If the PGN is in the FE/FF range, convert it to the 5-digit RV-C DGN (1F prefix)\n// for primary map lookup. This handles 1FECA, 1FFA9, etc.\nif (dgn.startsWith(\"FE\") || dgn.startsWith(\"FF\")) {\n  dgn = \"1\" + lookupPgn;\n  dgn_name = dgnMap.get(dgn); // Use the 5-digit key for lookup\n} else {\n  // For all other PGNs (like 00F7, EF4D), use the 4-digit PGN for lookup\n  dgn_name = dgnMap.get(dgn);\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  data_payload: data_payload,\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1230,
-        "y": 500,
+        "x": 1200,
+        "y": 520,
         "wires": [
             [
                 "ac47ce53a9fc3f21",
@@ -1409,8 +1436,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1480,
-        "y": 620,
+        "x": 1520,
+        "y": 720,
         "wires": []
     },
     {
@@ -1427,8 +1454,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1500,
-        "y": 580,
+        "x": 1540,
+        "y": 680,
         "wires": []
     },
     {
@@ -1445,8 +1472,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1470,
-        "y": 380,
+        "x": 1510,
+        "y": 320,
         "wires": []
     },
     {
@@ -1463,8 +1490,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1490,
-        "y": 420,
+        "x": 1530,
+        "y": 360,
         "wires": []
     },
     {
@@ -1481,8 +1508,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1500,
-        "y": 340,
+        "x": 1540,
+        "y": 280,
         "wires": []
     },
     {
@@ -1499,8 +1526,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1500,
-        "y": 460,
+        "x": 1540,
+        "y": 400,
         "wires": []
     },
     {
@@ -1517,8 +1544,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1470,
-        "y": 540,
+        "x": 1510,
+        "y": 640,
         "wires": []
     },
     {
@@ -1531,7 +1558,7 @@
             "958fed9f12301f59"
         ],
         "x": 1030,
-        "y": 500,
+        "y": 520,
         "wires": [
             [
                 "8d7d5d3ea117cf79"
@@ -1600,30 +1627,35 @@
         "checkall": "false",
         "repair": false,
         "outputs": 10,
-        "x": 1710,
-        "y": 500,
+        "x": 1510,
+        "y": 520,
         "wires": [
             [],
             [],
             [],
             [],
             [
-                "02bdfc59de71b5a5"
+                "02bdfc59de71b5a5",
+                "534281eb59433da1"
             ],
             [
-                "4fa9b9fdc36c83da"
+                "4fa9b9fdc36c83da",
+                "534281eb59433da1"
             ],
             [
                 "45414bacecada477"
             ],
             [
-                "3d5ce3e925ee2f04"
+                "3d5ce3e925ee2f04",
+                "534281eb59433da1"
             ],
             [
-                "c781b519a9f9b156"
+                "c781b519a9f9b156",
+                "534281eb59433da1"
             ],
             [
-                "463dfbbef66b51c2"
+                "463dfbbef66b51c2",
+                "534281eb59433da1"
             ]
         ]
     },
@@ -1649,8 +1681,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2050,
-        "y": 660,
+        "x": 1850,
+        "y": 680,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -1670,8 +1702,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2320,
-        "y": 660,
+        "x": 2120,
+        "y": 680,
         "wires": [
             []
         ]
@@ -1689,8 +1721,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2050,
-        "y": 720,
+        "x": 1850,
+        "y": 740,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -1711,8 +1743,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2340,
-        "y": 720,
+        "x": 2140,
+        "y": 740,
         "wires": []
     },
     {
@@ -1725,7 +1757,7 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 2010,
+        "x": 1830,
         "y": 300,
         "wires": [],
         "l": true
@@ -1860,8 +1892,8 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 2040,
-        "y": 380,
+        "x": 1860,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -2093,7 +2125,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "Otherwise dgn_name",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2101,8 +2133,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2040,
-        "y": 800,
+        "x": 1860,
+        "y": 820,
         "wires": []
     },
     {
@@ -2169,8 +2201,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 2050,
-        "y": 480,
+        "x": 1850,
+        "y": 460,
         "wires": [
             [
                 "9f47dc231ecd50cd"
@@ -2190,8 +2222,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2320,
-        "y": 480,
+        "x": 2120,
+        "y": 460,
         "wires": [
             []
         ]
@@ -2210,8 +2242,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2340,
-        "y": 540,
+        "x": 2140,
+        "y": 520,
         "wires": []
     },
     {
@@ -2227,8 +2259,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2050,
-        "y": 540,
+        "x": 1850,
+        "y": 520,
         "wires": [
             [
                 "5968e8ee034f8751"
@@ -2348,8 +2380,8 @@
         "links": [
             "00b1afc9a96aca8e"
         ],
-        "x": 2020,
-        "y": 340,
+        "x": 1840,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -2359,7 +2391,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 165,
+        "y": 191,
         "wires": []
     },
     {
@@ -2398,14 +2430,14 @@
         "z": "292e70a6ba25b323",
         "g": "f81ca31c89243206",
         "name": "create_user_toggles",
-        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    default_entity_id: \"button.librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    default_entity_id: \"button.librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      default_entity_id: `text.${field.id}`,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
+        "func": "// Creates LibreCoach: System config toggles via MQTT Discovery\n\nconst device = {\n  identifiers: [\"librecoach-system\"],\n  name: \"LibreCoach: System\",\n  manufacturer: \"LibreCoach\",\n};\n\nconst messages = [];\n\n// === Import/Export & RV Info ===\n\n// Export Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_config/config\",\n  payload: {\n    name: \"Export LibreCoach Configuration\",\n    unique_id: \"librecoach_export_config\",\n    default_entity_id: \"button.librecoach_export_config\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/trigger\",\n    device: device,\n  },\n});\n\n// Import Configuration button\nmessages.push({\n  topic: \"homeassistant/button/librecoach_import_config/config\",\n  payload: {\n    name: \"Import LibreCoach Configuration\",\n    unique_id: \"librecoach_import_config\",\n    default_entity_id: \"button.librecoach_import_config\",\n    icon: \"mdi:upload\",\n    command_topic: \"librecoach/import/trigger\",\n    device: device,\n  },\n});\n\n// RV Info fields\nconst rvFields = [\n  {\n    id: \"rv_manufacturer\",\n    name: \"RV Manufacturer\",\n    icon: \"mdi:factory\",\n    max: 50,\n  },\n  { id: \"rv_model\", name: \"RV Model\", icon: \"mdi:rv-truck\", max: 50 },\n  { id: \"rv_year\", name: \"RV Year\", icon: \"mdi:calendar\", max: 4 },\n  { id: \"rv_other\", name: \"RV Other\", icon: \"mdi:note-text\", max: 100 },\n];\n\nfor (const field of rvFields) {\n  // Config\n  messages.push({\n    topic: `homeassistant/text/${field.id}/config`,\n    payload: {\n      name: field.name,\n      unique_id: field.id,\n      default_entity_id: `text.${field.id}`,\n      icon: field.icon,\n      state_topic: `librecoach/rv_info/${field.id}`,\n      command_topic: `librecoach/rv_info/${field.id}/set`,\n      max: field.max,\n      device: device,\n    },\n  });\n\n  // State (restore from global or empty string)\n  const storedValue = global.get(field.id, \"file\") || \"\";\n  messages.push({\n    topic: `librecoach/rv_info/${field.id}`,\n    payload: storedValue,\n    retain: true,\n  });\n}\n\n// === Unknown CAN Recording ===\n\n// Switch - Record Unknown CAN\nmessages.push({\n  topic: \"homeassistant/switch/librecoach_record_unknown/config\",\n  payload: {\n    name: \"Record Unknown CAN\",\n    unique_id: \"librecoach_record_unknown\",\n    default_entity_id: \"switch.librecoach_record_unknown\",\n    icon: \"mdi:record-rec\",\n    command_topic: \"librecoach/record_unknown/set\",\n    state_topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload_on: \"1\",\n    payload_off: \"0\",\n    state_on: \"ON\",\n    state_off: \"OFF\",\n    optimistic: false,\n    value_template: \"{{ 'ON' if value == '1' else 'OFF' }}\",\n    device: device,\n  },\n});\n\n// State - Record Unknown CAN default off\nglobal.set(\"recordUnknown\", false, \"file\");\nmessages.push({\n  topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n  payload: 0,\n  retain: true,\n});\n\n// Button - Export Unknown Recording\nmessages.push({\n  topic: \"homeassistant/button/librecoach_export_unknown/config\",\n  payload: {\n    name: \"Recorded Unknown Export\",\n    unique_id: \"librecoach_export_unknown\",\n    default_entity_id: \"button.librecoach_export_unknown\",\n    icon: \"mdi:download\",\n    command_topic: \"librecoach/export/unknown/trigger\",\n    device: device,\n  },\n});\n\n// === Cleanup Old Entities ===\n// Send empty payload to delete orphaned entities from Home Assistant\n\nconst cleanupTopics = [\n  \"homeassistant/switch/victron_integration/config\",\n  \"homeassistant/switch/librecoach_testing_beta/config\",\n  \"homeassistant/switch/librecoach_beta_testing/config\",\n];\n\nfor (const topic of cleanupTopics) {\n  messages.push({ topic: topic, payload: \"\" });\n}\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `System Entities Created`,\n});\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 460,
         "y": 1460,
         "wires": [
             [
@@ -2457,7 +2489,8 @@
         "name": "Notify user",
         "links": [
             "47f3c921ae62126a",
-            "47ac3adc971d73eb"
+            "47ac3adc971d73eb",
+            "cd73ee739dad9f59"
         ],
         "x": 1060,
         "y": 1460,
@@ -2519,7 +2552,7 @@
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
         "name": "store_config_globals",
-        "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\nif (key === \"microair_enabled\") global.set(\"microairEnabled\", val);\n\nreturn msg;",
+        "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\nif (key === \"microair_enabled\") global.set(\"microairEnabled\", val);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2547,6 +2580,179 @@
         ],
         "x": 700,
         "y": 820,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "880ca1b6bf10b8d2",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "record_unknown_toggle",
+        "func": "// Record Unknown CAN — Toggle Handler\n// Input: MQTT payload \"ON\" or \"OFF\" from HA switch\n// On start: clears log, sets start time, sets recording flag\n// On stop: clears flag, shows message count\n// Output: retained state publish back to HA\n\nconst cmd = msg.payload;\n\nif (cmd === \"1\") {\n  global.set(\"recordUnknown\", true, \"file\");\n  global.set(\"recordUnknownStart\", Date.now(), \"file\");\n  global.set(\"recordUnknownLog\", [], \"file\");\n\n  node.status({ fill: \"red\", shape: \"dot\", text: \"Recording...\" });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"1\",\n    retain: true,\n  };\n}\n\nif (cmd === \"0\") {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const log = global.get(\"recordUnknownLog\", \"file\") || [];\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: `Stopped — ${log.length} messages`,\n  });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1740,
+        "wires": [
+            [
+                "dca8346e061f1d42"
+            ]
+        ]
+    },
+    {
+        "id": "ff7901a611c1e1aa",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Recording toggle",
+        "topic": "librecoach/record_unknown/set",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 1740,
+        "wires": [
+            [
+                "880ca1b6bf10b8d2"
+            ]
+        ]
+    },
+    {
+        "id": "4bea6d59dec3cdde",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Recording trigger",
+        "topic": "librecoach/export/unknown/trigger",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 1820,
+        "wires": [
+            [
+                "f3ee6dc19b0155a0"
+            ]
+        ]
+    },
+    {
+        "id": "f3ee6dc19b0155a0",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "record_unknown_export",
+        "func": "// Export Unknown CAN Recording\n// Reads recordUnknownLog from global context\n// Output: [[jsonMsg, htmlMsg], notifyMsg] to File Write node\n\nconst TIMEZONE = \"America/New_York\";\n\nfunction getLocalISO(ms) {\n  if (!ms) return null;\n  return new Date(ms)\n    .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n    .replace(\" \", \"T\");\n}\n\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\");\n\nconst report = {\n  recording_start: getLocalISO(startTime),\n  recording_end: log.length > 0 ? log[log.length - 1].timestamp : null,\n  message_count: log.length,\n  messages: log,\n};\n\n// Static filename replaces old files every time\nconst filename = \"librecoach_unknown_recording.json\";\n\nconst jsonMsg = {\n  filename: `/homeassistant/www/${filename}`,\n  payload: JSON.stringify(report, null, 2),\n};\n\nconst htmlMsg = {\n  filename: \"/homeassistant/www/librecoach_download.html\",\n  payload: `<!DOCTYPE html>\n<html><head><title>LibreCoach Download</title></head>\n<body>\n<script>\nvar a = document.createElement(\"a\");\na.href = \"/local/${filename}\";\na.download = \"${filename}\";\ndocument.body.appendChild(a);\na.click();\nsetTimeout(function() { window.close(); }, 1000);\n</script>\n<p>Your download should start automatically. If not, <a href=\"/local/${filename}\" download=\"${filename}\">click here</a>.</p>\n</body></html>`,\n};\n\nconst notifyMsg = {\n  payload: {\n    title: \"LibreCoach Unknown Recording\",\n    message: `Your recording is ready.<br><a href=\"/local/librecoach_download.html\" target=\"_blank\"><b>Click here to download</b></a>.`,\n    notification_id: \"librecoach_export_unknown\",\n  },\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Exported ${log.length} messages`,\n});\n\nreturn [[jsonMsg, htmlMsg], notifyMsg];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1820,
+        "wires": [
+            [
+                "cfa55144f4a17a5c"
+            ],
+            [
+                "cd73ee739dad9f59"
+            ]
+        ]
+    },
+    {
+        "id": "cfa55144f4a17a5c",
+        "type": "file",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Write file",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 700,
+        "y": 1800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd73ee739dad9f59",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Notify user",
+        "mode": "link",
+        "links": [
+            "a1e89f48333c8256"
+        ],
+        "x": 710,
+        "y": 1840,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "534281eb59433da1",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "record_unknown_capture",
+        "func": "// Record Unknown CAN — Terminal Capture Sink\n// Sits AFTER the routing switch at the end of the line.\n// Only receives DGNs routed to it (UNKNOWN, PROPRIETARY, COMMAND, STATUS).\n// Auto-stop: 2 minutes elapsed OR 1000 messages captured\n\nconst MAX_MESSAGES = 1000;\nconst MAX_DURATION_MS = 10 * 60 * 1000;\nconst TIMEZONE = \"America/New_York\";\n\n// STATUS DGNs allowed through — discrete state only, no analog sensors.\n// COMMAND, UNKNOWN, and PROPRIETARY always pass without this check.\nconst STATUS_WHITELIST = [\n  \"AC_LOAD_STATUS\",\n  \"AC_LOAD_STATUS_2\",\n  \"AAS_STATUS\",\n  \"AAS_SENSOR_STATUS\",\n  \"AIR_CONDITIONER_STATUS\",\n  \"HEAT_PUMP_STATUS\",\n  \"AUTOFILL_STATUS\",\n  \"AWNING_STATUS\",\n  \"AWNING_STATUS_2\",\n  \"CHASSIS_MOBILITY_STATUS\",\n  \"CHASSIS_MOBILITY_STATUS_2\",\n  \"CIRCULATION_PUMP_STATUS\",\n  \"DC_DIMMER_STATUS_1\",\n  \"DC_DIMMER_STATUS_2\",\n  \"DC_DIMMER_STATUS_3\",\n  \"DC_DISCONNECT_STATUS\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_1\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_2\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_3\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_4\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_5\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_6\",\n  \"DC_LOAD_STATUS\",\n  \"DC_LOAD_STATUS_2\",\n  \"DC_MOTOR_CONTROL_STATUS\",\n  \"DIGITAL_INPUT_STATUS\",\n  \"FLOOR_HEAT_STATUS\",\n  \"FURNACE_STATUS\",\n  \"GAS_SENSOR_STATUS\",\n  \"GENERATOR_STATUS_1\",\n  \"GENERATOR_STATUS_2\",\n  \"GENERIC_INDICATOR_STATUS\",\n  \"HYDRAULIC_PUMP_STATUS\",\n  \"INVERTER_STATUS\",\n  \"LOCK_STATUS\",\n  \"LEVELING_CONTROL_STATUS\",\n  \"LEVELING_JACK_STATUS\",\n  \"LEVELING_AIR_STATUS\",\n  \"REFRIGERATOR_STATUS\",\n  \"ROOF_FAN_STATUS_1\",\n  \"ROOF_FAN_STATUS_2\",\n  \"SLIDE_STATUS\",\n  \"SLIDE_MOTOR_STATUS\",\n  \"STEP_STATUS\",\n  \"THERMOSTAT_STATUS_1\",\n  \"THERMOSTAT_STATUS_2\",\n  \"TV_LIFT_STATUS\",\n  \"ATS_STATUS\",\n  \"VALVE_STATUS\",\n  \"VEHICLE_SEAT_STATUS\",\n  \"VEHICLE_SEAT_LIGHTING_STATUS\",\n  \"WATER_PUMP_STATUS\",\n  \"WATERHEATER_STATUS\",\n  \"WATERHEATER_STATUS_2\",\n  \"WINDOW_STATUS\",\n  \"WINDOW_SHADE_CONTROL_STATUS\",\n];\n\n// --- STATUS whitelist check ---\n// COMMAND, UNKNOWN, PROPRIETARY always pass. Known STATUS must be whitelisted.\nconst dgn_name = msg.payload.dgn_name;\nif (\n  dgn_name !== \"UNKNOWN\" &&\n  dgn_name !== \"PROPRIETARY\" &&\n  !dgn_name.includes(\"COMMAND\") &&\n  !STATUS_WHITELIST.includes(dgn_name)\n) {\n  return null;\n}\n\n// --- Parse data bytes from hex string ---\nconst raw = msg.payload.originalMessage || \"\";\nconst dataHex = msg.payload.data_payload || \"\";\nconst byteHexPairs = dataHex.match(/.{1,2}/g) || [];\nconst instanceId =\n  byteHexPairs.length > 0 ? parseInt(byteHexPairs[0], 16) : null;\nconst data = byteHexPairs.map((h) => h.toUpperCase()).join(\" \");\n\n// --- Change detection (always runs) ---\nconst seen = global.get(\"recordUnknownSeen\") || {};\nconst seenKey = `${msg.payload.dgn}:${instanceId}`;\nconst changed = seen[seenKey] !== data;\nseen[seenKey] = data;\nglobal.set(\"recordUnknownSeen\", seen);\n\n// Gate on recording state\nconst recording = global.get(\"recordUnknown\", \"file\");\nif (!recording) {\n  node.status({ fill: \"grey\", shape: \"ring\", text: \"Stopped\" });\n  return null;\n}\nif (!changed) {\n  node.status({ fill: \"red\", shape: \"ring\", text: \"Recording...\" });\n  return null;\n}\n\n// --- Timing ---\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\") || Date.now();\nconst elapsed = Date.now() - startTime;\n\n// Check auto-stop before adding\nif (log.length >= MAX_MESSAGES || elapsed >= MAX_DURATION_MS) {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const reason =\n    log.length >= MAX_MESSAGES ? `${MAX_MESSAGES} messages` : \"10 min elapsed\";\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: `Auto-stopped — ${reason}`,\n  });\n\n  const offMsg = {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n\n  return offMsg;\n}\n\n// --- Local timestamp ---\nconst localISO = new Date()\n  .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n  .replace(\" \", \"T\");\n\n// --- Build log entry ---\nlog.push({\n  timestamp: localISO,\n  dgn: msg.payload.dgn,\n  dgn_name: dgn_name,\n  instance: instanceId !== null ? instanceId : null,\n  data: data,\n  raw_can: raw,\n});\nglobal.set(\"recordUnknownLog\", log, \"file\");\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Recording... ${log.length}`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1870,
+        "y": 600,
+        "wires": [
+            [
+                "dbbf39b309416ca1"
+            ]
+        ]
+    },
+    {
+        "id": "dca8346e061f1d42",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 750,
+        "y": 1740,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "dbbf39b309416ca1",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 2150,
+        "y": 600,
         "wires": [],
         "l": true
     },
@@ -4011,7 +4217,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 157,
+        "y": 174,
         "wires": []
     },
     {
@@ -6405,7 +6611,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 140,
+        "y": 145,
         "wires": []
     },
     {
@@ -8664,7 +8870,7 @@
         "z": "7ecdba18640c1184",
         "content": "# 🚧 Under Construction 🚧\nThis flow is a work in progress and not yet ready for use.",
         "x": 320,
-        "y": 200,
+        "y": 226,
         "wires": []
     },
     {
