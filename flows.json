@@ -743,7 +743,7 @@
             "b104a7e82aefcb21"
         ],
         "x": 114,
-        "y": 859,
+        "y": 839,
         "w": 1192,
         "h": 122
     },
@@ -2391,7 +2391,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 153,
+        "y": 166,
         "wires": []
     },
     {
@@ -7389,8 +7389,8 @@
         "type": "mqtt in",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "Micro-Air in",
-        "topic": "librecoach/ble/microair/+/+/+/state",
+        "name": "Micro-Air status",
+        "topic": "librecoach/ble/microair/+/state",
         "qos": "2",
         "datatype": "json",
         "broker": "80727e60a251c36c",
@@ -7398,7 +7398,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 210,
+        "x": 220,
         "y": 440,
         "wires": [
             [
@@ -7593,7 +7593,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 920,
+        "y": 900,
         "wires": [
             [
                 "e1cc8c52948f9b2a"
@@ -7614,7 +7614,7 @@
         "finalize": "",
         "libs": [],
         "x": 500,
-        "y": 920,
+        "y": 900,
         "wires": [
             [
                 "e2335c226769f307"
@@ -7632,7 +7632,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1170,
-        "y": 940,
+        "y": 920,
         "wires": [],
         "l": true
     },
@@ -7643,7 +7643,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 140,
+        "y": 149,
         "wires": []
     },
     {
@@ -7675,7 +7675,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 920,
+        "y": 900,
         "wires": [
             [
                 "b104a7e82aefcb21"
@@ -7696,7 +7696,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1170,
-        "y": 900,
+        "y": 880,
         "wires": [],
         "l": true
     },
@@ -7857,7 +7857,7 @@
             "cdc4754f4c43430d"
         ],
         "x": 230,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "eef231d415615180"
