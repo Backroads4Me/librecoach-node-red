@@ -2391,7 +2391,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 217,
+        "y": 140,
         "wires": []
     },
     {
@@ -4217,7 +4217,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 174,
+        "y": 191,
         "wires": []
     },
     {
@@ -6066,7 +6066,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 1730,
-        "y": 198,
+        "y": 207,
         "wires": []
     },
     {
@@ -6611,7 +6611,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 145,
+        "y": 140,
         "wires": []
     },
     {
@@ -6817,7 +6817,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_status",
-        "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined values\nif (incomingPayload.value === null || incomingPayload.value === undefined) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// 1. Context-Aware Rounding (Filter Logic)\nlet roundedValue = value;\nif (typeof value === \"number\") {\n  // Round SOC to whole numbers, everything else to 1 decimal\n  const decimals = dbus_path.toLowerCase().includes(\"soc\") ? 0 : 1;\n  const factor = Math.pow(10, decimals);\n  roundedValue = Math.round(value * factor) / factor;\n}\n\n// 2. Report by Exception (Filter Logic)\nconst lastValues = context.get(\"lastValues\") || {};\nconst cacheKey = `${service_type}_${instance}_${dbus_path}`;\n\nif (lastValues[cacheKey] === roundedValue) {\n  return null; // Block if rounded value hasn't changed\n}\nlastValues[cacheKey] = roundedValue;\ncontext.set(\"lastValues\", lastValues);\n\n// 3. Build Entity ID (Status Logic)\nconst safePathRaw = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nlet safePath = safePathRaw;\n\n// Standardization Rules\nif (\n  [\"charger\", \"dcdc\", \"alternator\", \"solarcharger\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\nsafePath = safePath\n  .replace(\"_activein\", \"_in\")\n  .replace(\"_active_in\", \"_in\")\n  .replace(\"_active_input\", \"_in\");\n\n// Suffix expansion\nif (safePath.endsWith(\"_p\")) safePath = safePath.slice(0, -2) + \"_power\";\nelse if (safePath.endsWith(\"_v\")) safePath = safePath.slice(0, -2) + \"_voltage\";\nelse if (safePath.endsWith(\"_i\")) safePath = safePath.slice(0, -2) + \"_current\";\nelse if (safePath.endsWith(\"_f\"))\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n\n// Total power enforcement\nif (safePath.endsWith(\"_total_p\"))\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\nelse if (safePath.endsWith(\"_ac_power\"))\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\nelse if (safePath === \"ac_power\") safePath = \"ac_total_power\";\n\n// Look up product name\nconst victronDevices = global.get(\"victronDevices\", \"file\") || {};\nconst deviceInfo = victronDevices[`${service_type}_${instance}`];\nconst deviceName = deviceInfo ? deviceInfo.shortName : service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// 4. Determine Component Type & Topic\nlet componentType = \"sensor\";\nif (dbus_path === \"/Ac/ActiveIn/CurrentLimit\") componentType = \"number\";\nelse if (dbus_path === \"/Mode\") componentType = \"select\";\nelse if (dbus_path.includes(\"/Relay/\")) componentType = \"switch\";\n\n// 5. Build Final Message\nmsg.topic = `homeassistant/${componentType}/${entityId}/state`;\nmsg.payload = { value: roundedValue };\n\nreturn msg;\n",
+        "func": "// HA Status Updater for Victron\n\nconst incomingPayload = msg.payload;\n\n// Gate: skip null/undefined/empty values\nif (\n  incomingPayload.value === null ||\n  incomingPayload.value === undefined ||\n  incomingPayload.value === \"\"\n) {\n  return null;\n}\n\nconst { service_type, instance, dbus_path, value } = incomingPayload;\n\n// 1. Context-Aware Rounding (Filter Logic)\nlet roundedValue = value;\nif (typeof value === \"number\") {\n  // Round SOC to whole numbers, everything else to 1 decimal\n  const decimals = dbus_path.toLowerCase().includes(\"soc\") ? 0 : 1;\n  const factor = Math.pow(10, decimals);\n  roundedValue = Math.round(value * factor) / factor;\n}\n\n// 2. Report by Exception (Filter Logic)\nconst lastValues = context.get(\"lastValues\") || {};\nconst cacheKey = `${service_type}_${instance}_${dbus_path}`;\n\nif (lastValues[cacheKey] === roundedValue) {\n  return null; // Block if rounded value hasn't changed\n}\nlastValues[cacheKey] = roundedValue;\ncontext.set(\"lastValues\", lastValues);\n\n// 3. Build Entity ID (Status Logic)\nconst safePathRaw = dbus_path\n  .replace(/^\\//, \"\")\n  .replace(/\\//g, \"_\")\n  .toLowerCase();\n\nlet safePath = safePathRaw;\n\n// Standardization Rules\nif (\n  [\"charger\", \"dcdc\", \"alternator\", \"solarcharger\"].includes(service_type) &&\n  safePath.includes(\"dc_0\")\n) {\n  safePath = safePath.replace(\"dc_0\", \"dc_out\");\n}\n\nsafePath = safePath\n  .replace(\"_activein\", \"_in\")\n  .replace(\"_active_in\", \"_in\")\n  .replace(\"_active_input\", \"_in\");\n\n// Suffix expansion\nif (safePath.endsWith(\"_p\")) safePath = safePath.slice(0, -2) + \"_power\";\nelse if (safePath.endsWith(\"_v\")) safePath = safePath.slice(0, -2) + \"_voltage\";\nelse if (safePath.endsWith(\"_i\")) safePath = safePath.slice(0, -2) + \"_current\";\nelse if (safePath.endsWith(\"_f\"))\n  safePath = safePath.slice(0, -2) + \"_frequency\";\n\n// Total power enforcement\nif (safePath.endsWith(\"_total_p\"))\n  safePath = safePath.replace(/_total_p$/, \"_total_power\");\nelse if (safePath.endsWith(\"_ac_power\"))\n  safePath = safePath.replace(/_ac_power$/, \"_ac_total_power\");\nelse if (safePath === \"ac_power\") safePath = \"ac_total_power\";\n\n// Look up product name\nconst victronDevices = global.get(\"victronDevices\", \"file\") || {};\nconst deviceInfo = victronDevices[`${service_type}_${instance}`];\nconst deviceName = deviceInfo ? deviceInfo.shortName : service_type;\nconst entityId = `victron_${deviceName}_${instance}_${safePath}`;\n\n// 4. Determine Component Type & Topic\nlet componentType = \"sensor\";\nif (dbus_path === \"/Ac/ActiveIn/CurrentLimit\") componentType = \"number\";\nelse if (dbus_path === \"/Mode\") componentType = \"select\";\nelse if (dbus_path.includes(\"/Relay/\")) componentType = \"switch\";\n\n// 5. Build Final Message\nmsg.topic = `homeassistant/${componentType}/${entityId}/state`;\nmsg.payload = { value: roundedValue };\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7643,7 +7643,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 147,
+        "y": 140,
         "wires": []
     },
     {
