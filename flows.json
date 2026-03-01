@@ -619,7 +619,7 @@
             "19993b80c1009e61",
             "3fd699a116881ab0",
             "943309ad88255256",
-            "a0c37c6576258013"
+            "e371075d4dbfc113"
         ],
         "x": 114,
         "y": 279,
@@ -1311,7 +1311,8 @@
             "599ffbccfb7cd415",
             "b104a7e82aefcb21",
             "dca8346e061f1d42",
-            "dbbf39b309416ca1"
+            "dbbf39b309416ca1",
+            "e371075d4dbfc113"
         ],
         "x": 250,
         "y": 620,
@@ -4295,7 +4296,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 248,
+        "y": 180,
         "wires": []
     },
     {
@@ -6142,7 +6143,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 1730,
-        "y": 270,
+        "y": 279,
         "wires": []
     },
     {
@@ -6653,7 +6654,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 145,
+        "y": 150,
         "wires": []
     },
     {
@@ -6714,7 +6715,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
+        "x": 620,
         "y": 320,
         "wires": []
     },
@@ -6818,7 +6819,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_unique",
-        "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = global.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  global.set(\"uniqueVictron\", uniqueVictron);\n\n  // Look up product short name from discovered devices\n  const victronDevices = global.get(\"victronDevices\", \"file\") || {};\n  const deviceInfo = victronDevices[`${serviceType}_${instance}`];\n  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;\n  const productName = deviceInfo ? deviceInfo.productName : \"\";\n\n  // Send to first output, and reset message to second output\n  return [\n    {\n      payload: {\n        service_type: serviceType,\n        instance: instance,\n        dbus_path: dbusPath,\n        unit: msg.payload.unit,\n        value: msg.payload.value,\n        short_name: shortName,\n        product_name: productName,\n        access: msg.payload.access,\n        writable: msg.payload.writable,\n      },\n    },\n    { reset: true }, // this goes to the second output\n  ];\n}\n\n// Return nothing if duplicate\nreturn null;\n",
+        "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = global.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  global.set(\"uniqueVictron\", uniqueVictron);\n\n  // Look up product short name from discovered devices\n  const victronDevices = global.get(\"victronDevices\", \"file\") || {};\n  const deviceInfo = victronDevices[`${serviceType}_${instance}`];\n  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;\n  const productName = deviceInfo ? deviceInfo.productName : \"\";\n\n  return [\n    { reset: true },\n    {\n      payload: {\n        service_type: serviceType,\n        instance: instance,\n        dbus_path: dbusPath,\n        unit: msg.payload.unit,\n        value: msg.payload.value,\n        short_name: shortName,\n        product_name: productName,\n        access: msg.payload.access,\n        writable: msg.payload.writable,\n      },\n    },\n  ];\n}\n\n// Return nothing if duplicate\nreturn null;\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -6829,10 +6830,10 @@
         "y": 520,
         "wires": [
             [
-                "d1a2b3c4e5f67805"
+                "71ac45fb64bf70c9"
             ],
             [
-                "a0c37c6576258013"
+                "d1a2b3c4e5f67805"
             ]
         ]
     },
@@ -6849,8 +6850,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 520,
+        "x": 1040,
+        "y": 560,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -7061,8 +7062,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1310,
-        "y": 560,
+        "x": 1290,
+        "y": 600,
         "wires": [],
         "l": true
     },
@@ -7081,7 +7082,7 @@
         "correl": "",
         "expiry": "",
         "broker": "68237e1473ec01aa",
-        "x": 1270,
+        "x": 1250,
         "y": 740,
         "wires": []
     },
@@ -7092,7 +7093,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 174,
+        "y": 160,
         "wires": []
     },
     {
@@ -7101,21 +7102,21 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_handle_toggle",
-        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → Filter nodes (reset on enable)\n// Output 2 → MQTT Out (entity deletion on disable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [{ reset: true }, null];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\ndiscoveryTopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"uniqueVictron\", []);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
+        "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → MQTT Out (entity deletion on disable)\n// Output 2 → Filter nodes (reset on enable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset filter nodes when enabling so stale state doesn't block messages\n  return [null, { reset: true }];\n}\n\n// === Disable: delete all tracked entities from HA ===\nconst discoveryTopics = global.get(\"victronDiscoveryTopics\", \"file\") || [];\n\nif (discoveryTopics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null];\n}\n\n// Send deletion messages to output 1 (MQTT Out)\ndiscoveryTopics.forEach((topic) => {\n  node.send([{ topic: topic, payload: \"\" }, null]);\n});\n\n// Clear persisted tracking state\nglobal.set(\"uniqueVictron\", []);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${discoveryTopics.length} entities`,\n});\n\nreturn [null, null];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
+        "x": 920,
         "y": 440,
         "wires": [
             [
-                "71ac45fb64bf70c9"
+                "e371075d4dbfc113"
             ],
             [
-                "bd38c37850a3e832"
+                "71ac45fb64bf70c9"
             ]
         ]
     },
@@ -7194,8 +7195,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1310,
-        "y": 840,
+        "x": 1290,
+        "y": 860,
         "wires": [],
         "l": true
     },
@@ -7253,8 +7254,8 @@
             "b1b68ff387e01a3a",
             "31ca2b64ca5a2f07"
         ],
-        "x": 1290,
-        "y": 440,
+        "x": 1270,
+        "y": 500,
         "wires": [],
         "l": true
     },
@@ -7404,7 +7405,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 600,
+        "x": 560,
         "y": 400,
         "wires": [
             [
@@ -7425,7 +7426,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
+        "x": 410,
         "y": 380,
         "wires": [
             [
@@ -7451,7 +7452,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 760,
+        "x": 720,
         "y": 400,
         "wires": [
             [
@@ -7472,7 +7473,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 430,
+        "x": 410,
         "y": 320,
         "wires": [
             [
@@ -7481,19 +7482,17 @@
         ]
     },
     {
-        "id": "a0c37c6576258013",
+        "id": "e371075d4dbfc113",
         "type": "link out",
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
-        "name": "Reset Victron filters",
+        "name": "MQTT out: Retain TRUE",
         "mode": "link",
         "links": [
-            "db3ce2f66f852ca6",
-            "b1b68ff387e01a3a",
-            "31ca2b64ca5a2f07"
+            "f658418a7b9b4857"
         ],
-        "x": 1270,
-        "y": 640,
+        "x": 1290,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -7756,7 +7755,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 140,
+        "y": 149,
         "wires": []
     },
     {
