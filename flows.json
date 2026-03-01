@@ -378,14 +378,12 @@
             "d68c2206e3379850",
             "64578fa414def60a",
             "0d54f0db9a010394",
-            "ccc056e90ff9e046",
-            "936af6d306df76af",
-            "03d75239926b1616"
+            "ccc056e90ff9e046"
         ],
         "x": 1394,
-        "y": 1379,
+        "y": 1479,
         "w": 1112,
-        "h": 468
+        "h": 368
     },
     {
         "id": "84183171172657f8",
@@ -2391,7 +2389,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 173,
+        "y": 186,
         "wires": []
     },
     {
@@ -3447,7 +3445,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "decode_tank_status",
-        "func": "// Status Updater for Tank\n// Decodes TANK_STATUS messages (1FFB7)\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n  const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n  return (value & mask) >> startBit;\n}\n\n// === TANK_STATUS Specific Decoders ===\n\nfunction decodeTankInstance(value) {\n  // Tank instance mapping — per RV-C spec section 6.28 (TANK_STATUS, PGN 1FFB7)\n  const tankTypes = {\n    0: \"Fresh Water\",\n    1: \"Black Water\",\n    2: \"Gray Water\",\n    3: \"LPG\",\n    16: \"Fresh Water 2\",\n    17: \"Black Water 2\",\n    18: \"Gray Water 2\",\n    19: \"LPG 2\",\n  };\n\n  return tankTypes[value] || `Unknown Tank ${value}`;\n}\n\nfunction decodeTankLevel(value) {\n  // Tank level as raw sensor reading (not percentage)\n  // Percentage calculated as: (relative_level / resolution) * 100\n  if (value <= 250) {\n    return value; // Raw sensor reading\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTankResolution(value) {\n  // Tank resolution as raw sensor resolution value\n  // Used in calculation: (relative_level / resolution) * 100\n  if (value <= 250) {\n    return value; // Raw resolution value\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTemperature(value) {\n  // Temperature in Celsius, offset -40°C\n  if (value <= 210) {\n    return value - 40; // -40°C to +170°C range\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTankStatus(value) {\n  // Tank status bit field decoding\n  const statusBits = {\n    0: \"Tank OK\",\n    1: \"Tank Low\",\n    2: \"Tank Full\",\n    3: \"Tank Overfilled\",\n    4: \"Sensor Fault\",\n    5: \"Tank Disconnected\",\n    6: \"Reserved\",\n    7: \"Reserved\",\n  };\n\n  const activeStatuses = [];\n  for (let bit = 0; bit < 8; bit++) {\n    if (value & (1 << bit)) {\n      activeStatuses.push(statusBits[bit]);\n    }\n  }\n\n  return activeStatuses.length > 0 ? activeStatuses.join(\", \") : \"Tank OK\";\n}\n\n// === Parameter Decoder ===\n\nfunction decodeParameter(param, data) {\n  if (!data || param.byte >= data.length) {\n    return \"Invalid Data\";\n  }\n\n  const byte = param.byte;\n  const value = data[byte];\n\n  if (param.type === \"uint8\") {\n    // Handle specific TANK_STATUS parameter types\n    if (param.name === \"instance\") {\n      return decodeTankInstance(value);\n    }\n    if (param.name === \"relative level\" || param.name === \"level\") {\n      return decodeTankLevel(value);\n    }\n    if (param.name === \"resolution\") {\n      return decodeTankResolution(value);\n    }\n    if (param.name === \"temperature\") {\n      return decodeTemperature(value);\n    }\n    if (param.name === \"status\" || param.name === \"tank status\") {\n      return decodeTankStatus(value);\n    }\n\n    // Default uint8 handling\n    return value;\n  } else if (\n    param.type === \"bit2\" ||\n    (param.type.startsWith(\"uint\") && param.bit)\n  ) {\n    // Handle bit field parameters\n    const bitMatch = param.bit.match(/(\\d+)-(\\d+)/);\n    if (bitMatch) {\n      const [, startBit, endBit] = bitMatch.map(Number);\n      const bitValue = decodeBits(value, startBit, endBit);\n\n      if (param.values) {\n        return param.values[bitValue.toString()] || bitValue;\n      }\n      return bitValue;\n    }\n  }\n\n  return value;\n}\n\n// === Main Decode Function ===\n\nfunction decodeTankStatusMessage(dgn, data) {\n  const result = {\n    dgn: dgn,\n    dgn_name: \"TANK_STATUS\",\n  };\n\n  // Decode based on TANK_STATUS format (8 bytes typical)\n  if (data.length >= 8) {\n    // Byte 0: Tank Instance\n    result.instance = data[0];\n    result.instance_name = decodeTankInstance(data[0]);\n\n    // Byte 1: Relative Level (0-200)\n    result.relative_level = decodeTankLevel(data[1]);\n\n    // Byte 2: Resolution (tank capacity steps)\n    result.resolution = decodeTankResolution(data[2]);\n\n    // Byte 3: Temperature\n    result.temperature = decodeTemperature(data[3]);\n\n    // Byte 4: Tank Status (bit field)\n    result.status = decodeTankStatus(data[4]);\n\n    // Bytes 5-7: Reserved/Future use\n    // Currently set to 0xFF in most implementations\n\n    // Raw values for debugging\n    result.raw_instance = data[0];\n    result.raw_relative_level = data[1];\n    result.raw_resolution = data[2];\n    result.raw_temperature = data[3];\n    result.raw_status = data[4];\n    if (data.length > 5) result.raw_byte_5 = data[5];\n    if (data.length > 6) result.raw_byte_6 = data[6];\n    if (data.length > 7) result.raw_byte_7 = data[7];\n  }\n\n  // Add convenience fields for easier consumption\n  // Calculate tank percentage using RV-C formula: (relative_level / resolution) * 100\n  if (\n    result.relative_level !== undefined &&\n    result.resolution !== undefined &&\n    typeof result.relative_level === \"number\" &&\n    typeof result.resolution === \"number\" &&\n    result.resolution > 0\n  ) {\n    result.level_percentage = Math.round(\n      (result.relative_level / result.resolution) * 100,\n    );\n  } else if (\n    result.relative_level !== undefined &&\n    typeof result.relative_level === \"number\"\n  ) {\n    // Fallback if resolution is not available (direct percentage)\n    result.level_percentage = Math.round(result.relative_level * 0.5); // 0.5% per step\n  }\n\n  if (result.instance !== undefined) {\n    // Map numeric instance to single-word tank type — strictly per RV-C spec section 6.28\n    const tankTypeMap = {\n      0: \"fresh\",\n      1: \"black\",\n      2: \"gray\",\n      3: \"lpg\",\n      16: \"fresh2\",\n      17: \"black2\",\n      18: \"gray2\",\n      19: \"lpg2\",\n    };\n\n    result.tank_type =\n      tankTypeMap[result.instance] ?? `other_${result.instance}`;\n  }\n\n  // Tank level status\n  if (typeof result.level_percentage === \"number\") {\n    result.tank_empty = result.level_percentage <= 5;\n    result.tank_low = result.level_percentage <= 25;\n    result.tank_full = result.level_percentage >= 95;\n    result.tank_level_available = true;\n  } else {\n    result.tank_level_available = false;\n  }\n\n  // Validate instance — only spec-defined instances pass through\n  // RV-C section 6.28 defines exactly: 0-3 and 16-19\n  // Values 251-255 are RV-C special status values (not real tanks)\n  const validInstances = new Set([0, 1, 2, 3, 16, 17, 18, 19]);\n\n  if (result.instance > 250) {\n    // Silently drop RV-C special status values (251-255)\n    return null;\n  }\n\n  if (!validInstances.has(result.instance)) {\n    node.warn(\n      `Unknown tank instance: ${result.instance} — passing through as other_${result.instance}`,\n    );\n    // Don't return null — let unknown instances through as \"other_N\" for user visibility\n  }\n\n  // Temperature status\n  result.temperature_available = typeof result.temperature === \"number\";\n\n  return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n  node.warn(\"Missing required fields: dgn and/or data_payload\");\n  return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof data_payload !== \"string\" || data_payload.length % 2 !== 0) {\n  node.warn(\"Invalid data_payload: must be even-length hex string\");\n  return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < data_payload.length; i += 2) {\n  const hexByte = data_payload.substring(i, i + 2);\n  const byteValue = parseInt(hexByte, 16);\n  if (isNaN(byteValue)) {\n    node.warn(`Invalid hex byte in data_payload: ${hexByte}`);\n    return null;\n  }\n  dataBytes.push(byteValue);\n}\n\n// Decode the TANK_STATUS message\nconst decodedData = decodeTankStatusMessage(dgn, dataBytes);\n\n// Handle null return (invalid instance filtered out)\nif (!decodedData) {\n  return null;\n}\n\n// Handle decode errors\nif (decodedData.error) {\n  incomingPayload.decoding_error = decodedData.error;\n  msg.payload = incomingPayload;\n  return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n  ...incomingPayload,\n  ...decodedData,\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
+        "func": "// Status Updater for Tank\n// Decodes TANK_STATUS messages (1FFB7)\n\n// === Helper Functions ===\n\nfunction decodeBits(value, startBit, endBit) {\n  const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n  return (value & mask) >> startBit;\n}\n\n// === TANK_STATUS Specific Decoders ===\n\nfunction decodeTankInstance(value) {\n  // Tank instance mapping — per RV-C spec section 6.28 (TANK_STATUS, PGN 1FFB7)\n  const tankTypes = {\n    0: \"Fresh Water\",\n    1: \"Black Water\",\n    2: \"Gray Water\",\n    3: \"LPG\",\n    16: \"Fresh Water 2\",\n    17: \"Black Water 2\",\n    18: \"Gray Water 2\",\n    19: \"LPG 2\",\n  };\n\n  return tankTypes[value] || `Unknown Tank ${value}`;\n}\n\nfunction decodeTankLevel(value) {\n  // Tank level as raw sensor reading (not percentage)\n  // Percentage calculated as: (relative_level / resolution) * 100\n  if (value <= 250) {\n    return value; // Raw sensor reading\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTankResolution(value) {\n  // Tank resolution as raw sensor resolution value\n  // Used in calculation: (relative_level / resolution) * 100\n  if (value <= 250) {\n    return value; // Raw resolution value\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTemperature(value) {\n  // Temperature in Celsius, offset -40°C\n  if (value <= 210) {\n    return value - 40; // -40°C to +170°C range\n  } else if (value === 251) {\n    return \"Error\";\n  } else if (value === 252) {\n    return \"Not Supported\";\n  } else if (value === 253) {\n    return \"Out of Range\";\n  } else if (value === 254) {\n    return \"Reserved\";\n  } else if (value === 255) {\n    return \"Not Available\";\n  }\n  return \"Invalid\";\n}\n\nfunction decodeTankStatus(value) {\n  // Tank status bit field decoding\n  const statusBits = {\n    0: \"Tank OK\",\n    1: \"Tank Low\",\n    2: \"Tank Full\",\n    3: \"Tank Overfilled\",\n    4: \"Sensor Fault\",\n    5: \"Tank Disconnected\",\n    6: \"Reserved\",\n    7: \"Reserved\",\n  };\n\n  const activeStatuses = [];\n  for (let bit = 0; bit < 8; bit++) {\n    if (value & (1 << bit)) {\n      activeStatuses.push(statusBits[bit]);\n    }\n  }\n\n  return activeStatuses.length > 0 ? activeStatuses.join(\", \") : \"Tank OK\";\n}\n\n// === Parameter Decoder ===\n\nfunction decodeParameter(param, data) {\n  if (!data || param.byte >= data.length) {\n    return \"Invalid Data\";\n  }\n\n  const byte = param.byte;\n  const value = data[byte];\n\n  if (param.type === \"uint8\") {\n    // Handle specific TANK_STATUS parameter types\n    if (param.name === \"instance\") {\n      return decodeTankInstance(value);\n    }\n    if (param.name === \"relative level\" || param.name === \"level\") {\n      return decodeTankLevel(value);\n    }\n    if (param.name === \"resolution\") {\n      return decodeTankResolution(value);\n    }\n    if (param.name === \"temperature\") {\n      return decodeTemperature(value);\n    }\n    if (param.name === \"status\" || param.name === \"tank status\") {\n      return decodeTankStatus(value);\n    }\n\n    // Default uint8 handling\n    return value;\n  } else if (\n    param.type === \"bit2\" ||\n    (param.type.startsWith(\"uint\") && param.bit)\n  ) {\n    // Handle bit field parameters\n    const bitMatch = param.bit.match(/(\\d+)-(\\d+)/);\n    if (bitMatch) {\n      const [, startBit, endBit] = bitMatch.map(Number);\n      const bitValue = decodeBits(value, startBit, endBit);\n\n      if (param.values) {\n        return param.values[bitValue.toString()] || bitValue;\n      }\n      return bitValue;\n    }\n  }\n\n  return value;\n}\n\n// === Main Decode Function ===\n\nfunction decodeTankStatusMessage(dgn, data) {\n  const result = {\n    dgn: dgn,\n    dgn_name: \"TANK_STATUS\",\n  };\n\n  // Decode based on TANK_STATUS format (8 bytes typical)\n  if (data.length >= 8) {\n    // Byte 0: Tank Instance\n    result.instance = data[0];\n    result.instance_name = decodeTankInstance(data[0]);\n\n    // Byte 1: Relative Level (0-200)\n    result.relative_level = decodeTankLevel(data[1]);\n\n    // Byte 2: Resolution (tank capacity steps)\n    result.resolution = decodeTankResolution(data[2]);\n\n    // Byte 3: Temperature\n    result.temperature = decodeTemperature(data[3]);\n\n    // Byte 4: Tank Status (bit field)\n    result.status = decodeTankStatus(data[4]);\n\n    // Bytes 5-7: Reserved/Future use\n    // Currently set to 0xFF in most implementations\n\n    // Raw values for debugging\n    result.raw_instance = data[0];\n    result.raw_relative_level = data[1];\n    result.raw_resolution = data[2];\n    result.raw_temperature = data[3];\n    result.raw_status = data[4];\n    if (data.length > 5) result.raw_byte_5 = data[5];\n    if (data.length > 6) result.raw_byte_6 = data[6];\n    if (data.length > 7) result.raw_byte_7 = data[7];\n\n    // If relative_level is 0xFF (Not Available), the tank has no physical sensor\n    // or doesn't exist on this coach. Drop the message to prevent phantom entity creation.\n    if (data[1] === 0xff) {\n      return null;\n    }\n  }\n\n  // Add convenience fields for easier consumption\n  // Calculate tank percentage using RV-C formula: (relative_level / resolution) * 100\n  if (\n    result.relative_level !== undefined &&\n    result.resolution !== undefined &&\n    typeof result.relative_level === \"number\" &&\n    typeof result.resolution === \"number\" &&\n    result.resolution > 0\n  ) {\n    result.level_percentage = Math.round(\n      (result.relative_level / result.resolution) * 100,\n    );\n  } else if (\n    result.relative_level !== undefined &&\n    typeof result.relative_level === \"number\"\n  ) {\n    // Fallback if resolution is not available (direct percentage)\n    result.level_percentage = Math.round(result.relative_level * 0.5); // 0.5% per step\n  }\n\n  if (result.instance !== undefined) {\n    // Map numeric instance to single-word tank type — strictly per RV-C spec section 6.28\n    const tankTypeMap = {\n      0: \"fresh\",\n      1: \"black\",\n      2: \"gray\",\n      3: \"lpg\",\n      16: \"fresh2\",\n      17: \"black2\",\n      18: \"gray2\",\n      19: \"lpg2\",\n    };\n\n    result.tank_type =\n      tankTypeMap[result.instance] ?? `other_${result.instance}`;\n  }\n\n  // Tank level status\n  if (typeof result.level_percentage === \"number\") {\n    result.tank_empty = result.level_percentage <= 5;\n    result.tank_low = result.level_percentage <= 25;\n    result.tank_full = result.level_percentage >= 95;\n    result.tank_level_available = true;\n  } else {\n    result.tank_level_available = false;\n  }\n\n  // Validate instance — only spec-defined instances pass through\n  // RV-C section 6.28 defines exactly: 0-3 and 16-19\n  // Values 251-255 are RV-C special status values (not real tanks)\n  const validInstances = new Set([0, 1, 2, 3, 16, 17, 18, 19]);\n\n  if (result.instance > 250) {\n    // Silently drop RV-C special status values (251-255)\n    return null;\n  }\n\n  if (!validInstances.has(result.instance)) {\n    node.warn(\n      `Unknown tank instance: ${result.instance} — passing through as other_${result.instance}`,\n    );\n    // Don't return null — let unknown instances through as \"other_N\" for user visibility\n  }\n\n  // Temperature status\n  result.temperature_available = typeof result.temperature === \"number\";\n\n  return result;\n}\n\n// === Main Logic ===\n\n// Validate input payload\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n  node.warn(\"Missing required fields: dgn and/or data_payload\");\n  return null;\n}\n\n// Validate and convert hex payload to byte array\nif (typeof data_payload !== \"string\" || data_payload.length % 2 !== 0) {\n  node.warn(\"Invalid data_payload: must be even-length hex string\");\n  return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < data_payload.length; i += 2) {\n  const hexByte = data_payload.substring(i, i + 2);\n  const byteValue = parseInt(hexByte, 16);\n  if (isNaN(byteValue)) {\n    node.warn(`Invalid hex byte in data_payload: ${hexByte}`);\n    return null;\n  }\n  dataBytes.push(byteValue);\n}\n\n// Decode the TANK_STATUS message\nconst decodedData = decodeTankStatusMessage(dgn, dataBytes);\n\n// Handle null return (invalid instance filtered out)\nif (!decodedData) {\n  return null;\n}\n\n// Handle decode errors\nif (decodedData.error) {\n  incomingPayload.decoding_error = decodedData.error;\n  msg.payload = incomingPayload;\n  return msg;\n}\n\n// Merge the incoming payload and the decoded data into a single flat object\nmsg.payload = {\n  ...incomingPayload,\n  ...decodedData,\n};\n\n// Clean up the final object by removing the raw data field\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4217,7 +4215,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 180,
+        "y": 197,
         "wires": []
     },
     {
@@ -4906,7 +4904,7 @@
         "z": "3470febb2cd6e952",
         "g": "067069104a82b459",
         "name": "Create tank",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4947,8 +4945,7 @@
         "wires": [
             [
                 "2c1151c97bb185f2",
-                "b6d90639c3fc122c",
-                "03d75239926b1616"
+                "b6d90639c3fc122c"
             ]
         ],
         "l": true
@@ -4970,8 +4967,7 @@
         "y": 1520,
         "wires": [
             [
-                "ccc056e90ff9e046",
-                "936af6d306df76af"
+                "ccc056e90ff9e046"
             ]
         ]
     },
@@ -6066,7 +6062,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 1730,
-        "y": 252,
+        "y": 261,
         "wires": []
     },
     {
@@ -6145,40 +6141,6 @@
         "statusType": "auto",
         "x": 1050,
         "y": 240,
-        "wires": []
-    },
-    {
-        "id": "936af6d306df76af",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "5d1ecae7ac09586c",
-        "name": "debug 2",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1950,
-        "y": 1420,
-        "wires": []
-    },
-    {
-        "id": "03d75239926b1616",
-        "type": "debug",
-        "z": "3470febb2cd6e952",
-        "g": "5d1ecae7ac09586c",
-        "name": "debug 3",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1610,
-        "y": 1420,
         "wires": []
     },
     {
