@@ -618,7 +618,8 @@
             "89759b3d2d9812c8",
             "19993b80c1009e61",
             "3fd699a116881ab0",
-            "943309ad88255256"
+            "943309ad88255256",
+            "a0c37c6576258013"
         ],
         "x": 114,
         "y": 279,
@@ -2384,7 +2385,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 120,
+        "y": 133,
         "wires": []
     },
     {
@@ -6817,8 +6818,8 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_unique",
-        "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = global.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  global.set(\"uniqueVictron\", uniqueVictron);\n\n  // Look up product short name from discovered devices\n  const victronDevices = global.get(\"victronDevices\") || {};\n  const deviceInfo = victronDevices[`${serviceType}_${instance}`];\n  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;\n  const productName = deviceInfo ? deviceInfo.productName : \"\";\n\n  return {\n    payload: {\n      service_type: serviceType,\n      instance: instance,\n      dbus_path: dbusPath,\n      unit: msg.payload.unit,\n      value: msg.payload.value,\n      short_name: shortName,\n      product_name: productName,\n      access: msg.payload.access,\n      writable: msg.payload.writable,\n    },\n  };\n}\n\n// Return nothing if duplicate\nreturn null;\n",
-        "outputs": 1,
+        "func": "// Unique Filter for Victron entities\n\n// Retrieve existing Victron entities from flow context, or initialize as empty array\nlet uniqueVictron = global.get(\"uniqueVictron\") || [];\n\nconst serviceType = msg.payload.service_type;\nconst instance = msg.payload.instance;\nconst dbusPath = msg.payload.dbus_path;\n\n// Build unique key\nconst key = `${serviceType}_${instance}_${dbusPath}`;\n\n// Check if this entity has been seen before\nif (!uniqueVictron.includes(key)) {\n  uniqueVictron.push(key);\n  global.set(\"uniqueVictron\", uniqueVictron);\n\n  // Look up product short name from discovered devices\n  const victronDevices = global.get(\"victronDevices\", \"file\") || {};\n  const deviceInfo = victronDevices[`${serviceType}_${instance}`];\n  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;\n  const productName = deviceInfo ? deviceInfo.productName : \"\";\n\n  // Send to first output, and reset message to second output\n  return [\n    {\n      payload: {\n        service_type: serviceType,\n        instance: instance,\n        dbus_path: dbusPath,\n        unit: msg.payload.unit,\n        value: msg.payload.value,\n        short_name: shortName,\n        product_name: productName,\n        access: msg.payload.access,\n        writable: msg.payload.writable,\n      },\n    },\n    { reset: true }, // this goes to the second output\n  ];\n}\n\n// Return nothing if duplicate\nreturn null;\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -6829,6 +6830,9 @@
         "wires": [
             [
                 "d1a2b3c4e5f67805"
+            ],
+            [
+                "a0c37c6576258013"
             ]
         ]
     },
@@ -7088,7 +7092,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 157,
+        "y": 174,
         "wires": []
     },
     {
@@ -7246,7 +7250,8 @@
         "mode": "link",
         "links": [
             "db3ce2f66f852ca6",
-            "b1b68ff387e01a3a"
+            "b1b68ff387e01a3a",
+            "31ca2b64ca5a2f07"
         ],
         "x": 1290,
         "y": 440,
@@ -7260,7 +7265,8 @@
         "g": "8aac091f0fffbf22",
         "name": "Reset Victron filters",
         "links": [
-            "71ac45fb64bf70c9"
+            "71ac45fb64bf70c9",
+            "a0c37c6576258013"
         ],
         "x": 230,
         "y": 600,
@@ -7278,7 +7284,8 @@
         "g": "8aac091f0fffbf22",
         "name": "Reset Victron filters",
         "links": [
-            "71ac45fb64bf70c9"
+            "71ac45fb64bf70c9",
+            "a0c37c6576258013"
         ],
         "x": 230,
         "y": 1120,
@@ -7472,6 +7479,23 @@
                 "e1032a6a79ae3e4c"
             ]
         ]
+    },
+    {
+        "id": "a0c37c6576258013",
+        "type": "link out",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "Reset Victron filters",
+        "mode": "link",
+        "links": [
+            "db3ce2f66f852ca6",
+            "b1b68ff387e01a3a",
+            "31ca2b64ca5a2f07"
+        ],
+        "x": 1270,
+        "y": 640,
+        "wires": [],
+        "l": true
     },
     {
         "id": "d5cb654b4dad986f",
