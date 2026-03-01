@@ -184,12 +184,14 @@
             "4fa9b9fdc36c83da",
             "9dd6a98018824be9",
             "534281eb59433da1",
-            "dbbf39b309416ca1"
+            "dbbf39b309416ca1",
+            "03a998942a940736",
+            "94f9e848b3848621"
         ],
         "x": 954,
-        "y": 239,
+        "y": 79,
         "w": 1358,
-        "h": 622
+        "h": 782
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -602,22 +604,24 @@
             "8fdd1d506d28b9b6",
             "0b4d0850eae8a0b4",
             "eced66f05a1796cd",
-            "c02d9fc6bf086fdf",
             "f3f99ba42088c9b1",
             "a95d74d20270f69b",
-            "1e2529650de44a73",
             "9be2b9ec5c4f51d4",
             "71ac45fb64bf70c9",
             "db3ce2f66f852ca6",
             "b1b68ff387e01a3a",
             "0b2b4c52d68092cc",
             "6ba061be2ab168c5",
-            "70c7d357a6f48e4a"
+            "70c7d357a6f48e4a",
+            "89759b3d2d9812c8",
+            "19993b80c1009e61",
+            "3fd699a116881ab0",
+            "943309ad88255256"
         ],
         "x": 114,
-        "y": 299,
+        "y": 279,
         "w": 1338,
-        "h": 842
+        "h": 882
     },
     {
         "id": "3296e5f0fcd2c737",
@@ -1025,7 +1029,7 @@
             "2343c8c12f2081fa"
         ],
         "x": 954,
-        "y": 919,
+        "y": 939,
         "w": 472,
         "h": 142
     },
@@ -1416,7 +1420,8 @@
                 "a2dad25eb05117f7",
                 "fc66c16576e28548",
                 "c6fb02a17f709e08",
-                "a6594a9464d8fe4e"
+                "a6594a9464d8fe4e",
+                "03a998942a940736"
             ]
         ]
     },
@@ -1575,6 +1580,11 @@
         "rules": [
             {
                 "t": "eq",
+                "v": "DIGITAL_INPUT_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
                 "v": "DATE_TIME_STATUS",
                 "vt": "str"
             },
@@ -1624,11 +1634,14 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 10,
+        "outputs": 11,
         "x": 1510,
         "y": 520,
         "wires": [
             [],
+            [
+                "94f9e848b3848621"
+            ],
             [],
             [],
             [],
@@ -2389,7 +2402,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 186,
+        "y": 212,
         "wires": []
     },
     {
@@ -2755,6 +2768,87 @@
         "l": true
     },
     {
+        "id": "03a998942a940736",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Tally",
+        "func": "// Tally node (temporary diagnostic)\nconst counts = flow.get(\"dgnCounts\") || {};\nconst name = msg.payload.dgn_name;\ncounts[name] = (counts[name] || 0) + 1;\nflow.set(\"dgnCounts\", counts);\nreturn msg; // pass through unmodified\n",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "3d07bdca6b71b669",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "name": "function 1",
+        "func": "node.warn(JSON.stringify(flow.get(\"dgnCounts\")))",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8037e09fbf4ac87b",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1090,
+        "y": 140,
+        "wires": [
+            [
+                "3d07bdca6b71b669"
+            ]
+        ]
+    },
+    {
+        "id": "94f9e848b3848621",
+        "type": "debug",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1670,
+        "y": 120,
+        "wires": []
+    },
+    {
         "id": "9f88f215f3f07227",
         "type": "switch",
         "z": "3e5f038a4f5a8b9a",
@@ -2764,7 +2858,37 @@
         "rules": [
             {
                 "t": "eq",
-                "v": "DIGITAL_INPUT_STATUS",
+                "v": "DC_DIMMER_STATUS_3",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "DC_SOURCE_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "CHARGER_AC_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "INVERTER_AC_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "INVERTER_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "FLOOR_HEAT_STATUS",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "THERMOSTAT_AMBIENT_STATUS",
                 "vt": "str"
             },
             {
@@ -2775,11 +2899,6 @@
             {
                 "t": "eq",
                 "v": "AUTOFILL_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "DC_DIMMER_STATUS_3",
                 "vt": "str"
             },
             {
@@ -2804,11 +2923,6 @@
             },
             {
                 "t": "eq",
-                "v": "FLOOR_HEAT_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
                 "v": "AQUAHOT_STATUS",
                 "vt": "str"
             },
@@ -2825,11 +2939,6 @@
             {
                 "t": "eq",
                 "v": "THERMOSTAT_STATUS_2",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "THERMOSTAT_AMBIENT_STATUS",
                 "vt": "str"
             },
             {
@@ -2860,21 +2969,6 @@
             {
                 "t": "eq",
                 "v": "CHARGER_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "CHARGER_AC_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "INVERTER_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "INVERTER_AC_STATUS",
                 "vt": "str"
             },
             {
@@ -2913,11 +3007,6 @@
                 "vt": "str"
             },
             {
-                "t": "cont",
-                "v": "DC_SOURCE_STATUS",
-                "vt": "str"
-            },
-            {
                 "t": "eq",
                 "v": "CIRCULATION_PUMP_STATUS",
                 "vt": "str"
@@ -2938,19 +3027,36 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 35,
+        "outputs": 34,
         "x": 420,
         "y": 800,
         "wires": [
-            [],
+            [
+                "4a6d57460d64c76f"
+            ],
+            [
+                "40bc1ec5180b6589"
+            ],
+            [
+                "b2bda5ef5e68c98d"
+            ],
+            [
+                "9621acf15d833362"
+            ],
+            [
+                "cb64b7a9a87f03cc"
+            ],
+            [
+                "cd9d55c23ebcee86"
+            ],
+            [
+                "1bb521d55aeb5eba"
+            ],
             [
                 "9e8e5609c54fec82"
             ],
             [
                 "96c3c21a4dd0b9bd"
-            ],
-            [
-                "4a6d57460d64c76f"
             ],
             [
                 "3b2f348b9326267c"
@@ -2965,9 +3071,6 @@
                 "010c5119a7e833b2"
             ],
             [
-                "cd9d55c23ebcee86"
-            ],
-            [
                 "5e7062bde869c7a5"
             ],
             [
@@ -2978,9 +3081,6 @@
             ],
             [
                 "ae9f041c9cd36bb9"
-            ],
-            [
-                "1bb521d55aeb5eba"
             ],
             [
                 "d76a4a48e1beaed6"
@@ -2999,15 +3099,6 @@
             ],
             [
                 "f171dcbe8b5d2e05"
-            ],
-            [
-                "b2bda5ef5e68c98d"
-            ],
-            [
-                "cb64b7a9a87f03cc"
-            ],
-            [
-                "9621acf15d833362"
             ],
             [
                 "b91d72f6d383c0d6"
@@ -3029,9 +3120,6 @@
             ],
             [
                 "f945d56c437bfb38"
-            ],
-            [
-                "40bc1ec5180b6589"
             ],
             [
                 "2d9036a34ecd189a"
@@ -4215,7 +4303,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 197,
+        "y": 214,
         "wires": []
     },
     {
@@ -6591,7 +6679,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 420,
+        "y": 520,
         "wires": [
             [
                 "a95d74d20270f69b"
@@ -6613,10 +6701,11 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 580,
+        "y": 340,
         "wires": [
             [
-                "1e2529650de44a73"
+                "19993b80c1009e61",
+                "943309ad88255256"
             ]
         ]
     },
@@ -6626,15 +6715,15 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_store_instance",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = msg.payload.value;\n\n// Store the ID in global context\nglobal.set(\"victronPortalId\", portalId);\n\nnode.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: portalId,\n});\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = msg.payload.value;\n\n// Store the ID in global context (file store — survives restarts)\nglobal.set(\"victronPortalId\", portalId, \"file\");\n\nnode.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: portalId,\n});\n",
         "outputs": 0,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 580,
+        "x": 640,
+        "y": 320,
         "wires": []
     },
     {
@@ -6643,7 +6732,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_keep_alive",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    return msg;\n}\nreturn null;\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\", \"file\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = { \"keepalive-options\": [\"suppress-republish\"] };\n\n    return msg;\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6651,7 +6740,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6681,7 +6770,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -6694,7 +6783,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_poll_devices",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    return msg;\n}\nreturn null;\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst portalId = global.get(\"victronPortalId\", \"file\");\n\nif (portalId) {\n    msg.topic = `R/${portalId}/keepalive`;\n\n    msg.payload = \"\";\n\n    return msg;\n}\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6702,7 +6791,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 720,
+        "y": 740,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6715,7 +6804,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_decode_mqtt",
-        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// Optimized Decode: Rounds, Filters, and calculates Totals early\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === 1. Path Whitelist Gate ===\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n    \"/Relay/0/State\",\n    \"/Relay/1/State\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\"/Dc/0/Voltage\", \"/Dc/0/Current\", \"/Ac/In/L1/P\", \"/State\"],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  acload: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  tank: [\"/Level\", \"/Remaining\", \"/FluidType\"],\n  temperature: [\"/Temperature\", \"/Humidity\"],\n  digitalinput: [\"/InputState\", \"/Count\"],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n    \"/Relay/0/State\",\n  ],\n};\n\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;\n\n// === 2. Device Discovery Gate ===\nconst victronDevices = global.get(\"victronDevices\") || {};\nif (!victronDevices[`${serviceType}_${instance}`]) return null;\n\n// === 3. Value Extraction & Early Rounding ===\nlet rawValue;\ntry {\n  const parsed =\n    typeof msg.payload === \"string\" ? JSON.parse(msg.payload) : msg.payload;\n  rawValue = parsed && parsed.value !== undefined ? parsed.value : parsed;\n} catch (e) {\n  rawValue = msg.payload;\n}\n\nif (rawValue === null || rawValue === undefined) return null;\n\nlet processedValue = rawValue;\nif (typeof rawValue === \"number\") {\n  const decimals = dbusPath.toLowerCase().includes(\"soc\") ? 0 : 1;\n  processedValue =\n    Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);\n}\n\n// === 4. Early RBE Filter ===\nconst cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;\nif (flow.get(cacheKey) === processedValue) return null;\nflow.set(cacheKey, processedValue);\n\n// === 5. Map Lookup ===\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\",\n  dataType = \"\",\n  scale = \"\",\n  access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const def = victronMap.get(serviceType).get(dbusPath);\n  if (def) {\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === 6. Build Standardized Payload (Removed routing_key) ===\nconst basePayload = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: processedValue,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  writable: access === \"W\" || access === \"RW\",\n};\n\nmsg.payload = basePayload;\n\n// === 7. Synthetic Totals (using node.send) ===\nconst powerTotalPairs = [\n  {\n    l1: \"/Ac/Consumption/L1/Power\",\n    l2: \"/Ac/Consumption/L2/Power\",\n    total: \"/Ac/Consumption/Total/Power\",\n  },\n  {\n    l1: \"/Ac/Grid/L1/Power\",\n    l2: \"/Ac/Grid/L2/Power\",\n    total: \"/Ac/Grid/Total/Power\",\n  },\n  {\n    l1: \"/Ac/ActiveIn/L1/P\",\n    l2: \"/Ac/ActiveIn/L2/P\",\n    total: \"/Ac/ActiveIn/Total/P\",\n  },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    if (dbusPath === pair.l1) stored.l1 = processedValue;\n    if (dbusPath === pair.l2) stored.l2 = processedValue;\n    flow.set(contextKey, stored);\n\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      node.send({\n        payload: {\n          ...basePayload,\n          dbus_path: pair.total,\n          value: (Number(stored.l1) || 0) + (Number(stored.l2) || 0),\n        },\n      });\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
+        "func": "// Decode Victron MQTT topic and payload into standardized message\n\n// Optimized Decode: Rounds, Filters, and calculates Totals early\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\nconst topic = msg.topic;\nif (!topic || typeof topic !== \"string\") return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst dbusPath = \"/\" + parts.slice(4).join(\"/\");\n\n// === 1. Path Whitelist Gate ===\nconst pathWhitelist = {\n  system: [\n    \"/Dc/Battery/Soc\",\n    \"/Dc/Battery/Voltage\",\n    \"/Dc/Battery/Current\",\n    \"/Dc/Battery/Power\",\n    \"/Dc/Battery/Temperature\",\n    \"/Dc/Pv/Power\",\n    \"/Dc/Pv/Current\",\n    \"/Ac/Consumption/L1/Power\",\n    \"/Ac/Consumption/L2/Power\",\n    \"/Ac/Grid/L1/Power\",\n    \"/Ac/Grid/L2/Power\",\n    \"/Ac/ActiveIn/ActiveInput\",\n    \"/Ac/ActiveIn/Source\",\n    \"/Dc/System/Power\",\n    \"/Relay/0/State\",\n    \"/Relay/1/State\",\n  ],\n  battery: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/Dc/1/Voltage\",\n    \"/Soc\",\n  ],\n  solarcharger: [\n    \"/Yield/Power\",\n    \"/Yield/System\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Pv/V\",\n    \"/State\",\n  ],\n  charger: [\"/Dc/0/Voltage\", \"/Dc/0/Current\", \"/Ac/In/L1/P\", \"/State\"],\n  alternator: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  dcdc: [\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/In/V\",\n    \"/Dc/In/I\",\n    \"/Dc/In/P\",\n    \"/State\",\n  ],\n  grid: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  acload: [\"/Ac/L1/Power\", \"/Ac/L2/Power\", \"/Ac/Power\"],\n  tank: [\"/Level\", \"/Remaining\", \"/FluidType\"],\n  temperature: [\"/Temperature\", \"/Humidity\"],\n  digitalinput: [\"/InputState\", \"/Count\"],\n  vebus: [\n    \"/Ac/ActiveIn/L1/V\",\n    \"/Ac/ActiveIn/L1/I\",\n    \"/Ac/ActiveIn/L1/P\",\n    \"/Ac/ActiveIn/L2/V\",\n    \"/Ac/ActiveIn/L2/I\",\n    \"/Ac/ActiveIn/L2/P\",\n    \"/Ac/Out/L1/V\",\n    \"/Ac/Out/L1/I\",\n    \"/Ac/Out/L1/P\",\n    \"/Ac/Out/L2/V\",\n    \"/Ac/Out/L2/I\",\n    \"/Ac/Out/L2/P\",\n    \"/Ac/ActiveIn/CurrentLimit\",\n    \"/Ac/ActiveIn/L1/F\",\n    \"/Dc/0/Voltage\",\n    \"/Dc/0/Current\",\n    \"/Dc/0/Power\",\n    \"/Dc/0/Temperature\",\n    \"/State\",\n    \"/Mode\",\n    \"/Relay/0/State\",\n  ],\n};\n\nconst allowedPaths = pathWhitelist[serviceType];\nif (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;\n\n// === 2. Device Discovery Gate ===\nconst victronDevices = global.get(\"victronDevices\", \"file\") || {};\nif (!victronDevices[`${serviceType}_${instance}`]) return null;\n\n// === 3. Value Extraction & Early Rounding ===\nlet rawValue;\ntry {\n  const parsed =\n    typeof msg.payload === \"string\" ? JSON.parse(msg.payload) : msg.payload;\n  rawValue = parsed && parsed.value !== undefined ? parsed.value : parsed;\n} catch (e) {\n  rawValue = msg.payload;\n}\n\nif (rawValue === null || rawValue === undefined) return null;\n\nlet processedValue = rawValue;\nif (typeof rawValue === \"number\") {\n  const decimals = dbusPath.toLowerCase().includes(\"soc\") ? 0 : 1;\n  processedValue =\n    Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);\n}\n\n// === 4. Early RBE Filter ===\nconst cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;\nif (flow.get(cacheKey) === processedValue) return null;\nflow.set(cacheKey, processedValue);\n\n// === 5. Map Lookup ===\nconst victronMap = global.get(\"victronMap\");\nlet unit = \"\",\n  dataType = \"\",\n  scale = \"\",\n  access = \"\";\n\nif (victronMap && victronMap.has(serviceType)) {\n  const def = victronMap.get(serviceType).get(dbusPath);\n  if (def) {\n    unit = def.unit || \"\";\n    dataType = def.type || \"\";\n    scale = def.scale || \"\";\n    access = def.access || \"\";\n  }\n}\n\n// === 6. Build Standardized Payload (Removed routing_key) ===\nconst basePayload = {\n  service_type: serviceType,\n  instance: instance,\n  dbus_path: dbusPath,\n  value: processedValue,\n  unit: unit,\n  data_type: dataType,\n  scale: scale,\n  access: access,\n  writable: access === \"W\" || access === \"RW\",\n};\n\nmsg.payload = basePayload;\n\n// === 7. Synthetic Totals (using node.send) ===\nconst powerTotalPairs = [\n  {\n    l1: \"/Ac/Consumption/L1/Power\",\n    l2: \"/Ac/Consumption/L2/Power\",\n    total: \"/Ac/Consumption/Total/Power\",\n  },\n  {\n    l1: \"/Ac/Grid/L1/Power\",\n    l2: \"/Ac/Grid/L2/Power\",\n    total: \"/Ac/Grid/Total/Power\",\n  },\n  {\n    l1: \"/Ac/ActiveIn/L1/P\",\n    l2: \"/Ac/ActiveIn/L2/P\",\n    total: \"/Ac/ActiveIn/Total/P\",\n  },\n  { l1: \"/Ac/Out/L1/P\", l2: \"/Ac/Out/L2/P\", total: \"/Ac/Out/Total/P\" },\n];\n\nfor (const pair of powerTotalPairs) {\n  if (dbusPath === pair.l1 || dbusPath === pair.l2) {\n    const contextKey = `total_${serviceType}_${instance}_${pair.total}`;\n    const stored = flow.get(contextKey) || {};\n\n    if (dbusPath === pair.l1) stored.l1 = processedValue;\n    if (dbusPath === pair.l2) stored.l2 = processedValue;\n    flow.set(contextKey, stored);\n\n    if (stored.l1 !== undefined && stored.l2 !== undefined) {\n      node.send({\n        payload: {\n          ...basePayload,\n          dbus_path: pair.total,\n          value: (Number(stored.l1) || 0) + (Number(stored.l2) || 0),\n        },\n      });\n    }\n    break;\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6723,7 +6812,7 @@
         "finalize": "",
         "libs": [],
         "x": 560,
-        "y": 420,
+        "y": 520,
         "wires": [
             [
                 "d1a2b3c4e5f67804",
@@ -6745,7 +6834,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 420,
+        "y": 520,
         "wires": [
             [
                 "d1a2b3c4e5f67805"
@@ -6766,7 +6855,7 @@
         "finalize": "",
         "libs": [],
         "x": 1020,
-        "y": 420,
+        "y": 520,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6787,7 +6876,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 500,
+        "y": 600,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -6807,7 +6896,7 @@
         "sendError": false,
         "allProps": false,
         "x": 490,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -6828,7 +6917,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 920,
+        "y": 940,
         "wires": []
     },
     {
@@ -6854,7 +6943,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -6876,7 +6965,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 240,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -6889,7 +6978,7 @@
         "z": "1fde0c4ffb03727e",
         "g": "8aac091f0fffbf22",
         "name": "victron_store_devices",
-        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\n// Store active Victron device instances from ProductName topics\n// Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst key = `${serviceType}_${instance}`;\n\n// Extract product name from payload\nlet productName = \"\";\nif (typeof msg.payload === \"string\") {\n  try {\n    productName = JSON.parse(msg.payload).value || \"\";\n  } catch (e) {\n    productName = msg.payload;\n  }\n} else if (typeof msg.payload === \"object\" && msg.payload !== null) {\n  productName = msg.payload.value || \"\";\n}\n\n// Build short name from first two alpha words of product name (skip model numbers)\nconst alphaWords = productName.split(/\\s+/).filter((w) => /^[a-zA-Z]/.test(w));\nconst shortName = alphaWords\n  .slice(0, 2)\n  .join(\"_\")\n  .replace(/[^a-zA-Z0-9_-]/g, \"\")\n  .toLowerCase();\n\n// Get or initialize the active devices object\nlet victronDevices = global.get(\"victronDevices\") || {};\n\n// Store or update device entry\nvictronDevices[key] = {\n  productName: productName,\n  shortName: shortName || serviceType,\n};\n\nglobal.set(\"victronDevices\", victronDevices);\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `${Object.keys(victronDevices).length} active devices`,\n});\n\nreturn null;\n",
+        "func": "const victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\n// Store active Victron device instances from ProductName topics\n// Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName\n\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst parts = topic.split(\"/\");\nif (parts.length < 5) return null;\n\nconst serviceType = parts[2];\nconst instance = parts[3];\nconst key = `${serviceType}_${instance}`;\n\n// Extract product name from payload\nlet productName = \"\";\nif (typeof msg.payload === \"string\") {\n  try {\n    productName = JSON.parse(msg.payload).value || \"\";\n  } catch (e) {\n    productName = msg.payload;\n  }\n} else if (typeof msg.payload === \"object\" && msg.payload !== null) {\n  productName = msg.payload.value || \"\";\n}\n\n// Build short name from first two alpha words of product name (skip model numbers)\nconst alphaWords = productName.split(/\\s+/).filter((w) => /^[a-zA-Z]/.test(w));\nconst shortName = alphaWords\n  .slice(0, 2)\n  .join(\"_\")\n  .replace(/[^a-zA-Z0-9_-]/g, \"\")\n  .toLowerCase();\n\n// Get or initialize the active devices object\nlet victronDevices = global.get(\"victronDevices\", \"file\") || {};\n\n// Store or update device entry\nvictronDevices[key] = {\n  productName: productName,\n  shortName: shortName || serviceType,\n};\n\nglobal.set(\"victronDevices\", victronDevices, \"file\");\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `${Object.keys(victronDevices).length} active devices`,\n});\n\nreturn null;\n",
         "outputs": 0,
         "timeout": "",
         "noerr": 0,
@@ -6897,7 +6986,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 1020,
+        "y": 1040,
         "wires": []
     },
     {
@@ -6923,7 +7012,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1070,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6944,7 +7033,7 @@
         "finalize": "",
         "libs": [],
         "x": 1320,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -6959,7 +7048,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1050,
-        "y": 960,
+        "y": 980,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -6978,7 +7067,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1310,
-        "y": 460,
+        "y": 560,
         "wires": [],
         "l": true
     },
@@ -6998,7 +7087,7 @@
         "expiry": "",
         "broker": "68237e1473ec01aa",
         "x": 1270,
-        "y": 720,
+        "y": 740,
         "wires": []
     },
     {
@@ -7025,7 +7114,7 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 340,
+        "y": 440,
         "wires": [
             [
                 "71ac45fb64bf70c9"
@@ -7045,10 +7134,11 @@
             "88e5fa035bedb48c"
         ],
         "x": 230,
-        "y": 340,
+        "y": 440,
         "wires": [
             [
-                "c02d9fc6bf086fdf"
+                "89759b3d2d9812c8",
+                "48292ec85eb70ee5"
             ]
         ],
         "l": true
@@ -7068,7 +7158,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 840,
+        "y": 860,
         "wires": [
             [
                 "eced66f05a1796cd"
@@ -7089,39 +7179,13 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 840,
+        "y": 860,
         "wires": [
             [
                 "c80ea298a37232a2"
             ],
             [
                 "f3f99ba42088c9b1"
-            ]
-        ]
-    },
-    {
-        "id": "c02d9fc6bf086fdf",
-        "type": "delay",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 440,
-        "y": 340,
-        "wires": [
-            [
-                "48292ec85eb70ee5"
             ]
         ]
     },
@@ -7136,7 +7200,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1310,
-        "y": 820,
+        "y": 840,
         "wires": [],
         "l": true
     },
@@ -7154,31 +7218,10 @@
         "property": "payload",
         "topi": "topic",
         "x": 370,
-        "y": 420,
+        "y": 520,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
-            ]
-        ]
-    },
-    {
-        "id": "1e2529650de44a73",
-        "type": "rbe",
-        "z": "1fde0c4ffb03727e",
-        "g": "8aac091f0fffbf22",
-        "name": "",
-        "func": "rbe",
-        "gap": "",
-        "start": "",
-        "inout": "out",
-        "septopics": true,
-        "property": "payload",
-        "topi": "topic",
-        "x": 430,
-        "y": 580,
-        "wires": [
-            [
-                "e1032a6a79ae3e4c"
             ]
         ]
     },
@@ -7196,7 +7239,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 450,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -7215,7 +7258,7 @@
             "b1b68ff387e01a3a"
         ],
         "x": 1290,
-        "y": 340,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -7229,11 +7272,10 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 500,
+        "y": 600,
         "wires": [
             [
-                "a95d74d20270f69b",
-                "1e2529650de44a73"
+                "a95d74d20270f69b"
             ]
         ],
         "l": true
@@ -7248,7 +7290,7 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -7279,7 +7321,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -7309,7 +7351,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 340,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -7339,10 +7381,104 @@
         "payload": "",
         "payloadType": "date",
         "x": 400,
-        "y": 780,
+        "y": 800,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
+            ]
+        ]
+    },
+    {
+        "id": "89759b3d2d9812c8",
+        "type": "delay",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "days",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "day",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "3fd699a116881ab0"
+            ]
+        ]
+    },
+    {
+        "id": "19993b80c1009e61",
+        "type": "function",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "flush",
+        "func": "return {flush:true}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 380,
+        "wires": [
+            [
+                "89759b3d2d9812c8"
+            ]
+        ]
+    },
+    {
+        "id": "3fd699a116881ab0",
+        "type": "delay",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 760,
+        "y": 400,
+        "wires": [
+            [
+                "48292ec85eb70ee5"
+            ]
+        ]
+    },
+    {
+        "id": "943309ad88255256",
+        "type": "rbe",
+        "z": "1fde0c4ffb03727e",
+        "g": "8aac091f0fffbf22",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 430,
+        "y": 320,
+        "wires": [
+            [
+                "e1032a6a79ae3e4c"
             ]
         ]
     },
