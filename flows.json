@@ -186,12 +186,14 @@
             "534281eb59433da1",
             "dbbf39b309416ca1",
             "03a998942a940736",
-            "94f9e848b3848621"
+            "ba5b781648cb453a",
+            "8037e09fbf4ac87b",
+            "3d07bdca6b71b669"
         ],
         "x": 954,
-        "y": 79,
+        "y": 239,
         "w": 1358,
-        "h": 782
+        "h": 622
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -1402,7 +1404,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "decode_rvc_can",
-        "func": "// decode_rvc_can.js\n// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// If the PGN is in the FE/FF range, convert it to the 5-digit RV-C DGN (1F prefix)\n// for primary map lookup. This handles 1FECA, 1FFA9, etc.\nif (dgn.startsWith(\"FE\") || dgn.startsWith(\"FF\")) {\n  dgn = \"1\" + lookupPgn;\n  dgn_name = dgnMap.get(dgn); // Use the 5-digit key for lookup\n} else {\n  // For all other PGNs (like 00F7, EF4D), use the 4-digit PGN for lookup\n  dgn_name = dgnMap.get(dgn);\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  data_payload: data_payload,\n};\n\nreturn msg;\n",
+        "func": "// decode_rvc_can.js\n// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// If the PGN is in the FE/FF range, convert it to the 5-digit RV-C DGN (1F prefix)\n// for primary map lookup. This handles 1FECA, 1FFA9, etc.\nif (dgn.startsWith(\"FE\") || dgn.startsWith(\"FF\")) {\n  dgn = \"1\" + lookupPgn;\n  dgn_name = dgnMap.get(dgn); // Use the 5-digit key for lookup\n} else {\n  // For all other PGNs (like 00F7, EF4D), use the 4-digit PGN for lookup\n  dgn_name = dgnMap.get(dgn);\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  data_payload: data_payload,\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1579,18 +1581,13 @@
         "propertyType": "msg",
         "rules": [
             {
-                "t": "eq",
-                "v": "DIGITAL_INPUT_STATUS",
+                "t": "cont",
+                "v": "STATUS",
                 "vt": "str"
             },
             {
-                "t": "eq",
-                "v": "DATE_TIME_STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "ACKNOWLEDGEMENT",
+                "t": "cont",
+                "v": "COMMAND",
                 "vt": "str"
             },
             {
@@ -1601,16 +1598,6 @@
             {
                 "t": "eq",
                 "v": "TIME",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "STATUS",
-                "vt": "str"
-            },
-            {
-                "t": "cont",
-                "v": "COMMAND",
                 "vt": "str"
             },
             {
@@ -1634,25 +1621,20 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 11,
+        "outputs": 8,
         "x": 1510,
         "y": 520,
         "wires": [
-            [],
             [
-                "94f9e848b3848621"
-            ],
-            [],
-            [],
-            [],
-            [
-                "02bdfc59de71b5a5",
-                "534281eb59433da1"
+                "534281eb59433da1",
+                "ba5b781648cb453a"
             ],
             [
                 "4fa9b9fdc36c83da",
                 "534281eb59433da1"
             ],
+            [],
+            [],
             [
                 "45414bacecada477"
             ],
@@ -1768,7 +1750,7 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 1830,
+        "x": 1970,
         "y": 300,
         "wires": [],
         "l": true
@@ -1904,7 +1886,7 @@
             "f01db5ebc3ae2e18"
         ],
         "x": 1860,
-        "y": 340,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -2392,7 +2374,7 @@
             "00b1afc9a96aca8e"
         ],
         "x": 1840,
-        "y": 380,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -2402,7 +2384,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 212,
+        "y": 120,
         "wires": []
     },
     {
@@ -2771,6 +2753,7 @@
         "id": "03a998942a940736",
         "type": "function",
         "z": "292e70a6ba25b323",
+        "d": true,
         "g": "f09f79586501cb0b",
         "name": "Tally",
         "func": "// Tally node (temporary diagnostic)\nconst counts = flow.get(\"dgnCounts\") || {};\nconst name = msg.payload.dgn_name;\ncounts[name] = (counts[name] || 0) + 1;\nflow.set(\"dgnCounts\", counts);\nreturn msg; // pass through unmodified\n",
@@ -2781,14 +2764,16 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 300,
+        "y": 360,
         "wires": []
     },
     {
         "id": "3d07bdca6b71b669",
         "type": "function",
         "z": "292e70a6ba25b323",
-        "name": "function 1",
+        "d": true,
+        "g": "f09f79586501cb0b",
+        "name": "Tally report",
         "func": "node.warn(JSON.stringify(flow.get(\"dgnCounts\")))",
         "outputs": 1,
         "timeout": 0,
@@ -2796,8 +2781,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1280,
-        "y": 120,
+        "x": 1270,
+        "y": 300,
         "wires": [
             []
         ]
@@ -2806,6 +2791,8 @@
         "id": "8037e09fbf4ac87b",
         "type": "inject",
         "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "f09f79586501cb0b",
         "name": "",
         "props": [
             {
@@ -2823,8 +2810,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1090,
-        "y": 140,
+        "x": 1100,
+        "y": 300,
         "wires": [
             [
                 "3d07bdca6b71b669"
@@ -2832,21 +2819,25 @@
         ]
     },
     {
-        "id": "94f9e848b3848621",
-        "type": "debug",
+        "id": "ba5b781648cb453a",
+        "type": "rbe",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1670,
-        "y": 120,
-        "wires": []
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "payload.instance",
+        "x": 1810,
+        "y": 300,
+        "wires": [
+            [
+                "02bdfc59de71b5a5"
+            ]
+        ]
     },
     {
         "id": "9f88f215f3f07227",
@@ -3148,7 +3139,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 120,
+        "y": 540,
         "wires": [
             [
                 "b87fcd5e60905824"
@@ -3169,7 +3160,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1200,
+        "y": 180,
         "wires": []
     },
     {
@@ -3185,7 +3176,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1200,
+        "y": 180,
         "wires": [
             [
                 "19307edfe4e5bd84"
@@ -3206,7 +3197,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1320,
+        "y": 240,
         "wires": []
     },
     {
@@ -3222,7 +3213,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1320,
+        "y": 240,
         "wires": [
             [
                 "91cac903d306591a"
@@ -3242,7 +3233,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 60,
+        "y": 480,
         "wires": [
             [
                 "295d4bc9058dab71"
@@ -3263,7 +3254,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1290,
-        "y": 780,
+        "y": 420,
         "wires": []
     },
     {
@@ -3279,7 +3270,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 780,
+        "y": 420,
         "wires": [
             [
                 "b9d5913b9730b3e0"
@@ -3299,7 +3290,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 480,
+        "y": 360,
         "wires": [
             [
                 "db73295f937c90a1"
@@ -3320,7 +3311,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1260,
-        "y": 720,
+        "y": 1020,
         "wires": []
     },
     {
@@ -3336,7 +3327,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 720,
+        "y": 1020,
         "wires": [
             [
                 "e06ff8584295e0bd"
@@ -3357,7 +3348,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 900,
+        "y": 1140,
         "wires": []
     },
     {
@@ -3373,7 +3364,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 900,
+        "y": 1140,
         "wires": [
             [
                 "6a02f9f3c2b95dcc"
@@ -3393,7 +3384,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 960,
+        "y": 1200,
         "wires": [
             [
                 "6b903512de37f1ad"
@@ -3414,7 +3405,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1260,
-        "y": 960,
+        "y": 1200,
         "wires": []
     },
     {
@@ -3430,7 +3421,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 1560,
+        "y": 1620,
         "wires": [
             [
                 "f80a9416a8e18e46"
@@ -3451,7 +3442,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1230,
-        "y": 1560,
+        "y": 1620,
         "wires": []
     },
     {
@@ -3467,7 +3458,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1140,
+        "y": 1380,
         "wires": [
             [
                 "78904d457471d1b2"
@@ -3488,7 +3479,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1140,
+        "y": 1380,
         "wires": []
     },
     {
@@ -3504,7 +3495,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 1380,
+        "y": 1440,
         "wires": [
             [
                 "04bc7637ee7139d8"
@@ -3525,7 +3516,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1250,
-        "y": 1380,
+        "y": 1440,
         "wires": []
     },
     {
@@ -3541,7 +3532,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 360,
+        "y": 720,
         "wires": [
             [
                 "45ae070eafc9a732"
@@ -3561,7 +3552,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 1020,
+        "y": 1260,
         "wires": [
             [
                 "51e87f869d6aa2c5"
@@ -3582,7 +3573,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1280,
-        "y": 1020,
+        "y": 1260,
         "wires": []
     },
     {
@@ -3598,7 +3589,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1260,
+        "y": 300,
         "wires": [
             [
                 "9f3a9fd8a4506e74"
@@ -3619,7 +3610,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1260,
+        "y": 300,
         "wires": []
     },
     {
@@ -3635,7 +3626,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 420,
+        "y": 780,
         "wires": [
             [
                 "bff245b2ca47ef79"
@@ -3655,7 +3646,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1440,
+        "y": 1500,
         "wires": [
             [
                 "77e3defd386ce8a8"
@@ -3676,7 +3667,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 1440,
+        "y": 1500,
         "wires": []
     },
     {
@@ -3692,7 +3683,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 1500,
+        "y": 1560,
         "wires": [
             [
                 "fa30f6cf9bede7e9"
@@ -3713,7 +3704,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1220,
-        "y": 1500,
+        "y": 1560,
         "wires": []
     },
     {
@@ -3729,7 +3720,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 180,
+        "y": 60,
         "wires": [
             [
                 "7af7fb2178a714cf"
@@ -3749,7 +3740,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 840,
+        "y": 1080,
         "wires": [
             [
                 "9d90b7163a12d5ed"
@@ -3770,7 +3761,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1240,
-        "y": 840,
+        "y": 1080,
         "wires": []
     },
     {
@@ -3892,7 +3883,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1260,
-        "y": 660,
+        "y": 960,
         "wires": []
     },
     {
@@ -3908,7 +3899,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 660,
+        "y": 960,
         "wires": [
             [
                 "d0e2cc417cf65b90"
@@ -3925,7 +3916,7 @@
             "61f4573c56915577"
         ],
         "x": 1220,
-        "y": 360,
+        "y": 720,
         "wires": [],
         "l": true
     },
@@ -3939,7 +3930,7 @@
             "663120adc5ec254f"
         ],
         "x": 1250,
-        "y": 420,
+        "y": 780,
         "wires": [],
         "l": true
     },
@@ -3953,7 +3944,7 @@
             "7313d7c724d31538"
         ],
         "x": 1250,
-        "y": 180,
+        "y": 60,
         "wires": [],
         "l": true
     },
@@ -3971,7 +3962,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 900,
-        "y": 1620,
+        "y": 1680,
         "wires": []
     },
     {
@@ -3988,7 +3979,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1680,
+        "y": 1740,
         "wires": []
     },
     {
@@ -4005,7 +3996,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1740,
+        "y": 1800,
         "wires": []
     },
     {
@@ -4021,7 +4012,7 @@
         "finalize": "",
         "libs": [],
         "x": 850,
-        "y": 240,
+        "y": 600,
         "wires": [
             [
                 "4ab29d3dd1da32a5"
@@ -4041,7 +4032,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 300,
+        "y": 660,
         "wires": [
             [
                 "f00adfe38f0e26b5"
@@ -4058,7 +4049,7 @@
             "1d2d33ef4e57dd39"
         ],
         "x": 1220,
-        "y": 300,
+        "y": 660,
         "wires": [],
         "l": true
     },
@@ -4072,7 +4063,7 @@
             "f9a04003db7d8e4a"
         ],
         "x": 1230,
-        "y": 240,
+        "y": 600,
         "wires": [],
         "l": true
     },
@@ -4086,7 +4077,7 @@
             "93a2783b5bb8d93d"
         ],
         "x": 1240,
-        "y": 120,
+        "y": 540,
         "wires": [],
         "l": true
     },
@@ -4100,7 +4091,7 @@
             "efb5c968a0a43c7d"
         ],
         "x": 1250,
-        "y": 60,
+        "y": 480,
         "wires": [],
         "l": true
     },
@@ -4118,7 +4109,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 810,
-        "y": 1800,
+        "y": 120,
         "wires": []
     },
     {
@@ -4131,7 +4122,7 @@
             "bd2d1b59183b99bb"
         ],
         "x": 1250,
-        "y": 480,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -4148,7 +4139,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 540,
+        "y": 840,
         "wires": [
             [
                 "b6c72de91f6e7ec7"
@@ -4165,7 +4156,7 @@
             "2ee0ed60af1beb40"
         ],
         "x": 1240,
-        "y": 540,
+        "y": 840,
         "wires": [],
         "l": true
     },
@@ -4183,7 +4174,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 850,
-        "y": 600,
+        "y": 900,
         "wires": []
     },
     {
@@ -4303,7 +4294,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 214,
+        "y": 248,
         "wires": []
     },
     {
@@ -4320,7 +4311,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 820,
-        "y": 1080,
+        "y": 1320,
         "wires": []
     },
     {
@@ -6150,7 +6141,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 1730,
-        "y": 261,
+        "y": 270,
         "wires": []
     },
     {
@@ -7097,7 +7088,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 140,
+        "y": 157,
         "wires": []
     },
     {
