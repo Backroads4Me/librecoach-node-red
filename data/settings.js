@@ -8,21 +8,19 @@
  ******************************************************************************/
 
 module.exports = {
-  // Flow file and credentials
   flowFile: "flows.json",
-  credentialSecret: "librecoach", // Key to encrypt credentials
-  flowFilePretty: true, // Pretty-print JSON for easier reading
+  credentialSecret: "librecoach",
+  flowFilePretty: true,
 
-  // Context storage
   contextStorage: {
-    default: "memoryOnly", // Fast ephemeral storage
+    default: "memoryOnly",
     memoryOnly: { module: "memory" },
-    file: { module: "localfilesystem" }, // Persistent storage for flows
+    file: { module: "localfilesystem" },
   },
 
-  // Editor settings
   editorTheme: {
     theme: "dark",
     tours: false,
+    projects: { enabled: true, workflow: { mode: "manual" } },
   },
 };
