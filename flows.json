@@ -124,12 +124,15 @@
             "86a191e1f24d802a",
             "ed9920dce79a233a",
             "a8882b1f35300448",
-            "df1a21e8d68bc7ea",
-            "ae2d2a4f790d7cf9"
+            "ae2d2a4f790d7cf9",
+            "b09974dcd1646951",
+            "9a4eac9b74adce8e",
+            "289f35c5a1b8a9b5",
+            "682fe95e61a23383"
         ],
         "x": 114,
         "y": 259,
-        "w": 1372,
+        "w": 1452,
         "h": 562
     },
     {
@@ -147,15 +150,12 @@
             "f658418a7b9b4857",
             "b86f82e84d961549",
             "64c5e5cfd4382453",
-            "2110ea4d0b85f784",
-            "958fed9f12301f59",
             "d34a8c1fd2cc4320",
             "74329f13cbbc528a",
             "1ac6e0fa1cbb3852",
             "0e65ff3bc0a0795c",
             "9e9b11b9441e51db",
             "54cd7e4a8959a77c",
-            "32add109922d428a",
             "21029b71ed58348c",
             "c9d298bbaa855984",
             "88e5fa035bedb48c"
@@ -163,7 +163,7 @@
         "x": 114,
         "y": 239,
         "w": 732,
-        "h": 602
+        "h": 522
     },
     {
         "id": "f09f79586501cb0b",
@@ -183,7 +183,6 @@
             "a2dad25eb05117f7",
             "fc66c16576e28548",
             "c6fb02a17f709e08",
-            "2fcbc4d630144362",
             "a6594a9464d8fe4e",
             "02bdfc59de71b5a5",
             "45414bacecada477",
@@ -195,11 +194,13 @@
             "dbbf39b309416ca1",
             "ba5b781648cb453a",
             "ceee39e4b10d6030",
-            "398683928338f9c6"
+            "398683928338f9c6",
+            "2110ea4d0b85f784",
+            "32add109922d428a"
         ],
-        "x": 954,
+        "x": 908,
         "y": 239,
-        "w": 1358,
+        "w": 1344,
         "h": 642
     },
     {
@@ -820,8 +821,8 @@
             "08d4c674d7359aee",
             "baa7afeefe7f84eb"
         ],
-        "x": 214,
-        "y": 619,
+        "x": 134,
+        "y": 399,
         "w": 1092,
         "h": 348
     },
@@ -862,7 +863,7 @@
             "eea1641469efb23f",
             "c781b519a9f9b156"
         ],
-        "x": 1734,
+        "x": 1674,
         "y": 659,
         "w": 552,
         "h": 142
@@ -1023,7 +1024,7 @@
             "5968e8ee034f8751",
             "3d5ce3e925ee2f04"
         ],
-        "x": 1734,
+        "x": 1674,
         "y": 439,
         "w": 552,
         "h": 142
@@ -1121,7 +1122,7 @@
             "3d07bdca6b71b669",
             "8037e09fbf4ac87b"
         ],
-        "x": 994,
+        "x": 934,
         "y": 699,
         "w": 372,
         "h": 142
@@ -1141,9 +1142,30 @@
             "a11c02011307fe95",
             "aa12f93df2087d62"
         ],
-        "x": 794,
-        "y": 799,
+        "x": 714,
+        "y": 579,
         "w": 472,
+        "h": 142
+    },
+    {
+        "id": "f9fbb16169bddad3",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Furnace",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "4524e02cc49f736c",
+            "35854de96a741eab",
+            "ac24aa9a5a804022",
+            "93f4efc3d5dc3fde",
+            "3801a7eb83a2b8c7"
+        ],
+        "x": 114,
+        "y": 2339,
+        "w": 1052,
         "h": 142
     },
     {
@@ -1355,7 +1377,7 @@
         "expiry": "",
         "broker": "80727e60a251c36c",
         "x": 710,
-        "y": 600,
+        "y": 520,
         "wires": []
     },
     {
@@ -1373,7 +1395,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 500,
-        "y": 640,
+        "y": 560,
         "wires": []
     },
     {
@@ -1409,7 +1431,7 @@
             "ead6803380179866"
         ],
         "x": 250,
-        "y": 600,
+        "y": 520,
         "wires": [
             [
                 "cacf35b859af22a9",
@@ -1433,7 +1455,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -1452,7 +1474,7 @@
             "a3b957142479c075"
         ],
         "x": 650,
-        "y": 460,
+        "y": 380,
         "wires": [],
         "l": true
     },
@@ -1460,7 +1482,7 @@
         "id": "2110ea4d0b85f784",
         "type": "mqtt in",
         "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
+        "g": "f09f79586501cb0b",
         "name": "CAN in",
         "topic": "can/raw",
         "qos": "1",
@@ -1470,29 +1492,14 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 300,
+        "x": 990,
+        "y": 540,
         "wires": [
             [
-                "958fed9f12301f59",
-                "32add109922d428a"
+                "32add109922d428a",
+                "8d7d5d3ea117cf79"
             ]
         ]
-    },
-    {
-        "id": "958fed9f12301f59",
-        "type": "link out",
-        "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
-        "name": "CAN in",
-        "mode": "link",
-        "links": [
-            "2fcbc4d630144362"
-        ],
-        "x": 660,
-        "y": 320,
-        "wires": [],
-        "l": true
     },
     {
         "id": "8d7d5d3ea117cf79",
@@ -1507,7 +1514,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1200,
+        "x": 1160,
         "y": 540,
         "wires": [
             [
@@ -1537,7 +1544,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1520,
+        "x": 1460,
         "y": 740,
         "wires": []
     },
@@ -1555,7 +1562,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
+        "x": 1480,
         "y": 700,
         "wires": []
     },
@@ -1573,7 +1580,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1510,
+        "x": 1450,
         "y": 340,
         "wires": []
     },
@@ -1591,7 +1598,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1530,
+        "x": 1470,
         "y": 380,
         "wires": []
     },
@@ -1609,7 +1616,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
+        "x": 1480,
         "y": 300,
         "wires": []
     },
@@ -1627,7 +1634,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
+        "x": 1480,
         "y": 420,
         "wires": []
     },
@@ -1645,27 +1652,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1510,
+        "x": 1450,
         "y": 660,
         "wires": []
-    },
-    {
-        "id": "2fcbc4d630144362",
-        "type": "link in",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "CAN in",
-        "links": [
-            "958fed9f12301f59"
-        ],
-        "x": 1030,
-        "y": 540,
-        "wires": [
-            [
-                "8d7d5d3ea117cf79"
-            ]
-        ],
-        "l": true
     },
     {
         "id": "a6594a9464d8fe4e",
@@ -1723,7 +1712,7 @@
         "checkall": "false",
         "repair": false,
         "outputs": 9,
-        "x": 1510,
+        "x": 1450,
         "y": 540,
         "wires": [
             [
@@ -1778,7 +1767,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1850,
+        "x": 1790,
         "y": 700,
         "wires": [
             [
@@ -1799,7 +1788,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2120,
+        "x": 2060,
         "y": 700,
         "wires": [
             []
@@ -1818,7 +1807,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1850,
+        "x": 1790,
         "y": 760,
         "wires": [
             [
@@ -1840,7 +1829,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2140,
+        "x": 2080,
         "y": 760,
         "wires": []
     },
@@ -1854,7 +1843,7 @@
         "links": [
             "fbc5efde2c447eda"
         ],
-        "x": 1960,
+        "x": 1900,
         "y": 320,
         "wires": [],
         "l": true
@@ -1874,7 +1863,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 650,
-        "y": 400,
+        "y": 320,
         "wires": []
     },
     {
@@ -1989,7 +1978,7 @@
         "links": [
             "f01db5ebc3ae2e18"
         ],
-        "x": 1860,
+        "x": 1800,
         "y": 400,
         "wires": [],
         "l": true
@@ -2068,7 +2057,7 @@
         "expiry": "",
         "broker": "80727e60a251c36c",
         "x": 710,
-        "y": 720,
+        "y": 640,
         "wires": []
     },
     {
@@ -2083,7 +2072,7 @@
             "52b505b69f88888d"
         ],
         "x": 250,
-        "y": 720,
+        "y": 640,
         "wires": [
             [
                 "1ac6e0fa1cbb3852",
@@ -2230,7 +2219,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1860,
+        "x": 1800,
         "y": 840,
         "wires": []
     },
@@ -2298,7 +2287,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1850,
+        "x": 1790,
         "y": 480,
         "wires": [
             [
@@ -2319,7 +2308,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2120,
+        "x": 2060,
         "y": 480,
         "wires": [
             []
@@ -2339,7 +2328,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2140,
+        "x": 2080,
         "y": 540,
         "wires": []
     },
@@ -2356,7 +2345,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1850,
+        "x": 1790,
         "y": 540,
         "wires": [
             [
@@ -2379,7 +2368,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 500,
-        "y": 680,
+        "y": 600,
         "wires": []
     },
     {
@@ -2397,7 +2386,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 420,
+        "y": 340,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -2420,7 +2409,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 480,
+        "y": 400,
         "wires": [
             [
                 "64c5e5cfd4382453",
@@ -2432,7 +2421,7 @@
         "id": "32add109922d428a",
         "type": "debug",
         "z": "292e70a6ba25b323",
-        "g": "3c819b7900145438",
+        "g": "f09f79586501cb0b",
         "name": "can/raw",
         "active": false,
         "tosidebar": true,
@@ -2442,8 +2431,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 280,
+        "x": 1140,
+        "y": 440,
         "wires": []
     },
     {
@@ -2477,7 +2466,7 @@
         "links": [
             "00b1afc9a96aca8e"
         ],
-        "x": 1830,
+        "x": 1770,
         "y": 360,
         "wires": [],
         "l": true
@@ -2488,7 +2477,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 410,
-        "y": 146,
+        "y": 153,
         "wires": []
     },
     {
@@ -2636,7 +2625,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 800,
+        "y": 720,
         "wires": [
             [
                 "c9d298bbaa855984"
@@ -2657,7 +2646,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 800,
+        "y": 720,
         "wires": [
             [
                 "88e5fa035bedb48c"
@@ -2677,7 +2666,7 @@
             "027d238476871cfe"
         ],
         "x": 700,
-        "y": 800,
+        "y": 720,
         "wires": [],
         "l": true
     },
@@ -2816,7 +2805,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1870,
+        "x": 1810,
         "y": 620,
         "wires": [
             [
@@ -2849,7 +2838,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 2150,
+        "x": 2090,
         "y": 620,
         "wires": [],
         "l": true
@@ -2868,7 +2857,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
+        "x": 1210,
         "y": 740,
         "wires": []
     },
@@ -2886,7 +2875,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
+        "x": 1210,
         "y": 800,
         "wires": [
             []
@@ -2915,7 +2904,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1100,
+        "x": 1040,
         "y": 800,
         "wires": [
             [
@@ -2936,7 +2925,7 @@
         "septopics": true,
         "property": "payload",
         "topi": "payload.instance",
-        "x": 1810,
+        "x": 1750,
         "y": 320,
         "wires": [
             [
@@ -2971,7 +2960,6 @@
         "id": "e38f32a1f6d36bfb",
         "type": "link out",
         "z": "292e70a6ba25b323",
-        "d": true,
         "g": "9e47041ed71c4494",
         "name": "MQTT out: Retain TRUE",
         "mode": "link",
@@ -3009,7 +2997,8 @@
         "name": "BETA TEST",
         "links": [
             "db52c8f8b4e4e75f",
-            "04c537115b1bb0b5"
+            "04c537115b1bb0b5",
+            "3801a7eb83a2b8c7"
         ],
         "x": 1150,
         "y": 1740,
@@ -3031,7 +3020,7 @@
             "00b1afc9a96aca8e",
             "cd5a041811bc2c9a"
         ],
-        "x": 1830,
+        "x": 1770,
         "y": 280,
         "wires": [],
         "l": true
@@ -3239,12 +3228,12 @@
             },
             {
                 "t": "eq",
-                "v": "FURNACE_STATUS",
+                "v": "CIRCULATION_PUMP_STATUS",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "CIRCULATION_PUMP_STATUS",
+                "v": "FURNACE_STATUS",
                 "vt": "str"
             },
             {
@@ -3345,10 +3334,10 @@
                 "5bb6491915c598ce"
             ],
             [
-                "d76a4a48e1beaed6"
+                "2d9036a34ecd189a"
             ],
             [
-                "2d9036a34ecd189a"
+                "d76a4a48e1beaed6"
             ],
             [
                 "b797e5a52b6db5b4"
@@ -3954,10 +3943,10 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 1800,
+        "y": 1860,
         "wires": [
             [
-                "630c70190648a35a"
+                "eaf35ec3f1eaf910"
             ]
         ]
     },
@@ -4373,7 +4362,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 1860,
+        "y": 1800,
         "wires": [
             [
                 "630c70190648a35a"
@@ -4451,6 +4440,20 @@
         ],
         "x": 1260,
         "y": 1800,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "eaf35ec3f1eaf910",
+        "type": "link out",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "FURNACE_STATUS",
+        "mode": "link",
+        "links": [
+            "4524e02cc49f736c"
+        ],
+        "x": 1240,
+        "y": 1860,
         "wires": [],
         "l": true
     },
@@ -6258,7 +6261,7 @@
         "z": "3470febb2cd6e952",
         "g": "b2ac0cc5bede234b",
         "name": "status_waterheater",
-        "func": "// Publishes water heater, circ pump, and furnace entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst i = p.instance !== undefined ? p.instance : \"\";\nconst i_name = i !== \"\" ? ` ${i}` : \"\";\nconst messages = [];\n\n// === Device definition ===\n\nconst device = {\n    identifiers: [\"librecoach-waterheater\"],\n    name: \"Water Heater\",\n    manufacturer: \"LibreCoach\",\n};\n\n// === Flow context: tracks which entities have had discovery published ===\n\nconst CREATED_KEY = \"waterheater_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n    created[entityId] = true;\n    flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n    const cfg = {\n        name,\n        unique_id: entityId,\n        default_entity_id: `sensor.${entityId}`,\n        state_topic: `homeassistant/sensor/${entityId}/state`,\n        device,\n    };\n    if (unit) cfg.unit_of_measurement = unit;\n    if (deviceClass) cfg.device_class = deviceClass;\n    if (stateClass) cfg.state_class = stateClass;\n    if (icon) cfg.icon = icon;\n    return {\n        topic: `homeassistant/sensor/${entityId}/config`,\n        payload: cfg,\n        retain: true,\n    };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n    return {\n        topic: `homeassistant/binary_sensor/${entityId}/config`,\n        payload: {\n            name,\n            unique_id: entityId,\n            default_entity_id: `binary_sensor.${entityId}`,\n            state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n            payload_on: \"ON\",\n            payload_off: \"OFF\",\n            device_class: deviceClass,\n            icon,\n            device,\n        },\n        retain: true,\n    };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n    return { topic, payload };\n}\n\nfunction onOff(value) {\n    return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n    if (!created[entityId]) {\n        if (!canCreate) return;\n        messages.push(configFn());\n        markCreated(entityId);\n    }\n    messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n    if (!created[entityId]) {\n        messages.push(configFn());\n        markCreated(entityId);\n    }\n    messages.push(\n        stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n    );\n}\n\n// === WATERHEATER_STATUS (1FFF7) ===\nif (dgn_name === \"WATERHEATER_STATUS\") {\n    if (p.operating_mode !== undefined && p.operating_mode !== null) {\n        publishSensor(`waterheater_${i}_mode`, p.operating_mode, () =>\n            sensorConfig(\n                `waterheater_${i}_mode`,\n                `Water Heater${i_name} Mode`,\n                null,\n                null,\n                null,\n                \"mdi:water-boiler\",\n            ),\n        );\n    }\n\n    if (typeof p.water_temperature === \"number\") {\n        publishSensor(`waterheater_${i}_water_temp`, p.water_temperature, () =>\n            sensorConfig(\n                `waterheater_${i}_water_temp`,\n                `Water Heater${i_name} Water Temp`,\n                \"°F\",\n                \"temperature\",\n                \"measurement\",\n                \"mdi:thermometer\",\n            ),\n        );\n    }\n\n    if (typeof p.setpoint_temperature === \"number\") {\n        publishSensor(`waterheater_${i}_setpoint`, p.setpoint_temperature, () =>\n            sensorConfig(\n                `waterheater_${i}_setpoint`,\n                `Water Heater${i_name} Setpoint`,\n                \"°F\",\n                \"temperature\",\n                \"measurement\",\n                \"mdi:thermometer-check\",\n            ),\n        );\n    }\n\n    if (typeof p.burner_active === \"boolean\") {\n        publishBinary(`waterheater_${i}_burner`, onOff(p.burner_active), () =>\n            binarySensorConfig(\n                `waterheater_${i}_burner`,\n                `Water Heater${i_name} Burner`,\n                \"running\",\n                \"mdi:fire\",\n            ),\n        );\n    }\n\n    if (typeof p.ac_element_active === \"boolean\") {\n        publishBinary(\n            `waterheater_${i}_ac_element`,\n            onOff(p.ac_element_active),\n            () =>\n                binarySensorConfig(\n                    `waterheater_${i}_ac_element`,\n                    `Water Heater${i_name} AC Element`,\n                    \"running\",\n                    \"mdi:lightning-bolt\",\n                ),\n        );\n    }\n\n    if (typeof p.thermostat_not_met === \"boolean\") {\n        publishBinary(\n            `waterheater_${i}_thermostat`,\n            onOff(p.thermostat_not_met),\n            () =>\n                binarySensorConfig(\n                    `waterheater_${i}_thermostat`,\n                    `Water Heater${i_name} Thermostat`,\n                    null,\n                    \"mdi:thermostat\",\n                ),\n        );\n    }\n\n    if (typeof p.high_temp_tripped === \"boolean\") {\n        publishBinary(\n            `waterheater_${i}_high_temp`,\n            onOff(p.high_temp_tripped),\n            () =>\n                binarySensorConfig(\n                    `waterheater_${i}_high_temp`,\n                    `Water Heater${i_name} High Temp`,\n                    \"problem\",\n                    \"mdi:thermometer-alert\",\n                ),\n        );\n    }\n\n    if (typeof p.ignite_failed === \"boolean\") {\n        publishBinary(`waterheater_${i}_ignite_fail`, onOff(p.ignite_failed), () =>\n            binarySensorConfig(\n                `waterheater_${i}_ignite_fail`,\n                `Water Heater${i_name} Ignite Fail`,\n                \"problem\",\n                \"mdi:fire-alert\",\n            ),\n        );\n    }\n}\n\n// === WATERHEATER_STATUS_2 (1FE99) ===\nelse if (dgn_name === \"WATERHEATER_STATUS_2\") {\n    if (p.status !== undefined && p.status !== null) {\n        publishSensor(`waterheater_${i}_status`, p.status, () =>\n            sensorConfig(\n                `waterheater_${i}_status`,\n                `Water Heater${i_name} Status`,\n                null,\n                null,\n                null,\n                \"mdi:water-boiler\",\n            ),\n        );\n    }\n\n    if (typeof p.electric_element_level === \"number\") {\n        publishSensor(\n            `waterheater_${i}_element_level`,\n            p.electric_element_level,\n            () =>\n                sensorConfig(\n                    `waterheater_${i}_element_level`,\n                    `Water Heater${i_name} Element Level`,\n                    null,\n                    null,\n                    \"measurement\",\n                    \"mdi:gauge\",\n                ),\n        );\n    }\n\n    if (p.hot_water_priority !== undefined && p.hot_water_priority !== null) {\n        publishSensor(`waterheater_${i}_priority`, p.hot_water_priority, () =>\n            sensorConfig(\n                `waterheater_${i}_priority`,\n                `Water Heater${i_name} Priority`,\n                null,\n                null,\n                null,\n                \"mdi:arrow-decision\",\n            ),\n        );\n    }\n\n    if (typeof p.engine_preheat_active === \"boolean\") {\n        publishBinary(\n            `waterheater_${i}_preheat`,\n            onOff(p.engine_preheat_active),\n            () =>\n                binarySensorConfig(\n                    `waterheater_${i}_preheat`,\n                    `Water Heater${i_name} Preheat`,\n                    \"running\",\n                    \"mdi:engine\",\n                ),\n        );\n    }\n\n    if (typeof p.coolant_low === \"boolean\") {\n        publishBinary(`waterheater_${i}_coolant_low`, onOff(p.coolant_low), () =>\n            binarySensorConfig(\n                `waterheater_${i}_coolant_low`,\n                `Water Heater${i_name} Coolant Low`,\n                \"problem\",\n                \"mdi:coolant-temperature\",\n            ),\n        );\n    }\n\n    if (typeof p.has_fault === \"boolean\") {\n        publishBinary(`waterheater_${i}_fault`, onOff(p.has_fault), () =>\n            binarySensorConfig(\n                `waterheater_${i}_fault`,\n                `Water Heater${i_name} Fault`,\n                \"problem\",\n                \"mdi:alert-circle\",\n            ),\n        );\n    }\n}\n\n// === CIRCULATION_PUMP_STATUS (1FEFC) NOTE: Wait, pump is 1FEF9? ===\n// The plan doesn't specify the DGN for circulation pump exactly but handled it elsewhere.\n// We just match on dgn_name\nelse if (dgn_name === \"CIRCULATION_PUMP_STATUS\") {\n    if (p.output_status !== undefined && p.output_status !== null) {\n        publishSensor(`circ_pump_${i}_status`, p.output_status, () =>\n            sensorConfig(\n                `circ_pump_${i}_status`,\n                `Circ Pump${i_name} Status`,\n                null,\n                null,\n                null,\n                \"mdi:pump\",\n            ),\n        );\n    }\n\n    if (typeof p.pump_running === \"boolean\") {\n        publishBinary(`circ_pump_${i}_running`, onOff(p.pump_running), () =>\n            binarySensorConfig(\n                `circ_pump_${i}_running`,\n                `Circ Pump${i_name} Running`,\n                \"running\",\n                \"mdi:pump\",\n            ),\n        );\n    }\n\n    if (typeof p.has_fault === \"boolean\") {\n        publishBinary(`circ_pump_${i}_fault`, onOff(p.has_fault), () =>\n            binarySensorConfig(\n                `circ_pump_${i}_fault`,\n                `Circ Pump${i_name} Fault`,\n                \"problem\",\n                \"mdi:alert-circle\",\n            ),\n        );\n    }\n}\n\n// === FURNACE_STATUS (1FFE4) ===\nelse if (dgn_name === \"FURNACE_STATUS\") {\n    if (p.operating_mode !== undefined && p.operating_mode !== null) {\n        publishSensor(`furnace_${i}_mode`, p.operating_mode, () =>\n            sensorConfig(\n                `furnace_${i}_mode`,\n                `Furnace${i_name} Mode`,\n                null,\n                null,\n                null,\n                \"mdi:radiator\",\n            ),\n        );\n    }\n\n    if (p.heat_source !== undefined && p.heat_source !== null) {\n        publishSensor(`furnace_${i}_heat_source`, p.heat_source, () =>\n            sensorConfig(\n                `furnace_${i}_heat_source`,\n                `Furnace${i_name} Heat Source`,\n                null,\n                null,\n                null,\n                \"mdi:fire\",\n            ),\n        );\n    }\n\n    if (typeof p.circulation_fan_speed === \"number\") {\n        publishSensor(`furnace_${i}_fan_speed`, p.circulation_fan_speed, () =>\n            sensorConfig(\n                `furnace_${i}_fan_speed`,\n                `Furnace${i_name} Fan Speed`,\n                \"%\",\n                null,\n                \"measurement\",\n                \"mdi:fan\",\n            ),\n        );\n    }\n\n    if (typeof p.heat_output_level === \"number\") {\n        publishSensor(`furnace_${i}_heat_level`, p.heat_output_level, () =>\n            sensorConfig(\n                `furnace_${i}_heat_level`,\n                `Furnace${i_name} Heat Level`,\n                \"%\",\n                null,\n                \"measurement\",\n                \"mdi:gauge\",\n            ),\n        );\n    }\n\n    if (typeof p.furnace_active === \"boolean\") {\n        publishBinary(`furnace_${i}_active`, onOff(p.furnace_active), () =>\n            binarySensorConfig(\n                `furnace_${i}_active`,\n                `Furnace${i_name} Active`,\n                \"running\",\n                \"mdi:radiator\",\n            ),\n        );\n    }\n\n    if (typeof p.has_fault === \"boolean\") {\n        publishBinary(`furnace_${i}_fault`, onOff(p.has_fault), () =>\n            binarySensorConfig(\n                `furnace_${i}_fault`,\n                `Furnace${i_name} Fault`,\n                \"problem\",\n                \"mdi:alert-circle\",\n            ),\n        );\n    }\n}\n\nif (messages.length === 0) {\n    return null;\n}\n\nreturn [messages];\n",
+        "func": "// Publishes water heater, circ pump, and furnace entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst i = p.instance !== undefined ? p.instance : \"\";\nconst i_name = i !== \"\" ? ` ${i}` : \"\";\nconst messages = [];\n\n// === Device definition ===\n\nconst device = {\n  identifiers: [\"librecoach-waterheater\"],\n  name: \"Water Heater\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context: tracks which entities have had discovery published ===\n\nconst CREATED_KEY = \"waterheater_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n  created[entityId] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    state_topic: `homeassistant/sensor/${entityId}/state`,\n    device,\n  };\n  if (unit) cfg.unit_of_measurement = unit;\n  if (deviceClass) cfg.device_class = deviceClass;\n  if (stateClass) cfg.state_class = stateClass;\n  if (icon) cfg.icon = icon;\n  return {\n    topic: `homeassistant/sensor/${entityId}/config`,\n    payload: cfg,\n    retain: true,\n  };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n  return {\n    topic: `homeassistant/binary_sensor/${entityId}/config`,\n    payload: {\n      name,\n      unique_id: entityId,\n      default_entity_id: `binary_sensor.${entityId}`,\n      state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n      payload_on: \"ON\",\n      payload_off: \"OFF\",\n      device_class: deviceClass,\n      icon,\n      device,\n    },\n    retain: true,\n  };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n  return { topic, payload };\n}\n\nfunction onOff(value) {\n  return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n  if (!created[entityId]) {\n    if (!canCreate) return;\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(\n    stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n  );\n}\n\n// === WATERHEATER_STATUS (1FFF7) ===\nif (dgn_name === \"WATERHEATER_STATUS\") {\n  if (p.operating_mode !== undefined && p.operating_mode !== null) {\n    publishSensor(`waterheater_${i}_mode`, p.operating_mode, () =>\n      sensorConfig(\n        `waterheater_${i}_mode`,\n        `Water Heater${i_name} Mode`,\n        null,\n        null,\n        null,\n        \"mdi:water-boiler\",\n      ),\n    );\n  }\n\n  if (typeof p.water_temperature === \"number\") {\n    publishSensor(`waterheater_${i}_water_temp`, p.water_temperature, () =>\n      sensorConfig(\n        `waterheater_${i}_water_temp`,\n        `Water Heater${i_name} Water Temp`,\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  }\n\n  if (typeof p.setpoint_temperature === \"number\") {\n    publishSensor(`waterheater_${i}_setpoint`, p.setpoint_temperature, () =>\n      sensorConfig(\n        `waterheater_${i}_setpoint`,\n        `Water Heater${i_name} Setpoint`,\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer-check\",\n      ),\n    );\n  }\n\n  if (typeof p.burner_active === \"boolean\") {\n    publishBinary(`waterheater_${i}_burner`, onOff(p.burner_active), () =>\n      binarySensorConfig(\n        `waterheater_${i}_burner`,\n        `Water Heater${i_name} Burner`,\n        \"running\",\n        \"mdi:fire\",\n      ),\n    );\n  }\n\n  if (typeof p.ac_element_active === \"boolean\") {\n    publishBinary(\n      `waterheater_${i}_ac_element`,\n      onOff(p.ac_element_active),\n      () =>\n        binarySensorConfig(\n          `waterheater_${i}_ac_element`,\n          `Water Heater${i_name} AC Element`,\n          \"running\",\n          \"mdi:lightning-bolt\",\n        ),\n    );\n  }\n\n  if (typeof p.thermostat_not_met === \"boolean\") {\n    publishBinary(\n      `waterheater_${i}_thermostat`,\n      onOff(p.thermostat_not_met),\n      () =>\n        binarySensorConfig(\n          `waterheater_${i}_thermostat`,\n          `Water Heater${i_name} Thermostat`,\n          null,\n          \"mdi:thermostat\",\n        ),\n    );\n  }\n\n  if (typeof p.high_temp_tripped === \"boolean\") {\n    publishBinary(\n      `waterheater_${i}_high_temp`,\n      onOff(p.high_temp_tripped),\n      () =>\n        binarySensorConfig(\n          `waterheater_${i}_high_temp`,\n          `Water Heater${i_name} High Temp`,\n          \"problem\",\n          \"mdi:thermometer-alert\",\n        ),\n    );\n  }\n\n  if (typeof p.ignite_failed === \"boolean\") {\n    publishBinary(`waterheater_${i}_ignite_fail`, onOff(p.ignite_failed), () =>\n      binarySensorConfig(\n        `waterheater_${i}_ignite_fail`,\n        `Water Heater${i_name} Ignite Fail`,\n        \"problem\",\n        \"mdi:fire-alert\",\n      ),\n    );\n  }\n}\n\n// === WATERHEATER_STATUS_2 (1FE99) ===\nelse if (dgn_name === \"WATERHEATER_STATUS_2\") {\n  if (p.status !== undefined && p.status !== null) {\n    publishSensor(`waterheater_${i}_status`, p.status, () =>\n      sensorConfig(\n        `waterheater_${i}_status`,\n        `Water Heater${i_name} Status`,\n        null,\n        null,\n        null,\n        \"mdi:water-boiler\",\n      ),\n    );\n  }\n\n  if (typeof p.electric_element_level === \"number\") {\n    publishSensor(\n      `waterheater_${i}_element_level`,\n      p.electric_element_level,\n      () =>\n        sensorConfig(\n          `waterheater_${i}_element_level`,\n          `Water Heater${i_name} Element Level`,\n          null,\n          null,\n          \"measurement\",\n          \"mdi:gauge\",\n        ),\n    );\n  }\n\n  if (p.hot_water_priority !== undefined && p.hot_water_priority !== null) {\n    publishSensor(`waterheater_${i}_priority`, p.hot_water_priority, () =>\n      sensorConfig(\n        `waterheater_${i}_priority`,\n        `Water Heater${i_name} Priority`,\n        null,\n        null,\n        null,\n        \"mdi:arrow-decision\",\n      ),\n    );\n  }\n\n  if (typeof p.engine_preheat_active === \"boolean\") {\n    publishBinary(\n      `waterheater_${i}_preheat`,\n      onOff(p.engine_preheat_active),\n      () =>\n        binarySensorConfig(\n          `waterheater_${i}_preheat`,\n          `Water Heater${i_name} Preheat`,\n          \"running\",\n          \"mdi:engine\",\n        ),\n    );\n  }\n\n  if (typeof p.coolant_low === \"boolean\") {\n    publishBinary(`waterheater_${i}_coolant_low`, onOff(p.coolant_low), () =>\n      binarySensorConfig(\n        `waterheater_${i}_coolant_low`,\n        `Water Heater${i_name} Coolant Low`,\n        \"problem\",\n        \"mdi:coolant-temperature\",\n      ),\n    );\n  }\n\n  if (typeof p.has_fault === \"boolean\") {\n    publishBinary(`waterheater_${i}_fault`, onOff(p.has_fault), () =>\n      binarySensorConfig(\n        `waterheater_${i}_fault`,\n        `Water Heater${i_name} Fault`,\n        \"problem\",\n        \"mdi:alert-circle\",\n      ),\n    );\n  }\n}\n\n// === CIRCULATION_PUMP_STATUS (1FEFC) NOTE: Wait, pump is 1FEF9? ===\n// The plan doesn't specify the DGN for circulation pump exactly but handled it elsewhere.\n// We just match on dgn_name\nelse if (dgn_name === \"CIRCULATION_PUMP_STATUS\") {\n  if (p.output_status !== undefined && p.output_status !== null) {\n    publishSensor(`circ_pump_${i}_status`, p.output_status, () =>\n      sensorConfig(\n        `circ_pump_${i}_status`,\n        `Circ Pump${i_name} Status`,\n        null,\n        null,\n        null,\n        \"mdi:pump\",\n      ),\n    );\n  }\n\n  if (typeof p.pump_running === \"boolean\") {\n    publishBinary(`circ_pump_${i}_running`, onOff(p.pump_running), () =>\n      binarySensorConfig(\n        `circ_pump_${i}_running`,\n        `Circ Pump${i_name} Running`,\n        \"running\",\n        \"mdi:pump\",\n      ),\n    );\n  }\n\n  if (typeof p.has_fault === \"boolean\") {\n    publishBinary(`circ_pump_${i}_fault`, onOff(p.has_fault), () =>\n      binarySensorConfig(\n        `circ_pump_${i}_fault`,\n        `Circ Pump${i_name} Fault`,\n        \"problem\",\n        \"mdi:alert-circle\",\n      ),\n    );\n  }\n}\n\nif (messages.length === 0) {\n  return null;\n}\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6347,12 +6350,106 @@
         "l": true
     },
     {
+        "id": "4524e02cc49f736c",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "FURNACE_STATUS",
+        "links": [
+            "eaf35ec3f1eaf910"
+        ],
+        "x": 230,
+        "y": 2380,
+        "wires": [
+            [
+                "ac24aa9a5a804022"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "35854de96a741eab",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "Create Furnace",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "ac24aa9a5a804022",
+        "type": "rbe",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "payload.dgn_name",
+        "x": 470,
+        "y": 2380,
+        "wires": [
+            [
+                "93f4efc3d5dc3fde"
+            ]
+        ]
+    },
+    {
+        "id": "93f4efc3d5dc3fde",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "status_furnace",
+        "func": "// Publishes standard RV-C furnace entity states to MQTT state topics.\n// Outputs an interactive Climate entity along with read-only sensors.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst i = p.instance !== undefined ? p.instance : \"\";\nconst i_name = i !== \"\" ? ` ${i}` : \"\";\nconst messages = [];\n\n// === Device definition ===\n\nconst device = {\n    identifiers: [`librecoach-furnace-${i}`],\n    name: `Furnace${i_name}`,\n    manufacturer: \"LibreCoach\",\n};\n\n// === Flow context: tracks which entities have had discovery published ===\n\nconst CREATED_KEY = `furnace_${i}_entities_created`;\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n    created[entityId] = true;\n    flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction climateConfig(entityId, name) {\n    const cfg = {\n        name,\n        unique_id: entityId,\n        default_entity_id: `climate.${entityId}`,\n        mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,\n        mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,\n        modes: [\"off\", \"heat\"],\n        current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,\n        temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,\n        temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,\n        temperature_unit: \"F\",\n        action_topic: `homeassistant/climate/${entityId}/action/state`,\n        device,\n    };\n    return {\n        topic: `homeassistant/climate/${entityId}/config`,\n        payload: cfg,\n        retain: true,\n    };\n}\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n    const cfg = {\n        name,\n        unique_id: entityId,\n        default_entity_id: `sensor.${entityId}`,\n        state_topic: `homeassistant/sensor/${entityId}/state`,\n        device,\n    };\n    if (unit) cfg.unit_of_measurement = unit;\n    if (deviceClass) cfg.device_class = deviceClass;\n    if (stateClass) cfg.state_class = stateClass;\n    if (icon) cfg.icon = icon;\n    return {\n        topic: `homeassistant/sensor/${entityId}/config`,\n        payload: cfg,\n        retain: true,\n    };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n    return {\n        topic: `homeassistant/binary_sensor/${entityId}/config`,\n        payload: {\n            name,\n            unique_id: entityId,\n            default_entity_id: `binary_sensor.${entityId}`,\n            state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n            payload_on: \"ON\",\n            payload_off: \"OFF\",\n            device_class: deviceClass,\n            icon,\n            device,\n        },\n        retain: true,\n    };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n    return { topic, payload };\n}\n\nfunction onOff(value) {\n    return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n    if (!created[entityId]) {\n        if (!canCreate) return;\n        messages.push(configFn());\n        markCreated(entityId);\n    }\n    messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n    if (!created[entityId]) {\n        messages.push(configFn());\n        markCreated(entityId);\n    }\n    messages.push(\n        stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n    );\n}\n\nfunction publishClimate(entityId, mode, temp, action, configFn) {\n    if (!created[entityId]) {\n        messages.push(configFn());\n        markCreated(entityId);\n    }\n    if (mode !== undefined) {\n        let haMode = \"off\";\n        if (mode === \"HEAT\") haMode = \"heat\";\n        messages.push(\n            stateMsg(`homeassistant/climate/${entityId}/mode/state`, haMode),\n        );\n    }\n    if (temp !== undefined && temp !== null) {\n        // Assuming setpoint isn't in 1FFE4 directly but we might get it from elsewhere.\n        // If we don't have it, don't publish the temp state.\n        messages.push(\n            stateMsg(`homeassistant/climate/${entityId}/temp/state`, temp),\n        );\n    }\n    if (action !== undefined) {\n        const haAction = action ? \"heating\" : \"off\";\n        messages.push(\n            stateMsg(`homeassistant/climate/${entityId}/action/state`, haAction),\n        );\n    }\n}\n\n// === FURNACE_STATUS (1FFE4) ===\nif (dgn_name === \"FURNACE_STATUS\") {\n    // Publish Climate Entity State\n    if (p.operating_mode !== undefined && p.furnace_active !== undefined) {\n        publishClimate(\n            `furnace_${i}`,\n            p.operating_mode,\n            null, // 1FFE4 does not include the setpoint temperature.\n            p.furnace_active,\n            () => climateConfig(`furnace_${i}`, `Furnace${i_name}`),\n        );\n    }\n\n    // Publish Read-Only Sensors\n    if (p.operating_mode !== undefined && p.operating_mode !== null) {\n        publishSensor(`furnace_${i}_mode`, p.operating_mode, () =>\n            sensorConfig(\n                `furnace_${i}_mode`,\n                `Furnace${i_name} Mode`,\n                null,\n                null,\n                null,\n                \"mdi:radiator\",\n            ),\n        );\n    }\n\n    if (p.heat_source !== undefined && p.heat_source !== null) {\n        publishSensor(`furnace_${i}_heat_source`, p.heat_source, () =>\n            sensorConfig(\n                `furnace_${i}_heat_source`,\n                `Furnace${i_name} Heat Source`,\n                null,\n                null,\n                null,\n                \"mdi:fire\",\n            ),\n        );\n    }\n\n    if (typeof p.circulation_fan_speed === \"number\") {\n        publishSensor(`furnace_${i}_fan_speed`, p.circulation_fan_speed, () =>\n            sensorConfig(\n                `furnace_${i}_fan_speed`,\n                `Furnace${i_name} Fan Speed`,\n                \"%\",\n                null,\n                \"measurement\",\n                \"mdi:fan\",\n            ),\n        );\n    }\n\n    if (typeof p.heat_output_level === \"number\") {\n        publishSensor(`furnace_${i}_heat_level`, p.heat_output_level, () =>\n            sensorConfig(\n                `furnace_${i}_heat_level`,\n                `Furnace${i_name} Heat Level`,\n                \"%\",\n                null,\n                \"measurement\",\n                \"mdi:gauge\",\n            ),\n        );\n    }\n\n    if (typeof p.furnace_active === \"boolean\") {\n        publishBinary(`furnace_${i}_active`, onOff(p.furnace_active), () =>\n            binarySensorConfig(\n                `furnace_${i}_active`,\n                `Furnace${i_name} Active`,\n                \"running\",\n                \"mdi:radiator\",\n            ),\n        );\n    }\n\n    if (typeof p.has_fault === \"boolean\") {\n        publishBinary(`furnace_${i}_fault`, onOff(p.has_fault), () =>\n            binarySensorConfig(\n                `furnace_${i}_fault`,\n                `Furnace${i_name} Fault`,\n                \"problem\",\n                \"mdi:alert-circle\",\n            ),\n        );\n    }\n}\n\nif (messages.length === 0) {\n    return null;\n}\n\nreturn [messages];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 2380,
+        "wires": [
+            [
+                "35854de96a741eab",
+                "3801a7eb83a2b8c7"
+            ]
+        ]
+    },
+    {
+        "id": "3801a7eb83a2b8c7",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "BETA TEST",
+        "mode": "link",
+        "links": [
+            "d244b9fa7dfd5d48"
+        ],
+        "x": 1030,
+        "y": 2380,
+        "wires": [],
+        "l": true
+    },
+    {
         "id": "a37da245aba53b96",
         "type": "function",
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "decode_ha_command",
-        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n    /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n    const instance = parseInt(rvcTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"cover\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"cover\";\n    msg.entityId = `shade_${instance}`;\n    return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n    /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n    const instance = parseInt(lockTopicMatch[1], 10);\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"lock\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"lock\";\n    msg.entityId = `lock_${instance}`;\n    return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n    const instance = parseInt(climatePresetMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = \"SET_PRESET\";\n    msg.value = String(msg.payload); // e.g., \"Level 5\"\n    return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n    /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n    const instance = parseInt(climateTopicMatch[1], 10);\n    msg.routingKey = \"floor_heat\";\n    msg.instance = instance;\n    msg.entityType = \"climate\";\n    msg.entityId = `floor_heat_${instance}`;\n    msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n    return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n    /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n    const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n    const command = String(msg.payload).toUpperCase();\n    msg.routingKey = \"aquahot\";\n    msg.instance = instance;\n    msg.command = command;\n    msg.entityType = \"light\";\n    msg.entityId = `aquahot_${instance}`;\n    return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n    topicParts.length === 4 &&\n    topicParts[0] === \"homeassistant\" &&\n    (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n    topicParts[3] === \"set\"\n) {\n    const entityId = topicParts[2];\n    msg.entityType = topicParts[1];\n    msg.entityId = entityId;\n\n    // Handle JSON payloads from dimmable lights (JSON schema entities)\n    try {\n        const parsed = JSON.parse(msg.payload);\n        if (typeof parsed === \"object\" && parsed !== null) {\n            msg.payload = parsed;\n            msg.command = parsed.state ? parsed.state.toUpperCase() : \"ON\";\n        } else {\n            msg.command = String(msg.payload).toUpperCase();\n        }\n    } catch (e) {\n        // Simple string payload (non-dimmable lights)\n        msg.command = String(msg.payload).toUpperCase();\n    }\n\n    if (entityId === \"water_pump\" || entityId === \"autofill\") {\n        msg.instance = entityId;\n        msg.routingKey = entityId;\n    } else {\n        const entityIdParts = entityId.split(\"_\");\n        const instanceStr = entityIdParts[entityIdParts.length - 1];\n        const instanceNum = parseInt(instanceStr, 10);\n        if (isNaN(instanceNum)) {\n            node.warn(`Could not parse instance number from entityId: ${entityId}`);\n            return null;\n        }\n        msg.instance = instanceNum;\n        msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n    }\n    return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
+        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n  /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n  const instance = parseInt(rvcTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"cover\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"cover\";\n  msg.entityId = `shade_${instance}`;\n  return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n  /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n  const instance = parseInt(lockTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"lock\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"lock\";\n  msg.entityId = `lock_${instance}`;\n  return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n  const instance = parseInt(climatePresetMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = \"SET_PRESET\";\n  msg.value = String(msg.payload); // e.g., \"Level 5\"\n  return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n  const instance = parseInt(climateTopicMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n  return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n  /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n  const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"aquahot\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"light\";\n  msg.entityId = `aquahot_${instance}`;\n  return msg;\n}\n\n// --- Climate (Furnace) entities ---\nconst furnaceTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/furnace_(\\d+)\\/(mode|temp)\\/set$/,\n);\nif (furnaceTopicMatch) {\n  const instance = parseInt(furnaceTopicMatch[1], 10);\n  msg.routingKey = \"furnace_climate\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `furnace_${instance}`;\n  // The specific encoder handles mode vs temp values\n  return msg;\n}\n\n// --- Climate (Aqua-Hot Zone) entities ---\nconst aquahotZoneTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/aquahot_zone_(\\d+)\\/(mode|temp)\\/set$/,\n);\nif (aquahotZoneTopicMatch) {\n  const instance = parseInt(aquahotZoneTopicMatch[1], 10);\n  msg.routingKey = \"aquahot_zone_climate\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `aquahot_zone_${instance}`;\n  // The specific encoder handles mode vs temp values\n  return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n  topicParts.length === 4 &&\n  topicParts[0] === \"homeassistant\" &&\n  (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n  topicParts[3] === \"set\"\n) {\n  const entityId = topicParts[2];\n  msg.entityType = topicParts[1];\n  msg.entityId = entityId;\n\n  // Handle JSON payloads from dimmable lights (JSON schema entities)\n  try {\n    const parsed = JSON.parse(msg.payload);\n    if (typeof parsed === \"object\" && parsed !== null) {\n      msg.payload = parsed;\n      msg.command = parsed.state ? parsed.state.toUpperCase() : \"ON\";\n    } else {\n      msg.command = String(msg.payload).toUpperCase();\n    }\n  } catch (e) {\n    // Simple string payload (non-dimmable lights)\n    msg.command = String(msg.payload).toUpperCase();\n  }\n\n  if (entityId === \"water_pump\" || entityId === \"autofill\") {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n  } else {\n    const entityIdParts = entityId.split(\"_\");\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n    if (isNaN(instanceNum)) {\n      node.warn(`Could not parse instance number from entityId: ${entityId}`);\n      return null;\n    }\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n  }\n  return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6447,12 +6544,22 @@
                 "vt": "str"
             },
             {
+                "t": "eq",
+                "v": "aquahot_zone_climate",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "furnace_climate",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 8,
+        "outputs": 10,
         "x": 650,
         "y": 400,
         "wires": [
@@ -6476,6 +6583,12 @@
             ],
             [
                 "a8882b1f35300448"
+            ],
+            [
+                "b09974dcd1646951"
+            ],
+            [
+                "9a4eac9b74adce8e"
             ],
             [
                 "778971897d2a7fdc"
@@ -6603,7 +6716,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 940,
-        "y": 620,
+        "y": 680,
         "wires": []
     },
     {
@@ -6709,37 +6822,6 @@
         ]
     },
     {
-        "id": "df1a21e8d68bc7ea",
-        "type": "inject",
-        "z": "b3d80c5dc947ec88",
-        "d": true,
-        "g": "aea9d97e0563bd83",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "can/send",
-        "payload": "19FED99F#FF7EC8FFFFFF00FF",
-        "payloadType": "str",
-        "x": 1110,
-        "y": 720,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
         "id": "ae2d2a4f790d7cf9",
         "type": "inject",
         "z": "b3d80c5dc947ec88",
@@ -6776,7 +6858,85 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 140,
+        "y": 145,
+        "wires": []
+    },
+    {
+        "id": "b09974dcd1646951",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "encode_aquahot_zone_command",
+        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Primarily using 1FF2F (AQUAHOT_ZONE_COMMAND).\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\n// 1FF2F is the command for Zone Heating/Quiet Mode observed in recordings\nconst DGN = \"1FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// Read cached zone state\nconst cached = global.get(`aquahot_zone_${zone}_status`, \"file\") || {};\n// We'll need a proper map, but for now assuming 0 is off and 1 is on\nlet currentMode = cached.mode || 0;\nlet currentTemp = cached.temp || 70; // Default temp\n\n// From decode_aquahot_zone.js:\n// command_type 0x0a = Interior Heating\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n    const val = payload.toString().toLowerCase();\n    if (val === \"heat\") {\n        isHeating = true;\n    } else if (val === \"off\") {\n        isHeating = false;\n    } else {\n        return null;\n    }\n} else if (topic.endsWith(\"/temp/set\")) {\n    // We do not currently know which proprietary DGN/Byte handles the Aqua-Hot\n    // target thermostat setpoint. It is likely 1FF01 or a configuration DGN.\n    // Emitting a warning and dropping the message to prevent malformed CAN frames.\n    node.warn(\n        `[encode_aquahot_zone] Temperature setpoint received, but proprietary DGN mapping is unknown. Dropping to prevent corruption.`,\n    );\n    return null;\n} else {\n    return null;\n}\n\n// --- Build Payload (1FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x0a; // Byte 0: Command Type (Interior Heating = 0x0a)\ndataBytes[1] = isHeating ? 0xfd : 0xfc; // Byte 1: Status (fd=ON, fc=OFF) based on standard RV-C binary patterns\n// Other bytes remain FF\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `Set Aqua-Hot Zone ${zone} Heating -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 600,
+        "wires": [
+            [
+                "682fe95e61a23383"
+            ]
+        ]
+    },
+    {
+        "id": "9a4eac9b74adce8e",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "encode_furnace_command",
+        "func": "// Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFE6\"; // FURNACE_COMMAND\n\n// --- Input Validation ---\n// Topic determines command type: .../mode/set, .../temp/set\nconst topic = msg.topic;\nif (!topic) return null;\n\n// The payload from HA climate is a string (\"heat\", \"off\") or a number (72.5)\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/furnace_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"furnace_\")) return null;\n\nconst instanceMatch = entityPart.match(/furnace_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\n// Read cached furnace state to preserve current settings while changing others\nconst cached = global.get(`furnace_${instance}_status`, \"file\") || {};\n// We need to store/read the current raw values or defaults.\nconst currentMode =\n    cached.operating_mode !== undefined ? cached.operating_mode : 0; // 0=Off\nconst currentFanSpeed = cached.fan_speed !== undefined ? cached.fan_speed : 0;\n// RV-C spec says setpoint is in 1FFE6 natively (Sub-index and parameters).\n// For typical furnace command, we focus on mode and setpoint.\n\n// Let's implement the standard 1FFE6 layout based on spec 6.15.5 / 6.15.7\n// Actually, 6.15.7 is FURNACE_CONFIGURATION_COMMAND (1FDA0) for setpoints sometimes,\n// but 1FFE6 is the primary command.\n// Standard 1FFE6 layout (assumed from general RV-C patterns, verify with spec):\n// Byte 0: Instance\n// Byte 1: Operating Mode (0=Off, 1=Auto, 2=Heat, etc - see decode_furnace_status for mapping)\n\n// Let's map HA modes to RV-C operating modes\nconst MODE_MAP = {\n    off: 0x00,\n    heat: 0x02, // Assuming 2 is heat based on generic HVAC maps\n};\n\n// --- Determine Changes ---\nlet newModeRaw = currentMode;\n\nif (topic.endsWith(\"/mode/set\")) {\n    const val = payload.toString().toLowerCase();\n\n    // HA 'heat' -> RV-C 'Auto' (0x00) or 'Manual' (0x01)\n    // Standard HA 'heat' turns the furnace on to run its own thermostat schedule\n    if (val === \"heat\") {\n        newModeRaw = 0x00; // Automatic\n    } else if (val === \"off\") {\n        // RV-C Furnace Command doesn't have an explicit 'off' mode in Byte 1.\n        // It is turned off by sending Heat Output Level = 0% or Fan = 0% in bytes 2 and 3.\n        // We will leave Mode alone and use the heat level bytes.\n        newModeRaw = currentMode;\n    } else {\n        // Unsupported mode\n        return null;\n    }\n} else if (topic.endsWith(\"/temp/set\")) {\n    // RV-C Spec 6.15: FURNACE_COMMAND (1FFE6) does not contain temperature setpoint bytes.\n    // The furnace relies on the external THERMOSTAT_COMMAND (1FFE1) or its own internal configuration.\n    // Emitting a warning and dropping the message to prevent malformed CAN frames.\n    node.warn(\n        `[encode_furnace] Temperature setpoint received, but FURNACE_COMMAND does not support temperatures directly. Dropping.`,\n    );\n    return null;\n} else {\n    return null;\n}\n\n// --- Build Payload (1FFE6) ---\n// RV-C Spec 6.15.3 - FURNACE_COMMAND\nconst dataBytes = new Array(8).fill(0xff);\n\n// Byte 0: Instance\ndataBytes[0] = instance;\n\n// Byte 1: Operating mode (bits 0-1) and Heat source (bits 2-7)\n// Preserving Heat Source if cached, default to Combustion (0)\nconst cachedHeatSource =\n    cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;\ndataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2);\n\n// Bytes 2 & 3: Fan Speed & Heat Output Level\nif (payload.toString().toLowerCase() === \"off\") {\n    dataBytes[2] = 0; // 0% Fan\n    dataBytes[3] = 0; // 0% Heat Output\n} else if (payload.toString().toLowerCase() === \"heat\") {\n    dataBytes[2] = 200; // 100% Fan (0.5% per bit = 200)\n    dataBytes[3] = 100; // 100% Heat (1% per bit = 100)\n}\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\n// Update node status\nnode.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: `Furnace ${instance} Command -> Payload: ${dataHex.toUpperCase()}`,\n});\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 640,
+        "wires": [
+            [
+                "289f35c5a1b8a9b5"
+            ]
+        ]
+    },
+    {
+        "id": "289f35c5a1b8a9b5",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "encode_furnace_command",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "682fe95e61a23383",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "encode_aquahot_zone_command",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 600,
         "wires": []
     },
     {
@@ -6789,8 +6949,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1170,
-        "y": 660,
+        "x": 1090,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -6803,8 +6963,8 @@
         "links": [
             "b6c72de91f6e7ec7"
         ],
-        "x": 330,
-        "y": 660,
+        "x": 250,
+        "y": 440,
         "wires": [
             [
                 "6841e5cff3b5e0e1",
@@ -6826,8 +6986,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 720,
+        "x": 520,
+        "y": 500,
         "wires": [
             [
                 "2a97f79a308ff4fd"
@@ -6847,8 +7007,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 660,
+        "x": 520,
+        "y": 440,
         "wires": [
             [
                 "baa7afeefe7f84eb"
@@ -6868,8 +7028,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 720,
+        "x": 780,
+        "y": 500,
         "wires": [
             [
                 "1c1403c14b577fb4",
@@ -6899,8 +7059,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 910,
-        "y": 900,
+        "x": 830,
+        "y": 680,
         "wires": [
             [
                 "a11c02011307fe95"
@@ -6920,8 +7080,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1160,
-        "y": 900,
+        "x": 1080,
+        "y": 680,
         "wires": [
             []
         ]
@@ -6935,8 +7095,8 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 900,
-        "y": 840,
+        "x": 820,
+        "y": 620,
         "wires": [
             [
                 "a11c02011307fe95"
@@ -6958,8 +7118,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 720,
+        "x": 1070,
+        "y": 500,
         "wires": []
     },
     {
@@ -6975,8 +7135,8 @@
         "septopics": true,
         "property": "payload",
         "topi": "topic",
-        "x": 830,
-        "y": 660,
+        "x": 750,
+        "y": 440,
         "wires": [
             [
                 "1c1403c14b577fb4"
@@ -7059,22 +7219,19 @@
                 "5e7062bde869c7a5"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "01e7b95c49929589"
             ],
             [
-                "090f06a96f1e3a41",
-                "a6985e36ac9c8f1d"
+                "01e7b95c49929589"
             ],
             [
-                "9255ed83b98ecf02",
-                "a6985e36ac9c8f1d"
+                "01e7b95c49929589"
             ],
             [
-                "7644181985025798"
+                "01e7b95c49929589"
             ],
             [
-                "0c5c2ac7608fed83",
-                "a6985e36ac9c8f1d"
+                "01e7b95c49929589"
             ],
             [
                 "c5fdb5067c820e76"
@@ -7132,7 +7289,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 790,
-        "y": 520,
+        "y": 280,
         "wires": []
     },
     {
@@ -7147,7 +7304,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 920,
         "y": 160,
         "wires": [
             [
@@ -7160,14 +7317,14 @@
         "type": "function",
         "z": "384249601e37ba22",
         "name": "status_aquahot_zone",
-        "func": "// Publishes proprietary AquaHot zone entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst messages = [];\n\n// === Device definition ===\n\n// Shared device explicitly with standard water heater entities\nconst device = {\n  identifiers: [\"librecoach-aquahot\"],\n  name: \"Aqua-Hot\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context ===\n\nconst CREATED_KEY = \"aquahot_zone_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n  created[entityId] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    state_topic: `homeassistant/sensor/${entityId}/state`,\n    device,\n  };\n  if (unit) cfg.unit_of_measurement = unit;\n  if (deviceClass) cfg.device_class = deviceClass;\n  if (stateClass) cfg.state_class = stateClass;\n  if (icon) cfg.icon = icon;\n  return {\n    topic: `homeassistant/sensor/${entityId}/config`,\n    payload: cfg,\n    retain: true,\n  };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n  return {\n    topic: `homeassistant/binary_sensor/${entityId}/config`,\n    payload: {\n      name,\n      unique_id: entityId,\n      default_entity_id: `binary_sensor.${entityId}`,\n      state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n      payload_on: \"ON\",\n      payload_off: \"OFF\",\n      device_class: deviceClass,\n      icon,\n      device,\n    },\n    retain: true,\n  };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n  return { topic, payload };\n}\n\nfunction onOff(value) {\n  return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n  if (!created[entityId]) {\n    if (!canCreate) return;\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(\n    stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n  );\n}\n\n// Parse hex format helper\nfunction toHex(val) {\n  return \"0x\" + val.toString(16).toUpperCase().padStart(2, \"0\");\n}\n\n// === AQUAHOT_ZONE_THERMOSTAT (1FF01) ===\nif (dgn_name === \"AQUAHOT_ZONE_THERMOSTAT\") {\n  const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2\n\n  if (p.zone_temperature !== undefined && p.zone_temperature !== null) {\n    publishSensor(`aquahot_zone_${z}_temp`, p.zone_temperature, () =>\n      sensorConfig(\n        `aquahot_zone_${z}_temp`,\n        `AquaHot Zone ${z} Temp`,\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  }\n\n  if (p.config_byte !== undefined && p.config_byte !== null) {\n    publishSensor(`aquahot_zone_${z}_config`, toHex(p.config_byte), () =>\n      sensorConfig(\n        `aquahot_zone_${z}_config`,\n        `AquaHot Zone ${z} Config`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_COMMAND (1FF2F) ===\nelse if (dgn_name === \"AQUAHOT_ZONE_COMMAND\") {\n  if (p.command_type === 0x07) {\n    // Quiet Mode\n    publishBinary(\"aquahot_quiet_mode\", onOff(p.is_on), () =>\n      binarySensorConfig(\n        \"aquahot_quiet_mode\",\n        \"AquaHot Quiet Mode\",\n        null,\n        \"mdi:volume-off\",\n      ),\n    );\n  } else if (p.command_type === 0x0a) {\n    // Interior Heating\n    publishBinary(\"aquahot_interior_heating\", onOff(p.is_on), () =>\n      binarySensorConfig(\n        \"aquahot_interior_heating\",\n        \"AquaHot Interior Heating\",\n        \"running\",\n        \"mdi:radiator\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_STATUS (6F00) ===\nelse if (dgn_name === \"AQUAHOT_ZONE_STATUS\") {\n  if (p.water_temp !== undefined && p.water_temp !== null) {\n    publishSensor(\"aquahot_water_temp_6f00\", p.water_temp, () =>\n      sensorConfig(\n        \"aquahot_water_temp_6f00\",\n        \"AquaHot Water Temp (6F00)\",\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer-water\",\n      ),\n    );\n  }\n\n  if (typeof p.zones_active === \"boolean\") {\n    publishBinary(\"aquahot_zone_active\", onOff(p.zones_active), () =>\n      binarySensorConfig(\n        \"aquahot_zone_active\",\n        \"AquaHot Zone Active\",\n        \"running\",\n        \"mdi:radiator\",\n      ),\n    );\n  }\n\n  // Zone dynamic values\n  if (p.sub_index === 0x17 && p.dynamic_value !== undefined) {\n    publishSensor(\"aquahot_zone1_temp_6f00\", p.dynamic_value, () =>\n      sensorConfig(\n        \"aquahot_zone1_temp_6f00\",\n        \"AquaHot Zone 1 Temp (6F00)\",\n        null,\n        null,\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  } else if (p.sub_index === 0x0d && p.dynamic_value !== undefined) {\n    publishSensor(\"aquahot_zone2_temp_6f00\", p.dynamic_value, () =>\n      sensorConfig(\n        \"aquahot_zone2_temp_6f00\",\n        \"AquaHot Zone 2 Temp (6F00)\",\n        null,\n        null,\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_EXTENDED_STATUS (1FF2E) ===\nelse if (dgn_name === \"AQUAHOT_EXTENDED_STATUS\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.sub_index === 0x00 && p.water_temp_guess !== undefined) {\n    publishSensor(\"aquahot_ext_water_temp\", p.water_temp_guess, () =>\n      sensorConfig(\n        \"aquahot_ext_water_temp\",\n        \"AquaHot Ext Water Temp\",\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer-water\",\n      ),\n    );\n  } else if (p.primary_value !== undefined) {\n    publishSensor(`aquahot_ext_sub_${nn}`, p.primary_value, () =>\n      sensorConfig(\n        `aquahot_ext_sub_${nn}`,\n        `AquaHot Ext Status Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:information\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_CONFIG (6C00) ===\nelse if (dgn_name === \"AQUAHOT_ZONE_CONFIG\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.config_value_1 !== undefined && p.config_value_2 !== undefined) {\n    const val = `V1:${toHex(p.config_value_1)} V2:${toHex(p.config_value_2)}`;\n    publishSensor(`aquahot_cfg_sub_${nn}`, val, () =>\n      sensorConfig(\n        `aquahot_cfg_sub_${nn}`,\n        `AquaHot Config Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\nif (messages.length === 0) {\n  return null;\n}\n\nreturn [messages];\n",
+        "func": "// Publishes proprietary AquaHot zone entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst messages = [];\n\n// === Device definition ===\n\n// Shared device explicitly with standard water heater entities\nconst device = {\n  identifiers: [\"librecoach-aquahot\"],\n  name: \"Aqua-Hot\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context ===\n\nconst CREATED_KEY = \"aquahot_zone_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n  created[entityId] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    state_topic: `homeassistant/sensor/${entityId}/state`,\n    device,\n  };\n  if (unit) cfg.unit_of_measurement = unit;\n  if (deviceClass) cfg.device_class = deviceClass;\n  if (stateClass) cfg.state_class = stateClass;\n  if (icon) cfg.icon = icon;\n  return {\n    topic: `homeassistant/sensor/${entityId}/config`,\n    payload: cfg,\n    retain: true,\n  };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n  return {\n    topic: `homeassistant/binary_sensor/${entityId}/config`,\n    payload: {\n      name,\n      unique_id: entityId,\n      default_entity_id: `binary_sensor.${entityId}`,\n      state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n      payload_on: \"ON\",\n      payload_off: \"OFF\",\n      device_class: deviceClass,\n      icon,\n      device,\n    },\n    retain: true,\n  };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n  return { topic, payload };\n}\n\nfunction onOff(value) {\n  return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n  if (!created[entityId]) {\n    if (!canCreate) return;\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(\n    stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n  );\n}\n\nfunction climateConfig(entityId, name) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `climate.${entityId}`,\n    mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,\n    mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,\n    modes: [\"off\", \"heat\"],\n    current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,\n    temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,\n    temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,\n    temperature_unit: \"F\",\n    action_topic: `homeassistant/climate/${entityId}/action/state`,\n    device,\n  };\n  return {\n    topic: `homeassistant/climate/${entityId}/config`,\n    payload: cfg,\n    retain: true,\n  };\n}\n\nfunction publishClimate(entityId, mode, temp, action, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  if (mode !== undefined) {\n    let haMode = \"off\";\n    if (mode === \"HEAT\") haMode = \"heat\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/mode/state`, haMode),\n    );\n  }\n  // AquaHot uses zone_temperature (current) and setpoint (we don't get setpoint yet directly, using temp state for now)\n  if (temp !== undefined && temp !== null) {\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/current_temp/state`, temp),\n    );\n  }\n  if (action !== undefined) {\n    const haAction = action ? \"heating\" : \"idle\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/action/state`, haAction),\n    );\n  }\n}\n\n// Parse hex format helper\nfunction toHex(val) {\n  return \"0x\" + val.toString(16).toUpperCase().padStart(2, \"0\");\n}\n\n// === AQUAHOT_ZONE_THERMOSTAT (1FF01) ===\n// Provides current zone temperature\nif (dgn_name === \"AQUAHOT_ZONE_THERMOSTAT\") {\n  const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2\n\n  if (p.zone_temperature !== undefined && p.zone_temperature !== null) {\n    // Create Climate Entity and publish current temperature\n    publishClimate(\n      `aquahot_zone_${z}`,\n      undefined, // Mode handled by 1FF2F\n      p.zone_temperature, // Current temp\n      undefined, // Action handled by 1FF2F\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n\n  if (p.config_byte !== undefined && p.config_byte !== null) {\n    publishSensor(`aquahot_zone_${z}_config`, toHex(p.config_byte), () =>\n      sensorConfig(\n        `aquahot_zone_${z}_config`,\n        `Aqua-Hot Zone ${z} Config`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_COMMAND (1FF2F) ===\n// Provides operating state / mode\nelse if (dgn_name === \"AQUAHOT_ZONE_COMMAND\") {\n  if (p.command_type === 0x07) {\n    // Quiet Mode\n    publishBinary(\"aquahot_quiet_mode\", onOff(p.is_on), () =>\n      binarySensorConfig(\n        \"aquahot_quiet_mode\",\n        \"Aqua-Hot Quiet Mode\",\n        null,\n        \"mdi:volume-off\",\n      ),\n    );\n  } else if (p.command_type === 0x0a) {\n    // Interior Heating - Using this as the state/action for the primary zone\n    // If we only get one global heating status, we'll apply it to Zone 1 for now\n    const z = 1;\n    const mode = p.is_on ? \"HEAT\" : \"OFF\";\n    publishClimate(\n      `aquahot_zone_${z}`,\n      mode,\n      undefined,\n      p.is_on, // Action (heating/idle)\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_STATUS (6F00) ===\nelse if (dgn_name === \"AQUAHOT_ZONE_STATUS\") {\n  if (p.water_temp !== undefined && p.water_temp !== null) {\n    publishSensor(\"aquahot_water_temp_6f00\", p.water_temp, () =>\n      sensorConfig(\n        \"aquahot_water_temp_6f00\",\n        \"AquaHot Water Temp (6F00)\",\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer-water\",\n      ),\n    );\n  }\n\n  if (typeof p.zones_active === \"boolean\") {\n    publishBinary(\"aquahot_zone_active\", onOff(p.zones_active), () =>\n      binarySensorConfig(\n        \"aquahot_zone_active\",\n        \"AquaHot Zone Active\",\n        \"running\",\n        \"mdi:radiator\",\n      ),\n    );\n  }\n\n  // Zone dynamic values\n  if (p.sub_index === 0x17 && p.dynamic_value !== undefined) {\n    publishSensor(\"aquahot_zone1_temp_6f00\", p.dynamic_value, () =>\n      sensorConfig(\n        \"aquahot_zone1_temp_6f00\",\n        \"AquaHot Zone 1 Temp (6F00)\",\n        null,\n        null,\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  } else if (p.sub_index === 0x0d && p.dynamic_value !== undefined) {\n    publishSensor(\"aquahot_zone2_temp_6f00\", p.dynamic_value, () =>\n      sensorConfig(\n        \"aquahot_zone2_temp_6f00\",\n        \"AquaHot Zone 2 Temp (6F00)\",\n        null,\n        null,\n        \"measurement\",\n        \"mdi:thermometer\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_EXTENDED_STATUS (1FF2E) ===\nelse if (dgn_name === \"AQUAHOT_EXTENDED_STATUS\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.sub_index === 0x00 && p.water_temp_guess !== undefined) {\n    publishSensor(\"aquahot_ext_water_temp\", p.water_temp_guess, () =>\n      sensorConfig(\n        \"aquahot_ext_water_temp\",\n        \"AquaHot Ext Water Temp\",\n        \"°F\",\n        \"temperature\",\n        \"measurement\",\n        \"mdi:thermometer-water\",\n      ),\n    );\n  } else if (p.primary_value !== undefined) {\n    publishSensor(`aquahot_ext_sub_${nn}`, p.primary_value, () =>\n      sensorConfig(\n        `aquahot_ext_sub_${nn}`,\n        `AquaHot Ext Status Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:information\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_CONFIG (6C00) ===\nelse if (dgn_name === \"AQUAHOT_ZONE_CONFIG\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.config_value_1 !== undefined && p.config_value_2 !== undefined) {\n    const val = `V1:${toHex(p.config_value_1)} V2:${toHex(p.config_value_2)}`;\n    publishSensor(`aquahot_cfg_sub_${nn}`, val, () =>\n      sensorConfig(\n        `aquahot_cfg_sub_${nn}`,\n        `AquaHot Config Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\nif (messages.length === 0) {\n  return null;\n}\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1060,
+        "x": 1180,
         "y": 160,
         "wires": [
             [
@@ -7189,74 +7346,6 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 750,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "0c5c2ac7608fed83",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "name": "AQUAHOT_ZONE_COMMAND",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 770,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "7644181985025798",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "name": "AQUAHOT_EXTENDED_STATUS",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "9255ed83b98ecf02",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "name": "AQUAHOT_ZONE_THERMOSTAT",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "090f06a96f1e3a41",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "name": "AQUAHOT_ZONE_CONFIG",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
         "y": 220,
         "wires": []
     },
@@ -7272,29 +7361,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1360,
-        "y": 380,
+        "x": 700,
+        "y": 160,
         "wires": [
             [
-                "9dcad66d968cdd1a"
+                "a6985e36ac9c8f1d"
             ]
         ]
-    },
-    {
-        "id": "9dcad66d968cdd1a",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "name": "debug 1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1520,
-        "y": 380,
-        "wires": []
     },
     {
         "id": "04c537115b1bb0b5",
@@ -7305,7 +7378,7 @@
         "links": [
             "d244b9fa7dfd5d48"
         ],
-        "x": 1290,
+        "x": 1410,
         "y": 160,
         "wires": [],
         "l": true
