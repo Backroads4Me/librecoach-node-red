@@ -765,8 +765,8 @@
             "906e4d6a45bba29f",
             "ec8de048fbfa6ce4"
         ],
-        "x": 134,
-        "y": 2119,
+        "x": 1414,
+        "y": 99,
         "w": 1092,
         "h": 142
     },
@@ -784,7 +784,8 @@
             "6b1a7191643fa28e",
             "e38f32a1f6d36bfb",
             "d244b9fa7dfd5d48",
-            "5927f292918fa095"
+            "5927f292918fa095",
+            "01e7b95c49929589"
         ],
         "x": 1054,
         "y": 1639,
@@ -810,7 +811,7 @@
         "x": 1414,
         "y": 2119,
         "w": 1092,
-        "h": 222
+        "h": 202
     },
     {
         "id": "f9fbb16169bddad3",
@@ -829,9 +830,9 @@
             "6de271395c8998c1"
         ],
         "x": 134,
-        "y": 2339,
+        "y": 2119,
         "w": 1092,
-        "h": 222
+        "h": 202
     },
     {
         "id": "81985af394d7b2c6",
@@ -846,12 +847,13 @@
             "b79f634a1a8b4614",
             "51d236ac111d79cc",
             "d0ac05ad545390ce",
-            "2e75610c037a9b44"
+            "2e75610c037a9b44",
+            "67a758733fa40f50"
         ],
-        "x": 1414,
-        "y": 59,
+        "x": 134,
+        "y": 2419,
         "w": 1092,
-        "h": 142
+        "h": 202
     },
     {
         "id": "5811945b9bad79dc",
@@ -870,7 +872,6 @@
             "a6985e36ac9c8f1d",
             "443fd5ec55d7111b",
             "c5fdb5067c820e76",
-            "01e7b95c49929589",
             "04c537115b1bb0b5",
             "1c1403c14b577fb4",
             "6841e5cff3b5e0e1",
@@ -881,7 +882,7 @@
         ],
         "x": 74,
         "y": 139,
-        "w": 1672,
+        "w": 1432,
         "h": 448
     },
     {
@@ -1179,9 +1180,9 @@
             "a11c02011307fe95",
             "aa12f93df2087d62"
         ],
-        "x": 1214,
+        "x": 1014,
         "y": 419,
-        "w": 472,
+        "w": 432,
         "h": 142
     },
     {
@@ -1445,7 +1446,7 @@
             "e38f32a1f6d36bfb",
             "6de271395c8998c1",
             "435d80473a9168f7",
-            "e69b09d71c4c57eb"
+            "67a758733fa40f50"
         ],
         "x": 230,
         "y": 520,
@@ -2475,7 +2476,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 370,
-        "y": 119,
+        "y": 158,
         "wires": []
     },
     {
@@ -2937,7 +2938,6 @@
         "id": "e38f32a1f6d36bfb",
         "type": "link out",
         "z": "292e70a6ba25b323",
-        "d": true,
         "g": "9e47041ed71c4494",
         "name": "MQTT out: Retain TRUE",
         "mode": "link",
@@ -3040,7 +3040,7 @@
         "z": "292e70a6ba25b323",
         "g": "9e47041ed71c4494",
         "name": "BETA",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3091,6 +3091,26 @@
         "x": 1140,
         "y": 460,
         "wires": []
+    },
+    {
+        "id": "01e7b95c49929589",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "9e47041ed71c4494",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1440,
+        "y": 1680,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "9f88f215f3f07227",
@@ -4403,7 +4423,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 177,
+        "y": 211,
         "wires": []
     },
     {
@@ -5996,7 +6016,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 530,
-        "y": 129,
+        "y": 147,
         "wires": []
     },
     {
@@ -6045,8 +6065,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1090,
-        "y": 2160,
+        "x": 2370,
+        "y": 140,
         "wires": [],
         "l": true
     },
@@ -6059,8 +6079,8 @@
         "links": [
             "18358f61657b2606"
         ],
-        "x": 260,
-        "y": 2160,
+        "x": 1540,
+        "y": 140,
         "wires": [
             [
                 "906e4d6a45bba29f"
@@ -6081,8 +6101,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
-        "y": 2160,
+        "x": 2070,
+        "y": 140,
         "wires": [
             [
                 "ec8de048fbfa6ce4",
@@ -6104,8 +6124,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1070,
-        "y": 2220,
+        "x": 2350,
+        "y": 200,
         "wires": []
     },
     {
@@ -6178,7 +6198,7 @@
             "d244b9fa7dfd5d48"
         ],
         "x": 2330,
-        "y": 2300,
+        "y": 2280,
         "wires": [],
         "l": true
     },
@@ -6192,7 +6212,7 @@
             "eaf35ec3f1eaf910"
         ],
         "x": 250,
-        "y": 2380,
+        "y": 2160,
         "wires": [
             [
                 "93f4efc3d5dc3fde"
@@ -6215,7 +6235,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1060,
-        "y": 2440,
+        "y": 2220,
         "wires": []
     },
     {
@@ -6232,7 +6252,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 2380,
+        "y": 2160,
         "wires": [
             [
                 "3801a7eb83a2b8c7",
@@ -6252,7 +6272,7 @@
             "d244b9fa7dfd5d48"
         ],
         "x": 1050,
-        "y": 2520,
+        "y": 2280,
         "wires": [],
         "l": true
     },
@@ -6265,8 +6285,8 @@
         "links": [
             "7152c0726c9d4050"
         ],
-        "x": 1540,
-        "y": 100,
+        "x": 260,
+        "y": 2460,
         "wires": [
             [
                 "d0ac05ad545390ce"
@@ -6288,8 +6308,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2360,
-        "y": 160,
+        "x": 1080,
+        "y": 2520,
         "wires": []
     },
     {
@@ -6305,12 +6325,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2060,
-        "y": 100,
+        "x": 780,
+        "y": 2460,
         "wires": [
             [
                 "51d236ac111d79cc",
-                "2e75610c037a9b44"
+                "2e75610c037a9b44",
+                "67a758733fa40f50"
             ]
         ]
     },
@@ -6324,8 +6345,8 @@
         "links": [
             "d244b9fa7dfd5d48"
         ],
-        "x": 2330,
-        "y": 100,
+        "x": 1050,
+        "y": 2580,
         "wires": [],
         "l": true
     },
@@ -6340,7 +6361,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1090,
-        "y": 2380,
+        "y": 2160,
         "wires": [],
         "l": true
     },
@@ -6356,6 +6377,21 @@
         ],
         "x": 2370,
         "y": 2160,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "67a758733fa40f50",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "81985af394d7b2c6",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 1090,
+        "y": 2460,
         "wires": [],
         "l": true
     },
@@ -6774,7 +6810,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 145,
+        "y": 150,
         "wires": []
     },
     {
@@ -6829,7 +6865,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1610,
+        "x": 1370,
         "y": 240,
         "wires": [],
         "l": true
@@ -6847,7 +6883,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
+        "x": 880,
         "y": 180,
         "wires": [
             [
@@ -6868,7 +6904,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
+        "x": 880,
         "y": 240,
         "wires": [
             [
@@ -6889,7 +6925,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1300,
+        "x": 1100,
         "y": 180,
         "wires": [
             [
@@ -6920,7 +6956,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1330,
+        "x": 1130,
         "y": 520,
         "wires": [
             [
@@ -6941,7 +6977,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1580,
+        "x": 1340,
         "y": 520,
         "wires": [
             []
@@ -6956,7 +6992,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 1320,
+        "x": 1120,
         "y": 460,
         "wires": [
             [
@@ -6979,7 +7015,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1590,
+        "x": 1350,
         "y": 180,
         "wires": []
     },
@@ -7061,19 +7097,19 @@
                 "5e7062bde869c7a5"
             ],
             [
-                "01e7b95c49929589"
+                "a6985e36ac9c8f1d"
             ],
             [
-                "01e7b95c49929589"
+                "a6985e36ac9c8f1d"
             ],
             [
-                "01e7b95c49929589"
+                "a6985e36ac9c8f1d"
             ],
             [
-                "01e7b95c49929589"
+                "a6985e36ac9c8f1d"
             ],
             [
-                "01e7b95c49929589"
+                "a6985e36ac9c8f1d"
             ],
             [
                 "c5fdb5067c820e76"
@@ -7096,7 +7132,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 610,
         "y": 240,
         "wires": [
             [
@@ -7119,7 +7155,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 770,
+        "x": 650,
         "y": 420,
         "wires": []
     },
@@ -7136,7 +7172,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 600,
         "y": 300,
         "wires": [
             [
@@ -7157,7 +7193,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1060,
+        "x": 900,
         "y": 300,
         "wires": [
             [
@@ -7180,30 +7216,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 730,
+        "x": 610,
         "y": 360,
         "wires": []
-    },
-    {
-        "id": "01e7b95c49929589",
-        "type": "function",
-        "z": "384249601e37ba22",
-        "g": "5811945b9bad79dc",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 300,
-        "wires": [
-            [
-                "a6985e36ac9c8f1d"
-            ]
-        ]
     },
     {
         "id": "04c537115b1bb0b5",
@@ -7215,7 +7230,7 @@
         "links": [
             "d244b9fa7dfd5d48"
         ],
-        "x": 1570,
+        "x": 1330,
         "y": 300,
         "wires": [],
         "l": true
@@ -7656,7 +7671,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 137,
+        "y": 154,
         "wires": []
     },
     {
