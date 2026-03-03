@@ -239,7 +239,7 @@
             "32ec19602e928185",
             "6f91fc901b5dbf30"
         ],
-        "x": 154,
+        "x": 134,
         "y": 319,
         "w": 1092,
         "h": 348
@@ -784,8 +784,7 @@
             "6b1a7191643fa28e",
             "e38f32a1f6d36bfb",
             "d244b9fa7dfd5d48",
-            "5927f292918fa095",
-            "01e7b95c49929589"
+            "5927f292918fa095"
         ],
         "x": 1054,
         "y": 1639,
@@ -806,7 +805,8 @@
             "925e8716f5b06d62",
             "647ce51ee8a295c8",
             "db52c8f8b4e4e75f",
-            "435d80473a9168f7"
+            "435d80473a9168f7",
+            "8ab86518978a3b40"
         ],
         "x": 1414,
         "y": 2119,
@@ -827,7 +827,8 @@
             "35854de96a741eab",
             "93f4efc3d5dc3fde",
             "3801a7eb83a2b8c7",
-            "6de271395c8998c1"
+            "6de271395c8998c1",
+            "64f6d5015db4c9d9"
         ],
         "x": 134,
         "y": 2119,
@@ -848,7 +849,8 @@
             "51d236ac111d79cc",
             "d0ac05ad545390ce",
             "2e75610c037a9b44",
-            "67a758733fa40f50"
+            "67a758733fa40f50",
+            "01e7b95c49929589"
         ],
         "x": 134,
         "y": 2419,
@@ -878,7 +880,8 @@
             "43cd836c21f66b26",
             "2a97f79a308ff4fd",
             "54e6abd033b704f2",
-            "08d4c674d7359aee"
+            "08d4c674d7359aee",
+            "e2fc2c67eba80f70"
         ],
         "x": 74,
         "y": 139,
@@ -921,7 +924,7 @@
             "6e2b753c50d28b2b",
             "e8b62c33eab8e3ac"
         ],
-        "x": 734,
+        "x": 714,
         "y": 499,
         "w": 472,
         "h": 142
@@ -2475,8 +2478,8 @@
         "type": "note",
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
-        "x": 370,
-        "y": 158,
+        "x": 390,
+        "y": 153,
         "wires": []
     },
     {
@@ -3091,26 +3094,6 @@
         "x": 1140,
         "y": 460,
         "wires": []
-    },
-    {
-        "id": "01e7b95c49929589",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "d": true,
-        "g": "9e47041ed71c4494",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 1680,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "9f88f215f3f07227",
@@ -4423,7 +4406,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 211,
+        "y": 228,
         "wires": []
     },
     {
@@ -4529,7 +4512,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1110,
+        "x": 1090,
         "y": 360,
         "wires": [],
         "l": true
@@ -4543,7 +4526,7 @@
         "links": [
             "7af7fb2178a714cf"
         ],
-        "x": 290,
+        "x": 270,
         "y": 360,
         "wires": [
             [
@@ -4566,7 +4549,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 540,
         "y": 420,
         "wires": [
             [
@@ -4587,7 +4570,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 540,
         "y": 360,
         "wires": [
             [
@@ -4611,7 +4594,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 800,
         "y": 420,
         "wires": [
             [
@@ -4642,7 +4625,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 850,
+        "x": 830,
         "y": 600,
         "wires": [
             [
@@ -4663,7 +4646,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1100,
+        "x": 1080,
         "y": 600,
         "wires": [
             []
@@ -4678,7 +4661,7 @@
         "links": [
             "1e244bad0304bb74"
         ],
-        "x": 850,
+        "x": 830,
         "y": 540,
         "wires": [
             [
@@ -6016,7 +5999,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 530,
-        "y": 147,
+        "y": 156,
         "wires": []
     },
     {
@@ -6051,7 +6034,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1070,
+        "x": 1050,
         "y": 420,
         "wires": []
     },
@@ -6164,7 +6147,7 @@
         "y": 2160,
         "wires": [
             [
-                "647ce51ee8a295c8"
+                "8ab86518978a3b40"
             ]
         ],
         "l": true
@@ -6215,7 +6198,7 @@
         "y": 2160,
         "wires": [
             [
-                "93f4efc3d5dc3fde"
+                "64f6d5015db4c9d9"
             ]
         ],
         "l": true
@@ -6289,7 +6272,7 @@
         "y": 2460,
         "wires": [
             [
-                "d0ac05ad545390ce"
+                "01e7b95c49929589"
             ]
         ],
         "l": true
@@ -6394,6 +6377,69 @@
         "y": 2460,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "01e7b95c49929589",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "81985af394d7b2c6",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 2460,
+        "wires": [
+            [
+                "d0ac05ad545390ce"
+            ]
+        ]
+    },
+    {
+        "id": "64f6d5015db4c9d9",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "f9fbb16169bddad3",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 2160,
+        "wires": [
+            [
+                "93f4efc3d5dc3fde"
+            ]
+        ]
+    },
+    {
+        "id": "8ab86518978a3b40",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "b2ac0cc5bede234b",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1820,
+        "y": 2160,
+        "wires": [
+            [
+                "647ce51ee8a295c8"
+            ]
+        ]
     },
     {
         "id": "a37da245aba53b96",
@@ -6810,7 +6856,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 150,
+        "y": 155,
         "wires": []
     },
     {
@@ -7097,19 +7143,19 @@
                 "5e7062bde869c7a5"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "e2fc2c67eba80f70"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "e2fc2c67eba80f70"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "e2fc2c67eba80f70"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "e2fc2c67eba80f70"
             ],
             [
-                "a6985e36ac9c8f1d"
+                "e2fc2c67eba80f70"
             ],
             [
                 "c5fdb5067c820e76"
@@ -7172,7 +7218,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
+        "x": 780,
         "y": 300,
         "wires": [
             [
@@ -7193,7 +7239,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
+        "x": 1020,
         "y": 300,
         "wires": [
             [
@@ -7230,10 +7276,31 @@
         "links": [
             "d244b9fa7dfd5d48"
         ],
-        "x": 1330,
-        "y": 300,
+        "x": 1310,
+        "y": 360,
         "wires": [],
         "l": true
+    },
+    {
+        "id": "e2fc2c67eba80f70",
+        "type": "function",
+        "z": "384249601e37ba22",
+        "g": "5811945b9bad79dc",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 300,
+        "wires": [
+            [
+                "a6985e36ac9c8f1d"
+            ]
+        ]
     },
     {
         "id": "903a7fac6108ac58",
