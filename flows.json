@@ -2479,7 +2479,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 390,
-        "y": 153,
+        "y": 166,
         "wires": []
     },
     {
@@ -3259,12 +3259,12 @@
                 "vt": "str"
             },
             {
-                "t": "else"
-            },
-            {
                 "t": "cont",
                 "v": "DC_COMPONENT_DRIVER_STATUS",
                 "vt": "str"
+            },
+            {
+                "t": "else"
             }
         ],
         "checkall": "false",
@@ -3367,10 +3367,10 @@
                 "d76a4a48e1beaed6"
             ],
             [
-                "b797e5a52b6db5b4"
+                "a037b4692cc9f1dd"
             ],
             [
-                "a037b4692cc9f1dd"
+                "b797e5a52b6db5b4"
             ]
         ]
     },
@@ -4406,7 +4406,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 228,
+        "y": 245,
         "wires": []
     },
     {
