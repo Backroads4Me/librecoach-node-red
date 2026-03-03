@@ -24,5 +24,6 @@ module.exports = {
   editorTheme: {
     theme: "dark",
     tours: false,
+    projects: { enabled: false, workflow: { mode: "manual" } },
   },
 };
