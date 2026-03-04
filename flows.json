@@ -878,12 +878,14 @@
             "54e6abd033b704f2",
             "08d4c674d7359aee",
             "e2fc2c67eba80f70",
-            "7a1eed2a34490b2a"
+            "7a1eed2a34490b2a",
+            "691871e1972d2296",
+            "1bd7e1d4c5f3864a"
         ],
         "x": 74,
-        "y": 139,
-        "w": 1432,
-        "h": 448
+        "y": 79,
+        "w": 1452,
+        "h": 508
     },
     {
         "id": "de35fed78fc2a2bc",
@@ -1573,7 +1575,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "decode_rvc_can",
-        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS\";\n  } else if (dgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_ZONE_THERMOSTAT\";\n  } else if (dgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_EXTENDED_STATUS\";\n  } else if (dgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_ZONE_COMMAND\";\n  } else if (pgn === \"EFFA\") {\n    dgn_name = \"AQUAHOT_UNKNOWN\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\nreturn msg;\n",
+        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND_1\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS_1\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_1\";\n  } else if (lookupPgn === \"6F00\") {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  } else if (lookupPgn === \"6C00\") {\n    dgn_name = \"AQUAHOT_STATUS_2\";\n  } else if (lookupPgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_2\";\n  } else if (lookupPgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_SYSTEM_STATUS_2\";\n  } else if (lookupPgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_COMMAND_2\";\n  } else if (pgn.startsWith(\"EF\")) {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5965,7 +5967,7 @@
         "z": "3470febb2cd6e952",
         "g": "ad77b71440e42dc4",
         "name": "create_autofill",
-        "func": "// Creates Autofill entity\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload.instance !== \"string\") {\n  node.error(\"Input must be an object with a string 'instance' property.\", msg);\n  return null;\n}\n\nconst instance = msg.payload.instance; // e.g., \"autofill\"\n\n// Device configuration\nconst displayName = \"Autofill\";\nconst icon = \"mdi:water-plus-outline\";\nconst componentType = \"switch\";\n\n// Generate entity identifiers directly from the instance string\nconst entityId = instance;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  default_entity_id: `${componentType}.${entityId}`,\n  icon: icon,\n  command_topic: commandTopic,\n  state_topic: stateTopic,\n  payload_on: \"ON\",\n  payload_off: \"OFF\",\n  // Link entities to a common device for better HA grouping\n  device: {\n    identifiers: [\"librecoach-water\"],\n    name: \"LibreCoach: Water\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nreturn msg;\n",
+        "func": "// Creates Autofill entity\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload.instance !== \"string\") {\n  node.error(\"Input must be an object with a string 'instance' property.\", msg);\n  return null;\n}\n\nconst instance = msg.payload.instance; // e.g., \"autofill\"\n\n// Device configuration\nconst displayName = \"Autofill\";\nconst icon = \"mdi:water-plus-outline\";\nconst componentType = \"switch\";\n\n// Generate entity identifiers directly from the instance string\nconst entityId = instance;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  default_entity_id: `${componentType}.${entityId}`,\n  icon: icon,\n  command_topic: commandTopic,\n  state_topic: stateTopic,\n  payload_on: \"ON\",\n  payload_off: \"OFF\",\n  // Link entities to a common device for better HA grouping\n  device: {\n    identifiers: [\"librecoach-water\"],\n    name: \"Water\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7426,7 +7428,7 @@
         "type": "function",
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
-        "name": "encode_aquahot_command",
+        "name": "encode_aquahot_command_1",
         "func": "// Encodes AquaHot Commands (EF64)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // FE (Default) - Not used in PDU1 CAN ID\nconst DESTINATION_ADDRESS = 0x9f; // Aqua-Hot Module\nconst PRIORITY = 6; // Confirmed priority for Aqua-Hot control\nconst PGN = \"EF64\";\nconst PGN_INT = parseInt(PGN, 16);\nconst CONTROL_BYTE = 0xab; // First data byte for all commands\n\n// --- Command Mapping (PGN EF64) ---\nconst COMMAND_MAP = {\n    // Diesel Burner Control\n    burner: {\n        ON: 0xfd,\n        OFF: 0xfc,\n    },\n    // AC Element 1 Control\n    ac_1: {\n        ON: 0xc7,\n        OFF: 0xc3,\n    },\n    // AC Element 2 Control\n    ac_2: {\n        ON: 0xcb,\n        OFF: 0xc3,\n    },\n    // Engine Pre-heat Control\n    engine: {\n        ON: 0x7f,\n        OFF: 0x3f,\n    },\n};\n\n// --- Input Validation ---\nconst instance = msg.instance; // Expects \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// Validate instance\nif (!instance || !COMMAND_MAP[instance]) {\n    node.warn(\n        `[encode_aquahot] Invalid instance: \"${instance}\". Expected one of: burner, ac_1, ac_2, engine`,\n    );\n    return null;\n}\n\n// Validate command\nif (!command || !COMMAND_MAP[instance][command]) {\n    node.warn(\n        `[encode_aquahot] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst dataByte2 = COMMAND_MAP[instance][command];\n\n// Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = CONTROL_BYTE; // AB\ndataBytes[1] = dataByte2; // The specific command byte\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\n// PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F) goes in the last byte\nconst canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DESTINATION_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7434,7 +7436,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
+        "x": 1010,
         "y": 560,
         "wires": [
             [
@@ -7480,7 +7482,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 160,
+        "y": 165,
         "wires": []
     },
     {
@@ -7488,15 +7490,15 @@
         "type": "function",
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
-        "name": "encode_aquahot_zone_command",
-        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Primarily using FF2F (AQUAHOT_ZONE_COMMAND).\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\n// FF2F is the command for Zone Heating/Quiet Mode observed in recordings\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_zone.js:\n// command_type 0x0a = Interior Heating\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n    const val = payload.toString().toLowerCase();\n    if (val === \"heat\") {\n        isHeating = true;\n    } else if (val === \"off\") {\n        isHeating = false;\n    } else {\n        return null;\n    }\n} else if (topic.endsWith(\"/temp/set\")) {\n    // We do not currently know which proprietary DGN/Byte handles the Aqua-Hot\n    // target thermostat setpoint. It is likely FF01 or a configuration DGN.\n    // Emitting a warning and dropping the message to prevent malformed CAN frames.\n    node.warn(\n        `[encode_aquahot_zone_command] Temperature setpoint received, but proprietary DGN mapping is unknown. Dropping to prevent corruption.`,\n    );\n    return null;\n} else {\n    return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nnode.status({\n    fill: \"blue\",\n    shape: \"dot\",\n    text: `Set Aqua-Hot Zone ${zone} Heating -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn msg;\n",
+        "name": "encode_aquahot_command_2",
+        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Primarily using FF2F (AQUAHOT_COMMAND_2).\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\n// FF2F is the command for Zone Heating/Quiet Mode observed in recordings\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_zone.js:\n// command_type 0x0a = Interior Heating\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  if (val === \"heat\") {\n    isHeating = true;\n  } else if (val === \"off\") {\n    isHeating = false;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // We do not currently know which proprietary DGN/Byte handles the Aqua-Hot\n  // target thermostat setpoint. It is likely FF01 or a configuration DGN.\n  // Emitting a warning and dropping the message to prevent malformed CAN frames.\n  node.warn(\n    `[encode_aquahot_zone_command] Temperature setpoint received, but proprietary DGN mapping is unknown. Dropping to prevent corruption.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set Aqua-Hot Zone ${zone} Heating -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
+        "x": 1010,
         "y": 600,
         "wires": [
             [
@@ -7556,7 +7558,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1370,
+        "x": 1390,
         "y": 240,
         "wires": [],
         "l": true
@@ -7574,7 +7576,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
+        "x": 920,
         "y": 180,
         "wires": [
             [
@@ -7587,7 +7589,7 @@
         "type": "function",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "status_aquahot",
+        "name": "status_aquahot_1",
         "func": "// HA Status Updater for AquaHot\n\n// Validate basic input structure\nif (\n    !msg.payload ||\n    typeof msg.payload.instance !== \"string\" ||\n    typeof msg.payload.status !== \"string\"\n) {\n    node.error(\"Input missing 'instance' (string) or 'status' (string).\", msg);\n    return null;\n}\n\nconst instance = msg.payload.instance; // e.g., \"burner\", \"ac_1\", \"ac_2\", \"engine\"\nconst haStatus = msg.payload.status.toUpperCase(); // Ensure payload is \"ON\" or \"OFF\"\n\n// Validate instance is one of the expected values\nconst validInstances = [\"burner\", \"ac_1\", \"ac_2\", \"engine\"];\nif (!validInstances.includes(instance)) {\n    node.error(\n        `Invalid instance: ${instance}. Expected: burner, ac_1, ac_2, or engine.`,\n        msg,\n    );\n    return null;\n}\n\n// Device configuration\nconst componentType = \"light\";\nconst prefix = \"aquahot\";\n\n// Generate entity ID\nconst entityId = `${prefix}_${instance}`;\n\n// Construct the MQTT state topic\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n// Prepare the final message\nmsg.topic = stateTopic;\nmsg.payload = haStatus;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7595,7 +7597,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
+        "x": 910,
         "y": 240,
         "wires": [
             [
@@ -7608,7 +7610,7 @@
         "type": "function",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "create_aquahot",
+        "name": "create_aquahot_1",
         "func": "// Creates AquaHot entity\n\n// Validate input structure\nif (!msg.payload || typeof msg.payload.instance !== \"string\") {\n  node.error(\"Input must be an object with a string 'instance' property.\", msg);\n  return null;\n}\n\nconst instance = msg.payload.instance; // Expecting \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n\n// Validate instance is one of the expected values\nconst validInstances = [\"burner\", \"ac_1\", \"ac_2\", \"engine\"];\nif (!validInstances.includes(instance)) {\n  node.error(\n    `Invalid instance: ${instance}. Expected: burner, ac_1, ac_2, or engine.`,\n    msg,\n  );\n  return null;\n}\n\n// Device configuration\nconst componentType = \"light\";\nconst prefix = \"aquahot\";\n\n// Configure display name and icon based on instance\nlet displayName, icon;\nswitch (instance) {\n  case \"burner\":\n    displayName = \"Diesel Burner\";\n    icon = \"mdi:fire\";\n    break;\n  case \"ac_1\":\n    displayName = \"AC Element 1\";\n    icon = \"mdi:lightning-bolt\";\n    break;\n  case \"ac_2\":\n    displayName = \"AC Element 2\";\n    icon = \"mdi:lightning-bolt\";\n    break;\n  case \"engine\":\n    displayName = \"Engine Pre-heat\";\n    icon = \"mdi:engine\";\n    break;\n}\n\n// Generate entity identifiers\nconst entityId = `${prefix}_${instance}`;\n\n// MQTT topics\nconst discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;\nconst stateTopic = `homeassistant/${componentType}/${entityId}/state`;\nconst commandTopic = `homeassistant/${componentType}/${entityId}/set`;\n\n// MQTT Discovery payload\nconst payload = {\n  name: displayName,\n  unique_id: entityId,\n  default_entity_id: `${componentType}.${entityId}`,\n  icon: icon,\n  command_topic: commandTopic,\n  state_topic: stateTopic,\n  payload_on: \"ON\",\n  payload_off: \"OFF\",\n  // Link entities to a common device for better HA grouping\n  device: {\n    identifiers: [\"librecoach-aquahot\"],\n    name: \"Aqua-Hot\",\n    manufacturer: \"LibreCoach\",\n  },\n};\n\n// Prepare the final message for the MQTT Out node\nmsg.topic = discoveryTopic;\nmsg.payload = payload;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7616,7 +7618,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1100,
+        "x": 1130,
         "y": 180,
         "wires": [
             [
@@ -7706,7 +7708,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1350,
+        "x": 1370,
         "y": 180,
         "wires": []
     },
@@ -7740,42 +7742,42 @@
         "rules": [
             {
                 "t": "eq",
-                "v": "AQUAHOT_STATUS",
+                "v": "AQUAHOT_UNUSED",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_ZONE_STATUS",
+                "v": "AQUAHOT_STATUS_1",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_ZONE_CONFIG",
+                "v": "AQUAHOT_SYSTEM_STATUS_2",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_ZONE_THERMOSTAT",
+                "v": "AQUAHOT_STATUS_2",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_EXTENDED_STATUS",
+                "v": "AQUAHOT_THERMOSTAT_STATUS_2",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_ZONE_COMMAND",
+                "v": "AQUAHOT_COMMAND_2",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_COMMAND",
+                "v": "AQUAHOT_COMMAND_1",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": "AQUAHOT_THERMOSTAT_STATUS",
+                "v": "AQUAHOT_THERMOSTAT_STATUS_1 ",
                 "vt": "str"
             },
             {
@@ -7788,23 +7790,26 @@
         "x": 330,
         "y": 300,
         "wires": [
+            [],
             [
-                "5e7062bde869c7a5"
+                "5e7062bde869c7a5",
+                "691871e1972d2296"
             ],
             [
-                "e2fc2c67eba80f70"
+                "e2fc2c67eba80f70",
+                "1bd7e1d4c5f3864a"
             ],
             [
-                "e2fc2c67eba80f70"
+                "e2fc2c67eba80f70",
+                "691871e1972d2296"
             ],
             [
-                "e2fc2c67eba80f70"
+                "e2fc2c67eba80f70",
+                "871009c15ad9a99b"
             ],
             [
-                "e2fc2c67eba80f70"
-            ],
-            [
-                "e2fc2c67eba80f70"
+                "e2fc2c67eba80f70",
+                "c5fdb5067c820e76"
             ],
             [
                 "c5fdb5067c820e76"
@@ -7822,15 +7827,15 @@
         "type": "function",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "decode_aquahot_status",
-        "func": "// Status Updater for Aqua-Hot\n// Decodes proprietary AQUAHOT status byte into individual status messages\n\nconst DISCRIMINATOR = 0xA9; // The expected first data byte (Byte 1)\n\n// Maps the bit position to the instance name\nconst BIT_MAP = {\n    0: 'burner',     // Burner Status (Bit 0)\n    2: 'ac_1',       // AC Element 1 Status (Bit 2)\n    3: 'ac_2',       // AC Element 2 Status (Bit 3)\n    6: 'engine'      // Engine Pre-heat Status (Bit 6)\n};\n\nconst data_payload = msg.payload.data_payload;\n\n// Extract the status byte (Byte 2 of the data payload)\nconst statusByte = parseInt(data_payload.substring(2, 4), 16);\n\nlet outputMessages = [];\n\n// Decode the individual status bits\nfor (const bit in BIT_MAP) {\n    const bitIndex = Number(bit);\n    const instance = BIT_MAP[bitIndex];\n\n    // Check if the bit is set (Bit = 1 for ON)\n    const isBitSet = (statusByte >> bitIndex) & 1;\n    const status = isBitSet ? \"ON\" : \"OFF\";\n\n    // Prepare the message following the standard pattern\n    const statusMsg = {\n        payload: {\n            instance,\n            status\n        }\n    };\n\n    outputMessages.push(statusMsg);\n}\n\n// Send all four status updates simultaneously\nreturn [outputMessages];",
+        "name": "decode_aquahot_status_1",
+        "func": "// Status Updater for Aqua-Hot\n// Decodes proprietary AQUAHOT status byte into individual status messages\n\n// Maps the bit position to the instance name\nconst BIT_MAP = {\n  0: \"burner\", // Burner Status (Bit 0)\n  2: \"ac_1\", // AC Element 1 Status (Bit 2)\n  3: \"ac_2\", // AC Element 2 Status (Bit 3)\n  6: \"engine\", // Engine Pre-heat Status (Bit 6)\n};\n\nconst data_payload = msg.payload.data_payload;\n\n// Extract the status byte (Byte 2 of the data payload)\nconst statusByte = parseInt(data_payload.substring(2, 4), 16);\n\nlet outputMessages = [];\n\n// Decode the individual status bits\nfor (const bit in BIT_MAP) {\n  const bitIndex = Number(bit);\n  const instance = BIT_MAP[bitIndex];\n\n  // Check if the bit is set (Bit = 1 for ON)\n  const isBitSet = (statusByte >> bitIndex) & 1;\n  const status = isBitSet ? \"ON\" : \"OFF\";\n\n  // Prepare the message following the standard pattern\n  const statusMsg = {\n    payload: {\n      instance,\n      status,\n    },\n  };\n\n  outputMessages.push(statusMsg);\n}\n\n// Send all four status updates simultaneously\nreturn [outputMessages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 620,
         "y": 240,
         "wires": [
             [
@@ -7862,15 +7867,15 @@
         "type": "function",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "decode_aquahot_zone",
-        "func": "// Decoder for Proprietary AquaHot Zone Heating DGNs:\n// FF01 (AQUAHOT_ZONE_THERMOSTAT), FF2F (AQUAHOT_ZONE_COMMAND), FF2E (AQUAHOT_EXTENDED_STATUS)\n//\n// Note: These are NOT part of the standard RV-C specification. Decoding is based on\n// reverse-engineered analysis of recordings. Confidence levels differ per field.\n\nfunction decodeUint16(data, startByte) {\n    return data[startByte] | (data[startByte + 1] << 8);\n}\n\n// === AQUAHOT_ZONE_THERMOSTAT (FF01) ===\nfunction decodeZoneThermostat(data, result) {\n    // Byte 0: Zone Index [HIGH confidence] (00=Zone 1, 01=Zone 2)\n    result.zone_index = data[0];\n    result.raw_zone_index = data[0];\n\n    // Byte 1: Sub-Index [HIGH confidence] (01=primary, 02=secondary, FF=summary)\n    result.sub_index = data[1];\n\n    // Byte 2: Config/Capability Byte [MEDIUM confidence]\n    result.config_byte = data[2];\n\n    // Byte 3: Unknown [LOW confidence] (always 0x01 in recordings)\n    result.unknown_byte3 = data[3];\n\n    // Byte 4: Status/Mode [MEDIUM confidence]\n    result.status_mode = data[4];\n\n    // Byte 5: Unknown [LOW confidence]\n    result.unknown_byte5 = data[5];\n\n    // Byte 6: Temperature [HIGH confidence for sub-index 01, °F]\n    if (data[1] === 0x01 && data[6] !== 0xff) {\n        result.zone_temperature = data[6];\n    }\n    result.raw_temperature = data[6];\n\n    // Byte 7: Unknown [LOW confidence]\n    result.unknown_byte7 = data[7];\n}\n\n// === AQUAHOT_ZONE_COMMAND (FF2F) ===\nfunction decodeZoneCommand(data, result) {\n    // Byte 0: Instance [HIGH confidence] (Always 0x01)\n    result.instance = data[0];\n\n    // Byte 1: Command Type [HIGH confidence] (0x07=Quiet Mode, 0x0A=Interior Heating)\n    result.command_type = data[1];\n    if (data[1] === 0x07) {\n        result.command_name = \"Quiet Mode\";\n    } else if (data[1] === 0x0a) {\n        result.command_name = \"Interior Heating\";\n    } else {\n        result.command_name = `Unknown (0x${data[1].toString(16)})`;\n    }\n\n    // Byte 2: Reserved [HIGH confidence] (Always 0x00)\n\n    // Byte 3: Value [HIGH confidence] (0x00=Off, 0x01=On)\n    result.value_raw = data[3];\n    result.is_on = data[3] === 0x01;\n\n    // Bytes 4-7: Reserved/Padding [HIGH confidence]\n}\n\n// === AQUAHOT_EXTENDED_STATUS (FF2E) ===\nfunction decodeExtendedStatus(data, result) {\n    // Byte 0: Instance [HIGH confidence] (Always 0x01)\n    result.instance = data[0];\n\n    // Byte 1: Sub-Index [HIGH confidence] (0x00 through 0x0B observed)\n    result.sub_index = data[1];\n\n    // Byte 2: Reserved [HIGH confidence] (Always 0xFF)\n\n    // Byte 3: Value (primary) [MEDIUM confidence]\n    result.primary_value = data[3];\n\n    // Bytes 4-5: Value (secondary) [LOW confidence]\n    result.secondary_value = decodeUint16(data, 4);\n\n    // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)\n}\n\n// === Main Decode Function ===\n\nfunction decodeAquaHotZone(dgn, dgn_name, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: dgn_name,\n    };\n\n    if (data.length < 8) {\n        result.error = \"Data payload too short (expected 8 bytes)\";\n        return result;\n    }\n\n    // Include raw data for all proprietary analysis\n    result.raw_byte0 = data[0];\n    result.raw_byte1 = data[1];\n    result.raw_byte2 = data[2];\n    result.raw_byte3 = data[3];\n    result.raw_byte4 = data[4];\n    result.raw_byte5 = data[5];\n    result.raw_byte6 = data[6];\n    result.raw_byte7 = data[7];\n\n    if (dgn_name === \"AQUAHOT_ZONE_THERMOSTAT\") {\n        decodeZoneThermostat(data, result);\n    } else if (dgn_name === \"AQUAHOT_ZONE_COMMAND\") {\n        decodeZoneCommand(data, result);\n    } else if (dgn_name === \"AQUAHOT_EXTENDED_STATUS\") {\n        decodeExtendedStatus(data, result);\n    } else {\n        result.error = `Unhandled AquaHot DGN: ${dgn_name}`;\n    }\n\n    return result;\n}\n\n// === Node-RED Parsing ===\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dgn_name, data_payload } = incomingPayload;\n\nif (!dgn || !dgn_name || !data_payload) {\n    node.warn(\"Missing required fields: dgn, dgn_name, data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length % 2 !== 0) {\n    node.warn(\"Invalid data_payload: must be even-length hex string\");\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < data_payload.length; i += 2) {\n    const hexByte = data_payload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in data_payload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\nconst decodedData = decodeAquaHotZone(dgn, dgn_name, dataBytes);\n\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData,\n};\n\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
+        "name": "decode_aquahot_status_2",
+        "func": "// Decoder for Proprietary AquaHot _2 DGNs:\n// FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)\n//\n// Note: These are NOT part of the standard RV-C specification. Decoding is based on\n// reverse-engineered analysis of recordings. Confidence levels differ per field.\n\nfunction decodeUint16(data, startByte) {\n    return data[startByte] | (data[startByte + 1] << 8);\n}\n\n// === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===\nfunction decodeZoneThermostat(data, result) {\n    // Byte 0: Zone Index [HIGH confidence] (00=Zone 1, 01=Zone 2)\n    result.zone_index = data[0];\n    result.raw_zone_index = data[0];\n\n    // Byte 1: Sub-Index [HIGH confidence] (01=primary, 02=secondary, FF=summary)\n    result.sub_index = data[1];\n\n    // Byte 2: Config/Capability Byte [MEDIUM confidence]\n    result.config_byte = data[2];\n\n    // Byte 3: Unknown [LOW confidence] (always 0x01 in recordings)\n    result.unknown_byte3 = data[3];\n\n    // Byte 4: Status/Mode [MEDIUM confidence]\n    result.status_mode = data[4];\n\n    // Byte 5: Unknown [LOW confidence]\n    result.unknown_byte5 = data[5];\n\n    // Byte 6: Temperature [HIGH confidence for sub-index 01, °F]\n    if (data[1] === 0x01 && data[6] !== 0xff) {\n        result.zone_temperature = data[6];\n    }\n    result.raw_temperature = data[6];\n\n    // Byte 7: Unknown [LOW confidence]\n    result.unknown_byte7 = data[7];\n}\n\n// === AQUAHOT_COMMAND_2 (FF2F) ===\nfunction decodeCommand(data, result) {\n    // Byte 0: Instance [HIGH confidence] (Always 0x01)\n    result.instance = data[0];\n\n    // Byte 1: Command Type [HIGH confidence] (0x07=Quiet Mode, 0x0A=Interior Heating)\n    result.command_type = data[1];\n    if (data[1] === 0x07) {\n        result.command_name = \"Quiet Mode\";\n    } else if (data[1] === 0x0a) {\n        result.command_name = \"Interior Heating\";\n    } else {\n        result.command_name = `Unknown (0x${data[1].toString(16)})`;\n    }\n\n    // Byte 2: Reserved [HIGH confidence] (Always 0x00)\n\n    // Byte 3: Value [HIGH confidence] (0x00=Off, 0x01=On)\n    result.value_raw = data[3];\n    result.is_on = data[3] === 0x01;\n\n    // Bytes 4-7: Reserved/Padding [HIGH confidence]\n}\n\n// === AQUAHOT_STATUS_2 (6C00) ===\nfunction decodeStatus(data, result) {\n    // Byte 0: Instance [HIGH confidence] (0xFF = all zones)\n    result.instance = data[0];\n\n    // Byte 1: Sub-Index [HIGH confidence]\n    result.sub_index = data[1];\n\n    // Bytes 2–5: Values [LOW confidence]\n    result.value_a = data[2];\n    result.value_b = data[3];\n    result.value_c = data[4];\n    result.value_d = data[5];\n}\n\n// === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===\nfunction decodeSystemStatus(data, result) {\n    // Byte 0: Instance [HIGH confidence] (Always 0x01)\n    result.instance = data[0];\n\n    // Byte 1: Sub-Index [HIGH confidence] (0x00 through 0x0B observed)\n    result.sub_index = data[1];\n\n    // Byte 2: Reserved [HIGH confidence] (Always 0xFF)\n\n    // Byte 3: Value (primary) [MEDIUM confidence]\n    result.primary_value = data[3];\n\n    // Bytes 4-5: Value (secondary) [LOW confidence]\n    result.secondary_value = decodeUint16(data, 4);\n\n    // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)\n}\n\n// === Main Decode Function ===\n\nfunction decodeAquaHotZone(dgn, dgn_name, data) {\n    const result = {\n        dgn: dgn,\n        dgn_name: dgn_name,\n    };\n\n    if (data.length < 8) {\n        result.error = \"Data payload too short (expected 8 bytes)\";\n        return result;\n    }\n\n    // Include raw data for all proprietary analysis\n    result.raw_byte0 = data[0];\n    result.raw_byte1 = data[1];\n    result.raw_byte2 = data[2];\n    result.raw_byte3 = data[3];\n    result.raw_byte4 = data[4];\n    result.raw_byte5 = data[5];\n    result.raw_byte6 = data[6];\n    result.raw_byte7 = data[7];\n\n    if (dgn_name === \"AQUAHOT_THERMOSTAT_STATUS_2\") {\n        decodeZoneThermostat(data, result);\n    } else if (dgn_name === \"AQUAHOT_COMMAND_2\") {\n        decodeCommand(data, result);\n    } else if (dgn_name === \"AQUAHOT_SYSTEM_STATUS_2\") {\n        decodeSystemStatus(data, result);\n    } else if (dgn_name === \"AQUAHOT_STATUS_2\") {\n        decodeStatus(data, result);\n    } else {\n        result.error = `Unhandled AquaHot DGN: ${dgn_name}`;\n    }\n\n    return result;\n}\n\n// === Node-RED Parsing ===\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, dgn_name, data_payload } = incomingPayload;\n\nif (!dgn || !dgn_name || !data_payload) {\n    node.warn(\"Missing required fields: dgn, dgn_name, data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length % 2 !== 0) {\n    node.warn(\"Invalid data_payload: must be even-length hex string\");\n    return null;\n}\n\nconst dataBytes = [];\nfor (let i = 0; i < data_payload.length; i += 2) {\n    const hexByte = data_payload.substring(i, i + 2);\n    const byteValue = parseInt(hexByte, 16);\n    if (isNaN(byteValue)) {\n        node.warn(`Invalid hex byte in data_payload: ${hexByte}`);\n        return null;\n    }\n    dataBytes.push(byteValue);\n}\n\nconst decodedData = decodeAquaHotZone(dgn, dgn_name, dataBytes);\n\nif (decodedData.error) {\n    incomingPayload.decoding_error = decodedData.error;\n    msg.payload = incomingPayload;\n    return msg;\n}\n\n// Merge the incoming payload and the decoded data\nmsg.payload = {\n    ...incomingPayload,\n    ...decodedData,\n};\n\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
+        "x": 880,
         "y": 300,
         "wires": [
             [
@@ -7883,20 +7888,21 @@
         "type": "function",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "status_aquahot_zone",
-        "func": "// Publishes proprietary AquaHot zone entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst messages = [];\n\n// === Device definition ===\n\n// Shared device explicitly with standard water heater entities\nconst device = {\n  identifiers: [\"librecoach-aquahot\"],\n  name: \"Aqua-Hot\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context ===\n\nconst CREATED_KEY = \"aquahot_zone_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n  created[entityId] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    state_topic: `homeassistant/sensor/${entityId}/state`,\n    device,\n  };\n  if (unit) cfg.unit_of_measurement = unit;\n  if (deviceClass) cfg.device_class = deviceClass;\n  if (stateClass) cfg.state_class = stateClass;\n  if (icon) cfg.icon = icon;\n  return {\n    topic: `homeassistant/sensor/${entityId}/config`,\n    payload: cfg,\n  };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n  return {\n    topic: `homeassistant/binary_sensor/${entityId}/config`,\n    payload: {\n      name,\n      unique_id: entityId,\n      default_entity_id: `binary_sensor.${entityId}`,\n      state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n      payload_on: \"ON\",\n      payload_off: \"OFF\",\n      device_class: deviceClass,\n      icon,\n      device,\n    },\n  };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n  return { topic, payload };\n}\n\nfunction onOff(value) {\n  return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n  if (!created[entityId]) {\n    if (!canCreate) return;\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(\n    stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n  );\n}\n\nfunction climateConfig(entityId, name) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `climate.${entityId}`,\n    mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,\n    mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,\n    modes: [\"off\", \"heat\"],\n    current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,\n    temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,\n    temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,\n    temperature_unit: \"F\",\n    action_topic: `homeassistant/climate/${entityId}/action/state`,\n    device,\n  };\n  return {\n    topic: `homeassistant/climate/${entityId}/config`,\n    payload: cfg,\n  };\n}\n\nfunction publishClimate(entityId, mode, temp, action, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  if (mode !== undefined) {\n    let haMode = \"off\";\n    if (mode === \"HEAT\") haMode = \"heat\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/mode/state`, haMode),\n    );\n  }\n  // AquaHot uses zone_temperature (current) and setpoint (we don't get setpoint yet directly, using temp state for now)\n  if (temp !== undefined && temp !== null) {\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/current_temp/state`, temp),\n    );\n  }\n  if (action !== undefined) {\n    const haAction = action ? \"heating\" : \"idle\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/action/state`, haAction),\n    );\n  }\n}\n\n// Parse hex format helper\nfunction toHex(val) {\n  return \"0x\" + val.toString(16).toUpperCase().padStart(2, \"0\");\n}\n\n// === AQUAHOT_ZONE_THERMOSTAT (FF01) ===\n// Provides current zone temperature\nif (dgn_name === \"AQUAHOT_ZONE_THERMOSTAT\") {\n  const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2\n\n  if (p.zone_temperature !== undefined && p.zone_temperature !== null) {\n    // Create Climate Entity and publish current temperature\n    publishClimate(\n      `aquahot_zone_${z}`,\n      undefined, // Mode handled by FF2F\n      p.zone_temperature, // Current temp\n      undefined, // Action handled by FF2F\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n\n  if (p.config_byte !== undefined && p.config_byte !== null) {\n    publishSensor(`aquahot_zone_${z}_config`, toHex(p.config_byte), () =>\n      sensorConfig(\n        `aquahot_zone_${z}_config`,\n        `Aqua-Hot Zone ${z} Config`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_ZONE_COMMAND (FF2F) ===\n// Provides operating state / mode\nelse if (dgn_name === \"AQUAHOT_ZONE_COMMAND\") {\n  if (p.command_type === 0x07) {\n    // Quiet Mode\n    publishBinary(\"aquahot_quiet_mode\", onOff(p.is_on), () =>\n      binarySensorConfig(\n        \"aquahot_quiet_mode\",\n        \"Aqua-Hot Quiet Mode\",\n        null,\n        \"mdi:volume-off\",\n      ),\n    );\n  } else if (p.command_type === 0x0a) {\n    // Interior Heating - Using this as the state/action for the primary zone\n    // If we only get one global heating status, we'll apply it to Zone 1 for now\n    const z = 1;\n    const mode = p.is_on ? \"HEAT\" : \"OFF\";\n    publishClimate(\n      `aquahot_zone_${z}`,\n      mode,\n      undefined,\n      p.is_on, // Action (heating/idle)\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n}\n\n// === AQUAHOT_EXTENDED_STATUS (FF2E) ===\nelse if (dgn_name === \"AQUAHOT_EXTENDED_STATUS\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.primary_value !== undefined) {\n    publishSensor(`aquahot_ext_sub_${nn}`, p.primary_value, () =>\n      sensorConfig(\n        `aquahot_ext_sub_${nn}`,\n        `AquaHot Ext Status Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:information\",\n      ),\n    );\n  }\n}\n\nif (messages.length === 0) {\n  return null;\n}\n\nreturn [messages];\n",
+        "name": "status_aquahot_2",
+        "func": "// Publishes proprietary AquaHot zone entity states to MQTT state topics.\n// Also publishes MQTT discovery configs the first time a valid value is received.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst dgn_name = p.dgn_name;\nconst messages = [];\n\n// === Device definition ===\n\n// Shared device explicitly with standard water heater entities\nconst device = {\n  identifiers: [\"librecoach-aquahot\"],\n  name: \"Aqua-Hot\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context ===\n\nconst CREATED_KEY = \"aquahot_zone_entities_created\";\nconst created = flow.get(CREATED_KEY) || {};\n\nfunction markCreated(entityId) {\n  created[entityId] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Discovery config builders ===\n\nfunction sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `sensor.${entityId}`,\n    state_topic: `homeassistant/sensor/${entityId}/state`,\n    device,\n  };\n  if (unit) cfg.unit_of_measurement = unit;\n  if (deviceClass) cfg.device_class = deviceClass;\n  if (stateClass) cfg.state_class = stateClass;\n  if (icon) cfg.icon = icon;\n  return {\n    topic: `homeassistant/sensor/${entityId}/config`,\n    payload: cfg,\n  };\n}\n\nfunction binarySensorConfig(entityId, name, deviceClass, icon) {\n  return {\n    topic: `homeassistant/binary_sensor/${entityId}/config`,\n    payload: {\n      name,\n      unique_id: entityId,\n      default_entity_id: `binary_sensor.${entityId}`,\n      state_topic: `homeassistant/binary_sensor/${entityId}/state`,\n      payload_on: \"ON\",\n      payload_off: \"OFF\",\n      device_class: deviceClass,\n      icon,\n      device,\n    },\n  };\n}\n\n// === Helpers ===\n\nfunction stateMsg(topic, payload) {\n  return { topic, payload };\n}\n\nfunction onOff(value) {\n  return value ? \"ON\" : \"OFF\";\n}\n\nfunction publishSensor(entityId, stateValue, configFn, canCreate = true) {\n  if (!created[entityId]) {\n    if (!canCreate) return;\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));\n}\n\nfunction publishBinary(entityId, stateValue, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  messages.push(\n    stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),\n  );\n}\n\nfunction climateConfig(entityId, name) {\n  const cfg = {\n    name,\n    unique_id: entityId,\n    default_entity_id: `climate.${entityId}`,\n    mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,\n    mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,\n    modes: [\"off\", \"heat\"],\n    current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,\n    temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,\n    temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,\n    temperature_unit: \"F\",\n    action_topic: `homeassistant/climate/${entityId}/action/state`,\n    device,\n  };\n  return {\n    topic: `homeassistant/climate/${entityId}/config`,\n    payload: cfg,\n  };\n}\n\nfunction publishClimate(entityId, mode, temp, action, configFn) {\n  if (!created[entityId]) {\n    messages.push(configFn());\n    markCreated(entityId);\n  }\n  if (mode !== undefined) {\n    let haMode = \"off\";\n    if (mode === \"HEAT\") haMode = \"heat\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/mode/state`, haMode),\n    );\n  }\n  // AquaHot uses zone_temperature (current) and setpoint (we don't get setpoint yet directly, using temp state for now)\n  if (temp !== undefined && temp !== null) {\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/current_temp/state`, temp),\n    );\n  }\n  if (action !== undefined) {\n    const haAction = action ? \"heating\" : \"idle\";\n    messages.push(\n      stateMsg(`homeassistant/climate/${entityId}/action/state`, haAction),\n    );\n  }\n}\n\n// Parse hex format helper\nfunction toHex(val) {\n  return \"0x\" + val.toString(16).toUpperCase().padStart(2, \"0\");\n}\n\n// === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===\n// Provides current zone temperature\nif (dgn_name === \"AQUAHOT_THERMOSTAT_STATUS_2\") {\n  const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2\n\n  if (typeof p.zone_temperature === \"number\") {\n    // Create Climate Entity and publish current temperature\n    publishClimate(\n      `aquahot_zone_${z}`,\n      undefined, // Mode handled by FF2F\n      p.zone_temperature, // Current temp\n      undefined, // Action handled by FF2F\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n\n  if (typeof p.config_byte === \"number\") {\n    publishSensor(`aquahot_zone_${z}_config`, toHex(p.config_byte), () =>\n      sensorConfig(\n        `aquahot_zone_${z}_config`,\n        `Aqua-Hot Zone ${z} Config`,\n        null,\n        null,\n        null,\n        \"mdi:cog\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_COMMAND_2 (FF2F) ===\n// Provides operating state / mode\nelse if (dgn_name === \"AQUAHOT_COMMAND_2\") {\n  if (p.command_type === 0x07) {\n    // Quiet Mode\n    publishBinary(\"aquahot_quiet_mode\", onOff(p.is_on), () =>\n      binarySensorConfig(\n        \"aquahot_quiet_mode\",\n        \"Aqua-Hot Quiet Mode\",\n        null,\n        \"mdi:volume-off\",\n      ),\n    );\n  } else if (p.command_type === 0x0a) {\n    // Interior Heating - Using this as the state/action for the primary zone\n    // If we only get one global heating status, we'll apply it to Zone 1 for now\n    const z = 1;\n    const mode = p.is_on ? \"HEAT\" : \"OFF\";\n    publishClimate(\n      `aquahot_zone_${z}`,\n      mode,\n      undefined,\n      p.is_on, // Action (heating/idle)\n      () => climateConfig(`aquahot_zone_${z}`, `Aqua-Hot Zone ${z}`),\n    );\n  }\n}\n\n// === AQUAHOT_STATUS_2 (6C00) ===\nelse if (dgn_name === \"AQUAHOT_STATUS_2\") {\n  const nn = toHex(p.sub_index).substring(2);\n  if (p.value_a !== undefined && p.value_a !== null) {\n    publishSensor(`aquahot_status_2_sub_${nn}`, p.value_a, () =>\n      sensorConfig(\n        `aquahot_status_2_sub_${nn}`,\n        `AquaHot Status Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:information\",\n      ),\n    );\n  }\n}\n\n// === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===\nelse if (dgn_name === \"AQUAHOT_SYSTEM_STATUS_2\") {\n  const nn = toHex(p.sub_index).substring(2);\n\n  if (p.primary_value !== undefined && p.primary_value !== null) {\n    publishSensor(`aquahot_sys_status_sub_${nn}`, p.primary_value, () =>\n      sensorConfig(\n        `aquahot_sys_status_sub_${nn}`,\n        `AquaHot System Status Sub ${nn}`,\n        null,\n        null,\n        null,\n        \"mdi:information\",\n      ),\n    );\n  }\n}\n\nif (messages.length === 0) {\n  return null;\n}\n\nreturn [messages];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
+        "x": 1130,
         "y": 300,
         "wires": [
             [
                 "04c537115b1bb0b5",
-                "1c1403c14b577fb4"
+                "1c1403c14b577fb4",
+                "08d4c674d7359aee"
             ]
         ]
     },
@@ -7928,7 +7934,7 @@
         "links": [
             "d244b9fa7dfd5d48"
         ],
-        "x": 1310,
+        "x": 1370,
         "y": 360,
         "wires": [],
         "l": true
@@ -7959,7 +7965,7 @@
         "type": "debug",
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
-        "name": "AQUAHOT_UNKNOWN",
+        "name": "AQUAHOT_UNUSED",
         "active": false,
         "tosidebar": true,
         "console": false,
@@ -7968,8 +7974,44 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 610,
+        "x": 600,
         "y": 480,
+        "wires": []
+    },
+    {
+        "id": "1bd7e1d4c5f3864a",
+        "type": "debug",
+        "z": "384249601e37ba22",
+        "g": "5811945b9bad79dc",
+        "name": "AQUAHOT_SYSTEM_STATUS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "691871e1972d2296",
+        "type": "debug",
+        "z": "384249601e37ba22",
+        "g": "5811945b9bad79dc",
+        "name": "AQUAHOT_STATUS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 120,
         "wires": []
     },
     {
