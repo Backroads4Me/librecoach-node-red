@@ -952,6 +952,27 @@
         "h": 142
     },
     {
+        "id": "f67b4a374db41b27",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "GPS Updates",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "50dfcea54d80866b",
+            "a8a757fe3b31cf9c",
+            "5ffb64e684c20ea8",
+            "1becc1dacb0ecaf8",
+            "ac17a780a9a1dbcf"
+        ],
+        "x": 114,
+        "y": 1819,
+        "w": 772,
+        "h": 162
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -1495,7 +1516,8 @@
             "102272ba5b34f5e1",
             "77bb0b933f212e6c",
             "6376d98589368f2b",
-            "ac2dea7ebf546105"
+            "ac2dea7ebf546105",
+            "5ffb64e684c20ea8"
         ],
         "x": 230,
         "y": 520,
@@ -2271,7 +2293,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 390,
-        "y": 159,
+        "y": 140,
         "wires": []
     },
     {
@@ -2432,7 +2454,7 @@
         "z": "292e70a6ba25b323",
         "g": "3c819b7900145438",
         "name": "store_config_globals",
-        "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"ble_enabled\") global.set(\"bleEnabled\", val);\nif (key === \"microair_enabled\") global.set(\"microairEnabled\", val);\n\nreturn msg;\n",
+        "func": "var key = msg.topic.split(\"/\").pop();\nvar val = msg.payload.toString() === \"true\";\n\nif (key === \"victron_enabled\") global.set(\"victronEnabled\", val);\nif (key === \"beta_enabled\") global.set(\"betaEnabled\", val);\nif (key === \"microair_enabled\") global.set(\"microairEnabled\", val);\nif (key === \"geo_enabled\") global.set(\"geoEnabled\", val);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2457,7 +2479,8 @@
         "links": [
             "8fdd1d506d28b9b6",
             "bb154cf7301d6fa7",
-            "027d238476871cfe"
+            "027d238476871cfe",
+            "ac17a780a9a1dbcf"
         ],
         "x": 680,
         "y": 720,
@@ -2801,7 +2824,7 @@
         "z": "292e70a6ba25b323",
         "g": "9e47041ed71c4494",
         "name": "BETA",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2954,6 +2977,103 @@
                 "21dfe84b8adafa6e"
             ]
         ]
+    },
+    {
+        "id": "50dfcea54d80866b",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "f67b4a374db41b27",
+        "name": "Location updates",
+        "topic": "can/status/geo",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 1940,
+        "wires": [
+            [
+                "a8a757fe3b31cf9c"
+            ]
+        ]
+    },
+    {
+        "id": "a8a757fe3b31cf9c",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f67b4a374db41b27",
+        "name": "geo_status",
+        "func": "// HA Status Publisher for Geo Bridge (can/status/geo)\n// Self-creating: publishes MQTT discovery on first valid reading.\n\nif (!global.get(\"geoEnabled\")) return null;\n\nif (!msg.payload) {\n  return null;\n}\n\n// In case the MQTT node isn't set to parse JSON automatically\nlet p = msg.payload;\nif (typeof p === \"string\") {\n  try {\n    p = JSON.parse(p);\n  } catch (e) {\n    node.warn(\"Failed to parse geo payload as JSON\");\n    return null;\n  }\n}\n\nif (p.status !== \"online\") {\n  return null; // Ignore 'unavailable' or 'offline' status messages for now\n}\n\n// === Flow context: track which entities have had discovery published ===\nconst CREATED_KEY = \"geoSensorsCreated\";\nlet created = flow.get(CREATED_KEY);\n\nconst messages = [];\n\nif (!created) {\n  const device = {\n    identifiers: [\"librecoach-geo\"],\n    name: \"Location\",\n    manufacturer: \"LibreCoach\",\n  };\n\n  const createSensor = (id, name, icon, unit) => {\n    const entityId = `geo_${id}`;\n    const payload = {\n      name: name,\n      unique_id: entityId,\n      default_entity_id: `sensor.${entityId}`,\n      icon: icon,\n      state_topic: `homeassistant/sensor/${entityId}/state`,\n      device: device,\n    };\n    if (unit) payload.unit_of_measurement = unit;\n\n    messages.push({\n      topic: `homeassistant/sensor/${entityId}/config`,\n      payload: payload,\n    });\n  };\n\n  createSensor(\"city\", \"City\", \"mdi:city\");\n  createSensor(\"state\", \"State\", \"mdi:map-marker\");\n  createSensor(\"timezone\", \"Timezone\", \"mdi:clock-outline\");\n  createSensor(\"elevation\", \"Elevation\", \"mdi:image-filter-hdr\", \"m\");\n\n  created = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// Publish states\nif (p.city !== undefined)\n  messages.push({\n    topic: `homeassistant/sensor/geo_city/state`,\n    payload: p.city,\n  });\nif (p.state !== undefined)\n  messages.push({\n    topic: `homeassistant/sensor/geo_state/state`,\n    payload: p.state,\n  });\nif (p.timezone !== undefined)\n  messages.push({\n    topic: `homeassistant/sensor/geo_timezone/state`,\n    payload: p.timezone,\n  });\nif (p.elevation !== undefined)\n  messages.push({\n    topic: `homeassistant/sensor/geo_elevation/state`,\n    payload: p.elevation,\n  });\n\nreturn [messages];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1940,
+        "wires": [
+            [
+                "5ffb64e684c20ea8"
+            ]
+        ]
+    },
+    {
+        "id": "5ffb64e684c20ea8",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "f67b4a374db41b27",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 750,
+        "y": 1880,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "1becc1dacb0ecaf8",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "f67b4a374db41b27",
+        "name": "geo_handle_toggle",
+        "func": "// Handles enable/disable of Geo integration via addon config\n// Input: msg from librecoach/config/geo_enabled (\"true\" / \"false\")\n// Output 1 → MQTT Out (entity deletion on disable)\n\n// Only handle geo_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"geo_enabled\") return null;\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  return null;\n}\n\n// === Disable: delete all tracked entities from HA ===\n// Only need to delete what we create in status_geo.js\nconst sensors = [\"city\", \"state\", \"timezone\", \"elevation\"];\n\nlet deletedCount = 0;\nsensors.forEach((sensor) => {\n  const entityId = `geo_${sensor}`;\n  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: \"\" });\n  deletedCount++;\n});\n\n// Clear persisted tracking state\nflow.set(\"geoSensorsCreated\", false);\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${deletedCount} entities`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 1860,
+        "wires": [
+            [
+                "5ffb64e684c20ea8"
+            ]
+        ]
+    },
+    {
+        "id": "ac17a780a9a1dbcf",
+        "type": "link in",
+        "z": "292e70a6ba25b323",
+        "g": "f67b4a374db41b27",
+        "name": "CONFIG_GLOBALS",
+        "links": [
+            "88e5fa035bedb48c"
+        ],
+        "x": 230,
+        "y": 1860,
+        "wires": [
+            [
+                "1becc1dacb0ecaf8"
+            ]
+        ],
+        "l": true
     },
     {
         "id": "9f88f215f3f07227",
@@ -4265,7 +4385,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 279,
+        "y": 160,
         "wires": []
     },
     {
@@ -6245,7 +6365,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 530,
-        "y": 183,
+        "y": 160,
         "wires": []
     },
     {
@@ -7492,7 +7612,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 170,
+        "y": 175,
         "wires": []
     },
     {
@@ -8484,7 +8604,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 154,
+        "y": 140,
         "wires": []
     },
     {
@@ -9143,7 +9263,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 149,
+        "y": 140,
         "wires": []
     },
     {
