@@ -127,12 +127,13 @@
             "ae2d2a4f790d7cf9",
             "b09974dcd1646951",
             "9a4eac9b74adce8e",
-            "e25c9c82905dc476"
+            "e25c9c82905dc476",
+            "eea2c8f34cb0db28"
         ],
         "x": 114,
-        "y": 279,
+        "y": 319,
         "w": 1452,
-        "h": 482
+        "h": 522
     },
     {
         "id": "3c819b7900145438",
@@ -189,8 +190,7 @@
             "6376d98589368f2b",
             "3935564c9401e95d",
             "ac47ce53a9fc3f21",
-            "0c76b4a89a0e60ca",
-            "872f0bdac8a4d828"
+            "0c76b4a89a0e60ca"
         ],
         "x": 908,
         "y": 239,
@@ -472,7 +472,7 @@
             "03744ec33f2e6776"
         ],
         "x": 674,
-        "y": 639,
+        "y": 519,
         "w": 532,
         "h": 142
     },
@@ -492,28 +492,8 @@
             "54bee06f72b5c1f5"
         ],
         "x": 674,
-        "y": 279,
+        "y": 319,
         "w": 572,
-        "h": 142
-    },
-    {
-        "id": "ea5519f0372a650f",
-        "type": "group",
-        "z": "7ecdba18640c1184",
-        "name": "Rest unique list",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "738e5a8857696209",
-            "dc9f6facce21379f",
-            "d825c1e1a2850fa5",
-            "c95a503942e20c78"
-        ],
-        "x": 674,
-        "y": 459,
-        "w": 552,
         "h": 142
     },
     {
@@ -932,6 +912,26 @@
         "h": 202
     },
     {
+        "id": "75fc5db64064b477",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Thermostat ambient",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "79435708ae460e17",
+            "c029494258f180b6",
+            "47b68581ce35eac7",
+            "77bb0b933f212e6c"
+        ],
+        "x": 1414,
+        "y": 2419,
+        "w": 992,
+        "h": 142
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -1211,7 +1211,7 @@
         "h": 142
     },
     {
-        "id": "75fc5db64064b477",
+        "id": "9c2f6585c25b7049",
         "type": "group",
         "z": "3470febb2cd6e952",
         "name": "Thermostat ambient",
@@ -1220,14 +1220,14 @@
             "label": true
         },
         "nodes": [
-            "79435708ae460e17",
-            "c029494258f180b6",
-            "47b68581ce35eac7",
-            "77bb0b933f212e6c"
+            "4273bf5a57c7e2ed",
+            "d434ae62a98cb76b",
+            "e38432107a5eaea7",
+            "ac2dea7ebf546105"
         ],
         "x": 1414,
-        "y": 2419,
-        "w": 992,
+        "y": 2619,
+        "w": 1052,
         "h": 142
     },
     {
@@ -1485,7 +1485,6 @@
             "599ffbccfb7cd415",
             "b104a7e82aefcb21",
             "dca8346e061f1d42",
-            "dbbf39b309416ca1",
             "e371075d4dbfc113",
             "b53e5b230c533766",
             "e38f32a1f6d36bfb",
@@ -1496,7 +1495,7 @@
             "102272ba5b34f5e1",
             "77bb0b933f212e6c",
             "6376d98589368f2b",
-            "e13d24c5403cb1df"
+            "ac2dea7ebf546105"
         ],
         "x": 230,
         "y": 520,
@@ -1659,8 +1658,7 @@
             ],
             [],
             [
-                "45414bacecada477",
-                "872f0bdac8a4d828"
+                "45414bacecada477"
             ],
             [],
             [
@@ -2085,8 +2083,7 @@
             "893d80d1125057e8",
             "aa12f93df2087d62",
             "2343c8c12f2081fa",
-            "a58b5f05c8346eab",
-            "b71958cfc0370c7d"
+            "a58b5f05c8346eab"
         ],
         "x": 1460,
         "y": 1240,
@@ -2274,7 +2271,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 390,
-        "y": 133,
+        "y": 146,
         "wires": []
     },
     {
@@ -2741,9 +2738,7 @@
             "3801a7eb83a2b8c7",
             "2e75610c037a9b44",
             "64392da612dfb00b",
-            "48a58294bddfa9cc",
-            "231f135686aeef3b",
-            "f1730141203ee970"
+            "48a58294bddfa9cc"
         ],
         "x": 1150,
         "y": 1720,
@@ -2763,8 +2758,7 @@
         "mode": "link",
         "links": [
             "00b1afc9a96aca8e",
-            "cd5a041811bc2c9a",
-            "7b6d720e0296caf7"
+            "cd5a041811bc2c9a"
         ],
         "x": 1910,
         "y": 340,
@@ -2960,23 +2954,6 @@
                 "21dfe84b8adafa6e"
             ]
         ]
-    },
-    {
-        "id": "872f0bdac8a4d828",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "g": "f09f79586501cb0b",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1930,
-        "y": 460,
-        "wires": []
     },
     {
         "id": "9f88f215f3f07227",
@@ -4447,7 +4424,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 790,
-        "y": 680,
+        "y": 560,
         "wires": [
             [
                 "f96e5b3b013a2b8f"
@@ -4468,7 +4445,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 680,
+        "y": 560,
         "wires": [
             []
         ]
@@ -4488,7 +4465,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1070,
-        "y": 740,
+        "y": 620,
         "wires": []
     },
     {
@@ -4505,7 +4482,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 740,
+        "y": 620,
         "wires": [
             [
                 "bc59e15bf069f17d"
@@ -4535,7 +4512,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 790,
-        "y": 320,
+        "y": 360,
         "wires": [
             [
                 "4f86998be2551032"
@@ -4556,7 +4533,7 @@
         "finalize": "",
         "libs": [],
         "x": 1060,
-        "y": 320,
+        "y": 360,
         "wires": [
             []
         ]
@@ -4576,7 +4553,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1090,
-        "y": 380,
+        "y": 420,
         "wires": []
     },
     {
@@ -4593,7 +4570,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 380,
+        "y": 420,
         "wires": [
             [
                 "0f09356f283bfae7"
@@ -4632,13 +4609,13 @@
                 "vt": "str"
             },
             {
-                "t": "cont",
-                "v": "DC_DIMMER_COMMAND",
+                "t": "eq",
+                "v": "GENERIC_INDICATOR_COMMAND",
                 "vt": "str"
             },
             {
-                "t": "eq",
-                "v": "GENERIC_INDICATOR_COMMAND",
+                "t": "cont",
+                "v": "DC_DIMMER_COMMAND",
                 "vt": "str"
             },
             {
@@ -4680,10 +4657,10 @@
                 "b07052c69f7b857c"
             ],
             [
-                "54bee06f72b5c1f5"
+                "e5f557604a31d3df"
             ],
             [
-                "c95a503942e20c78"
+                "54bee06f72b5c1f5"
             ],
             [],
             [],
@@ -4694,104 +4671,6 @@
                 "03744ec33f2e6776"
             ]
         ]
-    },
-    {
-        "id": "738e5a8857696209",
-        "type": "inject",
-        "z": "7ecdba18640c1184",
-        "g": "ea5519f0372a650f",
-        "name": "Reset unique",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 790,
-        "y": 500,
-        "wires": [
-            [
-                "dc9f6facce21379f"
-            ]
-        ]
-    },
-    {
-        "id": "dc9f6facce21379f",
-        "type": "function",
-        "z": "7ecdba18640c1184",
-        "g": "ea5519f0372a650f",
-        "name": "Reset function",
-        "func": "global.set(\"uniqueGenericCmd\", []);\nreturn null;  // Nothing needs to go downstream\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1060,
-        "y": 500,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d825c1e1a2850fa5",
-        "type": "debug",
-        "z": "7ecdba18640c1184",
-        "g": "ea5519f0372a650f",
-        "name": "New GENERIC cmd",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "c95a503942e20c78",
-        "type": "function",
-        "z": "7ecdba18640c1184",
-        "g": "ea5519f0372a650f",
-        "name": "unique_generic_cmd",
-        "func": "// Retrieve existing messages from flow context, or initialize as empty array\nlet uniqueGenericCmd = global.get(\"uniqueGenericCmd\") || [];\n\nlet newMsgStr = JSON.stringify(msg.payload.data_payload);\n\n// Check if it's a new unique message\nif (!uniqueGenericCmd.includes(newMsgStr)) {\n    uniqueGenericCmd.push(newMsgStr);\n    global.set(\"uniqueGenericCmd\", uniqueGenericCmd);\n\n    // Only return if new\n    return msg;\n}\n\n// Return nothing if duplicate\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 800,
-        "y": 560,
-        "wires": [
-            [
-                "d825c1e1a2850fa5"
-            ]
-        ]
-    },
-    {
-        "id": "d0143932939c8262",
-        "type": "comment",
-        "z": "7ecdba18640c1184",
-        "name": "Panel Light recordings",
-        "info": "all panel lights\nOFF\n19FED99F#FF7E00FFFFFF00FF\n\nON\n19FED99F#FF7EC8FFFFFF00FF\n\n\ntoggle bed panel lights\n19FED997#FF7D00FFFFFF00FF\n",
-        "x": 1520,
-        "y": 320,
-        "wires": []
     },
     {
         "id": "b07052c69f7b857c",
@@ -4824,6 +4703,40 @@
         ],
         "x": 1180,
         "y": 200,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "e5f557604a31d3df",
+        "type": "function",
+        "z": "7ecdba18640c1184",
+        "name": "decode_generic_indicator_command",
+        "func": "// Decoder for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Input: msg.payload from decode_rvc_can (dgn, dgn_name, data_payload)\n// Output: decoded fields merged into payload, or null for unhandled function types.\n// Unhandled types are logged to flow context \"unknownGenericIndicatorCmd\" for future analysis.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n    node.warn(\"Missing required fields: dgn and/or data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length < 16) {\n    node.warn(\"Invalid data_payload: expected 8-byte hex string\");\n    return null;\n}\n\nconst d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));\nif (d.some(isNaN)) {\n    node.warn(\"Invalid hex in data_payload\");\n    return null;\n}\n\n// Byte 0: Instance\n// 1-250 = specific instance, 0 = all instances, 255 = no instances (use group)\nconst instance = d[0];\n\n// Byte 1: Group bitmap\n// Bits 0-6 correspond to groups 1-7 (0 bit = command applies to that group)\n// Bit 7 must be 0 for a group command; 0xFF = non-group command\nconst groupRaw = d[1];\nconst isGroupCommand = (groupRaw & 0x80) === 0;\nconst groups = [];\nif (isGroupCommand) {\n    for (let i = 0; i < 7; i++) {\n        if ((groupRaw & (1 << i)) === 0) {\n            groups.push(i + 1);\n        }\n    }\n}\n\n// Byte 2: Brightness (Table 5.3, 0-200, 0.5% per step)\nconst brightnessRaw = d[2];\nlet brightness;\nif (brightnessRaw <= 200) {\n    brightness = parseFloat((brightnessRaw * 0.5).toFixed(1));\n} else if (brightnessRaw === 255) {\n    brightness = \"Not Available\";\n} else {\n    brightness = \"Reserved\";\n}\n\n// Byte 3 bits 0-3: Bank Select (0-13; 0xF = banking not supported)\nconst bankSelect = d[3] & 0x0f;\n\n// Byte 4: Duration\nconst durationRaw = d[4];\nlet duration;\nif (durationRaw === 0) {\n    duration = \"Momentary\";\n} else if (durationRaw <= 240) {\n    duration = `${durationRaw}s`;\n} else if (durationRaw >= 241 && durationRaw <= 250) {\n    duration = `${durationRaw - 236}min`;\n} else if (durationRaw === 255) {\n    duration = \"Continuous\";\n} else {\n    duration = \"Reserved\";\n}\n\n// Byte 6: Function\nconst functionRaw = d[6];\nconst functionNames = {\n    0x00: \"Set Brightness\",\n    0x01: \"LED1 Off, LED2 Off\",\n    0x02: \"LED1 On, LED2 Off\",\n    0x03: \"LED1 Off, LED2 On\",\n    0x04: \"LED1 On, LED2 On\",\n    0x11: \"Ramp Brightness\",\n    0x21: \"Flash Alternate\",\n};\nconst functionName = functionNames[functionRaw] ?? `Unknown (${functionRaw})`;\n\n// Classification: only pass through function types we currently handle.\n// Everything else is logged for future analysis and dropped.\nconst HANDLED_FUNCTIONS = new Set([\n    0x00, // Set Brightness → light on/off/dim\n    0x11, // Ramp Brightness → dimmable light\n    // 0x01-0x04 (individual LED control) → unknown context until seen in the wild\n]);\n\nif (!HANDLED_FUNCTIONS.has(functionRaw)) {\n    const log = flow.get(\"unknownGenericIndicatorCmd\") || {};\n    if (!log[data_payload]) {\n        log[data_payload] = {\n            originalMessage: incomingPayload.originalMessage || null,\n            data_payload,\n            function_raw: functionRaw,\n            function: functionName,\n            instance,\n            group_raw: groupRaw,\n            groups,\n            brightness_raw: brightnessRaw,\n            count: 0,\n            first_seen: Date.now(),\n        };\n    }\n    log[data_payload].count++;\n    log[data_payload].last_seen = Date.now();\n    flow.set(\"unknownGenericIndicatorCmd\", log);\n    return null;\n}\n\nmsg.payload = {\n    ...incomingPayload,\n    dgn,\n    dgn_name: \"GENERIC_INDICATOR_COMMAND\",\n    instance,\n    group_raw: groupRaw,\n    groups,\n    is_group_command: isGroupCommand,\n    brightness_raw: brightnessRaw,\n    brightness,\n    bank_select: bankSelect,\n    duration_raw: durationRaw,\n    duration,\n    function_raw: functionRaw,\n    function: functionName,\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 260,
+        "wires": [
+            [
+                "55ac5497839d7c9b"
+            ]
+        ]
+    },
+    {
+        "id": "55ac5497839d7c9b",
+        "type": "link out",
+        "z": "7ecdba18640c1184",
+        "name": "GENERIC_INDICATOR_COMMAND",
+        "mode": "link",
+        "links": [
+            "4273bf5a57c7e2ed"
+        ],
+        "x": 1210,
+        "y": 260,
         "wires": [],
         "l": true
     },
@@ -6324,7 +6237,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 530,
-        "y": 174,
+        "y": 183,
         "wires": []
     },
     {
@@ -7060,6 +6973,79 @@
         "l": true
     },
     {
+        "id": "4273bf5a57c7e2ed",
+        "type": "link in",
+        "z": "3470febb2cd6e952",
+        "g": "9c2f6585c25b7049",
+        "name": "GENERIC_INDICATOR_COMMAND",
+        "links": [
+            "55ac5497839d7c9b"
+        ],
+        "x": 1580,
+        "y": 2660,
+        "wires": [
+            [
+                "e38432107a5eaea7"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "d434ae62a98cb76b",
+        "type": "debug",
+        "z": "3470febb2cd6e952",
+        "g": "9c2f6585c25b7049",
+        "name": "status_generic_indicator_cmd",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2290,
+        "y": 2720,
+        "wires": []
+    },
+    {
+        "id": "e38432107a5eaea7",
+        "type": "function",
+        "z": "3470febb2cd6e952",
+        "g": "9c2f6585c25b7049",
+        "name": "status_generic_indicator_cmd",
+        "func": "// Self-creating HA Status Publisher for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Eavesdrops on indicator commands to infer light state.\n// Entity naming: switch_i_N (instance) or switch_g_N (group).\n// Routing keys: \"switch_i\" (instance), \"switch_g\" (group).\n// Output 1: [messages] → MQTT Out\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  return null;\n}\n\nconst p = msg.payload;\n\nif (typeof p.instance !== \"number\" || typeof p.function_raw !== \"number\") {\n  return null;\n}\n\n// --- State inference ---\n// Only 0x00 and 0x11 reach here (decoder gates all other function types).\nfunction inferState(fn, bRaw) {\n  if (typeof bRaw === \"number\" && bRaw <= 200) {\n    return bRaw > 0 ? \"ON\" : \"OFF\";\n  }\n  return null;\n}\n\nconst haStatus = inferState(p.function_raw, p.brightness_raw);\nif (haStatus === null) {\n  return null;\n}\n\n// Brightness as 0-100%\nlet brightness;\nif (typeof p.brightness_raw === \"number\" && p.brightness_raw <= 200) {\n  brightness = parseFloat((p.brightness_raw * 0.5).toFixed(1));\n}\n\n// --- Build target list ---\nconst targets = [];\n\nif (p.instance >= 1 && p.instance <= 250) {\n  // Specific instance\n  targets.push({\n    entityId: `switch_i_${p.instance}`,\n    displayName: `Switch ${p.instance}`,\n  }); // routing key: switch_i\n} else if (\n  p.instance === 255 &&\n  p.is_group_command &&\n  Array.isArray(p.groups) &&\n  p.groups.length > 0\n) {\n  // Group command — one entity per targeted group\n  for (const g of p.groups) {\n    targets.push({\n      entityId: `switch_g_${g}`,\n      displayName: `Switch Group ${g}`,\n    }); // routing key: switch_g\n  }\n} else {\n  // instance=0 (all instances broadcast) — no specific entity to update\n  return null;\n}\n\n// --- Dimmable detection ---\n// Uses separate array from DC_DIMMER/DC_LOAD to avoid cross-contamination\n// (those store numeric instances; indicators use entityId strings for group support)\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst CREATED_KEY = \"genericIndicatorCreated\";\nconst created = flow.get(CREATED_KEY) || {};\nconst messages = [];\n\nfor (const { entityId, displayName } of targets) {\n  let isDimmable = dimmableIndicators.includes(entityId);\n  let needsRecreate = false;\n\n  // Intermediate brightness (1-199 raw = 0.5-99.5%) or Ramp → dimmable\n  if (!isDimmable) {\n    if (\n      (typeof p.brightness_raw === \"number\" &&\n        p.brightness_raw >= 1 &&\n        p.brightness_raw <= 199) ||\n      p.function_raw === 0x11\n    ) {\n      dimmableIndicators.push(entityId);\n      isDimmable = true;\n      needsRecreate = true;\n    }\n  }\n\n  if (!created[entityId] || needsRecreate) {\n    const config = {\n      name: displayName,\n      unique_id: entityId,\n      default_entity_id: `light.${entityId}`,\n      icon: \"mdi:light-recessed\",\n      schema: \"json\",\n      command_topic: `homeassistant/light/${entityId}/set`,\n      state_topic: `homeassistant/light/${entityId}/state`,\n      device: {\n        identifiers: [\"librecoach-switches\"],\n        name: \"Switches\",\n        manufacturer: \"LibreCoach\",\n      },\n    };\n\n    if (isDimmable) {\n      config.brightness = true;\n      config.brightness_scale = 100;\n      config.supported_color_modes = [\"brightness\"];\n    } else {\n      config.supported_color_modes = [\"onoff\"];\n    }\n\n    messages.push({\n      topic: `homeassistant/light/${entityId}/config`,\n      payload: config,\n    });\n\n    created[entityId] = true;\n  }\n\n  if (isDimmable && typeof brightness === \"number\" && brightness > 0) {\n    global.set(\"indicatorBrightness_\" + entityId, brightness, \"file\");\n  }\n\n  const stateObj = { state: haStatus };\n  if (haStatus === \"ON\") {\n    if (isDimmable && !needsRecreate) {\n      stateObj.color_mode = \"brightness\";\n      if (brightness !== undefined && brightness > 0) {\n        stateObj.brightness = brightness;\n      }\n    } else {\n      stateObj.color_mode = \"onoff\";\n    }\n  }\n\n  messages.push({\n    topic: `homeassistant/light/${entityId}/state`,\n    payload: JSON.stringify(stateObj),\n  });\n}\n\nif (messages.length === 0) return null;\n\nglobal.set(\"dimmableIndicators\", dimmableIndicators, \"file\");\nflow.set(CREATED_KEY, created);\nreturn [messages];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1910,
+        "y": 2660,
+        "wires": [
+            [
+                "d434ae62a98cb76b",
+                "ac2dea7ebf546105"
+            ]
+        ]
+    },
+    {
+        "id": "ac2dea7ebf546105",
+        "type": "link out",
+        "z": "3470febb2cd6e952",
+        "g": "9c2f6585c25b7049",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 2270,
+        "y": 2660,
+        "wires": [],
+        "l": true
+    },
+    {
         "id": "a37da245aba53b96",
         "type": "function",
         "z": "b3d80c5dc947ec88",
@@ -7073,7 +7059,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 400,
+        "y": 580,
         "wires": [
             [
                 "89946e1c7a570ed0",
@@ -7091,7 +7077,7 @@
             "64c5e5cfd4382453"
         ],
         "x": 190,
-        "y": 400,
+        "y": 580,
         "wires": [
             [
                 "a37da245aba53b96",
@@ -7111,7 +7097,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1430,
-        "y": 500,
+        "y": 540,
         "wires": [],
         "l": true
     },
@@ -7175,14 +7161,24 @@
                 "vt": "str"
             },
             {
+                "t": "eq",
+                "v": " switch_i",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": " switch_g",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 11,
+        "outputs": 13,
         "x": 650,
-        "y": 400,
+        "y": 580,
         "wires": [
             [
                 "86a191e1f24d802a"
@@ -7215,6 +7211,12 @@
                 "e25c9c82905dc476"
             ],
             [
+                "eea2c8f34cb0db28"
+            ],
+            [
+                "eea2c8f34cb0db28"
+            ],
+            [
                 "778971897d2a7fdc"
             ]
         ]
@@ -7233,7 +7235,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 360,
+        "y": 400,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -7256,7 +7258,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1400,
-        "y": 440,
+        "y": 480,
         "wires": []
     },
     {
@@ -7273,7 +7275,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 400,
+        "y": 440,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -7295,7 +7297,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 440,
+        "y": 480,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -7317,7 +7319,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -7340,7 +7342,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 940,
-        "y": 720,
+        "y": 800,
         "wires": []
     },
     {
@@ -7358,7 +7360,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 350,
-        "y": 540,
+        "y": 720,
         "wires": []
     },
     {
@@ -7376,7 +7378,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 600,
-        "y": 540,
+        "y": 720,
         "wires": []
     },
     {
@@ -7393,7 +7395,7 @@
         "finalize": "",
         "libs": [],
         "x": 1020,
-        "y": 320,
+        "y": 360,
         "wires": [
             [
                 "6aa079d768e1571c",
@@ -7415,7 +7417,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "c19a749621bffe0c",
@@ -7437,7 +7439,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "c19a749621bffe0c",
@@ -7468,8 +7470,8 @@
         "topic": "can/send",
         "payload": "19FED99F#FF7E00FFFFFF00FF",
         "payloadType": "str",
-        "x": 1310,
-        "y": 720,
+        "x": 1330,
+        "y": 760,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -7482,7 +7484,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 165,
+        "y": 170,
         "wires": []
     },
     {
@@ -7499,10 +7501,11 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
-                "6aa079d768e1571c"
+                "6aa079d768e1571c",
+                "c19a749621bffe0c"
             ]
         ]
     },
@@ -7520,10 +7523,11 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 640,
+        "y": 680,
         "wires": [
             [
-                "6aa079d768e1571c"
+                "6aa079d768e1571c",
+                "c19a749621bffe0c"
             ]
         ]
     },
@@ -7541,10 +7545,33 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 680,
+        "y": 720,
         "wires": [
             [
-                "c19a749621bffe0c"
+                "c19a749621bffe0c",
+                "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "eea2c8f34cb0db28",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "aea9d97e0563bd83",
+        "name": "encode_generic_indicator_command",
+        "func": "// Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Handles both routing keys:\n//   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)\n//   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)\n\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\n\nconst routingKey = msg.routingKey;\nconst instance = msg.instance; // instance number OR group number depending on routingKey\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// Build byte 0 (instance) and byte 1 (group bitmap)\nlet byte0, byte1;\n\nif (routingKey === \"switch_i\") {\n  if (instance < 1 || instance > 250) {\n    node.warn(\n      `[encode_generic_indicator_command] Instance out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = instance;\n  byte1 = 0xff; // non-group command\n} else if (routingKey === \"switch_g\") {\n  if (instance < 1 || instance > 7) {\n    node.warn(\n      `[encode_generic_indicator_command] Group out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = 0xff; // no specific instance (group command)\n  // Bit 7=0 (group command), bit (group-1)=0 (targets this group), all others=1\n  byte1 = 0x7f & ~(1 << (instance - 1));\n} else {\n  node.warn(\n    `[encode_generic_indicator_command] Unknown routingKey: ${routingKey}`,\n  );\n  return null;\n}\n\n// Parse HA command — decode_ha_command sets msg.command for both string and JSON payloads\nconst command = (msg.command || \"\").toUpperCase();\nconst brightnessIn =\n  msg.payload && typeof msg.payload === \"object\"\n    ? msg.payload.brightness\n    : undefined;\n\n// Resolve entity ID for dimmable/brightness lookups\nconst entityId =\n  routingKey === \"switch_g\" ? `switch_g_${instance}` : `switch_i_${instance}`;\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst isDimmable = dimmableIndicators.includes(entityId);\n\n// Determine brightness raw value (0-200 scale, 0.5% per step)\n// HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)\nlet brightnessRaw;\n\nif (command === \"OFF\") {\n  brightnessRaw = 0;\n} else if (brightnessIn !== undefined && brightnessIn > 0) {\n  brightnessRaw = Math.min(200, Math.round(brightnessIn * 2));\n} else if (isDimmable) {\n  const lastBrightness =\n    global.get(\"indicatorBrightness_\" + entityId, \"file\") || 100;\n  brightnessRaw = Math.min(200, Math.round(lastBrightness * 2));\n} else {\n  brightnessRaw = 200; // full brightness for non-dimmable ON\n}\n\n// Store last brightness (in 0-100% scale) for future recall\nif (command !== \"OFF\" && brightnessRaw > 0) {\n  global.set(\"indicatorBrightness_\" + entityId, brightnessRaw / 2, \"file\");\n}\n\n// Build 8-byte data payload per §6.26.2 Table 6.26.2b\nconst dataBytes = [\n  byte0, // Byte 0: Instance\n  byte1, // Byte 1: Group bitmap\n  brightnessRaw, // Byte 2: Brightness (0-200)\n  0xff, // Byte 3: Bank Select (0xFF = not supported)\n  0xff, // Byte 4: Duration (0xFF = continuous)\n  0xff, // Byte 5: Reserved\n  0x00, // Byte 6: Function (0x00 = Set Brightness)\n  0xff, // Byte 7: Reserved\n];\n\nconst dataHex = dataBytes.map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 760,
+        "wires": [
+            [
+                "c19a749621bffe0c",
+                "6aa079d768e1571c"
             ]
         ]
     },
@@ -7719,8 +7746,7 @@
         "g": "5811945b9bad79dc",
         "name": "AQUAHOT",
         "links": [
-            "398683928338f9c6",
-            "365cea2b28285fc4"
+            "398683928338f9c6"
         ],
         "x": 160,
         "y": 300,
@@ -7850,7 +7876,7 @@
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
         "name": "AQUAHOT_THERMOSTAT_STATUS",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
