@@ -932,6 +932,26 @@
         "h": 142
     },
     {
+        "id": "9c2f6585c25b7049",
+        "type": "group",
+        "z": "3470febb2cd6e952",
+        "name": "Thermostat ambient",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "4273bf5a57c7e2ed",
+            "d434ae62a98cb76b",
+            "e38432107a5eaea7",
+            "ac2dea7ebf546105"
+        ],
+        "x": 1414,
+        "y": 2619,
+        "w": 1052,
+        "h": 142
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -1208,26 +1228,6 @@
         "x": 1014,
         "y": 419,
         "w": 432,
-        "h": 142
-    },
-    {
-        "id": "9c2f6585c25b7049",
-        "type": "group",
-        "z": "3470febb2cd6e952",
-        "name": "Thermostat ambient",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "4273bf5a57c7e2ed",
-            "d434ae62a98cb76b",
-            "e38432107a5eaea7",
-            "ac2dea7ebf546105"
-        ],
-        "x": 1414,
-        "y": 2619,
-        "w": 1052,
         "h": 142
     },
     {
@@ -2271,7 +2271,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 390,
-        "y": 146,
+        "y": 159,
         "wires": []
     },
     {
@@ -3124,8 +3124,13 @@
                 "vt": "str"
             },
             {
-                "t": "cont",
-                "v": "DC_COMPONENT_DRIVER_STATUS",
+                "t": "eq",
+                "v": "DC_COMPONENT_DRIVER_STATUS_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "DC_COMPONENT_DRIVER_STATUS_6",
                 "vt": "str"
             },
             {
@@ -3134,7 +3139,7 @@
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 34,
+        "outputs": 35,
         "x": 420,
         "y": 800,
         "wires": [
@@ -3233,6 +3238,9 @@
             ],
             [
                 "d76a4a48e1beaed6"
+            ],
+            [
+                "a037b4692cc9f1dd"
             ],
             [
                 "a037b4692cc9f1dd"
@@ -4257,7 +4265,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 262,
+        "y": 279,
         "wires": []
     },
     {
