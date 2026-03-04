@@ -993,7 +993,7 @@
         "DGN": "GENERIC_INDICATOR_COMMAND",
         "Hex": "1FED9",
         "Decimal": 130777,
-        "Section": "6.26.3"
+        "Section": "6.26.2"
     },
     {
         "DGN": "GENERIC_CONFIGURATION_STATUS",
