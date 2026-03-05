@@ -741,9 +741,9 @@
             "906e4d6a45bba29f",
             "ec8de048fbfa6ce4"
         ],
-        "x": 1414,
-        "y": 99,
-        "w": 1092,
+        "x": 134,
+        "y": 2719,
+        "w": 772,
         "h": 142
     },
     {
@@ -760,7 +760,8 @@
             "6b1a7191643fa28e",
             "e38f32a1f6d36bfb",
             "d244b9fa7dfd5d48",
-            "5927f292918fa095"
+            "5927f292918fa095",
+            "e2fc2c67eba80f70"
         ],
         "x": 1054,
         "y": 1619,
@@ -780,14 +781,12 @@
             "a05b4ddd1073bb49",
             "925e8716f5b06d62",
             "647ce51ee8a295c8",
-            "db52c8f8b4e4e75f",
-            "435d80473a9168f7",
-            "8ab86518978a3b40"
+            "435d80473a9168f7"
         ],
-        "x": 1414,
-        "y": 2119,
-        "w": 1092,
-        "h": 202
+        "x": 134,
+        "y": 2919,
+        "w": 792,
+        "h": 142
     },
     {
         "id": "f9fbb16169bddad3",
@@ -802,14 +801,12 @@
             "4524e02cc49f736c",
             "35854de96a741eab",
             "93f4efc3d5dc3fde",
-            "3801a7eb83a2b8c7",
-            "6de271395c8998c1",
-            "64f6d5015db4c9d9"
+            "6de271395c8998c1"
         ],
         "x": 134,
         "y": 2119,
-        "w": 1092,
-        "h": 202
+        "w": 732,
+        "h": 142
     },
     {
         "id": "81985af394d7b2c6",
@@ -824,14 +821,12 @@
             "b79f634a1a8b4614",
             "51d236ac111d79cc",
             "d0ac05ad545390ce",
-            "2e75610c037a9b44",
-            "67a758733fa40f50",
-            "01e7b95c49929589"
+            "67a758733fa40f50"
         ],
         "x": 134,
-        "y": 2419,
-        "w": 1092,
-        "h": 202
+        "y": 2319,
+        "w": 752,
+        "h": 142
     },
     {
         "id": "5811945b9bad79dc",
@@ -850,14 +845,12 @@
             "a6985e36ac9c8f1d",
             "443fd5ec55d7111b",
             "c5fdb5067c820e76",
-            "04c537115b1bb0b5",
             "1c1403c14b577fb4",
             "6841e5cff3b5e0e1",
             "43cd836c21f66b26",
             "2a97f79a308ff4fd",
             "54e6abd033b704f2",
             "08d4c674d7359aee",
-            "e2fc2c67eba80f70",
             "7a1eed2a34490b2a",
             "691871e1972d2296",
             "1bd7e1d4c5f3864a"
@@ -880,14 +873,12 @@
             "9632a29894326e1d",
             "9ac7d2157496ae11",
             "e0daa4d3ae733b6a",
-            "64392da612dfb00b",
-            "5b5ff0cc519eca0c",
-            "3802a4e579e23fc5"
+            "5b5ff0cc519eca0c"
         ],
         "x": 134,
-        "y": 2679,
-        "w": 1092,
-        "h": 202
+        "y": 2519,
+        "w": 732,
+        "h": 142
     },
     {
         "id": "8c149d8f116b6b8e",
@@ -902,14 +893,12 @@
             "ad8f3e9ca1a60b75",
             "d44ea3f7c3fed155",
             "905a5e9fdcc1292a",
-            "48a58294bddfa9cc",
-            "102272ba5b34f5e1",
-            "e54359414b5d5046"
+            "102272ba5b34f5e1"
         ],
-        "x": 134,
-        "y": 2939,
-        "w": 1132,
-        "h": 202
+        "x": 1414,
+        "y": 2519,
+        "w": 892,
+        "h": 142
     },
     {
         "id": "75fc5db64064b477",
@@ -927,7 +916,7 @@
             "77bb0b933f212e6c"
         ],
         "x": 1414,
-        "y": 2419,
+        "y": 2099,
         "w": 992,
         "h": 142
     },
@@ -947,7 +936,7 @@
             "ac2dea7ebf546105"
         ],
         "x": 1414,
-        "y": 2619,
+        "y": 2299,
         "w": 1052,
         "h": 142
     },
@@ -2293,7 +2282,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nGets everything ready when the system starts up and periodically checks for devices.",
         "x": 390,
-        "y": 179,
+        "y": 153,
         "wires": []
     },
     {
@@ -3074,6 +3063,26 @@
             ]
         ],
         "l": true
+    },
+    {
+        "id": "e2fc2c67eba80f70",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "d": true,
+        "g": "9e47041ed71c4494",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1440,
+        "y": 1660,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "9f88f215f3f07227",
@@ -4385,7 +4394,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow catches all those messages and sends each one to the right decoder.",
         "x": 310,
-        "y": 160,
+        "y": 177,
         "wires": []
     },
     {
@@ -6365,7 +6374,7 @@
         "z": "3470febb2cd6e952",
         "content": "# HA Entities\nWhen a new device is discovered (like light #5 or shade #12), this flow creates a matching control in Home Assistant.\n\nThen each time a device reports its status, this flow updates Home Assistant.",
         "x": 530,
-        "y": 160,
+        "y": 169,
         "wires": []
     },
     {
@@ -6414,8 +6423,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 2370,
-        "y": 140,
+        "x": 770,
+        "y": 2760,
         "wires": [],
         "l": true
     },
@@ -6428,8 +6437,8 @@
         "links": [
             "18358f61657b2606"
         ],
-        "x": 1540,
-        "y": 140,
+        "x": 260,
+        "y": 2760,
         "wires": [
             [
                 "906e4d6a45bba29f"
@@ -6450,8 +6459,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2070,
-        "y": 140,
+        "x": 510,
+        "y": 2760,
         "wires": [
             [
                 "ec8de048fbfa6ce4",
@@ -6473,8 +6482,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2350,
-        "y": 200,
+        "x": 750,
+        "y": 2820,
         "wires": []
     },
     {
@@ -6490,12 +6499,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2070,
-        "y": 2160,
+        "x": 530,
+        "y": 2960,
         "wires": [
             [
                 "925e8716f5b06d62",
-                "db52c8f8b4e4e75f",
                 "435d80473a9168f7"
             ]
         ]
@@ -6509,11 +6517,11 @@
         "links": [
             "630c70190648a35a"
         ],
-        "x": 1550,
-        "y": 2160,
+        "x": 270,
+        "y": 2960,
         "wires": [
             [
-                "8ab86518978a3b40"
+                "647ce51ee8a295c8"
             ]
         ],
         "l": true
@@ -6532,24 +6540,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2350,
-        "y": 2220,
+        "x": 770,
+        "y": 3020,
         "wires": []
-    },
-    {
-        "id": "db52c8f8b4e4e75f",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "g": "b2ac0cc5bede234b",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 2330,
-        "y": 2280,
-        "wires": [],
-        "l": true
     },
     {
         "id": "4524e02cc49f736c",
@@ -6564,7 +6557,7 @@
         "y": 2160,
         "wires": [
             [
-                "64f6d5015db4c9d9"
+                "93f4efc3d5dc3fde"
             ]
         ],
         "l": true
@@ -6583,7 +6576,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1060,
+        "x": 700,
         "y": 2220,
         "wires": []
     },
@@ -6600,30 +6593,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
+        "x": 480,
         "y": 2160,
         "wires": [
             [
-                "3801a7eb83a2b8c7",
                 "35854de96a741eab",
                 "6de271395c8998c1"
             ]
         ]
-    },
-    {
-        "id": "3801a7eb83a2b8c7",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "g": "f9fbb16169bddad3",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 1050,
-        "y": 2280,
-        "wires": [],
-        "l": true
     },
     {
         "id": "b79f634a1a8b4614",
@@ -6635,10 +6612,10 @@
             "7152c0726c9d4050"
         ],
         "x": 260,
-        "y": 2460,
+        "y": 2360,
         "wires": [
             [
-                "01e7b95c49929589"
+                "d0ac05ad545390ce"
             ]
         ],
         "l": true
@@ -6657,8 +6634,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1080,
-        "y": 2520,
+        "x": 740,
+        "y": 2420,
         "wires": []
     },
     {
@@ -6674,30 +6651,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 2460,
+        "x": 500,
+        "y": 2360,
         "wires": [
             [
                 "51d236ac111d79cc",
-                "2e75610c037a9b44",
                 "67a758733fa40f50"
             ]
         ]
-    },
-    {
-        "id": "2e75610c037a9b44",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "g": "81985af394d7b2c6",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 1050,
-        "y": 2580,
-        "wires": [],
-        "l": true
     },
     {
         "id": "6de271395c8998c1",
@@ -6709,7 +6670,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1090,
+        "x": 730,
         "y": 2160,
         "wires": [],
         "l": true
@@ -6724,8 +6685,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 2370,
-        "y": 2160,
+        "x": 790,
+        "y": 2960,
         "wires": [],
         "l": true
     },
@@ -6739,73 +6700,10 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1090,
-        "y": 2460,
+        "x": 750,
+        "y": 2360,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "01e7b95c49929589",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "81985af394d7b2c6",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 2460,
-        "wires": [
-            [
-                "d0ac05ad545390ce"
-            ]
-        ]
-    },
-    {
-        "id": "64f6d5015db4c9d9",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "f9fbb16169bddad3",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 2160,
-        "wires": [
-            [
-                "93f4efc3d5dc3fde"
-            ]
-        ]
-    },
-    {
-        "id": "8ab86518978a3b40",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "b2ac0cc5bede234b",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1820,
-        "y": 2160,
-        "wires": [
-            [
-                "647ce51ee8a295c8"
-            ]
-        ]
     },
     {
         "id": "9632a29894326e1d",
@@ -6817,10 +6715,10 @@
             "f190f60c55a4fa3a"
         ],
         "x": 250,
-        "y": 2720,
+        "y": 2560,
         "wires": [
             [
-                "3802a4e579e23fc5"
+                "e0daa4d3ae733b6a"
             ]
         ],
         "l": true
@@ -6839,8 +6737,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1080,
-        "y": 2780,
+        "x": 720,
+        "y": 2620,
         "wires": []
     },
     {
@@ -6856,30 +6754,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 2720,
+        "x": 480,
+        "y": 2560,
         "wires": [
             [
                 "9ac7d2157496ae11",
-                "64392da612dfb00b",
                 "5b5ff0cc519eca0c"
             ]
         ]
-    },
-    {
-        "id": "64392da612dfb00b",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "g": "de35fed78fc2a2bc",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 1050,
-        "y": 2840,
-        "wires": [],
-        "l": true
     },
     {
         "id": "5b5ff0cc519eca0c",
@@ -6891,31 +6773,10 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1090,
-        "y": 2720,
+        "x": 730,
+        "y": 2560,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "3802a4e579e23fc5",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "de35fed78fc2a2bc",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 2720,
-        "wires": [
-            [
-                "e0daa4d3ae733b6a"
-            ]
-        ]
     },
     {
         "id": "ad8f3e9ca1a60b75",
@@ -6926,11 +6787,11 @@
         "links": [
             "a26968494dad55ea"
         ],
-        "x": 280,
-        "y": 2980,
+        "x": 1560,
+        "y": 2560,
         "wires": [
             [
-                "e54359414b5d5046"
+                "905a5e9fdcc1292a"
             ]
         ],
         "l": true
@@ -6949,8 +6810,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1100,
-        "y": 3040,
+        "x": 2140,
+        "y": 2620,
         "wires": []
     },
     {
@@ -6966,30 +6827,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
-        "y": 2980,
+        "x": 1850,
+        "y": 2560,
         "wires": [
             [
                 "d44ea3f7c3fed155",
-                "48a58294bddfa9cc",
                 "102272ba5b34f5e1"
             ]
         ]
-    },
-    {
-        "id": "48a58294bddfa9cc",
-        "type": "link out",
-        "z": "3470febb2cd6e952",
-        "g": "8c149d8f116b6b8e",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 1050,
-        "y": 3100,
-        "wires": [],
-        "l": true
     },
     {
         "id": "102272ba5b34f5e1",
@@ -7001,31 +6846,10 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1090,
-        "y": 2980,
+        "x": 2130,
+        "y": 2560,
         "wires": [],
         "l": true
-    },
-    {
-        "id": "e54359414b5d5046",
-        "type": "function",
-        "z": "3470febb2cd6e952",
-        "g": "8c149d8f116b6b8e",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 2980,
-        "wires": [
-            [
-                "905a5e9fdcc1292a"
-            ]
-        ]
     },
     {
         "id": "79435708ae460e17",
@@ -7037,7 +6861,7 @@
             "4bba0ef64e4e9efa"
         ],
         "x": 1580,
-        "y": 2460,
+        "y": 2140,
         "wires": [
             [
                 "47b68581ce35eac7"
@@ -7060,7 +6884,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 2250,
-        "y": 2520,
+        "y": 2200,
         "wires": []
     },
     {
@@ -7077,7 +6901,7 @@
         "finalize": "",
         "libs": [],
         "x": 1900,
-        "y": 2460,
+        "y": 2140,
         "wires": [
             [
                 "c029494258f180b6",
@@ -7096,7 +6920,7 @@
             "f658418a7b9b4857"
         ],
         "x": 2270,
-        "y": 2460,
+        "y": 2140,
         "wires": [],
         "l": true
     },
@@ -7110,7 +6934,7 @@
             "55ac5497839d7c9b"
         ],
         "x": 1580,
-        "y": 2660,
+        "y": 2340,
         "wires": [
             [
                 "e38432107a5eaea7"
@@ -7133,7 +6957,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 2290,
-        "y": 2720,
+        "y": 2400,
         "wires": []
     },
     {
@@ -7150,7 +6974,7 @@
         "finalize": "",
         "libs": [],
         "x": 1910,
-        "y": 2660,
+        "y": 2340,
         "wires": [
             [
                 "d434ae62a98cb76b",
@@ -7169,7 +6993,7 @@
             "f658418a7b9b4857"
         ],
         "x": 2270,
-        "y": 2660,
+        "y": 2340,
         "wires": [],
         "l": true
     },
@@ -7461,7 +7285,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "otherwise",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -7612,7 +7436,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nSends your commands from Home Assistant to the actual devices in your RV.\n\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand routes the command appropriately.",
         "x": 420,
-        "y": 175,
+        "y": 180,
         "wires": []
     },
     {
@@ -7752,7 +7576,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 910,
+        "x": 930,
         "y": 240,
         "wires": [
             [
@@ -7950,20 +7774,20 @@
                 "691871e1972d2296"
             ],
             [
-                "e2fc2c67eba80f70",
-                "1bd7e1d4c5f3864a"
+                "1bd7e1d4c5f3864a",
+                "a6985e36ac9c8f1d"
             ],
             [
-                "e2fc2c67eba80f70",
-                "691871e1972d2296"
+                "691871e1972d2296",
+                "a6985e36ac9c8f1d"
             ],
             [
-                "e2fc2c67eba80f70",
-                "871009c15ad9a99b"
+                "871009c15ad9a99b",
+                "a6985e36ac9c8f1d"
             ],
             [
-                "e2fc2c67eba80f70",
-                "c5fdb5067c820e76"
+                "c5fdb5067c820e76",
+                "a6985e36ac9c8f1d"
             ],
             [
                 "c5fdb5067c820e76"
@@ -8029,7 +7853,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
+        "x": 620,
         "y": 300,
         "wires": [
             [
@@ -8050,11 +7874,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1130,
+        "x": 930,
         "y": 300,
         "wires": [
             [
-                "04c537115b1bb0b5",
                 "1c1403c14b577fb4",
                 "08d4c674d7359aee"
             ]
@@ -8077,42 +7900,6 @@
         "x": 610,
         "y": 360,
         "wires": []
-    },
-    {
-        "id": "04c537115b1bb0b5",
-        "type": "link out",
-        "z": "384249601e37ba22",
-        "g": "5811945b9bad79dc",
-        "name": "BETA TEST",
-        "mode": "link",
-        "links": [
-            "d244b9fa7dfd5d48"
-        ],
-        "x": 1370,
-        "y": 360,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "e2fc2c67eba80f70",
-        "type": "function",
-        "z": "384249601e37ba22",
-        "g": "5811945b9bad79dc",
-        "name": "beta_gate",
-        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 560,
-        "y": 300,
-        "wires": [
-            [
-                "a6985e36ac9c8f1d"
-            ]
-        ]
     },
     {
         "id": "7a1eed2a34490b2a",
@@ -8604,7 +8391,7 @@
         "name": "",
         "content": "# For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 140,
+        "y": 157,
         "wires": []
     },
     {
@@ -9263,7 +9050,7 @@
         "name": "",
         "content": "# For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 167,
+        "y": 176,
         "wires": []
     },
     {
