@@ -86,7 +86,7 @@
             "cd670f6465b6374b",
             "c78420a075d43408"
         ],
-        "x": 1054,
+        "x": 1074,
         "y": 1519,
         "w": 852,
         "h": 82
@@ -179,9 +179,9 @@
             "d79041ca83ce8b8c"
         ],
         "x": 908,
-        "y": 219,
+        "y": 239,
         "w": 1504,
-        "h": 548
+        "h": 528
     },
     {
         "id": "eb51c1f2d0d389d1",
@@ -252,7 +252,7 @@
             "8e350e2c0a0536b4"
         ],
         "x": 94,
-        "y": 879,
+        "y": 859,
         "w": 1762,
         "h": 402
     },
@@ -426,8 +426,8 @@
             "0a63b31d61802934",
             "c2e1bc849357fcb4"
         ],
-        "x": 114,
-        "y": 1379,
+        "x": 94,
+        "y": 1339,
         "w": 732,
         "h": 122
     },
@@ -445,8 +445,8 @@
             "a1e89f48333c8256",
             "8337a7f0dd0435d6"
         ],
-        "x": 1054,
-        "y": 1379,
+        "x": 1074,
+        "y": 1339,
         "w": 652,
         "h": 82
     },
@@ -505,8 +505,8 @@
             "cd73ee739dad9f59",
             "dca8346e061f1d42"
         ],
-        "x": 114,
-        "y": 1559,
+        "x": 94,
+        "y": 1519,
         "w": 772,
         "h": 182
     },
@@ -527,7 +527,7 @@
             "5927f292918fa095",
             "e2fc2c67eba80f70"
         ],
-        "x": 1054,
+        "x": 1074,
         "y": 1659,
         "w": 812,
         "h": 142
@@ -557,7 +557,7 @@
         ],
         "x": 74,
         "y": 279,
-        "w": 1452,
+        "w": 1332,
         "h": 442
     },
     {
@@ -576,8 +576,8 @@
             "1becc1dacb0ecaf8",
             "ac17a780a9a1dbcf"
         ],
-        "x": 114,
-        "y": 1799,
+        "x": 94,
+        "y": 1759,
         "w": 772,
         "h": 162
     },
@@ -616,7 +616,7 @@
             "c781b519a9f9b156"
         ],
         "x": 1834,
-        "y": 479,
+        "y": 499,
         "w": 552,
         "h": 142
     },
@@ -849,7 +849,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 1180,
+        "x": 1200,
         "y": 1560,
         "wires": [
             [
@@ -869,7 +869,7 @@
         "chunk": false,
         "sendError": false,
         "allProps": false,
-        "x": 1380,
+        "x": 1400,
         "y": 1560,
         "wires": [
             [
@@ -890,7 +890,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1800,
+        "x": 1820,
         "y": 1560,
         "wires": []
     },
@@ -903,7 +903,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 1590,
+        "x": 1610,
         "y": 1560,
         "wires": [
             [
@@ -1016,7 +1016,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 990,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "8d7d5d3ea117cf79"
@@ -1037,7 +1037,7 @@
         "finalize": "",
         "libs": [],
         "x": 1160,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "21dfe84b8adafa6e"
@@ -1093,7 +1093,7 @@
         "repair": false,
         "outputs": 7,
         "x": 1610,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "398683928338f9c6"
@@ -1138,7 +1138,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1950,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "092c751dcdd12270"
@@ -1159,7 +1159,7 @@
         "finalize": "",
         "libs": [],
         "x": 2220,
-        "y": 520,
+        "y": 540,
         "wires": [
             []
         ]
@@ -1178,7 +1178,7 @@
         "finalize": "",
         "libs": [],
         "x": 1950,
-        "y": 580,
+        "y": 600,
         "wires": [
             [
                 "eea1641469efb23f"
@@ -1200,7 +1200,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 2240,
-        "y": 580,
+        "y": 600,
         "wires": []
     },
     {
@@ -1214,7 +1214,7 @@
             "fbc5efde2c447eda"
         ],
         "x": 1900,
-        "y": 380,
+        "y": 400,
         "wires": [],
         "l": true
     },
@@ -1259,7 +1259,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 260,
-        "y": 920,
+        "y": 900,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1280,7 +1280,7 @@
         "finalize": "",
         "libs": [],
         "x": 730,
-        "y": 920,
+        "y": 900,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -1307,7 +1307,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 910,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -1328,7 +1328,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1349,7 +1349,7 @@
             "f01db5ebc3ae2e18"
         ],
         "x": 1940,
-        "y": 660,
+        "y": 680,
         "wires": [],
         "l": true
     },
@@ -1363,7 +1363,7 @@
             "45414bacecada477"
         ],
         "x": 220,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -1382,7 +1382,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1720,
-        "y": 920,
+        "y": 900,
         "wires": [],
         "l": true
     },
@@ -1400,7 +1400,7 @@
         "finalize": "",
         "libs": [],
         "x": 1150,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "a2334b77d3764815",
@@ -1464,7 +1464,7 @@
         "finalize": "",
         "libs": [],
         "x": 1450,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1485,7 +1485,7 @@
         "finalize": "",
         "libs": [],
         "x": 1420,
-        "y": 1040,
+        "y": 1020,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1506,7 +1506,7 @@
         "finalize": "",
         "libs": [],
         "x": 1430,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1526,7 +1526,7 @@
             "a58b5f05c8346eab"
         ],
         "x": 1460,
-        "y": 1240,
+        "y": 1220,
         "wires": [],
         "l": true
     },
@@ -1553,7 +1553,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1180,
-        "y": 1100,
+        "y": 1080,
         "wires": [
             [
                 "73abad3deeed31e8",
@@ -1580,7 +1580,7 @@
         "finalize": "",
         "libs": [],
         "x": 1450,
-        "y": 1120,
+        "y": 1100,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1601,7 +1601,7 @@
         "finalize": "",
         "libs": [],
         "x": 1430,
-        "y": 1160,
+        "y": 1140,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1665,7 +1665,7 @@
             "00b1afc9a96aca8e"
         ],
         "x": 1910,
-        "y": 420,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -1675,7 +1675,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 330,
-        "y": 117,
+        "y": 120,
         "wires": []
     },
     {
@@ -1700,8 +1700,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 240,
-        "y": 1420,
+        "x": 220,
+        "y": 1380,
         "wires": [
             [
                 "d6680567062a0908"
@@ -1721,8 +1721,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 1420,
+        "x": 440,
+        "y": 1380,
         "wires": [
             [
                 "0a63b31d61802934"
@@ -1739,8 +1739,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 710,
-        "y": 1420,
+        "x": 690,
+        "y": 1380,
         "wires": [],
         "l": true
     },
@@ -1757,8 +1757,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1370,
-        "y": 1420,
+        "x": 1390,
+        "y": 1380,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -1776,8 +1776,8 @@
             "47ac3adc971d73eb",
             "cd73ee739dad9f59"
         ],
-        "x": 1140,
-        "y": 1420,
+        "x": 1160,
+        "y": 1380,
         "wires": [
             [
                 "dd199275f909301f"
@@ -1802,8 +1802,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1610,
-        "y": 1420,
+        "x": 1630,
+        "y": 1380,
         "wires": [
             []
         ]
@@ -1882,8 +1882,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 1600,
+        "x": 450,
+        "y": 1560,
         "wires": [
             [
                 "dca8346e061f1d42"
@@ -1904,8 +1904,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 1600,
+        "x": 200,
+        "y": 1560,
         "wires": [
             [
                 "880ca1b6bf10b8d2"
@@ -1926,8 +1926,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 1680,
+        "x": 200,
+        "y": 1640,
         "wires": [
             [
                 "f3ee6dc19b0155a0"
@@ -1947,8 +1947,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 1680,
+        "x": 450,
+        "y": 1640,
         "wires": [
             [
                 "cfa55144f4a17a5c"
@@ -1970,8 +1970,8 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 700,
-        "y": 1660,
+        "x": 680,
+        "y": 1620,
         "wires": [
             []
         ]
@@ -1986,8 +1986,8 @@
         "links": [
             "a1e89f48333c8256"
         ],
-        "x": 710,
-        "y": 1700,
+        "x": 690,
+        "y": 1660,
         "wires": [],
         "l": true
     },
@@ -2001,8 +2001,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 750,
-        "y": 1600,
+        "x": 730,
+        "y": 1560,
         "wires": [],
         "l": true
     },
@@ -2088,7 +2088,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
+        "x": 1490,
         "y": 1700,
         "wires": [
             [
@@ -2108,7 +2108,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1730,
+        "x": 1750,
         "y": 1700,
         "wires": [],
         "l": true
@@ -2122,7 +2122,7 @@
         "links": [
             "88e5fa035bedb48c"
         ],
-        "x": 1170,
+        "x": 1190,
         "y": 1700,
         "wires": [
             [
@@ -2138,7 +2138,7 @@
         "g": "9e47041ed71c4494",
         "name": "BETA TEST",
         "links": [],
-        "x": 1150,
+        "x": 1170,
         "y": 1760,
         "wires": [
             [
@@ -2159,7 +2159,7 @@
             "cd5a041811bc2c9a"
         ],
         "x": 1910,
-        "y": 340,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -2185,8 +2185,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 240,
-        "y": 1460,
+        "x": 220,
+        "y": 1420,
         "wires": [
             [
                 "d6680567062a0908"
@@ -2207,7 +2207,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1670,
+        "x": 1690,
         "y": 1760,
         "wires": []
     },
@@ -2225,7 +2225,7 @@
         "property": "payload",
         "topi": "filter_key",
         "x": 1350,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "a6594a9464d8fe4e",
@@ -2247,7 +2247,7 @@
         "finalize": "",
         "libs": [],
         "x": 1430,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -2265,7 +2265,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1950,
-        "y": 260,
+        "y": 280,
         "wires": [],
         "l": true
     },
@@ -2283,7 +2283,7 @@
         "finalize": "",
         "libs": [],
         "x": 1670,
-        "y": 280,
+        "y": 300,
         "wires": [
             [
                 "6376d98589368f2b"
@@ -2312,7 +2312,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 1190,
-        "y": 360,
+        "y": 380,
         "wires": [
             [
                 "21dfe84b8adafa6e"
@@ -2333,8 +2333,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 220,
-        "y": 1920,
+        "x": 200,
+        "y": 1880,
         "wires": [
             [
                 "a8a757fe3b31cf9c"
@@ -2354,8 +2354,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 1920,
+        "x": 430,
+        "y": 1880,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2372,8 +2372,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 750,
-        "y": 1860,
+        "x": 730,
+        "y": 1820,
         "wires": [],
         "l": true
     },
@@ -2390,8 +2390,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 1840,
+        "x": 450,
+        "y": 1800,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2407,8 +2407,8 @@
         "links": [
             "88e5fa035bedb48c"
         ],
-        "x": 230,
-        "y": 1840,
+        "x": 210,
+        "y": 1800,
         "wires": [
             [
                 "1becc1dacb0ecaf8"
@@ -2430,7 +2430,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1480,
+        "x": 1500,
         "y": 1760,
         "wires": [
             []
@@ -2451,7 +2451,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1930,
-        "y": 300,
+        "y": 320,
         "wires": []
     },
     {
@@ -3610,7 +3610,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
         "x": 280,
-        "y": 219,
+        "y": 200,
         "wires": []
     },
     {
@@ -4511,7 +4511,7 @@
         "z": "7ecdba18640c1184",
         "content": "# Commands\nYour RV's wall panels send commands to lights over the CAN bus.\nThis flow listens to that traffic to discover lights and infer\ntheir state, even when the lights don't broadcast a status response.\nIf a panel says \"turn on light 17,\" we now know light 17 exists and is on.",
         "x": 310,
-        "y": 157,
+        "y": 160,
         "wires": []
     },
     {
@@ -4702,7 +4702,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_water_pump_command",
-        "func": "// Encodes WATER_PUMP_COMMAND messages (1FFB2)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFB2\";\n\n// --- Input Validation ---\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// --- Command Mapping ---\nlet pumpCommandValue;\nswitch (command) {\n  case \"ON\":\n    pumpCommandValue = 1; // 01b = Enable pump (standby)\n    break;\n  case \"OFF\":\n    pumpCommandValue = 0; // 00b = Disable pump\n    break;\n  default:\n    node.warn(\n      `[encode_water_pump_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\n// Byte 0 contains the command. All other bytes are set to 0xFF (Not Available)\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = pumpCommandValue; // Byte 0: Pump command\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes WATER_PUMP_COMMAND messages (1FFB2)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFB2\";\n\n// --- Input Validation ---\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// --- Command Mapping ---\nlet pumpCommandValue;\nswitch (command) {\n  case \"ON\":\n    pumpCommandValue = 1; // 01b = Enable pump (standby)\n    break;\n  case \"OFF\":\n    pumpCommandValue = 0; // 00b = Disable pump\n    break;\n  default:\n    node.warn(\n      `[encode_water_pump_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\n// Byte 0 contains the command. All other bytes are set to 0xFF (Not Available)\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = pumpCommandValue; // Byte 0: Pump command\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4723,7 +4723,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_shade_command",
-        "func": "// Encodes WINDOW_SHADE_COMMAND messages (1FEDF)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDF\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command; // Expects \"OPEN\", \"CLOSE\", or \"STOP\"\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n    node.warn(`[encode_shade_command] Invalid instance: ${instance}`);\n    return null;\n}\n\n// --- Command Mapping ---\nlet shadeCommand;\nlet duration = 30; // 30 seconds duration (matches switch panel)\n\nswitch (command) {\n    case \"OPEN\":\n        shadeCommand = 0x85; // Toggle Forward (Raise/Open)\n        break;\n    case \"CLOSE\":\n        shadeCommand = 0x45; // Toggle Reverse (Lower/Close)\n        break;\n    case \"STOP\":\n        shadeCommand = 0x04; // Stop\n        duration = 0; // Duration is ignored for STOP\n        break;\n    default:\n        node.warn(\n            `[encode_shade_command] Invalid command: \"${command}\". Expected \"OPEN\", \"CLOSE\", or \"STOP\"`,\n        );\n        return null;\n}\n\n// --- Build Payload ---\nconst motorDuty = 200; // Use 200% motor duty (matches switch panel)\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance Number\ndataBytes[1] = 0xff; // Byte 1: Group (Non-group command)\ndataBytes[2] = motorDuty; // Byte 2: Motor Duty Cycle\ndataBytes[3] = shadeCommand; // Byte 3: Command Code\ndataBytes[4] = duration; // Byte 4: Duration\ndataBytes[5] = 0x00; // Byte 5: Interlock (No Interlock)\ndataBytes[6] = 0xff; // Byte 6: Not Available\ndataBytes[7] = 0xff; // Byte 7: Not Available\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes WINDOW_SHADE_COMMAND messages (1FEDF)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEDF\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command; // Expects \"OPEN\", \"CLOSE\", or \"STOP\"\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n  node.warn(`[encode_shade_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Command Mapping ---\nlet shadeCommand;\nlet duration = 30; // 30 seconds duration (matches switch panel)\n\nswitch (command) {\n  case \"OPEN\":\n    shadeCommand = 0x85; // Toggle Forward (Raise/Open)\n    break;\n  case \"CLOSE\":\n    shadeCommand = 0x45; // Toggle Reverse (Lower/Close)\n    break;\n  case \"STOP\":\n    shadeCommand = 0x04; // Stop\n    duration = 0; // Duration is ignored for STOP\n    break;\n  default:\n    node.warn(\n      `[encode_shade_command] Invalid command: \"${command}\". Expected \"OPEN\", \"CLOSE\", or \"STOP\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst motorDuty = 200; // Use 200% motor duty (matches switch panel)\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance Number\ndataBytes[1] = 0xff; // Byte 1: Group (Non-group command)\ndataBytes[2] = motorDuty; // Byte 2: Motor Duty Cycle\ndataBytes[3] = shadeCommand; // Byte 3: Command Code\ndataBytes[4] = duration; // Byte 4: Duration\ndataBytes[5] = 0x00; // Byte 5: Interlock (No Interlock)\ndataBytes[6] = 0xff; // Byte 6: Not Available\ndataBytes[7] = 0xff; // Byte 7: Not Available\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4744,7 +4744,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_lock_command",
-        "func": "// Encodes LOCK_COMMAND messages (1FEE4)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEE4\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command; // Expects \"LOCK\" or \"UNLOCK\"\n\n// Accept Instance 0 (broadcast to all locks)\nif (typeof instance !== \"number\" || instance < 0 || instance > 250) {\n    node.warn(`[encode_lock_command] Invalid instance: ${instance}`);\n    return null;\n}\n\n// --- Command Mapping ---\nlet lockCommand;\nswitch (command) {\n    case \"UNLOCK\":\n        lockCommand = 0; // Unlock\n        break;\n    case \"LOCK\":\n        lockCommand = 1; // Lock\n        break;\n    default:\n        node.warn(\n            `[encode_lock_command] Invalid command: \"${command}\". Expected \"LOCK\" or \"UNLOCK\"`,\n        );\n        return null;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance Number\ndataBytes[1] = lockCommand; // Byte 1: Lock Command (0=unlock, 1=lock)\ndataBytes[2] = 0; // Byte 2: Additional Command (0=no action)\ndataBytes[3] = 0xff; // Byte 3: Not Available\ndataBytes[4] = 0xff; // Byte 4: Not Available\ndataBytes[5] = 0xff; // Byte 5: Not Available\ndataBytes[6] = 0xff; // Byte 6: Not Available\ndataBytes[7] = 0xff; // Byte 7: Not Available\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes LOCK_COMMAND messages (1FEE4)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEE4\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command; // Expects \"LOCK\" or \"UNLOCK\"\n\n// Accept Instance 0 (broadcast to all locks)\nif (typeof instance !== \"number\" || instance < 0 || instance > 250) {\n  node.warn(`[encode_lock_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Command Mapping ---\nlet lockCommand;\nswitch (command) {\n  case \"UNLOCK\":\n    lockCommand = 0; // Unlock\n    break;\n  case \"LOCK\":\n    lockCommand = 1; // Lock\n    break;\n  default:\n    node.warn(\n      `[encode_lock_command] Invalid command: \"${command}\". Expected \"LOCK\" or \"UNLOCK\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance Number\ndataBytes[1] = lockCommand; // Byte 1: Lock Command (0=unlock, 1=lock)\ndataBytes[2] = 0; // Byte 2: Additional Command (0=no action)\ndataBytes[3] = 0xff; // Byte 3: Not Available\ndataBytes[4] = 0xff; // Byte 4: Not Available\ndataBytes[5] = 0xff; // Byte 5: Not Available\ndataBytes[6] = 0xff; // Byte 6: Not Available\ndataBytes[7] = 0xff; // Byte 7: Not Available\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4765,7 +4765,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_autofill_command",
-        "func": "// Encodes AUTOFILL_COMMAND messages (1FFB0)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFB0\"; // AUTOFILL_COMMAND\n\n// --- Input Validation ---\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// --- Command Mapping ---\nlet commandValue;\nswitch (command) {\n    case \"ON\":\n        // Universal ON command that works on standard and non-standard systems\n        commandValue = 0xfd;\n        break;\n    case \"OFF\":\n        // Universal OFF command\n        commandValue = 0xfc;\n        break;\n    default:\n        node.warn(\n            `[encode_autofill_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n        );\n        return null;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = commandValue; // Byte 0: Command value\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes AUTOFILL_COMMAND messages (1FFB0)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFB0\"; // AUTOFILL_COMMAND\n\n// --- Input Validation ---\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// --- Command Mapping ---\nlet commandValue;\nswitch (command) {\n  case \"ON\":\n    // Universal ON command that works on standard and non-standard systems\n    commandValue = 0xfd;\n    break;\n  case \"OFF\":\n    // Universal OFF command\n    commandValue = 0xfc;\n    break;\n  default:\n    node.warn(\n      `[encode_autofill_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = commandValue; // Byte 0: Command value\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// Construct the CAN ID\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4825,7 +4825,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_floor_heat_command",
-        "func": "// Encodes FLOOR_HEAT_COMMAND messages (1FEFB)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEFB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command;\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_floor_heat_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Get Context ---\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\");\nconst scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;\nconst isScheduleOn = global.get(scheduleContextKey, \"file\") || false;\n\n// Store and retrieve the last used non-store preset's rawValue\nconst lastPresetKey = `floorHeat_${instance}_LastRawSetpoint`;\nconst lastRawSetpoint = global.get(lastPresetKey, \"file\") || 0;\n\n// Get the currently active preset name from the status flow\nconst currentPresetKey = `floorHeat_${instance}_CurrentPreset`;\nconst currentPresetName = global.get(currentPresetKey, \"file\") || \"level_1\";\n// 0x4820 is the RVC raw value for 50°F / 10°C (a safe default)\nconst defaultRawValue =\n  levelMap?.[\"level_1\"]?.rawValue || lastRawSetpoint || 0x4820;\n\nif (!levelMap && command !== \"OFF\") {\n  node.warn(\n    \"[encode_floor_heat_command] Floor heat level map not found. Levels must be discovered first.\",\n  );\n  if (command !== \"OFF\") {\n    return null;\n  }\n}\n\n// Determine the raw value to send during mode changes (HEAT/AUTO)\nlet rawValueToSend;\nconst storeLevelInfo = levelMap?.[\"store\"];\n\nif (currentPresetName === \"store\" && storeLevelInfo) {\n  rawValueToSend = storeLevelInfo.rawValue;\n} else {\n  rawValueToSend = lastRawSetpoint > 0 ? lastRawSetpoint : defaultRawValue;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\n\n// --- Command Mapping ---\nif (command === \"OFF\") {\n  dataBytes[1] = 0xc0; // Byte 1: Command (Off)\n  dataBytes[2] = 0x00; // Byte 2: Setpoint LSB\n  dataBytes[3] = 0x00; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, false, \"file\");\n} else if (command === \"HEAT\") {\n  // HEAT command: Turn ON, force Schedule OFF (Manual Mode)\n  dataBytes[1] = 0xc4; // Byte 1: Command (ON + Schedule OFF)\n  dataBytes[2] = rawValueToSend & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValueToSend >> 8) & 0xff; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, false, \"file\");\n} else if (command === \"AUTO\") {\n  // AUTO command: Turn ON, force Schedule ON (Automatic Mode)\n  dataBytes[1] = 0xd7; // Byte 1: Command (ON + Schedule ON)\n  dataBytes[2] = rawValueToSend & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValueToSend >> 8) & 0xff; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, true, \"file\");\n} else if (command === \"SET_PRESET\") {\n  if (!levelMap) {\n    node.error(\n      \"[encode_floor_heat_command] Cannot set preset, level map is missing.\",\n    );\n    return null;\n  }\n\n  const presetName = msg.value;\n  const normalizedPresetName =\n    presetName === \"none\" || !presetName ? \"store\" : presetName;\n  const levelInfo = levelMap[normalizedPresetName];\n\n  if (!levelInfo || typeof levelInfo.rawValue === \"undefined\") {\n    node.warn(`[encode_floor_heat_command] Unknown preset name: ${presetName}`);\n    return null;\n  }\n\n  const rawValue = levelInfo.rawValue;\n  dataBytes[1] = isScheduleOn ? 0xd4 : 0xc4; // Byte 1: Command (maintain schedule state)\n  dataBytes[2] = rawValue & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValue >> 8) & 0xff; // Byte 3: Setpoint MSB\n\n  // Update last non-store setpoint\n  if (normalizedPresetName !== \"store\") {\n    global.set(lastPresetKey, rawValue, \"file\");\n  }\n} else {\n  node.warn(`[encode_floor_heat_command] Invalid command: \"${command}\"`);\n  return null;\n}\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes FLOOR_HEAT_COMMAND messages (1FEFB)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEFB\";\n\n// --- Input Validation ---\nconst instance = msg.instance;\nconst command = msg.command;\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_floor_heat_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// --- Get Context ---\nconst levelMap = global.get(\"floorHeatLevelMap\", \"file\");\nconst scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;\nconst isScheduleOn = global.get(scheduleContextKey, \"file\") || false;\n\n// Store and retrieve the last used non-store preset's rawValue\nconst lastPresetKey = `floorHeat_${instance}_LastRawSetpoint`;\nconst lastRawSetpoint = global.get(lastPresetKey, \"file\") || 0;\n\n// Get the currently active preset name from the status flow\nconst currentPresetKey = `floorHeat_${instance}_CurrentPreset`;\nconst currentPresetName = global.get(currentPresetKey, \"file\") || \"level_1\";\n// 0x4820 is the RVC raw value for 50°F / 10°C (a safe default)\nconst defaultRawValue =\n  levelMap?.[\"level_1\"]?.rawValue || lastRawSetpoint || 0x4820;\n\nif (!levelMap && command !== \"OFF\") {\n  node.warn(\n    \"[encode_floor_heat_command] Floor heat level map not found. Levels must be discovered first.\",\n  );\n  if (command !== \"OFF\") {\n    return null;\n  }\n}\n\n// Determine the raw value to send during mode changes (HEAT/AUTO)\nlet rawValueToSend;\nconst storeLevelInfo = levelMap?.[\"store\"];\n\nif (currentPresetName === \"store\" && storeLevelInfo) {\n  rawValueToSend = storeLevelInfo.rawValue;\n} else {\n  rawValueToSend = lastRawSetpoint > 0 ? lastRawSetpoint : defaultRawValue;\n}\n\n// --- Build Payload ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\n\n// --- Command Mapping ---\nif (command === \"OFF\") {\n  dataBytes[1] = 0xc0; // Byte 1: Command (Off)\n  dataBytes[2] = 0x00; // Byte 2: Setpoint LSB\n  dataBytes[3] = 0x00; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, false, \"file\");\n} else if (command === \"HEAT\") {\n  // HEAT command: Turn ON, force Schedule OFF (Manual Mode)\n  dataBytes[1] = 0xc4; // Byte 1: Command (ON + Schedule OFF)\n  dataBytes[2] = rawValueToSend & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValueToSend >> 8) & 0xff; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, false, \"file\");\n} else if (command === \"AUTO\") {\n  // AUTO command: Turn ON, force Schedule ON (Automatic Mode)\n  dataBytes[1] = 0xd7; // Byte 1: Command (ON + Schedule ON)\n  dataBytes[2] = rawValueToSend & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValueToSend >> 8) & 0xff; // Byte 3: Setpoint MSB\n  global.set(scheduleContextKey, true, \"file\");\n} else if (command === \"SET_PRESET\") {\n  if (!levelMap) {\n    node.error(\n      \"[encode_floor_heat_command] Cannot set preset, level map is missing.\",\n    );\n    return null;\n  }\n\n  const presetName = msg.value;\n  const normalizedPresetName =\n    presetName === \"none\" || !presetName ? \"store\" : presetName;\n  const levelInfo = levelMap[normalizedPresetName];\n\n  if (!levelInfo || typeof levelInfo.rawValue === \"undefined\") {\n    node.warn(`[encode_floor_heat_command] Unknown preset name: ${presetName}`);\n    return null;\n  }\n\n  const rawValue = levelInfo.rawValue;\n  dataBytes[1] = isScheduleOn ? 0xd4 : 0xc4; // Byte 1: Command (maintain schedule state)\n  dataBytes[2] = rawValue & 0xff; // Byte 2: Setpoint LSB\n  dataBytes[3] = (rawValue >> 8) & 0xff; // Byte 3: Setpoint MSB\n\n  // Update last non-store setpoint\n  if (normalizedPresetName !== \"store\") {\n    global.set(lastPresetKey, rawValue, \"file\");\n  }\n} else {\n  node.warn(`[encode_floor_heat_command] Invalid command: \"${command}\"`);\n  return null;\n}\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4846,7 +4846,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_aquahot_command_1",
-        "func": "// Encodes AquaHot Commands (EF64)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // FE (Default) - Not used in PDU1 CAN ID\nconst DESTINATION_ADDRESS = 0x9f; // Aqua-Hot Module\nconst PRIORITY = 6; // Confirmed priority for Aqua-Hot control\nconst PGN = \"EF64\";\nconst PGN_INT = parseInt(PGN, 16);\nconst CONTROL_BYTE = 0xab; // First data byte for all commands\n\n// --- Command Mapping (PGN EF64) ---\nconst COMMAND_MAP = {\n    // Diesel Burner Control\n    burner: {\n        ON: 0xfd,\n        OFF: 0xfc,\n    },\n    // AC Element 1 Control\n    ac_1: {\n        ON: 0xc7,\n        OFF: 0xc3,\n    },\n    // AC Element 2 Control\n    ac_2: {\n        ON: 0xcb,\n        OFF: 0xc3,\n    },\n    // Engine Pre-heat Control\n    engine: {\n        ON: 0x7f,\n        OFF: 0x3f,\n    },\n};\n\n// --- Input Validation ---\nconst instance = msg.instance; // Expects \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// Validate instance\nif (!instance || !COMMAND_MAP[instance]) {\n    node.warn(\n        `[encode_aquahot] Invalid instance: \"${instance}\". Expected one of: burner, ac_1, ac_2, engine`,\n    );\n    return null;\n}\n\n// Validate command\nif (!command || !COMMAND_MAP[instance][command]) {\n    node.warn(\n        `[encode_aquahot] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst dataByte2 = COMMAND_MAP[instance][command];\n\n// Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = CONTROL_BYTE; // AB\ndataBytes[1] = dataByte2; // The specific command byte\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\n// PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F) goes in the last byte\nconst canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DESTINATION_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nreturn msg;\n",
+        "func": "// Encodes AquaHot Commands (EF64)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254; // FE (Default) - Not used in PDU1 CAN ID\nconst DESTINATION_ADDRESS = 0x9f; // Aqua-Hot Module\nconst PRIORITY = 6; // Confirmed priority for Aqua-Hot control\nconst PGN = \"EF64\";\nconst PGN_INT = parseInt(PGN, 16);\nconst CONTROL_BYTE = 0xab; // First data byte for all commands\n\n// --- Command Mapping (PGN EF64) ---\nconst COMMAND_MAP = {\n    // Diesel Burner Control\n    burner: {\n        ON: 0xfd,\n        OFF: 0xfc,\n    },\n    // AC Element 1 Control\n    ac_1: {\n        ON: 0xc7,\n        OFF: 0xc3,\n    },\n    // AC Element 2 Control\n    ac_2: {\n        ON: 0xcb,\n        OFF: 0xc3,\n    },\n    // Engine Pre-heat Control\n    engine: {\n        ON: 0x7f,\n        OFF: 0x3f,\n    },\n};\n\n// --- Input Validation ---\nconst instance = msg.instance; // Expects \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\n// Validate instance\nif (!instance || !COMMAND_MAP[instance]) {\n    node.warn(\n        `[encode_aquahot] Invalid instance: \"${instance}\". Expected one of: burner, ac_1, ac_2, engine`,\n    );\n    return null;\n}\n\n// Validate command\nif (!command || !COMMAND_MAP[instance][command]) {\n    node.warn(\n        `[encode_aquahot] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\n// --- Build Payload ---\nconst dataByte2 = COMMAND_MAP[instance][command];\n\n// Build the 8-byte data payload\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = CONTROL_BYTE; // AB\ndataBytes[1] = dataByte2; // The specific command byte\n\nconst dataHex = dataBytes\n    .map((byte) => byte.toString(16).padStart(2, \"0\"))\n    .join(\"\");\n\n// --- Construct CAN ID ---\n// PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F) goes in the last byte\nconst canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DESTINATION_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n    topic: \"can/send\",\n    payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4898,7 +4898,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
         "x": 420,
-        "y": 140,
+        "y": 149,
         "wires": []
     },
     {
@@ -4907,7 +4907,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_aquahot_command_2",
-        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Primarily using FF2F (AQUAHOT_COMMAND_2).\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\n// FF2F is the command for Zone Heating/Quiet Mode observed in recordings\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_zone.js:\n// command_type 0x0a = Interior Heating\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  if (val === \"heat\") {\n    isHeating = true;\n  } else if (val === \"off\") {\n    isHeating = false;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // We do not currently know which proprietary DGN/Byte handles the Aqua-Hot\n  // target thermostat setpoint. It is likely FF01 or a configuration DGN.\n  // Emitting a warning and dropping the message to prevent malformed CAN frames.\n  node.warn(\n    `[encode_aquahot_zone_command] Temperature setpoint received, but proprietary DGN mapping is unknown. Dropping to prevent corruption.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set Aqua-Hot Zone ${zone} Heating -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn msg;\n",
+        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Primarily using FF2F (AQUAHOT_COMMAND_2).\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\n// FF2F is the command for Zone Heating/Quiet Mode observed in recordings\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_zone.js:\n// command_type 0x0a = Interior Heating\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  if (val === \"heat\") {\n    isHeating = true;\n  } else if (val === \"off\") {\n    isHeating = false;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // We do not currently know which proprietary DGN/Byte handles the Aqua-Hot\n  // target thermostat setpoint. It is likely FF01 or a configuration DGN.\n  // Emitting a warning and dropping the message to prevent malformed CAN frames.\n  node.warn(\n    `[encode_aquahot_zone_command] Temperature setpoint received, but proprietary DGN mapping is unknown. Dropping to prevent corruption.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set Aqua-Hot Zone ${zone} Heating -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4928,7 +4928,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_furnace_command",
-        "func": "// Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFE6\"; // FURNACE_COMMAND\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/furnace_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"furnace_\")) return null;\n\nconst instanceMatch = entityPart.match(/furnace_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\n// Read cached furnace state to preserve current settings while changing others\nconst cached = global.get(`furnace_${instance}_status`, \"file\") || {};\nconst cachedHeatSource =\n  cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;\n\n// --- Determine Changes ---\nlet newModeRaw =\n  cached.operating_mode !== undefined ? cached.operating_mode : 0;\nlet fanSpeed = 0xff; // Not Available (let furnace decide)\nlet heatOutput = 0xff; // Not Available (let furnace decide)\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n\n  if (val === \"heat\") {\n    // HA \"heat\" -> RV-C Automatic (0x00): furnace runs its own thermostat\n    newModeRaw = 0x00;\n    fanSpeed = 200; // 100% Fan (0.5% per step)\n    heatOutput = 100; // 100% Heat (1% per step)\n  } else if (val === \"off\") {\n    // No explicit \"off\" mode in RV-C; turn off by setting output levels to 0%\n    fanSpeed = 0;\n    heatOutput = 0;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // FURNACE_COMMAND (1FFE6) does not contain temperature setpoint bytes.\n  // Temperature is controlled via THERMOSTAT_COMMAND (1FFE1) or internal config.\n  node.warn(\n    `[encode_furnace_command] Temperature setpoint not supported by FURNACE_COMMAND. Dropping.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (1FFE6) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\ndataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); // Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)\ndataBytes[2] = fanSpeed; // Byte 2: Fan Speed\ndataBytes[3] = heatOutput; // Byte 3: Heat Output Level\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Return Message ---\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Furnace ${instance} -> ${fanSpeed > 0 ? \"ON\" : \"OFF\"}`,\n});\n\nreturn msg;\n",
+        "func": "// Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFE6\"; // FURNACE_COMMAND\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/furnace_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"furnace_\")) return null;\n\nconst instanceMatch = entityPart.match(/furnace_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\n// Read cached furnace state to preserve current settings while changing others\nconst cached = global.get(`furnace_${instance}_status`, \"file\") || {};\nconst cachedHeatSource =\n  cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;\n\n// --- Determine Changes ---\nlet newModeRaw =\n  cached.operating_mode !== undefined ? cached.operating_mode : 0;\nlet fanSpeed = 0xff; // Not Available (let furnace decide)\nlet heatOutput = 0xff; // Not Available (let furnace decide)\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n\n  if (val === \"heat\") {\n    // HA \"heat\" -> RV-C Automatic (0x00): furnace runs its own thermostat\n    newModeRaw = 0x00;\n    fanSpeed = 200; // 100% Fan (0.5% per step)\n    heatOutput = 100; // 100% Heat (1% per step)\n  } else if (val === \"off\") {\n    // No explicit \"off\" mode in RV-C; turn off by setting output levels to 0%\n    fanSpeed = 0;\n    heatOutput = 0;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // FURNACE_COMMAND (1FFE6) does not contain temperature setpoint bytes.\n  // Temperature is controlled via THERMOSTAT_COMMAND (1FFE1) or internal config.\n  node.warn(\n    `[encode_furnace_command] Temperature setpoint not supported by FURNACE_COMMAND. Dropping.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (1FFE6) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\ndataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); // Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)\ndataBytes[2] = fanSpeed; // Byte 2: Fan Speed\ndataBytes[3] = heatOutput; // Byte 3: Heat Output Level\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Furnace ${instance} -> ${fanSpeed > 0 ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4970,7 +4970,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_generic_indicator_command",
-        "func": "// Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Handles both routing keys:\n//   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)\n//   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)\n\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\n\nconst routingKey = msg.routingKey;\nconst instance = msg.instance; // instance number OR group number depending on routingKey\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// Build byte 0 (instance) and byte 1 (group bitmap)\nlet byte0, byte1;\n\nif (routingKey === \"switch_i\") {\n  if (instance < 1 || instance > 250) {\n    node.warn(\n      `[encode_generic_indicator_command] Instance out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = instance;\n  byte1 = 0xff; // non-group command\n} else if (routingKey === \"switch_g\") {\n  if (instance < 1 || instance > 7) {\n    node.warn(\n      `[encode_generic_indicator_command] Group out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = 0xff; // no specific instance (group command)\n  // Bit 7=0 (group command), bit (group-1)=0 (targets this group), all others=1\n  byte1 = 0x7f & ~(1 << (instance - 1));\n} else {\n  node.warn(\n    `[encode_generic_indicator_command] Unknown routingKey: ${routingKey}`,\n  );\n  return null;\n}\n\n// Parse HA command — decode_ha_command sets msg.command for both string and JSON payloads\nconst command = (msg.command || \"\").toUpperCase();\nconst brightnessIn =\n  msg.payload && typeof msg.payload === \"object\"\n    ? msg.payload.brightness\n    : undefined;\n\n// Resolve entity ID for dimmable/brightness lookups\nconst entityId =\n  routingKey === \"switch_g\" ? `switch_g_${instance}` : `switch_i_${instance}`;\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst isDimmable = dimmableIndicators.includes(entityId);\n\n// Determine brightness raw value (0-200 scale, 0.5% per step)\n// HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)\nlet brightnessRaw;\n\nif (command === \"OFF\") {\n  brightnessRaw = 0;\n} else if (brightnessIn !== undefined && brightnessIn > 0) {\n  brightnessRaw = Math.min(200, Math.round(brightnessIn * 2));\n} else if (isDimmable) {\n  const lastBrightness =\n    global.get(\"indicatorBrightness_\" + entityId, \"file\") || 100;\n  brightnessRaw = Math.min(200, Math.round(lastBrightness * 2));\n} else {\n  brightnessRaw = 200; // full brightness for non-dimmable ON\n}\n\n// Store last brightness (in 0-100% scale) for future recall\nif (command !== \"OFF\" && brightnessRaw > 0) {\n  global.set(\"indicatorBrightness_\" + entityId, brightnessRaw / 2, \"file\");\n}\n\n// Build 8-byte data payload per §6.26.2 Table 6.26.2b\nconst dataBytes = [\n  byte0, // Byte 0: Instance\n  byte1, // Byte 1: Group bitmap\n  brightnessRaw, // Byte 2: Brightness (0-200)\n  0xff, // Byte 3: Bank Select (0xFF = not supported)\n  0xff, // Byte 4: Duration (0xFF = continuous)\n  0xff, // Byte 5: Reserved\n  0x00, // Byte 6: Function (0x00 = Set Brightness)\n  0xff, // Byte 7: Reserved\n];\n\nconst dataHex = dataBytes.map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nmsg.topic = \"can/send\";\nmsg.payload = `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;\nreturn msg;\n",
+        "func": "// Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Handles both routing keys:\n//   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)\n//   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)\n\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\n\nconst routingKey = msg.routingKey;\nconst instance = msg.instance; // instance number OR group number depending on routingKey\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// Build byte 0 (instance) and byte 1 (group bitmap)\nlet byte0, byte1;\n\nif (routingKey === \"switch_i\") {\n  if (instance < 1 || instance > 250) {\n    node.warn(\n      `[encode_generic_indicator_command] Instance out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = instance;\n  byte1 = 0xff; // non-group command\n} else if (routingKey === \"switch_g\") {\n  if (instance < 1 || instance > 7) {\n    node.warn(\n      `[encode_generic_indicator_command] Group out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = 0xff; // no specific instance (group command)\n  // Bit 7=0 (group command), bit (group-1)=0 (targets this group), all others=1\n  byte1 = 0x7f & ~(1 << (instance - 1));\n} else {\n  node.warn(\n    `[encode_generic_indicator_command] Unknown routingKey: ${routingKey}`,\n  );\n  return null;\n}\n\n// Parse HA command — JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightnessIn = msg.payload.brightness;\n\n// Resolve entity ID for dimmable/brightness lookups\nconst entityId =\n  routingKey === \"switch_g\" ? `switch_g_${instance}` : `switch_i_${instance}`;\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst isDimmable = dimmableIndicators.includes(entityId);\n\n// Determine brightness raw value (0-200 scale, 0.5% per step)\n// HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)\nlet brightnessRaw;\n\nif (command === \"OFF\") {\n  brightnessRaw = 0;\n} else if (brightnessIn !== undefined && brightnessIn > 0) {\n  brightnessRaw = Math.min(200, Math.round(brightnessIn * 2));\n} else if (isDimmable) {\n  const lastBrightness =\n    global.get(\"indicatorBrightness_\" + entityId, \"file\") || 100;\n  brightnessRaw = Math.min(200, Math.round(lastBrightness * 2));\n} else {\n  brightnessRaw = 200; // full brightness for non-dimmable ON\n}\n\n// Store last brightness (in 0-100% scale) for future recall\nif (command !== \"OFF\" && brightnessRaw > 0) {\n  global.set(\"indicatorBrightness_\" + entityId, brightnessRaw / 2, \"file\");\n}\n\n// Build 8-byte data payload per §6.26.2 Table 6.26.2b\nconst dataBytes = [\n  byte0, // Byte 0: Instance\n  byte1, // Byte 1: Group bitmap\n  brightnessRaw, // Byte 2: Brightness (0-200)\n  0xff, // Byte 3: Bank Select (0xFF = not supported)\n  0xff, // Byte 4: Duration (0xFF = continuous)\n  0xff, // Byte 5: Reserved\n  0x00, // Byte 6: Function (0x00 = Set Brightness)\n  0xff, // Byte 7: Reserved\n];\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5016,7 +5016,7 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 1390,
+        "x": 1270,
         "y": 440,
         "wires": [],
         "l": true
@@ -5311,7 +5311,7 @@
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 150,
+        "y": 145,
         "wires": []
     },
     {
