@@ -176,7 +176,8 @@
             "6376d98589368f2b",
             "3935564c9401e95d",
             "0c76b4a89a0e60ca",
-            "d79041ca83ce8b8c"
+            "d79041ca83ce8b8c",
+            "52f6bcc4fb0ca263"
         ],
         "x": 908,
         "y": 239,
@@ -488,29 +489,6 @@
         "h": 562
     },
     {
-        "id": "1250cab4e8633d65",
-        "type": "group",
-        "z": "292e70a6ba25b323",
-        "name": "Recording unknown DGNs",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "ff7901a611c1e1aa",
-            "880ca1b6bf10b8d2",
-            "4bea6d59dec3cdde",
-            "f3ee6dc19b0155a0",
-            "cfa55144f4a17a5c",
-            "cd73ee739dad9f59",
-            "dca8346e061f1d42"
-        ],
-        "x": 94,
-        "y": 1519,
-        "w": 772,
-        "h": 182
-    },
-    {
         "id": "9e47041ed71c4494",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -524,7 +502,6 @@
             "6b1a7191643fa28e",
             "e38f32a1f6d36bfb",
             "d244b9fa7dfd5d48",
-            "5927f292918fa095",
             "e2fc2c67eba80f70"
         ],
         "x": 1074,
@@ -577,7 +554,7 @@
             "ac17a780a9a1dbcf"
         ],
         "x": 94,
-        "y": 1759,
+        "y": 1519,
         "w": 772,
         "h": 162
     },
@@ -598,6 +575,29 @@
         "y": 53,
         "w": 484,
         "h": 314
+    },
+    {
+        "id": "1250cab4e8633d65",
+        "type": "group",
+        "z": "292e70a6ba25b323",
+        "name": "Recording unknown DGNs",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "ff7901a611c1e1aa",
+            "880ca1b6bf10b8d2",
+            "4bea6d59dec3cdde",
+            "f3ee6dc19b0155a0",
+            "cfa55144f4a17a5c",
+            "cd73ee739dad9f59",
+            "dca8346e061f1d42"
+        ],
+        "x": 94,
+        "y": 1759,
+        "w": 772,
+        "h": 222
     },
     {
         "id": "9dd6a98018824be9",
@@ -1029,7 +1029,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "decode_rvc_can",
-        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND_1\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS_1\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_1\";\n  } else if (lookupPgn === \"6F00\") {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  } else if (lookupPgn === \"6C00\") {\n    dgn_name = \"AQUAHOT_STATUS_2\";\n  } else if (lookupPgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_2\";\n  } else if (lookupPgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_SYSTEM_STATUS_2\";\n  } else if (lookupPgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_COMMAND_2\";\n  } else if (pgn.startsWith(\"EF\")) {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\nreturn msg;\n",
+        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND_1\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS_1\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_1\";\n  } else if (lookupPgn === \"6F00\") {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  } else if (lookupPgn === \"6C00\") {\n    dgn_name = \"AQUAHOT_STATUS_2\";\n  } else if (lookupPgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_2\";\n  } else if (lookupPgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_SYSTEM_STATUS_2\";\n  } else if (lookupPgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_COMMAND_2\";\n  } else if (pgn.startsWith(\"EF\")) {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\n// Bypass RBE/deduplication exclusively for DC_DIMMER_COMMAND_2 \"Toggle\" buttons.\n// Byte 3 equals: 0x05 (Toggle). Other commands will naturally change byte values.\nif (dgn_name === \"DC_DIMMER_COMMAND_2\" && data_payload.length >= 8) {\n  const cmdByte = parseInt(data_payload.substring(6, 8), 16);\n  if (cmdByte === 0x05) {\n    msg.payload._ts = Date.now();\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1675,7 +1675,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 330,
-        "y": 120,
+        "y": 137,
         "wires": []
     },
     {
@@ -1870,143 +1870,6 @@
         "l": true
     },
     {
-        "id": "880ca1b6bf10b8d2",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "record_unknown_toggle",
-        "func": "// Record Unknown CAN — Toggle Handler\n// Input: MQTT payload \"ON\" or \"OFF\" from HA switch\n// On start: clears log, sets start time, sets recording flag\n// On stop: clears flag, shows message count\n// Output: retained state publish back to HA\n\nconst cmd = msg.payload;\n\nif (cmd === \"1\") {\n  global.set(\"recordUnknown\", true, \"file\");\n  global.set(\"recordUnknownStart\", Date.now(), \"file\");\n  global.set(\"recordUnknownLog\", [], \"file\");\n  global.set(\"recordUnknownSeen\", {});\n\n  node.status({ fill: \"red\", shape: \"dot\", text: \"Recording...\" });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"1\",\n    retain: true,\n  };\n}\n\nif (cmd === \"0\") {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const log = global.get(\"recordUnknownLog\", \"file\") || [];\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: `Stopped — ${log.length} messages`,\n  });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n}\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 1560,
-        "wires": [
-            [
-                "dca8346e061f1d42"
-            ]
-        ]
-    },
-    {
-        "id": "ff7901a611c1e1aa",
-        "type": "mqtt in",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "Recording toggle",
-        "topic": "librecoach/record_unknown/set",
-        "qos": "1",
-        "datatype": "utf8",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 200,
-        "y": 1560,
-        "wires": [
-            [
-                "880ca1b6bf10b8d2"
-            ]
-        ]
-    },
-    {
-        "id": "4bea6d59dec3cdde",
-        "type": "mqtt in",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "Recording trigger",
-        "topic": "librecoach/export/unknown/trigger",
-        "qos": "1",
-        "datatype": "utf8",
-        "broker": "80727e60a251c36c",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 200,
-        "y": 1640,
-        "wires": [
-            [
-                "f3ee6dc19b0155a0"
-            ]
-        ]
-    },
-    {
-        "id": "f3ee6dc19b0155a0",
-        "type": "function",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "record_unknown_export",
-        "func": "// Export Unknown CAN Recording\n// Reads recordUnknownLog from global context\n// Output: [[jsonMsg, htmlMsg], notifyMsg] to File Write node\n\nconst TIMEZONE = \"America/New_York\";\n\nfunction getLocalISO(ms) {\n  if (!ms) return null;\n  return new Date(ms)\n    .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n    .replace(\" \", \"T\");\n}\n\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\");\n\nconst report = {\n  recording_start: getLocalISO(startTime),\n  recording_end: log.length > 0 ? log[log.length - 1].timestamp : null,\n  message_count: log.length,\n  messages: log,\n};\n\n// Static filename replaces old files every time\nconst filename = \"librecoach_unknown_recording.json\";\n\nconst jsonMsg = {\n  filename: `/homeassistant/www/${filename}`,\n  payload: JSON.stringify(report, null, 2),\n};\n\nconst htmlMsg = {\n  filename: \"/homeassistant/www/librecoach_download.html\",\n  payload: `<!DOCTYPE html>\n<html><head><title>LibreCoach Download</title></head>\n<body>\n<script>\nvar a = document.createElement(\"a\");\na.href = \"/local/${filename}\";\na.download = \"${filename}\";\ndocument.body.appendChild(a);\na.click();\nsetTimeout(function() { window.close(); }, 1000);\n</script>\n<p>Your download should start automatically. If not, <a href=\"/local/${filename}\" download=\"${filename}\">click here</a>.</p>\n</body></html>`,\n};\n\nconst notifyMsg = {\n  payload: {\n    title: \"LibreCoach Unknown Recording\",\n    message: `Your recording is ready.<br><a href=\"/local/librecoach_download.html\" target=\"_blank\"><b>Click here to download</b></a>.`,\n    notification_id: \"librecoach_export_unknown\",\n  },\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Exported ${log.length} messages`,\n});\n\nreturn [[jsonMsg, htmlMsg], notifyMsg];\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 1640,
-        "wires": [
-            [
-                "cfa55144f4a17a5c"
-            ],
-            [
-                "cd73ee739dad9f59"
-            ]
-        ]
-    },
-    {
-        "id": "cfa55144f4a17a5c",
-        "type": "file",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "Write file",
-        "filename": "filename",
-        "filenameType": "msg",
-        "appendNewline": true,
-        "createDir": true,
-        "overwriteFile": "true",
-        "encoding": "none",
-        "x": 680,
-        "y": 1620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "cd73ee739dad9f59",
-        "type": "link out",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "Notify user",
-        "mode": "link",
-        "links": [
-            "a1e89f48333c8256"
-        ],
-        "x": 690,
-        "y": 1660,
-        "wires": [],
-        "l": true
-    },
-    {
-        "id": "dca8346e061f1d42",
-        "type": "link out",
-        "z": "292e70a6ba25b323",
-        "g": "1250cab4e8633d65",
-        "name": "MQTT out: Retain TRUE",
-        "mode": "link",
-        "links": [
-            "f658418a7b9b4857"
-        ],
-        "x": 730,
-        "y": 1560,
-        "wires": [],
-        "l": true
-    },
-    {
         "id": "03a998942a940736",
         "type": "function",
         "z": "292e70a6ba25b323",
@@ -2081,7 +1944,7 @@
         "z": "292e70a6ba25b323",
         "g": "9e47041ed71c4494",
         "name": "beta_handle_toggle",
-        "func": "// Handles enable/disable of Beta features and tracks beta entities for automatic deletion.\n// Input can be both config trigger and MQTT discovery configs.\n// Output 1 → MQTT Out (entity creation configs or entity deletion payloads)\n// Output 2 → Filter nodes (reset on enable)\n\n// 1. Handle config enable/disable messages\nconst key = msg.topic.split(\"/\").pop();\nif (key === \"beta_enabled\") {\n  const enabled = msg.payload.toString() === \"true\";\n\n  if (enabled) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n    // Output 2 reset for filter nodes, matching victron/microair pattern\n    return [null, { reset: true }];\n  }\n\n  // === Disable: delete all tracked beta entities from HA ===\n  const discoveryTopics = global.get(\"betaDiscoveryTopics\", \"file\") || [];\n\n  if (discoveryTopics.length === 0) {\n    node.status({\n      fill: \"yellow\",\n      shape: \"ring\",\n      text: \"Disabled (no entities)\",\n    });\n    return [null, null];\n  }\n\n  // Send deletion messages to output 1 (MQTT Out)\n  const msgs = discoveryTopics.map((topic) => ({ topic: topic, payload: \"\" }));\n\n  // Clear persisted tracking state\n  global.set(\"betaDiscoveryTopics\", [], \"file\");\n\n  node.status({\n    fill: \"red\",\n    text: `Disabled — removed ${discoveryTopics.length} entities`,\n  });\n\n  return [msgs, null];\n}\n\n// 2. Handle incoming discovery config messages (from beta Create nodes)\nif (\n  msg.topic &&\n  msg.topic.startsWith(\"homeassistant/\") &&\n  msg.topic.endsWith(\"/config\")\n) {\n  const isBetaEnabled = global.get(\"betaEnabled\");\n\n  // Only process if beta is actually enabled\n  if (isBetaEnabled === true) {\n    let discoveryTopics = global.get(\"betaDiscoveryTopics\", \"file\") || [];\n\n    // Add to tracked list if not already there\n    if (!discoveryTopics.includes(msg.topic)) {\n      discoveryTopics.push(msg.topic);\n      global.set(\"betaDiscoveryTopics\", discoveryTopics, \"file\");\n      node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: `Tracking ${discoveryTopics.length} entities`,\n      });\n    }\n\n    // Pass the message through to Output 1 (MQTT Out) to actually create the entity\n    return [msg, null];\n  } else {\n    // If a create message arrives while beta is disabled, block it.\n    return [null, null];\n  }\n}\n\n// Ignore unknown messages\nreturn [null, null];",
+        "func": "// Handles enable/disable of Beta features and tracks beta entities for automatic deletion.\n// Input can be both config trigger and MQTT discovery configs.\n// Output 1 → MQTT Out (entity creation configs or entity deletion payloads)\n// Output 2 → Filter nodes (reset on enable)\n\n// 1. Handle config enable/disable messages\nconst key = msg.topic.split(\"/\").pop();\nif (key === \"beta_enabled\") {\n  const enabled = msg.payload.toString() === \"true\";\n\n  if (enabled) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n    // Output 2 reset for filter nodes\n    return [null, { reset: true }];\n  }\n\n  // === Disable: delete all tracked beta entities from HA ===\n  const discoveryTopics = global.get(\"betaDiscoveryTopics\", \"file\") || [];\n\n  if (discoveryTopics.length === 0) {\n    node.status({\n      fill: \"yellow\",\n      shape: \"ring\",\n      text: \"Disabled (no entities)\",\n    });\n    return [null, null];\n  }\n\n  // Send deletion messages to output 1 (MQTT Out)\n  const msgs = discoveryTopics.map((topic) => ({ topic: topic, payload: \"\" }));\n\n  // Clear persisted tracking state\n  global.set(\"betaDiscoveryTopics\", [], \"file\");\n\n  node.status({\n    fill: \"red\",\n    text: `Disabled — removed ${discoveryTopics.length} entities`,\n  });\n\n  return [msgs, null];\n}\n\n// 2. Handle incoming discovery config messages (from beta Create nodes)\nif (\n  msg.topic &&\n  msg.topic.startsWith(\"homeassistant/\") &&\n  msg.topic.endsWith(\"/config\")\n) {\n  const isBetaEnabled = global.get(\"betaEnabled\");\n\n  // Only process if beta is actually enabled\n  if (isBetaEnabled === true) {\n    let discoveryTopics = global.get(\"betaDiscoveryTopics\", \"file\") || [];\n\n    // Add to tracked list if not already there\n    if (!discoveryTopics.includes(msg.topic)) {\n      discoveryTopics.push(msg.topic);\n      global.set(\"betaDiscoveryTopics\", discoveryTopics, \"file\");\n      node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: `Tracking ${discoveryTopics.length} entities`,\n      });\n    }\n\n    // Pass the message through to Output 1 (MQTT Out) to actually create the entity\n    return [msg, null];\n  } else {\n    // If a create message arrives while beta is disabled, block it.\n    return [null, null];\n  }\n}\n\n// Ignore unknown messages\nreturn [null, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2092,8 +1955,7 @@
         "y": 1700,
         "wires": [
             [
-                "e38f32a1f6d36bfb",
-                "5927f292918fa095"
+                "e38f32a1f6d36bfb"
             ],
             []
         ]
@@ -2194,24 +2056,6 @@
         ]
     },
     {
-        "id": "5927f292918fa095",
-        "type": "debug",
-        "z": "292e70a6ba25b323",
-        "g": "9e47041ed71c4494",
-        "name": "BETA",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1690,
-        "y": 1760,
-        "wires": []
-    },
-    {
         "id": "21dfe84b8adafa6e",
         "type": "rbe",
         "z": "292e70a6ba25b323",
@@ -2275,7 +2119,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "record_unknown_capture",
-        "func": "// Record Unknown CAN — Terminal Capture Sink\n// Sits AFTER the routing switch at the end of the line.\n// Only receives DGNs routed to it (UNKNOWN, PROPRIETARY, COMMAND, STATUS).\n// Auto-stop: 2 minutes elapsed OR 1000 messages captured\n// Output 1: MQTT state (auto-stop off message)\n// Output 2: Changed messages (debug passthrough)\n\nconst MAX_MESSAGES = 1000;\nconst MAX_DURATION_MS = 10 * 60 * 1000;\nconst TIMEZONE = \"America/New_York\";\n\n// STATUS DGNs allowed through — discrete state only, no analog sensors.\n// COMMAND, UNKNOWN, and PROPRIETARY always pass without this check.\nconst STATUS_WHITELIST = [\n  \"AC_LOAD_STATUS\",\n  \"AC_LOAD_STATUS_2\",\n  \"AAS_STATUS\",\n  \"AAS_SENSOR_STATUS\",\n  \"AIR_CONDITIONER_STATUS\",\n  \"HEAT_PUMP_STATUS\",\n  \"AUTOFILL_STATUS\",\n  \"AWNING_STATUS\",\n  \"AWNING_STATUS_2\",\n  \"CHASSIS_MOBILITY_STATUS\",\n  \"CHASSIS_MOBILITY_STATUS_2\",\n  \"CIRCULATION_PUMP_STATUS\",\n  \"DC_DIMMER_STATUS_1\",\n  \"DC_DIMMER_STATUS_2\",\n  \"DC_DIMMER_STATUS_3\",\n  \"DC_DISCONNECT_STATUS\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_1\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_2\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_3\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_4\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_5\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_6\",\n  \"DC_LOAD_STATUS\",\n  \"DC_LOAD_STATUS_2\",\n  \"DC_MOTOR_CONTROL_STATUS\",\n  \"DIGITAL_INPUT_STATUS\",\n  \"FLOOR_HEAT_STATUS\",\n  \"FURNACE_STATUS\",\n  \"GAS_SENSOR_STATUS\",\n  \"GENERATOR_STATUS_1\",\n  \"GENERATOR_STATUS_2\",\n  \"GENERIC_INDICATOR_STATUS\",\n  \"HYDRAULIC_PUMP_STATUS\",\n  \"INVERTER_STATUS\",\n  \"LOCK_STATUS\",\n  \"LEVELING_CONTROL_STATUS\",\n  \"LEVELING_JACK_STATUS\",\n  \"LEVELING_AIR_STATUS\",\n  \"REFRIGERATOR_STATUS\",\n  \"ROOF_FAN_STATUS_1\",\n  \"ROOF_FAN_STATUS_2\",\n  \"SLIDE_STATUS\",\n  \"SLIDE_MOTOR_STATUS\",\n  \"STEP_STATUS\",\n  \"THERMOSTAT_STATUS_1\",\n  \"THERMOSTAT_STATUS_2\",\n  \"TV_LIFT_STATUS\",\n  \"ATS_STATUS\",\n  \"VALVE_STATUS\",\n  \"VEHICLE_SEAT_STATUS\",\n  \"VEHICLE_SEAT_LIGHTING_STATUS\",\n  \"WATER_PUMP_STATUS\",\n  \"WATERHEATER_STATUS\",\n  \"WATERHEATER_STATUS_2\",\n  \"WINDOW_STATUS\",\n  \"WINDOW_SHADE_CONTROL_STATUS\",\n];\n\n// --- STATUS whitelist check ---\n// COMMAND, UNKNOWN, PROPRIETARY always pass. Known STATUS must be whitelisted.\nconst dgn_name = msg.payload.dgn_name;\nif (\n  dgn_name !== \"UNKNOWN\" &&\n  dgn_name !== \"PROPRIETARY\" &&\n  !dgn_name.includes(\"COMMAND\") &&\n  !STATUS_WHITELIST.includes(dgn_name)\n) {\n  return [null, null];\n}\n\n// --- Parse data bytes from hex string ---\nconst raw = msg.payload.originalMessage || \"\";\nconst dataHex = msg.payload.data_payload || \"\";\nconst byteHexPairs = dataHex.match(/.{1,2}/g) || [];\nconst instanceId =\n  byteHexPairs.length > 0 ? parseInt(byteHexPairs[0], 16) : null;\nconst data = byteHexPairs.map((h) => h.toUpperCase()).join(\" \");\n\n// --- Change detection (always runs) ---\nconst seen = global.get(\"recordUnknownSeen\") || {};\nconst seenKey = `${msg.payload.dgn}:${instanceId}`;\nconst changed = seen[seenKey] !== data;\nseen[seenKey] = data;\nglobal.set(\"recordUnknownSeen\", seen);\n\n// Pass changed messages to output 2 for debug\nconst debugMsg = changed ? { payload: { seenKey, data, dgn_name } } : null;\n\n// Gate on recording state\nconst recording = global.get(\"recordUnknown\", \"file\");\nif (!recording) {\n  node.status({ fill: \"grey\", shape: \"ring\", text: \"Stopped\" });\n  return [null, debugMsg];\n}\nif (!changed) {\n  const curLog = global.get(\"recordUnknownLog\", \"file\") || [];\n  node.status({\n    fill: \"red\",\n    shape: \"ring\",\n    text: `Watching... ${curLog.length}`,\n  });\n  return [null, null];\n}\n\n// --- Timing ---\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\") || Date.now();\nconst elapsed = Date.now() - startTime;\n\n// Check auto-stop before adding\nif (log.length >= MAX_MESSAGES || elapsed >= MAX_DURATION_MS) {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const reason =\n    log.length >= MAX_MESSAGES ? `${MAX_MESSAGES} messages` : \"10 min elapsed\";\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: `Auto-stopped — ${reason}`,\n  });\n\n  const offMsg = {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n\n  return [offMsg, debugMsg];\n}\n\n// --- Local timestamp ---\nconst localISO = new Date()\n  .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n  .replace(\" \", \"T\");\n\n// --- Build log entry ---\nlog.push({\n  timestamp: localISO,\n  dgn: msg.payload.dgn,\n  dgn_name: dgn_name,\n  instance: instanceId !== null ? instanceId : null,\n  data: data,\n  raw_can: raw,\n});\nglobal.set(\"recordUnknownLog\", log, \"file\");\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Recording... ${log.length}`,\n});\n\nreturn [null, debugMsg];\n",
+        "func": "// Record Unknown CAN — Terminal Capture Sink\n// Sits AFTER the routing switch at the end of the line.\n// Only receives DGNs routed to it (UNKNOWN, PROPRIETARY, COMMAND, STATUS).\n// Auto-stop: 2 minutes elapsed OR 1000 messages captured\n// Output 1: MQTT state (auto-stop off message)\n// Output 2: Changed messages (debug passthrough)\n\nconst MAX_MESSAGES = 1000;\nconst MAX_DURATION_MS = 10 * 60 * 1000;\nconst TIMEZONE = \"America/New_York\";\n\n// STATUS DGNs allowed through — discrete state only, no analog sensors.\n// COMMAND, UNKNOWN, and PROPRIETARY always pass without this check.\nconst STATUS_WHITELIST = [\n  \"AC_LOAD_STATUS\",\n  \"AC_LOAD_STATUS_2\",\n  \"AAS_STATUS\",\n  \"AAS_SENSOR_STATUS\",\n  \"AIR_CONDITIONER_STATUS\",\n  \"HEAT_PUMP_STATUS\",\n  \"AUTOFILL_STATUS\",\n  \"AWNING_STATUS\",\n  \"AWNING_STATUS_2\",\n  \"CHASSIS_MOBILITY_STATUS\",\n  \"CHASSIS_MOBILITY_STATUS_2\",\n  \"CIRCULATION_PUMP_STATUS\",\n  \"DC_DIMMER_STATUS_1\",\n  \"DC_DIMMER_STATUS_2\",\n  \"DC_DIMMER_STATUS_3\",\n  \"DC_DISCONNECT_STATUS\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_1\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_2\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_3\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_4\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_5\",\n  \"DC_LIGHTING_CONTROLLER_STATUS_6\",\n  \"DC_LOAD_STATUS\",\n  \"DC_LOAD_STATUS_2\",\n  \"DC_MOTOR_CONTROL_STATUS\",\n  \"DIGITAL_INPUT_STATUS\",\n  \"FLOOR_HEAT_STATUS\",\n  \"FURNACE_STATUS\",\n  \"GAS_SENSOR_STATUS\",\n  \"GENERATOR_STATUS_1\",\n  \"GENERATOR_STATUS_2\",\n  \"GENERIC_INDICATOR_STATUS\",\n  \"HYDRAULIC_PUMP_STATUS\",\n  \"INVERTER_STATUS\",\n  \"LOCK_STATUS\",\n  \"LEVELING_CONTROL_STATUS\",\n  \"LEVELING_JACK_STATUS\",\n  \"LEVELING_AIR_STATUS\",\n  \"REFRIGERATOR_STATUS\",\n  \"ROOF_FAN_STATUS_1\",\n  \"ROOF_FAN_STATUS_2\",\n  \"SLIDE_STATUS\",\n  \"SLIDE_MOTOR_STATUS\",\n  \"STEP_STATUS\",\n  \"THERMOSTAT_STATUS_1\",\n  \"THERMOSTAT_STATUS_2\",\n  \"TV_LIFT_STATUS\",\n  \"ATS_STATUS\",\n  \"VALVE_STATUS\",\n  \"VEHICLE_SEAT_STATUS\",\n  \"VEHICLE_SEAT_LIGHTING_STATUS\",\n  \"WATER_PUMP_STATUS\",\n  \"WATERHEATER_STATUS\",\n  \"WATERHEATER_STATUS_2\",\n  \"WINDOW_STATUS\",\n  \"WINDOW_SHADE_CONTROL_STATUS\",\n];\n\n// --- STATUS whitelist check ---\n// COMMAND, UNKNOWN, PROPRIETARY always pass. Known STATUS must be whitelisted.\nconst dgn_name = msg.payload.dgn_name;\nif (\n  dgn_name !== \"UNKNOWN\" &&\n  dgn_name !== \"PROPRIETARY\" &&\n  !dgn_name.includes(\"COMMAND\") &&\n  !STATUS_WHITELIST.includes(dgn_name)\n) {\n  return [null, null];\n}\n\n// --- Parse data bytes from hex string ---\nconst raw = msg.payload.originalMessage || \"\";\nconst dataHex = msg.payload.data_payload || \"\";\nconst byteHexPairs = dataHex.match(/.{1,2}/g) || [];\nconst instanceId =\n  byteHexPairs.length > 0 ? parseInt(byteHexPairs[0], 16) : null;\nconst data = byteHexPairs.map((h) => h.toUpperCase()).join(\" \");\n\nconst seenKey = `${msg.payload.dgn}:${instanceId}`;\n\n// RBE node upstream handles deduplication.\n// Any message reaching this node is considered a legitimate event to capture.\nconst changed = true;\n\n// Pass all received messages to output 2 for debug\nconst debugMsg = { payload: { seenKey, data, dgn_name } };\n\n// Gate on recording state\nconst recording = global.get(\"recordUnknown\", \"file\");\nif (!recording) {\n  node.status({ fill: \"grey\", shape: \"ring\", text: \"Stopped\" });\n  return [null, debugMsg];\n}\nif (!changed) {\n  const curLog = global.get(\"recordUnknownLog\", \"file\") || [];\n  node.status({\n    fill: \"red\",\n    shape: \"ring\",\n    text: `Watching... ${curLog.length}`,\n  });\n  return [null, null];\n}\n\n// --- Timing ---\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\") || Date.now();\nconst elapsed = Date.now() - startTime;\n\n// Check auto-stop before adding\nif (log.length >= MAX_MESSAGES || elapsed >= MAX_DURATION_MS) {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const reason =\n    log.length >= MAX_MESSAGES ? `${MAX_MESSAGES} messages` : \"10 min elapsed\";\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: `Auto-stopped — ${reason}`,\n  });\n\n  const offMsg = {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n\n  return [offMsg, debugMsg];\n}\n\n// --- Local timestamp ---\nconst localISO = new Date()\n  .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n  .replace(\" \", \"T\");\n\n// --- Build log entry ---\nlog.push({\n  timestamp: localISO,\n  dgn: msg.payload.dgn,\n  dgn_name: dgn_name,\n  instance: instanceId !== null ? instanceId : null,\n  data: data,\n  raw_can: raw,\n});\nglobal.set(\"recordUnknownLog\", log, \"file\");\n\nnode.status({\n  fill: \"red\",\n  shape: \"dot\",\n  text: `Recording... ${log.length}`,\n});\n\nreturn [null, debugMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2298,7 +2142,7 @@
         "type": "inject",
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
-        "name": "Reset",
+        "name": "On start",
         "props": [
             {
                 "p": "reset",
@@ -2308,10 +2152,10 @@
         ],
         "repeat": "",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 1190,
+        "x": 1180,
         "y": 380,
         "wires": [
             [
@@ -2334,7 +2178,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1880,
+        "y": 1640,
         "wires": [
             [
                 "a8a757fe3b31cf9c"
@@ -2355,7 +2199,7 @@
         "finalize": "",
         "libs": [],
         "x": 430,
-        "y": 1880,
+        "y": 1640,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2373,7 +2217,7 @@
             "f658418a7b9b4857"
         ],
         "x": 730,
-        "y": 1820,
+        "y": 1580,
         "wires": [],
         "l": true
     },
@@ -2391,7 +2235,7 @@
         "finalize": "",
         "libs": [],
         "x": 450,
-        "y": 1800,
+        "y": 1560,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2408,7 +2252,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 210,
-        "y": 1800,
+        "y": 1560,
         "wires": [
             [
                 "1becc1dacb0ecaf8"
@@ -2453,6 +2297,169 @@
         "x": 1930,
         "y": 320,
         "wires": []
+    },
+    {
+        "id": "52f6bcc4fb0ca263",
+        "type": "inject",
+        "z": "292e70a6ba25b323",
+        "g": "f09f79586501cb0b",
+        "name": "Reset",
+        "props": [
+            {
+                "p": "reset",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 1190,
+        "y": 340,
+        "wires": [
+            [
+                "21dfe84b8adafa6e"
+            ]
+        ]
+    },
+    {
+        "id": "ff7901a611c1e1aa",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Recording toggle",
+        "topic": "librecoach/record_unknown/set",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 1800,
+        "wires": [
+            [
+                "880ca1b6bf10b8d2"
+            ]
+        ]
+    },
+    {
+        "id": "880ca1b6bf10b8d2",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "record_unknown_toggle",
+        "func": "// Record Unknown CAN — Toggle Handler\n// Input: MQTT payload \"ON\" or \"OFF\" from HA switch\n// On start: clears log, sets start time, sets recording flag\n// On stop: clears flag, shows message count\n// Output: retained state publish back to HA\n\nconst cmd = msg.payload;\n\nif (cmd === \"1\") {\n  global.set(\"recordUnknown\", true, \"file\");\n  global.set(\"recordUnknownStart\", Date.now(), \"file\");\n  global.set(\"recordUnknownLog\", [], \"file\");\n\n  node.status({ fill: \"red\", shape: \"dot\", text: \"Recording...\" });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"1\",\n    retain: true,\n  };\n}\n\nif (cmd === \"0\") {\n  global.set(\"recordUnknown\", false, \"file\");\n\n  const log = global.get(\"recordUnknownLog\", \"file\") || [];\n  node.status({\n    fill: \"green\",\n    shape: \"dot\",\n    text: `Stopped — ${log.length} messages`,\n  });\n\n  return {\n    topic: \"homeassistant/switch/librecoach_record_unknown/state\",\n    payload: \"0\",\n    retain: true,\n  };\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1800,
+        "wires": [
+            [
+                "dca8346e061f1d42"
+            ]
+        ]
+    },
+    {
+        "id": "4bea6d59dec3cdde",
+        "type": "mqtt in",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Recording trigger",
+        "topic": "librecoach/export/unknown/trigger",
+        "qos": "1",
+        "datatype": "utf8",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 1920,
+        "wires": [
+            [
+                "f3ee6dc19b0155a0"
+            ]
+        ]
+    },
+    {
+        "id": "f3ee6dc19b0155a0",
+        "type": "function",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "record_unknown_export",
+        "func": "// Export Unknown CAN Recording\n// Reads recordUnknownLog from global context\n// Output: [[jsonMsg, htmlMsg], notifyMsg] to File Write node\n\nconst TIMEZONE = \"America/New_York\";\n\nfunction getLocalISO(ms) {\n  if (!ms) return null;\n  return new Date(ms)\n    .toLocaleString(\"sv-SE\", { timeZone: TIMEZONE, hour12: false })\n    .replace(\" \", \"T\");\n}\n\nconst log = global.get(\"recordUnknownLog\", \"file\") || [];\nconst startTime = global.get(\"recordUnknownStart\", \"file\");\n\nconst report = {\n  recording_start: getLocalISO(startTime),\n  recording_end: log.length > 0 ? log[log.length - 1].timestamp : null,\n  message_count: log.length,\n  messages: log,\n};\n\n// Static filename replaces old files every time\nconst filename = \"librecoach_unknown_recording.json\";\n\nconst jsonMsg = {\n  filename: `/homeassistant/www/${filename}`,\n  payload: JSON.stringify(report, null, 2),\n};\n\nconst htmlMsg = {\n  filename: \"/homeassistant/www/librecoach_download.html\",\n  payload: `<!DOCTYPE html>\n<html><head><title>LibreCoach Download</title></head>\n<body>\n<script>\nvar a = document.createElement(\"a\");\na.href = \"/local/${filename}\";\na.download = \"${filename}\";\ndocument.body.appendChild(a);\na.click();\nsetTimeout(function() { window.close(); }, 1000);\n</script>\n<p>Your download should start automatically. If not, <a href=\"/local/${filename}\" download=\"${filename}\">click here</a>.</p>\n</body></html>`,\n};\n\nconst notifyMsg = {\n  payload: {\n    title: \"LibreCoach Unknown Recording\",\n    message: `Your recording is ready.<br><a href=\"/local/librecoach_download.html\" target=\"_blank\"><b>Click here to download</b></a>.`,\n    notification_id: \"librecoach_export_unknown\",\n  },\n};\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Exported ${log.length} messages`,\n});\n\nreturn [[jsonMsg, htmlMsg], notifyMsg];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1920,
+        "wires": [
+            [
+                "cfa55144f4a17a5c"
+            ],
+            [
+                "cd73ee739dad9f59"
+            ]
+        ]
+    },
+    {
+        "id": "cfa55144f4a17a5c",
+        "type": "file",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Write file",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 680,
+        "y": 1900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd73ee739dad9f59",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "Notify user",
+        "mode": "link",
+        "links": [
+            "a1e89f48333c8256"
+        ],
+        "x": 690,
+        "y": 1940,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "dca8346e061f1d42",
+        "type": "link out",
+        "z": "292e70a6ba25b323",
+        "g": "1250cab4e8633d65",
+        "name": "MQTT out: Retain TRUE",
+        "mode": "link",
+        "links": [
+            "f658418a7b9b4857"
+        ],
+        "x": 730,
+        "y": 1800,
+        "wires": [],
+        "l": true
     },
     {
         "id": "9f88f215f3f07227",
@@ -4436,7 +4443,7 @@
         "type": "function",
         "z": "7ecdba18640c1184",
         "name": "decode_generic_indicator_command",
-        "func": "// Decoder for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Input: msg.payload from decode_rvc_can (dgn, dgn_name, data_payload)\n// Output: decoded fields merged into payload, or null for unhandled function types.\n// Unhandled types are logged to flow context \"unknownGenericIndicatorCmd\" for future analysis.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n    node.warn(\"Missing required fields: dgn and/or data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length < 16) {\n    node.warn(\"Invalid data_payload: expected 8-byte hex string\");\n    return null;\n}\n\nconst d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));\nif (d.some(isNaN)) {\n    node.warn(\"Invalid hex in data_payload\");\n    return null;\n}\n\n// Byte 0: Instance\n// 1-250 = specific instance, 0 = all instances, 255 = no instances (use group)\nconst instance = d[0];\n\n// Byte 1: Group bitmap\n// Bits 0-6 correspond to groups 1-7 (0 bit = command applies to that group)\n// Bit 7 must be 0 for a group command; 0xFF = non-group command\nconst groupRaw = d[1];\nconst isGroupCommand = (groupRaw & 0x80) === 0;\nconst groups = [];\nif (isGroupCommand) {\n    for (let i = 0; i < 7; i++) {\n        if ((groupRaw & (1 << i)) === 0) {\n            groups.push(i + 1);\n        }\n    }\n}\n\n// Byte 2: Brightness (Table 5.3, 0-200, 0.5% per step)\nconst brightnessRaw = d[2];\nlet brightness;\nif (brightnessRaw <= 200) {\n    brightness = parseFloat((brightnessRaw * 0.5).toFixed(1));\n} else if (brightnessRaw === 255) {\n    brightness = \"Not Available\";\n} else {\n    brightness = \"Reserved\";\n}\n\n// Byte 3 bits 0-3: Bank Select (0-13; 0xF = banking not supported)\nconst bankSelect = d[3] & 0x0f;\n\n// Byte 4: Duration\nconst durationRaw = d[4];\nlet duration;\nif (durationRaw === 0) {\n    duration = \"Momentary\";\n} else if (durationRaw <= 240) {\n    duration = `${durationRaw}s`;\n} else if (durationRaw >= 241 && durationRaw <= 250) {\n    duration = `${durationRaw - 236}min`;\n} else if (durationRaw === 255) {\n    duration = \"Continuous\";\n} else {\n    duration = \"Reserved\";\n}\n\n// Byte 6: Function\nconst functionRaw = d[6];\nconst functionNames = {\n    0x00: \"Set Brightness\",\n    0x01: \"LED1 Off, LED2 Off\",\n    0x02: \"LED1 On, LED2 Off\",\n    0x03: \"LED1 Off, LED2 On\",\n    0x04: \"LED1 On, LED2 On\",\n    0x11: \"Ramp Brightness\",\n    0x21: \"Flash Alternate\",\n};\nconst functionName = functionNames[functionRaw] ?? `Unknown (${functionRaw})`;\n\n// Classification: only pass through function types we currently handle.\n// Everything else is logged for future analysis and dropped.\nconst HANDLED_FUNCTIONS = new Set([\n    0x00, // Set Brightness → light on/off/dim\n    0x11, // Ramp Brightness → dimmable light\n    // 0x01-0x04 (individual LED control) → unknown context until seen in the wild\n]);\n\nif (!HANDLED_FUNCTIONS.has(functionRaw)) {\n    const log = flow.get(\"unknownGenericIndicatorCmd\") || {};\n    if (!log[data_payload]) {\n        log[data_payload] = {\n            originalMessage: incomingPayload.originalMessage || null,\n            data_payload,\n            function_raw: functionRaw,\n            function: functionName,\n            instance,\n            group_raw: groupRaw,\n            groups,\n            brightness_raw: brightnessRaw,\n            count: 0,\n            first_seen: Date.now(),\n        };\n    }\n    log[data_payload].count++;\n    log[data_payload].last_seen = Date.now();\n    flow.set(\"unknownGenericIndicatorCmd\", log);\n    return null;\n}\n\nmsg.payload = {\n    ...incomingPayload,\n    dgn,\n    dgn_name: \"GENERIC_INDICATOR_COMMAND\",\n    instance,\n    group_raw: groupRaw,\n    groups,\n    is_group_command: isGroupCommand,\n    brightness_raw: brightnessRaw,\n    brightness,\n    bank_select: bankSelect,\n    duration_raw: durationRaw,\n    duration,\n    function_raw: functionRaw,\n    function: functionName,\n};\n\nreturn msg;\n",
+        "func": "// Decoder for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Input: msg.payload from decode_rvc_can (dgn, dgn_name, data_payload)\n// Output: decoded fields merged into payload, or null for unhandled function types.\n// Unhandled types are logged to flow context \"unknownGenericIndicatorCmd\" for future analysis.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n    node.warn(\"Missing required fields: dgn and/or data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length < 16) {\n    node.warn(\"Invalid data_payload: expected 8-byte hex string\");\n    return null;\n}\n\nconst d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));\nif (d.some(isNaN)) {\n    node.warn(\"Invalid hex in data_payload\");\n    return null;\n}\n\n// Byte 0: Instance\n// 1-250 = specific instance, 0 = all instances, 255 = no instances (use group)\nconst instance = d[0];\n\n// Byte 1: Group bitmap\n// Bits 0-6 correspond to groups 1-7 (0 bit = command applies to that group)\n// Bit 7 must be 0 for a group command; 0xFF = non-group command\nconst groupRaw = d[1];\nconst isGroupCommand = (groupRaw & 0x80) === 0;\nconst groups = [];\nif (isGroupCommand) {\n    for (let i = 0; i < 7; i++) {\n        if ((groupRaw & (1 << i)) === 0) {\n            groups.push(i + 1);\n        }\n    }\n}\n\n// Byte 2: Brightness (Table 5.3, 0-200, 0.5% per step)\nconst brightnessRaw = d[2];\nlet brightness;\nif (brightnessRaw <= 200) {\n    brightness = parseFloat((brightnessRaw * 0.5).toFixed(1));\n} else if (brightnessRaw === 255) {\n    brightness = \"Not Available\";\n} else {\n    brightness = \"Reserved\";\n}\n\n// Byte 3 bits 0-3: Bank Select (0-13; 0xF = banking not supported)\nconst bankSelect = d[3] & 0x0f;\n\n// Byte 4: Duration\nconst durationRaw = d[4];\nlet duration;\nif (durationRaw === 0) {\n    duration = \"Momentary\";\n} else if (durationRaw <= 240) {\n    duration = `${durationRaw}s`;\n} else if (durationRaw >= 241 && durationRaw <= 250) {\n    duration = `${durationRaw - 236}min`;\n} else if (durationRaw === 255) {\n    duration = \"Continuous\";\n} else {\n    duration = \"Reserved\";\n}\n\n// Byte 6: Function\nconst functionRaw = d[6];\nconst functionNames = {\n    0x00: \"Set Brightness\",\n    0x01: \"LED1 Off, LED2 Off\",\n    0x02: \"LED1 On, LED2 Off\",\n    0x03: \"LED1 Off, LED2 On\",\n    0x04: \"LED1 On, LED2 On\",\n    0x11: \"Ramp Brightness\",\n    0x21: \"Flash Alternate\",\n};\nconst functionName = functionNames[functionRaw] ?? `Unknown (${functionRaw})`;\n\n// Classification: only pass through function types we currently handle.\n// Everything else is logged for future analysis and dropped.\nconst HANDLED_FUNCTIONS = new Set([\n    0x00, // Set Brightness → light on/off/dim\n    0x11, // Ramp Brightness → dimmable light\n    // 0x01-0x04 (individual LED control) → unknown context until seen in the wild\n]);\n\nif (!HANDLED_FUNCTIONS.has(functionRaw)) {\n    const log = flow.get(\"unknownGenericIndicatorCmd\") || {};\n    if (!log[data_payload]) {\n        log[data_payload] = {\n            originalMessage: incomingPayload.originalMessage || null,\n            data_payload,\n            function_raw: functionRaw,\n            function: functionName,\n            instance,\n            group_raw: groupRaw,\n            groups,\n            brightness_raw: brightnessRaw,\n            count: 0,\n            first_seen: Date.now(),\n        };\n    }\n    log[data_payload].count++;\n    log[data_payload].last_seen = Date.now();\n    flow.set(\"unknownGenericIndicatorCmd\", log);\n    return null;\n}\n\nmsg.payload = {\n    ...incomingPayload,\n    dgn,\n    dgn_name: \"GENERIC_INDICATOR_COMMAND\",\n    instance,\n    group_raw: groupRaw,\n    groups,\n    is_group_command: isGroupCommand,\n    brightness_raw: brightnessRaw,\n    brightness,\n    bank_select: bankSelect,\n    duration_raw: durationRaw,\n    duration,\n    function_raw: functionRaw,\n    function: functionName,\n};\n\n// Persist state + brightness to file store (shared with encoder and optimistic updater)\nconst haState =\n    typeof brightnessRaw === \"number\" && brightnessRaw <= 200\n        ? brightnessRaw > 0\n            ? \"ON\"\n            : \"OFF\"\n        : null;\n\n// Resolve entity IDs from the decoded command\nconst entityTargets = [];\nif (instance >= 1 && instance <= 250) {\n    entityTargets.push(`switch_i_${instance}`);\n} else if (instance === 255 && isGroupCommand) {\n    for (const g of groups) {\n        entityTargets.push(`switch_g_${g}`);\n    }\n}\n\nfor (const eid of entityTargets) {\n    if (haState !== null) {\n        global.set(\"indicatorState_\" + eid, haState, \"file\");\n    }\n    if (\n        haState === \"ON\" &&\n        typeof brightnessRaw === \"number\" &&\n        brightnessRaw > 0\n    ) {\n        global.set(\"indicatorBrightness_\" + eid, brightnessRaw * 0.5, \"file\");\n    }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4629,12 +4636,12 @@
             },
             {
                 "t": "eq",
-                "v": " switch_i",
+                "v": "switch_i",
                 "vt": "str"
             },
             {
                 "t": "eq",
-                "v": " switch_g",
+                "v": "switch_g",
                 "vt": "str"
             },
             {
@@ -4898,7 +4905,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
         "x": 420,
-        "y": 149,
+        "y": 140,
         "wires": []
     },
     {
@@ -4970,7 +4977,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "encode_generic_indicator_command",
-        "func": "// Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Handles both routing keys:\n//   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)\n//   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)\n\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\n\nconst routingKey = msg.routingKey;\nconst instance = msg.instance; // instance number OR group number depending on routingKey\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// Build byte 0 (instance) and byte 1 (group bitmap)\nlet byte0, byte1;\n\nif (routingKey === \"switch_i\") {\n  if (instance < 1 || instance > 250) {\n    node.warn(\n      `[encode_generic_indicator_command] Instance out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = instance;\n  byte1 = 0xff; // non-group command\n} else if (routingKey === \"switch_g\") {\n  if (instance < 1 || instance > 7) {\n    node.warn(\n      `[encode_generic_indicator_command] Group out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = 0xff; // no specific instance (group command)\n  // Bit 7=0 (group command), bit (group-1)=0 (targets this group), all others=1\n  byte1 = 0x7f & ~(1 << (instance - 1));\n} else {\n  node.warn(\n    `[encode_generic_indicator_command] Unknown routingKey: ${routingKey}`,\n  );\n  return null;\n}\n\n// Parse HA command — JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightnessIn = msg.payload.brightness;\n\n// Resolve entity ID for dimmable/brightness lookups\nconst entityId =\n  routingKey === \"switch_g\" ? `switch_g_${instance}` : `switch_i_${instance}`;\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst isDimmable = dimmableIndicators.includes(entityId);\n\n// Determine brightness raw value (0-200 scale, 0.5% per step)\n// HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)\nlet brightnessRaw;\n\nif (command === \"OFF\") {\n  brightnessRaw = 0;\n} else if (brightnessIn !== undefined && brightnessIn > 0) {\n  brightnessRaw = Math.min(200, Math.round(brightnessIn * 2));\n} else if (isDimmable) {\n  const lastBrightness =\n    global.get(\"indicatorBrightness_\" + entityId, \"file\") || 100;\n  brightnessRaw = Math.min(200, Math.round(lastBrightness * 2));\n} else {\n  brightnessRaw = 200; // full brightness for non-dimmable ON\n}\n\n// Store last brightness (in 0-100% scale) for future recall\nif (command !== \"OFF\" && brightnessRaw > 0) {\n  global.set(\"indicatorBrightness_\" + entityId, brightnessRaw / 2, \"file\");\n}\n\n// Build 8-byte data payload per §6.26.2 Table 6.26.2b\nconst dataBytes = [\n  byte0, // Byte 0: Instance\n  byte1, // Byte 1: Group bitmap\n  brightnessRaw, // Byte 2: Brightness (0-200)\n  0xff, // Byte 3: Bank Select (0xFF = not supported)\n  0xff, // Byte 4: Duration (0xFF = continuous)\n  0xff, // Byte 5: Reserved\n  0x00, // Byte 6: Function (0x00 = Set Brightness)\n  0xff, // Byte 7: Reserved\n];\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
+        "func": "// Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)\n// Handles both routing keys:\n//   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)\n//   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)\n\nconst PRIORITY = 6;\nconst DGN = \"1FED9\";\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\n\nconst routingKey = msg.routingKey;\nconst instance = msg.instance; // instance number OR group number depending on routingKey\n\nif (typeof instance !== \"number\") {\n  node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);\n  return null;\n}\n\n// Build byte 0 (instance) and byte 1 (group bitmap)\nlet byte0, byte1;\n\nif (routingKey === \"switch_i\") {\n  if (instance < 1 || instance > 250) {\n    node.warn(\n      `[encode_generic_indicator_command] Instance out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = instance;\n  byte1 = 0xff; // non-group command\n} else if (routingKey === \"switch_g\") {\n  if (instance < 1 || instance > 7) {\n    node.warn(\n      `[encode_generic_indicator_command] Group out of range: ${instance}`,\n    );\n    return null;\n  }\n  byte0 = 0xff; // no specific instance (group command)\n  // Bit 7=0 (group command), bit (group-1)=0 (targets this group), all others=1\n  byte1 = 0x7f & ~(1 << (instance - 1));\n} else {\n  node.warn(\n    `[encode_generic_indicator_command] Unknown routingKey: ${routingKey}`,\n  );\n  return null;\n}\n\n// Parse HA command — JSON schema: msg.payload is always an object\nconst command = msg.payload.state;\nconst brightnessIn = msg.payload.brightness;\n\n// Resolve entity ID for dimmable/brightness lookups\nconst entityId =\n  routingKey === \"switch_g\" ? `switch_g_${instance}` : `switch_i_${instance}`;\nconst dimmableIndicators = global.get(\"dimmableIndicators\", \"file\") || [];\nconst isDimmable = dimmableIndicators.includes(entityId);\n\n// Determine brightness raw value (0-200 scale, 0.5% per step)\n// HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)\nlet brightnessRaw;\n\nif (command === \"OFF\") {\n  brightnessRaw = 0;\n} else if (brightnessIn !== undefined && brightnessIn > 0) {\n  brightnessRaw = Math.min(200, Math.round(brightnessIn * 2));\n} else if (isDimmable) {\n  const lastBrightness =\n    global.get(\"indicatorBrightness_\" + entityId, \"file\") || 100;\n  brightnessRaw = Math.min(200, Math.round(lastBrightness * 2));\n} else {\n  brightnessRaw = 200; // full brightness for non-dimmable ON\n}\n\n// Store last brightness (in 0-100% scale) and state for recall / optimistic update\nif (command !== \"OFF\" && brightnessRaw > 0) {\n  global.set(\"indicatorBrightness_\" + entityId, brightnessRaw / 2, \"file\");\n}\nglobal.set(\"indicatorState_\" + entityId, command, \"file\");\n\n// Optimistic HA state publish — no CAN echo expected for self-sent commands\nconst storedBrightness = global.get(\"indicatorBrightness_\" + entityId, \"file\");\n\nconst stateObj = { state: command };\nif (command === \"ON\") {\n  if (\n    isDimmable &&\n    typeof storedBrightness === \"number\" &&\n    storedBrightness > 0\n  ) {\n    stateObj.color_mode = \"brightness\";\n    stateObj.brightness = storedBrightness;\n  } else {\n    stateObj.color_mode = \"onoff\";\n  }\n}\n\n// Build 8-byte data payload per §6.26.2 Table 6.26.2b\nconst dataBytes = [\n  byte0, // Byte 0: Instance\n  byte1, // Byte 1: Group bitmap\n  brightnessRaw, // Byte 2: Brightness (0-200)\n  0xff, // Byte 3: Bank Select (0xFF = not supported)\n  0xff, // Byte 4: Duration (0xFF = continuous)\n  0xff, // Byte 5: Reserved\n  0x00, // Byte 6: Function (0x00 = Set Brightness)\n  0xff, // Byte 7: Reserved\n];\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// Send both through output 1: CAN frame to bridge, then optimistic HA state update\nreturn [\n  [\n    {\n      topic: \"can/send\",\n      payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n    },\n    {\n      topic: `homeassistant/light/${entityId}/state`,\n      payload: JSON.stringify(stateObj),\n      retain: true,\n    },\n  ],\n];\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5311,7 +5318,7 @@
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 145,
+        "y": 150,
         "wires": []
     },
     {
