@@ -253,7 +253,7 @@
             "8e350e2c0a0536b4"
         ],
         "x": 94,
-        "y": 859,
+        "y": 799,
         "w": 1722,
         "h": 402
     },
@@ -530,9 +530,9 @@
             "1c1403c14b577fb4",
             "43cd836c21f66b26",
             "7a1eed2a34490b2a",
-            "691871e1972d2296",
             "1bd7e1d4c5f3864a",
             "914be705da0531dd",
+            "691871e1972d2296",
             "8d93a86dc09f4c57"
         ],
         "x": 74,
@@ -1262,7 +1262,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 260,
-        "y": 900,
+        "y": 840,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1283,7 +1283,7 @@
         "finalize": "",
         "libs": [],
         "x": 710,
-        "y": 900,
+        "y": 840,
         "wires": [
             [
                 "55071115a3fe7c2c",
@@ -1310,7 +1310,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 890,
-        "y": 980,
+        "y": 920,
         "wires": [
             [
                 "6423c433e099d2a5"
@@ -1331,7 +1331,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 980,
+        "y": 920,
         "wires": [
             [
                 "b846bc1605dae821"
@@ -1366,7 +1366,7 @@
             "45414bacecada477"
         ],
         "x": 220,
-        "y": 980,
+        "y": 920,
         "wires": [
             [
                 "4e46ba83df00a31b"
@@ -1385,7 +1385,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1680,
-        "y": 900,
+        "y": 840,
         "wires": [],
         "l": true
     },
@@ -1403,7 +1403,7 @@
         "finalize": "",
         "libs": [],
         "x": 1110,
-        "y": 980,
+        "y": 920,
         "wires": [
             [
                 "a2334b77d3764815",
@@ -1467,7 +1467,7 @@
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 980,
+        "y": 920,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1488,7 +1488,7 @@
         "finalize": "",
         "libs": [],
         "x": 1380,
-        "y": 1020,
+        "y": 960,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1509,7 +1509,7 @@
         "finalize": "",
         "libs": [],
         "x": 1390,
-        "y": 1060,
+        "y": 1000,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1529,7 +1529,7 @@
             "a58b5f05c8346eab"
         ],
         "x": 1420,
-        "y": 1220,
+        "y": 1160,
         "wires": [],
         "l": true
     },
@@ -1556,7 +1556,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1140,
-        "y": 1080,
+        "y": 1020,
         "wires": [
             [
                 "73abad3deeed31e8",
@@ -1583,7 +1583,7 @@
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 1100,
+        "y": 1040,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1604,7 +1604,7 @@
         "finalize": "",
         "libs": [],
         "x": 1390,
-        "y": 1140,
+        "y": 1080,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -1678,7 +1678,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 330,
-        "y": 137,
+        "y": 117,
         "wires": []
     },
     {
@@ -2094,7 +2094,7 @@
         "finalize": "",
         "libs": [],
         "x": 1390,
-        "y": 1180,
+        "y": 1120,
         "wires": [
             [
                 "a2334b77d3764815"
@@ -3620,7 +3620,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
         "x": 280,
-        "y": 226,
+        "y": 200,
         "wires": []
     },
     {
@@ -4535,8 +4535,8 @@
         "type": "note",
         "z": "7ecdba18640c1184",
         "content": "# Commands\nYour RV's wall panels send commands to lights over the CAN bus.\nThis flow listens to that traffic to discover lights and infer\ntheir state, even when the lights don't broadcast a status response.\nIf a panel says \"turn on light 17,\" we now know light 17 exists and is on.",
-        "x": 330,
-        "y": 177,
+        "x": 310,
+        "y": 140,
         "wires": []
     },
     {
@@ -4923,7 +4923,7 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
         "x": 420,
-        "y": 149,
+        "y": 120,
         "wires": []
     },
     {
@@ -5091,7 +5091,7 @@
         "z": "384249601e37ba22",
         "g": "5811945b9bad79dc",
         "name": "",
-        "property": "payload",
+        "property": "payload.dgn_name",
         "propertyType": "msg",
         "rules": [
             {
@@ -5156,8 +5156,8 @@
                 "a6985e36ac9c8f1d"
             ],
             [
-                "691871e1972d2296",
-                "a6985e36ac9c8f1d"
+                "a6985e36ac9c8f1d",
+                "691871e1972d2296"
             ],
             [
                 "871009c15ad9a99b",
@@ -5314,31 +5314,13 @@
         "wires": []
     },
     {
-        "id": "691871e1972d2296",
-        "type": "debug",
-        "z": "384249601e37ba22",
-        "g": "5811945b9bad79dc",
-        "name": "AQUAHOT_STATUS_1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 590,
-        "y": 360,
-        "wires": []
-    },
-    {
         "id": "8ae5ee1969cf9219",
         "type": "note",
         "z": "384249601e37ba22",
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 140,
+        "y": 120,
         "wires": []
     },
     {
@@ -5358,6 +5340,24 @@
             ]
         ],
         "l": true
+    },
+    {
+        "id": "691871e1972d2296",
+        "type": "debug",
+        "z": "384249601e37ba22",
+        "g": "5811945b9bad79dc",
+        "name": "AQUAHOT_STATUS_1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 360,
+        "wires": []
     },
     {
         "id": "8d93a86dc09f4c57",
@@ -5813,7 +5813,7 @@
         "name": "",
         "content": "# Victron\n## For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 185,
+        "y": 140,
         "wires": []
     },
     {
@@ -6498,7 +6498,7 @@
         "name": "",
         "content": "# Micro-Air Thermostats\n## For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 177,
+        "y": 194,
         "wires": []
     },
     {
