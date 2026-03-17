@@ -1678,7 +1678,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 330,
-        "y": 168,
+        "y": 185,
         "wires": []
     },
     {
@@ -3620,7 +3620,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
         "x": 280,
-        "y": 226,
+        "y": 239,
         "wires": []
     },
     {
@@ -3839,7 +3839,7 @@
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
         "name": "unique_floor_heat",
-        "func": "// Unique Filter for Floor Heat\n\n// --- Configuration ---\nconst instanceKey = \"uniqueFloorHeat\"; // Session-only\nconst levelsKey = \"uniqueFloorHeatLevels\"; // Persistent\n\n// Get data from payload ---\nconst instanceId = msg.payload.instance;\nconst raw_setpoint = msg.payload.raw_setpoint;\nconst schedule_mode = msg.payload.schedule_mode; // \"Enabled\" or \"Disabled\"\n\n// Validate input ---\nif (typeof instanceId !== \"number\") {\n  return null; // No instance, can't proceed\n}\n\n// We only want to discover a level if:\n// The setpoint is within a plausible floor heat range (32°F–120°F)\n// and the schedule_mode is \"Enabled\"\n// RVC raw range: 8746 (32°F/0°C) to 12576 (120°F/~49°C)\nconst isValidLevel =\n  typeof raw_setpoint === \"number\" &&\n  raw_setpoint >= 8746 &&\n  raw_setpoint <= 12576 &&\n  schedule_mode === \"Enabled\";\n\n// Get context lists ---\nlet instanceList = flow.get(instanceKey) || [];\nlet levelList = global.get(levelsKey, \"file\") || [];\n\nlet isNewInstance = false;\nlet isNewLevel = false;\n\n// Process Instance ---\nif (!instanceList.includes(instanceId)) {\n  isNewInstance = true;\n  instanceList.push(instanceId);\n  flow.set(instanceKey, instanceList); // Save to session context\n}\n\n// Process Level ---\nif (isValidLevel && !levelList.includes(raw_setpoint)) {\n  isNewLevel = true;\n  levelList.push(raw_setpoint);\n  levelList.sort((a, b) => a - b);\n  global.set(levelsKey, levelList, \"file\"); // Save to persistent context\n  node.log(`Discovered new floor heat level: ${raw_setpoint}`);\n}\n\n// Output Logic ---\nif (!isNewInstance && !isNewLevel) {\n  return null; // Nothing new, stop here\n}\n\nif (isNewLevel) {\n  //node.warn(`New level found. Sending config updates for all known instances: ${instanceList.join(', ')}`);\n\n  let outputs = [];\n  for (const inst of instanceList) {\n    outputs.push({ payload: { instance: inst } });\n  }\n  return outputs;\n}\n\nif (isNewInstance) {\n  return { payload: { instance: instanceId } };\n}\n\nreturn null;\n",
+        "func": "// Unique Filter for Floor Heat\n\n// --- Configuration ---\nconst instanceKey = \"uniqueFloorHeat\"; // Session-only\nconst levelsKey = \"uniqueFloorHeatLevels\"; // Persistent\n\n// Get data from payload ---\nconst instanceId = msg.payload.instance;\nconst raw_setpoint = msg.payload.raw_setpoint;\n\n// Validate input ---\nif (typeof instanceId !== \"number\") {\n  return null; // No instance, can't proceed\n}\n\n// We only want to discover a level if:\n// The setpoint is within a plausible floor heat range (32°F–120°F)\n// RVC raw range: 8746 (32°F/0°C) to 12576 (120°F/~49°C)\n// Note: schedule_mode is not checked because the store level is always\n// reported with schedule_mode \"Disabled\", preventing its discovery.\nconst isValidLevel =\n  typeof raw_setpoint === \"number\" &&\n  raw_setpoint >= 8746 &&\n  raw_setpoint <= 12576;\n\n// Get context lists ---\nlet instanceList = flow.get(instanceKey) || [];\nlet levelList = global.get(levelsKey, \"file\") || [];\n\nlet isNewInstance = false;\nlet isNewLevel = false;\n\n// Process Instance ---\nif (!instanceList.includes(instanceId)) {\n  isNewInstance = true;\n  instanceList.push(instanceId);\n  flow.set(instanceKey, instanceList); // Save to session context\n}\n\n// Process Level ---\nif (isValidLevel && !levelList.includes(raw_setpoint)) {\n  isNewLevel = true;\n  levelList.push(raw_setpoint);\n  levelList.sort((a, b) => a - b);\n  global.set(levelsKey, levelList, \"file\"); // Save to persistent context\n  node.log(`Discovered new floor heat level: ${raw_setpoint}`);\n}\n\n// Output Logic ---\nif (!isNewInstance && !isNewLevel) {\n  return null; // Nothing new, stop here\n}\n\nif (isNewLevel) {\n  //node.warn(`New level found. Sending config updates for all known instances: ${instanceList.join(', ')}`);\n\n  let outputs = [];\n  for (const inst of instanceList) {\n    outputs.push({ payload: { instance: inst } });\n  }\n  return outputs;\n}\n\nif (isNewInstance) {\n  return { payload: { instance: instanceId } };\n}\n\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
