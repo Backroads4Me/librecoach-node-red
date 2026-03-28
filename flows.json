@@ -1678,7 +1678,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 310,
-        "y": 137,
+        "y": 140,
         "wires": []
     },
     {
@@ -3610,7 +3610,8 @@
         "y": 1820,
         "wires": [
             [
-                "647ce51ee8a295c8"
+                "647ce51ee8a295c8",
+                "3f467bbd66a21eb9"
             ]
         ]
     },
@@ -3620,7 +3621,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
         "x": 280,
-        "y": 265,
+        "y": 278,
         "wires": []
     },
     {
@@ -4046,8 +4047,7 @@
         "y": 1880,
         "wires": [
             [
-                "d3a13b531babee66",
-                "3f467bbd66a21eb9"
+                "d3a13b531babee66"
             ]
         ]
     },
@@ -4160,8 +4160,8 @@
         "links": [
             "914be705da0531dd"
         ],
-        "x": 1530,
-        "y": 1880,
+        "x": 1230,
+        "y": 1820,
         "wires": [],
         "l": true
     },
@@ -5320,7 +5320,7 @@
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 135,
+        "y": 140,
         "wires": []
     },
     {
