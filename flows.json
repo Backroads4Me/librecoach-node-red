@@ -198,7 +198,7 @@
             "48e6dda2b2d9575e"
         ],
         "x": 694,
-        "y": 1999,
+        "y": 2039,
         "w": 492,
         "h": 142
     },
@@ -1055,7 +1055,7 @@
         "z": "292e70a6ba25b323",
         "g": "f09f79586501cb0b",
         "name": "decode_rvc_can",
-        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for Aqua-Hot proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND_1\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS_1\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_1\";\n  } else if (lookupPgn === \"6F00\") {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  } else if (lookupPgn === \"6C00\") {\n    dgn_name = \"AQUAHOT_STATUS_2\";\n  } else if (lookupPgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_2\";\n  } else if (lookupPgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_SYSTEM_STATUS_2\";\n  } else if (lookupPgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_COMMAND_2\";\n  } else if (pgn.startsWith(\"EF\")) {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\n// Bypass RBE/deduplication exclusively for DC_DIMMER_COMMAND_2 \"Toggle\" buttons.\n// Byte 3 equals: 0x05 (Toggle). Other commands will naturally change byte values.\nif (dgn_name === \"DC_DIMMER_COMMAND_2\" && data_payload.length >= 8) {\n  const cmdByte = parseInt(data_payload.substring(6, 8), 16);\n  if (cmdByte === 0x05) {\n    msg.payload._ts = Date.now();\n  }\n}\n\nreturn msg;\n",
+        "func": "// RV-C CAN Message Parser\n// Decodes a raw CAN message to output only the fields needed for\n// downstream routing (dgn_name) and decoding (data_payload).\n\nconst originalMessage = msg.payload;\n\n// Validate input\nif (!originalMessage || typeof originalMessage !== \"string\") {\n  node.warn(\n    \"Invalid message payload: expected string, got \" + typeof originalMessage,\n  );\n  return null;\n}\nconst dgnMap = global.get(\"dgnMap\");\nif (!dgnMap) {\n  node.error(\n    \"dgnMap not found in global context. Ensure the map is initialized.\",\n  );\n  return null;\n}\n\n// Parse CAN message format: CANID#PAYLOAD\nconst parts = originalMessage.split(\"#\");\nif (parts.length !== 2) {\n  node.warn(\"Invalid CAN message format: \" + originalMessage);\n  return null;\n}\nconst canIdHex = parts[0];\nconst data_payload = parts[1];\nconst canIdNum = parseInt(canIdHex, 16);\n\nif (isNaN(canIdNum)) {\n  node.warn(\"Invalid CAN ID: \" + canIdHex);\n  return null;\n}\n\n// Extract PGN (4-digit) and DGN (5-digit) keys\n\n// Get the 4-digit J1939 PGN (PF + PS). This value is consistent.\nconst pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)\nconst ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)\nlet pgn = ((pf << 8) | ps).toString(16).toUpperCase();\n\n// Ensure 4 characters for known PGNs (e.g., EF4D)\nwhile (pgn.length < 4) {\n  pgn = \"0\" + pgn;\n}\n\n// PDU1 handling: For PF < 240, PS is destination address, not part of DGN\n// Replace PS with 00 for lookup (with exceptions)\nlet lookupPgn = pgn;\nif (pf < 0xf0) {\n  // PDU1 format\n  if (pf === 0xef) {\n    // Exception: Proprietary messages keep PS (EF4D, EF64, EF9F)\n    lookupPgn = pgn;\n  } else if (pf === 0xec || pf === 0xeb) {\n    // Exception: Multi-packet transport uses FF\n    lookupPgn = pf.toString(16).toUpperCase() + \"FF\";\n  } else {\n    // Standard PDU1: Replace PS with 00\n    lookupPgn = pf.toString(16).toUpperCase() + \"00\";\n  }\n  // Ensure 4 characters\n  while (lookupPgn.length < 4) {\n    lookupPgn = \"0\" + lookupPgn;\n  }\n}\n\n// The lookup DGN starts as the lookup PGN\nlet dgn = lookupPgn;\nlet dgn_name;\n\n// --- DGN Conversion and Primary Lookup ---\n// Extract Data Page (DP) bit from CAN ID (bit 24)\nconst dp = (canIdNum >> 24) & 1;\nif (dp) {\n  dgn = \"1\" + lookupPgn;\n}\ndgn_name = dgnMap.get(dgn);\n\n// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)\nlet destination_address = null;\nif (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {\n  destination_address = ps;\n}\n\n// Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).\n// If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.\nif (!dgn_name && dp === 0 && pf >= 0xf0) {\n  const altDgn = \"1\" + lookupPgn;\n  const altName = dgnMap.get(altDgn);\n  if (altName) {\n    dgn = altDgn;\n    dgn_name = altName;\n  }\n}\n\n// Fallback logic for proprietary PGNs not in lookup table\nif (!dgn_name) {\n  if (pgn === \"EF64\") {\n    dgn_name = \"AQUAHOT_COMMAND_1\";\n  } else if (pgn === \"EF9F\") {\n    dgn_name = \"AQUAHOT_STATUS_1\";\n  } else if (pgn === \"EF4D\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_1\";\n  } else if (lookupPgn === \"6F00\") {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  } else if (lookupPgn === \"6C00\") {\n    dgn_name = \"AQUAHOT_STATUS_2\";\n  } else if (lookupPgn === \"FF01\") {\n    dgn_name = \"AQUAHOT_THERMOSTAT_STATUS_2\";\n  } else if (lookupPgn === \"FF2E\") {\n    dgn_name = \"AQUAHOT_SYSTEM_STATUS_2\";\n  } else if (lookupPgn === \"FF2F\") {\n    dgn_name = \"AQUAHOT_COMMAND_2\";\n  } else if (lookupPgn === \"BF00\") {\n    dgn_name = \"WIRELESS_PANEL_SIGNAL_STATUS\";\n  } else if (dgn === \"1AA00\") {\n    dgn_name = \"WIRELESS_PANEL_QUALITY_STATUS\";\n  } else if (pgn.startsWith(\"EF\")) {\n    dgn_name = \"AQUAHOT_UNUSED\";\n  }\n}\n\n// Final output\nif (!dgn_name) {\n  dgn_name = \"UNKNOWN\";\n}\n\nconst instance = parseInt(data_payload.substring(0, 2), 16);\n\nmsg.payload = {\n  originalMessage: originalMessage,\n  dgn: dgn,\n  dgn_name: dgn_name,\n  instance: instance,\n  destination_address: destination_address,\n  data_payload: data_payload,\n};\n\nmsg.filter_key = `${dgn_name}_${instance}`;\n\n// Bypass RBE/deduplication exclusively for DC_DIMMER_COMMAND_2 \"Toggle\" buttons.\n// Byte 3 equals: 0x05 (Toggle). Other commands will naturally change byte values.\nif (dgn_name === \"DC_DIMMER_COMMAND_2\" && data_payload.length >= 8) {\n  const cmdByte = parseInt(data_payload.substring(6, 8), 16);\n  if (cmdByte === 0x05) {\n    msg.payload._ts = Date.now();\n  }\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2672,12 +2672,17 @@
                 "vt": "str"
             },
             {
+                "t": "cont",
+                "v": "WIRELESS_PANEL",
+                "vt": "str"
+            },
+            {
                 "t": "else"
             }
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 36,
+        "outputs": 37,
         "x": 420,
         "y": 800,
         "wires": [
@@ -2785,6 +2790,9 @@
             ],
             [
                 "a037b4692cc9f1dd"
+            ],
+            [
+                "e7fac0a7c08bbb90"
             ],
             [
                 "b797e5a52b6db5b4"
@@ -3368,7 +3376,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 820,
-        "y": 2040,
+        "y": 2080,
         "wires": [
             [
                 "09640adb1fd08fbb"
@@ -3389,7 +3397,7 @@
         "finalize": "",
         "libs": [],
         "x": 1040,
-        "y": 2040,
+        "y": 2080,
         "wires": [
             []
         ]
@@ -3408,7 +3416,7 @@
         "finalize": "",
         "libs": [],
         "x": 800,
-        "y": 2100,
+        "y": 2140,
         "wires": [
             [
                 "48e6dda2b2d9575e"
@@ -3430,7 +3438,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1050,
-        "y": 2100,
+        "y": 2140,
         "wires": []
     },
     {
@@ -4186,6 +4194,64 @@
         "libs": [],
         "x": 1230,
         "y": 1040,
+        "wires": [
+            [
+                "d3a13b531babee66"
+            ]
+        ]
+    },
+    {
+        "id": "e7fac0a7c08bbb90",
+        "type": "function",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "decode_panel_signal",
+        "func": "// Decoder for proprietary wireless panel signal messages.\n// Handles two coach-specific DGNs observed in the field:\n// - BF00h: per-panel live RF metric, likely raw signal strength\n// - 1AA00h: per-panel coarse signal-quality companion, likely display bars/state\n\nfunction toSigned8(value) {\n    return value > 127 ? value - 256 : value;\n}\n\nfunction toUint16LE(lowByte, highByte) {\n    return lowByte | (highByte << 8);\n}\n\nfunction toSigned16(value) {\n    return value > 32767 ? value - 65536 : value;\n}\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    node.warn(\"Invalid payload: expected object\");\n    return null;\n}\n\nconst incomingPayload = msg.payload;\nconst { dgn, data_payload } = incomingPayload;\n\nif (!dgn || !data_payload) {\n    node.warn(\"Missing required fields: dgn and/or data_payload\");\n    return null;\n}\n\nif (typeof data_payload !== \"string\" || data_payload.length < 16) {\n    node.warn(\"Invalid data_payload: expected 8-byte hex string\");\n    return null;\n}\n\nif (dgn !== \"BF00\" && dgn !== \"1AA00\") {\n    node.warn(`[decode_panel_signal] Unexpected DGN: ${dgn}`);\n    return null;\n}\n\nconst d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));\nif (d.some(isNaN)) {\n    node.warn(\"Invalid hex in data_payload\");\n    return null;\n}\n\nconst instance = d[0];\n\nif (dgn === \"BF00\") {\n    const metricByte1Raw = d[1];\n    const metricByte2Raw = d[2];\n    const metricByte1Signed = toSigned8(metricByte1Raw);\n    const metricUint16 = toUint16LE(metricByte1Raw, metricByte2Raw);\n    const metricInt16 = toSigned16(metricUint16);\n    const metricInt16Div100 = parseFloat((metricInt16 / 100).toFixed(2));\n\n    let likelyEncoding = \"unknown\";\n    let wireless_strength_candidate_dbm = null;\n\n    if (metricByte2Raw === 0xff) {\n        likelyEncoding = \"signed_int8_dbm_candidate\";\n        wireless_strength_candidate_dbm = metricByte1Signed;\n    } else if (metricByte2Raw >= 0xe0 && metricByte2Raw <= 0xef) {\n        likelyEncoding = \"signed_int16_le_div100_dbm_candidate\";\n        wireless_strength_candidate_dbm = metricInt16Div100;\n    }\n\n    msg.payload = {\n        ...incomingPayload,\n        dgn_name: \"WIRELESS_PANEL_SIGNAL_STATUS\",\n        instance,\n        signal_metric_byte_1_raw: metricByte1Raw,\n        signal_metric_byte_1_signed: metricByte1Signed,\n        signal_metric_byte_2_raw: metricByte2Raw,\n        signal_metric_uint16_le_raw: metricUint16,\n        signal_metric_int16_le_signed: metricInt16,\n        signal_metric_int16_le_div100: metricInt16Div100,\n        likely_encoding: likelyEncoding,\n        wireless_strength_candidate_dbm,\n        reserved_byte_3_raw: d[3],\n        reserved_byte_4_raw: d[4],\n        reserved_byte_5_raw: d[5],\n        reserved_byte_6_raw: d[6],\n        reserved_byte_7_raw: d[7],\n    };\n\n    return msg;\n}\n\nconst qualityRaw = d[2];\n\nmsg.payload = {\n    ...incomingPayload,\n    dgn_name: \"WIRELESS_PANEL_QUALITY_STATUS\",\n    instance,\n    status_byte_1_raw: d[1],\n    quality_bucket_raw: qualityRaw,\n    quality_bucket_high_nibble: (qualityRaw >> 4) & 0x0f,\n    quality_bucket_low_nibble: qualityRaw & 0x0f,\n    likely_meaning: \"quantized_signal_quality_candidate\",\n    status_byte_3_raw: d[3],\n    reserved_byte_4_raw: d[4],\n    reserved_byte_5_raw: d[5],\n    reserved_byte_6_raw: d[6],\n    reserved_byte_7_raw: d[7],\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 2000,
+        "wires": [
+            [
+                "be06adcac3ccd7fc",
+                "5c41990fd6beb72e"
+            ]
+        ]
+    },
+    {
+        "id": "5c41990fd6beb72e",
+        "type": "debug",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "decode_panel_signal",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1420,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "be06adcac3ccd7fc",
+        "type": "function",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "status_panel_signal",
+        "func": "// HA Status Publisher for proprietary wireless panel signal messages.\n// Self-creating: publishes MQTT discovery on first valid reading per panel instance.\n// Handles:\n// - WIRELESS_PANEL_SIGNAL_STATUS (BF00): signal strength candidate sensor\n// - WIRELESS_PANEL_QUALITY_STATUS (1AA00): quality bucket sensor\n// Output 1: MQTT messages (discovery + state)\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n    return null;\n}\n\nconst p = msg.payload;\nconst instance = p.instance;\nconst dgnName = p.dgn_name;\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) {\n    return null;\n}\n\nif (\n    dgnName !== \"WIRELESS_PANEL_SIGNAL_STATUS\" &&\n    dgnName !== \"WIRELESS_PANEL_QUALITY_STATUS\"\n) {\n    return null;\n}\n\nconst messages = [];\nconst componentType = \"sensor\";\nconst CREATED_KEY = \"panelSignalCreated\";\nconst created = flow.get(CREATED_KEY) || {};\nconst device = {\n    identifiers: [\"librecoach-panels\"],\n    name: \"Panels\",\n    manufacturer: \"LibreCoach\",\n};\n\nfunction ensureDiscovery(entityId, config) {\n    if (created[entityId]) {\n        return;\n    }\n\n    messages.push({\n        topic: `homeassistant/${componentType}/${entityId}/config`,\n        payload: config,\n    });\n\n    created[entityId] = true;\n}\n\nif (dgnName === \"WIRELESS_PANEL_SIGNAL_STATUS\") {\n    const signal = p.wireless_strength_candidate_dbm;\n\n    if (typeof signal === \"number\") {\n        const entityId = `panel_${instance}_signal_strength`;\n        const stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n        ensureDiscovery(entityId, {\n            name: `Panel ${instance} Signal Strength`,\n            unique_id: entityId,\n            default_entity_id: `sensor.${entityId}`,\n            icon: \"mdi:signal\",\n            state_topic: stateTopic,\n            unit_of_measurement: \"dBm\",\n            state_class: \"measurement\",\n            entity_category: \"diagnostic\",\n            value_template: \"{{ value | float | round(2) }}\",\n            device,\n        });\n\n        messages.push({\n            topic: stateTopic,\n            payload: signal,\n        });\n    }\n}\n\nif (dgnName === \"WIRELESS_PANEL_QUALITY_STATUS\") {\n    const quality = p.quality_bucket_raw;\n\n    if (typeof quality === \"number\") {\n        const entityId = `panel_${instance}_signal_quality`;\n        const stateTopic = `homeassistant/${componentType}/${entityId}/state`;\n\n        ensureDiscovery(entityId, {\n            name: `Panel ${instance} Signal Quality`,\n            unique_id: entityId,\n            default_entity_id: `sensor.${entityId}`,\n            icon: \"mdi:wifi-strength-2\",\n            state_topic: stateTopic,\n            entity_category: \"diagnostic\",\n            value_template: \"{{ value | int }}\",\n            device,\n        });\n\n        messages.push({\n            topic: stateTopic,\n            payload: quality,\n        });\n    }\n}\n\nif (messages.length === 0) {\n    return null;\n}\n\nflow.set(CREATED_KEY, created);\n\nreturn [messages];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 2000,
         "wires": [
             [
                 "d3a13b531babee66"
