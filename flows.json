@@ -95,7 +95,7 @@
         "id": "aea9d97e0563bd83",
         "type": "group",
         "z": "b3d80c5dc947ec88",
-        "name": "Home Assistant message encoding",
+        "name": "Home Assistant command encoding",
         "style": {
             "stroke": "#777777",
             "label": true
@@ -114,8 +114,6 @@
             "ed9920dce79a233a",
             "a8882b1f35300448",
             "ae2d2a4f790d7cf9",
-            "b09974dcd1646951",
-            "9a4eac9b74adce8e",
             "e25c9c82905dc476",
             "eea2c8f34cb0db28",
             "a52b0f41097296b1"
@@ -123,7 +121,7 @@
         "x": 114,
         "y": 259,
         "w": 1312,
-        "h": 562
+        "h": 482
     },
     {
         "id": "3c819b7900145438",
@@ -482,10 +480,11 @@
             "e1cc8c52948f9b2a",
             "52b505b69f88888d",
             "e2335c226769f307",
-            "b104a7e82aefcb21"
+            "b104a7e82aefcb21",
+            "ab025c05d155f4ee"
         ],
         "x": 114,
-        "y": 339,
+        "y": 319,
         "w": 1412,
         "h": 522
     },
@@ -659,7 +658,7 @@
             "a58b5f05c8346eab"
         ],
         "x": 1034,
-        "y": 579,
+        "y": 559,
         "w": 452,
         "h": 142
     },
@@ -720,6 +719,29 @@
         "y": 1819,
         "w": 432,
         "h": 82
+    },
+    {
+        "id": "7183c5f0ad762adb",
+        "type": "group",
+        "z": "b3d80c5dc947ec88",
+        "name": "Home Assistant climate encoding",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "d95299a44e1d7ed5",
+            "e19247ab204a8e12",
+            "31e6105322d72319",
+            "a71ac1bd86bd3e13",
+            "83a24d85bf644847",
+            "755a5ee01bb1179d",
+            "51fdd54bd04e39e2"
+        ],
+        "x": 114,
+        "y": 819,
+        "w": 1292,
+        "h": 202
     },
     {
         "id": "80727e60a251c36c",
@@ -997,7 +1019,8 @@
         "name": "HA in",
         "mode": "link",
         "links": [
-            "a3b957142479c075"
+            "a3b957142479c075",
+            "5966b26c1bd279e3"
         ],
         "x": 570,
         "y": 380,
@@ -1442,7 +1465,8 @@
         "links": [
             "a2334b77d3764815",
             "6aa079d768e1571c",
-            "52b505b69f88888d"
+            "52b505b69f88888d",
+            "d95299a44e1d7ed5"
         ],
         "x": 230,
         "y": 600,
@@ -1678,7 +1702,7 @@
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
         "x": 290,
-        "y": 120,
+        "y": 137,
         "wires": []
     },
     {
@@ -3410,23 +3434,6 @@
         "wires": []
     },
     {
-        "id": "d0e2cc417cf65b90",
-        "type": "debug",
-        "z": "3e5f038a4f5a8b9a",
-        "name": "THERMOSTAT_STATUS_1",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1260,
-        "y": 1040,
-        "wires": []
-    },
-    {
         "id": "ccec30ad0f32bbdf",
         "type": "function",
         "z": "3e5f038a4f5a8b9a",
@@ -3442,7 +3449,7 @@
         "y": 1040,
         "wires": [
             [
-                "d0e2cc417cf65b90"
+                "6836e28529385aee"
             ]
         ]
     },
@@ -3621,7 +3628,7 @@
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
         "x": 280,
-        "y": 278,
+        "y": 291,
         "wires": []
     },
     {
@@ -4166,6 +4173,26 @@
         "l": true
     },
     {
+        "id": "6836e28529385aee",
+        "type": "function",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "status_thermostat",
+        "func": "// HA Status Publisher for THERMOSTAT_STATUS_1 (1FFE2)\n// Self-creating: publishes MQTT discovery on first valid reading per zone instance.\n// Creates a climate entity with mode, fan, and dual setpoint control.\n\nif (!msg.payload || typeof msg.payload !== \"object\") {\n  node.warn(\"Invalid payload: expected object\");\n  return null;\n}\n\nconst p = msg.payload;\nconst instance = p.instance;\n\nif (typeof instance !== \"number\" || instance < 1 || instance > 250) return null;\nif (p.operating_mode === undefined) return null;\n\n// === RV-C → HA mode mapping ===\n\nconst MODE_MAP = {\n  Off: \"off\",\n  Cool: \"cool\",\n  Heat: \"heat\",\n  Auto: \"heat_cool\",\n  \"Fan Only\": \"fan_only\",\n  \"Aux Heat\": \"heat\",\n  \"Window Defrost\": \"dry\",\n};\n\nconst haMode = MODE_MAP[p.operating_mode] || \"off\";\n\n// === RV-C → HA fan mode mapping ===\n// Fan speed is raw uint8 (0-200 at 0.5% resolution): 0=auto, 100=50%, 200=100%\n\nlet haFanMode = \"auto\";\nif (p.fan_mode === \"On\" && typeof p.fan_speed === \"number\" && p.fan_speed > 0) {\n  haFanMode = p.fan_speed > 100 ? \"high\" : \"low\";\n}\n\n// === Entity identifiers ===\n\nconst entityId = `thermostat_zone_${instance}`;\nconst baseTopic = `homeassistant/climate/${entityId}`;\n\nconst device = {\n  identifiers: [\"librecoach-climate\"],\n  name: \"Climate\",\n  manufacturer: \"LibreCoach\",\n};\n\n// === Flow context: track entity creation ===\n\nconst CREATED_KEY = \"thermostatClimateCreated\";\nconst created = flow.get(CREATED_KEY) || {};\nconst messages = [];\n\n// === Create climate entity on first valid reading ===\n\nif (!created[instance]) {\n  messages.push({\n    topic: `${baseTopic}/config`,\n    payload: {\n      name: `Thermostat Zone ${instance}`,\n      unique_id: entityId,\n      default_entity_id: `climate.${entityId}`,\n      modes: [\"off\", \"cool\", \"heat\", \"heat_cool\", \"fan_only\", \"dry\"],\n      fan_modes: [\"auto\", \"low\", \"high\"],\n      mode_state_topic: `${baseTopic}/mode/state`,\n      mode_command_topic: `${baseTopic}/mode/set`,\n      fan_mode_state_topic: `${baseTopic}/fan/state`,\n      fan_mode_command_topic: `${baseTopic}/fan/set`,\n      temperature_state_topic: `${baseTopic}/temp/state`,\n      temperature_command_topic: `${baseTopic}/temp/set`,\n      temperature_high_state_topic: `${baseTopic}/temp_high/state`,\n      temperature_high_command_topic: `${baseTopic}/temp_high/set`,\n      temperature_low_state_topic: `${baseTopic}/temp_low/state`,\n      temperature_low_command_topic: `${baseTopic}/temp_low/set`,\n      current_temperature_topic: `homeassistant/sensor/thermostat_ambient_zone${instance}/state`,\n      action_topic: `${baseTopic}/action/state`,\n      temperature_unit: \"F\",\n      temp_step: 1,\n      device,\n    },\n  });\n  created[instance] = true;\n  flow.set(CREATED_KEY, created);\n}\n\n// === Publish mode ===\n\nmessages.push({ topic: `${baseTopic}/mode/state`, payload: haMode });\n\n// === Publish fan mode ===\n\nmessages.push({ topic: `${baseTopic}/fan/state`, payload: haFanMode });\n\n// === Publish setpoints ===\n\n// Single setpoint: depends on current mode\nif (haMode === \"heat\" && typeof p.setpoint_heat === \"number\") {\n  messages.push({ topic: `${baseTopic}/temp/state`, payload: p.setpoint_heat });\n} else if (typeof p.setpoint_cool === \"number\") {\n  messages.push({ topic: `${baseTopic}/temp/state`, payload: p.setpoint_cool });\n}\n\n// Dual setpoints (for heat_cool mode)\nif (typeof p.setpoint_heat === \"number\") {\n  messages.push({\n    topic: `${baseTopic}/temp_low/state`,\n    payload: p.setpoint_heat,\n  });\n}\nif (typeof p.setpoint_cool === \"number\") {\n  messages.push({\n    topic: `${baseTopic}/temp_high/state`,\n    payload: p.setpoint_cool,\n  });\n}\n\n// === Publish action (best-effort from mode — no compressor feedback available) ===\n\nconst ACTION_MAP = {\n  off: \"off\",\n  cool: \"cooling\",\n  heat: \"heating\",\n  heat_cool: \"idle\",\n  fan_only: \"fan\",\n  dry: \"drying\",\n};\nmessages.push({\n  topic: `${baseTopic}/action/state`,\n  payload: ACTION_MAP[haMode] || \"idle\",\n});\n\n// === Cache state for encoder ===\n\nglobal.set(\n  `thermostat_zone_${instance}_status`,\n  {\n    operating_mode: p.operating_mode,\n    raw_b1: p.raw_b1,\n    raw_fan_speed: p.raw_fan_speed,\n    raw_setpoint_heat: p.raw_setpoint_heat,\n    raw_setpoint_cool: p.raw_setpoint_cool,\n  },\n  \"file\",\n);\n\nreturn [messages];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 1040,
+        "wires": [
+            [
+                "d3a13b531babee66"
+            ]
+        ]
+    },
+    {
         "id": "b2cbbdbaab1fc227",
         "type": "inject",
         "z": "7ecdba18640c1184",
@@ -4536,7 +4563,7 @@
         "z": "7ecdba18640c1184",
         "content": "# Commands\nYour RV's wall panels send commands to lights over the CAN bus.\nThis flow listens to that traffic to discover lights and infer\ntheir state, even when the lights don't broadcast a status response.\nIf a panel says \"turn on light 17,\" we now know light 17 exists and is on.",
         "x": 310,
-        "y": 174,
+        "y": 191,
         "wires": []
     },
     {
@@ -4545,7 +4572,7 @@
         "z": "b3d80c5dc947ec88",
         "g": "aea9d97e0563bd83",
         "name": "decode_ha_command",
-        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n  /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n  const instance = parseInt(rvcTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"cover\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"cover\";\n  msg.entityId = `shade_${instance}`;\n  return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n  /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n  const instance = parseInt(lockTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"lock\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"lock\";\n  msg.entityId = `lock_${instance}`;\n  return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n  const instance = parseInt(climatePresetMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = \"SET_PRESET\";\n  msg.value = String(msg.payload); // e.g., \"Level 5\"\n  return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n  const instance = parseInt(climateTopicMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n  return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n  /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n  const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"aquahot\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"light\";\n  msg.entityId = `aquahot_${instance}`;\n  return msg;\n}\n\n// --- Climate (Furnace) entities ---\nconst furnaceTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/furnace_(\\d+)\\/(mode|temp)\\/set$/,\n);\nif (furnaceTopicMatch) {\n  const instance = parseInt(furnaceTopicMatch[1], 10);\n  msg.routingKey = \"furnace_climate\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `furnace_${instance}`;\n  // Encoder reads msg.topic directly to distinguish mode vs temp — msg.command not set.\n  return msg;\n}\n\n// --- Climate (Aqua-Hot Zone) entities ---\nconst aquahotZoneTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/aquahot_zone_(\\d+)\\/(mode|temp)\\/set$/,\n);\nif (aquahotZoneTopicMatch) {\n  const instance = parseInt(aquahotZoneTopicMatch[1], 10);\n  msg.routingKey = \"aquahot_zone_climate\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `aquahot_zone_${instance}`;\n  // Encoder reads msg.topic directly to distinguish mode vs temp — msg.command not set.\n  return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n  topicParts.length === 4 &&\n  topicParts[0] === \"homeassistant\" &&\n  (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n  topicParts[3] === \"set\"\n) {\n  const entityId = topicParts[2];\n  msg.entityType = topicParts[1];\n  msg.entityId = entityId;\n\n  // Handle JSON payloads from dimmable lights (JSON schema entities)\n  try {\n    const parsed = JSON.parse(msg.payload);\n    if (typeof parsed === \"object\" && parsed !== null) {\n      msg.payload = parsed;\n      msg.command = parsed.state ? parsed.state.toUpperCase() : \"ON\";\n    } else {\n      msg.command = String(msg.payload).toUpperCase();\n    }\n  } catch (e) {\n    // Simple string payload (non-dimmable lights)\n    msg.command = String(msg.payload).toUpperCase();\n  }\n\n  if (entityId === \"water_pump\" || entityId === \"autofill\") {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n  } else {\n    const entityIdParts = entityId.split(\"_\");\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n    if (isNaN(instanceNum)) {\n      node.warn(`Could not parse instance number from entityId: ${entityId}`);\n      return null;\n    }\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n  }\n  return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
+        "func": "// Parse Home Assistant MQTT command topics\n\n// --- Cover (Shade) entities ---\nconst rvcTopicMatch = msg.topic.match(\n  /^homeassistant\\/cover\\/shade_(\\d+)\\/set$/,\n);\nif (rvcTopicMatch) {\n  const instance = parseInt(rvcTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"cover\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"cover\";\n  msg.entityId = `shade_${instance}`;\n  return msg;\n}\n\n// --- Lock entities ---\nconst lockTopicMatch = msg.topic.match(\n  /^homeassistant\\/lock\\/lock_(\\d+)\\/set$/,\n);\nif (lockTopicMatch) {\n  const instance = parseInt(lockTopicMatch[1], 10);\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"lock\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"lock\";\n  msg.entityId = `lock_${instance}`;\n  return msg;\n}\n\n// --- Climate (Floor Heat) Preset entities ---\nconst climatePresetMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_preset_mode$/,\n);\nif (climatePresetMatch) {\n  const instance = parseInt(climatePresetMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = \"SET_PRESET\";\n  msg.value = String(msg.payload); // e.g., \"Level 5\"\n  return msg;\n}\n\n// --- Climate (Floor Heat) Mode entities ---\nconst climateTopicMatch = msg.topic.match(\n  /^homeassistant\\/climate\\/floor_heat_(\\d+)\\/set_mode$/,\n);\nif (climateTopicMatch) {\n  const instance = parseInt(climateTopicMatch[1], 10);\n  msg.routingKey = \"floor_heat\";\n  msg.instance = instance;\n  msg.entityType = \"climate\";\n  msg.entityId = `floor_heat_${instance}`;\n  msg.command = String(msg.payload).toUpperCase(); // \"HEAT\" or \"OFF\"\n  return msg;\n}\n\n// --- Aqua-Hot entities ---\nconst aquahotTopicMatch = msg.topic.match(\n  /^homeassistant\\/light\\/aquahot_(burner|ac_1|ac_2|engine)\\/set$/,\n);\nif (aquahotTopicMatch) {\n  const instance = aquahotTopicMatch[1]; // \"burner\", \"ac_1\", \"ac_2\", or \"engine\"\n  const command = String(msg.payload).toUpperCase();\n  msg.routingKey = \"aquahot\";\n  msg.instance = instance;\n  msg.command = command;\n  msg.entityType = \"light\";\n  msg.entityId = `aquahot_${instance}`;\n  return msg;\n}\n\n// --- Switch and Light entities (Fallback) ---\nconst topicParts = msg.topic.split(\"/\");\nif (\n  topicParts.length === 4 &&\n  topicParts[0] === \"homeassistant\" &&\n  (topicParts[1] === \"switch\" || topicParts[1] === \"light\") &&\n  topicParts[3] === \"set\"\n) {\n  const entityId = topicParts[2];\n  msg.entityType = topicParts[1];\n  msg.entityId = entityId;\n\n  // Handle JSON payloads from dimmable lights (JSON schema entities)\n  try {\n    const parsed = JSON.parse(msg.payload);\n    if (typeof parsed === \"object\" && parsed !== null) {\n      msg.payload = parsed;\n      msg.command = parsed.state ? parsed.state.toUpperCase() : \"ON\";\n    } else {\n      msg.command = String(msg.payload).toUpperCase();\n    }\n  } catch (e) {\n    // Simple string payload (non-dimmable lights)\n    msg.command = String(msg.payload).toUpperCase();\n  }\n\n  if (entityId === \"water_pump\" || entityId === \"autofill\") {\n    msg.instance = entityId;\n    msg.routingKey = entityId;\n  } else {\n    const entityIdParts = entityId.split(\"_\");\n    const instanceStr = entityIdParts[entityIdParts.length - 1];\n    const instanceNum = parseInt(instanceStr, 10);\n    if (isNaN(instanceNum)) {\n      node.warn(`Could not parse instance number from entityId: ${entityId}`);\n      return null;\n    }\n    msg.instance = instanceNum;\n    msg.routingKey = entityIdParts.slice(0, -1).join(\"_\");\n  }\n  return msg;\n}\n\nnode.warn(`Unhandled MQTT topic: ${msg.topic}`);\nreturn null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4639,16 +4666,6 @@
             },
             {
                 "t": "eq",
-                "v": "aquahot_zone_climate",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "furnace_climate",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
                 "v": "switch_l",
                 "vt": "str"
             },
@@ -4673,7 +4690,7 @@
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 14,
+        "outputs": 12,
         "x": 570,
         "y": 520,
         "wires": [
@@ -4697,12 +4714,6 @@
             ],
             [
                 "a8882b1f35300448"
-            ],
-            [
-                "b09974dcd1646951"
-            ],
-            [
-                "9a4eac9b74adce8e"
             ],
             [
                 "e25c9c82905dc476"
@@ -4820,7 +4831,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 800,
-        "y": 780,
+        "y": 700,
         "wires": []
     },
     {
@@ -4923,50 +4934,8 @@
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
         "x": 420,
-        "y": 156,
+        "y": 165,
         "wires": []
-    },
-    {
-        "id": "b09974dcd1646951",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "encode_aquahot_command_2",
-        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Uses FF2F (AQUAHOT_COMMAND_2) for burner on/off.\n// TODO: Zone demand on/off is sent via WATERHEATER_COMMAND_2 (1FE98) byte 2,\n// not FF2F. This encoder currently controls the burner globally — per-zone\n// demand encoding via 1FE98 needs further reverse engineering.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_status_2.js:\n// command_type 0x0a = Burner Control (on/off)\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  if (val === \"heat\") {\n    isHeating = true;\n  } else if (val === \"off\") {\n    isHeating = false;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // Temperature setpoints are LOCAL to the wall panel (0x97). They are not\n  // broadcast on the CAN bus. The panel compares room temp vs setpoint locally\n  // and only sends zone demand on/off via WATERHEATER_COMMAND_2 (1FE98).\n  // Confirmed by Phase 3 recordings: setpoint changes produced no new CAN traffic.\n  node.warn(\n    `[encode_aquahot_command_2] Temperature setpoints are local to the wall panel and cannot be set via CAN bus.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set Aqua-Hot Burner -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 580,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
-    },
-    {
-        "id": "9a4eac9b74adce8e",
-        "type": "function",
-        "z": "b3d80c5dc947ec88",
-        "g": "aea9d97e0563bd83",
-        "name": "encode_furnace_command",
-        "func": "// Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFE6\"; // FURNACE_COMMAND\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/furnace_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"furnace_\")) return null;\n\nconst instanceMatch = entityPart.match(/furnace_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\n// Read cached furnace state to preserve current settings while changing others\nconst cached = global.get(`furnace_${instance}_status`, \"file\") || {};\nconst cachedHeatSource =\n  cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;\n\n// --- Determine Changes ---\nlet newModeRaw =\n  cached.operating_mode !== undefined ? cached.operating_mode : 0;\nlet fanSpeed = 0xff; // Not Available (let furnace decide)\nlet heatOutput = 0xff; // Not Available (let furnace decide)\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n\n  if (val === \"heat\") {\n    // HA \"heat\" -> RV-C Automatic (0x00): furnace runs its own thermostat\n    newModeRaw = 0x00;\n    fanSpeed = 200; // 100% Fan (0.5% per step)\n    heatOutput = 100; // 100% Heat (1% per step)\n  } else if (val === \"off\") {\n    // No explicit \"off\" mode in RV-C; turn off by setting output levels to 0%\n    fanSpeed = 0;\n    heatOutput = 0;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // FURNACE_COMMAND (1FFE6) does not contain temperature setpoint bytes.\n  // Temperature is controlled via THERMOSTAT_COMMAND (1FFE1) or internal config.\n  node.warn(\n    `[encode_furnace_command] Temperature setpoint not supported by FURNACE_COMMAND. Dropping.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (1FFE6) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\ndataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); // Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)\ndataBytes[2] = fanSpeed; // Byte 2: Fan Speed\ndataBytes[3] = heatOutput; // Byte 3: Heat Output Level\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Furnace ${instance} -> ${fanSpeed > 0 ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 860,
-        "y": 620,
-        "wires": [
-            [
-                "6aa079d768e1571c"
-            ]
-        ]
     },
     {
         "id": "e25c9c82905dc476",
@@ -4982,7 +4951,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 660,
+        "y": 580,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -5003,7 +4972,7 @@
         "finalize": "",
         "libs": [],
         "x": 890,
-        "y": 700,
+        "y": 620,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -5024,10 +4993,176 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 740,
+        "y": 660,
         "wires": [
             [
                 "6aa079d768e1571c"
+            ]
+        ]
+    },
+    {
+        "id": "d95299a44e1d7ed5",
+        "type": "link out",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "MQTT out: Retain FALSE",
+        "mode": "link",
+        "links": [
+            "74329f13cbbc528a"
+        ],
+        "x": 1270,
+        "y": 900,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "e19247ab204a8e12",
+        "type": "switch",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "furnace",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "aquahot_zone",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "thermostat_zone",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 570,
+        "y": 900,
+        "wires": [
+            [
+                "83a24d85bf644847"
+            ],
+            [
+                "a71ac1bd86bd3e13"
+            ],
+            [
+                "755a5ee01bb1179d"
+            ],
+            [
+                "31e6105322d72319"
+            ]
+        ]
+    },
+    {
+        "id": "31e6105322d72319",
+        "type": "debug",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "otherwise",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "a71ac1bd86bd3e13",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "encode_aquahot_command_2",
+        "func": "// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.\n// Uses FF2F (AQUAHOT_COMMAND_2) for burner on/off.\n// TODO: Zone demand on/off is sent via WATERHEATER_COMMAND_2 (1FE98) byte 2,\n// not FF2F. This encoder currently controls the burner globally — per-zone\n// demand encoding via 1FE98 needs further reverse engineering.\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"FF2F\";\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"aquahot_zone_\")) return null;\n\n// E.g., aquahot_zone_1\nconst zoneMatch = entityPart.match(/aquahot_zone_(\\d+)/);\nif (!zoneMatch) return null;\nconst zone = parseInt(zoneMatch[1], 10);\nif (isNaN(zone)) return null;\n\n// From decode_aquahot_status_2.js:\n// command_type 0x0a = Burner Control (on/off)\n// is_on = boolean\n\nlet isHeating = false;\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  if (val === \"heat\") {\n    isHeating = true;\n  } else if (val === \"off\") {\n    isHeating = false;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // Temperature setpoints are LOCAL to the wall panel (0x97). They are not\n  // broadcast on the CAN bus. The panel compares room temp vs setpoint locally\n  // and only sends zone demand on/off via WATERHEATER_COMMAND_2 (1FE98).\n  // Confirmed by Phase 3 recordings: setpoint changes produced no new CAN traffic.\n  node.warn(\n    `[encode_aquahot_command_2] Temperature setpoints are local to the wall panel and cannot be set via CAN bus.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (FF2F) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = 0x01; // Byte 0: Instance\ndataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)\ndataBytes[2] = 0x00; // Byte 2: Reserved\ndataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)\ndataBytes[4] = 0x00;\ndataBytes[5] = 0x00;\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `Set Aqua-Hot Burner -> ${isHeating ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 900,
+        "wires": [
+            [
+                "d95299a44e1d7ed5"
+            ]
+        ]
+    },
+    {
+        "id": "83a24d85bf644847",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "encode_furnace_command",
+        "func": "// Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFE6\"; // FURNACE_COMMAND\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/furnace_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"furnace_\")) return null;\n\nconst instanceMatch = entityPart.match(/furnace_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\n// Read cached furnace state to preserve current settings while changing others\nconst cached = global.get(`furnace_${instance}_status`, \"file\") || {};\nconst cachedHeatSource =\n  cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;\n\n// --- Determine Changes ---\nlet newModeRaw =\n  cached.operating_mode !== undefined ? cached.operating_mode : 0;\nlet fanSpeed = 0xff; // Not Available (let furnace decide)\nlet heatOutput = 0xff; // Not Available (let furnace decide)\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n\n  if (val === \"heat\") {\n    // HA \"heat\" -> RV-C Automatic (0x00): furnace runs its own thermostat\n    newModeRaw = 0x00;\n    fanSpeed = 200; // 100% Fan (0.5% per step)\n    heatOutput = 100; // 100% Heat (1% per step)\n  } else if (val === \"off\") {\n    // No explicit \"off\" mode in RV-C; turn off by setting output levels to 0%\n    fanSpeed = 0;\n    heatOutput = 0;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // FURNACE_COMMAND (1FFE6) does not contain temperature setpoint bytes.\n  // Temperature is controlled via THERMOSTAT_COMMAND (1FFE1) or internal config.\n  node.warn(\n    `[encode_furnace_command] Temperature setpoint not supported by FURNACE_COMMAND. Dropping.`,\n  );\n  return null;\n} else {\n  return null;\n}\n\n// --- Build Payload (1FFE6) ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance; // Byte 0: Instance\ndataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); // Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)\ndataBytes[2] = fanSpeed; // Byte 2: Fan Speed\ndataBytes[3] = heatOutput; // Byte 3: Heat Output Level\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\n// --- Construct CAN ID ---\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Furnace ${instance} -> ${fanSpeed > 0 ? \"ON\" : \"OFF\"}`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 860,
+        "wires": [
+            [
+                "d95299a44e1d7ed5"
+            ]
+        ]
+    },
+    {
+        "id": "755a5ee01bb1179d",
+        "type": "function",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "encode_thermostat_command",
+        "func": "// Encodes MQTT Climate commands into THERMOSTAT_COMMAND_1 messages (1FEF9)\n// §6.16.4 — same byte layout as THERMOSTAT_STATUS_1 (§6.16.2b)\n//\n// Byte 0: Instance\n// Byte 1: bits 0-3 Operating mode, bits 4-5 Fan mode, bits 6-7 Schedule mode\n// Byte 2: Fan speed (0-200 at 0.5% per step, 0=auto)\n// Bytes 3-4: Setpoint heat (uint16 LE, Table 5.3 temperature)\n// Bytes 5-6: Setpoint cool (uint16 LE, Table 5.3 temperature)\n// Byte 7: Reserved (0xFF)\n\n// --- Configuration ---\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEF9\"; // THERMOSTAT_COMMAND_1\n\n// --- Input Validation ---\nconst topic = msg.topic;\nif (!topic) return null;\n\nconst payload = msg.payload;\n\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/thermostat_zone_{instance}/{cmd}/set\nconst entityPart = parts[2];\nif (!entityPart || !entityPart.startsWith(\"thermostat_zone_\")) return null;\n\nconst instanceMatch = entityPart.match(/thermostat_zone_(\\d+)/);\nif (!instanceMatch) return null;\n\nconst instance = parseInt(instanceMatch[1], 10);\nif (isNaN(instance)) return null;\n\nconst cmdPart = parts[3]; // \"mode\", \"fan\", \"temp\", \"temp_high\", \"temp_low\"\n\n// --- Read cached state ---\nconst cached = global.get(`thermostat_zone_${instance}_status`, \"file\") || {};\n\n// --- Temperature conversion: °F → raw uint16 (Table 5.3) ---\n// raw = ((°F - 32) × 5/9 + 273) / 0.03125\nfunction tempToRaw(fahrenheit) {\n  const celsius = ((fahrenheit - 32) * 5) / 9;\n  return Math.round((celsius + 273) / 0.03125);\n}\n\n// --- Build 8-byte payload, default all fields to \"no change\" ---\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = instance;\n\n// Byte 1 bitfield helpers\n// bits 6-7: schedule mode — always \"no change\" (0x3)\n// bits 4-5: fan mode — 0=Auto, 1=On, 3=no change\n// bits 0-3: operating mode — 0=Off..6=Defrost, 0xF=no change\nconst SCHED_NC = 0x03;\n\n// --- HA → RV-C mode mapping ---\nconst HA_TO_RVC_MODE = {\n  off: 0x00,\n  cool: 0x01,\n  heat: 0x02,\n  heat_cool: 0x03,\n  fan_only: 0x04,\n  dry: 0x06,\n};\n\n// --- Process command ---\n\nif (topic.endsWith(\"/mode/set\")) {\n  const val = payload.toString().toLowerCase();\n  const modeRaw = HA_TO_RVC_MODE[val];\n  if (modeRaw === undefined) return null;\n\n  if (val === \"off\") {\n    // Off: explicitly set fan to auto (matches observed wireless remote behavior)\n    dataBytes[1] = (SCHED_NC << 6) | (0x00 << 4) | modeRaw; // 0xC0\n  } else {\n    // Other modes: leave fan as \"no change\"\n    dataBytes[1] = (SCHED_NC << 6) | (0x03 << 4) | modeRaw;\n  }\n} else if (topic.endsWith(\"/fan/set\")) {\n  const val = payload.toString().toLowerCase();\n\n  // Leave mode as \"no change\" (0xF), set fan mode + speed\n  if (val === \"auto\") {\n    dataBytes[1] = (SCHED_NC << 6) | (0x00 << 4) | 0x0f; // fan=Auto, mode=nc\n    dataBytes[2] = 0x00; // auto speed\n  } else if (val === \"low\") {\n    dataBytes[1] = (SCHED_NC << 6) | (0x01 << 4) | 0x0f; // fan=On, mode=nc\n    dataBytes[2] = 100; // 50% (0.5% per step)\n  } else if (val === \"high\") {\n    dataBytes[1] = (SCHED_NC << 6) | (0x01 << 4) | 0x0f; // fan=On, mode=nc\n    dataBytes[2] = 200; // 100%\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // Single setpoint: set heat or cool depending on current mode\n  const temp = parseFloat(payload);\n  if (isNaN(temp)) return null;\n\n  const raw = tempToRaw(temp);\n  const rawLo = raw & 0xff;\n  const rawHi = (raw >> 8) & 0xff;\n\n  // Determine which setpoint to set based on cached operating mode\n  const mode = cached.operating_mode || \"Cool\";\n  if (mode === \"Heat\" || mode === \"Aux Heat\") {\n    dataBytes[3] = rawLo;\n    dataBytes[4] = rawHi;\n  } else {\n    dataBytes[5] = rawLo;\n    dataBytes[6] = rawHi;\n  }\n} else if (topic.endsWith(\"/temp_low/set\")) {\n  // Heat setpoint (for heat_cool mode)\n  const temp = parseFloat(payload);\n  if (isNaN(temp)) return null;\n\n  const raw = tempToRaw(temp);\n  dataBytes[3] = raw & 0xff;\n  dataBytes[4] = (raw >> 8) & 0xff;\n} else if (topic.endsWith(\"/temp_high/set\")) {\n  // Cool setpoint (for heat_cool mode)\n  const temp = parseFloat(payload);\n  if (isNaN(temp)) return null;\n\n  const raw = tempToRaw(temp);\n  dataBytes[5] = raw & 0xff;\n  dataBytes[6] = (raw >> 8) & 0xff;\n} else {\n  return null;\n}\n\n// --- Construct CAN frame ---\n\nconst dataHex = dataBytes\n  .map((byte) => byte.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\n// --- Send Message ---\n\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nconst cmdLabel = cmdPart === \"mode\" ? payload : `${cmdPart}=${payload}`;\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `Zone ${instance} → ${cmdLabel}`,\n});\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 940,
+        "wires": [
+            [
+                "d95299a44e1d7ed5"
+            ]
+        ]
+    },
+    {
+        "id": "51fdd54bd04e39e2",
+        "type": "mqtt in",
+        "z": "b3d80c5dc947ec88",
+        "g": "7183c5f0ad762adb",
+        "name": "HA climate",
+        "topic": "homeassistant/climate/+/+/set",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "80727e60a251c36c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 900,
+        "wires": [
+            [
+                "e19247ab204a8e12"
             ]
         ]
     },
@@ -5320,7 +5455,7 @@
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 140,
+        "y": 145,
         "wires": []
     },
     {
@@ -6254,7 +6389,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 500,
+        "y": 480,
         "wires": [
             [
                 "eef231d415615180"
@@ -6275,7 +6410,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 500,
+        "y": 480,
         "wires": [
             [
                 "599ffbccfb7cd415"
@@ -6299,7 +6434,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 500,
+        "y": 480,
         "wires": [
             [
                 "c92f3be74ab20d69"
@@ -6332,7 +6467,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1150,
-        "y": 680,
+        "y": 660,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -6353,7 +6488,7 @@
         "finalize": "",
         "libs": [],
         "x": 1380,
-        "y": 680,
+        "y": 660,
         "wires": [
             []
         ]
@@ -6368,7 +6503,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1140,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -6390,7 +6525,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "950e9ce654224317"
@@ -6411,7 +6546,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "950e9ce654224317"
@@ -6429,7 +6564,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1390,
-        "y": 500,
+        "y": 480,
         "wires": [],
         "l": true
     },
@@ -6438,7 +6573,7 @@
         "type": "mqtt in",
         "z": "e3804d2dd0b81928",
         "g": "fe7cf55a75689b88",
-        "name": "Micro-Air in",
+        "name": "HA climate",
         "topic": "homeassistant/climate/+/+/set",
         "qos": "2",
         "datatype": "auto-detect",
@@ -6447,11 +6582,11 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 210,
-        "y": 800,
+        "x": 200,
+        "y": 780,
         "wires": [
             [
-                "e1cc8c52948f9b2a"
+                "ab025c05d155f4ee"
             ]
         ]
     },
@@ -6468,8 +6603,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 800,
+        "x": 580,
+        "y": 780,
         "wires": [
             [
                 "e2335c226769f307"
@@ -6486,8 +6621,8 @@
         "links": [
             "74329f13cbbc528a"
         ],
-        "x": 990,
-        "y": 820,
+        "x": 1130,
+        "y": 800,
         "wires": [],
         "l": true
     },
@@ -6498,7 +6633,7 @@
         "name": "",
         "content": "# Micro-Air Thermostats\n## For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 200,
+        "y": 177,
         "wires": []
     },
     {
@@ -6512,7 +6647,7 @@
             "f658418a7b9b4857"
         ],
         "x": 910,
-        "y": 420,
+        "y": 400,
         "wires": [],
         "l": true
     },
@@ -6529,8 +6664,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 800,
+        "x": 860,
+        "y": 780,
         "wires": [
             [
                 "b104a7e82aefcb21"
@@ -6550,8 +6685,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 990,
-        "y": 780,
+        "x": 1130,
+        "y": 760,
         "wires": [],
         "l": true
     },
@@ -6570,7 +6705,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "7605393317b3c471"
@@ -6591,7 +6726,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "ba611b1fa95bf468"
@@ -6612,7 +6747,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "cdc4754f4c43430d"
@@ -6632,7 +6767,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 230,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "dbc862c066d96221"
@@ -6659,7 +6794,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 420,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "2f91d31ed0be26b1"
@@ -6680,7 +6815,7 @@
         "property": "payload",
         "topi": "payload.zone",
         "x": 430,
-        "y": 500,
+        "y": 480,
         "wires": [
             [
                 "ae5fb4f1c3213c0a"
@@ -6698,7 +6833,7 @@
             "1d411b577497f7ae"
         ],
         "x": 900,
-        "y": 380,
+        "y": 360,
         "wires": [],
         "l": true
     },
@@ -6712,13 +6847,43 @@
             "cdc4754f4c43430d"
         ],
         "x": 230,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "eef231d415615180"
             ]
         ],
         "l": true
+    },
+    {
+        "id": "ab025c05d155f4ee",
+        "type": "switch",
+        "z": "e3804d2dd0b81928",
+        "g": "fe7cf55a75689b88",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "microair",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 780,
+        "wires": [
+            [
+                "e1cc8c52948f9b2a"
+            ],
+            []
+        ]
     },
     {
         "id": "export_mqtt_in_trigger_001",
