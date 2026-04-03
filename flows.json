@@ -4225,7 +4225,7 @@
         "type": "debug",
         "z": "3e5f038a4f5a8b9a",
         "name": "decode_panel_signal",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4233,8 +4233,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1420,
-        "y": 2060,
+        "x": 1540,
+        "y": 1960,
         "wires": []
     },
     {
@@ -4251,6 +4251,26 @@
         "libs": [],
         "x": 1240,
         "y": 2000,
+        "wires": [
+            [
+                "a51bd40c7da8dc17"
+            ]
+        ]
+    },
+    {
+        "id": "a51bd40c7da8dc17",
+        "type": "function",
+        "z": "3e5f038a4f5a8b9a",
+        "name": "beta_gate",
+        "func": "// A simple gate node to allow messages to pass only if Beta features are enabled.\n\n// Check the global betaEnabled flag\nconst isBetaEnabled = global.get(\"betaEnabled\");\n\n// If beta is enabled, pass the message through unmodified.\n// Otherwise, return null to drop the message and stop the flow along this path.\nif (isBetaEnabled === true) {\n  return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 1900,
         "wires": [
             [
                 "d3a13b531babee66"
