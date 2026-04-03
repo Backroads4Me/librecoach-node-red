@@ -87,7 +87,7 @@
             "c78420a075d43408"
         ],
         "x": 994,
-        "y": 1519,
+        "y": 1439,
         "w": 852,
         "h": 82
     },
@@ -427,7 +427,7 @@
             "c2e1bc849357fcb4"
         ],
         "x": 94,
-        "y": 1339,
+        "y": 1259,
         "w": 732,
         "h": 122
     },
@@ -446,7 +446,7 @@
             "8337a7f0dd0435d6"
         ],
         "x": 994,
-        "y": 1339,
+        "y": 1259,
         "w": 652,
         "h": 82
     },
@@ -505,7 +505,7 @@
             "e2fc2c67eba80f70"
         ],
         "x": 994,
-        "y": 1659,
+        "y": 1579,
         "w": 812,
         "h": 142
     },
@@ -556,7 +556,7 @@
             "ac17a780a9a1dbcf"
         ],
         "x": 94,
-        "y": 1519,
+        "y": 1439,
         "w": 772,
         "h": 162
     },
@@ -597,7 +597,7 @@
             "dca8346e061f1d42"
         ],
         "x": 94,
-        "y": 1739,
+        "y": 1659,
         "w": 772,
         "h": 222
     },
@@ -875,7 +875,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1120,
-        "y": 1560,
+        "y": 1480,
         "wires": [
             [
                 "74c7e4a6cc2508eb"
@@ -895,7 +895,7 @@
         "sendError": false,
         "allProps": false,
         "x": 1320,
-        "y": 1560,
+        "y": 1480,
         "wires": [
             [
                 "c78420a075d43408"
@@ -916,7 +916,7 @@
         "finalize": "",
         "libs": [],
         "x": 1740,
-        "y": 1560,
+        "y": 1480,
         "wires": []
     },
     {
@@ -929,7 +929,7 @@
         "action": "",
         "pretty": false,
         "x": 1530,
-        "y": 1560,
+        "y": 1480,
         "wires": [
             [
                 "cd670f6465b6374b"
@@ -1727,7 +1727,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 1380,
+        "y": 1300,
         "wires": [
             [
                 "d6680567062a0908"
@@ -1748,7 +1748,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 1380,
+        "y": 1300,
         "wires": [
             [
                 "0a63b31d61802934"
@@ -1766,7 +1766,7 @@
             "f658418a7b9b4857"
         ],
         "x": 690,
-        "y": 1380,
+        "y": 1300,
         "wires": [],
         "l": true
     },
@@ -1784,7 +1784,7 @@
         "finalize": "",
         "libs": [],
         "x": 1310,
-        "y": 1380,
+        "y": 1300,
         "wires": [
             [
                 "8337a7f0dd0435d6"
@@ -1803,7 +1803,7 @@
             "cd73ee739dad9f59"
         ],
         "x": 1080,
-        "y": 1380,
+        "y": 1300,
         "wires": [
             [
                 "dd199275f909301f"
@@ -1829,7 +1829,7 @@
         "senderr": false,
         "headers": [],
         "x": 1550,
-        "y": 1380,
+        "y": 1300,
         "wires": [
             []
         ]
@@ -1978,7 +1978,7 @@
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 1700,
+        "y": 1620,
         "wires": [
             [
                 "e38f32a1f6d36bfb"
@@ -1997,7 +1997,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1670,
-        "y": 1700,
+        "y": 1620,
         "wires": [],
         "l": true
     },
@@ -2011,7 +2011,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 1110,
-        "y": 1700,
+        "y": 1620,
         "wires": [
             [
                 "6b1a7191643fa28e"
@@ -2027,7 +2027,7 @@
         "name": "BETA TEST",
         "links": [],
         "x": 1090,
-        "y": 1760,
+        "y": 1680,
         "wires": [
             [
                 "6b1a7191643fa28e"
@@ -2074,7 +2074,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 1420,
+        "y": 1340,
         "wires": [
             [
                 "d6680567062a0908"
@@ -2204,7 +2204,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1640,
+        "y": 1560,
         "wires": [
             [
                 "a8a757fe3b31cf9c"
@@ -2225,7 +2225,7 @@
         "finalize": "",
         "libs": [],
         "x": 430,
-        "y": 1640,
+        "y": 1560,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2243,7 +2243,7 @@
             "f658418a7b9b4857"
         ],
         "x": 730,
-        "y": 1580,
+        "y": 1500,
         "wires": [],
         "l": true
     },
@@ -2261,7 +2261,7 @@
         "finalize": "",
         "libs": [],
         "x": 450,
-        "y": 1560,
+        "y": 1480,
         "wires": [
             [
                 "5ffb64e684c20ea8"
@@ -2278,7 +2278,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 210,
-        "y": 1560,
+        "y": 1480,
         "wires": [
             [
                 "1becc1dacb0ecaf8"
@@ -2301,7 +2301,7 @@
         "finalize": "",
         "libs": [],
         "x": 1420,
-        "y": 1760,
+        "y": 1680,
         "wires": [
             []
         ]
@@ -2365,7 +2365,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1780,
+        "y": 1700,
         "wires": [
             [
                 "880ca1b6bf10b8d2"
@@ -2386,7 +2386,7 @@
         "finalize": "",
         "libs": [],
         "x": 450,
-        "y": 1780,
+        "y": 1700,
         "wires": [
             [
                 "dca8346e061f1d42"
@@ -2408,7 +2408,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 1900,
+        "y": 1820,
         "wires": [
             [
                 "f3ee6dc19b0155a0"
@@ -2429,7 +2429,7 @@
         "finalize": "",
         "libs": [],
         "x": 450,
-        "y": 1900,
+        "y": 1820,
         "wires": [
             [
                 "cfa55144f4a17a5c"
@@ -2452,7 +2452,7 @@
         "overwriteFile": "true",
         "encoding": "none",
         "x": 680,
-        "y": 1880,
+        "y": 1800,
         "wires": [
             []
         ]
@@ -2468,7 +2468,7 @@
             "a1e89f48333c8256"
         ],
         "x": 690,
-        "y": 1920,
+        "y": 1840,
         "wires": [],
         "l": true
     },
@@ -2483,7 +2483,7 @@
             "f658418a7b9b4857"
         ],
         "x": 730,
-        "y": 1780,
+        "y": 1700,
         "wires": [],
         "l": true
     },
@@ -7275,7 +7275,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "notify_import_url",
+        "name": "import_notify_url",
         "func": "// Prepares notification payload for Import\n// Input: MQTT trigger from librecoach/import/trigger\n// Output: msg.payload configured for notify_user\n\nconst nrBaseUrl = \"http://homeassistant.local:1880\";\nconst importUrl = `${nrBaseUrl}/endpoint/librecoach/import`;\n\nmsg.payload = {\n  title: \"LibreCoach Import\",\n  message: `Upload a configuration file to restore entity names.\\n\\n[Open Import Page](${importUrl})`,\n  notification_id: \"librecoach_import\",\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -7296,7 +7296,7 @@
         "type": "function",
         "z": "bfa6336b0d45dc23",
         "g": "3296e5f0fcd2c737",
-        "name": "Import_summary",
+        "name": "import_summary",
         "func": "// Summarizes import results after all entity registry updates complete\n// Input: msg.payload = array of ha-api WebSocket responses (from Join after Split)\n//        msg.importCounts = { totalInFile, skippedUnchanged, skippedMissing, toUpdate }\n// Output 1: msg configured for HA persistent notification\n// Output 2: JSON result for HTTP Response to browser\n\nmsg.res = msg._originalRes;\ndelete msg._originalRes;\n\nconst responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];\nconst counts = msg.importCounts || {};\n\nlet updated = 0;\nlet failed = 0;\n\nfor (const res of responses) {\n    if (res && res.entity_id) {\n        updated++;\n    } else {\n        failed++;\n    }\n}\n\nconst skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing || 0);\n\n// Output 2: HTTP Response to browser\nconst httpMsg = {\n    payload: { updated, skipped, failed },\n    statusCode: 200,\n    res: msg.res,\n};\n\n// Output 1: HA persistent notification\nconst haBaseUrl = \"http://supervisor/core\";\nconst haToken = env.get(\"SUPERVISOR_TOKEN\");\n\nlet notifyMsg = null;\n\nif (haToken) {\n    notifyMsg = {\n        url: `${haBaseUrl}/api/services/persistent_notification/create`,\n        method: \"POST\",\n        headers: {\n            Authorization: `Bearer ${haToken}`,\n            \"Content-Type\": \"application/json\",\n        },\n        payload: {\n            title: \"LibreCoach Import Complete\",\n            message: `Updated: ${updated}\\nSkipped: ${skipped}\\nFailed: ${failed}`,\n            notification_id: \"librecoach_import_result\",\n        },\n    };\n}\n\nnode.status({\n    fill: failed > 0 ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: `${updated} updated, ${skipped} skipped, ${failed} failed`,\n});\n\nreturn [notifyMsg, httpMsg];\n",
         "outputs": 2,
         "timeout": 0,
