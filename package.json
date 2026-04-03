@@ -4,7 +4,8 @@
     "version": "1.2.0",
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "node-red-contrib-markdown-note": "1.1.1"
+        "node-red-contrib-markdown-note": "1.1.2",
+        "node-red-contrib-home-assistant-websocket": "0.80.3"
     },
     "node-red": {
         "settings": {

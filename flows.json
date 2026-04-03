@@ -119,7 +119,7 @@
             "a52b0f41097296b1"
         ],
         "x": 114,
-        "y": 259,
+        "y": 219,
         "w": 1312,
         "h": 482
     },
@@ -219,8 +219,8 @@
             "8c13a65ec0410f0d",
             "9539a951b2c7a1a9"
         ],
-        "x": 114,
-        "y": 219,
+        "x": 74,
+        "y": 179,
         "w": 772,
         "h": 262
     },
@@ -372,7 +372,7 @@
             "68214a83740efc26"
         ],
         "x": 114,
-        "y": 319,
+        "y": 299,
         "w": 1338,
         "h": 882
     },
@@ -484,7 +484,7 @@
             "ab025c05d155f4ee"
         ],
         "x": 114,
-        "y": 319,
+        "y": 259,
         "w": 1412,
         "h": 522
     },
@@ -602,6 +602,29 @@
         "h": 222
     },
     {
+        "id": "7183c5f0ad762adb",
+        "type": "group",
+        "z": "b3d80c5dc947ec88",
+        "name": "Home Assistant climate encoding",
+        "style": {
+            "stroke": "#777777",
+            "label": true
+        },
+        "nodes": [
+            "d95299a44e1d7ed5",
+            "e19247ab204a8e12",
+            "31e6105322d72319",
+            "a71ac1bd86bd3e13",
+            "83a24d85bf644847",
+            "755a5ee01bb1179d",
+            "51fdd54bd04e39e2"
+        ],
+        "x": 114,
+        "y": 759,
+        "w": 1292,
+        "h": 202
+    },
+    {
         "id": "9dd6a98018824be9",
         "type": "group",
         "z": "292e70a6ba25b323",
@@ -638,7 +661,7 @@
             "2343c8c12f2081fa"
         ],
         "x": 954,
-        "y": 979,
+        "y": 959,
         "w": 472,
         "h": 142
     },
@@ -658,7 +681,7 @@
             "a58b5f05c8346eab"
         ],
         "x": 1034,
-        "y": 559,
+        "y": 499,
         "w": 452,
         "h": 142
     },
@@ -719,29 +742,6 @@
         "y": 1819,
         "w": 432,
         "h": 82
-    },
-    {
-        "id": "7183c5f0ad762adb",
-        "type": "group",
-        "z": "b3d80c5dc947ec88",
-        "name": "Home Assistant climate encoding",
-        "style": {
-            "stroke": "#777777",
-            "label": true
-        },
-        "nodes": [
-            "d95299a44e1d7ed5",
-            "e19247ab204a8e12",
-            "31e6105322d72319",
-            "a71ac1bd86bd3e13",
-            "83a24d85bf644847",
-            "755a5ee01bb1179d",
-            "51fdd54bd04e39e2"
-        ],
-        "x": 114,
-        "y": 819,
-        "w": 1292,
-        "h": 202
     },
     {
         "id": "80727e60a251c36c",
@@ -1019,8 +1019,7 @@
         "name": "HA in",
         "mode": "link",
         "links": [
-            "a3b957142479c075",
-            "5966b26c1bd279e3"
+            "a3b957142479c075"
         ],
         "x": 570,
         "y": 380,
@@ -1701,8 +1700,8 @@
         "type": "note",
         "z": "292e70a6ba25b323",
         "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.\nThis runs first — nothing else works without it.",
-        "x": 290,
-        "y": 137,
+        "x": 330,
+        "y": 100,
         "wires": []
     },
     {
@@ -3635,8 +3634,8 @@
         "type": "note",
         "z": "3e5f038a4f5a8b9a",
         "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
-        "x": 280,
-        "y": 291,
+        "x": 300,
+        "y": 140,
         "wires": []
     },
     {
@@ -4629,7 +4628,7 @@
         "z": "7ecdba18640c1184",
         "content": "# Commands\nYour RV's wall panels send commands to lights over the CAN bus.\nThis flow listens to that traffic to discover lights and infer\ntheir state, even when the lights don't broadcast a status response.\nIf a panel says \"turn on light 17,\" we now know light 17 exists and is on.",
         "x": 310,
-        "y": 191,
+        "y": 120,
         "wires": []
     },
     {
@@ -4646,7 +4645,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 520,
+        "y": 480,
         "wires": [
             [
                 "89946e1c7a570ed0"
@@ -4663,7 +4662,7 @@
             "64c5e5cfd4382453"
         ],
         "x": 190,
-        "y": 520,
+        "y": 480,
         "wires": [
             [
                 "a37da245aba53b96"
@@ -4682,7 +4681,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1290,
-        "y": 480,
+        "y": 440,
         "wires": [],
         "l": true
     },
@@ -4758,7 +4757,7 @@
         "repair": false,
         "outputs": 12,
         "x": 570,
-        "y": 520,
+        "y": 480,
         "wires": [
             [
                 "86a191e1f24d802a"
@@ -4812,7 +4811,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 340,
+        "y": 300,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4833,7 +4832,7 @@
         "finalize": "",
         "libs": [],
         "x": 850,
-        "y": 380,
+        "y": 340,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4854,7 +4853,7 @@
         "finalize": "",
         "libs": [],
         "x": 850,
-        "y": 420,
+        "y": 380,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4875,7 +4874,7 @@
         "finalize": "",
         "libs": [],
         "x": 850,
-        "y": 460,
+        "y": 420,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4897,7 +4896,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 800,
-        "y": 700,
+        "y": 660,
         "wires": []
     },
     {
@@ -4914,7 +4913,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 300,
+        "y": 260,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4935,7 +4934,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 500,
+        "y": 460,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4956,7 +4955,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 540,
+        "y": 500,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4987,7 +4986,7 @@
         "payload": "19FED99F#FF7E00FFFFFF00FF",
         "payloadType": "str",
         "x": 1190,
-        "y": 700,
+        "y": 660,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -4999,8 +4998,8 @@
         "type": "note",
         "z": "b3d80c5dc947ec88",
         "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
-        "x": 420,
-        "y": 165,
+        "x": 360,
+        "y": 100,
         "wires": []
     },
     {
@@ -5017,7 +5016,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 580,
+        "y": 540,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -5038,7 +5037,7 @@
         "finalize": "",
         "libs": [],
         "x": 890,
-        "y": 620,
+        "y": 580,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -5059,7 +5058,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 660,
+        "y": 620,
         "wires": [
             [
                 "6aa079d768e1571c"
@@ -5077,7 +5076,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1270,
-        "y": 900,
+        "y": 840,
         "wires": [],
         "l": true
     },
@@ -5113,7 +5112,7 @@
         "repair": false,
         "outputs": 4,
         "x": 570,
-        "y": 900,
+        "y": 840,
         "wires": [
             [
                 "83a24d85bf644847"
@@ -5144,7 +5143,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 800,
-        "y": 980,
+        "y": 920,
         "wires": []
     },
     {
@@ -5161,7 +5160,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 900,
+        "y": 840,
         "wires": [
             [
                 "d95299a44e1d7ed5"
@@ -5182,7 +5181,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 860,
+        "y": 800,
         "wires": [
             [
                 "d95299a44e1d7ed5"
@@ -5203,7 +5202,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 940,
+        "y": 880,
         "wires": [
             [
                 "d95299a44e1d7ed5"
@@ -5225,7 +5224,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 900,
+        "y": 840,
         "wires": [
             [
                 "e19247ab204a8e12"
@@ -5521,7 +5520,7 @@
         "name": "",
         "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
         "x": 350,
-        "y": 145,
+        "y": 120,
         "wires": []
     },
     {
@@ -5593,7 +5592,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "a95d74d20270f69b"
@@ -5615,7 +5614,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 380,
+        "y": 360,
         "wires": [
             [
                 "19993b80c1009e61",
@@ -5637,7 +5636,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 360,
+        "y": 340,
         "wires": []
     },
     {
@@ -5654,7 +5653,7 @@
         "finalize": "",
         "libs": [],
         "x": 830,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -5684,7 +5683,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 220,
-        "y": 720,
+        "y": 700,
         "wires": [
             [
                 "36f5f1a727dfd1ca"
@@ -5705,7 +5704,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 780,
+        "y": 760,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -5726,7 +5725,7 @@
         "finalize": "",
         "libs": [],
         "x": 560,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "d1a2b3c4e5f67804",
@@ -5748,7 +5747,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "71ac45fb64bf70c9"
@@ -5772,7 +5771,7 @@
         "finalize": "",
         "libs": [],
         "x": 1040,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -5793,7 +5792,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 640,
+        "y": 620,
         "wires": [
             [
                 "bd38c37850a3e832"
@@ -5813,7 +5812,7 @@
         "sendError": false,
         "allProps": false,
         "x": 490,
-        "y": 980,
+        "y": 960,
         "wires": [
             [
                 "d1a2b3c4e5f6780c"
@@ -5834,7 +5833,7 @@
         "finalize": "",
         "libs": [],
         "x": 750,
-        "y": 980,
+        "y": 960,
         "wires": []
     },
     {
@@ -5860,7 +5859,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 240,
-        "y": 980,
+        "y": 960,
         "wires": [
             [
                 "d1a2b3c4e5f6780b"
@@ -5882,7 +5881,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 240,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -5903,7 +5902,7 @@
         "finalize": "",
         "libs": [],
         "x": 760,
-        "y": 1080,
+        "y": 1060,
         "wires": []
     },
     {
@@ -5929,7 +5928,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1070,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -5950,7 +5949,7 @@
         "finalize": "",
         "libs": [],
         "x": 1320,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             []
         ]
@@ -5965,7 +5964,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1050,
-        "y": 1020,
+        "y": 1000,
         "wires": [
             [
                 "9401b2d19494b1c2"
@@ -5984,7 +5983,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1290,
-        "y": 640,
+        "y": 620,
         "wires": [],
         "l": true
     },
@@ -6004,7 +6003,7 @@
         "expiry": "",
         "broker": "68237e1473ec01aa",
         "x": 1250,
-        "y": 780,
+        "y": 760,
         "wires": []
     },
     {
@@ -6014,7 +6013,7 @@
         "name": "",
         "content": "# Victron\n## For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
         "x": 350,
-        "y": 180,
+        "y": 140,
         "wires": []
     },
     {
@@ -6031,7 +6030,7 @@
         "finalize": "",
         "libs": [],
         "x": 920,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "e371075d4dbfc113"
@@ -6051,7 +6050,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 230,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "89759b3d2d9812c8",
@@ -6075,7 +6074,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 210,
-        "y": 900,
+        "y": 880,
         "wires": [
             [
                 "eced66f05a1796cd"
@@ -6096,7 +6095,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 900,
+        "y": 880,
         "wires": [
             [
                 "c80ea298a37232a2"
@@ -6117,7 +6116,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1290,
-        "y": 900,
+        "y": 880,
         "wires": [],
         "l": true
     },
@@ -6135,7 +6134,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 370,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "d1a2b3c4e5f67801"
@@ -6156,7 +6155,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 450,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             [
                 "1284b5e380db32be"
@@ -6175,7 +6174,7 @@
             "b1b68ff387e01a3a"
         ],
         "x": 1270,
-        "y": 560,
+        "y": 540,
         "wires": [],
         "l": true
     },
@@ -6189,7 +6188,7 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 660,
+        "y": 640,
         "wires": [
             [
                 "a95d74d20270f69b"
@@ -6207,7 +6206,7 @@
             "71ac45fb64bf70c9"
         ],
         "x": 230,
-        "y": 1160,
+        "y": 1140,
         "wires": [
             [
                 "9be2b9ec5c4f51d4"
@@ -6238,7 +6237,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 760,
+        "y": 740,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6268,7 +6267,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 340,
-        "y": 800,
+        "y": 780,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6298,7 +6297,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 400,
-        "y": 840,
+        "y": 820,
         "wires": [
             [
                 "ea38d37ac8c3ab57"
@@ -6324,7 +6323,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 560,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
                 "3fd699a116881ab0"
@@ -6345,7 +6344,7 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 420,
+        "y": 400,
         "wires": [
             [
                 "89759b3d2d9812c8"
@@ -6371,7 +6370,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 720,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
                 "48292ec85eb70ee5"
@@ -6392,7 +6391,7 @@
         "property": "payload",
         "topi": "topic",
         "x": 410,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "e1032a6a79ae3e4c"
@@ -6410,7 +6409,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1290,
-        "y": 480,
+        "y": 460,
         "wires": [],
         "l": true
     },
@@ -6433,7 +6432,7 @@
         "onceDelay": "0.3",
         "topic": "",
         "x": 220,
-        "y": 620,
+        "y": 600,
         "wires": [
             [
                 "a95d74d20270f69b"
@@ -6455,7 +6454,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 480,
+        "y": 420,
         "wires": [
             [
                 "eef231d415615180"
@@ -6476,7 +6475,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 480,
+        "y": 420,
         "wires": [
             [
                 "599ffbccfb7cd415"
@@ -6500,7 +6499,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 480,
+        "y": 420,
         "wires": [
             [
                 "c92f3be74ab20d69"
@@ -6533,7 +6532,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 1150,
-        "y": 660,
+        "y": 600,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -6554,7 +6553,7 @@
         "finalize": "",
         "libs": [],
         "x": 1380,
-        "y": 660,
+        "y": 600,
         "wires": [
             []
         ]
@@ -6569,7 +6568,7 @@
             "1e244bad0304bb74"
         ],
         "x": 1140,
-        "y": 600,
+        "y": 540,
         "wires": [
             [
                 "205af5b7fa62d8ac"
@@ -6591,7 +6590,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 460,
+        "y": 400,
         "wires": [
             [
                 "950e9ce654224317"
@@ -6612,7 +6611,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 500,
+        "y": 440,
         "wires": [
             [
                 "950e9ce654224317"
@@ -6630,7 +6629,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1390,
-        "y": 480,
+        "y": 420,
         "wires": [],
         "l": true
     },
@@ -6649,7 +6648,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 200,
-        "y": 780,
+        "y": 720,
         "wires": [
             [
                 "ab025c05d155f4ee"
@@ -6670,7 +6669,7 @@
         "finalize": "",
         "libs": [],
         "x": 580,
-        "y": 780,
+        "y": 720,
         "wires": [
             [
                 "e2335c226769f307"
@@ -6688,7 +6687,7 @@
             "74329f13cbbc528a"
         ],
         "x": 1130,
-        "y": 800,
+        "y": 740,
         "wires": [],
         "l": true
     },
@@ -6699,7 +6698,7 @@
         "name": "",
         "content": "# Micro-Air Thermostats\n## For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
         "x": 390,
-        "y": 177,
+        "y": 120,
         "wires": []
     },
     {
@@ -6713,7 +6712,7 @@
             "f658418a7b9b4857"
         ],
         "x": 910,
-        "y": 400,
+        "y": 340,
         "wires": [],
         "l": true
     },
@@ -6731,7 +6730,7 @@
         "finalize": "",
         "libs": [],
         "x": 860,
-        "y": 780,
+        "y": 720,
         "wires": [
             [
                 "b104a7e82aefcb21"
@@ -6752,7 +6751,7 @@
             "f658418a7b9b4857"
         ],
         "x": 1130,
-        "y": 760,
+        "y": 700,
         "wires": [],
         "l": true
     },
@@ -6771,7 +6770,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 220,
-        "y": 640,
+        "y": 580,
         "wires": [
             [
                 "7605393317b3c471"
@@ -6792,7 +6791,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 640,
+        "y": 580,
         "wires": [
             [
                 "ba611b1fa95bf468"
@@ -6813,7 +6812,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 380,
+        "y": 320,
         "wires": [
             [
                 "cdc4754f4c43430d"
@@ -6833,7 +6832,7 @@
             "88e5fa035bedb48c"
         ],
         "x": 230,
-        "y": 380,
+        "y": 320,
         "wires": [
             [
                 "dbc862c066d96221"
@@ -6860,7 +6859,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 420,
-        "y": 380,
+        "y": 320,
         "wires": [
             [
                 "2f91d31ed0be26b1"
@@ -6881,7 +6880,7 @@
         "property": "payload",
         "topi": "payload.zone",
         "x": 430,
-        "y": 480,
+        "y": 420,
         "wires": [
             [
                 "ae5fb4f1c3213c0a"
@@ -6899,7 +6898,7 @@
             "1d411b577497f7ae"
         ],
         "x": 900,
-        "y": 360,
+        "y": 300,
         "wires": [],
         "l": true
     },
@@ -6913,7 +6912,7 @@
             "cdc4754f4c43430d"
         ],
         "x": 230,
-        "y": 540,
+        "y": 480,
         "wires": [
             [
                 "eef231d415615180"
@@ -6943,7 +6942,7 @@
         "repair": false,
         "outputs": 2,
         "x": 350,
-        "y": 780,
+        "y": 720,
         "wires": [
             [
                 "e1cc8c52948f9b2a"
@@ -7591,7 +7590,7 @@
         "name": "",
         "content": "# Comfig Templates\nLibreCoach auto-discovers your RV's devices, but the\ndefault entity names are generic — \"Switch 12,\" \"Lock 3.\"\nOnce you've renamed them to match your rig — \"Bedroom Lights,\"\n\"Entry Door\" — you can export that configuration and share it\nwith the community. Other owners with a similar RV can\nimport your file to get meaningful names without starting from scratch.",
         "x": 350,
-        "y": 160,
+        "y": 140,
         "wires": []
     },
     {
@@ -7617,8 +7616,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 230,
-        "y": 260,
+        "x": 190,
+        "y": 220,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -7638,8 +7637,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 320,
+        "x": 420,
+        "y": 280,
         "wires": [
             [
                 "d38c75bc1474be23"
@@ -7656,8 +7655,8 @@
         "links": [
             "f658418a7b9b4857"
         ],
-        "x": 750,
-        "y": 320,
+        "x": 710,
+        "y": 280,
         "wires": [],
         "l": true
     },
@@ -7684,8 +7683,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 230,
-        "y": 320,
+        "x": 190,
+        "y": 280,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -7697,8 +7696,8 @@
         "type": "note",
         "z": "222c995b7790b8de",
         "content": "# Delete HA Entity\nRemoves devices from Home Assistant when they're no longer needed.",
-        "x": 370,
-        "y": 113,
+        "x": 330,
+        "y": 80,
         "wires": []
     },
     {
@@ -7724,8 +7723,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 220,
-        "y": 380,
+        "x": 180,
+        "y": 340,
         "wires": [
             [
                 "a2d2ed96ff4615f9"
@@ -7754,8 +7753,8 @@
         "topic": "homeassistant/sensor/librecoach_system_librecoach_config_download/config",
         "payload": "",
         "payloadType": "str",
-        "x": 210,
-        "y": 440,
+        "x": 170,
+        "y": 400,
         "wires": [
             [
                 "d38c75bc1474be23"
