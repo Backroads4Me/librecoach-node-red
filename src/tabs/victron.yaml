@@ -1,0 +1,1981 @@
+- id: 1fde0c4ffb03727e
+  type: tab
+  label: Victron
+  env: []
+  normalizedLabel: victron
+  disabled: false
+  info: ""
+- id: 0b2b4c52d68092cc
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Load on Start
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "18"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 280
+  "y": 740
+  g: 8aac091f0fffbf22
+  wires:
+    - - ea38d37ac8c3ab57
+- id: 0b4d0850eae8a0b4
+  type: mqtt in
+  z: 1fde0c4ffb03727e
+  name: Victron HA in
+  topic: librecoach/victron/set/+/+/#
+  qos: "2"
+  datatype: auto-detect
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 210
+  "y": 880
+  g: 8aac091f0fffbf22
+  wires:
+    - - eced66f05a1796cd
+- id: 1284b5e380db32be
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_store_devices
+  func: >
+    const victronEnabled = global.get("victronEnabled");
+
+    if (!victronEnabled) return null;
+
+
+    // Store active Victron device instances from ProductName topics
+
+    // Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName
+
+
+    const topic = msg.topic;
+
+    if (!topic) return null;
+
+
+    const parts = topic.split("/");
+
+    if (parts.length < 5) return null;
+
+
+    const serviceType = parts[2];
+
+    const instance = parts[3];
+
+    const key = `${serviceType}_${instance}`;
+
+
+    // Extract product name from payload
+
+    let productName = "";
+
+    if (typeof msg.payload === "string") {
+      try {
+        productName = JSON.parse(msg.payload).value || "";
+      } catch (e) {
+        productName = msg.payload;
+      }
+    } else if (typeof msg.payload === "object" && msg.payload !== null) {
+      productName = msg.payload.value || "";
+    }
+
+
+    // Build short name from first two alpha words of product name (skip model
+    numbers)
+
+    const alphaWords = productName.split(/\s+/).filter((w) =>
+    /^[a-zA-Z]/.test(w));
+
+    const shortName = alphaWords
+      .slice(0, 2)
+      .join("_")
+      .replace(/[^a-zA-Z0-9_-]/g, "")
+      .toLowerCase();
+
+    // Get or initialize the active devices object
+
+    let victronDevices = global.get("victronDevices", "file") || {};
+
+
+    // Store or update device entry
+
+    victronDevices[key] = {
+      productName: productName,
+      shortName: shortName || serviceType,
+    };
+
+
+    global.set("victronDevices", victronDevices, "file");
+
+
+    node.status({
+      fill: "green",
+      shape: "dot",
+      text: `${Object.keys(victronDevices).length} active devices`,
+    });
+
+
+    return null;
+  outputs: 0
+  timeout: ""
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 760
+  "y": 1060
+  g: 8aac091f0fffbf22
+  wires: []
+- id: 19993b80c1009e61
+  type: function
+  z: 1fde0c4ffb03727e
+  name: flush
+  func: return {flush:true}
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 410
+  "y": 400
+  g: 8aac091f0fffbf22
+  wires:
+    - - 89759b3d2d9812c8
+- id: 1a548b4f42a93938
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Load on Start
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "0.1"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 240
+  "y": 960
+  g: 8aac091f0fffbf22
+  wires:
+    - - d1a2b3c4e5f6780b
+- id: 2343c8c12f2081fa
+  type: link in
+  z: 1fde0c4ffb03727e
+  name: Reset Victron
+  links:
+    - 1e244bad0304bb74
+  x: 1050
+  "y": 1000
+  g: 3ffa68cfd2195db1
+  l: true
+  wires:
+    - - 9401b2d19494b1c2
+- id: 2ff7b2c41ee41253
+  type: mqtt in
+  z: 1fde0c4ffb03727e
+  name: Victron ProductName
+  topic: N/+/+/+/ProductName
+  qos: "2"
+  datatype: auto-detect
+  broker: 68237e1473ec01aa
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 240
+  "y": 1060
+  g: 8aac091f0fffbf22
+  wires:
+    - - 9be2b9ec5c4f51d4
+- id: 3057b4acf81dc8db
+  type: mqtt in
+  z: 1fde0c4ffb03727e
+  name: Victron Instance
+  topic: N/+/system/0/Serial
+  qos: "2"
+  datatype: auto-detect
+  broker: 68237e1473ec01aa
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 220
+  "y": 360
+  g: 8aac091f0fffbf22
+  wires:
+    - - 19993b80c1009e61
+      - 943309ad88255256
+- id: 36f5f1a727dfd1ca
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_keep_alive
+  func: |-
+    const victronEnabled = global.get("victronEnabled");
+    if (!victronEnabled) return null;
+
+    const portalId = global.get("victronPortalId", "file");
+
+    if (portalId) {
+        msg.topic = `R/${portalId}/keepalive`;
+
+        msg.payload = { "keepalive-options": ["suppress-republish"] };
+
+        return msg;
+    }
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 830
+  "y": 700
+  g: 8aac091f0fffbf22
+  wires:
+    - - c80ea298a37232a2
+- id: 3fd699a116881ab0
+  type: delay
+  z: 1fde0c4ffb03727e
+  name: ""
+  pauseType: delay
+  timeout: "1"
+  timeoutUnits: seconds
+  rate: "1"
+  nbRateUnits: "1"
+  rateUnits: second
+  randomFirst: "1"
+  randomLast: "5"
+  randomUnits: seconds
+  drop: false
+  allowrate: false
+  outputs: 1
+  x: 720
+  "y": 420
+  g: 8aac091f0fffbf22
+  wires:
+    - - 48292ec85eb70ee5
+- id: 3ffa68cfd2195db1
+  type: group
+  z: 1fde0c4ffb03727e
+  name: Rest unique list
+  x: 954
+  "y": 959
+  g: 8aac091f0fffbf22
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - 2343c8c12f2081fa
+    - 9401b2d19494b1c2
+    - ce787dfcc75988be
+- id: 48292ec85eb70ee5
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_handle_toggle
+  func: |
+    // Handles enable/disable of Victron integration via addon config
+    // Input: msg from librecoach/config/victron_enabled ("true" / "false")
+    // Output 1 → MQTT Out (entity deletion on disable)
+    // Output 2 → Filter nodes (reset on enable)
+
+    // Only handle victron_enabled messages
+    const key = msg.topic.split("/").pop();
+    if (key !== "victron_enabled") return [null, null];
+
+    const enabled = msg.payload.toString() === "true";
+
+    if (enabled) {
+      node.status({ fill: "green", shape: "dot", text: "Enabled" });
+      // Reset filter nodes when enabling so stale state doesn't block messages
+      return [null, { reset: true }];
+    }
+
+    // === Disable: delete all tracked entities from HA ===
+    const discoveryTopics = global.get("victronDiscoveryTopics", "file") || [];
+
+    if (discoveryTopics.length === 0) {
+      node.status({
+        fill: "yellow",
+        shape: "ring",
+        text: "Disabled (no entities)",
+      });
+      return [null, null];
+    }
+
+    // Send deletion messages to output 1 (MQTT Out)
+    discoveryTopics.forEach((topic) => {
+      node.send([{ topic: topic, payload: "" }, null]);
+    });
+
+    // Clear persisted tracking state
+    global.set("uniqueVictron", []);
+
+    node.status({
+      fill: "red",
+      text: `Disabled — removed ${discoveryTopics.length} entities`,
+    });
+
+    return [null, null];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 920
+  "y": 460
+  g: 8aac091f0fffbf22
+  wires:
+    - - e371075d4dbfc113
+    - - 71ac45fb64bf70c9
+- id: 68214a83740efc26
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: On start
+  props:
+    - p: reset
+      v: "true"
+      vt: bool
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "0.3"
+  topic: ""
+  x: 220
+  "y": 600
+  g: 8aac091f0fffbf22
+  wires:
+    - - a95d74d20270f69b
+- id: 6ba061be2ab168c5
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Load on Start
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "48"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 340
+  "y": 780
+  g: 8aac091f0fffbf22
+  wires:
+    - - ea38d37ac8c3ab57
+- id: 70c7d357a6f48e4a
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Load on Start
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "63"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 400
+  "y": 820
+  g: 8aac091f0fffbf22
+  wires:
+    - - ea38d37ac8c3ab57
+- id: 71ac45fb64bf70c9
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: Reset Victron filters
+  mode: link
+  links:
+    - db3ce2f66f852ca6
+    - b1b68ff387e01a3a
+  x: 1270
+  "y": 540
+  g: 8aac091f0fffbf22
+  l: true
+  wires: []
+- id: 89759b3d2d9812c8
+  type: delay
+  z: 1fde0c4ffb03727e
+  name: ""
+  pauseType: delay
+  timeout: "1"
+  timeoutUnits: days
+  rate: "1"
+  nbRateUnits: "1"
+  rateUnits: day
+  randomFirst: "1"
+  randomLast: "5"
+  randomUnits: seconds
+  drop: false
+  allowrate: false
+  outputs: 1
+  x: 560
+  "y": 420
+  g: 8aac091f0fffbf22
+  wires:
+    - - 3fd699a116881ab0
+- id: 8aac091f0fffbf22
+  type: group
+  z: 1fde0c4ffb03727e
+  name: Victron GX device configuration
+  x: 114
+  "y": 299
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - 0b2b4c52d68092cc
+    - 0b4d0850eae8a0b4
+    - 1284b5e380db32be
+    - 19993b80c1009e61
+    - 1a548b4f42a93938
+    - 2ff7b2c41ee41253
+    - 3057b4acf81dc8db
+    - 36f5f1a727dfd1ca
+    - 3fd699a116881ab0
+    - 3ffa68cfd2195db1
+    - 48292ec85eb70ee5
+    - 68214a83740efc26
+    - 6ba061be2ab168c5
+    - 70c7d357a6f48e4a
+    - 71ac45fb64bf70c9
+    - 89759b3d2d9812c8
+    - 8fdd1d506d28b9b6
+    - 903a7fac6108ac58
+    - 943309ad88255256
+    - 9be2b9ec5c4f51d4
+    - a95d74d20270f69b
+    - b1b68ff387e01a3a
+    - bd38c37850a3e832
+    - c80ea298a37232a2
+    - d1a2b3c4e5f67801
+    - d1a2b3c4e5f67804
+    - d1a2b3c4e5f67805
+    - d1a2b3c4e5f67806
+    - d1a2b3c4e5f6780b
+    - d1a2b3c4e5f6780c
+    - db3ce2f66f852ca6
+    - e1032a6a79ae3e4c
+    - e371075d4dbfc113
+    - ea38d37ac8c3ab57
+    - eced66f05a1796cd
+    - f3f99ba42088c9b1
+    - f9d1a59e25ce32dd
+- id: 8fdd1d506d28b9b6
+  type: link in
+  z: 1fde0c4ffb03727e
+  name: CONFIG_GLOBALS
+  links:
+    - 88e5fa035bedb48c
+  x: 230
+  "y": 460
+  g: 8aac091f0fffbf22
+  l: true
+  wires:
+    - - 89759b3d2d9812c8
+      - 48292ec85eb70ee5
+- id: 903a7fac6108ac58
+  type: mqtt in
+  z: 1fde0c4ffb03727e
+  name: Victron MQTT
+  topic: N/+/#
+  qos: "2"
+  datatype: auto-detect
+  broker: 68237e1473ec01aa
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 210
+  "y": 540
+  g: 8aac091f0fffbf22
+  wires:
+    - - a95d74d20270f69b
+- id: 9401b2d19494b1c2
+  type: function
+  z: 1fde0c4ffb03727e
+  name: Reset function
+  func: |
+    global.set("uniqueVictron", []);
+    global.set("victronDiscoveryTopics", [], "file");
+    return null;  // Nothing needs to go downstream
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1320
+  "y": 1060
+  g: 3ffa68cfd2195db1
+  wires:
+    - []
+- id: 943309ad88255256
+  type: rbe
+  z: 1fde0c4ffb03727e
+  name: ""
+  func: rbe
+  gap: ""
+  start: ""
+  inout: out
+  septopics: true
+  property: payload
+  topi: topic
+  x: 410
+  "y": 340
+  g: 8aac091f0fffbf22
+  wires:
+    - - e1032a6a79ae3e4c
+- id: 990c3568d504c86e
+  type: note
+  z: 1fde0c4ffb03727e
+  name: ""
+  content: |-
+    # Victron
+    ## For the Victron functionality to work you'll need:
+    - A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)
+    - The GX device connected to the same network as LibreCoach
+    - GX device LAN network security set to Unsecured
+    - MQTT enabed on the GX device
+  x: 350
+  "y": 140
+  wires: []
+- id: 9be2b9ec5c4f51d4
+  type: rbe
+  z: 1fde0c4ffb03727e
+  name: ""
+  func: rbe
+  gap: ""
+  start: ""
+  inout: out
+  septopics: true
+  property: payload
+  topi: topic
+  x: 450
+  "y": 1060
+  g: 8aac091f0fffbf22
+  wires:
+    - - 1284b5e380db32be
+- id: a95d74d20270f69b
+  type: rbe
+  z: 1fde0c4ffb03727e
+  name: ""
+  func: rbe
+  gap: ""
+  start: ""
+  inout: out
+  septopics: true
+  property: payload
+  topi: topic
+  x: 370
+  "y": 540
+  g: 8aac091f0fffbf22
+  wires:
+    - - d1a2b3c4e5f67801
+- id: b1b68ff387e01a3a
+  type: link in
+  z: 1fde0c4ffb03727e
+  name: Reset Victron filters
+  links:
+    - 71ac45fb64bf70c9
+  x: 230
+  "y": 1140
+  g: 8aac091f0fffbf22
+  l: true
+  wires:
+    - - 9be2b9ec5c4f51d4
+- id: bd38c37850a3e832
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 1290
+  "y": 620
+  g: 8aac091f0fffbf22
+  l: true
+  wires: []
+- id: c80ea298a37232a2
+  type: mqtt out
+  z: 1fde0c4ffb03727e
+  name: Victron out
+  topic: ""
+  qos: ""
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 68237e1473ec01aa
+  x: 1250
+  "y": 760
+  g: 8aac091f0fffbf22
+  wires: []
+- id: ce787dfcc75988be
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Reset unique
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: false
+  onceDelay: 0.1
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 1070
+  "y": 1060
+  g: 3ffa68cfd2195db1
+  wires:
+    - - 9401b2d19494b1c2
+- id: d1a2b3c4e5f67801
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_decode_mqtt
+  func: >
+    // Decode Victron MQTT topic and payload into standardized message
+
+
+    // Optimized Decode: Rounds, Filters, and calculates Totals early
+
+    const victronEnabled = global.get("victronEnabled");
+
+    if (!victronEnabled) return null;
+
+
+    const topic = msg.topic;
+
+    if (!topic || typeof topic !== "string") return null;
+
+
+    const parts = topic.split("/");
+
+    if (parts.length < 5) return null;
+
+
+    const serviceType = parts[2];
+
+    const instance = parts[3];
+
+    const dbusPath = "/" + parts.slice(4).join("/");
+
+
+    // === 1. Path Whitelist Gate ===
+
+    const pathWhitelist = {
+      system: [
+        "/Dc/Battery/Soc",
+        "/Dc/Battery/Voltage",
+        "/Dc/Battery/Current",
+        "/Dc/Battery/Power",
+        "/Dc/Battery/Temperature",
+        "/Dc/Pv/Power",
+        "/Dc/Pv/Current",
+        "/Ac/Consumption/L1/Power",
+        "/Ac/Consumption/L2/Power",
+        "/Ac/Grid/L1/Power",
+        "/Ac/Grid/L2/Power",
+        "/Ac/ActiveIn/ActiveInput",
+        "/Ac/ActiveIn/Source",
+        "/Dc/System/Power",
+        "/Relay/0/State",
+        "/Relay/1/State",
+      ],
+      battery: [
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Dc/0/Power",
+        "/Dc/0/Temperature",
+        "/Dc/1/Voltage",
+        "/Soc",
+      ],
+      solarcharger: [
+        "/Yield/Power",
+        "/Yield/System",
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Pv/V",
+        "/State",
+      ],
+      charger: ["/Dc/0/Voltage", "/Dc/0/Current", "/Ac/In/L1/P", "/State"],
+      alternator: [
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Dc/0/Power",
+        "/Dc/In/V",
+        "/Dc/In/I",
+        "/Dc/In/P",
+        "/State",
+      ],
+      dcdc: [
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Dc/0/Power",
+        "/Dc/In/V",
+        "/Dc/In/I",
+        "/Dc/In/P",
+        "/State",
+      ],
+      grid: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
+      acload: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
+      tank: ["/Level", "/Remaining", "/FluidType"],
+      temperature: ["/Temperature", "/Humidity"],
+      digitalinput: ["/InputState", "/Count"],
+      vebus: [
+        "/Ac/ActiveIn/L1/V",
+        "/Ac/ActiveIn/L1/I",
+        "/Ac/ActiveIn/L1/P",
+        "/Ac/ActiveIn/L2/V",
+        "/Ac/ActiveIn/L2/I",
+        "/Ac/ActiveIn/L2/P",
+        "/Ac/Out/L1/V",
+        "/Ac/Out/L1/I",
+        "/Ac/Out/L1/P",
+        "/Ac/Out/L2/V",
+        "/Ac/Out/L2/I",
+        "/Ac/Out/L2/P",
+        "/Ac/ActiveIn/CurrentLimit",
+        "/Ac/ActiveIn/L1/F",
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Dc/0/Power",
+        "/Dc/0/Temperature",
+        "/State",
+        "/Mode",
+        "/Relay/0/State",
+      ],
+    };
+
+
+    const allowedPaths = pathWhitelist[serviceType];
+
+    if (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;
+
+
+    // === 2. Device Discovery Gate ===
+
+    const victronDevices = global.get("victronDevices", "file") || {};
+
+    if (!victronDevices[`${serviceType}_${instance}`]) return null;
+
+
+    // === 3. Value Extraction & Early Rounding ===
+
+    let rawValue;
+
+    try {
+      const parsed =
+        typeof msg.payload === "string" ? JSON.parse(msg.payload) : msg.payload;
+      rawValue = parsed && parsed.value !== undefined ? parsed.value : parsed;
+    } catch (e) {
+      rawValue = msg.payload;
+    }
+
+
+    if (rawValue === null || rawValue === undefined) return null;
+
+
+    let processedValue = rawValue;
+
+    if (typeof rawValue === "number") {
+      const decimals = dbusPath.toLowerCase().includes("soc") ? 0 : 1;
+      processedValue =
+        Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    }
+
+
+    // === 4. Early RBE Filter ===
+
+    const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
+
+    if (flow.get(cacheKey) === processedValue) return null;
+
+    flow.set(cacheKey, processedValue);
+
+
+    // === 5. Map Lookup ===
+
+    const victronMap = global.get("victronMap");
+
+
+    // Block processing until map is loaded — prevents unitless discovery at
+    startup.
+
+    if (!victronMap) return null;
+
+
+    let unit = "",
+      dataType = "",
+      scale = "",
+      access = "";
+
+    if (victronMap.has(serviceType)) {
+      const def = victronMap.get(serviceType).get(dbusPath);
+      if (def) {
+        unit = def.unit || "";
+        dataType = def.type || "";
+        scale = def.scale || "";
+        access = def.access || "";
+      }
+    }
+
+
+    // === 6. Build Standardized Payload (Removed routing_key) ===
+
+    const basePayload = {
+      service_type: serviceType,
+      instance: instance,
+      dbus_path: dbusPath,
+      value: processedValue,
+      unit: unit,
+      data_type: dataType,
+      scale: scale,
+      access: access,
+      writable: access === "W" || access === "RW",
+    };
+
+
+    msg.payload = basePayload;
+
+
+    // === 7. Synthetic Totals (using node.send) ===
+
+    const powerTotalPairs = [
+      {
+        l1: "/Ac/Consumption/L1/Power",
+        l2: "/Ac/Consumption/L2/Power",
+        total: "/Ac/Consumption/Total/Power",
+      },
+      {
+        l1: "/Ac/Grid/L1/Power",
+        l2: "/Ac/Grid/L2/Power",
+        total: "/Ac/Grid/Total/Power",
+      },
+      {
+        l1: "/Ac/ActiveIn/L1/P",
+        l2: "/Ac/ActiveIn/L2/P",
+        total: "/Ac/ActiveIn/Total/P",
+      },
+      { l1: "/Ac/Out/L1/P", l2: "/Ac/Out/L2/P", total: "/Ac/Out/Total/P" },
+    ];
+
+
+    for (const pair of powerTotalPairs) {
+      if (dbusPath === pair.l1 || dbusPath === pair.l2) {
+        const contextKey = `total_${serviceType}_${instance}_${pair.total}`;
+        const stored = flow.get(contextKey) || {};
+
+        if (dbusPath === pair.l1) stored.l1 = processedValue;
+        if (dbusPath === pair.l2) stored.l2 = processedValue;
+        flow.set(contextKey, stored);
+
+        if (stored.l1 !== undefined && stored.l2 !== undefined) {
+          node.send({
+            payload: {
+              ...basePayload,
+              dbus_path: pair.total,
+              value: (Number(stored.l1) || 0) + (Number(stored.l2) || 0),
+            },
+          });
+        }
+        break;
+      }
+    }
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 560
+  "y": 540
+  g: 8aac091f0fffbf22
+  wires:
+    - - d1a2b3c4e5f67804
+      - d1a2b3c4e5f67806
+- id: d1a2b3c4e5f67804
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_unique
+  func: >
+    // Unique Filter for Victron entities
+
+
+    // Retrieve existing Victron entities from flow context, or initialize as
+    empty array
+
+    let uniqueVictron = global.get("uniqueVictron") || [];
+
+
+    const serviceType = msg.payload.service_type;
+
+    const instance = msg.payload.instance;
+
+    const dbusPath = msg.payload.dbus_path;
+
+
+    // Build unique key
+
+    const key = `${serviceType}_${instance}_${dbusPath}`;
+
+
+    // Check if this entity has been seen before
+
+    if (!uniqueVictron.includes(key)) {
+      uniqueVictron.push(key);
+      global.set("uniqueVictron", uniqueVictron);
+
+      // Look up product short name from discovered devices
+      const victronDevices = global.get("victronDevices", "file") || {};
+      const deviceInfo = victronDevices[`${serviceType}_${instance}`];
+      const shortName = deviceInfo ? deviceInfo.shortName : serviceType;
+      const productName = deviceInfo ? deviceInfo.productName : "";
+
+      return [
+        { reset: true },
+        {
+          payload: {
+            service_type: serviceType,
+            instance: instance,
+            dbus_path: dbusPath,
+            unit: msg.payload.unit,
+            value: msg.payload.value,
+            short_name: shortName,
+            product_name: productName,
+            access: msg.payload.access,
+            writable: msg.payload.writable,
+          },
+        },
+      ];
+    }
+
+
+    // Return nothing if duplicate
+
+    return null;
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 820
+  "y": 540
+  g: 8aac091f0fffbf22
+  wires:
+    - - 71ac45fb64bf70c9
+    - - d1a2b3c4e5f67805
+- id: d1a2b3c4e5f67805
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_create
+  func: >
+    // Creates Sensor entity for Victron via MQTT Discovery
+
+
+    // Validate input structure
+
+    if (!msg.payload || typeof msg.payload !== "object") {
+      node.error("Input payload must be an object.", msg);
+      return null;
+    }
+
+
+    const {
+      service_type,
+      instance,
+      dbus_path,
+      unit,
+      short_name,
+      product_name,
+      writable,
+    } = msg.payload;
+
+
+    // Validate required fields
+
+    if (!service_type || !instance || !dbus_path) {
+      node.error("Input missing service_type, instance, or dbus_path.", msg);
+      return null;
+    }
+
+
+    // === Unit to HA Metadata Mapping ===
+
+
+    const unitMap = {
+      "V DC": {
+        device_class: "voltage",
+        unit: "V",
+        icon: "mdi:flash",
+        precision: 1,
+      },
+      "V AC": {
+        device_class: "voltage",
+        unit: "V",
+        icon: "mdi:flash",
+        precision: 1,
+      },
+      "A DC": { device_class: "current", unit: "A", icon: "mdi:current-dc" },
+      "A AC": { device_class: "current", unit: "A", icon: "mdi:current-ac" },
+      W: { device_class: "power", unit: "W", icon: "mdi:flash" },
+      kWh: { device_class: "energy", unit: "kWh", icon: "mdi:lightning-bolt" },
+      Ah: { device_class: null, unit: "Ah", icon: "mdi:battery-charging" },
+      "%": { device_class: "battery", unit: "%", icon: "mdi:battery" },
+      "Degrees celsius": {
+        device_class: "temperature",
+        unit: "°C",
+        icon: "mdi:thermometer",
+      },
+      "Degrees Celsius": {
+        device_class: "temperature",
+        unit: "°C",
+        icon: "mdi:thermometer",
+      },
+      Hz: { device_class: "frequency", unit: "Hz", icon: "mdi:sine-wave" },
+      "m/s": { device_class: "speed", unit: "m/s", icon: "mdi:speedometer" },
+      RPM: { device_class: null, unit: "RPM", icon: "mdi:engine" },
+      seconds: { device_class: "duration", unit: "s", icon: "mdi:timer" },
+      VA: { device_class: "apparent_power", unit: "VA", icon: "mdi:flash" },
+      L: { device_class: null, unit: "L", icon: "mdi:cup-water" },
+      "%RH": { device_class: "humidity", unit: "%", icon: "mdi:water-percent" },
+      "%level": { device_class: null, unit: "%", icon: "mdi:gauge" },
+    };
+
+
+    // === Friendly Name Map ===
+
+    // Maps service_type + dbus_path to clean dashboard names.
+
+
+    const friendlyNameMap = {
+      // system/0 — GX device data
+      "system:/Dc/Battery/Soc": "Battery State of Charge",
+      "system:/Dc/Battery/Voltage": "Battery Voltage",
+      "system:/Dc/Battery/Current": "Battery Current",
+      "system:/Dc/Battery/Power": "Battery Power",
+      "system:/Dc/Battery/Temperature": "Battery Temperature",
+      "system:/Dc/Pv/Power": "Solar Power",
+      "system:/Dc/Pv/Current": "Solar Current",
+      "system:/Ac/Consumption/L1/Power": "AC Consumption L1",
+      "system:/Ac/Consumption/L2/Power": "AC Consumption L2",
+      "system:/Ac/Grid/L1/Power": "Shore Power L1",
+      "system:/Ac/Grid/L2/Power": "Shore Power L2",
+      "system:/Ac/ActiveIn/ActiveInput": "Active AC Input",
+      "system:/Ac/ActiveIn/Source": "AC Input Source",
+      "system:/Dc/System/Power": "DC Loads Power",
+      "system:/Ac/Consumption/Total/Power": "AC Consumption Total",
+      "system:/Ac/Grid/Total/Power": "Shore Power Total",
+      "system:/Relay/0/State": "Relay 1",
+      "system:/Relay/1/State": "Relay 2",
+      // battery
+      "battery:/Dc/0/Voltage": "Battery Voltage",
+      "battery:/Dc/0/Current": "Battery Current",
+      "battery:/Dc/0/Power": "Battery Power",
+      "battery:/Dc/0/Temperature": "Battery Temperature",
+      "battery:/Dc/1/Voltage": "Auxiliary Battery Voltage",
+      "battery:/Soc": "Battery SOC",
+      // solarcharger
+      "solarcharger:/Yield/Power": "Solar Power",
+      "solarcharger:/Yield/System": "Solar Total Yield",
+      "solarcharger:/Dc/0/Voltage": "Solar Battery Voltage",
+      "solarcharger:/Dc/0/Current": "Solar Charge Current",
+      "solarcharger:/Pv/V": "Solar Panel Voltage",
+      "solarcharger:/State": "Solar Charger State",
+      // vebus
+      "vebus:/Ac/ActiveIn/L1/V": "AC Input L1 Voltage",
+      "vebus:/Ac/ActiveIn/L1/I": "AC Input L1 Current",
+      "vebus:/Ac/ActiveIn/L1/P": "AC Input L1 Power",
+      "vebus:/Ac/ActiveIn/L2/V": "AC Input L2 Voltage",
+      "vebus:/Ac/ActiveIn/L2/I": "AC Input L2 Current",
+      "vebus:/Ac/ActiveIn/L2/P": "AC Input L2 Power",
+      "vebus:/Ac/Out/L1/V": "AC Output L1 Voltage",
+      "vebus:/Ac/Out/L1/I": "AC Output L1 Current",
+      "vebus:/Ac/Out/L1/P": "AC Output L1 Power",
+      "vebus:/Ac/Out/L2/V": "AC Output L2 Voltage",
+      "vebus:/Ac/Out/L2/I": "AC Output L2 Current",
+      "vebus:/Ac/Out/L2/P": "AC Output L2 Power",
+      "vebus:/Ac/ActiveIn/Total/P": "AC Input Total Power",
+      "vebus:/Ac/Out/Total/P": "AC Output Total Power",
+      "vebus:/Ac/ActiveIn/CurrentLimit": "Shore Power Limit",
+      "vebus:/Ac/ActiveIn/L1/F": "AC Input Frequency",
+      "vebus:/Dc/0/Voltage": "Inverter DC Voltage",
+      "vebus:/Dc/0/Current": "Inverter DC Current",
+      "vebus:/Dc/0/Power": "Inverter DC Power",
+      "vebus:/Dc/0/Temperature": "Inverter Temperature",
+      "vebus:/State": "Inverter State",
+      "vebus:/Mode": "Inverter Mode",
+      "vebus:/Relay/0/State": "Inverter Relay",
+      // charger
+      "charger:/Dc/0/Voltage": "Output Voltage",
+      "charger:/Dc/0/Current": "Output Current",
+      "charger:/Ac/In/L1/P": "AC Input Power",
+      "charger:/State": "Charge State",
+      // alternator (Orion XS DC-DC)
+      "alternator:/Dc/0/Voltage": "Output Voltage",
+      "alternator:/Dc/0/Current": "Output Current",
+      "alternator:/Dc/0/Power": "Output Power",
+      "alternator:/Dc/In/V": "Input Voltage",
+      "alternator:/Dc/In/I": "Input Current",
+      "alternator:/Dc/In/P": "Input Power",
+      "alternator:/State": "Charge State",
+      // dcdc
+      "dcdc:/Dc/0/Voltage": "Output Voltage",
+      "dcdc:/Dc/0/Current": "Output Current",
+      "dcdc:/Dc/0/Power": "Output Power",
+      "dcdc:/Dc/In/V": "Input Voltage",
+      "dcdc:/Dc/In/I": "Input Current",
+      "dcdc:/Dc/In/P": "Input Power",
+      "dcdc:/State": "Charge State",
+      // grid
+      "grid:/Ac/L1/Power": "L1 Power",
+      "grid:/Ac/L2/Power": "L2 Power",
+      "grid:/Ac/Power": "Total Power",
+      // acload
+      "acload:/Ac/L1/Power": "L1 Power",
+      "acload:/Ac/L2/Power": "L2 Power",
+      "acload:/Ac/Power": "Total Power",
+      // tank
+      "tank:/Level": "Level",
+      "tank:/Remaining": "Remaining",
+      "tank:/FluidType": "Fluid Type",
+      // temperature
+      "temperature:/Temperature": "Temperature",
+      "temperature:/Humidity": "Humidity",
+      // digitalinput
+      "digitalinput:/InputState": "State",
+      "digitalinput:/Count": "Count",
+    };
+
+
+    // === Build Entity ID ===
+
+
+    // Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage
+
+    let safePath = dbus_path.replace(/^\//, "").replace(/\//g,
+    "_").toLowerCase();
+
+
+    // === Standardization Rules ===
+
+
+    // 1. Context-aware renaming (only if direction is discernible)
+
+    // Map "dc_0" to "dc_out" for output-generating devices
+
+    if (
+      ["charger", "dcdc", "alternator"].includes(service_type) &&
+      safePath.includes("dc_0")
+    ) {
+      safePath = safePath.replace("dc_0", "dc_out");
+    }
+
+    // Note: solarcharger usually outputs to battery, but has "pv" as well.
+
+    // "dc_0" on solarcharger is battery connection (output).
+
+    if (service_type === "solarcharger" && safePath.includes("dc_0")) {
+      safePath = safePath.replace("dc_0", "dc_out");
+    }
+
+
+    // 2. Term normalization
+
+    safePath = safePath.replace("_activein", "_in");
+
+    safePath = safePath.replace("_active_in", "_in");
+
+    safePath = safePath.replace("_active_input", "_in");
+
+
+    // 3. Suffix expansion (single letters)
+
+    if (safePath.endsWith("_p")) {
+      safePath = safePath.slice(0, -2) + "_power";
+    } else if (safePath.endsWith("_v")) {
+      safePath = safePath.slice(0, -2) + "_voltage";
+    } else if (safePath.endsWith("_i")) {
+      safePath = safePath.slice(0, -2) + "_current";
+    } else if (safePath.endsWith("_f")) {
+      safePath = safePath.slice(0, -2) + "_frequency";
+    }
+
+
+    // 4. Specific "total_power" enforcement
+
+    if (safePath.endsWith("_total_p")) {
+      safePath = safePath.replace(/_total_p$/, "_total_power");
+    } else if (safePath.endsWith("_ac_power")) {
+      safePath = safePath.replace(/_ac_power$/, "_ac_total_power");
+    } else if (safePath === "ac_power") {
+      safePath = "ac_total_power";
+    }
+
+
+    // Use product short name in entity ID (e.g., smartshunt instead of battery)
+
+    const deviceName = short_name || service_type;
+
+    const entityId = `victron_${deviceName}_${instance}_${safePath}`;
+
+
+    // === Build Friendly Name ===
+
+
+    const nameKey = `${service_type}:${dbus_path}`;
+
+    const baseName =
+      friendlyNameMap[nameKey] ||
+      dbus_path
+        .replace(/^\//, "")
+        .replace(/\//g, " ")
+        .replace(/([a-z])([A-Z])/g, "$1 $2");
+
+    // Build short display name from first two alpha words of product name
+
+    const displayName = product_name
+      ? product_name
+          .split(/\s+/)
+          .filter((w) => /^[a-zA-Z]/.test(w))
+          .slice(0, 2)
+          .join(" ")
+      : "";
+
+    // Prefix with device display name (e.g., "MultiPlus-II — Inverter DC
+    Power")
+
+    // System service uses "System" prefix instead of product name.
+
+    const prefix = service_type === "system" ? "System" : displayName;
+
+    const friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;
+
+
+    // === Unit Override for Paths Missing from Victron CSV ===
+
+
+    const unitOverrides = {
+      "/Dc/0/Power": "W",
+      "/Dc/0/Voltage": "V DC",
+      "/Dc/0/Current": "A DC",
+      "/Dc/0/Temperature": "Degrees celsius",
+      "/Dc/In/V": "V DC",
+      "/Dc/In/I": "A DC",
+      "/Dc/In/P": "W",
+      "/Ac/In/L1/P": "W",
+      "/Ac/L1/Power": "W",
+      "/Ac/L2/Power": "W",
+      "/Ac/Power": "W",
+      "/Level": "%level",
+      "/Remaining": "L",
+      "/Temperature": "Degrees celsius",
+      "/Humidity": "%RH",
+      // vebus paths (whitelisted but may not all appear in Victron CSV)
+      "/Ac/ActiveIn/L1/V": "V AC",
+      "/Ac/ActiveIn/L1/I": "A AC",
+      "/Ac/ActiveIn/L1/P": "W",
+      "/Ac/ActiveIn/L2/V": "V AC",
+      "/Ac/ActiveIn/L2/I": "A AC",
+      "/Ac/ActiveIn/L2/P": "W",
+      "/Ac/ActiveIn/Total/P": "W",
+      "/Ac/ActiveIn/L1/F": "Hz",
+      "/Ac/Out/L1/V": "V AC",
+      "/Ac/Out/L1/I": "A AC",
+      "/Ac/Out/L1/P": "W",
+      "/Ac/Out/L2/V": "V AC",
+      "/Ac/Out/L2/I": "A AC",
+      "/Ac/Out/L2/P": "W",
+      "/Ac/Out/Total/P": "W",
+      // System service paths (synthesized by GX, not in Victron CSV)
+      "/Dc/Battery/Voltage": "V DC",
+      "/Dc/Battery/Current": "A DC",
+      "/Dc/Battery/Power": "W",
+      "/Dc/Battery/Soc": "%",
+      "/Dc/Battery/Temperature": "Degrees celsius",
+      "/Dc/Pv/Power": "W",
+      "/Dc/Pv/Current": "A DC",
+      "/Dc/System/Power": "W",
+      "/Ac/Consumption/L1/Power": "W",
+      "/Ac/Consumption/L2/Power": "W",
+      "/Ac/Consumption/Total/Power": "W",
+      "/Ac/Grid/L1/Power": "W",
+      "/Ac/Grid/L2/Power": "W",
+      "/Ac/Grid/Total/Power": "W",
+    };
+
+
+    const effectiveUnit = unit || unitOverrides[dbus_path] || "";
+
+
+    // === Determine HA Metadata ===
+
+
+    let haMetadata = unitMap[effectiveUnit];
+
+    let isEnum = false;
+
+
+    // Check if unit is an enum string (e.g., "0=Off;1=On;2=Error")
+
+    if (!haMetadata && effectiveUnit && effectiveUnit.includes("=")) {
+      isEnum = true;
+      haMetadata = {
+        device_class: null,
+        unit: null,
+        icon: dbus_path.includes("/Relay/")
+          ? "mdi:toggle-switch-outline"
+          : "mdi:information-outline",
+      };
+    }
+
+
+    // Fallback for unknown units
+
+    if (!haMetadata) {
+      haMetadata = {
+        device_class: null,
+        unit: effectiveUnit || null,
+        icon: "mdi:information-outline",
+      };
+    }
+
+
+    // === Determine HA Component Type ===
+
+
+    let componentType = "sensor";
+
+    if (writable && isEnum) {
+      if (dbus_path.includes("/Relay/")) {
+        componentType = "switch";
+      } else {
+        componentType = "select";
+      }
+    } else if (writable && !isEnum) {
+      componentType = "number";
+    }
+
+
+    // === Build Discovery Topic and State Topic ===
+
+
+    const discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;
+
+    const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
+
+
+    // === Build Discovery Payload ===
+
+
+    const payload = {
+      name: friendlyName,
+      unique_id: entityId,
+      icon: haMetadata.icon,
+      state_topic: stateTopic,
+      value_template: "{{ value_json.value }}",
+      device: {
+        identifiers: ["librecoach-victron"],
+        name: "Victron",
+        manufacturer: "LibreCoach",
+      },
+    };
+
+
+    // Add component-specific parameters
+
+    if (
+      componentType === "number" ||
+      componentType === "select" ||
+      componentType === "switch"
+    ) {
+      payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;
+      payload.optimistic = true;
+    }
+
+
+    if (componentType === "switch") {
+      payload.payload_on = "1";
+      payload.payload_off = "0";
+      payload.state_on = "ON";
+      payload.state_off = "OFF";
+      payload.optimistic = false;
+      payload.value_template =
+        "{{ 'ON' if value_json.value | int == 1 else 'OFF' }}";
+    } else if (componentType === "number") {
+      // Safe defaults for unknown numeric writable paths
+      payload.min = 0;
+      payload.max = 100;
+      payload.step = 0.5;
+
+      // Specific overrides based on path
+      if (dbus_path.endsWith("/Soc")) {
+        payload.max = 100;
+        payload.step = 1;
+      } else if (dbus_path.endsWith("/CurrentLimit")) {
+        payload.max = 100;
+        payload.step = 0.5;
+        payload.mode = "box";
+      }
+    }
+
+
+    // Add device_class if defined
+
+    if (haMetadata.device_class && componentType !== "select") {
+      payload.device_class = haMetadata.device_class;
+      payload.state_class = "measurement";
+    }
+
+
+    // Add unit_of_measurement if defined (excluding select)
+
+    if (haMetadata.unit && componentType !== "select") {
+      payload.unit_of_measurement = haMetadata.unit;
+    }
+
+
+    // Apply precision formatting for numeric values (excluding switches &
+    selects)
+
+    if (componentType === "sensor" || componentType === "number") {
+      // Default to 1 decimal place if not specified
+      const precision =
+        haMetadata.precision !== undefined ? haMetadata.precision : 1;
+      payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;
+    }
+
+
+    // For enum values, build a Jinja2 template to map numeric values to labels
+
+    if (isEnum && componentType === "select") {
+      const enumParts = effectiveUnit.split(";").map((p) => p.trim());
+      const mappings = {};
+      for (const part of enumParts) {
+        const [val, label] = part.split("=");
+        if (val !== undefined && label !== undefined) {
+          mappings[val.trim()] = label.trim();
+        }
+      }
+
+      // Build Jinja2 map template
+      const mapEntries = Object.entries(mappings)
+        .map(([k, v]) => `'${k}': '${v}'`)
+        .join(", ");
+      payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;
+
+      if (componentType === "select") {
+        payload.options = Object.values(mappings);
+      }
+    }
+
+
+    // Track discovery topic for cleanup on disable (file store — survives
+    restarts)
+
+    let discoveryTopics = global.get("victronDiscoveryTopics", "file") || [];
+
+    if (!discoveryTopics.includes(discoveryTopic)) {
+      discoveryTopics.push(discoveryTopic);
+      global.set("victronDiscoveryTopics", discoveryTopics, "file");
+    }
+
+
+    // Prepare final message
+
+    msg.topic = discoveryTopic;
+
+    msg.payload = payload;
+
+    msg.stateTopic = stateTopic;
+
+
+    // Send cleanup payloads for obsolete component types so they don't linger
+    in HA
+
+    if (dbus_path.endsWith("/CurrentLimit")) {
+      node.send({ topic: `homeassistant/select/${entityId}/config`, payload: "" });
+      node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
+    } else if (dbus_path.includes("/Relay/")) {
+      node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
+    }
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1040
+  "y": 580
+  g: 8aac091f0fffbf22
+  wires:
+    - - bd38c37850a3e832
+- id: d1a2b3c4e5f67806
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_status
+  func: >
+    // HA Status Updater for Victron
+
+
+    const incomingPayload = msg.payload;
+
+
+    // Gate: skip null/undefined/empty values
+
+    if (
+      incomingPayload.value === null ||
+      incomingPayload.value === undefined ||
+      incomingPayload.value === ""
+    ) {
+      return null;
+    }
+
+
+    const { service_type, instance, dbus_path, value } = incomingPayload;
+
+
+    // 1. Context-Aware Rounding (Filter Logic)
+
+    let roundedValue = value;
+
+    if (typeof value === "number") {
+      // Round SOC to whole numbers, everything else to 1 decimal
+      const decimals = dbus_path.toLowerCase().includes("soc") ? 0 : 1;
+      const factor = Math.pow(10, decimals);
+      roundedValue = Math.round(value * factor) / factor;
+    }
+
+
+    // 2. Report by Exception (Filter Logic)
+
+    const lastValues = context.get("lastValues") || {};
+
+    const cacheKey = `${service_type}_${instance}_${dbus_path}`;
+
+
+    if (lastValues[cacheKey] === roundedValue) {
+      return null; // Block if rounded value hasn't changed
+    }
+
+    lastValues[cacheKey] = roundedValue;
+
+    context.set("lastValues", lastValues);
+
+
+    // 3. Build Entity ID (Status Logic)
+
+    const safePathRaw = dbus_path
+      .replace(/^\//, "")
+      .replace(/\//g, "_")
+      .toLowerCase();
+
+    let safePath = safePathRaw;
+
+
+    // Standardization Rules
+
+    if (
+      ["charger", "dcdc", "alternator", "solarcharger"].includes(service_type) &&
+      safePath.includes("dc_0")
+    ) {
+      safePath = safePath.replace("dc_0", "dc_out");
+    }
+
+
+    safePath = safePath
+      .replace("_activein", "_in")
+      .replace("_active_in", "_in")
+      .replace("_active_input", "_in");
+
+    // Suffix expansion
+
+    if (safePath.endsWith("_p")) safePath = safePath.slice(0, -2) + "_power";
+
+    else if (safePath.endsWith("_v")) safePath = safePath.slice(0, -2) +
+    "_voltage";
+
+    else if (safePath.endsWith("_i")) safePath = safePath.slice(0, -2) +
+    "_current";
+
+    else if (safePath.endsWith("_f"))
+      safePath = safePath.slice(0, -2) + "_frequency";
+
+    // Total power enforcement
+
+    if (safePath.endsWith("_total_p"))
+      safePath = safePath.replace(/_total_p$/, "_total_power");
+    else if (safePath.endsWith("_ac_power"))
+      safePath = safePath.replace(/_ac_power$/, "_ac_total_power");
+    else if (safePath === "ac_power") safePath = "ac_total_power";
+
+
+    // Look up product name
+
+    const victronDevices = global.get("victronDevices", "file") || {};
+
+    const deviceInfo = victronDevices[`${service_type}_${instance}`];
+
+    const deviceName = deviceInfo ? deviceInfo.shortName : service_type;
+
+    const entityId = `victron_${deviceName}_${instance}_${safePath}`;
+
+
+    // 4. Determine Component Type & Topic
+
+    let componentType = "sensor";
+
+    if (dbus_path === "/Ac/ActiveIn/CurrentLimit") componentType = "number";
+
+    else if (dbus_path === "/Mode") componentType = "select";
+
+    else if (dbus_path.includes("/Relay/")) componentType = "switch";
+
+
+    // 5. Build Final Message
+
+    msg.topic = `homeassistant/${componentType}/${entityId}/state`;
+
+    msg.payload = { value: roundedValue };
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 820
+  "y": 620
+  g: 8aac091f0fffbf22
+  wires:
+    - - bd38c37850a3e832
+- id: d1a2b3c4e5f6780b
+  type: file in
+  z: 1fde0c4ffb03727e
+  name: Read Victron CSV
+  filename: /config/projects/librecoach-node-red/data/victron_attributes.csv
+  filenameType: str
+  format: utf8
+  chunk: false
+  sendError: false
+  allProps: false
+  x: 490
+  "y": 960
+  g: 8aac091f0fffbf22
+  wires:
+    - - d1a2b3c4e5f6780c
+- id: d1a2b3c4e5f6780c
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_store_map
+  func: |
+    // Parse Victron attributes CSV and store as nested Map in global context
+
+    const csvText = msg.payload;
+
+    if (!csvText || typeof csvText !== "string") {
+      node.warn("store_victron_map: No CSV data received");
+      return null;
+    }
+
+    const lines = csvText.split("\n").filter((line) => line.trim().length > 0);
+
+    // Build nested Map: serviceType → Map(path → { type, unit, scale, access })
+    const victronMap = new Map();
+
+    for (const line of lines) {
+      const parts = line.split(",");
+      if (parts.length < 8) continue;
+
+      const [service, path, type, unit, register, dataType, scale, access] =
+        parts.map((p) => p.trim());
+
+      // Strip "com.victronenergy." prefix to get short service type
+      const serviceType = service.replace("com.victronenergy.", "");
+
+      if (!victronMap.has(serviceType)) {
+        victronMap.set(serviceType, new Map());
+      }
+
+      victronMap.get(serviceType).set(path, {
+        type,
+        unit,
+        scale,
+        access,
+      });
+    }
+
+    // Store in global context
+    global.set("victronMap", victronMap);
+
+    // Count total records across all service types
+    let totalRecords = 0;
+    for (const [, pathMap] of victronMap) {
+      totalRecords += pathMap.size;
+    }
+
+    node.status({
+      fill: "green",
+      shape: "dot",
+      text: "Reference loaded",
+    });
+
+    return null;
+  outputs: 0
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 750
+  "y": 960
+  g: 8aac091f0fffbf22
+  wires: []
+- id: db3ce2f66f852ca6
+  type: link in
+  z: 1fde0c4ffb03727e
+  name: Reset Victron filters
+  links:
+    - 71ac45fb64bf70c9
+  x: 230
+  "y": 640
+  g: 8aac091f0fffbf22
+  l: true
+  wires:
+    - - a95d74d20270f69b
+- id: e1032a6a79ae3e4c
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_store_instance
+  func: |
+    const victronEnabled = global.get("victronEnabled");
+    if (!victronEnabled) return null;
+
+    const portalId = msg.payload.value;
+
+    // Store the ID in global context (file store — survives restarts)
+    global.set("victronPortalId", portalId, "file");
+
+    node.status({
+        fill: "green",
+        shape: "dot",
+        text: portalId,
+    });
+  outputs: 0
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 620
+  "y": 340
+  g: 8aac091f0fffbf22
+  wires: []
+- id: e371075d4dbfc113
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 1290
+  "y": 460
+  g: 8aac091f0fffbf22
+  l: true
+  wires: []
+- id: ea38d37ac8c3ab57
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_poll_devices
+  func: |
+    const victronEnabled = global.get("victronEnabled");
+    if (!victronEnabled) return null;
+
+    const portalId = global.get("victronPortalId", "file");
+
+    if (portalId) {
+        msg.topic = `R/${portalId}/keepalive`;
+
+        msg.payload = "";
+
+        return msg;
+    }
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 840
+  "y": 760
+  g: 8aac091f0fffbf22
+  wires:
+    - - c80ea298a37232a2
+- id: eced66f05a1796cd
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_encode_command
+  func: |
+    // Encodes HA commands to Victron MQTT format
+
+    const VEBUS_MODE_MAP = {
+      "charger only": 1,
+      "inverter only": 2,
+      on: 3,
+      off: 4,
+    };
+
+    const topic = msg.topic;
+    if (!topic) {
+      node.error("Missing msg.topic");
+      return null;
+    }
+
+    const prefix = "librecoach/victron/set/";
+    if (!topic.startsWith(prefix)) {
+      node.warn(`Unexpected command topic: ${topic}`);
+      return null;
+    }
+
+    // Extract path components: "system/0/Relay/1/State"
+    const pathPart = topic.substring(prefix.length);
+    const parts = pathPart.split("/");
+    if (parts.length < 3) {
+      node.error(`Invalid command topic structure: ${topic}`);
+      return null;
+    }
+
+    const serviceType = parts[0];
+    const instance = parts[1];
+    const dbusPath = "/" + parts.slice(2).join("/");
+
+    let value = msg.payload;
+
+    // Convert string payloads to numbers if applicable
+    if (typeof value === "string") {
+      const num = Number(value);
+      if (!isNaN(num)) {
+        value = num;
+      } else if (serviceType === "vebus" && dbusPath === "/Mode") {
+        const mapped = VEBUS_MODE_MAP[value.toLowerCase()];
+        if (mapped !== undefined) {
+          value = mapped;
+        } else {
+          node.warn(`Unknown VE.Bus mode value: ${value}`);
+          return null;
+        }
+      }
+    }
+
+    // Gate: Ensure active Portal ID
+    const victronPortalId = global.get("victronPortalId", "file");
+    if (!victronPortalId) {
+      node.warn("Cannot send Victron command: victronPortalId not set");
+      return null;
+    }
+
+    // --- Output 1: Victron Write ---
+    const victronMsg = {
+      topic: `W/${victronPortalId}/${serviceType}/${instance}${dbusPath}`,
+      payload: JSON.stringify({ value: value }),
+    };
+
+    // --- Output 2: HA System Relay Status Feedback ---
+    let haStatusMsg = null;
+
+    // Filter: Only proceed if it is a "system" service AND contains "relay"
+    const isSystemRelay =
+      serviceType === "system" && dbusPath.toLowerCase().includes("relay");
+
+    if (isSystemRelay) {
+      const sanitizedPath = parts
+        .slice(2)
+        .map((p) => p.toLowerCase())
+        .join("_");
+
+      haStatusMsg = {
+        topic: `homeassistant/switch/victron_${serviceType}_${instance}_${sanitizedPath}/state`,
+        payload: { value: value },
+      };
+    }
+
+    // Return array: [Victron, HA Status (if system relay)]
+    return [victronMsg, haStatusMsg];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 840
+  "y": 880
+  g: 8aac091f0fffbf22
+  wires:
+    - - c80ea298a37232a2
+    - - f3f99ba42088c9b1
+- id: f3f99ba42088c9b1
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 1290
+  "y": 880
+  g: 8aac091f0fffbf22
+  l: true
+  wires: []
+- id: f9d1a59e25ce32dd
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Repeat
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: "30"
+  crontab: ""
+  once: true
+  onceDelay: "3"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 220
+  "y": 700
+  g: 8aac091f0fffbf22
+  wires:
+    - - 36f5f1a727dfd1ca

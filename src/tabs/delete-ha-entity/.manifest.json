@@ -1,0 +1,14 @@
+{
+  "a2d2ed96ff4615f9": {
+    "nodeId": "a2d2ed96ff4615f9",
+    "name": "Delete HA entity",
+    "sanitizedName": "Delete HA entity",
+    "fileName": "Delete HA entity",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  }
+}

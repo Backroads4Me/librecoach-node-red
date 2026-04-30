@@ -1,0 +1,98 @@
+{
+  "03744ec33f2e6776": {
+    "nodeId": "03744ec33f2e6776",
+    "name": "unique_command",
+    "sanitizedName": "unique_command",
+    "fileName": "unique_command",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "4f86998be2551032": {
+    "nodeId": "4f86998be2551032",
+    "name": "Reset function",
+    "sanitizedName": "Reset function",
+    "fileName": "Reset function",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "54bee06f72b5c1f5": {
+    "nodeId": "54bee06f72b5c1f5",
+    "name": "unique_dc_dimmer_cmd",
+    "sanitizedName": "unique_dc_dimmer_cmd",
+    "fileName": "unique_dc_dimmer_cmd",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "905a5e9fdcc1292a": {
+    "nodeId": "905a5e9fdcc1292a",
+    "name": "status_dc_dimmer_cmd",
+    "sanitizedName": "status_dc_dimmer_cmd",
+    "fileName": "status_dc_dimmer_cmd",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "b07052c69f7b857c": {
+    "nodeId": "b07052c69f7b857c",
+    "name": "decode_dc_dimmer_command_2",
+    "sanitizedName": "decode_dc_dimmer_command_2",
+    "fileName": "decode_dc_dimmer_command_2",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "e38432107a5eaea7": {
+    "nodeId": "e38432107a5eaea7",
+    "name": "status_generic_indicator_cmd",
+    "sanitizedName": "status_generic_indicator_cmd",
+    "fileName": "status_generic_indicator_cmd",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "e5f557604a31d3df": {
+    "nodeId": "e5f557604a31d3df",
+    "name": "decode_generic_indicator_command",
+    "sanitizedName": "decode_generic_indicator_command",
+    "fileName": "decode_generic_indicator_command",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "f96e5b3b013a2b8f": {
+    "nodeId": "f96e5b3b013a2b8f",
+    "name": "Reset function",
+    "sanitizedName": "Reset function",
+    "fileName": "Reset function(2)",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  }
+}

@@ -1,0 +1,1412 @@
+- id: bfa6336b0d45dc23
+  type: tab
+  label: Templates
+  env: []
+  normalizedLabel: templates
+  disabled: false
+  info: ""
+- id: 080d3da2e1d0d2ff
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_summary
+  func: >
+    // Summarizes import results after all entity registry updates complete
+
+    // Input: msg.payload = array of ha-api WebSocket responses (from Join after
+    Split)
+
+    //        msg.importCounts = { totalInFile, skippedUnchanged,
+    skippedMissing, toUpdate }
+
+    // Output 1: msg configured for HA persistent notification
+
+    // Output 2: JSON result for HTTP Response to browser
+
+
+    msg.res = msg._originalRes;
+
+    delete msg._originalRes;
+
+
+    const responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];
+
+    const counts = msg.importCounts || {};
+
+
+    let updated = 0;
+
+    let failed = 0;
+
+
+    for (const res of responses) {
+        if (res && res.entity_id) {
+            updated++;
+        } else {
+            failed++;
+        }
+    }
+
+
+    const skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing ||
+    0);
+
+
+    // Output 2: HTTP Response to browser
+
+    const httpMsg = {
+        payload: { updated, skipped, failed },
+        statusCode: 200,
+        res: msg.res,
+    };
+
+
+    // Output 1: HA persistent notification
+
+    const haBaseUrl = "http://supervisor/core";
+
+    const haToken = env.get("SUPERVISOR_TOKEN");
+
+
+    let notifyMsg = null;
+
+
+    if (haToken) {
+        notifyMsg = {
+            url: `${haBaseUrl}/api/services/persistent_notification/create`,
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${haToken}`,
+                "Content-Type": "application/json",
+            },
+            payload: {
+                title: "LibreCoach Import Complete",
+                message: `Updated: ${updated}\nSkipped: ${skipped}\nFailed: ${failed}`,
+                notification_id: "librecoach_import_result",
+            },
+        };
+    }
+
+
+    node.status({
+        fill: failed > 0 ? "yellow" : "green",
+        shape: "dot",
+        text: `${updated} updated, ${skipped} skipped, ${failed} failed`,
+    });
+
+
+    return [notifyMsg, httpMsg];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1670
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - e686216d7dd9f13c
+    - - 6fe721da58a82100
+- id: 0bd062c51b9e4b8b
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_create_page
+  func: |
+    // Serves the LibreCoach configuration import upload page
+    // Input: HTTP In GET /librecoach/import
+    // Output: msg.payload = HTML string for HTTP Response
+
+    msg.payload = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibreCoach — Import Configuration</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #1a1a2e; color: #e0e0e0; padding: 2rem;
+        display: flex; justify-content: center; min-height: 100vh;
+      }
+      .container { max-width: 560px; width: 100%; }
+      h1 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1.5rem; }
+      .subtitle { color: #888; margin-bottom: 1.5rem; font-size: 0.9rem; }
+      .upload-area {
+        border: 2px dashed #444; border-radius: 8px; padding: 2rem;
+        text-align: center; margin-bottom: 1rem; transition: border-color 0.2s;
+      }
+      .upload-area.has-file { border-color: #4fc3f7; }
+      input[type="file"] { margin: 0.5rem 0; }
+      .preview {
+        background: #16213e; border-radius: 8px; padding: 1rem;
+        margin-bottom: 1rem; display: none;
+      }
+      .preview.visible { display: block; }
+      .preview h3 { color: #4fc3f7; margin-bottom: 0.5rem; font-size: 1rem; }
+      .preview-row { display: flex; justify-content: space-between; padding: 0.25rem 0; }
+      .preview-label { color: #888; }
+      .preview-value { color: #e0e0e0; font-weight: 500; }
+      .error-text { color: #ef5350; }
+      button {
+        background: #4fc3f7; color: #1a1a2e; border: none; border-radius: 6px;
+        padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 600;
+        cursor: pointer; width: 100%; transition: opacity 0.2s;
+      }
+      button:disabled { opacity: 0.4; cursor: not-allowed; }
+      button:hover:not(:disabled) { opacity: 0.85; }
+      .results {
+        background: #16213e; border-radius: 8px; padding: 1rem;
+        margin-top: 1rem; display: none;
+      }
+      .results.visible { display: block; }
+      .results h3 { margin-bottom: 0.5rem; font-size: 1rem; }
+      .results.success h3 { color: #66bb6a; }
+      .results.failure h3 { color: #ef5350; }
+      .spinner { display: inline-block; width: 18px; height: 18px;
+        border: 2px solid #4fc3f7; border-top-color: transparent;
+        border-radius: 50%; animation: spin 0.8s linear infinite;
+        vertical-align: middle; margin-right: 0.5rem;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+      <h1>Import Configuration</h1>
+      <p class="subtitle">Restore customized entity names from a LibreCoach export file.</p>
+
+      <div class="upload-area" id="uploadArea">
+        <p>Select a LibreCoach export JSON file</p>
+        <input type="file" id="fileInput" accept=".json">
+      </div>
+
+      <div class="preview" id="preview">
+        <h3>File Preview</h3>
+        <div id="previewContent"></div>
+      </div>
+
+      <button id="importBtn" disabled>Import</button>
+
+      <div class="results" id="results">
+        <h3 id="resultsTitle"></h3>
+        <div id="resultsContent"></div>
+      </div>
+    </div>
+
+    <script>
+      const importPostUrl = window.location.href;
+      const fileInput = document.getElementById("fileInput");
+      const uploadArea = document.getElementById("uploadArea");
+      const preview = document.getElementById("preview");
+      const previewContent = document.getElementById("previewContent");
+      const importBtn = document.getElementById("importBtn");
+      const results = document.getElementById("results");
+      const resultsTitle = document.getElementById("resultsTitle");
+      const resultsContent = document.getElementById("resultsContent");
+
+      let parsedConfig = null;
+
+      fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (!data.entities || typeof data.entities !== "object") {
+              showPreviewError("Invalid file: missing 'entities' key.");
+              return;
+            }
+
+            parsedConfig = data;
+            const entityCount = Object.keys(data.entities).length;
+
+            let html = "";
+            html += row("Export Date", data.export_date || "Unknown");
+            if (data.rv_info) {
+              const rv = data.rv_info;
+              const rvLabel = [rv.manufacturer, rv.model, rv.year, rv.other]
+                .filter(Boolean).join(" ");
+              if (rvLabel) html += row("Vehicle", rvLabel);
+            }
+            html += row("Customized Names", entityCount);
+            if (entityCount === 0) {
+              html += '<p class="error-text" style="margin-top:0.5rem">' +
+                      "No customized names found — nothing to import.</p>";
+            }
+
+            previewContent.innerHTML = html;
+            preview.classList.add("visible");
+            uploadArea.classList.add("has-file");
+            importBtn.disabled = entityCount === 0;
+            results.classList.remove("visible");
+          } catch (err) {
+            showPreviewError("Could not parse JSON: " + err.message);
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      function showPreviewError(msg) {
+        previewContent.innerHTML = '<p class="error-text">' + msg + "</p>";
+        preview.classList.add("visible");
+        importBtn.disabled = true;
+        parsedConfig = null;
+      }
+
+      function row(label, value) {
+        return '<div class="preview-row">' +
+               '<span class="preview-label">' + label + "</span>" +
+               '<span class="preview-value">' + value + "</span></div>";
+      }
+
+      importBtn.addEventListener("click", function () {
+        if (!parsedConfig) return;
+        importBtn.disabled = true;
+        importBtn.innerHTML = '<span class="spinner"></span>Importing…';
+        results.classList.remove("visible", "success", "failure");
+
+        fetch(importPostUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(parsedConfig),
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          resultsTitle.textContent = data.error ? "Import Failed" : "Import Complete";
+          results.classList.add(data.error ? "failure" : "success");
+
+          if (data.error) {
+            resultsContent.innerHTML = '<p class="error-text">' + data.error + "</p>";
+          } else {
+            let html = "";
+            html += row("Updated", data.updated || 0);
+            html += row("Skipped (not in HA)", data.skipped || 0);
+            html += row("Failed", data.failed || 0);
+            resultsContent.innerHTML = html;
+          }
+          results.classList.add("visible");
+        })
+        .catch(function (err) {
+          resultsTitle.textContent = "Import Failed";
+          results.classList.add("failure", "visible");
+          resultsContent.innerHTML = '<p class="error-text">' + err.message + "</p>";
+        })
+        .finally(function () {
+          importBtn.innerHTML = "Import";
+          importBtn.disabled = false;
+        });
+      });
+    </script>
+    </body>
+    </html>`;
+
+    msg.headers = { "Content-Type": "text/html" };
+    node.status({ fill: "green", shape: "dot", text: "Page served" });
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 380
+  "y": 560
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 40e089e9bdbb5373
+- id: 0d5ca59cd7836171
+  type: split
+  z: bfa6336b0d45dc23
+  name: ""
+  splt: \n
+  spltType: str
+  arraySplt: 1
+  arraySpltType: len
+  stream: false
+  addname: ""
+  property: payload
+  x: 970
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - c2e0c58f22ff4794
+- id: 12a57f6a07d0bf1a
+  type: link out
+  z: bfa6336b0d45dc23
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 590
+  "y": 420
+  g: export_config_group_001
+  l: true
+  wires: []
+- id: 3296e5f0fcd2c737
+  type: group
+  z: bfa6336b0d45dc23
+  name: Import Configuration
+  x: 94
+  "y": 519
+  style:
+    stroke: "#3d85c6"
+    label: true
+  nodes:
+    - 080d3da2e1d0d2ff
+    - 0bd062c51b9e4b8b
+    - 0d5ca59cd7836171
+    - 40e089e9bdbb5373
+    - 47ac3adc971d73eb
+    - 48af3768692e8e47
+    - 50bc401ae974546e
+    - 55dd74b672a2f509
+    - 616a7d5b8036c0b5
+    - 6a3efcac3894a63f
+    - 6ea3c976edca4420
+    - 6fe721da58a82100
+    - 83e45c7061bd9e49
+    - a439179f7b78685a
+    - ac639050da7648b9
+    - c2e0c58f22ff4794
+    - d3b9548ea352bc6c
+    - dda95ad4c2e65ea7
+    - e686216d7dd9f13c
+- id: 40e089e9bdbb5373
+  type: http response
+  z: bfa6336b0d45dc23
+  name: http response
+  statusCode: ""
+  headers: {}
+  x: 600
+  "y": 560
+  g: 3296e5f0fcd2c737
+  wires: []
+- id: 47ac3adc971d73eb
+  type: link out
+  z: bfa6336b0d45dc23
+  name: Notify user
+  mode: link
+  links:
+    - a1e89f48333c8256
+  x: 570
+  "y": 780
+  g: 3296e5f0fcd2c737
+  l: true
+  wires: []
+- id: 47f3c921ae62126a
+  type: link out
+  z: bfa6336b0d45dc23
+  name: Notify user
+  mode: link
+  links:
+    - a1e89f48333c8256
+  x: 1890
+  "y": 340
+  g: export_config_group_001
+  l: true
+  wires: []
+- id: 48af3768692e8e47
+  type: http response
+  z: bfa6336b0d45dc23
+  name: ""
+  statusCode: ""
+  headers: {}
+  x: 970
+  "y": 700
+  g: 3296e5f0fcd2c737
+  wires: []
+- id: 50bc401ae974546e
+  type: http in
+  z: bfa6336b0d45dc23
+  name: http get
+  url: /librecoach/import
+  method: get
+  upload: false
+  skipBodyParsing: false
+  swaggerDoc: ""
+  x: 170
+  "y": 560
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 0bd062c51b9e4b8b
+- id: 55dd74b672a2f509
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_notify_url
+  func: |
+    // Prepares notification payload for Import
+    // Input: MQTT trigger from librecoach/import/trigger
+    // Output: msg.payload configured for notify_user
+
+    const nrBaseUrl = "http://homeassistant.local:1880";
+    const importUrl = `${nrBaseUrl}/endpoint/librecoach/import`;
+
+    msg.payload = {
+      title: "LibreCoach Import",
+      message: `Upload a configuration file to restore entity names.\n\n[Open Import Page](${importUrl})`,
+      notification_id: "librecoach_import",
+    };
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 360
+  "y": 780
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 47ac3adc971d73eb
+- id: 614d0e17e66848f3
+  type: note
+  z: bfa6336b0d45dc23
+  name: ""
+  content: |-
+    # Comfig Templates
+    LibreCoach auto-discovers your RV's devices, but the
+    default entity names are generic — "Switch 12," "Lock 3."
+    Once you've renamed them to match your rig — "Bedroom Lights,"
+    "Entry Door" — you can export that configuration and share it
+    with the community. Other owners with a similar RV can
+    import your file to get meaningful names without starting from scratch.
+  x: 350
+  "y": 140
+  wires: []
+- id: 616a7d5b8036c0b5
+  type: http in
+  z: bfa6336b0d45dc23
+  name: http post
+  url: /librecoach/import
+  method: post
+  upload: false
+  skipBodyParsing: false
+  swaggerDoc: ""
+  x: 180
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 83e45c7061bd9e49
+- id: 6a3efcac3894a63f
+  type: ha-api
+  z: bfa6336b0d45dc23
+  name: ""
+  server: d568dc0e5978b830
+  version: 1
+  debugenabled: false
+  protocol: websocket
+  method: get
+  path: ""
+  data: ""
+  dataType: jsonata
+  responseType: json
+  outputProperties:
+    - property: payload
+      propertyType: msg
+      value: ""
+      valueType: results
+  x: 1350
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - d3b9548ea352bc6c
+- id: 6ea3c976edca4420
+  type: http request
+  z: bfa6336b0d45dc23
+  name: ""
+  method: use
+  ret: obj
+  paytoqs: ignore
+  url: ""
+  tls: ""
+  persist: false
+  proxy: ""
+  insecureHTTPParser: false
+  authType: ""
+  senderr: false
+  headers: []
+  x: 570
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - a439179f7b78685a
+- id: 6fe721da58a82100
+  type: http response
+  z: bfa6336b0d45dc23
+  name: ""
+  statusCode: ""
+  headers: {}
+  x: 1850
+  "y": 700
+  g: 3296e5f0fcd2c737
+  wires: []
+- id: 83e45c7061bd9e49
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_validation
+  func: >
+    // Validates incoming import JSON and prepares HA states request
+
+    // Input: msg.payload = parsed JSON body from POST /librecoach/import
+
+    // Output 1: valid → msg configured for GET /api/states (with
+    msg.importConfig)
+
+    // Output 2: error → msg.payload = error JSON for HTTP Response
+
+
+    const data = msg.payload;
+
+
+    if (!data || typeof data !== "object") {
+      msg.payload = { error: "Invalid request: expected a JSON object." };
+      msg.statusCode = 400;
+      return [null, msg];
+    }
+
+
+    if (!data.entities || typeof data.entities !== "object") {
+      msg.payload = { error: "Invalid file: missing 'entities' key." };
+      msg.statusCode = 400;
+      return [null, msg];
+    }
+
+
+    const haBaseUrl = "http://supervisor/core";
+
+    const haToken = env.get("SUPERVISOR_TOKEN");
+
+
+    if (!haToken) {
+      msg.payload = {
+        error: "Server configuration error: no Supervisor token available.",
+      };
+      msg.statusCode = 500;
+      return [null, msg];
+    }
+
+
+    const allEntities = Object.values(data.entities);
+
+    const customized = [];
+
+    let skippedUnchanged = 0;
+
+
+    for (const entity of allEntities) {
+      if (
+        entity.friendly_name &&
+        entity.original_name &&
+        entity.friendly_name !== entity.original_name
+      ) {
+        customized.push({
+          entity_id: entity.entity_id,
+          friendly_name: entity.friendly_name,
+        });
+      } else {
+        skippedUnchanged++;
+      }
+    }
+
+
+    msg.importConfig = {
+      customized: customized,
+      skippedUnchanged: skippedUnchanged,
+      totalInFile: allEntities.length,
+    };
+
+
+    msg.url = `${haBaseUrl}/api/states`;
+
+    msg.method = "GET";
+
+    msg.headers = {
+      Authorization: `Bearer ${haToken}`,
+      "Content-Type": "application/json",
+    };
+
+    msg.payload = "";
+
+
+    node.status({
+      fill: "blue",
+      shape: "dot",
+      text: `${customized.length} customized of ${allEntities.length}`,
+    });
+
+
+    return [msg, null];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 370
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 6ea3c976edca4420
+    - - dda95ad4c2e65ea7
+- id: a439179f7b78685a
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_build_plan
+  func: >
+    // Cross-references import entities with current HA entities
+
+    // Input:
+
+    //   msg.payload = array of state objects from GET /api/states
+
+    //   msg.importConfig = { customized, skippedUnchanged, totalInFile }
+
+    // Output 1: msg.payload = array of { entity_id, friendly_name } for Split
+    pipeline
+
+    // Output 2: msg.payload = early HTTP response when no entities to update
+
+
+    const states = msg.payload;
+
+    const config = msg.importConfig;
+
+
+    if (!Array.isArray(states) || !config) {
+        msg.payload = { error: "Failed to retrieve HA states." };
+        msg.statusCode = 500;
+        return [null, msg];
+    }
+
+
+    // Build set of entity IDs currently in HA
+
+    const haEntityIds = new Set(states.map((s) => s.entity_id));
+
+
+    // Cross-reference: only include entities that exist in HA
+
+    const toUpdate = [];
+
+    let skippedMissing = 0;
+
+
+    for (const entity of config.customized) {
+        if (haEntityIds.has(entity.entity_id)) {
+            toUpdate.push(entity);
+        } else {
+            skippedMissing++;
+        }
+    }
+
+
+    // Store counts for summarize_import
+
+    msg.importCounts = {
+        totalInFile: config.totalInFile,
+        skippedUnchanged: config.skippedUnchanged,
+        skippedMissing: skippedMissing,
+        toUpdate: toUpdate.length,
+    };
+
+
+    if (toUpdate.length === 0) {
+        msg.payload = {
+            updated: 0,
+            skipped: skippedMissing + config.skippedUnchanged,
+            failed: 0,
+            message: "No matching entities found in HA to update.",
+        };
+        msg.statusCode = 200;
+        node.status({ fill: "yellow", shape: "dot", text: "Nothing to update" });
+        return [null, msg];
+    }
+
+
+    msg.payload = toUpdate;
+
+
+    node.status({
+        fill: "blue",
+        shape: "dot",
+        text: `${toUpdate.length} to update, ${skippedMissing} skipped`,
+    });
+
+
+    return [msg, null];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 770
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 0d5ca59cd7836171
+    - - 48af3768692e8e47
+- id: ac639050da7648b9
+  type: mqtt in
+  z: bfa6336b0d45dc23
+  name: HA in
+  topic: librecoach/import/trigger
+  qos: "2"
+  datatype: auto-detect
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 170
+  "y": 780
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 55dd74b672a2f509
+- id: c2e0c58f22ff4794
+  type: function
+  z: bfa6336b0d45dc23
+  name: import_registry_update
+  func: |
+    // Prepares HA entity registry update for a single entity (runs after Split)
+    // Input: msg.payload = { entity_id, friendly_name }
+    // Output: msg configured for ha-api node (WebSocket protocol)
+
+    msg._originalRes = msg.res;
+    delete msg.res;
+
+    const entity = msg.payload;
+
+    msg.entityId = entity.entity_id;
+
+    msg.payload = {
+      protocol: "websocket",
+      data: {
+        type: "config/entity_registry/update",
+        entity_id: entity.entity_id,
+        name: entity.friendly_name,
+      },
+    };
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1160
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 6a3efcac3894a63f
+- id: c53cf5f35f59ccd6
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_notify_url
+  func: >
+    // Stores filename and prepares notification payload
+
+    // Input: msg from Notify Export Complete (has msg.entityCount,
+    msg.exportFilename)
+
+    // Output: msg.payload configured for notify_user
+
+
+    const filename = msg.exportFilename || "librecoach_config.json";
+
+
+    // Store filename in flow context for the download endpoint
+
+    flow.set("exportFilename", filename);
+
+
+    const haBaseUrl = env.get("HA_BASE_URL") ||
+    "http://homeassistant.local:8123";
+
+    const downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;
+
+
+    msg.payload = {
+      title: "LibreCoach Export Complete",
+      message: `<a href="${downloadUrl}" target="_blank">Download ${filename}</a>`,
+      notification_id: "librecoach_export",
+      data: {
+        filename: filename
+      }
+    };
+
+
+    node.status({
+      fill: "green",
+      shape: "dot",
+      text: "Notification prepared",
+    });
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1690
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - 47f3c921ae62126a
+- id: d3b9548ea352bc6c
+  type: join
+  z: bfa6336b0d45dc23
+  name: ""
+  mode: custom
+  build: array
+  property: payload
+  propertyType: msg
+  key: topic
+  joiner: \n
+  joinerType: str
+  useparts: false
+  accumulate: false
+  timeout: ""
+  count: importCounts.toUpdate
+  reduceRight: false
+  reduceExp: ""
+  reduceInit: ""
+  reduceInitType: ""
+  reduceFixup: ""
+  x: 1490
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - - 080d3da2e1d0d2ff
+- id: dda95ad4c2e65ea7
+  type: http response
+  z: bfa6336b0d45dc23
+  name: ""
+  statusCode: ""
+  headers: {}
+  x: 550
+  "y": 700
+  g: 3296e5f0fcd2c737
+  wires: []
+- id: de184f27cbcc117f
+  type: file
+  z: bfa6336b0d45dc23
+  name: Write file
+  filename: filename
+  filenameType: msg
+  appendNewline: true
+  createDir: true
+  overwriteFile: "true"
+  encoding: none
+  x: 1500
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - c53cf5f35f59ccd6
+- id: e686216d7dd9f13c
+  type: http request
+  z: bfa6336b0d45dc23
+  name: ""
+  method: use
+  ret: obj
+  paytoqs: ignore
+  url: ""
+  tls: ""
+  persist: false
+  proxy: ""
+  insecureHTTPParser: false
+  authType: ""
+  senderr: false
+  headers: []
+  x: 1870
+  "y": 640
+  g: 3296e5f0fcd2c737
+  wires:
+    - []
+- id: export_config_group_001
+  type: group
+  z: bfa6336b0d45dc23
+  name: Export Configuration
+  x: 94
+  "y": 299
+  style:
+    stroke: "#3d85c6"
+    label: true
+  nodes:
+    - 12a57f6a07d0bf1a
+    - 47f3c921ae62126a
+    - c53cf5f35f59ccd6
+    - de184f27cbcc117f
+    - export_func_build_001
+    - export_func_publish_url_001
+    - export_func_read_rv_001
+    - export_func_store_rv_001
+    - export_func_store_states_001
+    - export_http_states_001
+    - export_mqtt_in_rv_info_001
+    - export_mqtt_in_trigger_001
+- id: export_func_build_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_ha_config
+  func: >
+    // Builds export configuration from Home Assistant states
+
+    // Input:
+
+    //   msg.states - Array from /api/states
+
+    //   msg.rvInfo - Object with RV metadata (manufacturer, model, year, other)
+
+    // Output: msg.exportConfig (object), msg.exportFilename (string)
+
+
+    const ENTITY_PATTERNS = [
+      /^light\.switch_\d+$/,
+      /^cover\.shade_\d+$/,
+      /^lock\.lock_\d+$/,
+      /^switch\.water_pump$/,
+      /^switch\.autofill$/,
+      /^sensor\.\w+_tank$/,
+      /^sensor\.\w+_battery$/,
+      /^climate\.floor_heat_\d+$/,
+      /^light\.aquahot_(burner|ac_1|ac_2|engine)$/,
+    ];
+
+
+    if (!msg.states || !Array.isArray(msg.states)) {
+      node.error("Input missing 'states' array from /api/states", msg);
+      return null;
+    }
+
+
+    const entities = {};
+
+
+    for (const state of msg.states) {
+      const entityId = state.entity_id;
+
+      const isLibreCoachEntity = ENTITY_PATTERNS.some((pattern) =>
+        pattern.test(entityId),
+      );
+
+      if (!isLibreCoachEntity) {
+        continue;
+      }
+
+      const attributes = state.attributes || {};
+      const friendlyName = attributes.friendly_name || entityId;
+
+      // Skip entities with the default HA-generated name (not user-customized)
+      if (friendlyName.startsWith("LibreCoach: ")) {
+        continue;
+      }
+
+      const parts = entityId.split(".");
+      const domain = parts[0];
+      const entityName = parts[1];
+
+      let instance = null;
+      const instanceMatch = entityName.match(/_(\d+)$/);
+      if (instanceMatch) {
+        instance = parseInt(instanceMatch[1], 10);
+      } else if (entityName === "water_pump" || entityName === "autofill") {
+        instance = entityName;
+      } else {
+        const aquahotMatch = entityName.match(
+          /^aquahot_(burner|ac_1|ac_2|engine)$/,
+        );
+        if (aquahotMatch) {
+          instance = aquahotMatch[1];
+        }
+      }
+
+      let originalName = entityName
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+
+      entities[entityId] = {
+        entity_id: entityId,
+        original_name: originalName,
+        friendly_name: friendlyName,
+        device_class: domain,
+        instance: instance,
+      };
+    }
+
+
+    const exportConfig = {
+      export_date: new Date().toISOString(),
+      rv_info: msg.rvInfo || {
+        manufacturer: "Unknown",
+        model: "Unknown",
+        year: "Unknown",
+        other: "Unknown",
+      },
+      entities: entities,
+    };
+
+
+    msg.exportConfig = exportConfig;
+
+
+    const rvInfo = msg.rvInfo || {};
+
+    const filenameParts = ["manufacturer", "model", "year", "other"]
+      .map((key) => (rvInfo[key] || "").toString().trim())
+      .filter((val) => val.length > 0 && val !== "Unknown")
+      .map((val) => val.replace(/\s+/g, "-"));
+
+    msg.exportFilename =
+      filenameParts.length > 0
+        ? filenameParts.join("_") + ".json"
+        : "librecoach_config.json";
+
+    const entityCount = Object.keys(entities).length;
+
+    node.status({ fill: "green", shape: "dot", text: `${entityCount} entities`
+    });
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1090
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - export_func_publish_url_001
+- id: export_func_publish_url_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_publish_url
+  func: >
+    // Writes export config and download page to /homeassistant/www/
+
+    // Input: msg.exportConfig (object from Build Export Config)
+
+    //        msg.exportFilename (dynamic filename from export_ha_config)
+
+    // Output: two messages to File Write node (JSON export + HTML download
+    page)
+
+
+    if (!msg.exportConfig) {
+        node.error("Missing exportConfig object", msg);
+        return null;
+    }
+
+
+    const entityCount = Object.keys(msg.exportConfig.entities || {}).length;
+
+    const filename = msg.exportFilename || "librecoach_config.json";
+
+
+    // Message 1: the JSON export file
+
+    const jsonMsg = {
+        filename: `/homeassistant/www/${filename}`,
+        payload: JSON.stringify(msg.exportConfig, null, 2),
+        entityCount: entityCount,
+        exportFilename: filename,
+    };
+
+
+    // Message 2: HTML download page that auto-triggers the file download
+
+    const htmlMsg = {
+        filename: "/homeassistant/www/librecoach_download.html",
+        payload: `<!DOCTYPE html>
+    <html><head><title>LibreCoach Download</title></head>
+
+    <body>
+
+    <script>
+
+    var a = document.createElement("a");
+
+    a.href = "/local/${filename}";
+
+    a.download = "${filename}";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    setTimeout(function() { window.close(); }, 1000);
+
+    </script>
+
+    <p>Your download should start automatically. If not, <a
+    href="/local/${filename}" download="${filename}">click here</a>.</p>
+
+    </body></html>`,
+        entityCount: entityCount,
+        exportFilename: filename,
+    };
+
+
+    return [[jsonMsg, htmlMsg]];
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1310
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - de184f27cbcc117f
+- id: export_func_read_rv_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_read_rv_info
+  func: |
+    // Reads RV info and sets up HA API request configuration
+    // Input: msg (triggered by export button)
+    // Output: msg with rvInfo, headers, and url for first API call
+
+    const haBaseUrl = "http://supervisor/core";
+    const haToken = env.get("SUPERVISOR_TOKEN");
+
+    if (!haToken) {
+      node.error(
+        "SUPERVISOR_TOKEN not configured. Ensure the add-on provides it.",
+        msg,
+      );
+      node.status({ fill: "red", shape: "ring", text: "No Supervisor token" });
+      return null;
+    }
+
+    // Store base URL and headers for subsequent HTTP requests
+    msg.haBaseUrl = haBaseUrl;
+    msg.headers = {
+      Authorization: `Bearer ${haToken}`,
+      "Content-Type": "application/json",
+    };
+
+    // Set URL for first API call
+    msg.url = `${haBaseUrl}/api/states`;
+
+    // Read RV info from flow context
+    const rvInfo = flow.get("rvInfo") || {};
+    msg.rvInfo = {
+      manufacturer: rvInfo.rv_manufacturer || "Unknown",
+      model: rvInfo.rv_model || "Unknown",
+      year: rvInfo.rv_year || "Unknown",
+      other: rvInfo.rv_other || "Unknown",
+    };
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 400
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - export_http_states_001
+- id: export_func_store_rv_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: store_rv_info
+  func: >
+    // Stores RV info values from text input entities to flow context
+
+    // Input: msg.topic = "librecoach/rv_info/{field}/set"
+
+    //        msg.payload = value string
+
+    // Output: Republishes to state topic for HA sync
+
+
+    // Parse the topic to get the field name
+
+    const topicMatch = msg.topic.match(/^librecoach\/rv_info\/(\w+)\/set$/);
+
+    if (!topicMatch) {
+      node.warn(`Unexpected topic format: ${msg.topic}`);
+      return null;
+    }
+
+
+    const field = topicMatch[1];
+
+    const value = String(msg.payload).trim();
+
+
+    // Valid fields
+
+    const validFields = ["rv_manufacturer", "rv_model", "rv_year", "rv_other"];
+
+    if (!validFields.includes(field)) {
+      node.warn(`Unknown RV info field: ${field}`);
+      return null;
+    }
+
+
+    // Get current RV info from flow context or initialize
+
+    let rvInfo = flow.get("rvInfo") || {
+      rv_manufacturer: "",
+      rv_model: "",
+      rv_year: "",
+      rv_other: "",
+    };
+
+
+    // Update the field
+
+    rvInfo[field] = value;
+
+
+    // Store back to flow context
+
+    flow.set("rvInfo", rvInfo);
+
+
+    // Also persist to global file store so create_user_toggles.js can restore
+    on restart
+
+    global.set(field, value, "file");
+
+
+    // Republish to state topic for HA to confirm the update
+
+    msg.topic = `librecoach/rv_info/${field}`;
+
+    msg.payload = value;
+
+
+    node.status({ fill: "green", shape: "dot" });
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 370
+  "y": 420
+  g: export_config_group_001
+  wires:
+    - - 12a57f6a07d0bf1a
+- id: export_func_store_states_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_store_ha_states
+  func: >
+    // Stores Home Assistant states response
+
+    // Input: msg.payload = response from GET /api/states (array of state
+    objects)
+
+    // Output: msg with states array ready for export function
+
+
+    // Validate response
+
+    if (!msg.payload || !Array.isArray(msg.payload)) {
+      node.error("Invalid response from /api/states - expected array", msg);
+      return null;
+    }
+
+
+    // Store states in message for downstream processing
+
+    msg.states = msg.payload;
+
+
+    // Log count for debugging
+
+    node.status({
+      fill: "blue",
+      shape: "dot",
+      text: `${msg.states.length} entities`,
+    });
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 850
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - export_func_build_001
+- id: export_http_states_001
+  type: http request
+  z: bfa6336b0d45dc23
+  name: GET /api/states
+  method: GET
+  ret: obj
+  paytoqs: ignore
+  url: ""
+  tls: ""
+  persist: false
+  proxy: ""
+  insecureHTTPParser: false
+  authType: ""
+  senderr: false
+  headers: []
+  x: 620
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - export_func_store_states_001
+- id: export_mqtt_in_rv_info_001
+  type: mqtt in
+  z: bfa6336b0d45dc23
+  name: RV Info Input
+  topic: librecoach/rv_info/+/set
+  qos: "1"
+  datatype: utf8
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 190
+  "y": 420
+  g: export_config_group_001
+  wires:
+    - - export_func_store_rv_001
+- id: export_mqtt_in_trigger_001
+  type: mqtt in
+  z: bfa6336b0d45dc23
+  name: Export Trigger
+  topic: librecoach/export/trigger
+  qos: "1"
+  datatype: utf8
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 190
+  "y": 340
+  g: export_config_group_001
+  wires:
+    - - export_func_read_rv_001

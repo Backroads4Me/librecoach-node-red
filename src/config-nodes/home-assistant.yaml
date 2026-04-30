@@ -1,0 +1,28 @@
+- id: d568dc0e5978b830
+  type: server
+  name: Home Assistant
+  version: 6
+  addon: true
+  rejectUnauthorizedCerts: true
+  ha_boolean:
+    - "y"
+    - "yes"
+    - "true"
+    - "on"
+    - home
+    - open
+  connectionDelay: true
+  cacheJson: true
+  heartbeat: false
+  heartbeatInterval: 30
+  areaSelector: friendlyName
+  deviceSelector: friendlyName
+  entitySelector: friendlyName
+  statusSeparator: ": "
+  statusYear: hidden
+  statusMonth: short
+  statusDay: numeric
+  statusHourCycle: default
+  statusTimeFormat: h:m
+  enableGlobalContextStore: false
+  normalizedLabel: home-assistant

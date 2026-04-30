@@ -1,0 +1,50 @@
+{
+  "43cd836c21f66b26": {
+    "nodeId": "43cd836c21f66b26",
+    "name": "status_aquahot_1",
+    "sanitizedName": "status_aquahot_1",
+    "fileName": "status_aquahot_1",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "443fd5ec55d7111b": {
+    "nodeId": "443fd5ec55d7111b",
+    "name": "status_aquahot_2",
+    "sanitizedName": "status_aquahot_2",
+    "fileName": "status_aquahot_2",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "5e7062bde869c7a5": {
+    "nodeId": "5e7062bde869c7a5",
+    "name": "decode_aquahot_status_1",
+    "sanitizedName": "decode_aquahot_status_1",
+    "fileName": "decode_aquahot_status_1",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "a6985e36ac9c8f1d": {
+    "nodeId": "a6985e36ac9c8f1d",
+    "name": "decode_aquahot_status_2",
+    "sanitizedName": "decode_aquahot_status_2",
+    "fileName": "decode_aquahot_status_2",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "fileFormat": "yaml",
+  "destinationFolder": "src",
+  "tabsOrder": [
+    "292e70a6ba25b323",
+    "3e5f038a4f5a8b9a",
+    "7ecdba18640c1184",
+    "b3d80c5dc947ec88",
+    "384249601e37ba22",
+    "1fde0c4ffb03727e",
+    "e3804d2dd0b81928",
+    "bfa6336b0d45dc23",
+    "222c995b7790b8de"
+  ],
+  "extractFunctionsTemplates": true,
+  "restoreFunctionsTemplates": false,
+  "enableArtifact": true
+}

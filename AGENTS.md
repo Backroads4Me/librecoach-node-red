@@ -1,4 +1,8 @@
-# librecoach-node-red (test sandbox)
+# librecoach-node-red
+
+Workspace rules: `/home/ted/github/AGENTS.md`
+
+RV-C protocol reference: `/home/ted/github/knowledge/projects/librecoach/wiki/index.md`
 
 ## Wiring map — start here for topology
 
@@ -9,7 +13,7 @@ Each tab and subflow has its own `_wiring.md` co-located in `src/tabs/<tab>/` an
 To regenerate after flow changes:
 
 ```bash
-node /home/ted/github/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach-test
+node /home/ted/github/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach
 ```
 
 The pre-commit hook regenerates stale wiring maps automatically on every commit.

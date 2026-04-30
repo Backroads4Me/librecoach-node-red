@@ -1,0 +1,110 @@
+{
+  "205af5b7fa62d8ac": {
+    "nodeId": "205af5b7fa62d8ac",
+    "name": "Reset function",
+    "sanitizedName": "Reset function",
+    "fileName": "Reset function",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "2f91d31ed0be26b1": {
+    "nodeId": "2f91d31ed0be26b1",
+    "name": "microair_handle_toggle",
+    "sanitizedName": "microair_handle_toggle",
+    "fileName": "microair_handle_toggle",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "7605393317b3c471": {
+    "nodeId": "7605393317b3c471",
+    "name": "microair_decode_config",
+    "sanitizedName": "microair_decode_config",
+    "fileName": "microair_decode_config",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "78058c1b20751a76": {
+    "nodeId": "78058c1b20751a76",
+    "name": "microair_create_sensor",
+    "sanitizedName": "microair_create_sensor",
+    "fileName": "microair_create_sensor",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "ae5fb4f1c3213c0a": {
+    "nodeId": "ae5fb4f1c3213c0a",
+    "name": "microair_decode_status",
+    "sanitizedName": "microair_decode_status",
+    "fileName": "microair_decode_status",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "ba611b1fa95bf468": {
+    "nodeId": "ba611b1fa95bf468",
+    "name": "microair_unique",
+    "sanitizedName": "microair_unique",
+    "fileName": "microair_unique",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "c92f3be74ab20d69": {
+    "nodeId": "c92f3be74ab20d69",
+    "name": "microair_create_climate",
+    "sanitizedName": "microair_create_climate",
+    "fileName": "microair_create_climate",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "e1cc8c52948f9b2a": {
+    "nodeId": "e1cc8c52948f9b2a",
+    "name": "microair_encode_command",
+    "sanitizedName": "microair_encode_command",
+    "fileName": "microair_encode_command",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "e2335c226769f307": {
+    "nodeId": "e2335c226769f307",
+    "name": "microair_optimistic_update",
+    "sanitizedName": "microair_optimistic_update",
+    "fileName": "microair_optimistic_update",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  }
+}
