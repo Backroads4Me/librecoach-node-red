@@ -6,14 +6,111 @@
 ## Tab Summary
 - **Tab ID:** `bfa6336b0d45dc23`
 - **Disabled:** false
-- **Node count:** 34
-- **Function nodes:** 12
+- **Node count:** 41
+- **Function nodes:** 15
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 3
 - **Link in (inbound):** 0
 
 ## Function Nodes
+
+### export_entities_notify
+- **Node ID:** `export_entities_func_notify_001`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_47f3c921ae62["Notify user"]:::link
+  n_exportentiti["export_entities_notify"]:::fn
+  n_exportentiti -->|out 0| n_47f3c921ae62
+  n_exportentiti -->|out 0| n_exportentiti
+```
+
+#### Msg contract
+Prepares persistent notification for entity list export
+Input: msg with msg.exportFilename, msg.entityCount
+Output: msg.payload configured for notify_user
+
+#### Upstream
+- Write file (file) — this tab
+
+#### Downstream
+- **Output 0:**
+  - Notify user (link out) — this tab
+
+---
+
+### export_entities_prepare
+- **Node ID:** `export_entities_func_prepare_001`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_exportentiti["export_entities_prepare"]:::fn
+  n_exportentiti -->|out 0| n_exportentiti
+  n_exportentiti -->|out 0| n_exportentiti
+```
+
+#### Msg contract
+Sets up HA Template API call to render the full LibreCoach entity list with area info
+Input: msg (triggered by export button)
+Output: msg configured for POST /api/template
+
+#### Upstream
+- Export Entities Trigger (mqtt in) — this tab
+
+#### Downstream
+- **Output 0:**
+  - POST /api/template (http request) — this tab
+
+---
+
+### export_entities_publish
+- **Node ID:** `export_entities_func_publish_001`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_exportentiti["export_entities_publish"]:::fn
+  n_exportentiti -->|out 0| n_exportentiti
+  n_exportentiti -->|out 0| n_exportentiti
+```
+
+#### Msg contract
+Writes entity list and HTML download page to /homeassistant/www/
+Input: msg.payload = rendered string from POST /api/template
+Output: two messages to File Write node (text file + HTML download page)
+
+#### Upstream
+- POST /api/template (http request) — this tab
+
+#### Downstream
+- **Output 0:**
+  - Write file (file) — this tab
+
+---
 
 ### export_ha_config
 - **File:** [`export_ha_config.js`](../tabs/templates/export_ha_config.js)
@@ -491,12 +588,16 @@ _None._
 - 6ea3c976edca4420 (http request) — id `6ea3c976edca4420`, in: 1, out: 1
 - 6fe721da58a82100 (http response) — id `6fe721da58a82100`, in: 1, out: 0
 - Export Configuration (group) — id `export_config_group_001`, in: 0, out: 0
+- Export Entities Trigger (mqtt in) — id `export_entities_mqtt_in_001`, in: 0, out: 1
+- Export Entity List (group) — id `export_entities_group_001`, in: 0, out: 0
 - Export Trigger (mqtt in) — id `export_mqtt_in_trigger_001`, in: 0, out: 1
 - GET /api/states (http request) — id `export_http_states_001`, in: 1, out: 1
 - HA in (mqtt in) — id `ac639050da7648b9`, in: 0, out: 1
 - Import Configuration (group) — id `3296e5f0fcd2c737`, in: 0, out: 0
+- POST /api/template (http request) — id `export_entities_http_001`, in: 1, out: 1
 - RV Info Input (mqtt in) — id `export_mqtt_in_rv_info_001`, in: 0, out: 1
 - Write file (file) — id `de184f27cbcc117f`, in: 1, out: 1
+- Write file (file) — id `export_entities_file_001`, in: 1, out: 1
 - d3b9548ea352bc6c (join) — id `d3b9548ea352bc6c`, in: 1, out: 1
 - dda95ad4c2e65ea7 (http response) — id `dda95ad4c2e65ea7`, in: 1, out: 0
 - e686216d7dd9f13c (http request) — id `e686216d7dd9f13c`, in: 1, out: 0
