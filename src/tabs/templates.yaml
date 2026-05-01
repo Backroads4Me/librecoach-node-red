@@ -1410,3 +1410,223 @@
   g: export_config_group_001
   wires:
     - - export_func_read_rv_001
+- id: export_entities_group_001
+  type: group
+  z: bfa6336b0d45dc23
+  name: Export Entity List
+  x: 94
+  "y": 519
+  style:
+    stroke: "#3d85c6"
+    label: true
+  nodes:
+    - export_entities_mqtt_in_001
+    - export_entities_func_prepare_001
+    - export_entities_http_001
+    - export_entities_func_publish_001
+    - export_entities_file_001
+    - export_entities_func_notify_001
+- id: export_entities_mqtt_in_001
+  type: mqtt in
+  z: bfa6336b0d45dc23
+  name: Export Entities Trigger
+  topic: librecoach/export/entities/trigger
+  qos: "1"
+  datatype: utf8
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 210
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - export_entities_func_prepare_001
+- id: export_entities_func_prepare_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_entities_prepare
+  func: |
+    // Sets up HA Template API call to render the full LibreCoach entity list with area info
+    // Input: msg (triggered by export button)
+    // Output: msg configured for POST /api/template
+
+    const haBaseUrl = "http://supervisor/core";
+    const haToken = env.get("SUPERVISOR_TOKEN");
+
+    if (!haToken) {
+      node.error("SUPERVISOR_TOKEN not configured.", msg);
+      node.status({ fill: "red", shape: "ring", text: "No Supervisor token" });
+      return null;
+    }
+
+    msg.headers = {
+      Authorization: `Bearer ${haToken}`,
+      "Content-Type": "application/json",
+    };
+    msg.url = `${haBaseUrl}/api/template`;
+
+    // Jinja2 template rendered by HA — catches every LibreCoach entity via
+    // device manufacturer check (authoritative) plus keyword fallbacks.
+    // Sorted by area so output groups naturally by room for dashboard building.
+    const template = `{%- set ns = namespace(rows=[]) -%}
+    {%- for s in states -%}
+    {%- set eid = s.entity_id -%}
+    {%- set dev_id = device_id(eid) -%}
+    {%- set is_lc = dev_id is not none and device_attr(dev_id, 'manufacturer') == 'LibreCoach' -%}
+    {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or 'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or 'librecoach' in eid or 'rv_' in eid -%}
+    {%- set area = area_name(eid) | default('(no area)') -%}
+    {%- set fname = s.attributes.friendly_name | default(eid) -%}
+    {%- set uom = s.attributes.unit_of_measurement | default('') -%}
+    {%- set dc = s.attributes.device_class | default('') -%}
+    {%- set domain = eid.split('.')[0] -%}
+    {%- set sv = s.state ~ (' ' ~ uom if uom else '') -%}
+    {%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ sv ~ '|' ~ dc] -%}
+    {%- endif -%}
+    {%- endfor -%}
+    AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS
+    {%- for row in ns.rows | sort %}
+    {{ row }}
+    {%- endfor %}`;
+
+    msg.payload = { template };
+    node.status({ fill: "blue", shape: "dot", text: "Rendering entity list..." });
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 450
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - export_entities_http_001
+- id: export_entities_http_001
+  type: http request
+  z: bfa6336b0d45dc23
+  name: POST /api/template
+  method: POST
+  ret: txt
+  paytoqs: ignore
+  url: ""
+  tls: ""
+  persist: false
+  proxy: ""
+  insecureHTTPParser: false
+  authType: ""
+  senderr: false
+  headers: []
+  x: 680
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - export_entities_func_publish_001
+- id: export_entities_func_publish_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_entities_publish
+  func: |
+    // Writes entity list and HTML download page to /homeassistant/www/
+    // Input: msg.payload = rendered string from POST /api/template
+    // Output: two messages to File Write node (text file + HTML download page)
+
+    const content = msg.payload;
+    if (!content || typeof content !== "string") {
+      node.error("Invalid response from /api/template — expected rendered string", msg);
+      node.status({ fill: "red", shape: "ring", text: "Template render failed" });
+      return null;
+    }
+
+    const filename = "librecoach_entities.txt";
+    const lineCount = content.split("\n").filter((l) => l.trim() && !l.startsWith("AREA")).length;
+
+    const textMsg = {
+      filename: `/homeassistant/www/${filename}`,
+      payload: content,
+      entityCount: lineCount,
+      exportFilename: filename,
+    };
+
+    const htmlMsg = {
+      filename: "/homeassistant/www/librecoach_download_entities.html",
+      payload: `<!DOCTYPE html>
+    <html><head><title>LibreCoach Entity List</title></head>
+    <body>
+    <script>
+    var a = document.createElement("a");
+    a.href = "/local/${filename}";
+    a.download = "${filename}";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() { window.close(); }, 1000);
+    </script>
+    <p>Your download should start automatically. If not, <a href="/local/${filename}" download="${filename}">click here</a>.</p>
+    </body></html>`,
+      entityCount: lineCount,
+      exportFilename: filename,
+    };
+
+    node.status({ fill: "green", shape: "dot", text: `${lineCount} entities` });
+    return [[textMsg, htmlMsg]];
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 910
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - export_entities_file_001
+- id: export_entities_file_001
+  type: file
+  z: bfa6336b0d45dc23
+  name: Write file
+  filename: filename
+  filenameType: msg
+  appendNewline: false
+  createDir: true
+  overwriteFile: "true"
+  encoding: none
+  x: 1120
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - export_entities_func_notify_001
+- id: export_entities_func_notify_001
+  type: function
+  z: bfa6336b0d45dc23
+  name: export_entities_notify
+  func: |
+    // Prepares persistent notification for entity list export
+    // Input: msg with msg.exportFilename, msg.entityCount
+    // Output: msg.payload configured for notify_user
+
+    const filename = msg.exportFilename || "librecoach_entities.txt";
+    const haBaseUrl = env.get("HA_BASE_URL") || "http://homeassistant.local:8123";
+    const downloadUrl = `${haBaseUrl}/local/librecoach_download_entities.html`;
+
+    msg.payload = {
+      title: "LibreCoach Entity List Ready",
+      message: `<a href="${downloadUrl}" target="_blank">Download ${filename} (${msg.entityCount || "?"} entities)</a>`,
+      notification_id: "librecoach_export_entities",
+      data: { filename },
+    };
+
+    node.status({ fill: "green", shape: "dot", text: "Notification prepared" });
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1350
+  "y": 560
+  g: export_entities_group_001
+  wires:
+    - - 47f3c921ae62126a
