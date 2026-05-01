@@ -83,6 +83,42 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "export_entities_func_notify_001": {
+    "nodeId": "export_entities_func_notify_001",
+    "name": "export_entities_notify",
+    "sanitizedName": "export_entities_notify",
+    "fileName": "export_entities_notify",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "export_entities_func_prepare_001": {
+    "nodeId": "export_entities_func_prepare_001",
+    "name": "export_entities_prepare",
+    "sanitizedName": "export_entities_prepare",
+    "fileName": "export_entities_prepare",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "export_entities_func_publish_001": {
+    "nodeId": "export_entities_func_publish_001",
+    "name": "export_entities_publish",
+    "sanitizedName": "export_entities_publish",
+    "fileName": "export_entities_publish",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "export_func_build_001": {
     "nodeId": "export_func_build_001",
     "name": "export_ha_config",

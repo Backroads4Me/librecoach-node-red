@@ -2538,6 +2538,19 @@
       retain: true,
     });
 
+    // Export Entity List button
+    messages.push({
+      topic: "homeassistant/button/librecoach_export_entities/config",
+      payload: {
+        name: "Export Entity List",
+        unique_id: "librecoach_export_entities",
+        default_entity_id: "button.librecoach_export_entities",
+        icon: "mdi:format-list-bulleted",
+        command_topic: "librecoach/export/entities/trigger",
+        device: device,
+      },
+    });
+
     // Button - Export Unknown Recording
     messages.push({
       topic: "homeassistant/button/librecoach_export_unknown/config",
