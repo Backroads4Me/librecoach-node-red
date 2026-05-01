@@ -483,13 +483,13 @@
       "c53cf5f35f59ccd6",
       "de184f27cbcc117f",
       "export_func_build_001",
-      "export_func_publish_url_001",
       "export_func_read_rv_001",
       "export_func_store_rv_001",
       "export_func_store_states_001",
       "export_http_states_001",
       "export_mqtt_in_rv_info_001",
-      "export_mqtt_in_trigger_001"
+      "export_mqtt_in_trigger_001",
+      "export_func_publish_url_001"
     ],
     "x": 94,
     "y": 299,
@@ -511,11 +511,12 @@
       "export_entities_http_001",
       "export_entities_func_publish_001",
       "export_entities_file_001",
-      "export_entities_func_notify_001"
+      "export_entities_func_notify_001",
+      "fa104ff19bbee333"
     ],
     "x": 94,
-    "y": 899,
-    "w": 1392,
+    "y": 879,
+    "w": 1552,
     "h": 82
   },
   {
@@ -1811,7 +1812,8 @@
     "links": [
       "47f3c921ae62126a",
       "47ac3adc971d73eb",
-      "cd73ee739dad9f59"
+      "cd73ee739dad9f59",
+      "fa104ff19bbee333"
     ],
     "x": 1080,
     "y": 1300,
@@ -7445,8 +7447,8 @@
     "createDir": true,
     "overwriteFile": "true",
     "encoding": "none",
-    "x": 1130,
-    "y": 940,
+    "x": 1140,
+    "y": 920,
     "wires": [
       [
         "export_entities_func_notify_001"
@@ -7466,11 +7468,11 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1360,
-    "y": 940,
+    "x": 1340,
+    "y": 920,
     "wires": [
       [
-        "47f3c921ae62126a"
+        "fa104ff19bbee333"
       ]
     ]
   },
@@ -7487,8 +7489,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 460,
-    "y": 940,
+    "x": 470,
+    "y": 920,
     "wires": [
       [
         "export_entities_http_001"
@@ -7508,8 +7510,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 920,
-    "y": 940,
+    "x": 940,
+    "y": 920,
     "wires": [
       [
         "export_entities_file_001"
@@ -7533,8 +7535,8 @@
     "authType": "",
     "senderr": false,
     "headers": [],
-    "x": 690,
-    "y": 940,
+    "x": 710,
+    "y": 920,
     "wires": [
       [
         "export_entities_func_publish_001"
@@ -7556,7 +7558,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 220,
-    "y": 940,
+    "y": 920,
     "wires": [
       [
         "export_entities_func_prepare_001"
@@ -7736,6 +7738,21 @@
         "export_func_read_rv_001"
       ]
     ]
+  },
+  {
+    "id": "fa104ff19bbee333",
+    "type": "link out",
+    "z": "bfa6336b0d45dc23",
+    "g": "export_entities_group_001",
+    "name": "Notify user",
+    "mode": "link",
+    "links": [
+      "a1e89f48333c8256"
+    ],
+    "x": 1550,
+    "y": 920,
+    "wires": [],
+    "l": true
   },
   {
     "id": "69c114a873c4c716",

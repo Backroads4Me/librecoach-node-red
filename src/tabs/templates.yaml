@@ -963,8 +963,8 @@
   createDir: true
   overwriteFile: "true"
   encoding: none
-  x: 1130
-  "y": 940
+  x: 1140
+  "y": 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_notify_001
@@ -1005,11 +1005,11 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1360
-  "y": 940
+  x: 1340
+  "y": 920
   g: export_entities_group_001
   wires:
-    - - 47f3c921ae62126a
+    - - fa104ff19bbee333
 - id: export_entities_func_prepare_001
   type: function
   z: bfa6336b0d45dc23
@@ -1105,8 +1105,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 460
-  "y": 940
+  x: 470
+  "y": 920
   g: export_entities_group_001
   wires:
     - - export_entities_http_001
@@ -1186,8 +1186,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 920
-  "y": 940
+  x: 940
+  "y": 920
   g: export_entities_group_001
   wires:
     - - export_entities_file_001
@@ -1196,7 +1196,7 @@
   z: bfa6336b0d45dc23
   name: Export Entity List
   x: 94
-  "y": 899
+  "y": 879
   style:
     stroke: "#3d85c6"
     label: true
@@ -1207,6 +1207,7 @@
     - export_entities_func_publish_001
     - export_entities_http_001
     - export_entities_mqtt_in_001
+    - fa104ff19bbee333
 - id: export_entities_http_001
   type: http request
   z: bfa6336b0d45dc23
@@ -1222,8 +1223,8 @@
   authType: ""
   senderr: false
   headers: []
-  x: 690
-  "y": 940
+  x: 710
+  "y": 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_publish_001
@@ -1240,7 +1241,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 940
+  "y": 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001
@@ -1701,3 +1702,15 @@
   g: export_config_group_001
   wires:
     - - export_func_read_rv_001
+- id: fa104ff19bbee333
+  type: link out
+  z: bfa6336b0d45dc23
+  name: Notify user
+  mode: link
+  links:
+    - a1e89f48333c8256
+  x: 1550
+  "y": 920
+  g: export_entities_group_001
+  l: true
+  wires: []
