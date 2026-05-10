@@ -1079,7 +1079,8 @@
 
     {%- set sv = s.state ~ (' ' ~ uom if uom else '') -%}
 
-    {%- set dimmable = 'true' if 'brightness' in s.attributes.get('supported_color_modes', []) else 'false' -%}
+    {%- set dimmable = 'true' if 'brightness' in
+    s.attributes.get('supported_color_modes', []) else 'false' -%}
 
     {%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~
     '|' ~ sv ~ '|' ~ dc ~ '|' ~ dimmable] -%}
@@ -1135,7 +1136,323 @@
     }
 
 
-    const PROMPT_HEADER = `============================================================\nLIBRECOACH AI DASHBOARD GENERATION PROMPT\n============================================================\n\nYou are building a Home Assistant dashboard YAML for an RV control system\ncalled LibreCoach. The dashboard title is "LibreCoach". Use the entity data\nat the bottom of this file.\n\n--- STEP 1: WEB SEARCH (REQUIRED BEFORE WRITING ANY YAML) ---\nSearch the web for current documentation on:\n  1. "lovelace-mushroom" — current card types, options, feature lists,\n     and any breaking changes or deprecations since 2024\n  2. "Home Assistant sections dashboard YAML" — current syntax for\n     type: sections, max_columns, grid_options, badges_position\n  3. "Home Assistant tile card features climate" — confirm feature type names\n     for climate-hvac-modes, target-temperature, climate-preset-modes\n\nHA and mushroom update frequently. Do not rely solely on training data.\n\n--- STEP 2: REQUIRED CONSTRAINTS ---\n• ONLY use: custom:mushroom-* cards and native HA cards (tile, gauge,\n  entities, button, thermostat, history-graph, glance, sensor)\n• Do NOT use: custom:button-card, layout-card, or any other third-party cards\n• Dashboard must be optimized for MOBILE (compact, touch-friendly)\n• Every view must have navigation badges linking to all other views\n• The badge entity should always be zone.home (it exists on every HA install)\n• type: masonry for the Lights view; type: sections (max_columns: 4) for all others\n• Group entities by area using mushroom-title-card headers (alignment: center)\n• Dashboard path prefix: /dashboard-librecoach/\n• Use the exact mdi: icons shown in the examples below — do not substitute\n\n--- STEP 3: VIEWS TO CREATE ---\nCreate exactly these views (use path names and icons as shown):\n\n  path: lights    title: Lights    icon: mdi:lightbulb\n  path: shades    title: Shades    icon: mdi:roller-shade\n  path: locks     title: Locks     icon: mdi:lock\n  path: ac        title: AC        icon: mdi:air-conditioner\n  path: heat      title: Heat      icon: mdi:heat-wave\n  path: tanks     title: Tanks     icon: mdi:water\n  path: misc      title: Misc      icon: mdi:cog-outline\n\n--- STEP 4: EXACT CARD TEMPLATES ---\nCopy these patterns exactly, including icon values.\n\n## Section title header:\n  type: custom:mushroom-title-card\n  title: Living Room\n  alignment: center\n\n## Light (dimmable, DIMMABLE=true):\n  type: custom:mushroom-light-card\n  entity: light.switch_4\n  name: Entry Ceiling\n  secondary_info: none\n  show_brightness_control: true\n  use_light_color: false\n  collapsible_controls: false\n  fill_container: false\n\n## Light (non-dimmable, DIMMABLE=false):\n  type: custom:mushroom-light-card\n  entity: light.switch_g_1\n  name: Entry Scene\n  secondary_info: none\n  show_brightness_control: false\n\n## Night shade (cover) — icon: mdi:moon-waning-crescent:\n  type: custom:mushroom-cover-card\n  entity: cover.shade_7\n  name: Windshield\n  icon: mdi:moon-waning-crescent\n  secondary_info: none\n  fill_container: true\n  primary_info: name\n\n## Day shade (cover) — icon: mdi:white-balance-sunny:\n  type: custom:mushroom-cover-card\n  entity: cover.shade_2\n  name: Windshield\n  icon: mdi:white-balance-sunny\n  secondary_info: none\n  fill_container: true\n  primary_info: name\n\n## Lock:\n  show_name: true\n  show_icon: true\n  type: button\n  entity: lock.lock_1\n  tap_action:\n    action: toggle\n\n## MicroAir AC zone (tile — use this exact features list):\n  type: tile\n  entity: climate.librecoach_climate_microair_zone_1\n  name: Zone 1\n  features:\n    - type: climate-hvac-modes\n    - type: target-temperature\n  grid_options:\n    columns: 6\n    rows: 3\n\n## Floor heat zone (thermostat — use this exact features list):\n  type: thermostat\n  entity: climate.floor_heat_1\n  name: Living Room\n  features:\n    - type: climate-hvac-modes\n    - type: climate-preset-modes\n      style: dropdown\n\n## Aqua-Hot element (no brightness):\n  type: custom:mushroom-light-card\n  entity: light.aquahot_burner\n  name: Diesel Burner\n  secondary_info: none\n  show_brightness_control: false\n\n## Fresh water tank gauge:\n  type: gauge\n  entity: sensor.tank_fresh\n  name: Fresh Tank\n  severity:\n    green: 60\n    yellow: 40\n    red: 0\n\n## Black/grey tank gauge (inverted — full is bad):\n  type: gauge\n  entity: sensor.tank_black\n  name: Black Tank\n  needle: false\n  severity:\n    green: 0\n    yellow: 50\n    red: 60\n\n## Switch (water pump, autofill):\n  type: custom:mushroom-entity-card\n  entity: switch.water_pump\n  name: Water Pump\n  primary_info: name\n  secondary_info: none\n  tap_action:\n    action: toggle\n\n## Navigation badges — include ALL of these on EVERY view:\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Lights\n    icon: mdi:light-recessed\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/lights\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Shades\n    icon: mdi:roller-shade\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/shades\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Locks\n    icon: mdi:lock\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/locks\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: AC\n    icon: mdi:air-conditioner\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/ac\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Heat\n    icon: mdi:heat-wave\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/heat\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Tanks\n    icon: mdi:water\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/tanks\n  - type: entity\n    entity: zone.home\n    show_name: true\n    show_state: false\n    show_icon: true\n    show_entity_picture: false\n    name: Misc\n    icon: mdi:cog-outline\n    tap_action:\n      action: navigate\n      navigation_path: /dashboard-librecoach/misc\n\n--- STEP 5: LIGHTS VIEW LAYOUT ---\nUse type: masonry. For each area:\n• One mushroom-title-card header\n• One grid card (columns: 2) containing all lights for that area\n• Dimmable lights (DIMMABLE=true) use the dimmable template above\n• Non-dimmable lights (DIMMABLE=false) use the non-dimmable template\n• Light groups (entity_id contains switch_g_) are always non-dimmable,\n  place them at the end of their area grid\n\n--- STEP 6: SHADES VIEW LAYOUT ---\nUse type: sections (max_columns: 4). For each area that has shades:\n• One mushroom-title-card header spanning the section\n• A horizontal-stack with two grid cards (columns: 1 each):\n    Left column:  all night shades (icon: mdi:moon-waning-crescent)\n    Right column: all day shades   (icon: mdi:white-balance-sunny)\n• If an area has only one shade type, use a single grid (no horizontal-stack)\n\n--- STEP 7: ENTITY DATA FORMAT ---\nThe 7-column pipe-delimited data below lists only user-labeled entities.\n  AREA          — HA area; use for grouping; "(no area)" entities go last\n  DOMAIN        — entity type (light, cover, lock, climate, sensor, switch, button)\n  ENTITY_ID     — use exactly as-is in the entity: field\n  FRIENDLY_NAME — use as the name: field on the card\n  STATE         — current value; context only, do not display\n  DEVICE_CLASS  — HA device class hint\n  DIMMABLE      — true/false; drives show_brightness_control on light cards\n\n--- RV-SPECIFIC NOTES ---\n  switch_N     = interior light (N is RV-C instance number)\n  switch_g_N   = light group or scene (always non-dimmable)\n  shade_N      = motorized window shade\n  aquahot_*    = diesel hydronic heating elements (not HVAC)\n  floor_heat_N = in-floor radiant heat zone\n  Areas: Entry, Living Room, Kitchen, Bedroom, Bath, Potty, Exterior\n\n--- OUTPUT ---\nProduce complete, valid HA dashboard YAML ready to paste into\nSettings → Dashboards → LibreCoach → Raw Config Editor.\nDo not truncate or summarize. Include every entity from the data below.\n\n============================================================\nENTITY DATA\nAREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS|DIMMABLE\n============================================================\n`;
+    const PROMPT_HEADER =
+    `============================================================
+
+    LIBRECOACH AI DASHBOARD GENERATION PROMPT
+
+    ============================================================
+
+
+    You are building a Home Assistant dashboard YAML for an RV control system
+
+    called LibreCoach. The dashboard title is "LibreCoach". Use the entity data
+
+    at the bottom of this file.
+
+
+    --- STEP 1: WEB SEARCH (REQUIRED BEFORE WRITING ANY YAML) ---
+
+    Search the web for current documentation on:
+      1. "lovelace-mushroom" — current card types, options, feature lists,
+         and any breaking changes or deprecations since 2024
+      2. "Home Assistant sections dashboard YAML" — current syntax for
+         type: sections, max_columns, grid_options, badges_position
+      3. "Home Assistant tile card features climate" — confirm feature type names
+         for climate-hvac-modes, target-temperature, climate-preset-modes
+
+    HA and mushroom update frequently. Do not rely solely on training data.
+
+
+    --- STEP 2: REQUIRED CONSTRAINTS ---
+
+    • ONLY use: custom:mushroom-* cards and native HA cards (tile, gauge,
+      entities, button, thermostat, history-graph, glance, sensor)
+    • Do NOT use: custom:button-card, layout-card, or any other third-party
+    cards
+
+    • Dashboard must be optimized for MOBILE (compact, touch-friendly)
+
+    • Every view must have navigation badges linking to all other views
+
+    • The badge entity should always be zone.home (it exists on every HA
+    install)
+
+    • type: masonry for the Lights view; type: sections (max_columns: 4) for all
+    others
+
+    • Group entities by area using mushroom-title-card headers (alignment:
+    center)
+
+    • Dashboard path prefix: /dashboard-librecoach/
+
+    • Use the exact mdi: icons shown in the examples below — do not substitute
+
+
+    --- STEP 3: VIEWS TO CREATE ---
+
+    Create exactly these views (use path names and icons as shown):
+
+      path: lights    title: Lights    icon: mdi:lightbulb
+      path: shades    title: Shades    icon: mdi:roller-shade
+      path: locks     title: Locks     icon: mdi:lock
+      path: ac        title: AC        icon: mdi:air-conditioner
+      path: heat      title: Heat      icon: mdi:heat-wave
+      path: tanks     title: Tanks     icon: mdi:water
+      path: misc      title: Misc      icon: mdi:cog-outline
+
+    --- STEP 4: EXACT CARD TEMPLATES ---
+
+    Copy these patterns exactly, including icon values.
+
+
+    ## Section title header:
+      type: custom:mushroom-title-card
+      title: Living Room
+      alignment: center
+
+    ## Light (dimmable, DIMMABLE=true):
+      type: custom:mushroom-light-card
+      entity: light.switch_4
+      name: Entry Ceiling
+      secondary_info: none
+      show_brightness_control: true
+      use_light_color: false
+      collapsible_controls: false
+      fill_container: false
+
+    ## Light (non-dimmable, DIMMABLE=false):
+      type: custom:mushroom-light-card
+      entity: light.switch_g_1
+      name: Entry Scene
+      secondary_info: none
+      show_brightness_control: false
+
+    ## Night shade (cover) — icon: mdi:moon-waning-crescent:
+      type: custom:mushroom-cover-card
+      entity: cover.shade_7
+      name: Windshield
+      icon: mdi:moon-waning-crescent
+      secondary_info: none
+      fill_container: true
+      primary_info: name
+
+    ## Day shade (cover) — icon: mdi:white-balance-sunny:
+      type: custom:mushroom-cover-card
+      entity: cover.shade_2
+      name: Windshield
+      icon: mdi:white-balance-sunny
+      secondary_info: none
+      fill_container: true
+      primary_info: name
+
+    ## Lock:
+      show_name: true
+      show_icon: true
+      type: button
+      entity: lock.lock_1
+      tap_action:
+        action: toggle
+
+    ## MicroAir AC zone (tile — use this exact features list):
+      type: tile
+      entity: climate.librecoach_climate_microair_zone_1
+      name: Zone 1
+      features:
+        - type: climate-hvac-modes
+        - type: target-temperature
+      grid_options:
+        columns: 6
+        rows: 3
+
+    ## Floor heat zone (thermostat — use this exact features list):
+      type: thermostat
+      entity: climate.floor_heat_1
+      name: Living Room
+      features:
+        - type: climate-hvac-modes
+        - type: climate-preset-modes
+          style: dropdown
+
+    ## Aqua-Hot element (no brightness):
+      type: custom:mushroom-light-card
+      entity: light.aquahot_burner
+      name: Diesel Burner
+      secondary_info: none
+      show_brightness_control: false
+
+    ## Fresh water tank gauge:
+      type: gauge
+      entity: sensor.tank_fresh
+      name: Fresh Tank
+      severity:
+        green: 60
+        yellow: 40
+        red: 0
+
+    ## Black/grey tank gauge (inverted — full is bad):
+      type: gauge
+      entity: sensor.tank_black
+      name: Black Tank
+      needle: false
+      severity:
+        green: 0
+        yellow: 50
+        red: 60
+
+    ## Switch (water pump, autofill):
+      type: custom:mushroom-entity-card
+      entity: switch.water_pump
+      name: Water Pump
+      primary_info: name
+      secondary_info: none
+      tap_action:
+        action: toggle
+
+    ## Navigation badges — include ALL of these on EVERY view:
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Lights
+        icon: mdi:light-recessed
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/lights
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Shades
+        icon: mdi:roller-shade
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/shades
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Locks
+        icon: mdi:lock
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/locks
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: AC
+        icon: mdi:air-conditioner
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/ac
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Heat
+        icon: mdi:heat-wave
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/heat
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Tanks
+        icon: mdi:water
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/tanks
+      - type: entity
+        entity: zone.home
+        show_name: true
+        show_state: false
+        show_icon: true
+        show_entity_picture: false
+        name: Misc
+        icon: mdi:cog-outline
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-librecoach/misc
+
+    --- STEP 5: LIGHTS VIEW LAYOUT ---
+
+    Use type: masonry. For each area:
+
+    • One mushroom-title-card header
+
+    • One grid card (columns: 2) containing all lights for that area
+
+    • Dimmable lights (DIMMABLE=true) use the dimmable template above
+
+    • Non-dimmable lights (DIMMABLE=false) use the non-dimmable template
+
+    • Light groups (entity_id contains switch_g_) are always non-dimmable,
+      place them at the end of their area grid
+
+    --- STEP 6: SHADES VIEW LAYOUT ---
+
+    Use type: sections (max_columns: 4). For each area that has shades:
+
+    • One mushroom-title-card header spanning the section
+
+    • A horizontal-stack with two grid cards (columns: 1 each):
+        Left column:  all night shades (icon: mdi:moon-waning-crescent)
+        Right column: all day shades   (icon: mdi:white-balance-sunny)
+    • If an area has only one shade type, use a single grid (no
+    horizontal-stack)
+
+
+    --- STEP 7: ENTITY DATA FORMAT ---
+
+    The 7-column pipe-delimited data below lists only user-labeled entities.
+      AREA          — HA area; use for grouping; "(no area)" entities go last
+      DOMAIN        — entity type (light, cover, lock, climate, sensor, switch, button)
+      ENTITY_ID     — use exactly as-is in the entity: field
+      FRIENDLY_NAME — use as the name: field on the card
+      STATE         — current value; context only, do not display
+      DEVICE_CLASS  — HA device class hint
+      DIMMABLE      — true/false; drives show_brightness_control on light cards
+
+    --- RV-SPECIFIC NOTES ---
+      switch_N     = interior light (N is RV-C instance number)
+      switch_g_N   = light group or scene (always non-dimmable)
+      shade_N      = motorized window shade
+      aquahot_*    = diesel hydronic heating elements (not HVAC)
+      floor_heat_N = in-floor radiant heat zone
+      Areas: Entry, Living Room, Kitchen, Bedroom, Bath, Potty, Exterior
+
+    --- OUTPUT ---
+
+    Produce complete, valid HA dashboard YAML ready to paste into
+
+    Settings → Dashboards → LibreCoach → Raw Config Editor.
+
+    Do not truncate or summarize. Include every entity from the data below.
+
+
+    ============================================================
+
+    ENTITY DATA
+
+    AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS|DIMMABLE
+
+    ============================================================
+
+    `;
 
 
     const filename = "librecoach_dashboard_prompt.txt";
