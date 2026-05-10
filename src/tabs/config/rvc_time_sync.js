@@ -1,13 +1,15 @@
-// Broadcasts SET_DATE_TIME_COMMAND to the RV-C network (DGN 1FFFEh, §6.25.1)
+// Broadcasts DATE_TIME_STATUS to the RV-C network (DGN 1FFFFh, §6.4)
 // Fires every 60s via inject node. Gated by timeSyncEnabled global (default: false).
+// Note: spec nominal interval is 1000 ms; 60s is adequate for clock correction without
+// competing with a hardware master. No source-address arbitration is implemented here.
 
 // --- Configuration ---
 const PRIORITY = 6;
-const DGN = 0x1FFFE;
+const DGN = 0x1FFFF;
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
 // --- Feature Gate ---
-const timeSyncEnabled = global.get("timeSyncEnabled");
+const timeSyncEnabled = global.get("timeSyncEnabled", "file");
 if (!timeSyncEnabled) return null;
 
 // --- Current Time ---
@@ -25,7 +27,7 @@ const isDst = dt.getTimezoneOffset() < std;
 const tzCode = isDst ? std / 60 - 1 : std / 60;
 
 // --- Payload ---
-// Byte layout per RV-C §6.25.1: year(offset 2000), month, day, dow, hour, min, sec, tz
+// Byte layout per RV-C §6.4 Table 6.4.2b: year(offset 2000), month, day, dow, hour, min, sec, tz
 const dataBytes = [
   Math.max(0, Math.min(255, dt.getFullYear() - 2000)), // Byte 0: Year (2000..2255)
   dt.getMonth() + 1,                                   // Byte 1: Month (1..12)

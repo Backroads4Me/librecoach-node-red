@@ -6,16 +6,17 @@
 ## Tab Summary
 - **Tab ID:** `bfa6336b0d45dc23`
 - **Disabled:** false
-- **Node count:** 41
+- **Node count:** 42
 - **Function nodes:** 15
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 3
+- **Link out (outbound):** 4
 - **Link in (inbound):** 0
 
 ## Function Nodes
 
 ### export_entities_notify
+- **File:** [`export_entities_notify.js`](../tabs/templates/export_entities_notify.js)
 - **Node ID:** `export_entities_func_notify_001`
 - **Outputs:** 1
 
@@ -28,10 +29,10 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_47f3c921ae62["Notify user"]:::link
   n_exportentiti["export_entities_notify"]:::fn
-  n_exportentiti -->|out 0| n_47f3c921ae62
+  n_fa104ff19bbe["Notify user"]:::link
   n_exportentiti -->|out 0| n_exportentiti
+  n_exportentiti -->|out 0| n_fa104ff19bbe
 ```
 
 #### Msg contract
@@ -49,6 +50,7 @@ Output: msg.payload configured for notify_user
 ---
 
 ### export_entities_prepare
+- **File:** [`export_entities_prepare.js`](../tabs/templates/export_entities_prepare.js)
 - **Node ID:** `export_entities_func_prepare_001`
 - **Outputs:** 1
 
@@ -81,6 +83,7 @@ Output: msg configured for POST /api/template
 ---
 
 ### export_entities_publish
+- **File:** [`export_entities_publish.js`](../tabs/templates/export_entities_publish.js)
 - **Node ID:** `export_entities_func_publish_001`
 - **Outputs:** 1
 
@@ -99,7 +102,7 @@ flowchart LR
 ```
 
 #### Msg contract
-Writes entity list and HTML download page to /homeassistant/www/
+Writes AI dashboard prompt and HTML download page to /homeassistant/www/
 Input: msg.payload = rendered string from POST /api/template
 Output: two messages to File Write node (text file + HTML download page)
 
@@ -571,6 +574,8 @@ _None._
   - Notify user in tab `Config` ([wiring](./config.md))
 - **Notify user** (`47f3c921ae62126a`) →
   - Notify user in tab `Config` ([wiring](./config.md))
+- **Notify user** (`fa104ff19bbee333`) →
+  - Notify user in tab `Config` ([wiring](./config.md))
 
 ### Inbound (link in)
 _None._
@@ -587,9 +592,9 @@ _None._
 - 6a3efcac3894a63f (ha-api) — id `6a3efcac3894a63f`, in: 1, out: 1
 - 6ea3c976edca4420 (http request) — id `6ea3c976edca4420`, in: 1, out: 1
 - 6fe721da58a82100 (http response) — id `6fe721da58a82100`, in: 1, out: 0
+- Export AI Dashboard Prompt (group) — id `export_entities_group_001`, in: 0, out: 0
 - Export Configuration (group) — id `export_config_group_001`, in: 0, out: 0
 - Export Entities Trigger (mqtt in) — id `export_entities_mqtt_in_001`, in: 0, out: 1
-- Export Entity List (group) — id `export_entities_group_001`, in: 0, out: 0
 - Export Trigger (mqtt in) — id `export_mqtt_in_trigger_001`, in: 0, out: 1
 - GET /api/states (http request) — id `export_http_states_001`, in: 1, out: 1
 - HA in (mqtt in) — id `ac639050da7648b9`, in: 0, out: 1

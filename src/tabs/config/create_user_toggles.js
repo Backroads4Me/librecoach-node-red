@@ -104,14 +104,14 @@ messages.push({
   retain: true,
 });
 
-// Export Entity List button
+// Export AI Dashboard Prompt button
 messages.push({
   topic: "homeassistant/button/librecoach_export_entities/config",
   payload: {
-    name: "Export Entity List",
+    name: "Export AI Dashboard Prompt",
     unique_id: "librecoach_export_entities",
     default_entity_id: "button.librecoach_export_entities",
-    icon: "mdi:format-list-bulleted",
+    icon: "mdi:robot-outline",
     command_topic: "librecoach/export/entities/trigger",
     device: device,
   },

@@ -28,14 +28,16 @@ const template = `{%- set ns = namespace(rows=[]) -%}
 {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or 'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or 'librecoach' in eid or 'rv_' in eid -%}
 {%- set area = area_name(eid) | default('(no area)') -%}
 {%- set fname = s.attributes.friendly_name | default(eid) -%}
+{%- if fname.startswith('LibreCoach:') -%}{%- continue -%}{%- endif -%}
 {%- set uom = s.attributes.unit_of_measurement | default('') -%}
 {%- set dc = s.attributes.device_class | default('') -%}
 {%- set domain = eid.split('.')[0] -%}
 {%- set sv = s.state ~ (' ' ~ uom if uom else '') -%}
-{%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ sv ~ '|' ~ dc] -%}
+{%- set dimmable = 'true' if 'brightness' in s.attributes.get('supported_color_modes', []) else 'false' -%}
+{%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ sv ~ '|' ~ dc ~ '|' ~ dimmable] -%}
 {%- endif -%}
 {%- endfor -%}
-AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS
+AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS|DIMMABLE
 {%- for row in ns.rows | sort %}
 {{ row }}
 {%- endfor %}`;

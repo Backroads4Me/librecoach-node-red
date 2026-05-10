@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 87
-- **Function nodes:** 25
+- **Node count:** 90
+- **Function nodes:** 26
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 14
+- **Link out (outbound):** 15
 - **Link in (inbound):** 7
 
 ## Function Nodes
@@ -812,6 +812,39 @@ Output: retained state publish back to HA
 
 ---
 
+### rvc_time_sync
+- **Node ID:** `dd22c9c987534342`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_bce5d439a67d["Every 60s"]:::fn
+  n_dd22c9c98753["rvc_time_sync"]:::fn
+  n_de36b6c52fd2["MQTT out_ Retain FALSE"]:::link
+  n_bce5d439a67d -->|out 0| n_dd22c9c98753
+  n_dd22c9c98753 -->|out 0| n_de36b6c52fd2
+```
+
+#### Msg contract
+Broadcasts SET_DATE_TIME_COMMAND to the RV-C network (DGN 1FFFEh, §6.25.1)
+Fires every 60s via inject node. Gated by timeSyncEnabled global (default: false).
+
+#### Upstream
+- Every 60s (inject) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain FALSE (link out) — this tab
+
+---
+
 ### store_config_globals
 - **File:** [`store_config_globals.js`](../tabs/config/store_config_globals.js)
 - **Node ID:** `c9d298bbaa855984`
@@ -939,6 +972,8 @@ _None._
   - HA in in tab `HA Commands` ([wiring](./ha_commands.md))
 - **MQTT out: Retain FALSE** (`a2334b77d3764815`) →
   - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
+- **MQTT out: Retain FALSE** (`de36b6c52fd2b2cc`) →
+  - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`0a63b31d61802934`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`5ffb64e684c20ea8`) →
@@ -967,6 +1002,7 @@ _None._
   - MQTT out: Retain FALSE in tab `HA Commands`
   - MQTT out: Retain FALSE in tab `Config`
   - MQTT out: Retain FALSE in tab `HA Commands`
+  - MQTT out: Retain FALSE in tab `Config`
 - **MQTT out: Retain TRUE** (`f658418a7b9b4857`) ←
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Command routing`
@@ -988,6 +1024,7 @@ _None._
   - Notify user in tab `Templates`
   - Notify user in tab `Templates`
   - Notify user in tab `Config`
+  - Notify user in tab `Templates`
 
 ## Catch / Status Nodes
 
@@ -1006,6 +1043,7 @@ _None._
 - Claim CAN source address (group) — id `8ef86a1c4b59d8e1`, in: 0, out: 0
 - Config in (mqtt in) — id `21029b71ed58348c`, in: 0, out: 1
 - Device discovery (inject) — id `07b8bcce03f19e8f`, in: 0, out: 7
+- Every 60s (inject) — id `bce5d439a67df7da`, in: 0, out: 1
 - GPS Updates (group) — id `f67b4a374db41b27`, in: 0, out: 0
 - HA in (mqtt in) — id `54cd7e4a8959a77c`, in: 0, out: 2
 - HA in (mqtt in) — id `9e9b11b9441e51db`, in: 0, out: 2

@@ -13,7 +13,7 @@ Each tab and subflow has its own `_wiring.md` co-located in `src/tabs/<tab>/` an
 To regenerate after flow changes:
 
 ```bash
-node /home/ted/src/Backroads4Me/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach
+node /home/ted/src/Backroads4Me/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach --config /home/ted/src/Backroads4Me/librecoach/librecoach-flow-tools/librecoach-flow-tools.config.json
 ```
 
 The pre-commit hook regenerates stale wiring maps automatically on every commit.
