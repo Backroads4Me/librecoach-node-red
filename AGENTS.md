@@ -1,8 +1,8 @@
 # librecoach-node-red
 
-Workspace rules: `/home/ted/github/AGENTS.md`
+Workspace rules: `/home/ted/src/AGENTS.md`
 
-RV-C protocol reference: `/home/ted/github/knowledge/projects/librecoach/wiki/index.md`
+RV-C protocol reference: `/home/ted/src/local/knowledge/projects/librecoach/wiki/index.md`
 
 ## Wiring map — start here for topology
 
@@ -13,7 +13,17 @@ Each tab and subflow has its own `_wiring.md` co-located in `src/tabs/<tab>/` an
 To regenerate after flow changes:
 
 ```bash
-node /home/ted/github/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach
+node /home/ted/src/Backroads4Me/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach
 ```
 
 The pre-commit hook regenerates stale wiring maps automatically on every commit.
+
+## Flow-splitter behavior
+
+The project uses `@vdwpsmt/node-red-contrib-flow-splitter-extended` with
+`restoreFunctionsTemplates: true` in `.config.flow-splitter.json`.
+
+This means the splitter **fully restores the Node-RED canvas from `src/`** — new nodes,
+updated function code, and wiring all apply on next deploy. You can freely add new node
+definitions to `src/tabs/*.yaml` and companion `.js` files; they will be created in
+Node-RED when the user deploys.
