@@ -7,8 +7,8 @@ const haBaseUrl = env.get("HA_BASE_URL") || "http://homeassistant.local:8123";
 const downloadUrl = `${haBaseUrl}/local/librecoach_download_dashboard.html`;
 
 msg.payload = {
-  title: "LibreCoach AI Dashboard Prompt Ready",
-  message: `<a href="${downloadUrl}" target="_blank">Download ${filename} (${msg.entityCount || "?"} entities)</a>`,
+  title: "LibreCoach AI Dashboard Prompt",
+  message: `<a href="${downloadUrl}" target="_blank">Download ${filename} (${msg.entityCount || "?"} entities)</a><br><br>Upload the file to your AI, then type:<br><b>Read the attached file and create a Home Assistant dashboard following all instructions in the file.</b>`,
   notification_id: "librecoach_export_entities",
   data: { filename },
 };

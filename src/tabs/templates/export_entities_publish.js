@@ -9,11 +9,7 @@ if (!content || typeof content !== "string") {
   return null;
 }
 
-const PROMPT_HEADER = `============================================================
-LIBRECOACH AI DASHBOARD GENERATION PROMPT
-============================================================
-
-You are building a Home Assistant dashboard YAML for an RV control system
+const PROMPT_HEADER = `You are building a Home Assistant dashboard YAML for an RV control system
 called LibreCoach. The dashboard title is "LibreCoach". Use the entity data
 at the bottom of this file.
 
@@ -33,23 +29,26 @@ HA and mushroom update frequently. Do not rely solely on training data.
   entities, button, thermostat, history-graph, glance, sensor)
 • Do NOT use: custom:button-card, layout-card, or any other third-party cards
 • Dashboard must be optimized for MOBILE (compact, touch-friendly)
-• Every view must have navigation badges linking to all other views
+• Only create views that have relevant entities in the data below
+• Only include navigation badges for views that were actually created
 • The badge entity should always be zone.home (it exists on every HA install)
 • type: masonry for the Lights view; type: sections (max_columns: 4) for all others
 • Group entities by area using mushroom-title-card headers (alignment: center)
+• If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a header
 • Dashboard path prefix: /dashboard-librecoach/
 • Use the exact mdi: icons shown in the examples below — do not substitute
 
---- STEP 3: VIEWS TO CREATE ---
-Create exactly these views (use path names and icons as shown):
+--- STEP 3: VIEWS TO CREATE (IF APPLICABLE) ---
+Create a view for each category only if the entity data contains matching entities.
+Use these path names and icons when creating a view:
 
-  path: lights    title: Lights    icon: mdi:lightbulb
-  path: shades    title: Shades    icon: mdi:roller-shade
-  path: locks     title: Locks     icon: mdi:lock
-  path: ac        title: AC        icon: mdi:air-conditioner
-  path: heat      title: Heat      icon: mdi:heat-wave
-  path: tanks     title: Tanks     icon: mdi:water
-  path: misc      title: Misc      icon: mdi:cog-outline
+  path: lights    title: Lights    icon: mdi:lightbulb       (domain: light)
+  path: shades    title: Shades    icon: mdi:roller-shade    (domain: cover)
+  path: locks     title: Locks     icon: mdi:lock            (domain: lock)
+  path: ac        title: AC        icon: mdi:air-conditioner (climate with microair or ac in entity_id)
+  path: heat      title: Heat      icon: mdi:heat-wave       (climate floor_heat, or light aquahot_*)
+  path: tanks     title: Tanks     icon: mdi:water           (sensor with tank_ in entity_id, plus water_pump and autofill switches)
+  path: misc      title: Misc      icon: mdi:cog-outline     (everything else, including unrecognized types)
 
 --- STEP 4: EXACT CARD TEMPLATES ---
 Copy these patterns exactly, including icon values.
@@ -76,23 +75,39 @@ Copy these patterns exactly, including icon values.
   secondary_info: none
   show_brightness_control: false
 
-## Night shade (cover) — icon: mdi:moon-waning-crescent:
+## Shade column header (Night):
+  type: custom:mushroom-template-card
+  primary: Night
+  icon: mdi:moon-waning-crescent
+  features_position: bottom
+  grid_options:
+    columns: 6
+    rows: 1
+  color: yellow
+
+## Shade column header (Day):
+  type: custom:mushroom-template-card
+  primary: Day
+  icon: mdi:white-balance-sunny
+  features_position: bottom
+  grid_options:
+    columns: 6
+    rows: 1
+  color: yellow
+
+## Night shade (cover):
   type: custom:mushroom-cover-card
   entity: cover.shade_7
   name: Windshield
   icon: mdi:moon-waning-crescent
   secondary_info: none
-  fill_container: true
-  primary_info: name
 
-## Day shade (cover) — icon: mdi:white-balance-sunny:
+## Day shade (cover):
   type: custom:mushroom-cover-card
   entity: cover.shade_2
   name: Windshield
   icon: mdi:white-balance-sunny
   secondary_info: none
-  fill_container: true
-  primary_info: name
 
 ## Lock:
   show_name: true
@@ -157,7 +172,7 @@ Copy these patterns exactly, including icon values.
   tap_action:
     action: toggle
 
-## Navigation badges — include ALL of these on EVERY view:
+## Navigation badges — include one per view that was created, on every view:
   - type: entity
     entity: zone.home
     show_name: true
@@ -246,20 +261,47 @@ Use type: masonry. For each area:
   place them at the end of their area grid
 
 --- STEP 6: SHADES VIEW LAYOUT ---
-Use type: sections (max_columns: 4). For each area that has shades:
-• One mushroom-title-card header spanning the section
-• A horizontal-stack with two grid cards (columns: 1 each):
-    Left column:  all night shades (icon: mdi:moon-waning-crescent)
-    Right column: all day shades   (icon: mdi:white-balance-sunny)
-• If an area has only one shade type, use a single grid (no horizontal-stack)
+Use type: sections (max_columns: 4) with a SINGLE type: grid section containing
+all shade cards laid out flat. The two-column effect comes from sub-grids with
+grid_options: columns: 6 (half of the 12-column grid) sitting side by side.
 
---- STEP 7: ENTITY DATA FORMAT ---
-The 7-column pipe-delimited data below lists only user-labeled entities.
-  AREA          — HA area; use for grouping; "(no area)" entities go last
+Structure of the flat card list inside the single grid section:
+  1. Night column header (mushroom-template-card, grid_options: columns: 6)
+  2. Day column header  (mushroom-template-card, grid_options: columns: 6)
+  3. If cover.all_night and cover.all_day group entities exist:
+       - mushroom-title-card "All"
+       - type: grid, columns: 1, grid_options: columns: 6  ← night group card
+       - type: grid, columns: 1, grid_options: columns: 6  ← day group card
+  4. For each area with shades (repeat the pattern):
+       - mushroom-title-card with area name
+       - type: grid, columns: 1, grid_options: columns: 6  ← all night covers for area
+       - type: grid, columns: 1, grid_options: columns: 6  ← all day covers for area
+
+Each inner type: grid that holds shade cards uses:
+  columns: 1
+  grid_options:
+    columns: 6
+    rows: auto
+  square: false
+
+If an area has only night OR only day shades, still emit both column slots but
+leave the missing side as an empty grid (cards: []) so columns stay aligned.
+
+--- STEP 7: TANKS VIEW LAYOUT ---
+Use type: sections (max_columns: 4).
+• Tank gauges (sensor with tank_ in entity_id) use the gauge templates above
+• Water pump and autofill switches belong on this view — use the switch template
+• Group tank gauges together, then water management switches below them
+
+--- STEP 8: ENTITY DATA FORMAT ---
+The 6-column pipe-delimited data below lists only user-labeled entities.
+  AREA          — HA area; use for grouping. If AREA is "(no area)", infer a
+                  logical room or category from the entity_id and friendly_name
+                  (e.g. "Living Room", "Bedroom", "Exterior") — never display
+                  a header labeled "(no area)"
   DOMAIN        — entity type (light, cover, lock, climate, sensor, switch, button)
   ENTITY_ID     — use exactly as-is in the entity: field
   FRIENDLY_NAME — use as the name: field on the card
-  STATE         — current value; context only, do not display
   DEVICE_CLASS  — HA device class hint
   DIMMABLE      — true/false; drives show_brightness_control on light cards
 
@@ -274,12 +316,15 @@ The 7-column pipe-delimited data below lists only user-labeled entities.
 --- OUTPUT ---
 Produce complete, valid HA dashboard YAML ready to paste into
 Settings → Dashboards → LibreCoach → Raw Config Editor.
-Do not truncate or summarize. Include every entity from the data below.
+Do not truncate or summarize.
 
-============================================================
-ENTITY DATA
-AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|STATE|DEVICE_CLASS|DIMMABLE
-============================================================
+Include all entities you have a clear card type for. For entity types not
+covered by the templates above, use your best judgment to pick the closest
+matching card. Do not skip entities silently — if no specific template fits,
+place them in the Misc view using custom:mushroom-entity-card.
+
+--- ENTITY DATA ---
+AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|DIMMABLE
 `;
 
 const filename = "librecoach_dashboard_prompt.txt";
