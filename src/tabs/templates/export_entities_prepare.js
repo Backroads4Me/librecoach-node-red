@@ -31,7 +31,7 @@ const template = `{%- set ns = namespace(rows=[]) -%}
 {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or 'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or 'librecoach' in eid or 'rv_' in eid -%}
 {%- set area = area_name(eid) | default('(no area)') -%}
 {%- set fname = s.attributes.friendly_name | default(eid) -%}
-{%- if fname.startswith('LibreCoach:') -%}{%- continue -%}{%- endif -%}
+{%- if fname.startswith('LibreCoach:') and domain not in ('button', 'text', 'select') -%}{%- continue -%}{%- endif -%}
 {%- if 'switch_' in eid and fname.startswith('Switches ') -%}{%- continue -%}{%- endif -%}
 {%- if s.state in ('unavailable', 'unknown') -%}{%- continue -%}{%- endif -%}
 {%- set dc = s.attributes.device_class | default('') -%}

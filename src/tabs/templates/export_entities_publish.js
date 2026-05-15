@@ -4,7 +4,10 @@
 
 const content = msg.payload;
 if (!content || typeof content !== "string") {
-  node.error("Invalid response from /api/template — expected rendered string", msg);
+  node.error(
+    "Invalid response from /api/template — expected rendered string",
+    msg,
+  );
   node.status({ fill: "red", shape: "ring", text: "Template render failed" });
   return null;
 }
@@ -17,46 +20,50 @@ at the bottom of this file.
 Search the web for current documentation on:
   1. "lovelace-mushroom" — current card types, options, feature lists,
      and any breaking changes or deprecations since 2024
-  2. "Home Assistant sections dashboard YAML" — current syntax for
-     type: sections, max_columns, grid_options, badges_position
+  2. "Home Assistant masonry dashboard badges" — current syntax for
+     type: masonry badges list, zone.home entity badge
   3. "Home Assistant tile card features climate" — confirm feature type names
      for climate-hvac-modes, target-temperature, climate-preset-modes
 
 HA and mushroom update frequently. Do not rely solely on training data.
 
+--- GLOBAL NAVIGATION ORDER (memorize this — it governs every badge list) ---
+  1. Lights  2. Doors  3. AC  4. Heat  5. Shades  6. Locks  7. Tanks  8. Energy  9. Misc
+Navigation paths: /dashboard-librecoach/<lowercase-name>
+Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner, mdi:heat-wave,
+  mdi:roller-shade, mdi:lock, mdi:water, mdi:transmission-tower, mdi:cog-outline
+
 --- STEP 2: REQUIRED CONSTRAINTS ---
 • ONLY use: custom:mushroom-* cards and native HA cards (tile, gauge,
-  entities, button, thermostat, history-graph, glance, sensor)
+  entities, button, history-graph, glance, sensor)
 • Do NOT use: custom:button-card, layout-card, or any other third-party cards
 • Dashboard must be optimized for MOBILE (compact, touch-friendly)
-• Only create views that have relevant entities in the data below
-• Only include navigation badges for views that were actually created
-• The badge entity should always be zone.home (it exists on every HA install)
-• type: masonry for the Lights view; type: sections (max_columns: 4) for all others
-• Group entities by area using mushroom-title-card headers (alignment: center)
-• If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a header
+• ALL views use type: masonry — no sections views
+• Navigation badges: every view gets the full set (minus current view) — see STEP 4.1
+• Group entities by area using type: vertical-stack with title: <area name>
+• If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a title
 • Dashboard path prefix: /dashboard-librecoach/
 • Use the exact mdi: icons shown in the examples below — do not substitute
 
---- STEP 3: VIEWS TO CREATE (IF APPLICABLE) ---
-Create a view for each category only if the entity data contains matching entities.
-Use these path names and icons when creating a view:
+--- STEP 3: PRE-PROCESSING — DO THIS BEFORE WRITING ANY YAML ---
+Scan the entire entity data at the bottom of this file and produce a mental checklist:
+  a. Which of the 9 views will be created? (apply the rules in the view list below)
+  b. Record the final list of active views — this is the ONLY set of badges you will
+     place on every view. Do not add or remove badges mid-generation.
 
+View detection rules (create a view only if matching entities exist):
   path: lights    title: Lights    icon: mdi:lightbulb       (domain: light)
-  path: shades    title: Shades    icon: mdi:roller-shade    (domain: cover)
-  path: locks     title: Locks     icon: mdi:lock            (domain: lock)
+  path: doors     title: Doors     icon: mdi:door            (button entities for door open/close)
   path: ac        title: AC        icon: mdi:air-conditioner (climate with microair or ac in entity_id)
   path: heat      title: Heat      icon: mdi:heat-wave       (climate floor_heat, or light aquahot_*)
+  path: shades    title: Shades    icon: mdi:roller-shade    (domain: cover)
+  path: locks     title: Locks     icon: mdi:lock            (domain: lock)
   path: tanks     title: Tanks     icon: mdi:water           (sensor with tank_ in entity_id, plus water_pump and autofill switches)
+  path: energy    title: Energy    icon: mdi:transmission-tower (battery/power sensors and switches)
   path: misc      title: Misc      icon: mdi:cog-outline     (everything else, including unrecognized types)
 
 --- STEP 4: EXACT CARD TEMPLATES ---
 Copy these patterns exactly, including icon values.
-
-## Section title header:
-  type: custom:mushroom-title-card
-  title: Living Room
-  alignment: center
 
 ## Light (dimmable, DIMMABLE=true):
   type: custom:mushroom-light-card
@@ -75,39 +82,54 @@ Copy these patterns exactly, including icon values.
   secondary_info: none
   show_brightness_control: false
 
-## Shade column header (Night):
-  type: custom:mushroom-template-card
-  primary: Night
-  icon: mdi:moon-waning-crescent
-  features_position: bottom
-  grid_options:
-    columns: 6
-    rows: 1
-  color: yellow
+## Shade column headers (first vertical-stack in the Shades view, title: Shades):
+  type: horizontal-stack
+  cards:
+    - type: horizontal-stack
+      cards:
+        - type: custom:mushroom-template-card
+          primary: Night
+          icon: mdi:moon-waning-crescent
+          features_position: bottom
+          color: yellow
+    - type: custom:mushroom-template-card
+      primary: Day
+      icon: mdi:white-balance-sunny
+      features_position: bottom
+      color: yellow
 
-## Shade column header (Day):
-  type: custom:mushroom-template-card
-  primary: Day
-  icon: mdi:white-balance-sunny
-  features_position: bottom
-  grid_options:
-    columns: 6
-    rows: 1
-  color: yellow
-
-## Night shade (cover):
+## Night shade (cover) — inside horizontal-stack, left column:
   type: custom:mushroom-cover-card
   entity: cover.shade_7
   name: Windshield
   icon: mdi:moon-waning-crescent
   secondary_info: none
+  fill_container: true
+  primary_info: name
 
-## Day shade (cover):
+## Day shade (cover) — inside horizontal-stack, right column:
   type: custom:mushroom-cover-card
   entity: cover.shade_2
   name: Windshield
   icon: mdi:white-balance-sunny
   secondary_info: none
+
+## Door (open/close button pair — each door is one vertical-stack with title):
+  type: vertical-stack
+  title: Bedroom
+  cards:
+    - show_name: true
+      show_icon: false
+      show_state: false
+      type: button
+      name: Open
+      entity: light.switch_38
+    - show_name: true
+      show_icon: false
+      show_state: false
+      type: button
+      name: Close
+      entity: light.switch_39
 
 ## Lock:
   show_name: true
@@ -124,18 +146,17 @@ Copy these patterns exactly, including icon values.
   features:
     - type: climate-hvac-modes
     - type: target-temperature
-  grid_options:
-    columns: 6
-    rows: 3
 
-## Floor heat zone (thermostat — use this exact features list):
-  type: thermostat
+## Floor heat zone (tile — use this exact features list, NOT thermostat):
+  type: tile
   entity: climate.floor_heat_1
   name: Living Room
+  vertical: false
   features:
     - type: climate-hvac-modes
     - type: climate-preset-modes
       style: dropdown
+  features_position: bottom
 
 ## Aqua-Hot element (no brightness):
   type: custom:mushroom-light-card
@@ -143,6 +164,19 @@ Copy these patterns exactly, including icon values.
   name: Diesel Burner
   secondary_info: none
   show_brightness_control: false
+
+## Temperature sensor (for AC and Heat views):
+  show_name: true
+  show_icon: false
+  show_state: true
+  type: glance
+  entities:
+    - entity: sensor.cal_living_room_temp
+      name:
+        type: area
+    - entity: sensor.cal_bedroom_temp
+      name:
+        type: area
 
 ## Fresh water tank gauge:
   type: gauge
@@ -172,128 +206,217 @@ Copy these patterns exactly, including icon values.
   tap_action:
     action: toggle
 
-## Navigation badges — include one per view that was created, on every view:
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Lights
-    icon: mdi:light-recessed
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/lights
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Shades
-    icon: mdi:roller-shade
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/shades
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Locks
-    icon: mdi:lock
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/locks
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: AC
-    icon: mdi:air-conditioner
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/ac
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Heat
-    icon: mdi:heat-wave
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/heat
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Tanks
-    icon: mdi:water
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/tanks
-  - type: entity
-    entity: zone.home
-    show_name: true
-    show_state: false
-    show_icon: true
-    show_entity_picture: false
-    name: Misc
-    icon: mdi:cog-outline
-    tap_action:
-      action: navigate
-      navigation_path: /dashboard-librecoach/misc
+## House battery state-of-charge gauge:
+  type: gauge
+  entity: sensor.librecoach_victron_system_battery_state_of_charge
+  name: House
+  min: 0
+  max: 100
+  needle: true
+  severity:
+    green: 75
+    yellow: 25
+    red: 0
+
+## Starter/auxiliary battery voltage gauge:
+  type: gauge
+  entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
+  name: Starter
+  min: 11.5
+  max: 14.5
+  needle: true
+  severity:
+    red: 0
+    green: 12
+    yellow: 14.2
+
+## Power/inverter toggle button:
+  show_name: true
+  show_icon: true
+  type: button
+  icon: mdi:power
+  entity: light.switch_57
+
+--- STEP 4.1: NAVIGATION BADGE PROTOCOL ---
+All views are masonry. Use a top-level badges: list on every view.
+Omit only the badge for the current view. Keep the Global Navigation Order.
+
+  badges:
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Lights
+      icon: mdi:light-recessed
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/lights
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Doors
+      icon: mdi:door
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/doors
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: AC
+      icon: mdi:air-conditioner
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/ac
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Heat
+      icon: mdi:heat-wave
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/heat
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Shades
+      icon: mdi:roller-shade
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/shades
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Locks
+      icon: mdi:lock
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/locks
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Tanks
+      icon: mdi:water
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/tanks
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Energy
+      icon: mdi:transmission-tower
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/energy
+    - type: entity
+      entity: zone.home
+      show_name: true
+      show_state: false
+      show_icon: true
+      show_entity_picture: false
+      name: Misc
+      icon: mdi:cog-outline
+      tap_action:
+        action: navigate
+        navigation_path: /dashboard-librecoach/misc
 
 --- STEP 5: LIGHTS VIEW LAYOUT ---
-Use type: masonry. For each area:
-• One mushroom-title-card header
-• One grid card (columns: 2) containing all lights for that area
+type: masonry. For each area:
+• One type: vertical-stack with title: <area name>
+• Inside the stack: one type: grid card (square: false, columns: 2) containing all lights for that area
 • Dimmable lights (DIMMABLE=true) use the dimmable template above
 • Non-dimmable lights (DIMMABLE=false) use the non-dimmable template
 • Light groups (entity_id contains switch_g_) are always non-dimmable,
   place them at the end of their area grid
 
---- STEP 6: SHADES VIEW LAYOUT ---
-Use type: sections (max_columns: 4) with a SINGLE type: grid section containing
-all shade cards laid out flat. The two-column effect comes from sub-grids with
-grid_options: columns: 6 (half of the 12-column grid) sitting side by side.
+--- STEP 6: DOORS VIEW LAYOUT ---
+type: masonry. Each door location is one vertical-stack with title: <location name>.
+Inside the stack: Open button then Close button (show_name: true, show_icon: false, show_state: false).
 
-Structure of the flat card list inside the single grid section:
-  1. Night column header (mushroom-template-card, grid_options: columns: 6)
-  2. Day column header  (mushroom-template-card, grid_options: columns: 6)
-  3. If cover.all_night and cover.all_day group entities exist:
-       - mushroom-title-card "All"
-       - type: grid, columns: 1, grid_options: columns: 6  ← night group card
-       - type: grid, columns: 1, grid_options: columns: 6  ← day group card
-  4. For each area with shades (repeat the pattern):
-       - mushroom-title-card with area name
-       - type: grid, columns: 1, grid_options: columns: 6  ← all night covers for area
-       - type: grid, columns: 1, grid_options: columns: 6  ← all day covers for area
+--- STEP 7: AC VIEW LAYOUT ---
+type: masonry.
+• One vertical-stack title: MicroAir Zones containing all zone tile cards
+• One vertical-stack title: Temperature containing glance cards — one for calibrated
+  sensors (sensor.cal_*), one for humidity sensors (sensor.*_temp_humidity),
+  using name: type: area for labels
 
-Each inner type: grid that holds shade cards uses:
-  columns: 1
-  grid_options:
-    columns: 6
-    rows: auto
-  square: false
+--- STEP 8: HEAT VIEW LAYOUT ---
+type: masonry.
+• vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* light cards
+• vertical-stack title: Floor Heat → tile cards for each floor_heat zone
+• vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
+  (graph: none, detail: 1, name: type: area) for air temperature sensors
 
-If an area has only night OR only day shades, still emit both column slots but
-leave the missing side as an empty grid (cards: []) so columns stay aligned.
+--- STEP 9: SHADES VIEW LAYOUT ---
+type: masonry. Each area is a type: vertical-stack with title: <area name>.
+The two-column night|day layout within each stack uses type: horizontal-stack rows.
 
---- STEP 7: TANKS VIEW LAYOUT ---
-Use type: sections (max_columns: 4).
-• Tank gauges (sensor with tank_ in entity_id) use the gauge templates above
-• Water pump and autofill switches belong on this view — use the switch template
-• Group tank gauges together, then water management switches below them
+Structure:
+  1. First vertical-stack — title: Shades (the column header row):
+       type: horizontal-stack
+         cards:
+           - type: horizontal-stack   ← wraps the Night header
+               cards:
+                 - type: custom:mushroom-template-card  (Night, icon: mdi:moon-waning-crescent)
+           - type: custom:mushroom-template-card        (Day, icon: mdi:white-balance-sunny)
 
---- STEP 8: ENTITY DATA FORMAT ---
+  2. If cover.all_night and cover.all_day exist — vertical-stack title: All:
+       type: horizontal-stack with night cover (fill_container: true, primary_info: name) + day cover
+
+  3. For each area — vertical-stack title: <area>:
+       One type: horizontal-stack per shade pair:
+         - night cover (fill_container: true, primary_info: name, icon: mdi:moon-waning-crescent)
+         - day cover   (secondary_info: none, icon: mdi:white-balance-sunny)
+
+--- STEP 10: MISC VIEW LAYOUT ---
+type: masonry.
+• vertical-stack title: LibreCoach Tools containing a single type: entities card
+  listing these entities in order (include only those present in the entity data):
+    - button.librecoach_export_entities
+    - text.rv_manufacturer
+    - text.rv_model
+    - text.rv_year
+    - text.rv_other
+    - button.librecoach_import_config
+    - button.librecoach_export_config
+    - switch.librecoach_record_unknown   (name: type: entity)
+    - button.librecoach_export_unknown   (name: type: entity)
+
+Skip any entity you are unsure about rather than guessing.
+
+--- STEP 11: TANKS VIEW LAYOUT ---
+type: masonry. Use a single vertical-stack title: Water Management (or no title):
+• Water pump and autofill mushroom-entity-card switches FIRST
+• Then tank gauges: fresh water uses the fresh gauge template,
+  black/grey tanks use the inverted gauge template
+
+--- STEP 12: ENERGY VIEW LAYOUT ---
+type: masonry.
+• vertical-stack title: Batteries → House SOC gauge + Starter voltage gauge + power toggle button
+
+--- STEP 13: ENTITY DATA FORMAT ---
 The 6-column pipe-delimited data below lists only user-labeled entities.
   AREA          — HA area; use for grouping. If AREA is "(no area)", infer a
                   logical room or category from the entity_id and friendly_name
@@ -318,18 +441,16 @@ Produce complete, valid HA dashboard YAML ready to paste into
 Settings → Dashboards → LibreCoach → Raw Config Editor.
 Do not truncate or summarize.
 
-Include all entities you have a clear card type for. For entity types not
-covered by the templates above, use your best judgment to pick the closest
-matching card. Do not skip entities silently — if no specific template fits,
-place them in the Misc view using custom:mushroom-entity-card.
+Only include entities where you have a clear card type from the templates above.
+Skip any entity that doesn't clearly fit — do not guess or force entities into cards.
 
---- ENTITY DATA ---
-AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|DIMMABLE
 `;
 
 const filename = "librecoach_dashboard_prompt.txt";
 const fullContent = PROMPT_HEADER + content;
-const lineCount = content.split("\n").filter((l) => l.trim() && !l.startsWith("AREA")).length;
+const lineCount = content
+  .split("\n")
+  .filter((l) => l.trim() && !l.startsWith("AREA")).length;
 
 const textMsg = {
   filename: `/homeassistant/www/${filename}`,
