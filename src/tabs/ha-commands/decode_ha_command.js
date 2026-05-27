@@ -74,6 +74,19 @@ if (aquahotTopicMatch) {
   return msg;
 }
 
+// --- AquaHot 125D switch entities (1FE98 / FF2F commands) ---
+const aquahot125dMatch = msg.topic.match(
+  /^homeassistant\/switch\/aquahot_(diesel_burner|electric_element|quiet_mode|interior_heating)\/set$/,
+);
+if (aquahot125dMatch) {
+  const entityId = `aquahot_${aquahot125dMatch[1]}`;
+  msg.routingKey = "aquahot_125d";
+  msg.entityId = entityId;
+  msg.command = String(msg.payload).toUpperCase();
+  msg.entityType = "switch";
+  return msg;
+}
+
 // --- Switch and Light entities (Fallback) ---
 const topicParts = msg.topic.split("/");
 if (

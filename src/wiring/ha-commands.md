@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `b3d80c5dc947ec88`
 - **Disabled:** false
-- **Node count:** 26
-- **Function nodes:** 14
+- **Node count:** 27
+- **Function nodes:** 15
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 2
@@ -137,10 +137,7 @@ flowchart LR
 
 #### Msg contract
 Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
-Uses FF2F (AQUAHOT_COMMAND_2) for burner on/off.
-TODO: Zone demand on/off is sent via WATERHEATER_COMMAND_2 (1FE98) byte 2,
-not FF2F. This encoder currently controls the burner globally — per-zone
-demand encoding via 1FE98 needs further reverse engineering.
+Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
 
 #### Upstream
 - e19247ab204a8e12 (switch) — this tab
@@ -493,6 +490,40 @@ Encodes WATER_PUMP_COMMAND messages (1FFB2)
 
 ---
 
+### encode_waterheater_command_2
+- **Node ID:** `dd9e8f7c6b5a4321`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_6aa079d768e1["MQTT out_ Retain FALSE"]:::link
+  n_89946e1c7a57["89946e1c7a570ed0"]:::fn
+  n_dd9e8f7c6b5a["encode_waterheater_command_2"]:::fn
+  n_89946e1c7a57 -->|out 11| n_dd9e8f7c6b5a
+  n_dd9e8f7c6b5a -->|out 0| n_6aa079d768e1
+```
+
+#### Msg contract
+Encodes AquaHot 125D switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
+Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
+Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
+
+#### Upstream
+- 89946e1c7a570ed0 (switch) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain FALSE (link out) — this tab
+
+---
+
 ## UI Template Nodes
 
 _None._
@@ -519,7 +550,7 @@ _None._
 
 ## Other Nodes
 
-- 89946e1c7a570ed0 (switch) — id `89946e1c7a570ed0`, in: 1, out: 12
+- 89946e1c7a570ed0 (switch) — id `89946e1c7a570ed0`, in: 1, out: 13
 - 9f10dee2300ff666 (note) — id `9f10dee2300ff666`, in: 0, out: 0
 - HA climate (mqtt in) — id `51fdd54bd04e39e2`, in: 0, out: 1
 - Home Assistant climate encoding (group) — id `7183c5f0ad762adb`, in: 0, out: 0

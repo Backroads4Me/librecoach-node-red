@@ -113,8 +113,11 @@ function decodeStatus(data, result) {
   result.raw_setpoint_temperature = setpointRaw;
 
   // Bytes 4-5: Water Temp
+  // AquaHot 125D uses raw LE uint16 / 128 = °C (not standard RV-C Kelvin encoding)
   const waterTempRaw = decodeUint16(data, 4);
-  result.water_temperature = decodeTemperature(waterTempRaw);
+  const waterTempC = parseFloat((waterTempRaw / 128).toFixed(1));
+  result.water_temperature_c = waterTempC;
+  result.water_temperature = parseFloat(((waterTempC * 9) / 5 + 32).toFixed(1));
   result.raw_water_temperature = waterTempRaw;
 
   // Byte 6: Thermostat, Burner, AC Element, High Temp

@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `384249601e37ba22`
 - **Disabled:** false
-- **Node count:** 16
-- **Function nodes:** 4
+- **Node count:** 18
+- **Function nodes:** 5
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 1
@@ -86,6 +86,39 @@ reverse-engineered analysis of recordings. Confidence levels differ per field.
 #### Downstream
 - **Output 0:**
   - status_aquahot_2 (function) — this tab, file: [`status_aquahot_2.js`](../tabs/aquahot/status_aquahot_2.js)
+
+---
+
+### republish_pump_state
+- **Node ID:** `ff1234567890abcd`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_1c1403c14b57["MQTT out_ Retain TRUE"]:::link
+  n_ee1234567890["Every 60s"]:::fn
+  n_ff1234567890["republish_pump_state"]:::fn
+  n_ee1234567890 -->|out 0| n_ff1234567890
+  n_ff1234567890 -->|out 0| n_1c1403c14b57
+```
+
+#### Msg contract
+Republishes AquaHot zone pump states from flow context every 60 seconds.
+This keeps MQTT retain state fresh if Node-RED restarts after the broker.
+
+#### Upstream
+- Every 60s (inject) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
 
 ---
 
@@ -200,4 +233,5 @@ _None._
 - AQUAHOT_UNUSED (debug) — id `7a1eed2a34490b2a`, in: 1, out: 0
 - AQUAHOT_UNUSED (debug) — id `8d93a86dc09f4c57`, in: 1, out: 0
 - Aqua-Hot (group) — id `5811945b9bad79dc`, in: 0, out: 0
+- Every 60s (inject) — id `ee1234567890abcd`, in: 0, out: 1
 - ee4192410344e659 (switch) — id `ee4192410344e659`, in: 1, out: 14

@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 90
+- **Node count:** 91
 - **Function nodes:** 26
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -813,6 +813,7 @@ Output: retained state publish back to HA
 ---
 
 ### rvc_time_sync
+- **File:** [`rvc_time_sync.js`](../tabs/config/rvc_time_sync.js)
 - **Node ID:** `dd22c9c987534342`
 - **Outputs:** 1
 
@@ -826,15 +827,17 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_bce5d439a67d["Every 60s"]:::fn
+  n_c83c6b2b70c9["MQTT out_ Retain FALSE"]:::link
   n_dd22c9c98753["rvc_time_sync"]:::fn
-  n_de36b6c52fd2["MQTT out_ Retain FALSE"]:::link
   n_bce5d439a67d -->|out 0| n_dd22c9c98753
-  n_dd22c9c98753 -->|out 0| n_de36b6c52fd2
+  n_dd22c9c98753 -->|out 0| n_c83c6b2b70c9
 ```
 
 #### Msg contract
-Broadcasts SET_DATE_TIME_COMMAND to the RV-C network (DGN 1FFFEh, §6.25.1)
+Broadcasts DATE_TIME_STATUS to the RV-C network (DGN 1FFFFh, §6.4)
 Fires every 60s via inject node. Gated by timeSyncEnabled global (default: false).
+Note: spec nominal interval is 1000 ms; 60s is adequate for clock correction without
+competing with a hardware master. No source-address arbitration is implemented here.
 
 #### Upstream
 - Every 60s (inject) — this tab
@@ -972,7 +975,7 @@ _None._
   - HA in in tab `HA Commands` ([wiring](./ha_commands.md))
 - **MQTT out: Retain FALSE** (`a2334b77d3764815`) →
   - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
-- **MQTT out: Retain FALSE** (`de36b6c52fd2b2cc`) →
+- **MQTT out: Retain FALSE** (`c83c6b2b70c927a3`) →
   - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`0a63b31d61802934`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
@@ -1001,8 +1004,8 @@ _None._
   - MQTT out: Retain FALSE in tab `Micro-Air`
   - MQTT out: Retain FALSE in tab `HA Commands`
   - MQTT out: Retain FALSE in tab `Config`
-  - MQTT out: Retain FALSE in tab `HA Commands`
   - MQTT out: Retain FALSE in tab `Config`
+  - MQTT out: Retain FALSE in tab `HA Commands`
 - **MQTT out: Retain TRUE** (`f658418a7b9b4857`) ←
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Command routing`
@@ -1061,6 +1064,7 @@ _None._
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0
 - On start (inject) — id `0c76b4a89a0e60ca`, in: 0, out: 1
+- RV-C Time Sync (group) — id `5169613bd2735138`, in: 0, out: 0
 - Read DGN table (file in) — id `74c7e4a6cc2508eb`, in: 1, out: 1
 - Recorded message (debug) — id `d79041ca83ce8b8c`, in: 1, out: 0
 - Recording toggle (mqtt in) — id `ff7901a611c1e1aa`, in: 0, out: 1

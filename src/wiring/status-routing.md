@@ -7,7 +7,7 @@
 - **Tab ID:** `3e5f038a4f5a8b9a`
 - **Disabled:** false
 - **Node count:** 81
-- **Function nodes:** 53
+- **Function nodes:** 54
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 2
@@ -105,39 +105,6 @@ flowchart LR
 
 #### Downstream
 _None._
-
----
-
-### beta_gate
-- **File:** [`beta_gate.js`](../tabs/status-routing/beta_gate.js)
-- **Node ID:** `a51bd40c7da8dc17`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_a51bd40c7da8["beta_gate"]:::fn
-  n_be06adcac3cc["status_panel_signal"]:::fn
-  n_d3a13b531bab["MQTT out_ Retain TRUE"]:::link
-  n_a51bd40c7da8 -->|out 0| n_d3a13b531bab
-  n_be06adcac3cc -->|out 0| n_a51bd40c7da8
-```
-
-#### Msg contract
-A simple gate node to allow messages to pass only if Beta features are enabled.
-
-#### Upstream
-- status_panel_signal (function) — this tab, file: [`status_panel_signal.js`](../tabs/status-routing/status_panel_signal.js)
-
-#### Downstream
-- **Output 0:**
-  - MQTT out: Retain TRUE (link out) — this tab
 
 ---
 
@@ -896,6 +863,7 @@ Decodes LOCK_STATUS messages (1FEE5)
 - **File:** [`decode_panel_signal.js`](../tabs/status-routing/decode_panel_signal.js)
 - **Node ID:** `e7fac0a7c08bbb90`
 - **Outputs:** 1
+- **Disabled:** true
 
 #### Neighborhood
 ```mermaid
@@ -906,12 +874,10 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_5c41990fd6be["decode_panel_signal"]:::fn
   n_9f88f215f3f0["STATUS"]:::fn
-  n_be06adcac3cc["status_panel_signal"]:::fn
-  n_e7fac0a7c08b["decode_panel_signal"]:::fn
-  n_9f88f215f3f0 -->|out 35| n_e7fac0a7c08b
-  n_e7fac0a7c08b -->|out 0| n_5c41990fd6be
+  n_be06adcac3cc["status_panel_signal"]:::fn:::disabled
+  n_e7fac0a7c08b["decode_panel_signal"]:::fn:::disabled
+  n_9f88f215f3f0 -->|out 36| n_e7fac0a7c08b
   n_e7fac0a7c08b -->|out 0| n_be06adcac3cc
 ```
 
@@ -926,8 +892,41 @@ Handles two coach-specific DGNs observed in the field:
 
 #### Downstream
 - **Output 0:**
-  - decode_panel_signal (debug) — this tab
   - status_panel_signal (function) — this tab, file: [`status_panel_signal.js`](../tabs/status-routing/status_panel_signal.js)
+
+---
+
+### decode_solar_controller
+- **File:** [`decode_solar_controller.js`](../tabs/status-routing/decode_solar_controller.js)
+- **Node ID:** `5b9a1c073b281840`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_5b9a1c073b28["decode_solar_controller"]:::fn
+  n_9f88f215f3f0["STATUS"]:::fn
+  n_f65fa76598ee["status_solar_controller"]:::fn
+  n_5b9a1c073b28 -->|out 0| n_f65fa76598ee
+  n_9f88f215f3f0 -->|out 35| n_5b9a1c073b28
+```
+
+#### Msg contract
+Decodes GO Power GP-RVC-30-MPPT Solar Controller messages
+Handles DGNs: 1FE80, 1FDFF, 1FEB3, 1FE85, 1FE84, 1FE83, 1FE82, 1FE81
+
+#### Upstream
+- STATUS (switch) — this tab
+
+#### Downstream
+- **Output 0:**
+  - status_solar_controller (function) — this tab, file: [`status_solar_controller.js`](../tabs/status-routing/status_solar_controller.js)
 
 ---
 
@@ -1533,6 +1532,7 @@ Output 1: MQTT messages (discovery + state)
 - **File:** [`status_panel_signal.js`](../tabs/status-routing/status_panel_signal.js)
 - **Node ID:** `be06adcac3ccd7fc`
 - **Outputs:** 1
+- **Disabled:** true
 
 #### Neighborhood
 ```mermaid
@@ -1543,10 +1543,8 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_a51bd40c7da8["beta_gate"]:::fn
-  n_be06adcac3cc["status_panel_signal"]:::fn
-  n_e7fac0a7c08b["decode_panel_signal"]:::fn
-  n_be06adcac3cc -->|out 0| n_a51bd40c7da8
+  n_be06adcac3cc["status_panel_signal"]:::fn:::disabled
+  n_e7fac0a7c08b["decode_panel_signal"]:::fn:::disabled
   n_e7fac0a7c08b -->|out 0| n_be06adcac3cc
 ```
 
@@ -1562,8 +1560,7 @@ Output 1: MQTT messages (discovery + state)
 - decode_panel_signal (function) — this tab, file: [`decode_panel_signal.js`](../tabs/status-routing/decode_panel_signal.js)
 
 #### Downstream
-- **Output 0:**
-  - beta_gate (function) — this tab, file: [`beta_gate.js`](../tabs/status-routing/beta_gate.js)
+_None._
 
 ---
 
@@ -1595,6 +1592,43 @@ Output 1: MQTT messages (discovery + state)
 
 #### Upstream
 - decode_window_shade_control_status (function) — this tab, file: [`decode_window_shade_control_status.js`](../tabs/status-routing/decode_window_shade_control_status.js)
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
+### status_solar_controller
+- **File:** [`status_solar_controller.js`](../tabs/status-routing/status_solar_controller.js)
+- **Node ID:** `f65fa76598eeb965`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_5b9a1c073b28["decode_solar_controller"]:::fn
+  n_d3a13b531bab["MQTT out_ Retain TRUE"]:::link
+  n_f65fa76598ee["status_solar_controller"]:::fn
+  n_5b9a1c073b28 -->|out 0| n_f65fa76598ee
+  n_f65fa76598ee -->|out 0| n_d3a13b531bab
+```
+
+#### Msg contract
+HA Status Publisher for GO Power GP-RVC-30-MPPT Solar Controller
+Handles: SOLAR_CONTROLLER_BATTERY_STATUS (1FE80) - primary source
+         SOLAR_CONTROLLER_SOLAR_ARRAY_STATUS (1FDFF) - panel data
+         SOLAR_CONTROLLER_STATUS_6 (1FE81) - setpoints
+Self-creating: publishes MQTT discovery on first valid reading.
+
+#### Upstream
+- decode_solar_controller (function) — this tab, file: [`decode_solar_controller.js`](../tabs/status-routing/decode_solar_controller.js)
 
 #### Downstream
 - **Output 0:**
@@ -1828,7 +1862,7 @@ flowchart LR
   n_48e6dda2b2d9["New Unique Status"]:::fn
   n_9f88f215f3f0["STATUS"]:::fn
   n_b797e5a52b6d["unique_status"]:::fn
-  n_9f88f215f3f0 -->|out 36| n_b797e5a52b6d
+  n_9f88f215f3f0 -->|out 37| n_b797e5a52b6d
   n_b797e5a52b6d -->|out 0| n_48e6dda2b2d9
 ```
 
@@ -1893,6 +1927,5 @@ _None._
 - Reset unique STATUS list (group) — id `eb51c1f2d0d389d1`, in: 0, out: 0
 - Reset unique list (group) — id `1f7fde87c1ab1f51`, in: 0, out: 0
 - SOLAR_EQUALIZATION_CONFIGURATION_STATUS (debug) — id `0ecfccb41b17f21b`, in: 1, out: 0
-- STATUS (switch) — id `9f88f215f3f07227`, in: 1, out: 37
+- STATUS (switch) — id `9f88f215f3f07227`, in: 1, out: 38
 - THERMOSTAT_STATUS_2 (debug) — id `e06ff8584295e0bd`, in: 1, out: 0
-- decode_panel_signal (debug) — id `5c41990fd6beb72e`, in: 1, out: 0

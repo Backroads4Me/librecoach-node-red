@@ -41,9 +41,9 @@ flowchart TD
     n_a1e89f48333c["Notify user"]:::link
     n_a2334b77d376["MQTT out_ Retain FALSE"]:::link
     n_ac17a780a9a1["CONFIG_GLOBALS"]:::link
+    n_c83c6b2b70c9["MQTT out_ Retain FALSE"]:::link
     n_cd73ee739dad["Notify user"]:::link
     n_dca8346e061f["MQTT out_ Retain TRUE"]:::link
-    n_de36b6c52fd2["MQTT out_ Retain FALSE"]:::link
     n_e38f32a1f6d3["MQTT out_ Retain TRUE"]:::link
     n_f01db5ebc3ae["ADDRESS_CLAIMED"]:::link
     n_f658418a7b9b["MQTT out_ Retain TRUE"]:::link
@@ -115,13 +115,13 @@ flowchart TD
   n_a2334b77d376 --> n_74329f13cbbc
   n_b104a7e82aef --> n_f658418a7b9b
   n_bd38c37850a3 --> n_f658418a7b9b
+  n_c83c6b2b70c9 --> n_74329f13cbbc
   n_cd73ee739dad --> n_a1e89f48333c
   n_cdc4754f4c43 --> n_1d411b577497
   n_d38c75bc1474 --> n_f658418a7b9b
   n_d3a13b531bab --> n_f658418a7b9b
   n_d95299a44e1d --> n_74329f13cbbc
   n_dca8346e061f --> n_f658418a7b9b
-  n_de36b6c52fd2 --> n_74329f13cbbc
   n_e371075d4dbf --> n_f658418a7b9b
   n_e38f32a1f6d3 --> n_f658418a7b9b
   n_f3f99ba42088 --> n_f658418a7b9b
@@ -133,10 +133,10 @@ flowchart TD
 | Tab | Functions | Subflow instances | Link out | Link in |
 |---|---|---|---|---|
 | [Config](./config.md) | 26 | 0 | 15 | 7 |
-| [Status routing](./status-routing.md) | 53 | 0 | 2 | 2 |
+| [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
-| [HA Commands](./ha-commands.md) | 14 | 0 | 2 | 1 |
-| [AquaHot](./aquahot.md) | 4 | 0 | 1 | 2 |
+| [HA Commands](./ha-commands.md) | 15 | 0 | 2 | 1 |
+| [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
 | [Victron](./victron.md) | 13 | 0 | 4 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
 | [Templates](./templates.md) | 15 | 0 | 4 | 0 |
@@ -181,13 +181,13 @@ _None._
 | MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | MQTT out: Retain TRUE | Micro-Air | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
+| MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | Notify user | Config | → | Notify user | Config |
 | Reset Microair filters | Micro-Air | → | Reset Microair filters | Micro-Air |
 | MQTT out: Retain TRUE | Delete HA Entity | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Status routing | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain FALSE | HA Commands | → | MQTT out: Retain FALSE | Config |
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
-| MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
