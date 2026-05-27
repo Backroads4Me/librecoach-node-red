@@ -2744,7 +2744,7 @@
     "statusVal": "",
     "statusType": "auto",
     "x": 800,
-    "y": 660,
+    "y": 700,
     "g": "aea9d97e0563bd83",
     "wires": []
   },
@@ -6355,7 +6355,7 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1270,
+    "x": 1290,
     "y": 840,
     "g": "7183c5f0ad762adb",
     "l": true,
@@ -6483,7 +6483,7 @@
     "type": "function",
     "z": "b3d80c5dc947ec88",
     "name": "encode_waterheater_command_2",
-    "func": "// Encodes AquaHot 125D switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)\n// Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority\n// Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating\n\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 0x9e;\n\nconst entityId = msg.entityId;\nconst command = msg.command; // \"ON\" or \"OFF\"\n\nif (!entityId || !command) return null;\n\nfunction send1FE98(byte1, byte2) {\n  // CAN ID: priority 6, DGN 1FE98, source address\n  // DGN 1FE98 is PDU2 format (PF >= 240), so full 18-bit DGN goes in bits 25-8\n  // Result for source 0x9E: 0x19FE989E\n  const DGN_INT = 0x1FE98;\n  const PRIORITY = 6;\n  const canIdInt = (PRIORITY << 26) | (DGN_INT << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[1] = byte1;\n  dataBytes[2] = byte2;\n  const dataHex = dataBytes.map(b => b.toString(16).padStart(2, \"0\")).join(\"\");\n  node.send({ topic: \"can/send\", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });\n}\n\nfunction sendFF2F(cmdType, isOn) {\n  // CAN ID: priority 6, DGN FF2F, source address\n  // Result for source 0x9E: 0x18FF2F9E\n  const DGN_INT = 0xFF2F;\n  const PRIORITY = 6;\n  const canIdInt = (PRIORITY << 26) | (DGN_INT << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[0] = 0x01;      // instance\n  dataBytes[1] = cmdType;\n  dataBytes[2] = 0x00;\n  dataBytes[3] = isOn ? 0x01 : 0x00;\n  dataBytes[4] = 0x00;\n  dataBytes[5] = 0x00;\n  const dataHex = dataBytes.map(b => b.toString(16).padStart(2, \"0\")).join(\"\");\n  node.send({ topic: \"can/send\", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });\n}\n\nswitch (entityId) {\n  case \"aquahot_diesel_burner\":\n    // Toggle semantics — send toggle regardless of ON/OFF command\n    send1FE98(0xF6, 0xFF);\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Diesel burner toggle (${command})` });\n    break;\n  case \"aquahot_electric_element\":\n    // Toggle semantics\n    send1FE98(0x6F, 0xFF);\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Electric element toggle (${command})` });\n    break;\n  case \"aquahot_quiet_mode\":\n    sendFF2F(0x07, command === \"ON\");\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Quiet mode -> ${command}` });\n    break;\n  case \"aquahot_interior_heating\":\n    sendFF2F(0x0a, command === \"ON\");\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Interior heating -> ${command}` });\n    break;\n  default:\n    node.warn(`[encode_waterheater_command_2] Unknown entityId: ${entityId}`);\n}\n\nreturn null;\n",
+    "func": "// Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)\n// Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority\n// Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating\n\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 0x9e;\n\nconst entityId = msg.entityId;\nconst command = msg.command; // \"ON\" or \"OFF\"\n\nif (!entityId || !command) return null;\n\nfunction send1FE98(byte1, byte2) {\n  // CAN ID: priority 6, DGN 1FE98, source address\n  // DGN 1FE98 is PDU2 format (PF >= 240), so full 18-bit DGN goes in bits 25-8\n  // Result for source 0x9E: 0x19FE989E\n  const DGN_INT = 0x1FE98;\n  const PRIORITY = 6;\n  const canIdInt = (PRIORITY << 26) | (DGN_INT << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[1] = byte1;\n  dataBytes[2] = byte2;\n  const dataHex = dataBytes.map(b => b.toString(16).padStart(2, \"0\")).join(\"\");\n  node.send({ topic: \"can/send\", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });\n}\n\nfunction sendFF2F(cmdType, isOn) {\n  // CAN ID: priority 6, DGN FF2F, source address\n  // Result for source 0x9E: 0x18FF2F9E\n  const DGN_INT = 0xFF2F;\n  const PRIORITY = 6;\n  const canIdInt = (PRIORITY << 26) | (DGN_INT << 8) | SOURCE_ADDRESS;\n  const canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n  const dataBytes = new Array(8).fill(0xff);\n  dataBytes[0] = 0x01;      // instance\n  dataBytes[1] = cmdType;\n  dataBytes[2] = 0x00;\n  dataBytes[3] = isOn ? 0x01 : 0x00;\n  dataBytes[4] = 0x00;\n  dataBytes[5] = 0x00;\n  const dataHex = dataBytes.map(b => b.toString(16).padStart(2, \"0\")).join(\"\");\n  node.send({ topic: \"can/send\", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });\n}\n\nswitch (entityId) {\n  case \"aquahot_diesel_burner\":\n    // Toggle semantics — send toggle regardless of ON/OFF command\n    send1FE98(0xF6, 0xFF);\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Diesel burner toggle (${command})` });\n    break;\n  case \"aquahot_electric_element\":\n    // Toggle semantics\n    send1FE98(0x6F, 0xFF);\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Electric element toggle (${command})` });\n    break;\n  case \"aquahot_quiet_mode\":\n    sendFF2F(0x07, command === \"ON\");\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Quiet mode -> ${command}` });\n    break;\n  case \"aquahot_interior_heating\":\n    sendFF2F(0x0a, command === \"ON\");\n    node.status({ fill: \"blue\", shape: \"dot\", text: `Interior heating -> ${command}` });\n    break;\n  default:\n    node.warn(`[encode_waterheater_command_2] Unknown entityId: ${entityId}`);\n}\n\nreturn null;\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -6491,7 +6491,7 @@
     "finalize": "",
     "libs": [],
     "x": 880,
-    "y": 540,
+    "y": 660,
     "g": "aea9d97e0563bd83",
     "wires": [
       [
