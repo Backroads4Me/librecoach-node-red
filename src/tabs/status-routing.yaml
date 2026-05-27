@@ -667,6 +667,15 @@
       result.temperature_status = decode2BitStatus(temperatureRaw);
       result.temperature_warning = temperatureRaw === 1;
 
+      // Byte 3: AquaHot 125D per-zone pump state
+      if (data.length >= 4) {
+        result.front_pump_running = (data[3] & 0x01) === 1; // bit 0
+        result.floor_pump_running = (data[3] & 0x10) === 0x10; // bit 4
+        result.any_zone_pump_running =
+          result.front_pump_running || result.floor_pump_running;
+        result.raw_byte3 = data[3];
+      }
+
       // Convenience fields
       result.status = result.pump_running ? "ON" : "OFF";
       result.has_fault =
@@ -2825,8 +2834,11 @@
       result.raw_setpoint_temperature = setpointRaw;
 
       // Bytes 4-5: Water Temp
+      // AquaHot 125D uses raw LE uint16 / 128 = °C (not standard RV-C Kelvin encoding)
       const waterTempRaw = decodeUint16(data, 4);
-      result.water_temperature = decodeTemperature(waterTempRaw);
+      const waterTempC = parseFloat((waterTempRaw / 128).toFixed(1));
+      result.water_temperature_c = waterTempC;
+      result.water_temperature = parseFloat(((waterTempC * 9) / 5 + 32).toFixed(1));
       result.raw_water_temperature = waterTempRaw;
 
       // Byte 6: Thermostat, Burner, AC Element, High Temp
@@ -3195,6 +3207,13 @@
     };
 
 
+    const aquahotDevice = {
+      identifiers: ["librecoach-aquahot"],
+      name: "Aqua-Hot",
+      manufacturer: "LibreCoach",
+    };
+
+
     // === Flow context: tracks which entities have had discovery published ===
 
 
@@ -3280,6 +3299,51 @@
       messages.push(
         stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),
       );
+    }
+
+
+    function switchConfig(entityId, name, icon, commandTopic) {
+      return {
+        topic: `homeassistant/switch/${entityId}/config`,
+        payload: {
+          name,
+          unique_id: entityId,
+          default_entity_id: `switch.${entityId}`,
+          state_topic: `homeassistant/switch/${entityId}/state`,
+          command_topic: commandTopic,
+          payload_on: "ON",
+          payload_off: "OFF",
+          icon,
+          device: aquahotDevice,
+        },
+      };
+    }
+
+
+    function publishSwitch(entityId, stateValue, configFn) {
+      if (!created[entityId]) {
+        messages.push(configFn());
+        markCreated(entityId);
+      }
+      messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
+    }
+
+
+    function aquahotBinarySensorConfig(entityId, name, deviceClass, icon) {
+      return {
+        topic: `homeassistant/binary_sensor/${entityId}/config`,
+        payload: {
+          name,
+          unique_id: entityId,
+          default_entity_id: `binary_sensor.${entityId}`,
+          state_topic: `homeassistant/binary_sensor/${entityId}/state`,
+          payload_on: "ON",
+          payload_off: "OFF",
+          device_class: deviceClass,
+          icon,
+          device: aquahotDevice,
+        },
+      };
     }
 
 
@@ -3388,6 +3452,30 @@
             `Ignite Fail${i_name}`,
             "problem",
             "mdi:fire-alert",
+          ),
+        );
+      }
+
+      // AquaHot 125D — diesel burner switch (controlled via 1FE98 toggle)
+      if (typeof p.burner_active === "boolean") {
+        publishSwitch("aquahot_diesel_burner", onOff(p.burner_active), () =>
+          switchConfig(
+            "aquahot_diesel_burner",
+            "Diesel Burner",
+            "mdi:fire",
+            "homeassistant/switch/aquahot_diesel_burner/set",
+          ),
+        );
+      }
+
+      // AquaHot 125D — electric element switch (controlled via 1FE98 toggle)
+      if (typeof p.ac_element_active === "boolean") {
+        publishSwitch("aquahot_electric_element", onOff(p.ac_element_active), () =>
+          switchConfig(
+            "aquahot_electric_element",
+            "Electric Element",
+            "mdi:lightning-bolt",
+            "homeassistant/switch/aquahot_electric_element/set",
           ),
         );
       }
@@ -3516,6 +3604,31 @@
             "mdi:alert-circle",
           ),
         );
+      }
+
+      // AquaHot 125D: per-zone pump binary sensors (byte 3 in 1FE97)
+      if (typeof p.front_pump_running === "boolean") {
+        publishBinary("aquahot_front_pump", onOff(p.front_pump_running), () =>
+          aquahotBinarySensorConfig(
+            "aquahot_front_pump",
+            "Front Zone Pump",
+            "running",
+            "mdi:pump",
+          ),
+        );
+        flow.set("aquahot_pump_front_state", onOff(p.front_pump_running));
+      }
+
+      if (typeof p.floor_pump_running === "boolean") {
+        publishBinary("aquahot_floor_pump", onOff(p.floor_pump_running), () =>
+          aquahotBinarySensorConfig(
+            "aquahot_floor_pump",
+            "Floor Zone Pump",
+            "running",
+            "mdi:pump",
+          ),
+        );
+        flow.set("aquahot_pump_floor_state", onOff(p.floor_pump_running));
       }
     }
 

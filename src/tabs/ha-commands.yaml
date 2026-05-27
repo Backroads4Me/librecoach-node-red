@@ -1171,7 +1171,8 @@
   func: >
     // Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
 
-    // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
+    // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating
+    priority.
 
 
     // --- Configuration ---
@@ -1534,21 +1535,42 @@
   g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
+- id: d95299a44e1d7ed5
+  type: link out
+  z: b3d80c5dc947ec88
+  name: "MQTT out: Retain FALSE"
+  mode: link
+  links:
+    - 74329f13cbbc528a
+  x: 1270
+  "y": 840
+  g: 7183c5f0ad762adb
+  l: true
+  wires: []
 - id: dd9e8f7c6b5a4321
   type: function
   z: b3d80c5dc947ec88
   name: encode_waterheater_command_2
-  func: |
-    // Encodes AquaHot 125D switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
+  func: >
+    // Encodes AquaHot 125D switch commands via 1FE98 (WATERHEATER_COMMAND_2)
+    and FF2F (AQUAHOT_COMMAND_2)
+
     // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
-    // Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
+
+    // Entity IDs: aquahot_diesel_burner, aquahot_electric_element,
+    aquahot_quiet_mode, aquahot_interior_heating
+
 
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 0x9e;
 
+
     const entityId = msg.entityId;
+
     const command = msg.command; // "ON" or "OFF"
 
+
     if (!entityId || !command) return null;
+
 
     function send1FE98(byte1, byte2) {
       // CAN ID: priority 6, DGN 1FE98, source address
@@ -1564,6 +1586,7 @@
       const dataHex = dataBytes.map(b => b.toString(16).padStart(2, "0")).join("");
       node.send({ topic: "can/send", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });
     }
+
 
     function sendFF2F(cmdType, isOn) {
       // CAN ID: priority 6, DGN FF2F, source address
@@ -1582,6 +1605,7 @@
       const dataHex = dataBytes.map(b => b.toString(16).padStart(2, "0")).join("");
       node.send({ topic: "can/send", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });
     }
+
 
     switch (entityId) {
       case "aquahot_diesel_burner":
@@ -1606,6 +1630,7 @@
         node.warn(`[encode_waterheater_command_2] Unknown entityId: ${entityId}`);
     }
 
+
     return null;
   outputs: 1
   timeout: 0
@@ -1618,18 +1643,6 @@
   g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-- id: d95299a44e1d7ed5
-  type: link out
-  z: b3d80c5dc947ec88
-  name: "MQTT out: Retain FALSE"
-  mode: link
-  links:
-    - 74329f13cbbc528a
-  x: 1270
-  "y": 840
-  g: 7183c5f0ad762adb
-  l: true
-  wires: []
 - id: e19247ab204a8e12
   type: switch
   z: b3d80c5dc947ec88

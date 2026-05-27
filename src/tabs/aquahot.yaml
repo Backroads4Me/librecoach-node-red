@@ -28,7 +28,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1150
+  x: 1290
   "y": 480
   g: 5811945b9bad79dc
   l: true
@@ -410,6 +410,7 @@
 
     else if (dgn_name === "AQUAHOT_COMMAND_2") {
       if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
+        // Quiet Mode on/off
         publishSwitch(
           "aquahot_quiet_mode",
           onOff(p.quiet_mode_on),
@@ -421,6 +422,7 @@
           ),
         );
       } else if (p.command_type === 0x0a && typeof p.interior_heating_on === "boolean") {
+        // Interior Heating Priority on/off
         publishSwitch(
           "aquahot_interior_heating",
           onOff(p.interior_heating_on),
@@ -455,6 +457,7 @@
             climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
           );
         }
+        // Store per-zone active state for downstream use
         if (typeof p.zone_active[0] === "boolean") {
           flow.set("aquahot_zone_front_active", p.zone_active[0]);
         }
@@ -544,8 +547,8 @@
     - a6985e36ac9c8f1d
     - c5fdb5067c820e76
     - cd5a041811bc2c9a
-    - ee4192410344e659
     - ee1234567890abcd
+    - ee4192410344e659
     - ff1234567890abcd
 - id: 5e7062bde869c7a5
   type: function
@@ -642,7 +645,7 @@
   statusVal: ""
   statusType: auto
   x: 580
-  "y": 780
+  "y": 840
   g: 5811945b9bad79dc
   wires: []
 - id: 871009c15ad9a99b
@@ -658,7 +661,7 @@
   statusVal: ""
   statusType: auto
   x: 640
-  "y": 720
+  "y": 780
   g: 5811945b9bad79dc
   wires: []
 - id: 8ae5ee1969cf9219
@@ -957,7 +960,7 @@
   statusVal: ""
   statusType: auto
   x: 600
-  "y": 660
+  "y": 720
   g: 5811945b9bad79dc
   wires: []
 - id: cd5a041811bc2c9a
@@ -972,6 +975,24 @@
   l: true
   wires:
     - - ee4192410344e659
+- id: ee1234567890abcd
+  type: inject
+  z: 384249601e37ba22
+  name: Every 60s
+  props:
+    - p: payload
+  repeat: "60"
+  crontab: ""
+  once: false
+  onceDelay: 0.1
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 710
+  "y": 660
+  g: 5811945b9bad79dc
+  wires:
+    - - ff1234567890abcd
 - id: ee4192410344e659
   type: switch
   z: 384249601e37ba22
@@ -1025,28 +1046,10 @@
     - - c5fdb5067c820e76
     - - 871009c15ad9a99b
     - - 7a1eed2a34490b2a
-- id: ee1234567890abcd
-  type: inject
-  z: 384249601e37ba22
-  name: Every 60s
-  props:
-    - p: payload
-  repeat: "60"
-  crontab: ""
-  once: false
-  onceDelay: 0.1
-  topic: ""
-  payload: ""
-  payloadType: date
-  x: 730
-  "y": 660
-  g: 5811945b9bad79dc
-  wires:
-    - - ff1234567890abcd
 - id: ff1234567890abcd
   type: function
   z: 384249601e37ba22
-  name: republish_pump_state
+  name: republish_aquahot_pump_state
   func: |
     // Republishes AquaHot zone pump states from flow context every 60 seconds.
     // This keeps MQTT retain state fresh if Node-RED restarts after the broker.
@@ -1079,7 +1082,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 910
+  x: 950
   "y": 660
   g: 5811945b9bad79dc
   wires:

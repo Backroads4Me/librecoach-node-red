@@ -46,5 +46,17 @@
     "hasInitialize": false,
     "hasFinalize": false,
     "hasInfo": false
+  },
+  "ff1234567890abcd": {
+    "nodeId": "ff1234567890abcd",
+    "name": "republish_aquahot_pump_state",
+    "sanitizedName": "republish_aquahot_pump_state",
+    "fileName": "republish_aquahot_pump_state",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
   }
 }

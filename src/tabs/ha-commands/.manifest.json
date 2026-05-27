@@ -131,6 +131,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "dd9e8f7c6b5a4321": {
+    "nodeId": "dd9e8f7c6b5a4321",
+    "name": "encode_waterheater_command_2",
+    "sanitizedName": "encode_waterheater_command_2",
+    "fileName": "encode_waterheater_command_2",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "e25c9c82905dc476": {
     "nodeId": "e25c9c82905dc476",
     "name": "encode_dc_load_command",
