@@ -198,6 +198,6 @@ _None._
 | Name | Type | Used by |
 |---|---|---|
 | Home Assistant | server | 1 node across 1 tab |
-| Mosquitto | mqtt-broker | 19 nodes across 5 tabs |
+| Mosquitto | mqtt-broker | 20 nodes across 5 tabs |
 | Victron Cerbo GX | mqtt-broker | 4 nodes across 1 tab |
 | f32f7fc67467278b | global-config | 0 nodes across 0 tabs |

@@ -89,7 +89,8 @@ reverse-engineered analysis of recordings. Confidence levels differ per field.
 
 ---
 
-### republish_pump_state
+### republish_aquahot_pump_state
+- **File:** [`republish_aquahot_pump_state.js`](../tabs/aquahot/republish_aquahot_pump_state.js)
 - **Node ID:** `ff1234567890abcd`
 - **Outputs:** 1
 
@@ -104,7 +105,7 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_1c1403c14b57["MQTT out_ Retain TRUE"]:::link
   n_ee1234567890["Every 60s"]:::fn
-  n_ff1234567890["republish_pump_state"]:::fn
+  n_ff1234567890["republish_aquahot_pump_state"]:::fn
   n_ee1234567890 -->|out 0| n_ff1234567890
   n_ff1234567890 -->|out 0| n_1c1403c14b57
 ```

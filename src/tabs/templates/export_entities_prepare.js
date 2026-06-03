@@ -29,17 +29,18 @@ const template = `{%- set ns = namespace(rows=[]) -%}
 {%- set dev_id = device_id(eid) -%}
 {%- set is_lc = dev_id is not none and device_attr(dev_id, 'manufacturer') == 'LibreCoach' -%}
 {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or 'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or 'librecoach' in eid or 'rv_' in eid -%}
-{%- set area = area_name(eid) | default('(no area)') -%}
+{%- set area = area_name(eid) | default('(no area)', true) -%}
 {%- set fname = s.attributes.friendly_name | default(eid) -%}
-{%- if fname.startswith('LibreCoach:') and domain not in ('button', 'text', 'select') -%}{%- continue -%}{%- endif -%}
+{%- if fname.startswith('LibreCoach:') and domain not in ('button', 'text', 'select') and 'record_unknown' not in eid -%}{%- continue -%}{%- endif -%}
 {%- if 'switch_' in eid and fname.startswith('Switches ') -%}{%- continue -%}{%- endif -%}
-{%- if s.state in ('unavailable', 'unknown') -%}{%- continue -%}{%- endif -%}
+{%- if s.state in ('unavailable', 'unknown') and domain not in ('button', 'text', 'select') -%}{%- continue -%}{%- endif -%}
 {%- set dc = s.attributes.device_class | default('') -%}
+{%- set unit = s.attributes.unit_of_measurement | default('') -%}
 {%- set dimmable = 'true' if 'brightness' in s.attributes.get('supported_color_modes', []) else 'false' -%}
-{%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ dc ~ '|' ~ dimmable] -%}
+{%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ dc ~ '|' ~ unit ~ '|' ~ dimmable] -%}
 {%- endif -%}
 {%- endfor -%}
-AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|DIMMABLE
+AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|UNIT|DIMMABLE
 {%- for row in ns.rows | sort %}
 {{ row }}
 {%- endfor %}`;

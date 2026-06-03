@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `bfa6336b0d45dc23`
 - **Disabled:** false
-- **Node count:** 42
+- **Node count:** 43
 - **Function nodes:** 15
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -37,7 +37,8 @@ flowchart LR
 
 #### Msg contract
 Prepares persistent notification for entity list export
-Input: msg with msg.exportFilename, msg.entityCount
+Input: msg with msg.exportFilename, msg.entityCount, and (per variant)
+       msg.downloadPage, msg.notificationId, msg.notifyTitle
 Output: msg.payload configured for notify_user
 
 #### Upstream
@@ -66,6 +67,7 @@ flowchart LR
   n_exportentiti["export_entities_prepare"]:::fn
   n_exportentiti -->|out 0| n_exportentiti
   n_exportentiti -->|out 0| n_exportentiti
+  n_exportentiti -->|out 0| n_exportentiti
 ```
 
 #### Msg contract
@@ -74,6 +76,7 @@ Input: msg (triggered by export button)
 Output: msg configured for POST /api/template
 
 #### Upstream
+- Export Entities Trigger (Standard Cards) (mqtt in) — this tab
 - Export Entities Trigger (mqtt in) — this tab
 
 #### Downstream
@@ -104,6 +107,8 @@ flowchart LR
 #### Msg contract
 Writes AI dashboard prompt and HTML download page to /homeassistant/www/
 Input: msg.payload = rendered string from POST /api/template
+       msg.topic   = trigger topic; "/entities/default/" selects the
+                     standard-cards-only variant (no custom: cards)
 Output: two messages to File Write node (text file + HTML download page)
 
 #### Upstream
@@ -595,6 +600,7 @@ _None._
 - Export AI Dashboard Prompt (group) — id `export_entities_group_001`, in: 0, out: 0
 - Export Configuration (group) — id `export_config_group_001`, in: 0, out: 0
 - Export Entities Trigger (mqtt in) — id `export_entities_mqtt_in_001`, in: 0, out: 1
+- Export Entities Trigger (Standard Cards) (mqtt in) — id `export_entities_default_mqtt_in_001`, in: 0, out: 1
 - Export Trigger (mqtt in) — id `export_mqtt_in_trigger_001`, in: 0, out: 1
 - GET /api/states (http request) — id `export_http_states_001`, in: 1, out: 1
 - HA in (mqtt in) — id `ac639050da7648b9`, in: 0, out: 1

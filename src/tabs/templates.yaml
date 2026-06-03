@@ -1732,6 +1732,7 @@
     - export_entities_func_publish_001
     - export_entities_http_001
     - export_entities_mqtt_in_001
+    - export_entities_default_mqtt_in_001
     - fa104ff19bbee333
 - id: export_entities_http_001
   type: http request
@@ -1767,6 +1768,23 @@
   inputs: 0
   x: 220
   "y": 920
+  g: export_entities_group_001
+  wires:
+    - - export_entities_func_prepare_001
+- id: export_entities_default_mqtt_in_001
+  type: mqtt in
+  z: bfa6336b0d45dc23
+  name: Export Entities Trigger (Standard Cards)
+  topic: librecoach/export/entities/default/trigger
+  qos: "1"
+  datatype: utf8
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 220
+  "y": 980
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001

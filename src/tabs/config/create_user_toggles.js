@@ -104,15 +104,28 @@ messages.push({
   retain: true,
 });
 
-// Export AI Dashboard Prompt button
+// Export AI Dashboard Prompt button (mushroom/custom cards)
 messages.push({
   topic: "homeassistant/button/librecoach_export_entities/config",
   payload: {
-    name: "Export AI Dashboard Prompt",
+    name: "Export AI Dashboard Prompt (Mushroom Cards)",
     unique_id: "librecoach_export_entities",
     default_entity_id: "button.librecoach_export_entities",
     icon: "mdi:robot-outline",
     command_topic: "librecoach/export/entities/trigger",
+    device: device,
+  },
+});
+
+// Export AI Dashboard Prompt button (standard HA cards only — no HACS needed)
+messages.push({
+  topic: "homeassistant/button/librecoach_export_entities_default/config",
+  payload: {
+    name: "Export AI Dashboard Prompt (Standard Cards)",
+    unique_id: "librecoach_export_entities_default",
+    default_entity_id: "button.librecoach_export_entities_default",
+    icon: "mdi:view-dashboard-outline",
+    command_topic: "librecoach/export/entities/default/trigger",
     device: device,
   },
 });

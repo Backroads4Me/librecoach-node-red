@@ -491,6 +491,7 @@ Encodes WATER_PUMP_COMMAND messages (1FFB2)
 ---
 
 ### encode_waterheater_command_2
+- **File:** [`encode_waterheater_command_2.js`](../tabs/ha-commands/encode_waterheater_command_2.js)
 - **Node ID:** `dd9e8f7c6b5a4321`
 - **Outputs:** 1
 
@@ -511,7 +512,7 @@ flowchart LR
 ```
 
 #### Msg contract
-Encodes AquaHot 125D switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
+Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
 Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
 Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
 
