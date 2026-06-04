@@ -2487,8 +2487,9 @@
   type: function
   z: 292e70a6ba25b323
   name: create_user_toggles
-  func: |
+  func: >
     // Creates LibreCoach: System config toggles via MQTT Discovery
+
 
     const device = {
       identifiers: ["librecoach-system"],
@@ -2496,11 +2497,15 @@
       manufacturer: "LibreCoach",
     };
 
+
     const messages = [];
+
 
     // === Import/Export & RV Info ===
 
+
     // Export Configuration button
+
     messages.push({
       topic: "homeassistant/button/librecoach_export_config/config",
       payload: {
@@ -2513,7 +2518,9 @@
       },
     });
 
+
     // Import Configuration button
+
     messages.push({
       topic: "homeassistant/button/librecoach_import_config/config",
       payload: {
@@ -2526,7 +2533,9 @@
       },
     });
 
+
     // RV Info fields
+
     const rvFields = [
       {
         id: "rv_manufacturer",
@@ -2538,6 +2547,7 @@
       { id: "rv_year", name: "RV Year", icon: "mdi:calendar", max: 4 },
       { id: "rv_other", name: "RV Other", icon: "mdi:note-text", max: 100 },
     ];
+
 
     for (const field of rvFields) {
       // Config
@@ -2564,9 +2574,12 @@
       });
     }
 
+
     // === Unknown CAN Recording ===
 
+
     // Switch - Record Unknown CAN
+
     messages.push({
       topic: "homeassistant/switch/librecoach_record_unknown/config",
       payload: {
@@ -2586,19 +2599,24 @@
       },
     });
 
+
     // State - Record Unknown CAN default off
+
     global.set("recordUnknown", false, "file");
+
     messages.push({
       topic: "homeassistant/switch/librecoach_record_unknown/state",
       payload: 0,
       retain: true,
     });
 
-    // Export AI Dashboard Prompt button
+
+    // Export AI Dashboard Prompt button (mushroom/custom cards)
+
     messages.push({
       topic: "homeassistant/button/librecoach_export_entities/config",
       payload: {
-        name: "Export AI Dashboard Prompt",
+        name: "Export AI Dashboard Prompt (Mushroom Cards)",
         unique_id: "librecoach_export_entities",
         default_entity_id: "button.librecoach_export_entities",
         icon: "mdi:robot-outline",
@@ -2607,7 +2625,25 @@
       },
     });
 
+
+    // Export AI Dashboard Prompt button (standard HA cards only — no HACS
+    needed)
+
+    messages.push({
+      topic: "homeassistant/button/librecoach_export_entities_default/config",
+      payload: {
+        name: "Export AI Dashboard Prompt (Standard Cards)",
+        unique_id: "librecoach_export_entities_default",
+        default_entity_id: "button.librecoach_export_entities_default",
+        icon: "mdi:view-dashboard-outline",
+        command_topic: "librecoach/export/entities/default/trigger",
+        device: device,
+      },
+    });
+
+
     // Button - Export Unknown Recording
+
     messages.push({
       topic: "homeassistant/button/librecoach_export_unknown/config",
       payload: {
@@ -2620,8 +2656,11 @@
       },
     });
 
+
     // === Cleanup Old Entities ===
+
     // Send empty payload to delete orphaned entities from Home Assistant
+
 
     const cleanupTopics = [
       "homeassistant/switch/victron_integration/config",
@@ -2629,15 +2668,18 @@
       "homeassistant/switch/librecoach_beta_testing/config",
     ];
 
+
     for (const topic of cleanupTopics) {
       messages.push({ topic: topic, payload: "" });
     }
+
 
     node.status({
       fill: "green",
       shape: "dot",
       text: `System Entities Created`,
     });
+
 
     return [messages];
   outputs: 1
