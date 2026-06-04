@@ -7,6 +7,9 @@
  * - Minimal configuration
  ******************************************************************************/
 
+process.env.MQTT_USER = "REPLACE_MQTT_USER";
+process.env.MQTT_PASS = "REPLACE_MQTT_PASS";
+
 module.exports = {
   // Flow file and credentials
   flowFile: "flows.json",
