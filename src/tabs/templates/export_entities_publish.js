@@ -212,12 +212,13 @@ Copy these patterns exactly, including icon values.
     yellow: 50
     red: 60
 
-## Switch (water pump, autofill):
+## Switch (water pump, autofill) — blue tint signals water system:
   type: custom:mushroom-entity-card
   entity: switch.water_pump
   name: Water Pump
   primary_info: name
   secondary_info: none
+  color: blue
   tap_action:
     action: toggle
 
@@ -375,7 +376,8 @@ Door entities are lights named "<place> door open" / "<place> door close"; pair 
 
 --- STEP 7: AC VIEW LAYOUT ---
 type: masonry.
-• One vertical-stack title: MicroAir Zones containing all zone tile cards
+• One vertical-stack title: MicroAir Zones containing a type: grid (columns: 2, square: false)
+  with all zone tile cards inside it — never place zone tiles loose in the stack
 • One vertical-stack title: Temperature containing a glance card that lists every
   sensor with DEVICE_CLASS temperature (use name: type: area, or the friendly name
   when the sensor has no area)
@@ -383,15 +385,18 @@ type: masonry.
 --- STEP 8: HEAT VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* light cards
-• vertical-stack title: Floor Heat → tile cards for each floor_heat zone
-• vertical-stack title: Zone Thermostats → tile cards for every thermostat_zone_* or
-  furnace_* climate (same tile + climate features as Floor Heat)
+• vertical-stack title: Floor Heat → type: grid (columns: 2, square: false) with tile
+  cards for each floor_heat zone inside it
+• vertical-stack title: Zone Thermostats → type: grid (columns: 2, square: false) with
+  tile cards for every thermostat_zone_* or furnace_* climate inside it
 • vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
   (graph: none, detail: 1, name: type: area) for sensors with DEVICE_CLASS temperature
 
 --- STEP 9: SHADES VIEW LAYOUT ---
 type: masonry. Each area is a type: vertical-stack with title: <area name>.
-The two-column night|day layout within each stack uses type: horizontal-stack rows.
+The two-column night|day layout uses a single type: grid (columns: 2, square: false)
+inside each vertical-stack — NOT individual horizontal-stacks per pair.
+Using a grid guarantees every card is half-width, including lone unpaired shades.
 
 Structure:
   1. First vertical-stack — title: Shades (the column header row):
@@ -403,24 +408,21 @@ Structure:
            - type: custom:mushroom-template-card        (Day, icon: mdi:white-balance-sunny)
 
   2. If cover.all_night and cover.all_day exist — vertical-stack title: All:
-       type: horizontal-stack with night cover (fill_container: true, primary_info: name) + day cover
+       type: grid (columns: 2, square: false) with the night cover then the day cover
 
   3. For each area — vertical-stack title: <area>:
-       One type: horizontal-stack per shade pair:
-         - night cover (fill_container: true, primary_info: name, icon: mdi:moon-waning-crescent)
-         - day cover   (secondary_info: none, icon: mdi:white-balance-sunny)
-       A cover with no day/night partner gets its own single full-width mushroom-cover-card
-       (primary_info: name) — never drop an unpaired shade.
+       type: grid (columns: 2, square: false) containing covers in this order:
+         night cover first (fill_container: true, primary_info: name, icon: mdi:moon-waning-crescent),
+         then its paired day cover (secondary_info: none, icon: mdi:white-balance-sunny).
+       Repeat for each pair within the area. Unpaired covers go in the same grid as a
+       single half-width card — never place any shade card outside a grid.
 Pair shades by base FRIENDLY_NAME: the one containing "night" is the night cover, "day" the day cover.
 
 --- STEP 9.1: LOCKS VIEW LAYOUT ---
-type: masonry. Group locks by area:
-• One type: vertical-stack with title: <area name> per area
-• Inside each stack: one type: grid card (square: false, columns: 2) containing
-  every lock button card for that area (use the Lock template from STEP 4)
-• If no area can be inferred, use a single type: grid card (square: false,
-  columns: 2) holding every lock button card
-Locks must NEVER be placed loose in the view — always inside a grid card.
+type: masonry. All locks go in a single vertical-stack title: Locks, regardless of
+their AREA value. Inside that stack: one type: grid (square: false, columns: 2)
+containing every lock button card. Do NOT split locks by area — ignore AREA for locks.
+The button's own name (show_name: true, show_icon: true) identifies each lock.
 
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
@@ -443,9 +445,10 @@ type: masonry.
 
 --- STEP 11: TANKS VIEW LAYOUT ---
 type: masonry. Use a single vertical-stack title: Water Management (or no title):
-• Water pump and autofill mushroom-entity-card switches FIRST
+• Water pump and autofill mushroom-entity-card switches FIRST — always include color: blue
 • Then tank gauges: fresh water uses the fresh gauge template,
   black/grey tanks use the inverted gauge template
+• Any other water-system switch (e.g. dump valves) also gets color: blue
 
 --- STEP 12: ENERGY VIEW LAYOUT ---
 type: masonry.
@@ -680,11 +683,12 @@ Copy these patterns exactly, including icon values.
     yellow: 50
     red: 60
 
-## Switch (water pump, autofill) — tile toggles on tap:
+## Switch (water pump, autofill) — blue tint signals water system:
   type: tile
   entity: switch.water_pump
   name: Water Pump
   hide_state: true
+  color: blue
   tap_action:
     action: toggle
 
@@ -842,7 +846,8 @@ Door entities are lights named "<place> door open" / "<place> door close"; pair 
 
 --- STEP 7: AC VIEW LAYOUT ---
 type: masonry.
-• One vertical-stack title: MicroAir Zones containing all zone tile cards
+• One vertical-stack title: MicroAir Zones containing a type: grid (columns: 2, square: false)
+  with all zone tile cards inside it — never place zone tiles loose in the stack
 • One vertical-stack title: Temperature containing a glance card that lists every
   sensor with DEVICE_CLASS temperature (use name: type: area, or the friendly name
   when the sensor has no area)
@@ -850,35 +855,35 @@ type: masonry.
 --- STEP 8: HEAT VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* tile cards
-• vertical-stack title: Floor Heat → tile cards for each floor_heat zone
-• vertical-stack title: Zone Thermostats → tile cards for every thermostat_zone_* or
-  furnace_* climate (same tile + climate features as Floor Heat)
+• vertical-stack title: Floor Heat → type: grid (columns: 2, square: false) with tile
+  cards for each floor_heat zone inside it
+• vertical-stack title: Zone Thermostats → type: grid (columns: 2, square: false) with
+  tile cards for every thermostat_zone_* or furnace_* climate inside it
 • vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
   (graph: none, detail: 1, name: type: area) for sensors with DEVICE_CLASS temperature
 
 --- STEP 9: SHADES VIEW LAYOUT ---
 type: masonry. Each area is a type: vertical-stack with title: <area name>.
-The two-column night|day layout within each stack uses type: horizontal-stack rows.
+The two-column night|day layout uses a single type: grid (columns: 2, square: false)
+inside each vertical-stack — NOT individual horizontal-stacks per pair.
+Using a grid guarantees every card is half-width, including lone unpaired shades.
 
 Structure:
   1. If cover.all_night and cover.all_day exist — vertical-stack title: All:
-       type: horizontal-stack with night cover tile + day cover tile
+       type: grid (columns: 2, square: false) with the night cover tile then the day cover tile
   2. For each area — vertical-stack title: <area>:
-       One type: horizontal-stack per shade pair:
-         - night cover tile (icon: mdi:moon-waning-crescent)
-         - day cover tile   (icon: mdi:white-balance-sunny)
-       A cover with no day/night partner gets its own single full-width tile —
-       never drop an unpaired shade.
+       type: grid (columns: 2, square: false) containing covers in this order:
+         night cover tile first (icon: mdi:moon-waning-crescent),
+         then its paired day cover tile (icon: mdi:white-balance-sunny).
+       Repeat for each pair within the area. Unpaired covers go in the same grid as a
+       single half-width card — never place any shade card outside a grid.
 Pair shades by base FRIENDLY_NAME: the one containing "night" is the night cover, "day" the day cover.
 
 --- STEP 9.1: LOCKS VIEW LAYOUT ---
-type: masonry. Group locks by area:
-• One type: vertical-stack with title: <area name> per area
-• Inside each stack: one type: grid card (square: false, columns: 2) containing
-  every lock button card for that area (use the Lock template from STEP 4)
-• If no area can be inferred, use a single type: grid card (square: false,
-  columns: 2) holding every lock button card
-Locks must NEVER be placed loose in the view — always inside a grid card.
+type: masonry. All locks go in a single vertical-stack title: Locks, regardless of
+their AREA value. Inside that stack: one type: grid (square: false, columns: 2)
+containing every lock button card. Do NOT split locks by area — ignore AREA for locks.
+The button's own name (show_name: true, show_icon: true) identifies each lock.
 
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
@@ -901,9 +906,10 @@ type: masonry.
 
 --- STEP 11: TANKS VIEW LAYOUT ---
 type: masonry. Use a single vertical-stack title: Water Management (or no title):
-• Water pump and autofill switch tiles FIRST
+• Water pump and autofill tile switches FIRST — always include color: blue
 • Then tank gauges: fresh water uses the fresh gauge template,
   black/grey tanks use the inverted gauge template
+• Any other water-system switch (e.g. dump valves) also gets color: blue
 
 --- STEP 12: ENERGY VIEW LAYOUT ---
 type: masonry.

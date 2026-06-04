@@ -5,7 +5,7 @@ button (`button.librecoach_export_entities_default`). It instructs an LLM to bui
 Home Assistant dashboard using **only built-in HA cards** — no HACS / mushroom / custom
 cards required.
 
-At runtime the header below is prepended to a 6-column, pipe-delimited table of the user's
+At runtime the header below is prepended to a 7-column, pipe-delimited table of the user's
 LibreCoach entities (rendered by HA's `/api/template`). The `AREA|DOMAIN|...` line at the
 very bottom marks where that entity data is appended.
 
@@ -52,6 +52,10 @@ Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner, mdi:heat-wave
 • Navigation badges: every view gets the full set (minus current view) — see STEP 4.1
 • Group entities by area using type: vertical-stack with title: <area name>
 • If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a title
+• If FRIENDLY_NAME is blank or equals the entity_id, derive a readable name from the
+  entity_id (drop the domain, replace underscores with spaces, Title-Case it) — never display a raw entity_id
+• Goal: place ~95% of entities. If you can't confidently fit one on a specific view,
+  put it in Misc — never silently drop an entity
 • Dashboard path prefix: /dashboard-librecoach/
 • Use the exact mdi: icons shown in the examples below — do not substitute
 
@@ -62,15 +66,15 @@ Scan the entire entity data at the bottom of this file and produce a mental chec
      place on every view. Do not add or remove badges mid-generation.
 
 View detection rules (create a view only if matching entities exist):
-  path: lights    title: Lights    icon: mdi:lightbulb       (domain: light)
-  path: doors     title: Doors     icon: mdi:door            (button entities for door open/close)
+  path: lights    title: Lights    icon: mdi:lightbulb       (domain: light, EXCLUDING door open/close lights — those go to Doors)
+  path: doors     title: Doors     icon: mdi:door            (light entities whose FRIENDLY_NAME contains "door open" or "door close")
   path: ac        title: AC        icon: mdi:air-conditioner (climate with microair or ac in entity_id)
-  path: heat      title: Heat      icon: mdi:heat-wave       (climate floor_heat, or light aquahot_*)
+  path: heat      title: Heat      icon: mdi:heat-wave       (any OTHER climate — floor_heat_*, thermostat_zone_*, furnace_* — plus light aquahot_*)
   path: shades    title: Shades    icon: mdi:roller-shade    (domain: cover)
   path: locks     title: Locks     icon: mdi:lock            (domain: lock)
   path: tanks     title: Tanks     icon: mdi:water           (sensor with tank_ in entity_id, plus water_pump and autofill switches)
   path: energy    title: Energy    icon: mdi:transmission-tower (battery/power sensors and switches)
-  path: misc      title: Misc      icon: mdi:cog-outline     (everything else, including unrecognized types)
+  path: misc      title: Misc      icon: mdi:cog-outline     (EVERYTHING not placed on another view — never drop an entity; see STEP 10)
 
 --- STEP 4: EXACT CARD TEMPLATES (NATIVE CARDS ONLY) ---
 Copy these patterns exactly, including icon values.
@@ -110,22 +114,31 @@ Copy these patterns exactly, including icon values.
   features:
     - type: cover-open-close
 
-## Door (open/close button pair — each door is one vertical-stack with title):
-  type: vertical-stack
-  title: Bedroom
+## Doors view — wrap EVERY door in ONE 2-column grid; each door is a vertical-stack:
+  type: grid
+  square: false
+  columns: 2
   cards:
-    - show_name: true
-      show_icon: false
-      show_state: false
-      type: button
-      name: Open
-      entity: light.switch_38
-    - show_name: true
-      show_icon: false
-      show_state: false
-      type: button
-      name: Close
-      entity: light.switch_39
+    - type: vertical-stack
+      title: Bedroom
+      cards:
+        - show_name: true
+          show_icon: false
+          show_state: false
+          type: button
+          name: Open
+          entity: light.switch_38
+        - show_name: true
+          show_icon: false
+          show_state: false
+          type: button
+          name: Close
+          entity: light.switch_39
+    - type: vertical-stack
+      title: Bath
+      cards:
+        - { type: button, name: Open, show_name: true, show_icon: false, show_state: false, entity: light.switch_28 }
+        - { type: button, name: Close, show_name: true, show_icon: false, show_state: false, entity: light.switch_31 }
 
 ## Lock:
   show_name: true
@@ -195,15 +208,16 @@ Copy these patterns exactly, including icon values.
     yellow: 50
     red: 60
 
-## Switch (water pump, autofill) — tile toggles on tap:
+## Switch (water pump, autofill) — blue tint signals water system:
   type: tile
   entity: switch.water_pump
   name: Water Pump
   hide_state: true
+  color: blue
   tap_action:
     action: toggle
 
-## House battery state-of-charge gauge:
+## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is "%"):
   type: gauge
   entity: sensor.librecoach_victron_system_battery_state_of_charge
   name: House
@@ -215,7 +229,7 @@ Copy these patterns exactly, including icon values.
     yellow: 25
     red: 0
 
-## Starter/auxiliary battery voltage gauge:
+## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V"; house or starter):
   type: gauge
   entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
   name: Starter
@@ -349,43 +363,52 @@ type: masonry. For each area:
   place them at the end of their area grid
 
 --- STEP 6: DOORS VIEW LAYOUT ---
-type: masonry. Each door location is one vertical-stack with title: <location name>.
-Inside the stack: Open button then Close button (show_name: true, show_icon: false, show_state: false).
+type: masonry. Wrap ALL door locations in a single type: grid (square: false, columns: 2)
+so each door occupies a half-width cell — never let a door card span the full view width.
+Each door location is one type: vertical-stack with title: <location name> inside that grid,
+holding the Open button then the Close button (show_name: true, show_icon: false, show_state: false).
+Door entities are lights named "<place> door open" / "<place> door close"; pair them by place.
 
 --- STEP 7: AC VIEW LAYOUT ---
 type: masonry.
-• One vertical-stack title: MicroAir Zones containing all zone tile cards
-• One vertical-stack title: Temperature containing glance cards — one for calibrated
-  sensors (sensor.cal_*), one for humidity sensors (sensor.*_temp_humidity),
-  using name: type: area for labels
+• One vertical-stack title: MicroAir Zones containing a type: grid (columns: 2, square: false)
+  with all zone tile cards inside it — never place zone tiles loose in the stack
+• One vertical-stack title: Temperature containing a glance card that lists every
+  sensor with DEVICE_CLASS temperature (use name: type: area, or the friendly name
+  when the sensor has no area)
 
 --- STEP 8: HEAT VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* tile cards
-• vertical-stack title: Floor Heat → tile cards for each floor_heat zone
+• vertical-stack title: Floor Heat → type: grid (columns: 2, square: false) with tile
+  cards for each floor_heat zone inside it
+• vertical-stack title: Zone Thermostats → type: grid (columns: 2, square: false) with
+  tile cards for every thermostat_zone_* or furnace_* climate inside it
 • vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
-  (graph: none, detail: 1, name: type: area) for air temperature sensors
+  (graph: none, detail: 1, name: type: area) for sensors with DEVICE_CLASS temperature
 
 --- STEP 9: SHADES VIEW LAYOUT ---
 type: masonry. Each area is a type: vertical-stack with title: <area name>.
-The two-column night|day layout within each stack uses type: horizontal-stack rows.
+The two-column night|day layout uses a single type: grid (columns: 2, square: false)
+inside each vertical-stack — NOT individual horizontal-stacks per pair.
+Using a grid guarantees every card is half-width, including lone unpaired shades.
 
 Structure:
   1. If cover.all_night and cover.all_day exist — vertical-stack title: All:
-       type: horizontal-stack with night cover tile + day cover tile
+       type: grid (columns: 2, square: false) with the night cover tile then the day cover tile
   2. For each area — vertical-stack title: <area>:
-       One type: horizontal-stack per shade pair:
-         - night cover tile (icon: mdi:moon-waning-crescent)
-         - day cover tile   (icon: mdi:white-balance-sunny)
+       type: grid (columns: 2, square: false) containing covers in this order:
+         night cover tile first (icon: mdi:moon-waning-crescent),
+         then its paired day cover tile (icon: mdi:white-balance-sunny).
+       Repeat for each pair within the area. Unpaired covers go in the same grid as a
+       single half-width card — never place any shade card outside a grid.
+Pair shades by base FRIENDLY_NAME: the one containing "night" is the night cover, "day" the day cover.
 
 --- STEP 9.1: LOCKS VIEW LAYOUT ---
-type: masonry. Group locks by area:
-• One type: vertical-stack with title: <area name> per area
-• Inside each stack: one type: grid card (square: false, columns: 2) containing
-  every lock button card for that area (use the Lock template from STEP 4)
-• If no area can be inferred, use a single type: grid card (square: false,
-  columns: 2) holding every lock button card
-Locks must NEVER be placed loose in the view — always inside a grid card.
+type: masonry. All locks go in a single vertical-stack title: Locks, regardless of
+their AREA value. Inside that stack: one type: grid (square: false, columns: 2)
+containing every lock button card. Do NOT split locks by area — ignore AREA for locks.
+The button's own name (show_name: true, show_icon: true) identifies each lock.
 
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
@@ -401,29 +424,37 @@ type: masonry.
     - button.librecoach_export_config
     - switch.librecoach_record_unknown   (name: type: entity)
     - button.librecoach_export_unknown   (name: type: entity)
-
-Skip any entity you are unsure about rather than guessing.
+• AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
+  on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
+  sensors/binary_sensors into type: entities cards, others as tile/button cards.
+  This is the catch-all — do not silently drop entities.
 
 --- STEP 11: TANKS VIEW LAYOUT ---
 type: masonry. Use a single vertical-stack title: Water Management (or no title):
-• Water pump and autofill switch tiles FIRST
+• Water pump and autofill tile switches FIRST — always include color: blue
 • Then tank gauges: fresh water uses the fresh gauge template,
   black/grey tanks use the inverted gauge template
+• Any other water-system switch (e.g. dump valves) also gets color: blue
 
 --- STEP 12: ENERGY VIEW LAYOUT ---
 type: masonry.
-• vertical-stack title: Batteries → House SOC gauge + Starter voltage gauge + power toggle button
+• vertical-stack title: Batteries → one gauge per battery sensor (pick the SOC gauge
+  when its UNIT is "%", the Voltage gauge when its UNIT is "V"), then the power/inverter
+  toggle button if one exists
 
 --- STEP 13: ENTITY DATA FORMAT ---
-The 6-column pipe-delimited data below lists only user-labeled entities.
+The 7-column pipe-delimited data below lists LibreCoach entities (some may be unlabeled).
   AREA          — HA area; use for grouping. If AREA is "(no area)", infer a
                   logical room or category from the entity_id and friendly_name
                   (e.g. "Living Room", "Bedroom", "Exterior") — never display
                   a header labeled "(no area)"
   DOMAIN        — entity type (light, cover, lock, climate, sensor, switch, button)
   ENTITY_ID     — use exactly as-is in the entity: field
-  FRIENDLY_NAME — use as the name: field on the card
+  FRIENDLY_NAME — use as the name: field on the card. If blank or identical to ENTITY_ID,
+                  derive a short human name from the entity_id (drop domain, de-underscore,
+                  Title-Case) — never show a raw entity_id as a card name
   DEVICE_CLASS  — HA device class hint
+  UNIT          — unit_of_measurement (e.g. %, V, °F); use to pick gauge ranges
   DIMMABLE      — true/false; drives whether a light tile gets the light-brightness feature
 
 --- RV-SPECIFIC NOTES ---
@@ -439,6 +470,10 @@ Produce complete, valid HA dashboard YAML ready to paste into
 Settings → Dashboards → LibreCoach → Raw Config Editor.
 Do not truncate or summarize.
 
-Only include entities where you have a clear card type from the templates above.
-Skip any entity that doesn't clearly fit — do not guess or force entities into cards.
+Use the closest matching card template for each entity. If an entity truly has no
+sensible card, place it in the Misc → Other catch-all rather than discarding it.
 Remember: NO custom:* cards anywhere in the output.
+
+
+AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|UNIT|DIMMABLE
+<the user's LibreCoach entity rows are appended here at runtime, one per line, sorted by area>
