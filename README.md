@@ -1,10 +1,15 @@
-# LibreCoach
+# LibreCoach Node-RED Flows
 
-LibreCoach is a comprehensive Node-RED based system for monitoring and controlling RV systems through the RV-C protocol. The system bridges RV CAN bus messages with MQTT for integration with Home Assistant.
+Node-RED flows for LibreCoach, an RV-C to Home Assistant control and monitoring system.
 
-For more information, visit [LibreCoach.com](https://librecoach.com)
+This repository contains the flow-based logic that decodes RV-C CAN messages, publishes Home Assistant entities through MQTT, and sends supported control commands back to the RV network.
 
----
+For user-facing documentation, visit [LibreCoach.com](https://librecoach.com).
+
+## Related Repositories
+
+- [`ha-addons`](https://github.com/Backroads4Me/ha-addons) packages LibreCoach as a Home Assistant add-on.
+- [`librecoach-site`](https://github.com/Backroads4Me/librecoach-site) contains the public documentation site.
 
 ## License
 
@@ -22,7 +27,11 @@ Contributions require signing the CLA. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Support LibreCoach
 
-LibreCoach is free and open source. If it's useful to you, you can support its development in either of these ways:
+LibreCoach is free and open source.
 
+If it helped you connect your RV to Home Assistant, the best way to support the project right now is to star this repository so other RV and Home Assistant users can find it.
+
+Sponsorships are appreciated, but never expected.
+
+[![Star Repository](https://img.shields.io/badge/%E2%AD%90%20Star%20this%20Repo-GitHub-lightgrey?logo=github&logoColor=black)](https://github.com/Backroads4Me/librecoach-node-red)
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-EA4AAA?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/Backroads4Me)
-[![Buy Me a Coffee](https://img.shields.io/badge/Support-Buy%20Me%20a%20Coffee-FFDD00?logo=buy-me-a-coffee&logoColor=000000)](https://buymeacoffee.com/Backroads4Me)
