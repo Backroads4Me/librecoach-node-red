@@ -28,7 +28,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1150
+  x: 1290
   "y": 480
   g: 5811945b9bad79dc
   l: true
@@ -198,7 +198,7 @@
     // === Flow context ===
 
 
-    const CREATED_KEY = "aquahot_zone_entities_created";
+    const CREATED_KEY = "aquahot_zone_entities_created_v2";
 
     const created = flow.get(CREATED_KEY) || {};
 
@@ -283,6 +283,33 @@
     }
 
 
+    function switchConfig(entityId, name, icon, commandTopic) {
+      return {
+        topic: `homeassistant/switch/${entityId}/config`,
+        payload: {
+          name,
+          unique_id: entityId,
+          default_entity_id: `switch.${entityId}`,
+          state_topic: `homeassistant/switch/${entityId}/state`,
+          command_topic: commandTopic,
+          payload_on: "ON",
+          payload_off: "OFF",
+          icon,
+          device,
+        },
+      };
+    }
+
+
+    function publishSwitch(entityId, stateValue, configFn) {
+      if (!created[entityId]) {
+        messages.push(configFn());
+        markCreated(entityId);
+      }
+      messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
+    }
+
+
     function climateConfig(entityId, name) {
       const cfg = {
         name,
@@ -292,10 +319,9 @@
         mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,
         modes: ["off", "heat"],
         current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,
-        temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,
-        temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,
         temperature_unit: "F",
         action_topic: `homeassistant/climate/${entityId}/action/state`,
+        optimistic: true,
         device,
       };
       return {
@@ -383,33 +409,30 @@
     changes.
 
     else if (dgn_name === "AQUAHOT_COMMAND_2") {
-      if (p.command_type === 0x07 && typeof p.zone_id === "number") {
-        // Zone Control — only observed during zone OFF events.
-        // zone_id is 0-based; entity uses 1-based numbering.
-        // NOTE: On a 2-zone system, zone_id may be inverted relative to
-        // STATUS_2 bit positions (zone_id 1 = bit 0, zone_id 0 = bit 2).
-        // Using direct mapping for now; STATUS_2 periodic updates will
-        // correct any mismatch within seconds.
-        const z = p.zone_id + 1;
-        publishClimate(
-          `aquahot_zone_${z}`,
-          "OFF",
-          undefined,
-          false, // Action: idle
-          () => climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
+      if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
+        // Quiet Mode on/off
+        publishSwitch(
+          "aquahot_quiet_mode",
+          onOff(p.quiet_mode_on),
+          () => switchConfig(
+            "aquahot_quiet_mode",
+            "Quiet Mode",
+            "mdi:volume-off",
+            "homeassistant/switch/aquahot_quiet_mode/set",
+          ),
         );
-      } else if (p.command_type === 0x0a) {
-        // Burner Control — global burner on/off, affects both zones
-        const mode = p.is_on ? "HEAT" : "OFF";
-        for (const z of [1, 2]) {
-          publishClimate(
-            `aquahot_zone_${z}`,
-            mode,
-            undefined,
-            p.is_on, // Action (heating/idle)
-            () => climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
-          );
-        }
+      } else if (p.command_type === 0x0a && typeof p.interior_heating_on === "boolean") {
+        // Interior Heating Priority on/off
+        publishSwitch(
+          "aquahot_interior_heating",
+          onOff(p.interior_heating_on),
+          () => switchConfig(
+            "aquahot_interior_heating",
+            "Interior Heating Priority",
+            "mdi:home-thermometer",
+            "homeassistant/switch/aquahot_interior_heating/set",
+          ),
+        );
       }
     }
 
@@ -433,6 +456,13 @@
           publishClimate(`aquahot_zone_${z}`, mode, undefined, active, () =>
             climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
           );
+        }
+        // Store per-zone active state for downstream use
+        if (typeof p.zone_active[0] === "boolean") {
+          flow.set("aquahot_zone_front_active", p.zone_active[0]);
+        }
+        if (typeof p.zone_active[1] === "boolean") {
+          flow.set("aquahot_zone_floor_active", p.zone_active[1]);
         }
       }
     }
@@ -517,7 +547,9 @@
     - a6985e36ac9c8f1d
     - c5fdb5067c820e76
     - cd5a041811bc2c9a
+    - ee1234567890abcd
     - ee4192410344e659
+    - ff1234567890abcd
 - id: 5e7062bde869c7a5
   type: function
   z: 384249601e37ba22
@@ -613,7 +645,7 @@
   statusVal: ""
   statusType: auto
   x: 580
-  "y": 780
+  "y": 840
   g: 5811945b9bad79dc
   wires: []
 - id: 871009c15ad9a99b
@@ -629,7 +661,7 @@
   statusVal: ""
   statusType: auto
   x: 640
-  "y": 720
+  "y": 780
   g: 5811945b9bad79dc
   wires: []
 - id: 8ae5ee1969cf9219
@@ -738,13 +770,13 @@
         result.instance = data[0];
 
         // Byte 1: Command Type [HIGH confidence]
-        //   0x07 = Zone Control (observed during zone OFF events from 0x9E)
-        //   0x0A = Burner Control (observed during burner on/off from 0x9E)
+        //   0x07 = Quiet Mode (observed during quiet mode on/off from 0x9E)
+        //   0x0A = Interior Heating Priority (observed during interior heating on/off from 0x9E)
         result.command_type = data[1];
         if (data[1] === 0x07) {
-            result.command_name = "Zone Control";
+            result.command_name = "Quiet Mode";
         } else if (data[1] === 0x0a) {
-            result.command_name = "Burner Control";
+            result.command_name = "Interior Heating Priority";
         } else {
             result.command_name = `Unknown (0x${data[1].toString(16)})`;
         }
@@ -754,13 +786,11 @@
         // Byte 3: Meaning depends on command type
         result.value_raw = data[3];
         if (data[1] === 0x07) {
-            // Zone Control: byte 3 = zone index (0-based)
-            // Only observed during zone OFF events; on/off may be implicit in the command type
-            // Observed values: 0 and 1 on a 2-zone system; other systems may have more
-            result.zone_id = data[3];
+            // Quiet Mode: byte 3 = on/off (0x01=On, 0x00=Off)
+            result.quiet_mode_on = data[3] === 0x01;
         } else if (data[1] === 0x0a) {
-            // Burner Control: byte 3 = on/off (0x01=On, 0x00=Off)
-            result.is_on = data[3] === 0x01;
+            // Interior Heating Priority: byte 3 = on/off (0x01=On, 0x00=Off)
+            result.interior_heating_on = data[3] === 0x01;
         }
 
         // Bytes 4-7: Reserved/Padding [HIGH confidence]
@@ -930,7 +960,7 @@
   statusVal: ""
   statusType: auto
   x: 600
-  "y": 660
+  "y": 720
   g: 5811945b9bad79dc
   wires: []
 - id: cd5a041811bc2c9a
@@ -945,6 +975,24 @@
   l: true
   wires:
     - - ee4192410344e659
+- id: ee1234567890abcd
+  type: inject
+  z: 384249601e37ba22
+  name: Every 60s
+  props:
+    - p: payload
+  repeat: "60"
+  crontab: ""
+  once: false
+  onceDelay: 0.1
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 710
+  "y": 660
+  g: 5811945b9bad79dc
+  wires:
+    - - ff1234567890abcd
 - id: ee4192410344e659
   type: switch
   z: 384249601e37ba22
@@ -998,3 +1046,44 @@
     - - c5fdb5067c820e76
     - - 871009c15ad9a99b
     - - 7a1eed2a34490b2a
+- id: ff1234567890abcd
+  type: function
+  z: 384249601e37ba22
+  name: republish_aquahot_pump_state
+  func: |
+    // Republishes AquaHot zone pump states from flow context every 60 seconds.
+    // This keeps MQTT retain state fresh if Node-RED restarts after the broker.
+
+    const messages = [];
+
+    const frontState = flow.get("aquahot_pump_front_state");
+    const floorState = flow.get("aquahot_pump_floor_state");
+
+    if (frontState !== null && frontState !== undefined) {
+      messages.push({
+        topic: "homeassistant/binary_sensor/aquahot_front_pump/state",
+        payload: frontState,
+      });
+    }
+
+    if (floorState !== null && floorState !== undefined) {
+      messages.push({
+        topic: "homeassistant/binary_sensor/aquahot_floor_pump/state",
+        payload: floorState,
+      });
+    }
+
+    if (messages.length === 0) return null;
+
+    return [messages];
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 950
+  "y": 660
+  g: 5811945b9bad79dc
+  wires:
+    - - 1c1403c14b577fb4

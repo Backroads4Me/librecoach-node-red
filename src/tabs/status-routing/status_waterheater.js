@@ -20,6 +20,12 @@ const device = {
   manufacturer: "LibreCoach",
 };
 
+const aquahotDevice = {
+  identifiers: ["librecoach-aquahot"],
+  name: "Aqua-Hot",
+  manufacturer: "LibreCoach",
+};
+
 // === Flow context: tracks which entities have had discovery published ===
 
 const CREATED_KEY = "waterheater_entities_created";
@@ -94,6 +100,48 @@ function publishBinary(entityId, stateValue, configFn) {
   messages.push(
     stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),
   );
+}
+
+function switchConfig(entityId, name, icon, commandTopic) {
+  return {
+    topic: `homeassistant/switch/${entityId}/config`,
+    payload: {
+      name,
+      unique_id: entityId,
+      default_entity_id: `switch.${entityId}`,
+      state_topic: `homeassistant/switch/${entityId}/state`,
+      command_topic: commandTopic,
+      payload_on: "ON",
+      payload_off: "OFF",
+      icon,
+      device: aquahotDevice,
+    },
+  };
+}
+
+function publishSwitch(entityId, stateValue, configFn) {
+  if (!created[entityId]) {
+    messages.push(configFn());
+    markCreated(entityId);
+  }
+  messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
+}
+
+function aquahotBinarySensorConfig(entityId, name, deviceClass, icon) {
+  return {
+    topic: `homeassistant/binary_sensor/${entityId}/config`,
+    payload: {
+      name,
+      unique_id: entityId,
+      default_entity_id: `binary_sensor.${entityId}`,
+      state_topic: `homeassistant/binary_sensor/${entityId}/state`,
+      payload_on: "ON",
+      payload_off: "OFF",
+      device_class: deviceClass,
+      icon,
+      device: aquahotDevice,
+    },
+  };
 }
 
 // === WATERHEATER_STATUS (1FFF7) ===
@@ -200,6 +248,30 @@ if (dgn_name === "WATERHEATER_STATUS") {
         `Ignite Fail${i_name}`,
         "problem",
         "mdi:fire-alert",
+      ),
+    );
+  }
+
+  // AquaHot 125D — diesel burner switch (controlled via 1FE98 toggle)
+  if (typeof p.burner_active === "boolean") {
+    publishSwitch("aquahot_diesel_burner", onOff(p.burner_active), () =>
+      switchConfig(
+        "aquahot_diesel_burner",
+        "Diesel Burner",
+        "mdi:fire",
+        "homeassistant/switch/aquahot_diesel_burner/set",
+      ),
+    );
+  }
+
+  // AquaHot 125D — electric element switch (controlled via 1FE98 toggle)
+  if (typeof p.ac_element_active === "boolean") {
+    publishSwitch("aquahot_electric_element", onOff(p.ac_element_active), () =>
+      switchConfig(
+        "aquahot_electric_element",
+        "Electric Element",
+        "mdi:lightning-bolt",
+        "homeassistant/switch/aquahot_electric_element/set",
       ),
     );
   }
@@ -324,6 +396,31 @@ else if (dgn_name === "CIRCULATION_PUMP_STATUS") {
         "mdi:alert-circle",
       ),
     );
+  }
+
+  // AquaHot 125D: per-zone pump binary sensors (byte 3 in 1FE97)
+  if (typeof p.front_pump_running === "boolean") {
+    publishBinary("aquahot_front_pump", onOff(p.front_pump_running), () =>
+      aquahotBinarySensorConfig(
+        "aquahot_front_pump",
+        "Front Zone Pump",
+        "running",
+        "mdi:pump",
+      ),
+    );
+    flow.set("aquahot_pump_front_state", onOff(p.front_pump_running));
+  }
+
+  if (typeof p.floor_pump_running === "boolean") {
+    publishBinary("aquahot_floor_pump", onOff(p.floor_pump_running), () =>
+      aquahotBinarySensorConfig(
+        "aquahot_floor_pump",
+        "Floor Zone Pump",
+        "running",
+        "mdi:pump",
+      ),
+    );
+    flow.set("aquahot_pump_floor_state", onOff(p.floor_pump_running));
   }
 }
 

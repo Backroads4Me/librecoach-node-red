@@ -45,13 +45,13 @@ function decodeCommand(data, result) {
     result.instance = data[0];
 
     // Byte 1: Command Type [HIGH confidence]
-    //   0x07 = Zone Control (observed during zone OFF events from 0x9E)
-    //   0x0A = Burner Control (observed during burner on/off from 0x9E)
+    //   0x07 = Quiet Mode (observed during quiet mode on/off from 0x9E)
+    //   0x0A = Interior Heating Priority (observed during interior heating on/off from 0x9E)
     result.command_type = data[1];
     if (data[1] === 0x07) {
-        result.command_name = "Zone Control";
+        result.command_name = "Quiet Mode";
     } else if (data[1] === 0x0a) {
-        result.command_name = "Burner Control";
+        result.command_name = "Interior Heating Priority";
     } else {
         result.command_name = `Unknown (0x${data[1].toString(16)})`;
     }
@@ -61,13 +61,11 @@ function decodeCommand(data, result) {
     // Byte 3: Meaning depends on command type
     result.value_raw = data[3];
     if (data[1] === 0x07) {
-        // Zone Control: byte 3 = zone index (0-based)
-        // Only observed during zone OFF events; on/off may be implicit in the command type
-        // Observed values: 0 and 1 on a 2-zone system; other systems may have more
-        result.zone_id = data[3];
+        // Quiet Mode: byte 3 = on/off (0x01=On, 0x00=Off)
+        result.quiet_mode_on = data[3] === 0x01;
     } else if (data[1] === 0x0a) {
-        // Burner Control: byte 3 = on/off (0x01=On, 0x00=Off)
-        result.is_on = data[3] === 0x01;
+        // Interior Heating Priority: byte 3 = on/off (0x01=On, 0x00=Off)
+        result.interior_heating_on = data[3] === 0x01;
     }
 
     // Bytes 4-7: Reserved/Padding [HIGH confidence]

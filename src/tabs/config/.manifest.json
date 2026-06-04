@@ -275,6 +275,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "dd22c9c987534342": {
+    "nodeId": "dd22c9c987534342",
+    "name": "rvc_time_sync",
+    "sanitizedName": "rvc_time_sync",
+    "fileName": "rvc_time_sync",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "e2fc2c67eba80f70": {
     "nodeId": "e2fc2c67eba80f70",
     "name": "beta_gate",

@@ -1,8 +1,5 @@
 // Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
-// Uses FF2F (AQUAHOT_COMMAND_2) for burner on/off.
-// TODO: Zone demand on/off is sent via WATERHEATER_COMMAND_2 (1FE98) byte 2,
-// not FF2F. This encoder currently controls the burner globally — per-zone
-// demand encoding via 1FE98 needs further reverse engineering.
+// Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
 
 // --- Configuration ---
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
@@ -26,8 +23,7 @@ const zone = parseInt(zoneMatch[1], 10);
 if (isNaN(zone)) return null;
 
 // From decode_aquahot_status_2.js:
-// command_type 0x0a = Burner Control (on/off)
-// is_on = boolean
+// command_type 0x0a = Interior Heating Priority (on/off)
 
 let isHeating = false;
 
@@ -80,7 +76,7 @@ node.send({
 node.status({
   fill: "blue",
   shape: "dot",
-  text: `Set Aqua-Hot Burner -> ${isHeating ? "ON" : "OFF"}`,
+  text: `Set Interior Heating Priority -> ${isHeating ? "ON" : "OFF"}`,
 });
 
 return null;

@@ -13,6 +13,6 @@
     "222c995b7790b8de"
   ],
   "extractFunctionsTemplates": true,
-  "restoreFunctionsTemplates": false,
+  "restoreFunctionsTemplates": true,
   "enableArtifact": true
 }

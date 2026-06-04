@@ -26,7 +26,7 @@ const device = {
 
 // === Flow context ===
 
-const CREATED_KEY = "aquahot_zone_entities_created";
+const CREATED_KEY = "aquahot_zone_entities_created_v2";
 const created = flow.get(CREATED_KEY) || {};
 
 function markCreated(entityId) {
@@ -100,6 +100,31 @@ function publishBinary(entityId, stateValue, configFn) {
   );
 }
 
+function switchConfig(entityId, name, icon, commandTopic) {
+  return {
+    topic: `homeassistant/switch/${entityId}/config`,
+    payload: {
+      name,
+      unique_id: entityId,
+      default_entity_id: `switch.${entityId}`,
+      state_topic: `homeassistant/switch/${entityId}/state`,
+      command_topic: commandTopic,
+      payload_on: "ON",
+      payload_off: "OFF",
+      icon,
+      device,
+    },
+  };
+}
+
+function publishSwitch(entityId, stateValue, configFn) {
+  if (!created[entityId]) {
+    messages.push(configFn());
+    markCreated(entityId);
+  }
+  messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
+}
+
 function climateConfig(entityId, name) {
   const cfg = {
     name,
@@ -109,10 +134,9 @@ function climateConfig(entityId, name) {
     mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,
     modes: ["off", "heat"],
     current_temperature_topic: `homeassistant/climate/${entityId}/current_temp/state`,
-    temperature_state_topic: `homeassistant/climate/${entityId}/temp/state`,
-    temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,
     temperature_unit: "F",
     action_topic: `homeassistant/climate/${entityId}/action/state`,
+    optimistic: true,
     device,
   };
   return {
@@ -190,33 +214,30 @@ if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
 // === AQUAHOT_COMMAND_2 (FF2F) ===
 // Event-driven commands from 0x9E. Not periodic — only sent on state changes.
 else if (dgn_name === "AQUAHOT_COMMAND_2") {
-  if (p.command_type === 0x07 && typeof p.zone_id === "number") {
-    // Zone Control — only observed during zone OFF events.
-    // zone_id is 0-based; entity uses 1-based numbering.
-    // NOTE: On a 2-zone system, zone_id may be inverted relative to
-    // STATUS_2 bit positions (zone_id 1 = bit 0, zone_id 0 = bit 2).
-    // Using direct mapping for now; STATUS_2 periodic updates will
-    // correct any mismatch within seconds.
-    const z = p.zone_id + 1;
-    publishClimate(
-      `aquahot_zone_${z}`,
-      "OFF",
-      undefined,
-      false, // Action: idle
-      () => climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
+  if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
+    // Quiet Mode on/off
+    publishSwitch(
+      "aquahot_quiet_mode",
+      onOff(p.quiet_mode_on),
+      () => switchConfig(
+        "aquahot_quiet_mode",
+        "Quiet Mode",
+        "mdi:volume-off",
+        "homeassistant/switch/aquahot_quiet_mode/set",
+      ),
     );
-  } else if (p.command_type === 0x0a) {
-    // Burner Control — global burner on/off, affects both zones
-    const mode = p.is_on ? "HEAT" : "OFF";
-    for (const z of [1, 2]) {
-      publishClimate(
-        `aquahot_zone_${z}`,
-        mode,
-        undefined,
-        p.is_on, // Action (heating/idle)
-        () => climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
-      );
-    }
+  } else if (p.command_type === 0x0a && typeof p.interior_heating_on === "boolean") {
+    // Interior Heating Priority on/off
+    publishSwitch(
+      "aquahot_interior_heating",
+      onOff(p.interior_heating_on),
+      () => switchConfig(
+        "aquahot_interior_heating",
+        "Interior Heating Priority",
+        "mdi:home-thermometer",
+        "homeassistant/switch/aquahot_interior_heating/set",
+      ),
+    );
   }
 }
 
@@ -234,6 +255,13 @@ else if (dgn_name === "WATERHEATER_STATUS_2") {
       publishClimate(`aquahot_zone_${z}`, mode, undefined, active, () =>
         climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
       );
+    }
+    // Store per-zone active state for downstream use
+    if (typeof p.zone_active[0] === "boolean") {
+      flow.set("aquahot_zone_front_active", p.zone_active[0]);
+    }
+    if (typeof p.zone_active[1] === "boolean") {
+      flow.set("aquahot_zone_floor_active", p.zone_active[1]);
     }
   }
 }

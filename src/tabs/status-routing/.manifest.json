@@ -143,6 +143,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "5b9a1c073b281840": {
+    "nodeId": "5b9a1c073b281840",
+    "name": "decode_solar_controller",
+    "sanitizedName": "decode_solar_controller",
+    "fileName": "decode_solar_controller",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "5bb6491915c598ce": {
     "nodeId": "5bb6491915c598ce",
     "name": "decode_waterheater_status",
@@ -304,18 +316,6 @@
     "name": "decode_dc_driver_status",
     "sanitizedName": "decode_dc_driver_status",
     "fileName": "decode_dc_driver_status",
-    "isVue": false,
-    "isFun": true,
-    "hasCode": true,
-    "hasInitialize": false,
-    "hasFinalize": false,
-    "hasInfo": false
-  },
-  "a51bd40c7da8dc17": {
-    "nodeId": "a51bd40c7da8dc17",
-    "name": "beta_gate",
-    "sanitizedName": "beta_gate",
-    "fileName": "beta_gate",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
@@ -616,6 +616,18 @@
     "name": "status_ac_load",
     "sanitizedName": "status_ac_load",
     "fileName": "status_ac_load",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "f65fa76598eeb965": {
+    "nodeId": "f65fa76598eeb965",
+    "name": "status_solar_controller",
+    "sanitizedName": "status_solar_controller",
+    "fileName": "status_solar_controller",
     "isVue": false,
     "isFun": true,
     "hasCode": true,

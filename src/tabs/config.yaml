@@ -807,6 +807,19 @@
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
+- id: 5169613bd2735138
+  type: group
+  z: 292e70a6ba25b323
+  name: RV-C Time Sync
+  x: 994
+  "y": 1799
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - bce5d439a67df7da
+    - c83c6b2b70c927a3
+    - dd22c9c987534342
 - id: 52f6bcc4fb0ca263
   type: inject
   z: 292e70a6ba25b323
@@ -1237,6 +1250,7 @@
     - 6aa079d768e1571c
     - 52b505b69f88888d
     - d95299a44e1d7ed5
+    - c83c6b2b70c927a3
   x: 230
   "y": 600
   g: 3c819b7900145438
@@ -1329,7 +1343,7 @@
     and sets up the global state that all other flows depend on.
     This runs first — nothing else works without it.
   x: 330
-  "y": 100
+  "y": 120
   wires: []
 - id: 880ca1b6bf10b8d2
   type: function
@@ -1773,6 +1787,7 @@
     - 47f3c921ae62126a
     - 47ac3adc971d73eb
     - cd73ee739dad9f59
+    - fa104ff19bbee333
   x: 1080
   "y": 1300
   g: efe52fc701f550cf
@@ -2150,6 +2165,26 @@
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
+- id: bce5d439a67df7da
+  type: inject
+  z: 292e70a6ba25b323
+  name: Every 60s
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: "60"
+  crontab: ""
+  once: true
+  onceDelay: "10"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 1110
+  "y": 1840
+  g: 5169613bd2735138
+  wires:
+    - - dd22c9c987534342
 - id: c2e1bc849357fcb4
   type: inject
   z: 292e70a6ba25b323
@@ -2224,18 +2259,39 @@
   g: 9cfcca5efde78052
   wires:
     - - cd670f6465b6374b
+- id: c83c6b2b70c927a3
+  type: link out
+  z: 292e70a6ba25b323
+  name: "MQTT out: Retain FALSE"
+  mode: link
+  links:
+    - 74329f13cbbc528a
+  x: 1570
+  "y": 1840
+  g: 5169613bd2735138
+  l: true
+  wires: []
 - id: c9d298bbaa855984
   type: function
   z: 292e70a6ba25b323
   name: store_config_globals
-  func: |
+  func: >
     const key = msg.topic.split("/").pop();
+
     const val = msg.payload.toString() === "true";
 
+
     if (key === "victron_enabled") global.set("victronEnabled", val);
+
     if (key === "beta_enabled") global.set("betaEnabled", val);
+
     if (key === "microair_enabled") global.set("microairEnabled", val);
+
     if (key === "geo_enabled") global.set("geoEnabled", val);
+
+    if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val,
+    "file");
+
 
     return msg;
   outputs: 1
@@ -2538,6 +2594,19 @@
       retain: true,
     });
 
+    // Export AI Dashboard Prompt button
+    messages.push({
+      topic: "homeassistant/button/librecoach_export_entities/config",
+      payload: {
+        name: "Export AI Dashboard Prompt",
+        unique_id: "librecoach_export_entities",
+        default_entity_id: "button.librecoach_export_entities",
+        icon: "mdi:robot-outline",
+        command_topic: "librecoach/export/entities/trigger",
+        device: device,
+      },
+    });
+
     // Button - Export Unknown Recording
     messages.push({
       topic: "homeassistant/button/librecoach_export_unknown/config",
@@ -2659,6 +2728,112 @@
   g: efe52fc701f550cf
   wires:
     - - 8337a7f0dd0435d6
+- id: dd22c9c987534342
+  type: function
+  z: 292e70a6ba25b323
+  name: rvc_time_sync
+  func: >
+    // Broadcasts DATE_TIME_STATUS to the RV-C network (DGN 1FFFFh, §6.4)
+
+    // Fires every 60s via inject node. Gated by timeSyncEnabled global
+    (default: false).
+
+    // Note: spec nominal interval is 1000 ms; 60s is adequate for clock
+    correction without
+
+    // competing with a hardware master. No source-address arbitration is
+    implemented here.
+
+
+    // --- Configuration ---
+
+    const PRIORITY = 6;
+
+    const DGN = 0x1FFFF;
+
+    const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
+
+    // --- Feature Gate ---
+
+    const timeSyncEnabled = global.get("timeSyncEnabled", "file");
+
+    if (!timeSyncEnabled) return null;
+
+
+    // --- Current Time ---
+
+    const dt = new Date();
+
+
+    // --- Helpers ---
+
+    // RV-C DOW: 1=Sunday..7=Saturday (JS getDay(): 0=Sun..6=Sat)
+
+    const rvcDow = (jsDow) => (jsDow === 0 ? 1 : jsDow + 1);
+
+
+    // Derive TZ code from system UTC offset: std offset in hours, minus 1 if
+    DST active
+
+    const jan = new Date(dt.getFullYear(), 0, 1).getTimezoneOffset();
+
+    const jul = new Date(dt.getFullYear(), 6, 1).getTimezoneOffset();
+
+    const std = Math.max(jan, jul);
+
+    const isDst = dt.getTimezoneOffset() < std;
+
+    const tzCode = isDst ? std / 60 - 1 : std / 60;
+
+
+    // --- Payload ---
+
+    // Byte layout per RV-C §6.4 Table 6.4.2b: year(offset 2000), month, day,
+    dow, hour, min, sec, tz
+
+    const dataBytes = [
+      Math.max(0, Math.min(255, dt.getFullYear() - 2000)), // Byte 0: Year (2000..2255)
+      dt.getMonth() + 1,                                   // Byte 1: Month (1..12)
+      dt.getDate(),                                         // Byte 2: Day (1..31)
+      rvcDow(dt.getDay()),                                  // Byte 3: Day of week (1..7)
+      dt.getHours(),                                        // Byte 4: Hour (0..23)
+      dt.getMinutes(),                                      // Byte 5: Minute (0..59)
+      dt.getSeconds(),                                      // Byte 6: Second (0..59)
+      tzCode & 0xff,                                        // Byte 7: Timezone code
+    ];
+
+
+    // --- Build and Send ---
+
+    const dataHex = dataBytes
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase();
+    const canIdInt = (PRIORITY << 26) | (DGN << 8) | SOURCE_ADDRESS;
+
+    const canIdHex = canIdInt.toString(16).padStart(8, "0").toUpperCase();
+
+
+    node.status({
+      fill: "green",
+      shape: "dot",
+      text: `${dt.getMonth() + 1}/${dt.getDate()} ${dt.getHours().toString().padStart(2, "0")}:${dt.getMinutes().toString().padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")} tz=${tzCode}`,
+    });
+
+
+    return { topic: "can/send", payload: `${canIdHex}#${dataHex}` };
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1320
+  "y": 1840
+  g: 5169613bd2735138
+  wires:
+    - - c83c6b2b70c927a3
 - id: e2fc2c67eba80f70
   type: function
   z: 292e70a6ba25b323

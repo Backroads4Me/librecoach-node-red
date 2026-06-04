@@ -41,6 +41,7 @@ flowchart TD
     n_a1e89f48333c["Notify user"]:::link
     n_a2334b77d376["MQTT out_ Retain FALSE"]:::link
     n_ac17a780a9a1["CONFIG_GLOBALS"]:::link
+    n_c83c6b2b70c9["MQTT out_ Retain FALSE"]:::link
     n_cd73ee739dad["Notify user"]:::link
     n_dca8346e061f["MQTT out_ Retain TRUE"]:::link
     n_e38f32a1f6d3["MQTT out_ Retain TRUE"]:::link
@@ -71,6 +72,7 @@ flowchart TD
     n_12a57f6a07d0["MQTT out_ Retain TRUE"]:::link
     n_47ac3adc971d["Notify user"]:::link
     n_47f3c921ae62["Notify user"]:::link
+    n_fa104ff19bbe["Notify user"]:::link
   end
   subgraph n_e3804d2dd0b8["Micro-Air"]
     n_1d411b577497["Reset Microair filters"]:::link
@@ -113,6 +115,7 @@ flowchart TD
   n_a2334b77d376 --> n_74329f13cbbc
   n_b104a7e82aef --> n_f658418a7b9b
   n_bd38c37850a3 --> n_f658418a7b9b
+  n_c83c6b2b70c9 --> n_74329f13cbbc
   n_cd73ee739dad --> n_a1e89f48333c
   n_cdc4754f4c43 --> n_1d411b577497
   n_d38c75bc1474 --> n_f658418a7b9b
@@ -122,20 +125,21 @@ flowchart TD
   n_e371075d4dbf --> n_f658418a7b9b
   n_e38f32a1f6d3 --> n_f658418a7b9b
   n_f3f99ba42088 --> n_f658418a7b9b
+  n_fa104ff19bbe --> n_a1e89f48333c
 ```
 
 ## Tabs
 
 | Tab | Functions | Subflow instances | Link out | Link in |
 |---|---|---|---|---|
-| [Config](./config.md) | 25 | 0 | 14 | 7 |
-| [Status routing](./status-routing.md) | 53 | 0 | 2 | 2 |
+| [Config](./config.md) | 26 | 0 | 15 | 7 |
+| [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
-| [HA Commands](./ha-commands.md) | 14 | 0 | 2 | 1 |
-| [AquaHot](./aquahot.md) | 4 | 0 | 1 | 2 |
+| [HA Commands](./ha-commands.md) | 15 | 0 | 2 | 1 |
+| [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
 | [Victron](./victron.md) | 13 | 0 | 4 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
-| [Templates](./templates.md) | 12 | 0 | 3 | 0 |
+| [Templates](./templates.md) | 15 | 0 | 4 | 0 |
 | [Delete HA Entity](./delete-ha-entity.md) | 1 | 0 | 1 | 0 |
 
 ## Subflows
@@ -177,6 +181,7 @@ _None._
 | MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | MQTT out: Retain TRUE | Micro-Air | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
+| MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | Notify user | Config | → | Notify user | Config |
 | Reset Microair filters | Micro-Air | → | Reset Microair filters | Micro-Air |
 | MQTT out: Retain TRUE | Delete HA Entity | → | MQTT out: Retain TRUE | Config |
@@ -186,12 +191,13 @@ _None._
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
+| Notify user | Templates | → | Notify user | Config |
 
 ## Config nodes
 
 | Name | Type | Used by |
 |---|---|---|
 | Home Assistant | server | 1 node across 1 tab |
-| Mosquitto | mqtt-broker | 18 nodes across 5 tabs |
+| Mosquitto | mqtt-broker | 20 nodes across 5 tabs |
 | Victron Cerbo GX | mqtt-broker | 4 nodes across 1 tab |
 | f32f7fc67467278b | global-config | 0 nodes across 0 tabs |
