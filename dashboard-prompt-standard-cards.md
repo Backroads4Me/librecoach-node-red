@@ -1,18 +1,9 @@
-# LibreCoach Dashboard Prompt — Standard (Native) Cards
-
-This is the complete prompt emitted by the **"Export AI Dashboard Prompt (Standard Cards)"**
-button (`button.librecoach_export_entities_default`). It instructs an LLM to build a
-Home Assistant dashboard using **only built-in HA cards** — no HACS / mushroom / custom
-cards required.
-
-At runtime the header below is prepended to a 7-column, pipe-delimited table of the user's
-LibreCoach entities (rendered by HA's `/api/template`). The `AREA|DOMAIN|...` line at the
-very bottom marks where that entity data is appended.
-
-> Source of truth: `src/tabs/templates/export_entities_publish.js` (`DEFAULT_PROMPT_HEADER`).
-> Edit that file, not this one — this is a human-readable copy.
-
----
+<!--
+  dashboard-prompt-standard-cards.md
+  Human-readable copy of the Standard Cards dashboard prompt header.
+  Source of truth: src/tabs/templates/export_entities_publish.js — edit that file, not this one.
+  Regenerate with: node scripts/regen-standard-cards-md.js
+-->
 
 You are building a Home Assistant dashboard YAML for an RV control system
 called LibreCoach. The dashboard title is "LibreCoach". Use the entity data
@@ -413,17 +404,18 @@ The button's own name (show_name: true, show_icon: true) identifies each lock.
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: LibreCoach Tools containing a single type: entities card
-  listing these entities in order (include only those present in the entity data):
-    - button.librecoach_export_entities
-    - button.librecoach_export_entities_default
-    - text.rv_manufacturer
-    - text.rv_model
-    - text.rv_year
-    - text.rv_other
-    - button.librecoach_import_config
-    - button.librecoach_export_config
-    - switch.librecoach_record_unknown   (name: type: entity)
-    - button.librecoach_export_unknown   (name: type: entity)
+  listing these entities in order (include only those present in the entity data).
+  Use these exact display names — strip any "LibreCoach: System " prefix from FRIENDLY_NAME:
+    - button.librecoach_export_entities        name: Export AI Dashboard Prompt (Mushroom Cards)
+    - button.librecoach_export_entities_default name: Export AI Dashboard Prompt (Standard Cards)
+    - text.rv_manufacturer                      name: RV Manufacturer
+    - text.rv_model                             name: RV Model
+    - text.rv_year                              name: RV Year
+    - text.rv_other                             name: RV Other
+    - button.librecoach_import_config           name: Import LibreCoach Configuration
+    - button.librecoach_export_config           name: Export LibreCoach Configuration
+    - switch.librecoach_record_unknown          name: Record Unknown Commands   (type: entity)
+    - button.librecoach_export_unknown          name: Save Recorded Log         (type: entity)
 • AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
   on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
   sensors/binary_sensors into type: entities cards, others as tile/button cards.
@@ -474,6 +466,3 @@ Use the closest matching card template for each entity. If an entity truly has n
 sensible card, place it in the Misc → Other catch-all rather than discarding it.
 Remember: NO custom:* cards anywhere in the output.
 
-
-AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|UNIT|DIMMABLE
-<the user's LibreCoach entity rows are appended here at runtime, one per line, sorted by area>

@@ -427,17 +427,18 @@ The button's own name (show_name: true, show_icon: true) identifies each lock.
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: LibreCoach Tools containing a single type: entities card
-  listing these entities in order (include only those present in the entity data):
-    - button.librecoach_export_entities
-    - button.librecoach_export_entities_default
-    - text.rv_manufacturer
-    - text.rv_model
-    - text.rv_year
-    - text.rv_other
-    - button.librecoach_import_config
-    - button.librecoach_export_config
-    - switch.librecoach_record_unknown   (name: type: entity)
-    - button.librecoach_export_unknown   (name: type: entity)
+  listing these entities in order (include only those present in the entity data).
+  Use these exact display names — strip any "LibreCoach: System " prefix from FRIENDLY_NAME:
+    - button.librecoach_export_entities        name: Export AI Dashboard Prompt (Mushroom Cards)
+    - button.librecoach_export_entities_default name: Export AI Dashboard Prompt (Standard Cards)
+    - text.rv_manufacturer                      name: RV Manufacturer
+    - text.rv_model                             name: RV Model
+    - text.rv_year                              name: RV Year
+    - text.rv_other                             name: RV Other
+    - button.librecoach_import_config           name: Import LibreCoach Configuration
+    - button.librecoach_export_config           name: Export LibreCoach Configuration
+    - switch.librecoach_record_unknown          name: Record Unknown Commands   (type: entity)
+    - button.librecoach_export_unknown          name: Save Recorded Log         (type: entity)
 • AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
   on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
   sensors/binary_sensors into type: entities cards, others as tile/button cards.
@@ -888,17 +889,18 @@ The button's own name (show_name: true, show_icon: true) identifies each lock.
 --- STEP 10: MISC VIEW LAYOUT ---
 type: masonry.
 • vertical-stack title: LibreCoach Tools containing a single type: entities card
-  listing these entities in order (include only those present in the entity data):
-    - button.librecoach_export_entities
-    - button.librecoach_export_entities_default
-    - text.rv_manufacturer
-    - text.rv_model
-    - text.rv_year
-    - text.rv_other
-    - button.librecoach_import_config
-    - button.librecoach_export_config
-    - switch.librecoach_record_unknown   (name: type: entity)
-    - button.librecoach_export_unknown   (name: type: entity)
+  listing these entities in order (include only those present in the entity data).
+  Use these exact display names — strip any "LibreCoach: System " prefix from FRIENDLY_NAME:
+    - button.librecoach_export_entities        name: Export AI Dashboard Prompt (Mushroom Cards)
+    - button.librecoach_export_entities_default name: Export AI Dashboard Prompt (Standard Cards)
+    - text.rv_manufacturer                      name: RV Manufacturer
+    - text.rv_model                             name: RV Model
+    - text.rv_year                              name: RV Year
+    - text.rv_other                             name: RV Other
+    - button.librecoach_import_config           name: Import LibreCoach Configuration
+    - button.librecoach_export_config           name: Export LibreCoach Configuration
+    - switch.librecoach_record_unknown          name: Record Unknown Commands   (type: entity)
+    - button.librecoach_export_unknown          name: Save Recorded Log         (type: entity)
 • AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
   on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
   sensors/binary_sensors into type: entities cards, others as tile/button cards.
