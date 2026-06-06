@@ -109,7 +109,7 @@ if (isDimmable && typeof brightness === "number" && brightness > 0) {
 const stateObj = { state: haStatus };
 
 if (haStatus === "ON") {
-  if (isDimmable && !needsRecreate) {
+  if (isDimmable) {
     stateObj.color_mode = "brightness";
     if (brightness !== undefined) {
       stateObj.brightness = brightness;

@@ -109,10 +109,7 @@ if (isDimmable && typeof brightness === "number" && brightness > 0) {
 const stateObj = { state: haStatus };
 
 if (haStatus === "ON") {
-    // If we just detected dimmability this cycle, the discovery config still
-    // reflects the old schema until HA processes it — report onoff to avoid
-    // "Invalid color mode" errors.
-    if (isDimmable && !needsRecreate) {
+    if (isDimmable) {
         stateObj.color_mode = "brightness";
         if (brightness !== undefined) {
             stateObj.brightness = brightness;

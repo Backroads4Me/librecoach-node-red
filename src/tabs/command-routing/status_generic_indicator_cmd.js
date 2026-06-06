@@ -125,7 +125,7 @@ for (const { entityId, displayName } of targets) {
 
   const stateObj = { state: haStatus };
   if (haStatus === "ON") {
-    if (isDimmable && !needsRecreate) {
+    if (isDimmable) {
       stateObj.color_mode = "brightness";
       if (brightness !== undefined && brightness > 0) {
         stateObj.brightness = brightness;
