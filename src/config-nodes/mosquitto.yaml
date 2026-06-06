@@ -1,7 +1,7 @@
 - id: 80727e60a251c36c
   type: mqtt-broker
   name: Mosquitto
-  broker: 127.0.0.1
+  broker: core-mosquitto
   port: 1883
   clientid: ""
   autoConnect: true
