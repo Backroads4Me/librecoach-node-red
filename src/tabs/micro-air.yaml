@@ -4,7 +4,7 @@
   env: []
   normalizedLabel: micro-air
   disabled: false
-  info: ''
+  info: ""
 - id: 1d411b577497f7ae
   type: link in
   z: e3804d2dd0b81928
@@ -12,7 +12,7 @@
   links:
     - cdc4754f4c43430d
   x: 230
-  'y': 480
+  "y": 480
   g: fe7cf55a75689b88
   l: true
   wires:
@@ -27,11 +27,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1380
-  'y': 600
+  "y": 600
   g: cd4c55cd4f675905
   wires:
     - []
@@ -87,11 +87,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 630
-  'y': 320
+  "y": 320
   g: fe7cf55a75689b88
   wires:
     - - cdc4754f4c43430d
@@ -104,52 +104,56 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
-  payload: ''
+  topic: ""
+  payload: ""
   payloadType: date
   x: 1150
-  'y': 600
+  "y": 600
   g: cd4c55cd4f675905
   wires:
     - - 205af5b7fa62d8ac
 - id: 514aeab5c0897a23
   type: note
   z: e3804d2dd0b81928
-  name: ''
-  content: |-
+  content: >-
     # Micro-Air Thermostats
+
     ## For the Micro-Air functionality to work you'll need:
+
     - A Micro-Air EasyTouch RV Thermostat
-    - Enable the Micro-Air integration in the LibreCoach addon conifiguration tab
+
+    - Enable the Micro-Air integration in the LibreCoach addon conifiguration
+    tab
+
     - Enter your thermostat bluetooth email and password
   x: 390
-  'y': 120
+  "y": 132
   wires: []
 - id: 52b505b69f88888d
   type: link out
   z: e3804d2dd0b81928
-  name: 'MQTT out: Retain FALSE'
+  name: "MQTT out: Retain FALSE"
   mode: link
   links:
     - 74329f13cbbc528a
   x: 1130
-  'y': 740
+  "y": 740
   g: fe7cf55a75689b88
   l: true
   wires: []
 - id: 599ffbccfb7cd415
   type: link out
   z: e3804d2dd0b81928
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 910
-  'y': 340
+  "y": 340
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -201,11 +205,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 630
-  'y': 580
+  "y": 580
   g: fe7cf55a75689b88
   wires:
     - - ba611b1fa95bf468
@@ -268,23 +272,23 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1130
-  'y': 440
+  "y": 440
   g: fe7cf55a75689b88
   wires:
     - - 950e9ce654224317
 - id: 950e9ce654224317
   type: link out
   z: e3804d2dd0b81928
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1390
-  'y': 420
+  "y": 420
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -295,7 +299,7 @@
   links:
     - 1e244bad0304bb74
   x: 1140
-  'y': 540
+  "y": 540
   g: cd4c55cd4f675905
   l: true
   wires:
@@ -303,7 +307,7 @@
 - id: ab025c05d155f4ee
   type: switch
   z: e3804d2dd0b81928
-  name: ''
+  name: ""
   property: topic
   propertyType: msg
   rules:
@@ -311,11 +315,11 @@
       v: microair
       vt: str
     - t: else
-  checkall: 'true'
+  checkall: "true"
   repair: false
   outputs: 2
   x: 350
-  'y': 720
+  "y": 720
   g: fe7cf55a75689b88
   wires:
     - - e1cc8c52948f9b2a
@@ -408,11 +412,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 630
-  'y': 420
+  "y": 420
   g: fe7cf55a75689b88
   wires:
     - - 599ffbccfb7cd415
@@ -420,12 +424,12 @@
 - id: b104a7e82aefcb21
   type: link out
   z: e3804d2dd0b81928
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1130
-  'y': 700
+  "y": 700
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -494,11 +498,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 880
-  'y': 420
+  "y": 420
   g: fe7cf55a75689b88
   wires:
     - - c92f3be74ab20d69
@@ -510,7 +514,7 @@
   links:
     - 88e5fa035bedb48c
   x: 230
-  'y': 320
+  "y": 320
   g: fe7cf55a75689b88
   l: true
   wires:
@@ -519,51 +523,83 @@
   type: function
   z: e3804d2dd0b81928
   name: microair_create_climate
-  func: |
+  func: >
     // Create MicroAir Climate Entity for Home Assistant
+
     // Uses cached zone config (MAV, SPL) and observed max fan speed
+
     // for dynamic modes, fan modes, and temperature limits
 
+
     const microairEnabled = global.get("microairEnabled");
+
     if (!microairEnabled) return null;
 
+
     const payload = msg.payload;
+
     if (!payload || !payload.mac) return null;
 
+
     const mac = payload.mac;
+
     const safeMac = mac.replace(/:/g, "_");
+
     const zone = payload.zone;
+
     if (zone === undefined) return null;
 
+
     const uniqueId = `microair_${safeMac}_zone_${zone}`;
+
     const entityId = uniqueId;
 
+
     // --- Per-zone state and config topics ---
+
     const stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;
+
     const discoveryTopic = `homeassistant/climate/${entityId}/config`;
 
+
     // Command topics
+
     const baseCommand = `homeassistant/climate/${entityId}`;
+
     const modeCommand = `${baseCommand}/mode/set`;
+
     const tempCommand = `${baseCommand}/temp/set`;
+
     const tempHighCommand = `${baseCommand}/temp_high/set`;
+
     const tempLowCommand = `${baseCommand}/temp_low/set`;
+
     const fanCommand = `${baseCommand}/fan/set`;
+
     const presetCommand = `${baseCommand}/preset/set`;
 
+
     // --- Read cached config and observed capabilities ---
+
     const zoneConfig =
       global.get(`microair_${safeMac}_zone_${zone}_config`, "file") || {};
     const maxFanSpeed =
       global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
 
     // --- Determine available modes ---
-    // Always include these base modes; MAV only removes modes we're sure aren't supported
+
+    // Always include these base modes; MAV only removes modes we're sure aren't
+    supported
+
     let modes = ["off", "cool", "heat", "fan_only"];
 
+
     // Add auto if supported (MAV bits 8-11)
+
     // Add dry if supported (MAV bit 6)
+
     // Default: include both unless MAV explicitly excludes them
+
     if (zoneConfig.MAV) {
       const mav = zoneConfig.MAV;
       // Auto modes: bits 8, 9, 10, 11
@@ -579,8 +615,11 @@
       modes.push("auto", "dry");
     }
 
+
     // --- Determine fan modes from observed max speed ---
+
     let fanModes;
+
     if (maxFanSpeed >= 3) {
       // 3-speed system
       fanModes = ["low", "medium", "high", "auto"];
@@ -589,7 +628,9 @@
       fanModes = ["low", "high", "auto"];
     }
 
+
     // --- Determine heat type presets from MAV ---
+
     const HEAT_TYPE_PRESETS = {
       "Heat Pump": 5,
       Furnace: 4,
@@ -597,7 +638,9 @@
       "Heat Strip": 7,
       "Electric Heat": 12,
     };
+
     let presetModes = [];
+
     if (zoneConfig.MAV) {
       const mav = zoneConfig.MAV;
       for (const [name, bit] of Object.entries(HEAT_TYPE_PRESETS)) {
@@ -607,15 +650,21 @@
       }
     }
 
+
     // --- Determine temp limits from SPL ---
+
     let minTemp = 50;
+
     let maxTemp = 90;
+
     if (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {
       minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);
       maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);
     }
 
+
     // --- Discovery payload ---
+
     const discoveryPayload = {
       name: `MicroAir Zone ${zone + 1}`,
       unique_id: uniqueId,
@@ -682,26 +731,33 @@
       availability_topic: `librecoach/ble/microair/${mac}/available`,
     };
 
+
     msg.topic = discoveryTopic;
+
     msg.payload = discoveryPayload;
+
     msg.entityId = entityId;
 
+
     // Track discovery topic for cleanup when disabled
+
     let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
+
     if (!discoveryTopics.includes(discoveryTopic)) {
       discoveryTopics.push(discoveryTopic);
       global.set("microairDiscoveryTopics", discoveryTopics, "file");
     }
 
+
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1130
-  'y': 400
+  "y": 400
   g: fe7cf55a75689b88
   wires:
     - - 950e9ce654224317
@@ -710,10 +766,10 @@
   z: e3804d2dd0b81928
   name: Rest unique list
   x: 1034
-  'y': 499
+  "y": 499
   g: fe7cf55a75689b88
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 205af5b7fa62d8ac
@@ -727,7 +783,7 @@
   links:
     - 1d411b577497f7ae
   x: 900
-  'y': 300
+  "y": 300
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -736,7 +792,7 @@
   z: e3804d2dd0b81928
   name: Micro-Air status
   topic: librecoach/ble/microair/+/state
-  qos: '2'
+  qos: "2"
   datatype: json
   broker: 80727e60a251c36c
   nl: false
@@ -744,28 +800,28 @@
   rh: 0
   inputs: 0
   x: 220
-  'y': 420
+  "y": 420
   g: fe7cf55a75689b88
   wires:
     - - eef231d415615180
 - id: dbc862c066d96221
   type: delay
   z: e3804d2dd0b81928
-  name: ''
+  name: ""
   pauseType: delay
-  timeout: '5'
+  timeout: "5"
   timeoutUnits: seconds
-  rate: '1'
-  nbRateUnits: '1'
+  rate: "1"
+  nbRateUnits: "1"
   rateUnits: second
-  randomFirst: '1'
-  randomLast: '5'
+  randomFirst: "1"
+  randomLast: "5"
   randomUnits: seconds
   drop: false
   allowrate: false
   outputs: 1
   x: 420
-  'y': 320
+  "y": 320
   g: fe7cf55a75689b88
   wires:
     - - 2f91d31ed0be26b1
@@ -939,11 +995,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 580
-  'y': 720
+  "y": 720
   g: fe7cf55a75689b88
   wires:
     - - e2335c226769f307
@@ -951,44 +1007,67 @@
   type: function
   z: e3804d2dd0b81928
   name: microair_optimistic_update
-  func: |
+  func: >
     // Optimistic MicroAir State Update
+
     // Input: Encoded bridge command from microair_encode_command.js
+
     // Output 1: Optimistic HA state update (MQTT out to HA state topic)
-    // Output 2: Original bridge command passthrough (MQTT out to bridge /set topic)
+
+    // Output 2: Original bridge command passthrough (MQTT out to bridge /set
+    topic)
+
     //
+
     // Merges pending changes into cached zone state and publishes
+
     // immediately so the HA UI updates without waiting for the next poll cycle.
 
+
     const command = msg.payload;
+
     if (!command || command.Type !== "Change" || !command.Changes)
       return [null, msg];
 
     const changes = command.Changes;
+
     const zone = changes.zone;
 
+
     // Extract MAC from the bridge topic: librecoach/ble/microair/{mac}/set
+
     const topicParts = msg.topic.split("/");
+
     if (topicParts.length < 5) return [null, msg];
 
+
     const mac = topicParts[3];
+
     const safeMac = mac.replace(/:/g, "_");
 
+
     // Read cached state
+
     const cached = global.get(`microair_${safeMac}_zone_${zone}`);
+
     if (!cached) {
       // No cached state yet — can't build optimistic update, just forward command
       return [null, msg];
     }
 
+
     // Read observed max fan speed for dynamic mapping
+
     const maxFanSpeed =
       global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
 
     // Build optimistic state by merging changes into cached state
+
     const optimistic = Object.assign({}, cached);
 
+
     // Mode changes
+
     if ("mode" in changes) {
       optimistic.mode_num = changes.mode;
       // Map numeric mode to string mode
@@ -1028,65 +1107,94 @@
       }
     }
 
+
     // Setpoint changes
+
     if ("cool_sp" in changes) optimistic.cool_sp = changes.cool_sp;
+
     if ("heat_sp" in changes) optimistic.heat_sp = changes.heat_sp;
+
     if ("dry_sp" in changes) optimistic.dry_sp = changes.dry_sp;
+
     if ("autoCool_sp" in changes) optimistic.autoCool_sp = changes.autoCool_sp;
+
     if ("autoHeat_sp" in changes) optimistic.autoHeat_sp = changes.autoHeat_sp;
 
+
     // Fan changes — update the correct fan field
+
     if ("fanOnly" in changes) optimistic.fan_mode_num = changes.fanOnly;
+
     if ("coolFan" in changes) optimistic.cool_fan_mode_num = changes.coolFan;
+
     if ("gasFan" in changes) optimistic.furnace_fan_mode_num = changes.gasFan;
+
     if ("eleFan" in changes) optimistic.heat_fan_mode_num = changes.eleFan;
+
     if ("autoFan" in changes) optimistic.auto_fan_mode_num = changes.autoFan;
 
+
     // Dynamic fan mode map based on observed speed count
+
     const FAN_MODE_MAP =
       maxFanSpeed >= 3
         ? { 0: "auto", 1: "low", 2: "medium", 3: "high", 128: "auto" } // 3-speed
         : { 0: "auto", 1: "low", 2: "high", 128: "auto" }; // 2-speed
     const mode = optimistic.mode || "off";
+
     let fanNum = 0;
+
     if (mode === "fan_only") fanNum = optimistic.fan_mode_num || 0;
+
     else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num || 0;
+
     else if (mode === "heat")
       fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;
     else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num || 0;
+
     else if (mode === "dry") fanNum = optimistic.dry_fan_mode_num || 0;
+
     optimistic.fan_mode = FAN_MODE_MAP[fanNum] || "auto";
 
+
     // Power state
+
     if ("power" in changes) {
       optimistic.on = changes.power === 1;
       optimistic.off = changes.power === 0;
     }
 
+
     // Update cache with optimistic state
+
     global.set(`microair_${safeMac}_zone_${zone}`, optimistic);
 
+
     // Output 1: Publish optimistic state to HA state topic
+
     const haMsg = {
       topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,
       payload: JSON.stringify(optimistic),
     };
 
+
     // Output 2: Forward original command to bridge
+
     const bridgeMsg = {
       topic: msg.topic,
       payload: msg.payload,
     };
 
+
     return [haMsg, bridgeMsg];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 860
-  'y': 720
+  "y": 720
   g: fe7cf55a75689b88
   wires:
     - - b104a7e82aefcb21
@@ -1094,16 +1202,16 @@
 - id: eef231d415615180
   type: rbe
   z: e3804d2dd0b81928
-  name: ''
+  name: ""
   func: rbe
-  gap: ''
-  start: ''
+  gap: ""
+  start: ""
   inout: out
   septopics: true
   property: payload
   topi: payload.zone
   x: 430
-  'y': 420
+  "y": 420
   g: fe7cf55a75689b88
   wires:
     - - ae5fb4f1c3213c0a
@@ -1112,7 +1220,7 @@
   z: e3804d2dd0b81928
   name: HA climate
   topic: homeassistant/climate/+/+/set
-  qos: '2'
+  qos: "2"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -1120,7 +1228,7 @@
   rh: 0
   inputs: 0
   x: 200
-  'y': 720
+  "y": 720
   g: fe7cf55a75689b88
   wires:
     - - ab025c05d155f4ee
@@ -1129,9 +1237,9 @@
   z: e3804d2dd0b81928
   name: Micro-Air status
   x: 114
-  'y': 259
+  "y": 259
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 1d411b577497f7ae
@@ -1161,7 +1269,7 @@
   z: e3804d2dd0b81928
   name: Micro-Air config
   topic: librecoach/ble/microair/+/zone/+/config
-  qos: '2'
+  qos: "2"
   datatype: json
   broker: 80727e60a251c36c
   nl: false
@@ -1169,7 +1277,7 @@
   rh: 0
   inputs: 0
   x: 220
-  'y': 580
+  "y": 580
   g: fe7cf55a75689b88
   wires:
     - - 7605393317b3c471

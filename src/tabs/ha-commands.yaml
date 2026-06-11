@@ -1,44 +1,47 @@
-- disabled: false
-  env: []
-  id: b3d80c5dc947ec88
-  info: ''
-  label: HA Commands
-  normalizedLabel: ha-commands
+- id: b3d80c5dc947ec88
   type: tab
-- active: false
-  complete: payload
-  console: false
-  g: 7183c5f0ad762adb
-  id: 31e6105322d72319
-  name: otherwise
-  statusType: auto
-  statusVal: ''
-  targetType: msg
-  tosidebar: true
-  tostatus: false
+  label: HA Commands
+  env: []
+  normalizedLabel: ha-commands
+  disabled: false
+  info: ""
+- id: 31e6105322d72319
   type: debug
-  wires: []
-  x: 800
-  'y': 920
   z: b3d80c5dc947ec88
-- broker: 80727e60a251c36c
-  datatype: auto-detect
+  name: otherwise
+  active: false
+  tosidebar: true
+  console: false
+  tostatus: false
+  complete: payload
+  targetType: msg
+  statusVal: ""
+  statusType: auto
+  x: 800
+  "y": 1000
   g: 7183c5f0ad762adb
-  id: 51fdd54bd04e39e2
-  inputs: 0
+  wires: []
+- id: 51fdd54bd04e39e2
+  type: mqtt in
+  z: b3d80c5dc947ec88
   name: HA climate
+  topic: homeassistant/climate/+/+/set
+  qos: "2"
+  datatype: auto-detect
+  broker: 80727e60a251c36c
   nl: false
-  qos: '2'
   rap: true
   rh: 0
-  topic: homeassistant/climate/+/+/set
-  type: mqtt in
+  inputs: 0
+  x: 200
+  "y": 920
+  g: 7183c5f0ad762adb
   wires:
     - - e19247ab204a8e12
-  x: 200
-  'y': 840
+- id: 58d9a2789e4a1391
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_shade_command
   func: |
     // Encodes WINDOW_SHADE_COMMAND messages (1FEDF)
 
@@ -106,34 +109,110 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: 58d9a2789e4a1391
-  initialize: ''
-  libs: []
-  name: encode_shade_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 850
+  "y": 340
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 850
-  'y': 340
+- id: 6aa079d768e1571c
+  type: link out
   z: b3d80c5dc947ec88
-- g: aea9d97e0563bd83
-  id: 6aa079d768e1571c
-  l: true
+  name: "MQTT out: Retain FALSE"
+  mode: link
   links:
     - 74329f13cbbc528a
-  mode: link
-  name: 'MQTT out: Retain FALSE'
-  type: link out
-  wires: []
   x: 1290
-  'y': 440
+  "y": 440
+  g: aea9d97e0563bd83
+  l: true
+  wires: []
+- id: 6c7a6786667fe3dd
+  type: function
   z: b3d80c5dc947ec88
+  name: encode_generator_command
+  func: >
+    // Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)
+
+    // §6.35.3 — preferred method for network-initiated start/stop (respects
+    Quiet Time)
+
+
+    const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
+    const PRIORITY = 6;
+
+    const DGN = "1FEFF";
+
+
+    const command = msg.command; // Expects "ON" or "OFF"
+
+
+    let demandByte;
+
+    switch (command) {
+      case "ON":
+        demandByte = 0x01; // bits 0-1 = 01 = Generator power demanded
+        break;
+      case "OFF":
+        demandByte = 0x00; // bits 0-1 = 00 = No demand
+        break;
+      default:
+        node.warn(
+          `[encode_generator_demand_command] Invalid command: "${command}". Expected "ON" or "OFF"`,
+        );
+        return null;
+    }
+
+
+    const dataBytes = new Array(8).fill(0xff);
+
+    dataBytes[0] = demandByte;
+
+
+    const dataHex = dataBytes
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    const dgnInt = parseInt(DGN, 16);
+
+    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
+    const canIdHex = canIdInt.toString(16).padStart(8, "0");
+
+
+    node.send({
+      topic: "can/send",
+      payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
+    });
+
+
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 860
+  "y": 700
+  g: aea9d97e0563bd83
+  wires:
+    - - 6aa079d768e1571c
 - id: 7183c5f0ad762adb
+  type: group
+  z: b3d80c5dc947ec88
   name: Home Assistant climate encoding
+  x: 114
+  "y": 839
+  style:
+    label: true
+    stroke: "#777777"
   nodes:
     - 31e6105322d72319
     - 51fdd54bd04e39e2
@@ -142,70 +221,108 @@
     - a71ac1bd86bd3e13
     - d95299a44e1d7ed5
     - e19247ab204a8e12
-  style:
-    label: true
-    stroke: '#777777'
-  type: group
-  x: 114
-  'y': 759
+- id: 755a5ee01bb1179d
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: encode_thermostat_command
+  func: >
     // Encodes MQTT Climate commands into THERMOSTAT_COMMAND_1 messages (1FEF9)
+
     // §6.16.4 — same byte layout as THERMOSTAT_STATUS_1 (§6.16.2b)
+
     //
+
     // Byte 0: Instance
-    // Byte 1: bits 0-3 Operating mode, bits 4-5 Fan mode, bits 6-7 Schedule mode
+
+    // Byte 1: bits 0-3 Operating mode, bits 4-5 Fan mode, bits 6-7 Schedule
+    mode
+
     // Byte 2: Fan speed (0-200 at 0.5% per step, 0=auto)
+
     // Bytes 3-4: Setpoint heat (uint16 LE, Table 5.3 temperature)
+
     // Bytes 5-6: Setpoint cool (uint16 LE, Table 5.3 temperature)
+
     // Byte 7: Reserved (0xFF)
 
+
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "1FEF9"; // THERMOSTAT_COMMAND_1
 
+
     // --- Input Validation ---
+
     const topic = msg.topic;
+
     if (!topic) return null;
+
 
     const payload = msg.payload;
 
+
     const parts = topic.split("/");
+
     // Expected: homeassistant/climate/thermostat_zone_{instance}/{cmd}/set
+
     const entityPart = parts[2];
+
     if (!entityPart || !entityPart.startsWith("thermostat_zone_")) return null;
 
+
     const instanceMatch = entityPart.match(/thermostat_zone_(\d+)/);
+
     if (!instanceMatch) return null;
 
+
     const instance = parseInt(instanceMatch[1], 10);
+
     if (isNaN(instance)) return null;
+
 
     const cmdPart = parts[3]; // "mode", "fan", "temp", "temp_high", "temp_low"
 
+
     // --- Read cached state ---
-    const cached = global.get(`thermostat_zone_${instance}_status`, "file") || {};
+
+    const cached = global.get(`thermostat_zone_${instance}_status`, "file") ||
+    {};
+
 
     // --- Temperature conversion: °F → raw uint16 (Table 5.3) ---
+
     // raw = ((°F - 32) × 5/9 + 273) / 0.03125
+
     function tempToRaw(fahrenheit) {
       const celsius = ((fahrenheit - 32) * 5) / 9;
       return Math.round((celsius + 273) / 0.03125);
     }
 
+
     // --- Build 8-byte payload, default all fields to "no change" ---
+
     const dataBytes = new Array(8).fill(0xff);
+
     dataBytes[0] = instance;
 
+
     // Byte 1 bitfield helpers
+
     // bits 6-7: schedule mode — always "no change" (0x3)
+
     // bits 4-5: fan mode — 0=Auto, 1=On, 3=no change
+
     // bits 0-3: operating mode — 0=Off..6=Defrost, 0xF=no change
+
     const SCHED_NC = 0x03;
 
+
     // --- HA → RV-C mode mapping ---
+
     const HA_TO_RVC_MODE = {
       off: 0x00,
       cool: 0x01,
@@ -215,7 +332,9 @@
       dry: 0x06,
     };
 
+
     // --- Process command ---
+
 
     if (topic.endsWith("/mode/set")) {
       const val = payload.toString().toLowerCase();
@@ -283,97 +402,129 @@
       return null;
     }
 
+
     // --- Construct CAN frame ---
+
 
     const dataHex = dataBytes
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
     const dgnInt = parseInt(DGN, 16);
+
     const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
+
     // --- Send Message ---
+
 
     node.send({
       topic: "can/send",
       payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
     });
 
+
     const cmdLabel = cmdPart === "mode" ? payload : `${cmdPart}=${payload}`;
+
     node.status({
       fill: "green",
       shape: "dot",
       text: `Zone ${instance} → ${cmdLabel}`,
     });
 
+
     return null;
-  g: 7183c5f0ad762adb
-  id: 755a5ee01bb1179d
-  initialize: ''
-  libs: []
-  name: encode_thermostat_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 870
+  "y": 960
+  g: 7183c5f0ad762adb
   wires:
     - - d95299a44e1d7ed5
-  x: 870
-  'y': 880
-  z: b3d80c5dc947ec88
-- active: false
-  complete: payload
-  console: false
-  g: aea9d97e0563bd83
-  id: 778971897d2a7fdc
-  name: otherwise
-  statusType: auto
-  statusVal: ''
-  targetType: msg
-  tosidebar: true
-  tostatus: false
+- id: 778971897d2a7fdc
   type: debug
-  wires: []
-  x: 800
-  'y': 700
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: otherwise
+  active: false
+  tosidebar: true
+  console: false
+  tostatus: false
+  complete: payload
+  targetType: msg
+  statusVal: ""
+  statusType: auto
+  x: 800
+  "y": 740
+  g: aea9d97e0563bd83
+  wires: []
+- id: 83a24d85bf644847
+  type: function
+  z: b3d80c5dc947ec88
+  name: encode_furnace_command
+  func: >
     // Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)
 
+
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "1FFE6"; // FURNACE_COMMAND
 
+
     // --- Input Validation ---
+
     const topic = msg.topic;
+
     if (!topic) return null;
+
 
     const payload = msg.payload;
 
+
     const parts = topic.split("/");
+
     // Expected: homeassistant/climate/furnace_{instance}/{cmd}/set
+
     const entityPart = parts[2];
+
     if (!entityPart || !entityPart.startsWith("furnace_")) return null;
 
+
     const instanceMatch = entityPart.match(/furnace_(\d+)/);
+
     if (!instanceMatch) return null;
 
+
     const instance = parseInt(instanceMatch[1], 10);
+
     if (isNaN(instance)) return null;
 
-    // Read cached furnace state to preserve current settings while changing others
+
+    // Read cached furnace state to preserve current settings while changing
+    others
+
     const cached = global.get(`furnace_${instance}_status`, "file") || {};
+
     const cachedHeatSource =
       cached.raw_heat_source !== undefined ? cached.raw_heat_source : 0x00;
 
     // --- Determine Changes ---
+
     let newModeRaw =
       cached.operating_mode !== undefined ? cached.operating_mode : 0;
     let fanSpeed = 0xff; // Not Available (let furnace decide)
+
     let heatOutput = 0xff; // Not Available (let furnace decide)
+
 
     if (topic.endsWith("/mode/set")) {
       const val = payload.toString().toLowerCase();
@@ -401,27 +552,41 @@
       return null;
     }
 
+
     // --- Build Payload (1FFE6) ---
+
     const dataBytes = new Array(8).fill(0xff);
+
     dataBytes[0] = instance; // Byte 0: Instance
-    dataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); // Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)
+
+    dataBytes[1] = (newModeRaw & 0x03) | ((cachedHeatSource & 0x3f) << 2); //
+    Byte 1: Operating mode (bits 0-1) + Heat source (bits 2-7)
+
     dataBytes[2] = fanSpeed; // Byte 2: Fan Speed
+
     dataBytes[3] = heatOutput; // Byte 3: Heat Output Level
+
 
     const dataHex = dataBytes
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
     // --- Construct CAN ID ---
+
     const dgnInt = parseInt(DGN, 16);
+
     const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
+
     // --- Send Message ---
+
     node.send({
       topic: "can/send",
       payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
     });
+
 
     node.status({
       fill: "green",
@@ -429,22 +594,23 @@
       text: `Furnace ${instance} -> ${fanSpeed > 0 ? "ON" : "OFF"}`,
     });
 
+
     return null;
-  g: 7183c5f0ad762adb
-  id: 83a24d85bf644847
-  initialize: ''
-  libs: []
-  name: encode_furnace_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 860
+  "y": 880
+  g: 7183c5f0ad762adb
   wires:
     - - d95299a44e1d7ed5
-  x: 860
-  'y': 800
+- id: 86a191e1f24d802a
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_dc_dimmer_command_2
   func: |
     // Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)
 
@@ -555,28 +721,23 @@
     }
 
     return null;
-  g: aea9d97e0563bd83
-  id: 86a191e1f24d802a
-  initialize: ''
-  libs: []
-  name: encode_dc_dimmer_command_2
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 880
+  "y": 260
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 880
-  'y': 260
+- id: 89946e1c7a570ed0
+  type: switch
   z: b3d80c5dc947ec88
-- checkall: 'true'
-  g: aea9d97e0563bd83
-  id: 89946e1c7a570ed0
-  name: ''
-  outputs: 14
+  name: ""
   property: routingKey
   propertyType: msg
-  repair: false
   rules:
     - t: eq
       v: switch
@@ -618,7 +779,12 @@
       v: generator
       vt: str
     - t: else
-  type: switch
+  checkall: "true"
+  repair: false
+  outputs: 14
+  x: 570
+  "y": 480
+  g: aea9d97e0563bd83
   wires:
     - - 86a191e1f24d802a
     - - 927786f8f3f21075
@@ -634,10 +800,10 @@
     - - dd9e8f7c6b5a4321
     - - 6c7a6786667fe3dd
     - - 778971897d2a7fdc
-  x: 570
-  'y': 480
+- id: 8a5082e9f29a8080
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_lock_command
   func: |
     // Encodes LOCK_COMMAND messages (1FEE4)
 
@@ -699,34 +865,43 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: 8a5082e9f29a8080
-  initialize: ''
-  libs: []
-  name: encode_lock_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 850
+  "y": 380
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 850
-  'y': 380
+- id: 927786f8f3f21075
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: encode_water_pump_command
+  func: >
     // Encodes WATER_PUMP_COMMAND messages (1FFB2)
 
+
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "1FFB2";
 
+
     // --- Input Validation ---
+
     const command = msg.command; // Expects "ON" or "OFF"
 
+
     // --- Command Mapping ---
+
     let pumpCommandValue;
+
     switch (command) {
       case "ON":
         pumpCommandValue = 1; // 01b = Enable pump (standby)
@@ -741,53 +916,71 @@
         return null;
     }
 
+
     // --- Build Payload ---
-    // Byte 0 contains the command. All other bytes are set to 0xFF (Not Available)
+
+    // Byte 0 contains the command. All other bytes are set to 0xFF (Not
+    Available)
+
     const dataBytes = new Array(8).fill(0xff);
+
     dataBytes[0] = pumpCommandValue; // Byte 0: Pump command
+
 
     const dataHex = dataBytes
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
     // Construct the CAN ID
+
     const dgnInt = parseInt(DGN, 16);
+
     const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
+
     // --- Send Message ---
+
     node.send({
       topic: "can/send",
       payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
     });
 
+
     return null;
-  g: aea9d97e0563bd83
-  id: 927786f8f3f21075
-  initialize: ''
-  libs: []
-  name: encode_water_pump_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 870
+  "y": 300
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 870
-  'y': 300
-  z: b3d80c5dc947ec88
-- content: |-
-    # HA Commands
-    When you tap a button in Home Assistant - turn on a light, open a shade, lock a door -
-    this flow receives that request, figures out what type of device you're controlling
-    and translates the command appropriately then broadcast out on your RV devices.
-  id: 9f10dee2300ff666
+- id: 9f10dee2300ff666
   type: note
-  wires: []
-  x: 360
-  'y': 100
   z: b3d80c5dc947ec88
-- finalize: ''
+  content: >-
+    # HA Commands
+
+    When you tap a button in Home Assistant - turn on a light, open a shade,
+    lock a door -
+
+    this flow receives that request, figures out what type of device you're
+    controlling
+
+    and translates the command appropriately then broadcast out on your RV
+    devices.
+  x: 420
+  "y": 112
+  wires: []
+- id: a37da245aba53b96
+  type: function
+  z: b3d80c5dc947ec88
+  name: decode_ha_command
   func: |
     // Parse Home Assistant MQTT command topics
 
@@ -932,33 +1125,33 @@
 
     node.warn(`Unhandled MQTT topic: ${msg.topic}`);
     return null;
-  g: aea9d97e0563bd83
-  id: a37da245aba53b96
-  initialize: ''
-  libs: []
-  name: decode_ha_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 380
+  "y": 480
+  g: aea9d97e0563bd83
   wires:
     - - 89946e1c7a570ed0
-  x: 380
-  'y': 480
+- id: a3b957142479c075
+  type: link in
   z: b3d80c5dc947ec88
-- g: aea9d97e0563bd83
-  id: a3b957142479c075
-  l: true
+  name: HA in
   links:
     - 64c5e5cfd4382453
-  name: HA in
-  type: link in
+  x: 190
+  "y": 480
+  g: aea9d97e0563bd83
+  l: true
   wires:
     - - a37da245aba53b96
-  x: 190
-  'y': 480
+- id: a52b0f41097296b1
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_ac_load_command
   func: |
     // Encodes AC_LOAD_COMMAND messages (DGN 1FFBEh, §6.22.4)
 
@@ -1045,50 +1238,73 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: a52b0f41097296b1
-  initialize: ''
-  libs: []
-  name: encode_ac_load_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 860
+  "y": 620
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 860
-  'y': 620
+- id: a71ac1bd86bd3e13
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: encode_aquahot_command_2
+  func: >
     // Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
-    // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
+
+    // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating
+    priority.
+
 
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "FF2F";
 
+
     // --- Input Validation ---
+
     const topic = msg.topic;
+
     if (!topic) return null;
 
+
     const payload = msg.payload;
+
     const parts = topic.split("/");
+
     // Expected: homeassistant/climate/aquahot_zone_{z}/{cmd}/set
+
     const entityPart = parts[2];
+
     if (!entityPart || !entityPart.startsWith("aquahot_zone_")) return null;
 
+
     // E.g., aquahot_zone_1
+
     const zoneMatch = entityPart.match(/aquahot_zone_(\d+)/);
+
     if (!zoneMatch) return null;
+
     const zone = parseInt(zoneMatch[1], 10);
+
     if (isNaN(zone)) return null;
 
+
     // From decode_aquahot_status_2.js:
+
     // command_type 0x0a = Interior Heating Priority (on/off)
 
+
     let isHeating = false;
+
 
     if (topic.endsWith("/mode/set")) {
       const val = payload.toString().toLowerCase();
@@ -1112,29 +1328,45 @@
       return null;
     }
 
+
     // --- Build Payload (FF2F) ---
+
     const dataBytes = new Array(8).fill(0xff);
+
     dataBytes[0] = 0x01; // Byte 0: Instance
+
     dataBytes[1] = 0x0a; // Byte 1: Command Type (Interior Heating = 0x0a)
+
     dataBytes[2] = 0x00; // Byte 2: Reserved
-    dataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON, 0x00=OFF)
+
+    dataBytes[3] = isHeating ? 0x01 : 0x00; // Byte 3: Status (0x01=ON,
+    0x00=OFF)
+
     dataBytes[4] = 0x00;
+
     dataBytes[5] = 0x00;
+
 
     const dataHex = dataBytes
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
     // --- Construct CAN ID ---
+
     const dgnInt = parseInt(DGN, 16);
+
     const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
+
     // --- Send Message ---
+
     node.send({
       topic: "can/send",
       payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
     });
+
 
     node.status({
       fill: "blue",
@@ -1142,34 +1374,44 @@
       text: `Set Interior Heating Priority -> ${isHeating ? "ON" : "OFF"}`,
     });
 
+
     return null;
-  g: 7183c5f0ad762adb
-  id: a71ac1bd86bd3e13
-  initialize: ''
-  libs: []
-  name: encode_aquahot_command_2
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 870
+  "y": 920
+  g: 7183c5f0ad762adb
   wires:
     - - d95299a44e1d7ed5
-  x: 870
-  'y': 840
+- id: a8882b1f35300448
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: encode_aquahot_command_1
+  func: >
     // Encodes AquaHot Commands (EF64)
 
+
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const DESTINATION_ADDRESS = 0x9f; // Aqua-Hot Module
+
     const PRIORITY = 6; // Confirmed priority for Aqua-Hot control
+
     const PGN = "EF64";
+
     const PGN_INT = parseInt(PGN, 16);
+
     const CONTROL_BYTE = 0xab; // First data byte for all commands
 
+
     // --- Command Mapping (PGN EF64) ---
+
     const COMMAND_MAP = {
         // Diesel Burner Control
         burner: {
@@ -1193,9 +1435,14 @@
         },
     };
 
+
     // --- Input Validation ---
-    const instance = msg.instance; // Expects "burner", "ac_1", "ac_2", or "engine"
+
+    const instance = msg.instance; // Expects "burner", "ac_1", "ac_2", or
+    "engine"
+
     const command = msg.command; // Expects "ON" or "OFF"
+
 
     if (!instance || !COMMAND_MAP[instance]) {
         node.warn(
@@ -1204,6 +1451,7 @@
         return null;
     }
 
+
     if (!command || !COMMAND_MAP[instance][command]) {
         node.warn(
             `[encode_aquahot] Invalid command: "${command}". Expected "ON" or "OFF"`,
@@ -1211,70 +1459,89 @@
         return null;
     }
 
+
     // --- Build Payload ---
+
     const dataByte2 = COMMAND_MAP[instance][command];
 
+
     // Build the 8-byte data payload
+
     const dataBytes = new Array(8).fill(0xff);
+
     dataBytes[0] = CONTROL_BYTE; // AB
+
     dataBytes[1] = dataByte2; // The specific command byte
+
 
     const dataHex = dataBytes
         .map((byte) => byte.toString(16).padStart(2, "0"))
         .join("");
 
     // --- Construct CAN ID ---
-    // PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F) goes in the last byte
+
+    // PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F)
+    goes in the last byte
+
     const canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DESTINATION_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
+
     // --- Send Message ---
+
     node.send({
         topic: "can/send",
         payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
     });
 
+
     return null;
-  g: aea9d97e0563bd83
-  id: a8882b1f35300448
-  initialize: ''
-  libs: []
-  name: encode_aquahot_command_1
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 870
+  "y": 500
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 870
-  'y': 500
+- id: ae2d2a4f790d7cf9
+  type: inject
   z: b3d80c5dc947ec88
-- crontab: ''
   d: true
-  g: aea9d97e0563bd83
-  id: ae2d2a4f790d7cf9
-  name: ''
-  once: false
-  onceDelay: 0.1
-  payload: 19FED99F#FF7E00FFFFFF00FF
-  payloadType: str
+  name: ""
   props:
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
+  repeat: ""
+  crontab: ""
+  once: false
+  onceDelay: 0.1
   topic: can/send
-  type: inject
+  payload: 19FED99F#FF7E00FFFFFF00FF
+  payloadType: str
+  x: 1190
+  "y": 660
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 1190
-  'y': 660
-  z: b3d80c5dc947ec88
 - id: aea9d97e0563bd83
+  type: group
+  z: b3d80c5dc947ec88
   name: Home Assistant command encoding
+  x: 114
+  "y": 219
+  style:
+    label: true
+    stroke: "#777777"
   nodes:
     - 58d9a2789e4a1391
     - 6aa079d768e1571c
+    - 6c7a6786667fe3dd
     - 778971897d2a7fdc
     - 86a191e1f24d802a
     - 89946e1c7a570ed0
@@ -1290,14 +1557,10 @@
     - e25c9c82905dc476
     - ed9920dce79a233a
     - eea2c8f34cb0db28
-  style:
-    label: true
-    stroke: '#777777'
-  type: group
-  x: 114
-  'y': 219
+- id: d367ea017bd41347
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_autofill_command
   func: |
     // Encodes AUTOFILL_COMMAND messages (1FFB0)
 
@@ -1347,44 +1610,53 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: d367ea017bd41347
-  initialize: ''
-  libs: []
-  name: encode_autofill_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 850
+  "y": 420
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 850
-  'y': 420
+- id: d95299a44e1d7ed5
+  type: link out
   z: b3d80c5dc947ec88
-- g: 7183c5f0ad762adb
-  id: d95299a44e1d7ed5
-  l: true
+  name: "MQTT out: Retain FALSE"
+  mode: link
   links:
     - 74329f13cbbc528a
-  mode: link
-  name: 'MQTT out: Retain FALSE'
-  type: link out
-  wires: []
   x: 1290
-  'y': 840
+  "y": 920
+  g: 7183c5f0ad762adb
+  l: true
+  wires: []
+- id: dd9e8f7c6b5a4321
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
-    // Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
+  name: encode_waterheater_command_2
+  func: >
+    // Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and
+    FF2F (AQUAHOT_COMMAND_2)
+
     // Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
-    // Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
+
+    // Entity IDs: aquahot_diesel_burner, aquahot_electric_element,
+    aquahot_quiet_mode, aquahot_interior_heating
+
 
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 0x9e;
 
+
     const entityId = msg.entityId;
+
     const command = msg.command; // "ON" or "OFF"
 
+
     if (!entityId || !command) return null;
+
 
     function send1FE98(byte1, byte2) {
       // CAN ID: priority 6, DGN 1FE98, source address
@@ -1400,6 +1672,7 @@
       const dataHex = dataBytes.map(b => b.toString(16).padStart(2, "0")).join("");
       node.send({ topic: "can/send", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });
     }
+
 
     function sendFF2F(cmdType, isOn) {
       // CAN ID: priority 6, DGN FF2F, source address
@@ -1418,6 +1691,7 @@
       const dataHex = dataBytes.map(b => b.toString(16).padStart(2, "0")).join("");
       node.send({ topic: "can/send", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });
     }
+
 
     switch (entityId) {
       case "aquahot_diesel_burner":
@@ -1442,29 +1716,25 @@
         node.warn(`[encode_waterheater_command_2] Unknown entityId: ${entityId}`);
     }
 
+
     return null;
-  g: aea9d97e0563bd83
-  id: dd9e8f7c6b5a4321
-  initialize: ''
-  libs: []
-  name: encode_waterheater_command_2
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 880
+  "y": 660
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 880
-  'y': 660
+- id: e19247ab204a8e12
+  type: switch
   z: b3d80c5dc947ec88
-- checkall: 'true'
-  g: 7183c5f0ad762adb
-  id: e19247ab204a8e12
-  name: ''
-  outputs: 4
+  name: ""
   property: topic
   propertyType: msg
-  repair: false
   rules:
     - t: cont
       v: furnace
@@ -1476,16 +1746,21 @@
       v: thermostat_zone
       vt: str
     - t: else
-  type: switch
+  checkall: "true"
+  repair: false
+  outputs: 4
+  x: 570
+  "y": 920
+  g: 7183c5f0ad762adb
   wires:
     - - 83a24d85bf644847
     - - a71ac1bd86bd3e13
     - - 755a5ee01bb1179d
     - - 31e6105322d72319
-  x: 570
-  'y': 840
+- id: e25c9c82905dc476
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_dc_load_command
   func: |
     // Encodes DC_LOAD_COMMAND messages (DGN 1FFBCh, §6.23.4)
 
@@ -1578,21 +1853,21 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: e25c9c82905dc476
-  initialize: ''
-  libs: []
-  name: encode_dc_load_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 860
+  "y": 540
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 860
-  'y': 540
+- id: ed9920dce79a233a
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
+  name: encode_floor_heat_command
   func: |
     // Encodes FLOOR_HEAT_COMMAND messages (1FEFB)
 
@@ -1717,41 +1992,56 @@
     });
 
     return null;
-  g: aea9d97e0563bd83
-  id: ed9920dce79a233a
-  initialize: ''
-  libs: []
-  name: encode_floor_heat_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 870
+  "y": 460
+  g: aea9d97e0563bd83
   wires:
     - - 6aa079d768e1571c
-  x: 870
-  'y': 460
+- id: eea2c8f34cb0db28
+  type: function
   z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
+  name: encode_generic_indicator_command
+  func: >
     // Encodes GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)
+
     // Handles both routing keys:
-    //   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF non-group)
-    //   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group bitmap)
+
+    //   switch_i → instance-targeted command (byte 0 = instance, byte 1 = 0xFF
+    non-group)
+
+    //   switch_g → group-targeted command   (byte 0 = 0xFF,      byte 1 = group
+    bitmap)
+
 
     const PRIORITY = 6;
+
     const DGN = "1FED9";
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
+
     const routingKey = msg.routingKey;
-    const instance = msg.instance; // instance number OR group number depending on routingKey
+
+    const instance = msg.instance; // instance number OR group number depending
+    on routingKey
+
 
     if (typeof instance !== "number") {
       node.warn(`[encode_generic_indicator_command] Invalid instance: ${instance}`);
       return null;
     }
 
+
     // Build byte 0 (instance) and byte 1 (group bitmap)
+
     let byte0, byte1;
+
 
     if (routingKey === "switch_i") {
       if (instance < 1 || instance > 250) {
@@ -1779,19 +2069,29 @@
       return null;
     }
 
+
     // Parse HA command — JSON schema: msg.payload is always an object
+
     const command = msg.payload.state;
+
     const brightnessIn = msg.payload.brightness;
 
+
     // Resolve entity ID for dimmable/brightness lookups
+
     const entityId =
       routingKey === "switch_g" ? `switch_g_${instance}` : `switch_i_${instance}`;
     const dimmableIndicators = global.get("dimmableIndicators", "file") || [];
+
     const isDimmable = dimmableIndicators.includes(entityId);
 
+
     // Determine brightness raw value (0-200 scale, 0.5% per step)
+
     // HA sends brightness as 0-100% (brightness_scale: 100 set in discovery)
+
     let brightnessRaw;
+
 
     if (command === "OFF") {
       brightnessRaw = 0;
@@ -1805,16 +2105,25 @@
       brightnessRaw = 200; // full brightness for non-dimmable ON
     }
 
-    // Store last brightness (in 0-100% scale) and state for recall / optimistic update
+
+    // Store last brightness (in 0-100% scale) and state for recall / optimistic
+    update
+
     if (command !== "OFF" && brightnessRaw > 0) {
       global.set("indicatorBrightness_" + entityId, brightnessRaw / 2, "file");
     }
+
     global.set("indicatorState_" + entityId, command, "file");
 
+
     // Optimistic HA state publish — no CAN echo expected for self-sent commands
-    const storedBrightness = global.get("indicatorBrightness_" + entityId, "file");
+
+    const storedBrightness = global.get("indicatorBrightness_" + entityId,
+    "file");
+
 
     const stateObj = { state: command };
+
     if (command === "ON") {
       if (
         isDimmable &&
@@ -1828,7 +2137,9 @@
       }
     }
 
+
     // Build 8-byte data payload per §6.26.2 Table 6.26.2b
+
     const dataBytes = [
       byte0, // Byte 0: Instance
       byte1, // Byte 1: Group bitmap
@@ -1840,15 +2151,21 @@
       0xff, // Byte 7: Reserved
     ];
 
+
     const dataHex = dataBytes
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
     const dgnInt = parseInt(DGN, 16);
+
     const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
+
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
-    // Send both through output 1: CAN frame to bridge, then optimistic HA state update
+
+    // Send both through output 1: CAN frame to bridge, then optimistic HA state
+    update
+
     return [
       [
         {
@@ -1862,74 +2179,14 @@
         },
       ],
     ];
-  g: aea9d97e0563bd83
-  id: eea2c8f34cb0db28
-  initialize: ''
-  libs: []
-  name: encode_generic_indicator_command
-  noerr: 0
   outputs: 1
   timeout: 0
-  type: function
-  wires:
-    - - 6aa079d768e1571c
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
   x: 890
-  'y': 580
-  z: b3d80c5dc947ec88
-- finalize: ''
-  func: |
-    // Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)
-    // §6.35.3 — preferred method for network-initiated start/stop (respects Quiet Time)
-
-    const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-    const PRIORITY = 6;
-    const DGN = "1FEFF";
-
-    const command = msg.command; // Expects "ON" or "OFF"
-
-    let demandByte;
-    switch (command) {
-      case "ON":
-        demandByte = 0x01; // bits 0-1 = 01 = Generator power demanded
-        break;
-      case "OFF":
-        demandByte = 0x00; // bits 0-1 = 00 = No demand
-        break;
-      default:
-        node.warn(
-          `[encode_generator_demand_command] Invalid command: "${command}". Expected "ON" or "OFF"`,
-        );
-        return null;
-    }
-
-    const dataBytes = new Array(8).fill(0xff);
-    dataBytes[0] = demandByte;
-
-    const dataHex = dataBytes
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-
-    const dgnInt = parseInt(DGN, 16);
-    const canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;
-    const canIdHex = canIdInt.toString(16).padStart(8, "0");
-
-    node.send({
-      topic: "can/send",
-      payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
-    });
-
-    return null;
+  "y": 580
   g: aea9d97e0563bd83
-  id: 6c7a6786667fe3dd
-  initialize: ''
-  libs: []
-  name: encode_generator_demand_command
-  noerr: 0
-  outputs: 1
-  timeout: 0
-  type: function
   wires:
     - - 6aa079d768e1571c
-  x: 830
-  'y': 600
-  z: b3d80c5dc947ec88

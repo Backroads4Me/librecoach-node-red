@@ -4,7 +4,7 @@
   env: []
   normalizedLabel: command-routing
   disabled: false
-  info: ''
+  info: ""
 - id: 00b1afc9a96aca8e
   type: link in
   z: 7ecdba18640c1184
@@ -13,7 +13,7 @@
     - 398683928338f9c6
     - 4fa9b9fdc36c83da
   x: 150
-  'y': 380
+  "y": 380
   l: true
   wires:
     - - c063a09a82cdd204
@@ -21,11 +21,15 @@
   type: function
   z: 7ecdba18640c1184
   name: unique_command
-  func: |
-    // Passes through the first message with each unique dgn_name; drops duplicates.
+  func: >
+    // Passes through the first message with each unique dgn_name; drops
+    duplicates.
+
     let uniqueCommand = flow.get("uniqueCommand") || [];
 
+
     const newMsgStr = JSON.stringify(msg.payload.dgn_name);
+
 
     if (!uniqueCommand.includes(newMsgStr)) {
         uniqueCommand.push(newMsgStr);
@@ -33,15 +37,16 @@
         return msg;
     }
 
+
     return null;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 650
-  'y': 700
+  "y": 700
   g: 081183d6c363e792
   wires:
     - - bc59e15bf069f17d
@@ -50,9 +55,9 @@
   z: 7ecdba18640c1184
   name: Rest unique list
   x: 534
-  'y': 599
+  "y": 599
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 03744ec33f2e6776
@@ -69,21 +74,21 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ''
+  statusVal: ""
   statusType: auto
   x: 950
-  'y': 520
+  "y": 520
   g: 54c9dde7767b8935
   wires: []
 - id: 102272ba5b34f5e1
   type: link out
   z: 7ecdba18640c1184
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1370
-  'y': 300
+  "y": 300
   l: true
   wires: []
 - id: 4f86998be2551032
@@ -96,11 +101,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 920
-  'y': 460
+  "y": 460
   g: 54c9dde7767b8935
   wires:
     - []
@@ -108,13 +113,18 @@
   type: function
   z: 7ecdba18640c1184
   name: unique_dc_dimmer_cmd
-  func: |-
-    // Retrieve existing messages from flow context, or initialize as empty array
+  func: >-
+    // Retrieve existing messages from flow context, or initialize as empty
+    array
+
     let uniqueDcDimmerCmd = global.get("uniqueDcDimmerCmd") || [];
+
 
     let newMsgStr = JSON.stringify(msg.payload.data_payload);
 
+
     // Check if it's a new unique message
+
     if (!uniqueDcDimmerCmd.includes(newMsgStr)) {
         uniqueDcDimmerCmd.push(newMsgStr);
         global.set("uniqueDcDimmerCmd", uniqueDcDimmerCmd);
@@ -123,16 +133,18 @@
         return msg;
     }
 
+
     // Return nothing if duplicate
+
     return null;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 670
-  'y': 520
+  "y": 520
   g: 54c9dde7767b8935
   wires:
     - - 0f09356f283bfae7
@@ -141,9 +153,9 @@
   z: 7ecdba18640c1184
   name: Rest unique list
   x: 534
-  'y': 419
+  "y": 419
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 0f09356f283bfae7
@@ -158,15 +170,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
-  payload: ''
+  topic: ""
+  payload: ""
   payloadType: date
   x: 650
-  'y': 460
+  "y": 460
   g: 54c9dde7767b8935
   wires:
     - - 4f86998be2551032
@@ -174,40 +186,59 @@
   type: function
   z: 7ecdba18640c1184
   name: status_dc_dimmer_cmd
-  func: |
+  func: >
     // HA Status Publisher for DC Dimmer — inferred from COMMAND_2 (DGN 1FEDBh)
-    // Self-creating: publishes MQTT discovery on first valid command per instance.
+
+    // Self-creating: publishes MQTT discovery on first valid command per
+    instance.
+
     // Uses switch_N entity naming (same as STATUS_3 path).
+
     // Output 1: MQTT messages [messages] (discovery + state)
+
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
+
     const p = msg.payload;
+
     const instance = p.instance;
+
     const commandRaw = p.command_raw;
+
     const levelRaw = p.desired_level_raw;
+
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
       return null;
     }
 
+
     // This node is only a fallback for RVs that never acknowledge light changes
-    // with DC_DIMMER_STATUS_* messages. Once real status is seen for an instance,
+
+    // with DC_DIMMER_STATUS_* messages. Once real status is seen for an
+    instance,
+
     // let the status-based publisher own discovery and state permanently.
+
     const statusBackedInstances =
       global.get("dcDimmerStatusBackedInstances", "file") || [];
     if (statusBackedInstances.includes(instance)) {
       return null;
     }
 
+
     if (typeof commandRaw !== "number") {
       return null;
     }
 
+
     // --- Command-to-state mapping ---
+
     // Returns: "ON", "OFF", or null (ignore / no state change)
+
     function inferState(cmd, level) {
       switch (cmd) {
         case 0x01: // On Duration
@@ -232,16 +263,23 @@
       }
     }
 
+
     const haStatus = inferState(commandRaw, levelRaw);
+
 
     if (haStatus === null) {
       return null;
     }
 
+
     // --- Dimmable detection ---
+
     const dimmableLights = global.get("dimmableLights", "file") || [];
+
     let isDimmable = dimmableLights.includes(instance);
+
     let needsRecreate = false;
+
 
     function markDimmable() {
       if (!isDimmable) {
@@ -252,36 +290,56 @@
       }
     }
 
+
     // Intermediate levels (1-199 raw = 0.5%-99.5%) indicate dimmable
+
     if (typeof levelRaw === "number" && levelRaw >= 1 && levelRaw <= 199) {
       markDimmable();
     }
 
+
     // Ramp commands indicate dimmable regardless of level
+
     const rampCommands = [0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x15];
+
     if (rampCommands.includes(commandRaw)) {
       markDimmable();
     }
 
+
     // --- Brightness from COMMAND_2 ---
+
     let brightness;
+
     if (typeof levelRaw === "number" && levelRaw <= 200) {
       // 0-200 raw → 0-100%
       brightness = parseFloat((levelRaw * 0.5).toFixed(1));
     }
-    // Special values (250=Dimmed Memory, 251=Master Memory, scenes) → no brightness
+
+    // Special values (250=Dimmed Memory, 251=Master Memory, scenes) → no
+    brightness
+
     // (actual level unknown — report ON without brightness)
 
+
     // --- Entity identifiers — switch_N (same as STATUS_3 path) ---
+
     const entityId = `switch_${instance}`;
+
     const stateTopic = `homeassistant/light/${entityId}/state`;
+
     const commandTopic = `homeassistant/light/${entityId}/set`;
+
 
     const messages = [];
 
+
     // --- Self-creating discovery ---
+
     const CREATED_KEY = "dcDimmerCmdCreated";
+
     const created = flow.get(CREATED_KEY) || {};
+
 
     if (!created[instance] || needsRecreate) {
       const config = {
@@ -316,13 +374,18 @@
       flow.set(CREATED_KEY, created);
     }
 
+
     // --- Store last brightness for dimmable recall on toggle ---
+
     if (isDimmable && typeof brightness === "number" && brightness > 0) {
       global.set("dimmerBrightness_" + instance, brightness, "file");
     }
 
+
     // --- Build JSON state payload ---
+
     const stateObj = { state: haStatus };
+
 
     if (haStatus === "ON") {
       if (isDimmable) {
@@ -335,22 +398,25 @@
       }
     }
 
+
     messages.push({
       topic: stateTopic,
       payload: JSON.stringify(stateObj),
     });
 
+
     if (messages.length === 0) return null;
+
 
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1030
-  'y': 300
+  "y": 300
   wires:
     - - 102272ba5b34f5e1
 - id: 962bb2f334b27886
@@ -363,7 +429,7 @@
     their state, even when the lights don't broadcast a status response.
     If a panel says "turn on light 17," we now know light 17 exists and is on.
   x: 310
-  'y': 120
+  "y": 132
   wires: []
 - id: b07052c69f7b857c
   type: function
@@ -516,11 +582,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 680
-  'y': 300
+  "y": 300
   wires:
     - - 905a5e9fdcc1292a
 - id: b2cbbdbaab1fc227
@@ -531,15 +597,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
-  payload: ''
+  topic: ""
+  payload: ""
   payloadType: date
   x: 650
-  'y': 640
+  "y": 640
   g: 081183d6c363e792
   wires:
     - - f96e5b3b013a2b8f
@@ -553,10 +619,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ''
+  statusVal: ""
   statusType: auto
   x: 930
-  'y': 700
+  "y": 700
   g: 081183d6c363e792
   wires: []
 - id: c063a09a82cdd204
@@ -591,11 +657,11 @@
       v: FLOOR_HEAT_COMMAND
       vt: str
     - t: else
-  checkall: 'true'
+  checkall: "true"
   repair: false
   outputs: 9
   x: 410
-  'y': 380
+  "y": 380
   wires:
     - - b07052c69f7b857c
     - - e5f557604a31d3df
@@ -610,25 +676,36 @@
   type: function
   z: 7ecdba18640c1184
   name: status_generic_indicator_cmd
-  func: |
-    // Self-creating HA Status Publisher for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)
+  func: >
+    // Self-creating HA Status Publisher for GENERIC_INDICATOR_COMMAND (DGN
+    1FED9h, §6.26.2)
+
     // Eavesdrops on indicator commands to infer light state.
+
     // Entity naming: switch_i_N (instance) or switch_g_N (group).
+
     // Routing keys: "switch_i" (instance), "switch_g" (group).
+
     // Output 1: [messages] → MQTT Out
+
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
+
     const p = msg.payload;
+
 
     if (typeof p.instance !== "number" || typeof p.function_raw !== "number") {
       return null;
     }
 
+
     // --- State inference ---
+
     // Only 0x00 and 0x11 reach here (decoder gates all other function types).
+
     function inferState(fn, bRaw) {
       if (typeof bRaw === "number" && bRaw <= 200) {
         return bRaw > 0 ? "ON" : "OFF";
@@ -636,19 +713,27 @@
       return null;
     }
 
+
     const haStatus = inferState(p.function_raw, p.brightness_raw);
+
     if (haStatus === null) {
       return null;
     }
 
+
     // Brightness as 0-100%
+
     let brightness;
+
     if (typeof p.brightness_raw === "number" && p.brightness_raw <= 200) {
       brightness = parseFloat((p.brightness_raw * 0.5).toFixed(1));
     }
 
+
     // --- Build target list ---
+
     const targets = [];
+
 
     if (p.instance >= 1 && p.instance <= 250) {
       // Specific instance
@@ -674,13 +759,22 @@
       return null;
     }
 
+
     // --- Dimmable detection ---
+
     // Uses separate array from DC_DIMMER/DC_LOAD to avoid cross-contamination
-    // (those store numeric instances; indicators use entityId strings for group support)
+
+    // (those store numeric instances; indicators use entityId strings for group
+    support)
+
     const dimmableIndicators = global.get("dimmableIndicators", "file") || [];
+
     const CREATED_KEY = "genericIndicatorCreated";
+
     const created = flow.get(CREATED_KEY) || {};
+
     const messages = [];
+
 
     for (const { entityId, displayName } of targets) {
       let isDimmable = dimmableIndicators.includes(entityId);
@@ -754,65 +848,92 @@
       });
     }
 
+
     if (messages.length === 0) return null;
 
+
     global.set("dimmableIndicators", dimmableIndicators, "file");
+
     flow.set(CREATED_KEY, created);
+
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1050
-  'y': 360
+  "y": 360
   wires:
     - - 102272ba5b34f5e1
 - id: e5f557604a31d3df
   type: function
   z: 7ecdba18640c1184
   name: decode_generic_indicator_command
-  func: |
+  func: >
     // Decoder for GENERIC_INDICATOR_COMMAND (DGN 1FED9h, §6.26.2)
+
     // Input: msg.payload from decode_rvc_can (dgn, dgn_name, data_payload)
-    // Output: decoded fields merged into payload, or null for unhandled function types.
-    // Unhandled types are logged to flow context "unknownGenericIndicatorCmd" for future analysis.
+
+    // Output: decoded fields merged into payload, or null for unhandled
+    function types.
+
+    // Unhandled types are logged to flow context "unknownGenericIndicatorCmd"
+    for future analysis.
+
 
     if (!msg.payload || typeof msg.payload !== "object") {
         node.warn("Invalid payload: expected object");
         return null;
     }
 
+
     const incomingPayload = msg.payload;
+
     const { dgn, data_payload } = incomingPayload;
+
 
     if (!dgn || !data_payload) {
         node.warn("Missing required fields: dgn and/or data_payload");
         return null;
     }
 
+
     if (typeof data_payload !== "string" || data_payload.length < 16) {
         node.warn("Invalid data_payload: expected 8-byte hex string");
         return null;
     }
 
+
     const d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));
+
     if (d.some(isNaN)) {
         node.warn("Invalid hex in data_payload");
         return null;
     }
 
+
     // Byte 0: Instance
-    // 1-250 = specific instance, 0 = all instances, 255 = no instances (use group)
+
+    // 1-250 = specific instance, 0 = all instances, 255 = no instances (use
+    group)
+
     const instance = d[0];
 
+
     // Byte 1: Group bitmap
+
     // Bits 0-6 correspond to groups 1-7 (0 bit = command applies to that group)
+
     // Bit 7 must be 0 for a group command; 0xFF = non-group command
+
     const groupRaw = d[1];
+
     const isGroupCommand = (groupRaw & 0x80) === 0;
+
     const groups = [];
+
     if (isGroupCommand) {
         for (let i = 0; i < 7; i++) {
             if ((groupRaw & (1 << i)) === 0) {
@@ -821,9 +942,13 @@
         }
     }
 
+
     // Byte 2: Brightness (Table 5.3, 0-200, 0.5% per step)
+
     const brightnessRaw = d[2];
+
     let brightness;
+
     if (brightnessRaw <= 200) {
         brightness = parseFloat((brightnessRaw * 0.5).toFixed(1));
     } else if (brightnessRaw === 255) {
@@ -832,12 +957,18 @@
         brightness = "Reserved";
     }
 
+
     // Byte 3 bits 0-3: Bank Select (0-13; 0xF = banking not supported)
+
     const bankSelect = d[3] & 0x0f;
 
+
     // Byte 4: Duration
+
     const durationRaw = d[4];
+
     let duration;
+
     if (durationRaw === 0) {
         duration = "Momentary";
     } else if (durationRaw <= 240) {
@@ -850,8 +981,11 @@
         duration = "Reserved";
     }
 
+
     // Byte 6: Function
+
     const functionRaw = d[6];
+
     const functionNames = {
         0x00: "Set Brightness",
         0x01: "LED1 Off, LED2 Off",
@@ -861,15 +995,21 @@
         0x11: "Ramp Brightness",
         0x21: "Flash Alternate",
     };
-    const functionName = functionNames[functionRaw] ?? `Unknown (${functionRaw})`;
+
+    const functionName = functionNames[functionRaw] ?? `Unknown
+    (${functionRaw})`;
+
 
     // Classification: only pass through function types we currently handle.
+
     // Everything else is logged for future analysis and dropped.
+
     const HANDLED_FUNCTIONS = new Set([
         0x00, // Set Brightness → light on/off/dim
         0x11, // Ramp Brightness → dimmable light
         // 0x01-0x04 (individual LED control) → unknown context until seen in the wild
     ]);
+
 
     if (!HANDLED_FUNCTIONS.has(functionRaw)) {
         const log = flow.get("unknownGenericIndicatorCmd") || {};
@@ -893,6 +1033,7 @@
         return null;
     }
 
+
     msg.payload = {
         ...incomingPayload,
         dgn,
@@ -910,7 +1051,10 @@
         function: functionName,
     };
 
-    // Persist state + brightness to file store (shared with encoder and optimistic updater)
+
+    // Persist state + brightness to file store (shared with encoder and
+    optimistic updater)
+
     const haState =
         typeof brightnessRaw === "number" && brightnessRaw <= 200
             ? brightnessRaw > 0
@@ -919,7 +1063,9 @@
             : null;
 
     // Resolve entity IDs from the decoded command
+
     const entityTargets = [];
+
     if (instance >= 1 && instance <= 250) {
         entityTargets.push(`switch_i_${instance}`);
     } else if (instance === 255 && isGroupCommand) {
@@ -927,6 +1073,7 @@
             entityTargets.push(`switch_g_${g}`);
         }
     }
+
 
     for (const eid of entityTargets) {
         if (haState !== null) {
@@ -941,15 +1088,16 @@
         }
     }
 
+
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 690
-  'y': 360
+  "y": 360
   wires:
     - - e38432107a5eaea7
 - id: f96e5b3b013a2b8f
@@ -962,11 +1110,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 920
-  'y': 640
+  "y": 640
   g: 081183d6c363e792
   wires:
     - []

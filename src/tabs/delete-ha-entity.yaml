@@ -4,15 +4,15 @@
   env: []
   normalizedLabel: delete-ha-entity
   disabled: false
-  info: ''
+  info: ""
 - id: 04e375b0c463df72
   type: group
   z: 222c995b7790b8de
   name: Delete Home Assistant Entity
   x: 74
-  'y': 179
+  "y": 179
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 802228bc8d89d80a
@@ -28,7 +28,7 @@
     # Delete HA Entity
     Removes devices from Home Assistant when they're no longer needed.
   x: 330
-  'y': 80
+  "y": 92
   wires: []
 - id: 802228bc8d89d80a
   type: inject
@@ -41,13 +41,13 @@
     - p: entityId
       v: black
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
+  topic: ""
   x: 190
-  'y': 220
+  "y": 220
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
@@ -62,33 +62,33 @@
     - p: entityId
       v: aqua_hot_diesel_burner
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
+  topic: ""
   x: 180
-  'y': 340
+  "y": 340
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
 - id: 9539a951b2c7a1a9
   type: inject
   z: 222c995b7790b8de
-  name: ''
+  name: ""
   props:
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
   topic: homeassistant/sensor/librecoach_system_librecoach_config_download/config
-  payload: ''
+  payload: ""
   payloadType: str
   x: 170
-  'y': 400
+  "y": 400
   g: 04e375b0c463df72
   wires:
     - - d38c75bc1474be23
@@ -109,11 +109,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 420
-  'y': 280
+  "y": 280
   g: 04e375b0c463df72
   wires:
     - - d38c75bc1474be23
@@ -126,27 +126,27 @@
       v: switch
       vt: str
     - p: entityId
-      v: '58'
+      v: "58"
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
+  topic: ""
   x: 190
-  'y': 280
+  "y": 280
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
 - id: d38c75bc1474be23
   type: link out
   z: 222c995b7790b8de
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 710
-  'y': 280
+  "y": 280
   g: 04e375b0c463df72
   l: true
   wires: []

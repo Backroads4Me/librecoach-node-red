@@ -4,7 +4,7 @@
   env: []
   normalizedLabel: victron
   disabled: false
-  info: ''
+  info: ""
 - id: 0b2b4c52d68092cc
   type: inject
   z: 1fde0c4ffb03727e
@@ -13,15 +13,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: true
-  onceDelay: '18'
-  topic: ''
-  payload: ''
+  onceDelay: "18"
+  topic: ""
+  payload: ""
   payloadType: date
   x: 280
-  'y': 740
+  "y": 720
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -30,7 +30,7 @@
   z: 1fde0c4ffb03727e
   name: Victron HA in
   topic: librecoach/victron/set/+/+/#
-  qos: '2'
+  qos: "2"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -38,7 +38,7 @@
   rh: 0
   inputs: 0
   x: 210
-  'y': 880
+  "y": 860
   g: 8aac091f0fffbf22
   wires:
     - - eced66f05a1796cd
@@ -46,25 +46,38 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_store_devices
-  func: |
+  func: >
     const victronEnabled = global.get("victronEnabled");
+
     if (!victronEnabled) return null;
 
+
     // Store active Victron device instances from ProductName topics
+
     // Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName
 
+
     const topic = msg.topic;
+
     if (!topic) return null;
 
+
     const parts = topic.split("/");
+
     if (parts.length < 5) return null;
 
+
     const serviceType = parts[2];
+
     const instance = parts[3];
+
     const key = `${serviceType}_${instance}`;
 
+
     // Extract product name from payload
+
     let productName = "";
+
     if (typeof msg.payload === "string") {
       try {
         productName = JSON.parse(msg.payload).value || "";
@@ -75,8 +88,13 @@
       productName = msg.payload.value || "";
     }
 
-    // Build short name from first two alpha words of product name (skip model numbers)
-    const alphaWords = productName.split(/\s+/).filter((w) => /^[a-zA-Z]/.test(w));
+
+    // Build short name from first two alpha words of product name (skip model
+    numbers)
+
+    const alphaWords = productName.split(/\s+/).filter((w) =>
+    /^[a-zA-Z]/.test(w));
+
     const shortName = alphaWords
       .slice(0, 2)
       .join("_")
@@ -84,15 +102,20 @@
       .toLowerCase();
 
     // Get or initialize the active devices object
+
     let victronDevices = global.get("victronDevices", "file") || {};
 
+
     // Store or update device entry
+
     victronDevices[key] = {
       productName: productName,
       shortName: shortName || serviceType,
     };
 
+
     global.set("victronDevices", victronDevices, "file");
+
 
     node.status({
       fill: "green",
@@ -100,15 +123,16 @@
       text: `${Object.keys(victronDevices).length} active devices`,
     });
 
+
     return null;
   outputs: 0
-  timeout: ''
+  timeout: ""
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 760
-  'y': 1060
+  "y": 1040
   g: 8aac091f0fffbf22
   wires: []
 - id: 19993b80c1009e61
@@ -119,11 +143,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 410
-  'y': 400
+  "y": 380
   g: 8aac091f0fffbf22
   wires:
     - - 89759b3d2d9812c8
@@ -135,15 +159,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: true
-  onceDelay: '0.1'
-  topic: ''
-  payload: ''
+  onceDelay: "0.1"
+  topic: ""
+  payload: ""
   payloadType: date
   x: 240
-  'y': 960
+  "y": 940
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f6780b
@@ -154,7 +178,7 @@
   links:
     - 1e244bad0304bb74
   x: 1050
-  'y': 1000
+  "y": 980
   g: 3ffa68cfd2195db1
   l: true
   wires:
@@ -164,7 +188,7 @@
   z: 1fde0c4ffb03727e
   name: Victron ProductName
   topic: N/+/+/+/ProductName
-  qos: '2'
+  qos: "2"
   datatype: auto-detect
   broker: 68237e1473ec01aa
   nl: false
@@ -172,7 +196,7 @@
   rh: 0
   inputs: 0
   x: 240
-  'y': 1060
+  "y": 1040
   g: 8aac091f0fffbf22
   wires:
     - - 9be2b9ec5c4f51d4
@@ -181,7 +205,7 @@
   z: 1fde0c4ffb03727e
   name: Victron Instance
   topic: N/+/system/0/Serial
-  qos: '2'
+  qos: "2"
   datatype: auto-detect
   broker: 68237e1473ec01aa
   nl: false
@@ -189,7 +213,7 @@
   rh: 0
   inputs: 0
   x: 220
-  'y': 360
+  "y": 340
   g: 8aac091f0fffbf22
   wires:
     - - 19993b80c1009e61
@@ -215,32 +239,32 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 830
-  'y': 700
+  "y": 680
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
 - id: 3fd699a116881ab0
   type: delay
   z: 1fde0c4ffb03727e
-  name: ''
+  name: ""
   pauseType: delay
-  timeout: '1'
+  timeout: "1"
   timeoutUnits: seconds
-  rate: '1'
-  nbRateUnits: '1'
+  rate: "1"
+  nbRateUnits: "1"
   rateUnits: second
-  randomFirst: '1'
-  randomLast: '5'
+  randomFirst: "1"
+  randomLast: "5"
   randomUnits: seconds
   drop: false
   allowrate: false
   outputs: 1
   x: 720
-  'y': 420
+  "y": 400
   g: 8aac091f0fffbf22
   wires:
     - - 48292ec85eb70ee5
@@ -249,10 +273,10 @@
   z: 1fde0c4ffb03727e
   name: Rest unique list
   x: 954
-  'y': 959
+  "y": 939
   g: 8aac091f0fffbf22
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 2343c8c12f2081fa
@@ -309,11 +333,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 920
-  'y': 460
+  "y": 440
   g: 8aac091f0fffbf22
   wires:
     - - e371075d4dbfc113
@@ -324,15 +348,15 @@
   name: On start
   props:
     - p: reset
-      v: 'true'
+      v: "true"
       vt: bool
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: true
-  onceDelay: '0.3'
-  topic: ''
+  onceDelay: "0.3"
+  topic: ""
   x: 220
-  'y': 600
+  "y": 580
   g: 8aac091f0fffbf22
   wires:
     - - a95d74d20270f69b
@@ -344,15 +368,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: true
-  onceDelay: '48'
-  topic: ''
-  payload: ''
+  onceDelay: "48"
+  topic: ""
+  payload: ""
   payloadType: date
   x: 340
-  'y': 780
+  "y": 760
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -364,15 +388,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: true
-  onceDelay: '63'
-  topic: ''
-  payload: ''
+  onceDelay: "63"
+  topic: ""
+  payload: ""
   payloadType: date
   x: 400
-  'y': 820
+  "y": 800
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -385,28 +409,28 @@
     - db3ce2f66f852ca6
     - b1b68ff387e01a3a
   x: 1270
-  'y': 540
+  "y": 520
   g: 8aac091f0fffbf22
   l: true
   wires: []
 - id: 89759b3d2d9812c8
   type: delay
   z: 1fde0c4ffb03727e
-  name: ''
+  name: ""
   pauseType: delay
-  timeout: '1'
+  timeout: "1"
   timeoutUnits: days
-  rate: '1'
-  nbRateUnits: '1'
+  rate: "1"
+  nbRateUnits: "1"
   rateUnits: day
-  randomFirst: '1'
-  randomLast: '5'
+  randomFirst: "1"
+  randomLast: "5"
   randomUnits: seconds
   drop: false
   allowrate: false
   outputs: 1
   x: 560
-  'y': 420
+  "y": 400
   g: 8aac091f0fffbf22
   wires:
     - - 3fd699a116881ab0
@@ -415,9 +439,9 @@
   z: 1fde0c4ffb03727e
   name: Victron GX device configuration
   x: 114
-  'y': 299
+  "y": 279
   style:
-    stroke: '#777777'
+    stroke: "#777777"
     label: true
   nodes:
     - 0b2b4c52d68092cc
@@ -464,7 +488,7 @@
   links:
     - 88e5fa035bedb48c
   x: 230
-  'y': 460
+  "y": 440
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -475,7 +499,7 @@
   z: 1fde0c4ffb03727e
   name: Victron MQTT
   topic: N/+/#
-  qos: '2'
+  qos: "2"
   datatype: auto-detect
   broker: 68237e1473ec01aa
   nl: false
@@ -483,7 +507,7 @@
   rh: 0
   inputs: 0
   x: 210
-  'y': 540
+  "y": 520
   g: 8aac091f0fffbf22
   wires:
     - - a95d74d20270f69b
@@ -498,34 +522,33 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1320
-  'y': 1060
+  "y": 1040
   g: 3ffa68cfd2195db1
   wires:
     - []
 - id: 943309ad88255256
   type: rbe
   z: 1fde0c4ffb03727e
-  name: ''
+  name: ""
   func: rbe
-  gap: ''
-  start: ''
+  gap: ""
+  start: ""
   inout: out
   septopics: true
   property: payload
   topi: topic
   x: 410
-  'y': 340
+  "y": 320
   g: 8aac091f0fffbf22
   wires:
     - - e1032a6a79ae3e4c
 - id: 990c3568d504c86e
   type: note
   z: 1fde0c4ffb03727e
-  name: ''
   content: |-
     # Victron
     ## For the Victron functionality to work you'll need:
@@ -534,37 +557,37 @@
     - GX device LAN network security set to Unsecured
     - MQTT enabed on the GX device
   x: 350
-  'y': 140
+  "y": 140
   wires: []
 - id: 9be2b9ec5c4f51d4
   type: rbe
   z: 1fde0c4ffb03727e
-  name: ''
+  name: ""
   func: rbe
-  gap: ''
-  start: ''
+  gap: ""
+  start: ""
   inout: out
   septopics: true
   property: payload
   topi: topic
   x: 450
-  'y': 1060
+  "y": 1040
   g: 8aac091f0fffbf22
   wires:
     - - 1284b5e380db32be
 - id: a95d74d20270f69b
   type: rbe
   z: 1fde0c4ffb03727e
-  name: ''
+  name: ""
   func: rbe
-  gap: ''
-  start: ''
+  gap: ""
+  start: ""
   inout: out
   septopics: true
   property: payload
   topi: topic
   x: 370
-  'y': 540
+  "y": 520
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f67801
@@ -575,7 +598,7 @@
   links:
     - 71ac45fb64bf70c9
   x: 230
-  'y': 1140
+  "y": 1120
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -583,12 +606,12 @@
 - id: bd38c37850a3e832
   type: link out
   z: 1fde0c4ffb03727e
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1290
-  'y': 620
+  "y": 600
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -596,17 +619,17 @@
   type: mqtt out
   z: 1fde0c4ffb03727e
   name: Victron out
-  topic: ''
-  qos: ''
-  retain: 'false'
-  respTopic: ''
-  contentType: ''
-  userProps: ''
-  correl: ''
-  expiry: ''
+  topic: ""
+  qos: ""
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
   broker: 68237e1473ec01aa
   x: 1250
-  'y': 760
+  "y": 740
   g: 8aac091f0fffbf22
   wires: []
 - id: ce787dfcc75988be
@@ -617,15 +640,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ''
-  crontab: ''
+  repeat: ""
+  crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ''
-  payload: ''
+  topic: ""
+  payload: ""
   payloadType: date
   x: 1070
-  'y': 1060
+  "y": 1040
   g: 3ffa68cfd2195db1
   wires:
     - - 9401b2d19494b1c2
@@ -633,24 +656,36 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_decode_mqtt
-  func: |
+  func: >
     // Decode Victron MQTT topic and payload into standardized message
 
+
     // Optimized Decode: Rounds, Filters, and calculates Totals early
+
     const victronEnabled = global.get("victronEnabled");
+
     if (!victronEnabled) return null;
 
+
     const topic = msg.topic;
+
     if (!topic || typeof topic !== "string") return null;
 
+
     const parts = topic.split("/");
+
     if (parts.length < 5) return null;
 
+
     const serviceType = parts[2];
+
     const instance = parts[3];
+
     const dbusPath = "/" + parts.slice(4).join("/");
 
+
     // === 1. Path Whitelist Gate ===
+
     const pathWhitelist = {
       system: [
         "/Dc/Battery/Soc",
@@ -735,15 +770,23 @@
       ],
     };
 
+
     const allowedPaths = pathWhitelist[serviceType];
+
     if (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;
 
+
     // === 2. Device Discovery Gate ===
+
     const victronDevices = global.get("victronDevices", "file") || {};
+
     if (!victronDevices[`${serviceType}_${instance}`]) return null;
 
+
     // === 3. Value Extraction & Early Rounding ===
+
     let rawValue;
+
     try {
       const parsed =
         typeof msg.payload === "string" ? JSON.parse(msg.payload) : msg.payload;
@@ -752,25 +795,38 @@
       rawValue = msg.payload;
     }
 
+
     if (rawValue === null || rawValue === undefined) return null;
 
+
     let processedValue = rawValue;
+
     if (typeof rawValue === "number") {
       const decimals = dbusPath.toLowerCase().includes("soc") ? 0 : 1;
       processedValue =
         Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);
     }
 
+
     // === 4. Early RBE Filter ===
+
     const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
+
     if (flow.get(cacheKey) === processedValue) return null;
+
     flow.set(cacheKey, processedValue);
 
+
     // === 5. Map Lookup ===
+
     const victronMap = global.get("victronMap");
 
-    // Block processing until map is loaded — prevents unitless discovery at startup.
+
+    // Block processing until map is loaded — prevents unitless discovery at
+    startup.
+
     if (!victronMap) return null;
+
 
     let unit = "",
       dataType = "",
@@ -787,7 +843,9 @@
       }
     }
 
+
     // === 6. Build Standardized Payload (Removed routing_key) ===
+
     const basePayload = {
       service_type: serviceType,
       instance: instance,
@@ -800,9 +858,12 @@
       writable: access === "W" || access === "RW",
     };
 
+
     msg.payload = basePayload;
 
+
     // === 7. Synthetic Totals (using node.send) ===
+
     const powerTotalPairs = [
       {
         l1: "/Ac/Consumption/L1/Power",
@@ -821,6 +882,7 @@
       },
       { l1: "/Ac/Out/L1/P", l2: "/Ac/Out/L2/P", total: "/Ac/Out/Total/P" },
     ];
+
 
     for (const pair of powerTotalPairs) {
       if (dbusPath === pair.l1 || dbusPath === pair.l2) {
@@ -844,15 +906,16 @@
       }
     }
 
+
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 560
-  'y': 540
+  "y": 520
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f67804
@@ -861,20 +924,30 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_unique
-  func: |
+  func: >
     // Unique Filter for Victron entities
 
-    // Retrieve existing Victron entities from flow context, or initialize as empty array
+
+    // Retrieve existing Victron entities from flow context, or initialize as
+    empty array
+
     let uniqueVictron = global.get("uniqueVictron") || [];
 
+
     const serviceType = msg.payload.service_type;
+
     const instance = msg.payload.instance;
+
     const dbusPath = msg.payload.dbus_path;
 
+
     // Build unique key
+
     const key = `${serviceType}_${instance}_${dbusPath}`;
 
+
     // Check if this entity has been seen before
+
     if (!uniqueVictron.includes(key)) {
       uniqueVictron.push(key);
       global.set("uniqueVictron", uniqueVictron);
@@ -903,16 +976,18 @@
       ];
     }
 
+
     // Return nothing if duplicate
+
     return null;
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 820
-  'y': 540
+  "y": 520
   g: 8aac091f0fffbf22
   wires:
     - - 71ac45fb64bf70c9
@@ -921,14 +996,17 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_create
-  func: |
+  func: >
     // Creates Sensor entity for Victron via MQTT Discovery
 
+
     // Validate input structure
+
     if (!msg.payload || typeof msg.payload !== "object") {
       node.error("Input payload must be an object.", msg);
       return null;
     }
+
 
     const {
       service_type,
@@ -940,13 +1018,17 @@
       writable,
     } = msg.payload;
 
+
     // Validate required fields
+
     if (!service_type || !instance || !dbus_path) {
       node.error("Input missing service_type, instance, or dbus_path.", msg);
       return null;
     }
 
+
     // === Unit to HA Metadata Mapping ===
+
 
     const unitMap = {
       "V DC": {
@@ -987,8 +1069,11 @@
       "%level": { device_class: null, unit: "%", icon: "mdi:gauge" },
     };
 
+
     // === Friendly Name Map ===
+
     // Maps service_type + dbus_path to clean dashboard names.
+
 
     const friendlyNameMap = {
       // system/0 — GX device data
@@ -1089,33 +1174,50 @@
       "digitalinput:/Count": "Count",
     };
 
+
     // === Build Entity ID ===
 
+
     // Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage
-    let safePath = dbus_path.replace(/^\//, "").replace(/\//g, "_").toLowerCase();
+
+    let safePath = dbus_path.replace(/^\//, "").replace(/\//g,
+    "_").toLowerCase();
+
 
     // === Standardization Rules ===
 
+
     // 1. Context-aware renaming (only if direction is discernible)
+
     // Map "dc_0" to "dc_out" for output-generating devices
+
     if (
       ["charger", "dcdc", "alternator"].includes(service_type) &&
       safePath.includes("dc_0")
     ) {
       safePath = safePath.replace("dc_0", "dc_out");
     }
+
     // Note: solarcharger usually outputs to battery, but has "pv" as well.
+
     // "dc_0" on solarcharger is battery connection (output).
+
     if (service_type === "solarcharger" && safePath.includes("dc_0")) {
       safePath = safePath.replace("dc_0", "dc_out");
     }
 
+
     // 2. Term normalization
+
     safePath = safePath.replace("_activein", "_in");
+
     safePath = safePath.replace("_active_in", "_in");
+
     safePath = safePath.replace("_active_input", "_in");
 
+
     // 3. Suffix expansion (single letters)
+
     if (safePath.endsWith("_p")) {
       safePath = safePath.slice(0, -2) + "_power";
     } else if (safePath.endsWith("_v")) {
@@ -1126,7 +1228,9 @@
       safePath = safePath.slice(0, -2) + "_frequency";
     }
 
+
     // 4. Specific "total_power" enforcement
+
     if (safePath.endsWith("_total_p")) {
       safePath = safePath.replace(/_total_p$/, "_total_power");
     } else if (safePath.endsWith("_ac_power")) {
@@ -1135,13 +1239,19 @@
       safePath = "ac_total_power";
     }
 
+
     // Use product short name in entity ID (e.g., smartshunt instead of battery)
+
     const deviceName = short_name || service_type;
+
     const entityId = `victron_${deviceName}_${instance}_${safePath}`;
+
 
     // === Build Friendly Name ===
 
+
     const nameKey = `${service_type}:${dbus_path}`;
+
     const baseName =
       friendlyNameMap[nameKey] ||
       dbus_path
@@ -1150,6 +1260,7 @@
         .replace(/([a-z])([A-Z])/g, "$1 $2");
 
     // Build short display name from first two alpha words of product name
+
     const displayName = product_name
       ? product_name
           .split(/\s+/)
@@ -1158,12 +1269,18 @@
           .join(" ")
       : "";
 
-    // Prefix with device display name (e.g., "MultiPlus-II — Inverter DC Power")
+    // Prefix with device display name (e.g., "MultiPlus-II — Inverter DC
+    Power")
+
     // System service uses "System" prefix instead of product name.
+
     const prefix = service_type === "system" ? "System" : displayName;
+
     const friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;
 
+
     // === Unit Override for Paths Missing from Victron CSV ===
+
 
     const unitOverrides = {
       "/Dc/0/Power": "W",
@@ -1214,14 +1331,20 @@
       "/Ac/Grid/Total/Power": "W",
     };
 
+
     const effectiveUnit = unit || unitOverrides[dbus_path] || "";
+
 
     // === Determine HA Metadata ===
 
+
     let haMetadata = unitMap[effectiveUnit];
+
     let isEnum = false;
 
+
     // Check if unit is an enum string (e.g., "0=Off;1=On;2=Error")
+
     if (!haMetadata && effectiveUnit && effectiveUnit.includes("=")) {
       isEnum = true;
       haMetadata = {
@@ -1233,7 +1356,9 @@
       };
     }
 
+
     // Fallback for unknown units
+
     if (!haMetadata) {
       haMetadata = {
         device_class: null,
@@ -1242,9 +1367,12 @@
       };
     }
 
+
     // === Determine HA Component Type ===
 
+
     let componentType = "sensor";
+
     if (writable && isEnum) {
       if (dbus_path.includes("/Relay/")) {
         componentType = "switch";
@@ -1255,12 +1383,17 @@
       componentType = "number";
     }
 
+
     // === Build Discovery Topic and State Topic ===
 
+
     const discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;
+
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 
+
     // === Build Discovery Payload ===
+
 
     const payload = {
       name: friendlyName,
@@ -1275,7 +1408,9 @@
       },
     };
 
+
     // Add component-specific parameters
+
     if (
       componentType === "number" ||
       componentType === "select" ||
@@ -1284,6 +1419,7 @@
       payload.command_topic = `librecoach/victron/set/${service_type}/${instance}${dbus_path}`;
       payload.optimistic = true;
     }
+
 
     if (componentType === "switch") {
       payload.payload_on = "1";
@@ -1310,18 +1446,25 @@
       }
     }
 
+
     // Add device_class if defined
+
     if (haMetadata.device_class && componentType !== "select") {
       payload.device_class = haMetadata.device_class;
       payload.state_class = "measurement";
     }
 
+
     // Add unit_of_measurement if defined (excluding select)
+
     if (haMetadata.unit && componentType !== "select") {
       payload.unit_of_measurement = haMetadata.unit;
     }
 
-    // Apply precision formatting for numeric values (excluding switches & selects)
+
+    // Apply precision formatting for numeric values (excluding switches &
+    selects)
+
     if (componentType === "sensor" || componentType === "number") {
       // Default to 1 decimal place if not specified
       const precision =
@@ -1329,7 +1472,9 @@
       payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;
     }
 
+
     // For enum values, build a Jinja2 template to map numeric values to labels
+
     if (isEnum && componentType === "select") {
       const enumParts = effectiveUnit.split(";").map((p) => p.trim());
       const mappings = {};
@@ -1351,19 +1496,30 @@
       }
     }
 
-    // Track discovery topic for cleanup on disable (file store — survives restarts)
+
+    // Track discovery topic for cleanup on disable (file store — survives
+    restarts)
+
     let discoveryTopics = global.get("victronDiscoveryTopics", "file") || [];
+
     if (!discoveryTopics.includes(discoveryTopic)) {
       discoveryTopics.push(discoveryTopic);
       global.set("victronDiscoveryTopics", discoveryTopics, "file");
     }
 
+
     // Prepare final message
+
     msg.topic = discoveryTopic;
+
     msg.payload = payload;
+
     msg.stateTopic = stateTopic;
 
-    // Send cleanup payloads for obsolete component types so they don't linger in HA
+
+    // Send cleanup payloads for obsolete component types so they don't linger
+    in HA
+
     if (dbus_path.endsWith("/CurrentLimit")) {
       node.send({ topic: `homeassistant/select/${entityId}/config`, payload: "" });
       node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
@@ -1371,15 +1527,16 @@
       node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
     }
 
+
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 1040
-  'y': 580
+  "y": 560
   g: 8aac091f0fffbf22
   wires:
     - - bd38c37850a3e832
@@ -1387,12 +1544,15 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_status
-  func: |
+  func: >
     // HA Status Updater for Victron
+
 
     const incomingPayload = msg.payload;
 
+
     // Gate: skip null/undefined/empty values
+
     if (
       incomingPayload.value === null ||
       incomingPayload.value === undefined ||
@@ -1401,10 +1561,14 @@
       return null;
     }
 
+
     const { service_type, instance, dbus_path, value } = incomingPayload;
 
+
     // 1. Context-Aware Rounding (Filter Logic)
+
     let roundedValue = value;
+
     if (typeof value === "number") {
       // Round SOC to whole numbers, everything else to 1 decimal
       const decimals = dbus_path.toLowerCase().includes("soc") ? 0 : 1;
@@ -1412,17 +1576,25 @@
       roundedValue = Math.round(value * factor) / factor;
     }
 
+
     // 2. Report by Exception (Filter Logic)
+
     const lastValues = context.get("lastValues") || {};
+
     const cacheKey = `${service_type}_${instance}_${dbus_path}`;
+
 
     if (lastValues[cacheKey] === roundedValue) {
       return null; // Block if rounded value hasn't changed
     }
+
     lastValues[cacheKey] = roundedValue;
+
     context.set("lastValues", lastValues);
 
+
     // 3. Build Entity ID (Status Logic)
+
     const safePathRaw = dbus_path
       .replace(/^\//, "")
       .replace(/\//g, "_")
@@ -1430,7 +1602,9 @@
 
     let safePath = safePathRaw;
 
+
     // Standardization Rules
+
     if (
       ["charger", "dcdc", "alternator", "solarcharger"].includes(service_type) &&
       safePath.includes("dc_0")
@@ -1438,50 +1612,72 @@
       safePath = safePath.replace("dc_0", "dc_out");
     }
 
+
     safePath = safePath
       .replace("_activein", "_in")
       .replace("_active_in", "_in")
       .replace("_active_input", "_in");
 
     // Suffix expansion
+
     if (safePath.endsWith("_p")) safePath = safePath.slice(0, -2) + "_power";
-    else if (safePath.endsWith("_v")) safePath = safePath.slice(0, -2) + "_voltage";
-    else if (safePath.endsWith("_i")) safePath = safePath.slice(0, -2) + "_current";
+
+    else if (safePath.endsWith("_v")) safePath = safePath.slice(0, -2) +
+    "_voltage";
+
+    else if (safePath.endsWith("_i")) safePath = safePath.slice(0, -2) +
+    "_current";
+
     else if (safePath.endsWith("_f"))
       safePath = safePath.slice(0, -2) + "_frequency";
 
     // Total power enforcement
+
     if (safePath.endsWith("_total_p"))
       safePath = safePath.replace(/_total_p$/, "_total_power");
     else if (safePath.endsWith("_ac_power"))
       safePath = safePath.replace(/_ac_power$/, "_ac_total_power");
     else if (safePath === "ac_power") safePath = "ac_total_power";
 
+
     // Look up product name
+
     const victronDevices = global.get("victronDevices", "file") || {};
+
     const deviceInfo = victronDevices[`${service_type}_${instance}`];
+
     const deviceName = deviceInfo ? deviceInfo.shortName : service_type;
+
     const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 
+
     // 4. Determine Component Type & Topic
+
     let componentType = "sensor";
+
     if (dbus_path === "/Ac/ActiveIn/CurrentLimit") componentType = "number";
+
     else if (dbus_path === "/Mode") componentType = "select";
+
     else if (dbus_path.includes("/Relay/")) componentType = "switch";
 
+
     // 5. Build Final Message
+
     msg.topic = `homeassistant/${componentType}/${entityId}/state`;
+
     msg.payload = { value: roundedValue };
+
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 820
-  'y': 620
+  "y": 600
   g: 8aac091f0fffbf22
   wires:
     - - bd38c37850a3e832
@@ -1496,7 +1692,7 @@
   sendError: false
   allProps: false
   x: 490
-  'y': 960
+  "y": 940
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f6780c
@@ -1560,11 +1756,11 @@
   outputs: 0
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 750
-  'y': 960
+  "y": 940
   g: 8aac091f0fffbf22
   wires: []
 - id: db3ce2f66f852ca6
@@ -1574,7 +1770,7 @@
   links:
     - 71ac45fb64bf70c9
   x: 230
-  'y': 640
+  "y": 620
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -1600,22 +1796,22 @@
   outputs: 0
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 620
-  'y': 340
+  "y": 320
   g: 8aac091f0fffbf22
   wires: []
 - id: e371075d4dbfc113
   type: link out
   z: 1fde0c4ffb03727e
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1290
-  'y': 460
+  "y": 440
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -1640,11 +1836,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 840
-  'y': 760
+  "y": 740
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
@@ -1741,11 +1937,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ''
-  finalize: ''
+  initialize: ""
+  finalize: ""
   libs: []
   x: 840
-  'y': 880
+  "y": 860
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
@@ -1753,12 +1949,12 @@
 - id: f3f99ba42088c9b1
   type: link out
   z: 1fde0c4ffb03727e
-  name: 'MQTT out: Retain TRUE'
+  name: "MQTT out: Retain TRUE"
   mode: link
   links:
     - f658418a7b9b4857
   x: 1290
-  'y': 880
+  "y": 860
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -1770,15 +1966,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: '30'
-  crontab: ''
+  repeat: "30"
+  crontab: ""
   once: true
-  onceDelay: '3'
-  topic: ''
-  payload: ''
+  onceDelay: "3"
+  topic: ""
+  payload: ""
   payloadType: date
   x: 220
-  'y': 700
+  "y": 680
   g: 8aac091f0fffbf22
   wires:
     - - 36f5f1a727dfd1ca
