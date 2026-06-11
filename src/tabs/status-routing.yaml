@@ -4,27 +4,22 @@
   env: []
   normalizedLabel: status-routing
   disabled: false
-  info: ""
+  info: ''
 - id: 010c5119a7e833b2
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_dc_source_status
-  func: >
+  func: |
     // Status Updater for DC Source
-
     // Decodes DC_SOURCE_STATUS_1/2/3 messages (1FFFD/C/B)
 
-
     // Decodes a bitfield from within a byte
-
     function decodeBits(byte, startBit, endBit) {
       const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;
       return (byte & mask) >> startBit;
     }
 
-
     // Decodes the DC Instance (Byte 0)
-
     function decodeDCInstance(value) {
       const dcInstances = {
         0: "Invalid",
@@ -40,9 +35,7 @@
       return dcInstances[value] || `Unknown DC Instance ${value}`;
     }
 
-
     // Decodes the Device Priority (Byte 1)
-
     function decodeDevicePriority(value) {
       const priorities = {
         20: "Voltmeter",
@@ -55,18 +48,14 @@
       return priorities[value] || `Unknown Priority ${value}`;
     }
 
-
     // Decodes DC Voltage (uint16)
-
     function decodeDCVoltage(value) {
       if (value <= 64000) return parseFloat((value * 0.05).toFixed(2));
       if (value === 65535) return "Not Available";
       return "Invalid";
     }
 
-
     // Decodes DC Current (32-bit signed)
-
     function decodeDCCurrent32bit(value) {
       if (value === 4294967295) return "Not Available";
 
@@ -79,9 +68,7 @@
       return parseFloat((value * 0.05).toFixed(2));
     }
 
-
     // Decodes Temperature (uint16, 0.03125°C/bit, Kelvin base, output °F)
-
     function decodeTemperature(value) {
       if (value <= 64000) {
         const tempC = value * 0.03125 - 273.15;
@@ -91,9 +78,7 @@
       return "Invalid";
     }
 
-
     // Decodes State of Charge / Health / Relative Capacity (uint8)
-
     function decodePercentage(value) {
       // 0.5% per step.
       if (value <= 200) return parseFloat((value * 0.5).toFixed(1));
@@ -101,9 +86,7 @@
       return "Invalid";
     }
 
-
     // === DGN-Specific Decoders ===
-
 
     function decodeDCSourceStatus1(data) {
       if (data.length < 8) return { error: "Invalid data length for STATUS_1" };
@@ -131,7 +114,6 @@
 
       return result;
     }
-
 
     function decodeDCSourceStatus2(data) {
       if (data.length < 8) return { error: "Invalid data length for STATUS_2" };
@@ -170,7 +152,6 @@
       return result;
     }
 
-
     function decodeDCSourceStatus3(data) {
       if (data.length < 8) return { error: "Invalid data length for STATUS_3" };
 
@@ -201,9 +182,7 @@
       return result;
     }
 
-
     // === Main Router Function ===
-
 
     function decodeDCSourceMessage(dgn, data) {
       switch (dgn) {
@@ -221,64 +200,48 @@
       }
     }
 
-
     // === Main Node-RED Logic ===
 
-
     const incomingPayload = msg.payload;
-
-    if (!incomingPayload || !incomingPayload.dgn ||
-    !incomingPayload.data_payload) {
+    if (!incomingPayload || !incomingPayload.dgn || !incomingPayload.data_payload) {
       node.warn("Missing required fields: dgn and/or data_payload");
       return null;
     }
 
-
     // Convert hex payload to byte array
-
     const dataBytes = [];
-
     for (let i = 0; i < incomingPayload.data_payload.length; i += 2) {
       dataBytes.push(
         parseInt(incomingPayload.data_payload.substring(i, i + 2), 16),
       );
     }
 
-
     // Decode the message by routing to the correct function based on DGN
-
     const decodedData = decodeDCSourceMessage(incomingPayload.dgn, dataBytes);
 
-
     // Handle null return (invalid instance filtered out)
-
     if (!decodedData) {
       return null;
     }
 
-
     // Merge the original payload and the newly decoded data
-
     msg.payload = {
       ...incomingPayload,
       ...decodedData,
     };
 
-
     // Clean up by removing the raw hex payload
-
     delete msg.payload.data_payload;
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 100
+  'y': 100
   wires:
     - - 2c1151c97bb185f2
 - id: 04bc7637ee7139d8
@@ -291,10 +254,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1250
-  "y": 1460
+  'y': 1460
   wires: []
 - id: 09640adb1fd08fbb
   type: function
@@ -306,11 +269,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1040
-  "y": 2140
+  'y': 2140
   g: eb51c1f2d0d389d1
   wires:
     - []
@@ -324,10 +287,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 900
-  "y": 1580
+  'y': 1580
   wires: []
 - id: 19307edfe4e5bd84
   type: debug
@@ -339,10 +302,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1250
-  "y": 740
+  'y': 740
   wires: []
 - id: 1b079a5b225e1552
   type: debug
@@ -354,10 +317,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 810
-  "y": 1640
+  'y': 1640
   wires: []
 - id: 1bb521d55aeb5eba
   type: function
@@ -443,11 +406,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 840
-  "y": 40
+  'y': 40
   wires:
     - - 47b68581ce35eac7
 - id: 1f7fde87c1ab1f51
@@ -455,10 +418,10 @@
   z: 3e5f038a4f5a8b9a
   name: Reset unique list
   x: 74
-  "y": 1639
+  'y': 1639
   g: daeff1de077d7dbb
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 7a0956cdace18b52
@@ -468,40 +431,29 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_battery
-  func: >
+  func: |
     // HA Status Publisher for Battery (DC_SOURCE_STATUS, §6.22)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 0 || instance > 250) {
       return null;
     }
 
-
     const voltage = p.dc_voltage_V;
-
 
     if (typeof voltage !== "number") {
       return null;
     }
 
-
     // Instance-to-suffix map (per RV-C spec §6.22)
-
     const batteryMap = {
       1: { suffix: "house", name: "Main House Battery" },
       2: { suffix: "chassis", name: "Chassis Battery" },
@@ -509,9 +461,7 @@
       4: { suffix: "generator", name: "Generator Battery" },
     };
 
-
     let entitySuffix, displayName;
-
     if (instance >= 5 && instance <= 250) {
       entitySuffix = instance.toString();
       displayName = `Battery ${instance}`;
@@ -524,28 +474,18 @@
       displayName = info.name;
     }
 
-
     const entityId = `battery_${entitySuffix}`;
-
     const componentType = "sensor";
-
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 
-
     // Round voltage to 2 decimal places, clamp to reasonable range
-
     const v = Math.max(0, Math.min(50, Math.round(voltage * 100) / 100));
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "batteryCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance]) {
       messages.push({
@@ -571,24 +511,21 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // State update
-
     messages.push({
       topic: stateTopic,
       payload: v,
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 100
+  'y': 100
   wires:
     - - d3a13b531babee66
 - id: 2d9036a34ecd189a
@@ -747,11 +684,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 840
-  "y": 1880
+  'y': 1880
   wires:
     - - 647ce51ee8a295c8
 - id: 2e5425d73a166c9b
@@ -1043,11 +980,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 400
+  'y': 400
   wires:
     - - 6dc4171b23e1cc2a
 - id: 3b2f348b9326267c
@@ -1413,11 +1350,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 850
-  "y": 280
+  'y': 280
   wires:
     - - ad388870b71549ef
 - id: 3f467bbd66a21eb9
@@ -1428,58 +1365,44 @@
   links:
     - 914be705da0531dd
   x: 1230
-  "y": 1820
+  'y': 1820
   l: true
   wires: []
 - id: 47b68581ce35eac7
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_thermostat_ambient
-  func: >
+  func: |
     // HA Status Publisher for THERMOSTAT_AMBIENT_STATUS (1FF9C)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per zone
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per zone instance.
 
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
     const temperature = p.ambient_temperature;
-
 
     if (typeof instance !== "number") {
       node.warn("Missing 'instance'");
       return null;
     }
 
-
     if (temperature === null || temperature === "Out of Range") {
       return null;
     }
-
 
     if (typeof temperature !== "number") {
       return null;
     }
 
-
     // === Deadband filter: suppress updates smaller than 0.5°F ===
 
-
     const LAST_TEMP_KEY = "thermostatAmbientLastTemp";
-
     const lastTemp = flow.get(LAST_TEMP_KEY) || {};
-
     const DEADBAND = 0.2;
-
 
     if (
       lastTemp[instance] !== undefined &&
@@ -1487,30 +1410,20 @@
     ) {
       return null;
     }
-
     lastTemp[instance] = temperature;
-
     flow.set(LAST_TEMP_KEY, lastTemp);
-
 
     // === Entity identifiers ===
 
-
     const entityId = `thermostat_ambient_zone${instance}`;
-
     const stateTopic = `homeassistant/sensor/${entityId}/state`;
-
 
     // === Flow context: track which zones have had discovery published ===
 
-
     const CREATED_KEY = "thermostatAmbientCreated";
-
     const created = flow.get(CREATED_KEY) || {};
 
-
     const messages = [];
-
 
     if (!created[instance]) {
       messages.push({
@@ -1535,57 +1448,42 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     messages.push({ topic: stateTopic, payload: temperature });
-
 
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1260
-  "y": 40
+  'y': 40
   wires:
     - - d3a13b531babee66
 - id: 48e3b18cb440da52
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_dc_dimmer_3
-  func: >
-    // HA Status Publisher for DC Dimmer (STATUS_3 1FEDAh §6.23.6 + STATUS_1
-    1FFBBh §6.23.3)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+  func: |
+    // HA Status Publisher for DC Dimmer (STATUS_3 1FEDAh §6.23.6 + STATUS_1 1FFBBh §6.23.3)
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
     // Entity naming: switch_N (routing key "switch"), "Switches" device.
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
       return null;
     }
 
-
-    // Track instances that report real dimmer status so command-inferred
-    fallback
-
+    // Track instances that report real dimmer status so command-inferred fallback
     // can be disabled for those lights after the first acknowledgement.
-
     const statusBackedInstances =
       global.get("dcDimmerStatusBackedInstances", "file") || [];
     if (!statusBackedInstances.includes(instance)) {
@@ -1593,15 +1491,10 @@
       global.set("dcDimmerStatusBackedInstances", statusBackedInstances, "file");
     }
 
-
     // Dimmable detection
-
     const dimmableLights = global.get("dimmableLights", "file") || [];
-
     let isDimmable = dimmableLights.includes(instance);
-
     let needsRecreate = false;
-
 
     function markDimmable() {
       if (!isDimmable) {
@@ -1612,11 +1505,8 @@
       }
     }
 
-
     let haStatus;
-
     let brightness;
-
 
     if (p.master_brightness !== undefined) {
       // STATUS_1 message: has master_brightness (0-100%)
@@ -1645,23 +1535,15 @@
       return null;
     }
 
-
     const entityId = `switch_${instance}`;
-
     const stateTopic = `homeassistant/light/${entityId}/state`;
-
     const commandTopic = `homeassistant/light/${entityId}/set`;
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "dcDimmerCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance] || needsRecreate) {
       const config = {
@@ -1696,18 +1578,13 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // Store last brightness for dimmable recall on toggle
-
     if (isDimmable && typeof brightness === "number" && brightness > 0) {
       global.set("dimmerBrightness_" + instance, brightness, "file");
     }
 
-
     // Build JSON state payload
-
     const stateObj = { state: haStatus };
-
 
     if (haStatus === "ON") {
       if (isDimmable) {
@@ -1720,22 +1597,20 @@
       }
     }
 
-
     messages.push({
       topic: stateTopic,
       payload: JSON.stringify(stateObj),
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1240
-  "y": 220
+  'y': 220
   wires:
     - - d3a13b531babee66
 - id: 48e6dda2b2d9575e
@@ -1748,10 +1623,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1050
-  "y": 2200
+  'y': 2200
   g: eb51c1f2d0d389d1
   wires: []
 - id: 4a6d57460d64c76f
@@ -2185,11 +2060,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 830
-  "y": 220
+  'y': 220
   wires:
     - - 48e3b18cb440da52
 - id: 5004281b11ec3bd7
@@ -2255,11 +2130,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 980
+  'y': 980
   wires:
     - - d3a13b531babee66
 - id: 54c7344ace5b029a
@@ -2272,10 +2147,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1270
-  "y": 1760
+  'y': 1760
   wires: []
 - id: 56aa8b5c045b391d
   type: inject
@@ -2285,15 +2160,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 190
-  "y": 1860
+  'y': 1860
   g: ee5f54f521f5ecda
   wires:
     - - 870bf91817db9d08
@@ -2498,11 +2373,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 830
-  "y": 1760
+  'y': 1760
   wires:
     - - 54c7344ace5b029a
 - id: 5b9a1c073b281840
@@ -2691,42 +2566,34 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 2000
+  'y': 2000
   wires:
     - - f65fa76598eeb965
 - id: 5bb6491915c598ce
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_waterheater_status
-  func: >
-    // Combined decoder for WATERHEATER_STATUS (1FFF7) and WATERHEATER_STATUS_2
-    (1FE99)
-
+  func: |
+    // Combined decoder for WATERHEATER_STATUS (1FFF7) and WATERHEATER_STATUS_2 (1FE99)
     // RV-C spec 6.9.2 and 6.9.4
 
-
     // === Helper Functions ===
-
 
     function decodeBits(value, startBit, endBit) {
       const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;
       return (value & mask) >> startBit;
     }
 
-
     function decodeUint16(data, startByte) {
       return data[startByte] | (data[startByte + 1] << 8);
     }
 
-
     // Decodes a standard RV-C temperature value (uint16).
-
     // Uses 0.03125°C resolution (per RVC spec) with -273.15°C offset (Kelvin).
-
     function decodeTemperature(value, isCelsius = false) {
       if (value <= 65530) {
         const tempK = value * 0.03125; // Kelvin
@@ -2748,7 +2615,6 @@
       return "Invalid";
     }
 
-
     function decodeEnginePreheat(value) {
       // Engine preheat status mapping
       const statuses = {
@@ -2758,7 +2624,6 @@
       };
       return statuses[value] || `Unknown (${value})`;
     }
-
 
     function decode2BitOnOff(value) {
       // Generic 2-bit on/off status
@@ -2771,7 +2636,6 @@
       return statuses[value] || `Unknown (${value})`;
     }
 
-
     function decode2BitWarning(value) {
       // Generic 2-bit warning status
       const statuses = {
@@ -2783,7 +2647,6 @@
       return statuses[value] || `Unknown (${value})`;
     }
 
-
     function decodeCoolantLevel(value) {
       const statuses = {
         0: "Sufficient",
@@ -2793,7 +2656,6 @@
       };
       return statuses[value] || `Unknown (${value})`;
     }
-
 
     function decodeHotWaterPriority(value) {
       const priorities = {
@@ -2805,9 +2667,7 @@
       return priorities[value] || `Unknown (${value})`;
     }
 
-
     // === WATERHEATER_STATUS (1FFF7) — §6.9.2 ===
-
 
     function decodeOperatingMode(value) {
       const modes = {
@@ -2821,7 +2681,6 @@
       };
       return modes[value] || `Unknown (${value})`;
     }
-
 
     function decodeStatus(data, result) {
       // Byte 1: Operating Mode
@@ -2882,9 +2741,7 @@
       result.any_heat_active = result.burner_active || result.ac_element_active;
     }
 
-
     // === WATERHEATER_STATUS_2 (1FE99) — §6.9.4 ===
-
 
     function decodeStatus2(data, result) {
       // Byte 1: Electric Element Levels
@@ -3048,9 +2905,7 @@
       result.raw_byte7 = data[7];
     }
 
-
     // === Main Decode Function ===
-
 
     function decodeWaterheaterMessage(dgn, dgn_name, data) {
       const result = {
@@ -3085,39 +2940,29 @@
       return result;
     }
 
-
     // === Main Logic ===
 
-
     // Validate input payload
-
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const incomingPayload = msg.payload;
-
     const { dgn, dgn_name, data_payload } = incomingPayload;
-
 
     if (!dgn || !dgn_name || !data_payload) {
       node.warn("Missing required fields: dgn, dgn_name, and/or data_payload");
       return null;
     }
 
-
     // Validate and convert hex payload to byte array
-
     if (typeof data_payload !== "string" || data_payload.length % 2 !== 0) {
       node.warn("Invalid data_payload: must be even-length hex string");
       return null;
     }
 
-
     const dataBytes = [];
-
     for (let i = 0; i < data_payload.length; i += 2) {
       const hexByte = data_payload.substring(i, i + 2);
       const byteValue = parseInt(hexByte, 16);
@@ -3128,43 +2973,34 @@
       dataBytes.push(byteValue);
     }
 
-
     // Decode the message
-
     const decodedData = decodeWaterheaterMessage(dgn, dgn_name, dataBytes);
 
-
     // Handle decode errors
-
     if (decodedData.error) {
       incomingPayload.decoding_error = decodedData.error;
       msg.payload = incomingPayload;
       return msg;
     }
 
-
     // Merge the incoming payload and the decoded data into a single flat object
-
     msg.payload = {
       ...incomingPayload,
       ...decodedData,
     };
 
-
     // Clean up the final object by removing the raw data field
-
     delete msg.payload.data_payload;
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 1820
+  'y': 1820
   wires:
     - - 647ce51ee8a295c8
       - 3f467bbd66a21eb9
@@ -3172,33 +3008,22 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_waterheater
-  func: >
-    // Publishes water heater and circulation pump entity states to MQTT state
-    topics.
-
-    // Also publishes MQTT discovery configs the first time a valid value is
-    received.
-
+  func: |
+    // Publishes water heater and circulation pump entity states to MQTT state topics.
+    // Also publishes MQTT discovery configs the first time a valid value is received.
 
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const p = msg.payload;
-
     const dgn_name = p.dgn_name;
-
     const i = p.instance !== undefined ? p.instance : "";
-
     const i_name = i !== "" ? ` ${i}` : "";
-
     const messages = [];
 
-
     // === Device definition ===
-
 
     const device = {
       identifiers: ["librecoach-waterheater"],
@@ -3206,30 +3031,23 @@
       manufacturer: "LibreCoach",
     };
 
-
     const aquahotDevice = {
       identifiers: ["librecoach-aquahot"],
       name: "Aqua-Hot",
       manufacturer: "LibreCoach",
     };
 
-
     // === Flow context: tracks which entities have had discovery published ===
 
-
     const CREATED_KEY = "waterheater_entities_created";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     function markCreated(entityId) {
       created[entityId] = true;
       flow.set(CREATED_KEY, created);
     }
 
-
     // === Discovery config builders ===
-
 
     function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
       const cfg = {
@@ -3249,7 +3067,6 @@
       };
     }
 
-
     function binarySensorConfig(entityId, name, deviceClass, icon) {
       return {
         topic: `homeassistant/binary_sensor/${entityId}/config`,
@@ -3267,19 +3084,15 @@
       };
     }
 
-
     // === Helpers ===
-
 
     function stateMsg(topic, payload) {
       return { topic, payload };
     }
 
-
     function onOff(value) {
       return value ? "ON" : "OFF";
     }
-
 
     function publishSensor(entityId, stateValue, configFn, canCreate = true) {
       if (!created[entityId]) {
@@ -3290,7 +3103,6 @@
       messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));
     }
 
-
     function publishBinary(entityId, stateValue, configFn) {
       if (!created[entityId]) {
         messages.push(configFn());
@@ -3300,7 +3112,6 @@
         stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),
       );
     }
-
 
     function switchConfig(entityId, name, icon, commandTopic) {
       return {
@@ -3319,7 +3130,6 @@
       };
     }
 
-
     function publishSwitch(entityId, stateValue, configFn) {
       if (!created[entityId]) {
         messages.push(configFn());
@@ -3327,7 +3137,6 @@
       }
       messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
     }
-
 
     function aquahotBinarySensorConfig(entityId, name, deviceClass, icon) {
       return {
@@ -3346,9 +3155,7 @@
       };
     }
 
-
     // === WATERHEATER_STATUS (1FFF7) ===
-
     if (dgn_name === "WATERHEATER_STATUS") {
       if (
         typeof p.operating_mode === "string" &&
@@ -3481,9 +3288,7 @@
       }
     }
 
-
     // === WATERHEATER_STATUS_2 (1FE99) ===
-
     else if (dgn_name === "WATERHEATER_STATUS_2") {
       if (typeof p.status === "string" && p.status !== "Not Available") {
         publishSensor(`waterheater_${i}_status`, p.status, () =>
@@ -3564,9 +3369,7 @@
       }
     }
 
-
     // === CIRCULATION_PUMP_STATUS ===
-
     else if (dgn_name === "CIRCULATION_PUMP_STATUS") {
       if (
         typeof p.output_status === "string" &&
@@ -3632,55 +3435,42 @@
       }
     }
 
-
     if (messages.length === 0) {
       return null;
     }
-
 
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1230
-  "y": 1880
+  'y': 1880
   wires:
     - - d3a13b531babee66
 - id: 6836e28529385aee
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_thermostat
-  func: >
+  func: |
     // HA Status Publisher for THERMOSTAT_STATUS_1 (1FFE2)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per zone
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per zone instance.
     // Creates a climate entity with mode, fan, and dual setpoint control.
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
 
-
-    if (typeof instance !== "number" || instance < 1 || instance > 250) return
-    null;
-
+    if (typeof instance !== "number" || instance < 1 || instance > 250) return null;
     if (p.operating_mode === undefined) return null;
 
-
     // === RV-C → HA mode mapping ===
-
 
     const MODE_MAP = {
       Off: "off",
@@ -3692,31 +3482,20 @@
       "Window Defrost": "dry",
     };
 
-
     const haMode = MODE_MAP[p.operating_mode] || "off";
 
-
     // === RV-C → HA fan mode mapping ===
-
-    // Fan speed is raw uint8 (0-200 at 0.5% resolution): 0=auto, 100=50%,
-    200=100%
-
+    // Fan speed is raw uint8 (0-200 at 0.5% resolution): 0=auto, 100=50%, 200=100%
 
     let haFanMode = "auto";
-
-    if (p.fan_mode === "On" && typeof p.fan_speed === "number" && p.fan_speed >
-    0) {
+    if (p.fan_mode === "On" && typeof p.fan_speed === "number" && p.fan_speed > 0) {
       haFanMode = p.fan_speed > 100 ? "high" : "low";
     }
 
-
     // === Entity identifiers ===
 
-
     const entityId = `thermostat_zone_${instance}`;
-
     const baseTopic = `homeassistant/climate/${entityId}`;
-
 
     const device = {
       identifiers: ["librecoach-climate"],
@@ -3724,19 +3503,13 @@
       manufacturer: "LibreCoach",
     };
 
-
     // === Flow context: track entity creation ===
 
-
     const CREATED_KEY = "thermostatClimateCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
     const messages = [];
 
-
     // === Create climate entity on first valid reading ===
-
 
     if (!created[instance]) {
       messages.push({
@@ -3768,40 +3541,30 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // === Publish mode ===
-
 
     messages.push({ topic: `${baseTopic}/mode/state`, payload: haMode });
 
-
     // === Publish fan mode ===
-
 
     messages.push({ topic: `${baseTopic}/fan/state`, payload: haFanMode });
 
-
     // === Publish setpoints ===
 
-
     // Single setpoint: depends on current mode
-
     if (haMode === "heat" && typeof p.setpoint_heat === "number") {
       messages.push({ topic: `${baseTopic}/temp/state`, payload: p.setpoint_heat });
     } else if (typeof p.setpoint_cool === "number") {
       messages.push({ topic: `${baseTopic}/temp/state`, payload: p.setpoint_cool });
     }
 
-
     // Dual setpoints (for heat_cool mode)
-
     if (typeof p.setpoint_heat === "number") {
       messages.push({
         topic: `${baseTopic}/temp_low/state`,
         payload: p.setpoint_heat,
       });
     }
-
     if (typeof p.setpoint_cool === "number") {
       messages.push({
         topic: `${baseTopic}/temp_high/state`,
@@ -3809,10 +3572,7 @@
       });
     }
 
-
-    // === Publish action (best-effort from mode — no compressor feedback
-    available) ===
-
+    // === Publish action (best-effort from mode — no compressor feedback available) ===
 
     const ACTION_MAP = {
       off: "off",
@@ -3822,15 +3582,12 @@
       fan_only: "fan",
       dry: "drying",
     };
-
     messages.push({
       topic: `${baseTopic}/action/state`,
       payload: ACTION_MAP[haMode] || "idle",
     });
 
-
     // === Cache state for encoder ===
-
 
     global.set(
       `thermostat_zone_${instance}_status`,
@@ -3844,42 +3601,35 @@
       "file",
     );
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1230
-  "y": 1040
+  'y': 1040
   wires:
     - - d3a13b531babee66
 - id: 6b27f0f99ea11a72
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_generator_status
-  func: >
-    // Decodes GENERATOR_STATUS_1 (1FFDC) and GENERATOR_STATUS_2 (1FFDB)
-    messages
-
+  func: |
+    // Decodes GENERATOR_STATUS_1 (1FFDC) and GENERATOR_STATUS_2 (1FFDB) messages
     // RV-C spec 6.18.23 and 6.18.24
 
-
     // === Helper Functions ===
-
 
     function decodeBits(value, startBit, endBit) {
       const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;
       return (value & mask) >> startBit;
     }
 
-
     function decodeUint16(data, startByte) {
       return data[startByte] | (data[startByte + 1] << 8);
     }
-
 
     function decodeUint32(data, startByte) {
       return (
@@ -3890,12 +3640,9 @@
       );
     }
 
-
     // === GENERATOR_STATUS Specific Decoders ===
 
-
     // RV-C Table 5.3 uint2 indicator
-
     const BIT2_STATES = {
       0: "Not Active",
       1: "Active",
@@ -3903,9 +3650,7 @@
       3: "Not Available",
     };
 
-
     // STATUS_1 - Byte 0: Operational status (§6.18.23)
-
     function decodeGeneratorStatus(value) {
       const states = {
         0: "Stopped",
@@ -3923,17 +3668,10 @@
       return states[value] !== undefined ? states[value] : `Unknown (${value})`;
     }
 
-
     // STATUS_1 - Bytes 6-7: Start battery voltage (uint16 LE, Table 5.3)
-
-    // Spec defines this as Vdc using Table 5.3 — resolution not explicitly
-    stated.
-
+    // Spec defines this as Vdc using Table 5.3 — resolution not explicitly stated.
     // Using 0.05 Vdc/bit consistent with other RV-C DC voltage fields and the
-
-    // CHARGER_STATUS approach, valid range tops at ~3276.75 V (0xFFFA = out of
-    range).
-
+    // CHARGER_STATUS approach, valid range tops at ~3276.75 V (0xFFFA = out of range).
     function decodeStartBatteryVoltage(value) {
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(2));
@@ -3947,13 +3685,8 @@
       return "Invalid";
     }
 
-
-    // STATUS_2 - Byte 1: Coolant temperature (uint8, °C, -40 offset per Table
-    5.3)
-
-    // Output in °F by default to match project convention (see
-    decode_thermostat_ambient_status.js)
-
+    // STATUS_2 - Byte 1: Coolant temperature (uint8, °C, -40 offset per Table 5.3)
+    // Output in °F by default to match project convention (see decode_thermostat_ambient_status.js)
     function decodeCoolantTemperature(value, isCelsius = false) {
       if (value <= 250) {
         const tempC = value - 40; // -40°C to +210°C range
@@ -3972,9 +3705,7 @@
       return "Invalid";
     }
 
-
     // STATUS_2 - Byte 2: Oil pressure (uint8, kPa, 4 kPa/bit, 0-1000 kPa)
-
     function decodeOilPressure(value) {
       if (value <= 250) {
         return value * 4; // 4 kPa per step
@@ -3992,9 +3723,7 @@
       return "Invalid";
     }
 
-
     // STATUS_2 - Bytes 3-4: Engine RPM (uint16 LE, 0.125 rpm/bit)
-
     function decodeEngineRPM(value) {
       if (value <= 65530) {
         return parseFloat((value * 0.125).toFixed(2));
@@ -4008,9 +3737,7 @@
       return "Invalid";
     }
 
-
     // STATUS_2 - Bytes 5-6: Fuel rate (uint16 LE, 0.05 lph/bit)
-
     function decodeFuelRate(value) {
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(2));
@@ -4024,12 +3751,9 @@
       return "Invalid";
     }
 
-
     // === DGN-specific Decode Functions ===
 
-
     // GENERATOR_STATUS_1 (1FFDC) - §6.18.23
-
     function decodeStatus1(data, result) {
       // Byte 0: Status
       result.status = decodeGeneratorStatus(data[0]);
@@ -4070,9 +3794,7 @@
         result.status === "Priming";
     }
 
-
     // GENERATOR_STATUS_2 (1FFDB) - §6.18.24
-
     function decodeStatus2(data, result) {
       // Byte 0: Fault/switch bits (4x uint2)
       const faultByte = data[0];
@@ -4110,9 +3832,7 @@
         typeof result.engine_rpm === "number" && result.engine_rpm > 0;
     }
 
-
     // === Main Decode Function ===
-
 
     function decodeGeneratorMessage(dgn, dgn_name, data) {
       const result = {
@@ -4136,39 +3856,29 @@
       return result;
     }
 
-
     // === Main Logic ===
 
-
     // Validate input payload
-
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const incomingPayload = msg.payload;
-
     const { dgn, dgn_name, data_payload } = incomingPayload;
-
 
     if (!dgn || !dgn_name || !data_payload) {
       node.warn("Missing required fields: dgn, dgn_name, and/or data_payload");
       return null;
     }
 
-
     // Validate and convert hex payload to byte array
-
     if (typeof data_payload !== "string" || data_payload.length % 2 !== 0) {
       node.warn("Invalid data_payload: must be even-length hex string");
       return null;
     }
 
-
     const dataBytes = [];
-
     for (let i = 0; i < data_payload.length; i += 2) {
       const hexByte = data_payload.substring(i, i + 2);
       const byteValue = parseInt(hexByte, 16);
@@ -4179,85 +3889,64 @@
       dataBytes.push(byteValue);
     }
 
-
     // Decode the GENERATOR_STATUS message
-
     const decodedData = decodeGeneratorMessage(dgn, dgn_name, dataBytes);
 
-
     // Handle decode errors
-
     if (decodedData.error) {
       incomingPayload.decoding_error = decodedData.error;
       msg.payload = incomingPayload;
       return msg;
     }
 
-
     // Merge the incoming payload and the decoded data into a single flat object
-
     msg.payload = {
       ...incomingPayload,
       ...decodedData,
     };
 
-
     // Clean up the raw data field
-
     delete msg.payload.data_payload;
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 1160
+  'y': 1160
   wires:
     - - 906e4d6a45bba29f
 - id: 6dc4171b23e1cc2a
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_tank
-  func: >
+  func: |
     // HA Status Publisher for Tank (DGN 1FFB7, §6.28)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number") {
       return null;
     }
 
-
     const tankType = p.tank_type;
-
     const levelPercentage = p.level_percentage;
-
 
     if (!tankType || typeof levelPercentage !== "number") {
       return null;
     }
 
-
     // Instance-to-name map (per RV-C spec §6.28)
-
     const tankNameMap = {
       0: "Fresh Water",
       1: "Black Water",
@@ -4269,30 +3958,19 @@
       19: "LPG 2",
     };
 
-
     const displayName = tankNameMap[instance] || `Unknown Tank ${instance}`;
-
     const entityId = `tank_${tankType}`;
-
     const componentType = "sensor";
-
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 
-
     // Clamp level to 0-100%
-
     const level = Math.max(0, Math.min(100, Math.round(levelPercentage)));
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "tankCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance]) {
       messages.push({
@@ -4317,24 +3995,21 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // State update
-
     messages.push({
       topic: stateTopic,
       payload: level,
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1210
-  "y": 400
+  'y': 400
   wires:
     - - d3a13b531babee66
 - id: 78904d457471d1b2
@@ -4347,10 +4022,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1240
-  "y": 1400
+  'y': 1400
   wires: []
 - id: 7a0956cdace18b52
   type: function
@@ -4362,11 +4037,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 400
-  "y": 1740
+  'y': 1740
   g: 1f7fde87c1ab1f51
   wires:
     - []
@@ -4380,10 +4055,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 820
-  "y": 1340
+  'y': 1340
   wires: []
 - id: 870bf91817db9d08
   type: function
@@ -4415,11 +4090,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 400
-  "y": 1860
+  'y': 1860
   g: ee5f54f521f5ecda
   wires:
     - []
@@ -4435,7 +4110,7 @@
     RV, creates the appropriate entities in Home Assistant,
     and publishes their status.
   x: 300
-  "y": 140
+  'y': 140
   wires: []
 - id: 893d80d1125057e8
   type: link in
@@ -4444,7 +4119,7 @@
   links:
     - 1e244bad0304bb74
   x: 180
-  "y": 1680
+  'y': 1680
   g: 1f7fde87c1ab1f51
   l: true
   wires:
@@ -4453,32 +4128,22 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_generator
-  func: >
+  func: |
     // Publishes generator entity states to MQTT state topics.
-
     // Also publishes MQTT discovery configs the first time a valid value is
-
     // received for each entity.
-
-    // Handles output from decode_generator_status.js and
-    decode_generator_ac_status.js.
-
+    // Handles output from decode_generator_status.js and decode_generator_ac_status.js.
 
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const p = msg.payload;
-
     const dgn_name = p.dgn_name;
-
     const messages = [];
 
-
     // --- Device definition ---
-
 
     const device = {
       identifiers: ["librecoach-generator"],
@@ -4486,23 +4151,17 @@
       manufacturer: "LibreCoach",
     };
 
-
     // --- Flow context: tracks which entities have had discovery published ---
 
-
     const CREATED_KEY = "generator_entities_created";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     function markCreated(entityId) {
       created[entityId] = true;
       flow.set(CREATED_KEY, created);
     }
 
-
     // --- Discovery config builders ---
-
 
     function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
       const cfg = {
@@ -4522,7 +4181,6 @@
       };
     }
 
-
     function binarySensorConfig(entityId, name, deviceClass, icon) {
       return {
         topic: `homeassistant/binary_sensor/${entityId}/config`,
@@ -4540,33 +4198,21 @@
       };
     }
 
-
     // --- Helpers ---
-
 
     function stateMsg(topic, payload) {
       return { topic, payload };
     }
 
-
     function onOff(value) {
       return value ? "ON" : "OFF";
     }
 
-
-    // Publish discovery config the first time a valid value is seen for an
-    entity,
-
+    // Publish discovery config the first time a valid value is seen for an entity,
     // then always publish the state.
-
-    // canCreate: pass a reasonableness check expression — entity won't be
-    created
-
-    // until the value makes physical sense (e.g., RPM > 0 means engine is
-    spinning).
-
+    // canCreate: pass a reasonableness check expression — entity won't be created
+    // until the value makes physical sense (e.g., RPM > 0 means engine is spinning).
     // Once created, state is always published (including zeros).
-
     function publishSensor(entityId, stateValue, configFn, canCreate = true) {
       if (!created[entityId]) {
         if (!canCreate) return;
@@ -4575,7 +4221,6 @@
       }
       messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));
     }
-
 
     function publishBinary(entityId, stateValue, configFn) {
       if (!created[entityId]) {
@@ -4587,9 +4232,7 @@
       );
     }
 
-
     // --- STATUS_1 ---
-
 
     if (dgn_name === "GENERATOR_STATUS_1") {
       if (typeof p.status === "string" && p.status !== "Not Available") {
@@ -4635,19 +4278,20 @@
         );
       }
 
-      if (
-        typeof p.start_battery_voltage === "number" &&
-        p.start_battery_voltage > 0
-      ) {
-        publishSensor("generator_battery_voltage", p.start_battery_voltage, () =>
-          sensorConfig(
-            "generator_battery_voltage",
-            "Generator Battery Voltage",
-            "V",
-            "voltage",
-            "measurement",
-            "mdi:battery",
-          ),
+      if (typeof p.start_battery_voltage === "number") {
+        publishSensor(
+          "generator_battery_voltage",
+          p.start_battery_voltage,
+          () =>
+            sensorConfig(
+              "generator_battery_voltage",
+              "Generator Battery Voltage",
+              "V",
+              "voltage",
+              "measurement",
+              "mdi:battery",
+            ),
+          p.start_battery_voltage > 0,
         );
       }
 
@@ -4670,6 +4314,32 @@
             "Generator Fault",
             "problem",
             "mdi:alert-circle",
+          ),
+        );
+      }
+
+      if (typeof p.generator_running === "boolean") {
+        if (!created["generator_control"]) {
+          messages.push({
+            topic: "homeassistant/switch/generator_control/config",
+            payload: {
+              name: "Generator Control",
+              unique_id: "generator_control",
+              default_entity_id: "switch.generator_control",
+              state_topic: "homeassistant/switch/generator_control/state",
+              command_topic: "homeassistant/switch/generator_control/set",
+              payload_on: "ON",
+              payload_off: "OFF",
+              icon: "mdi:engine",
+              device,
+            },
+          });
+          markCreated("generator_control");
+        }
+        messages.push(
+          stateMsg(
+            "homeassistant/switch/generator_control/state",
+            onOff(p.generator_running),
           ),
         );
       }
@@ -4796,80 +4466,93 @@
 
       // --- GENERATOR_AC_STATUS_1 ---
     } else if (dgn_name === "GENERATOR_AC_STATUS_1") {
-      // Only publish AC values when output is active (rms_voltage > 50V)
-      if (!p.ac_output_active) {
-        return null;
-      }
+      const active = !!p.ac_output_active;
 
       if (typeof p.rms_voltage === "number") {
-        publishSensor("generator_ac_voltage", p.rms_voltage, () =>
-          sensorConfig(
-            "generator_ac_voltage",
-            "Generator AC Voltage",
-            "V",
-            "voltage",
-            "measurement",
-            "mdi:lightning-bolt",
-          ),
+        publishSensor(
+          "generator_ac_voltage",
+          active ? p.rms_voltage : 0,
+          () =>
+            sensorConfig(
+              "generator_ac_voltage",
+              "Generator AC Voltage",
+              "V",
+              "voltage",
+              "measurement",
+              "mdi:lightning-bolt",
+            ),
+          active,
         );
       }
 
       if (typeof p.rms_current === "number") {
-        publishSensor("generator_ac_current", p.rms_current, () =>
-          sensorConfig(
-            "generator_ac_current",
-            "Generator AC Current",
-            "A",
-            "current",
-            "measurement",
-            "mdi:current-ac",
-          ),
+        publishSensor(
+          "generator_ac_current",
+          active ? p.rms_current : 0,
+          () =>
+            sensorConfig(
+              "generator_ac_current",
+              "Generator AC Current",
+              "A",
+              "current",
+              "measurement",
+              "mdi:current-ac",
+            ),
+          active,
         );
       }
 
       if (typeof p.frequency === "number") {
-        publishSensor("generator_frequency", p.frequency, () =>
-          sensorConfig(
-            "generator_frequency",
-            "Generator Frequency",
-            "Hz",
-            "frequency",
-            "measurement",
-            "mdi:sine-wave",
-          ),
+        publishSensor(
+          "generator_frequency",
+          active ? p.frequency : 0,
+          () =>
+            sensorConfig(
+              "generator_frequency",
+              "Generator Frequency",
+              "Hz",
+              "frequency",
+              "measurement",
+              "mdi:sine-wave",
+            ),
+          active,
         );
       }
 
       if (typeof p.rms_voltage === "number" && typeof p.rms_current === "number") {
-        const power = parseFloat((p.rms_voltage * p.rms_current).toFixed(1));
-        publishSensor("generator_ac_power", power, () =>
-          sensorConfig(
-            "generator_ac_power",
-            "Generator AC Power",
-            "VA",
-            "apparent_power",
-            "measurement",
-            "mdi:flash",
-          ),
+        const power = active
+          ? parseFloat((p.rms_voltage * p.rms_current).toFixed(1))
+          : 0;
+        publishSensor(
+          "generator_ac_power",
+          power,
+          () =>
+            sensorConfig(
+              "generator_ac_power",
+              "Generator AC Power",
+              "VA",
+              "apparent_power",
+              "measurement",
+              "mdi:flash",
+            ),
+          active,
         );
       }
     }
-
 
     if (messages.length === 0) {
       return null;
     }
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1230
-  "y": 1220
+  'y': 1220
   wires:
     - - d3a13b531babee66
 - id: 91cac903d306591a
@@ -4882,10 +4565,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1250
-  "y": 800
+  'y': 800
   wires: []
 - id: 93f4efc3d5dc3fde
   type: function
@@ -5136,11 +4819,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 680
+  'y': 680
   wires:
     - - d3a13b531babee66
 - id: 9621acf15d833362
@@ -5376,11 +5059,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 800
+  'y': 800
   wires:
     - - 91cac903d306591a
 - id: 96c3c21a4dd0b9bd
@@ -5433,11 +5116,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 980
+  'y': 980
   wires:
     - - 5004281b11ec3bd7
 - id: 9e8e5609c54fec82
@@ -5486,11 +5169,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 920
+  'y': 920
   wires:
     - - c3c4a8bcea0243e9
 - id: 9f3a9fd8a4506e74
@@ -5503,10 +5186,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1240
-  "y": 860
+  'y': 860
   wires: []
 - id: 9f88f215f3f07227
   type: switch
@@ -5627,11 +5310,11 @@
       v: WIRELESS_PANEL
       vt: str
     - t: else
-  checkall: "false"
+  checkall: 'false'
   repair: false
   outputs: 38
   x: 420
-  "y": 800
+  'y': 800
   wires:
     - - 1bb521d55aeb5eba
     - - bacdea9854675b01
@@ -5833,32 +5516,27 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 790
-  "y": 1520
+  'y': 1520
   wires:
     - - fa30f6cf9bede7e9
 - id: a037b4692cc9f1dd
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_dc_driver_status
-  func: >
+  func: |
     // Decode DC Component Driver Status Messages (16F00 - 16300)
-
 
     const payload = msg.payload;
 
-
-    if (!payload || !payload.dgn_name.startsWith("DC_COMPONENT_DRIVER_STATUS_"))
-    {
+    if (!payload || !payload.dgn_name.startsWith("DC_COMPONENT_DRIVER_STATUS_")) {
       return null;
     }
 
-
     const data_payload = payload.data_payload;
-
     if (
       !data_payload ||
       typeof data_payload !== "string" ||
@@ -5867,18 +5545,13 @@
       return null;
     }
 
-
     const bytePairs = data_payload.match(/.{1,2}/g);
-
     if (!bytePairs || bytePairs.length < 8) {
       return null;
     }
 
-
     const device_instance = parseInt(bytePairs[0], 16);
-
     const driver_index = parseInt(bytePairs[1], 16);
-
 
     let out = {
       originalMessage: payload.originalMessage,
@@ -5889,11 +5562,9 @@
       instance: driver_index, // Override instance with functional driver_index
     };
 
-
     if (payload.destination_address !== undefined) {
       out.destination_address = payload.destination_address;
     }
-
 
     switch (payload.dgn_name) {
       case "DC_COMPONENT_DRIVER_STATUS_1": {
@@ -5919,18 +5590,16 @@
       }
     }
 
-
     msg.payload = out;
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 1940
+  'y': 1940
   wires:
     - - d0ac05ad545390ce
 - id: a9069efd6410088f
@@ -5941,15 +5610,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 190
-  "y": 1740
+  'y': 1740
   g: 1f7fde87c1ab1f51
   wires:
     - - 7a0956cdace18b52
@@ -6029,50 +5698,38 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1130
-  "y": 560
+  'y': 560
   wires:
     - - b3e18602b6affaf5
 - id: ad388870b71549ef
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_shade
-  func: >
+  func: |
     // HA Status Publisher for Shade (WINDOW_SHADE_STATUS, §6.40)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
         return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
         return null;
     }
 
-
     const motorStatus = p.motor_status;
-
     const forwardStatus = p.forward_status;
-
     const reverseStatus = p.reverse_status;
 
-
     let haState, position;
-
 
     if (motorStatus === 1 && forwardStatus === 1) {
         haState = "opening";
@@ -6086,23 +5743,15 @@
         position = 50;
     }
 
-
     const entityId = `shade_${instance}`;
-
     const componentType = "cover";
-
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "shadeCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance]) {
         messages.push({
@@ -6137,24 +5786,21 @@
         flow.set(CREATED_KEY, created);
     }
 
-
     // State update (JSON for state + position)
-
     messages.push({
         topic: stateTopic,
         payload: JSON.stringify({ state: haState, position: position }),
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1210
-  "y": 280
+  'y': 280
   wires:
     - - d3a13b531babee66
 - id: ae9f041c9cd36bb9
@@ -6330,11 +5976,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 1100
+  'y': 1100
   wires:
     - - e06ff8584295e0bd
 - id: b2bda5ef5e68c98d
@@ -6566,11 +6212,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 740
+  'y': 740
   wires:
     - - 19307edfe4e5bd84
 - id: b3e18602b6affaf5
@@ -6684,26 +6330,22 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1330
-  "y": 560
+  'y': 560
   wires:
     - - d3a13b531babee66
 - id: b797e5a52b6db5b4
   type: function
   z: 3e5f038a4f5a8b9a
   name: unique_status
-  func: >
-    // Passes through the first message with each unique dgn_name; drops
-    duplicates.
-
+  func: |
+    // Passes through the first message with each unique dgn_name; drops duplicates.
     let uniqueDecodedStatus = flow.get("uniqueDecodedStatus") || [];
 
-
     const newMsgStr = JSON.stringify(msg.payload.dgn_name);
-
 
     if (!uniqueDecodedStatus.includes(newMsgStr)) {
       uniqueDecodedStatus.push(newMsgStr);
@@ -6711,16 +6353,15 @@
       return msg;
     }
 
-
     return null;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 2200
+  'y': 2200
   g: eb51c1f2d0d389d1
   wires:
     - - 48e6dda2b2d9575e
@@ -6960,11 +6601,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 1460
+  'y': 1460
   wires:
     - - 04bc7637ee7139d8
 - id: bacdea9854675b01
@@ -7202,11 +6843,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 160
+  'y': 160
   wires:
     - - f80a9416a8e18e46
 - id: be06adcac3ccd7fc
@@ -7214,37 +6855,25 @@
   z: 3e5f038a4f5a8b9a
   d: true
   name: status_panel_signal
-  func: >
+  func: |
     // HA Status Publisher for proprietary wireless panel signal messages.
-
-    // Self-creating: publishes MQTT discovery on first valid reading per panel
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per panel instance.
     // Handles:
-
     // - WIRELESS_PANEL_SIGNAL_STATUS (BF00): signal strength candidate sensor
-
     // - WIRELESS_PANEL_QUALITY_STATUS (1AA00): quality bucket sensor
-
     // Output 1: MQTT messages (discovery + state)
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
         return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
     const dgnName = p.dgn_name;
-
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
         return null;
     }
-
 
     if (
         dgnName !== "WIRELESS_PANEL_SIGNAL_STATUS" &&
@@ -7253,21 +6882,15 @@
         return null;
     }
 
-
     const messages = [];
-
     const componentType = "sensor";
-
     const CREATED_KEY = "panelSignalCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
     const device = {
         identifiers: ["librecoach-panels"],
         name: "Panels",
         manufacturer: "LibreCoach",
     };
-
 
     function ensureDiscovery(entityId, config) {
         if (created[entityId]) {
@@ -7281,7 +6904,6 @@
 
         created[entityId] = true;
     }
-
 
     if (dgnName === "WIRELESS_PANEL_SIGNAL_STATUS") {
         const signal = p.wireless_strength_candidate_dbm;
@@ -7310,7 +6932,6 @@
         }
     }
 
-
     if (dgnName === "WIRELESS_PANEL_QUALITY_STATUS") {
         const quality = p.quality_bucket_raw;
 
@@ -7336,24 +6957,21 @@
         }
     }
 
-
     if (messages.length === 0) {
         return null;
     }
 
-
     flow.set(CREATED_KEY, created);
-
 
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1240
-  "y": 2060
+  'y': 2060
   wires:
     - []
 - id: c38d48059f463772
@@ -7675,11 +7293,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 460
+  'y': 460
   wires:
     - - f36ccb373852dd16
 - id: c3c4a8bcea0243e9
@@ -7745,48 +7363,36 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1230
-  "y": 920
+  'y': 920
   wires:
     - - d3a13b531babee66
 - id: c853244d3f2e753d
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_lock
-  func: >
+  func: |
     // HA Status Publisher for Lock (LOCK_STATUS, 1FEE5, §6.40)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
-    // Also bootstraps instance 0 ("All Locks") broadcast entity on first
-    message.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
+    // Also bootstraps instance 0 ("All Locks") broadcast entity on first message.
     // Output 1: MQTT messages (discovery + state)
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 0 || instance > 250) {
       return null;
     }
 
-
     // Determine lock state from decoder output
-
     let haStatus;
-
     if (p.is_locked === true) {
       haStatus = "LOCKED";
     } else if (p.is_unlocked === true) {
@@ -7800,26 +7406,18 @@
       }
     }
 
-
     // Require a valid lock state before creating entities
-
     if (!haStatus) {
       return null;
     }
 
-
     const componentType = "lock";
-
     const messages = [];
 
-
     const CREATED_KEY = "lockCreated";
-
     const created = flow.get(CREATED_KEY) || {};
 
-
     // Bootstrap instance 0 ("All Locks") on first lock message
-
     if (!created[0]) {
       const entityId0 = "lock_0";
       messages.push({
@@ -7848,20 +7446,14 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // Skip state publishing for instance 0 (broadcast-only, optimistic)
-
     if (instance === 0) {
       return messages.length > 0 ? [messages] : null;
     }
 
-
     // Self-creating discovery for individual locks
-
     const entityId = `lock_${instance}`;
-
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
-
 
     if (!created[instance]) {
       messages.push({
@@ -7890,24 +7482,21 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // State update
-
     messages.push({
       topic: stateTopic,
       payload: haStatus,
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1210
-  "y": 620
+  'y': 620
   wires:
     - - d3a13b531babee66
 - id: cb64b7a9a87f03cc
@@ -8023,11 +7612,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 860
+  'y': 860
   wires:
     - - 9f3a9fd8a4506e74
 - id: ccec30ad0f32bbdf
@@ -8170,11 +7759,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 1040
+  'y': 1040
   wires:
     - - 6836e28529385aee
 - id: cd9d55c23ebcee86
@@ -8397,11 +7986,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 540
+  'y': 540
   wires:
     - - f183a66e28426985
       - aa518caf7366cec9
@@ -8507,11 +8096,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 340
+  'y': 340
   wires:
     - - e0daa4d3ae733b6a
 - id: d0ac05ad545390ce
@@ -8659,22 +8248,22 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 1940
+  'y': 1940
   wires:
     - - d3a13b531babee66
 - id: d3a13b531babee66
   type: link out
   z: 3e5f038a4f5a8b9a
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 2030
-  "y": 880
+  'y': 880
   l: true
   wires: []
 - id: d76a4a48e1beaed6
@@ -8907,11 +8496,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 680
+  'y': 680
   wires:
     - - 93f4efc3d5dc3fde
 - id: daeff1de077d7dbb
@@ -8919,9 +8508,9 @@
   z: 3e5f038a4f5a8b9a
   name: Floor heat
   x: 48
-  "y": 1613
+  'y': 1613
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 1f7fde87c1ab1f51
@@ -8936,56 +8525,41 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1260
-  "y": 1100
+  'y': 1100
   wires: []
 - id: e0daa4d3ae733b6a
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_dc_load
-  func: >
+  func: |
     // HA Status Publisher for DC Load (DGN 1FFBDh, §6.23.2)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
     // Entity naming: switch_l_N (routing key "switch_l"), "Switches" device.
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
         return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
         return null;
     }
 
-
     const opStatus = p.operating_status;
-
     if (opStatus === undefined || opStatus === "Not Available") {
         return null;
     }
 
-
     // Dimmable detection
-
     const dimmableLights = global.get("dimmableLights", "file") || [];
-
     let isDimmable = dimmableLights.includes(instance);
-
     let needsRecreate = false;
-
 
     function markDimmable() {
         if (!isDimmable) {
@@ -8996,20 +8570,14 @@
         }
     }
 
-
     // Detect dimmable via spec bit
-
     if (p.variable_level_capability === true) {
         markDimmable();
     }
 
-
     // Determine state and brightness
-
     let haStatus;
-
     let brightness;
-
 
     if (typeof opStatus === "number") {
         haStatus = opStatus > 0 ? "ON" : "OFF";
@@ -9025,25 +8593,16 @@
         return null;
     }
 
-
     // Entity identifiers — switch_l_N distinguishes from DC_DIMMER's switch_N
-
     const entityId = `switch_l_${instance}`;
-
     const stateTopic = `homeassistant/light/${entityId}/state`;
-
     const commandTopic = `homeassistant/light/${entityId}/set`;
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "dcLoadCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance] || needsRecreate) {
         const config = {
@@ -9078,18 +8637,13 @@
         flow.set(CREATED_KEY, created);
     }
 
-
     // Store last brightness for dimmable recall on toggle
-
     if (isDimmable && typeof brightness === "number" && brightness > 0) {
         global.set("dimmerBrightness_" + instance, brightness, "file");
     }
 
-
     // Build JSON state payload
-
     const stateObj = { state: haStatus };
-
 
     if (haStatus === "ON") {
         if (isDimmable) {
@@ -9102,22 +8656,20 @@
         }
     }
 
-
     messages.push({
         topic: stateTopic,
         payload: JSON.stringify(stateObj),
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 340
+  'y': 340
   wires:
     - - d3a13b531babee66
 - id: e5d61c5724c6ed1b
@@ -9316,11 +8868,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 840
-  "y": 1280
+  'y': 1280
   wires:
     - - 906e4d6a45bba29f
 - id: e7fac0a7c08bbb90
@@ -9328,71 +8880,54 @@
   z: 3e5f038a4f5a8b9a
   d: true
   name: decode_panel_signal
-  func: >
+  func: |
     // Decoder for proprietary wireless panel signal messages.
-
     // Handles two coach-specific DGNs observed in the field:
-
     // - BF00h: per-panel live RF metric, likely raw signal strength
-
-    // - 1AA00h: per-panel coarse signal-quality companion, likely display
-    bars/state
-
+    // - 1AA00h: per-panel coarse signal-quality companion, likely display bars/state
 
     function toSigned8(value) {
         return value > 127 ? value - 256 : value;
     }
 
-
     function toUint16LE(lowByte, highByte) {
         return lowByte | (highByte << 8);
     }
 
-
     function toSigned16(value) {
         return value > 32767 ? value - 65536 : value;
     }
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
         node.warn("Invalid payload: expected object");
         return null;
     }
 
-
     const incomingPayload = msg.payload;
-
     const { dgn, data_payload } = incomingPayload;
-
 
     if (!dgn || !data_payload) {
         node.warn("Missing required fields: dgn and/or data_payload");
         return null;
     }
 
-
     if (typeof data_payload !== "string" || data_payload.length < 16) {
         node.warn("Invalid data_payload: expected 8-byte hex string");
         return null;
     }
-
 
     if (dgn !== "BF00" && dgn !== "1AA00") {
         node.warn(`[decode_panel_signal] Unexpected DGN: ${dgn}`);
         return null;
     }
 
-
     const d = data_payload.match(/.{1,2}/g).map((b) => parseInt(b, 16));
-
     if (d.some(isNaN)) {
         node.warn("Invalid hex in data_payload");
         return null;
     }
 
-
     const instance = d[0];
-
 
     if (dgn === "BF00") {
         const metricByte1Raw = d[1];
@@ -9435,9 +8970,7 @@
         return msg;
     }
 
-
     const qualityRaw = d[2];
-
 
     msg.payload = {
         ...incomingPayload,
@@ -9455,16 +8988,15 @@
         reserved_byte_7_raw: d[7],
     };
 
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 2060
+  'y': 2060
   wires:
     - - be06adcac3ccd7fc
 - id: eb3524b2b7bf51e5
@@ -9727,11 +9259,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 800
-  "y": 620
+  'y': 620
   wires:
     - - c853244d3f2e753d
 - id: eb51c1f2d0d389d1
@@ -9739,9 +9271,9 @@
   z: 3e5f038a4f5a8b9a
   name: Reset unique STATUS list
   x: 694
-  "y": 2099
+  'y': 2099
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 09640adb1fd08fbb
@@ -9753,10 +9285,10 @@
   z: 3e5f038a4f5a8b9a
   name: Reset floor levels (Don't do this)
   x: 74
-  "y": 1819
+  'y': 1819
   g: daeff1de077d7dbb
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 56aa8b5c045b391d
@@ -9919,71 +9451,50 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 810
-  "y": 1400
+  'y': 1400
   wires:
     - - 78904d457471d1b2
 - id: f183a66e28426985
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_floor_heat
-  func: >
+  func: |
     // HA Status Updater for Floor Heat
 
-
     const payload = msg.payload;
-
     const instance = payload.instance;
-
     const raw_setpoint = payload.raw_setpoint;
 
-
     // --- Level Map ---
-
     const levelMap = global.get("floorHeatLevelMap", "file") || {};
 
-
     // Determine the preset mode early
-
     // "store" (lowest level) maps to HA's built-in "none" preset
-
     const rawPreset = levelMap[raw_setpoint]?.preset || "store";
-
     const presetMode = rawPreset === "store" ? "none" : rawPreset;
-
     const isStorePreset = rawPreset === "store";
 
-
     // --- Climate Status ---
-
     const climatePayload = {};
-
     climatePayload.measured_temperature = payload.measured_temperature;
-
     climatePayload.preset_mode = presetMode;
 
-
     // Mode (Strictly controlled by operating status and schedule status)
-
     let climateMode;
-
     if (payload.operating_status === "Off") {
       climateMode = "off";
     } else {
       // If the system is ON, mode is "auto" only if the schedule is enabled, otherwise "heat"
       climateMode = payload.schedule_mode === "Enabled" ? "auto" : "heat";
     }
-
     climatePayload.mode = climateMode;
 
-
     // Action (idle when off, store, or heating)
-
     let action;
-
     if (payload.operating_status === "Off") {
       action = "off";
     } else if (isStorePreset) {
@@ -9991,37 +9502,23 @@
     } else {
       action = payload.heating_active ? "heating" : "idle";
     }
-
     climatePayload.action = action;
-
 
     // --- Update Context ---
 
-
     // Save schedule state
-
     const scheduleContextKey = `floorHeat_${instance}_ScheduleOn`;
-
     global.set(scheduleContextKey, payload.schedule_mode === "Enabled", "file");
 
-
-    // Save the currently active preset name for command encoder use (internal
-    name, not HA name)
-
+    // Save the currently active preset name for command encoder use (internal name, not HA name)
     const currentPresetKey = `floorHeat_${instance}_CurrentPreset`;
-
     global.set(currentPresetKey, rawPreset, "file");
 
-
     // --- Create MQTT message ---
-
     const climateEntityId = `floor_heat_${instance}`;
-
     const climateStateTopic = `homeassistant/climate/${climateEntityId}/state`;
 
-
     msg.topic = climateStateTopic;
-
     msg.payload = {
       measured_temperature: payload.measured_temperature,
       preset_mode: presetMode,
@@ -10029,63 +9526,47 @@
       action: action,
     };
 
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1230
-  "y": 520
+  'y': 520
   wires:
     - - d3a13b531babee66
 - id: f36ccb373852dd16
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_ac_load
-  func: >
+  func: |
     // HA Status Publisher for AC Load (DGN 1FFBFh, §6.22.2)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
     // Entity naming: switch_ac_N (routing key "switch_a"), "Switches" device.
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       return null;
     }
 
-
     const p = msg.payload;
-
     const instance = p.instance;
-
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
       return null;
     }
 
-
     const opLevel = p.operating_level;
-
     if (opLevel === undefined || opLevel === "Not Available") {
       return null;
     }
 
-
     // Dimmable detection
-
     const dimmableAcLoads = global.get("dimmableAcLoads", "file") || [];
-
     let isDimmable = dimmableAcLoads.includes(instance);
-
     let needsRecreate = false;
-
 
     function markDimmable() {
       if (!isDimmable) {
@@ -10096,20 +9577,14 @@
       }
     }
 
-
     // Detect dimmable via spec bit
-
     if (p.is_dimmable === true) {
       markDimmable();
     }
 
-
     // Determine state and brightness
-
     let haStatus;
-
     let brightness;
-
 
     if (typeof opLevel === "number") {
       haStatus = opLevel > 0 ? "ON" : "OFF";
@@ -10125,25 +9600,16 @@
       return null;
     }
 
-
     // Entity identifiers — switch_ac_N distinguishes from DC_DIMMER and DC_LOAD
-
     const entityId = `switch_ac_${instance}`;
-
     const stateTopic = `homeassistant/light/${entityId}/state`;
-
     const commandTopic = `homeassistant/light/${entityId}/set`;
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "acLoadCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance] || needsRecreate) {
       const config = {
@@ -10178,18 +9644,13 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // Store last brightness for dimmable recall on toggle
-
     if (isDimmable && typeof brightness === "number" && brightness > 0) {
       global.set("acLoadBrightness_" + instance, brightness, "file");
     }
 
-
     // Build JSON state payload
-
     const stateObj = { state: haStatus };
-
 
     if (haStatus === "ON") {
       if (isDimmable) {
@@ -10202,22 +9663,20 @@
       }
     }
 
-
     messages.push({
       topic: stateTopic,
       payload: JSON.stringify(stateObj),
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1220
-  "y": 460
+  'y': 460
   wires:
     - - d3a13b531babee66
 - id: f65fa76598eeb965
@@ -10504,11 +9963,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1240
-  "y": 2000
+  'y': 2000
   wires:
     - - d3a13b531babee66
 - id: f80a9416a8e18e46
@@ -10521,10 +9980,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1230
-  "y": 160
+  'y': 160
   wires: []
 - id: f82e60f4adb5e60b
   type: function
@@ -10749,11 +10208,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 820
-  "y": 1220
+  'y': 1220
   wires:
     - - 906e4d6a45bba29f
 - id: f945d56c437bfb38
@@ -10766,10 +10225,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 810
-  "y": 1700
+  'y': 1700
   wires: []
 - id: fa30f6cf9bede7e9
   type: debug
@@ -10781,10 +10240,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1220
-  "y": 1520
+  'y': 1520
   wires: []
 - id: fbc5efde2c447eda
   type: link in
@@ -10793,7 +10252,7 @@
   links:
     - 02bdfc59de71b5a5
   x: 160
-  "y": 800
+  'y': 800
   l: true
   wires:
     - - 9f88f215f3f07227
@@ -10805,15 +10264,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 820
-  "y": 2140
+  'y': 2140
   g: eb51c1f2d0d389d1
   wires:
     - - 09640adb1fd08fbb

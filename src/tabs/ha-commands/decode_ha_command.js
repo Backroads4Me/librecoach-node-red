@@ -87,6 +87,15 @@ if (aquahot125dMatch) {
   return msg;
 }
 
+// --- Generator control ---
+if (msg.topic === "homeassistant/switch/generator_control/set") {
+  msg.routingKey = "generator";
+  msg.command = String(msg.payload).toUpperCase();
+  msg.entityType = "switch";
+  msg.entityId = "generator_control";
+  return msg;
+}
+
 // --- Switch and Light entities (Fallback) ---
 const topicParts = msg.topic.split("/");
 if (

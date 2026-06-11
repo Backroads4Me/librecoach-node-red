@@ -178,5 +178,17 @@
     "hasInitialize": false,
     "hasFinalize": false,
     "hasInfo": false
+  },
+  "6c7a6786667fe3dd": {
+    "nodeId": "6c7a6786667fe3dd",
+    "name": "encode_generator_demand_command",
+    "sanitizedName": "encode_generator_demand_command",
+    "fileName": "encode_generator_demand_command",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
   }
 }

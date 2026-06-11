@@ -147,19 +147,20 @@ if (dgn_name === "GENERATOR_STATUS_1") {
     );
   }
 
-  if (
-    typeof p.start_battery_voltage === "number" &&
-    p.start_battery_voltage > 0
-  ) {
-    publishSensor("generator_battery_voltage", p.start_battery_voltage, () =>
-      sensorConfig(
-        "generator_battery_voltage",
-        "Generator Battery Voltage",
-        "V",
-        "voltage",
-        "measurement",
-        "mdi:battery",
-      ),
+  if (typeof p.start_battery_voltage === "number") {
+    publishSensor(
+      "generator_battery_voltage",
+      p.start_battery_voltage,
+      () =>
+        sensorConfig(
+          "generator_battery_voltage",
+          "Generator Battery Voltage",
+          "V",
+          "voltage",
+          "measurement",
+          "mdi:battery",
+        ),
+      p.start_battery_voltage > 0,
     );
   }
 
@@ -182,6 +183,32 @@ if (dgn_name === "GENERATOR_STATUS_1") {
         "Generator Fault",
         "problem",
         "mdi:alert-circle",
+      ),
+    );
+  }
+
+  if (typeof p.generator_running === "boolean") {
+    if (!created["generator_control"]) {
+      messages.push({
+        topic: "homeassistant/switch/generator_control/config",
+        payload: {
+          name: "Generator Control",
+          unique_id: "generator_control",
+          default_entity_id: "switch.generator_control",
+          state_topic: "homeassistant/switch/generator_control/state",
+          command_topic: "homeassistant/switch/generator_control/set",
+          payload_on: "ON",
+          payload_off: "OFF",
+          icon: "mdi:engine",
+          device,
+        },
+      });
+      markCreated("generator_control");
+    }
+    messages.push(
+      stateMsg(
+        "homeassistant/switch/generator_control/state",
+        onOff(p.generator_running),
       ),
     );
   }
@@ -308,61 +335,76 @@ if (dgn_name === "GENERATOR_STATUS_1") {
 
   // --- GENERATOR_AC_STATUS_1 ---
 } else if (dgn_name === "GENERATOR_AC_STATUS_1") {
-  // Only publish AC values when output is active (rms_voltage > 50V)
-  if (!p.ac_output_active) {
-    return null;
-  }
+  const active = !!p.ac_output_active;
 
   if (typeof p.rms_voltage === "number") {
-    publishSensor("generator_ac_voltage", p.rms_voltage, () =>
-      sensorConfig(
-        "generator_ac_voltage",
-        "Generator AC Voltage",
-        "V",
-        "voltage",
-        "measurement",
-        "mdi:lightning-bolt",
-      ),
+    publishSensor(
+      "generator_ac_voltage",
+      active ? p.rms_voltage : 0,
+      () =>
+        sensorConfig(
+          "generator_ac_voltage",
+          "Generator AC Voltage",
+          "V",
+          "voltage",
+          "measurement",
+          "mdi:lightning-bolt",
+        ),
+      active,
     );
   }
 
   if (typeof p.rms_current === "number") {
-    publishSensor("generator_ac_current", p.rms_current, () =>
-      sensorConfig(
-        "generator_ac_current",
-        "Generator AC Current",
-        "A",
-        "current",
-        "measurement",
-        "mdi:current-ac",
-      ),
+    publishSensor(
+      "generator_ac_current",
+      active ? p.rms_current : 0,
+      () =>
+        sensorConfig(
+          "generator_ac_current",
+          "Generator AC Current",
+          "A",
+          "current",
+          "measurement",
+          "mdi:current-ac",
+        ),
+      active,
     );
   }
 
   if (typeof p.frequency === "number") {
-    publishSensor("generator_frequency", p.frequency, () =>
-      sensorConfig(
-        "generator_frequency",
-        "Generator Frequency",
-        "Hz",
-        "frequency",
-        "measurement",
-        "mdi:sine-wave",
-      ),
+    publishSensor(
+      "generator_frequency",
+      active ? p.frequency : 0,
+      () =>
+        sensorConfig(
+          "generator_frequency",
+          "Generator Frequency",
+          "Hz",
+          "frequency",
+          "measurement",
+          "mdi:sine-wave",
+        ),
+      active,
     );
   }
 
   if (typeof p.rms_voltage === "number" && typeof p.rms_current === "number") {
-    const power = parseFloat((p.rms_voltage * p.rms_current).toFixed(1));
-    publishSensor("generator_ac_power", power, () =>
-      sensorConfig(
-        "generator_ac_power",
-        "Generator AC Power",
-        "VA",
-        "apparent_power",
-        "measurement",
-        "mdi:flash",
-      ),
+    const power = active
+      ? parseFloat((p.rms_voltage * p.rms_current).toFixed(1))
+      : 0;
+    publishSensor(
+      "generator_ac_power",
+      power,
+      () =>
+        sensorConfig(
+          "generator_ac_power",
+          "Generator AC Power",
+          "VA",
+          "apparent_power",
+          "measurement",
+          "mdi:flash",
+        ),
+      active,
     );
   }
 }

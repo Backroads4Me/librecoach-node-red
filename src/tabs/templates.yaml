@@ -4,39 +4,26 @@
   env: []
   normalizedLabel: templates
   disabled: false
-  info: ""
+  info: ''
 - id: 080d3da2e1d0d2ff
   type: function
   z: bfa6336b0d45dc23
   name: import_summary
-  func: >
+  func: |
     // Summarizes import results after all entity registry updates complete
-
-    // Input: msg.payload = array of ha-api WebSocket responses (from Join after
-    Split)
-
-    //        msg.importCounts = { totalInFile, skippedUnchanged,
-    skippedMissing, toUpdate }
-
+    // Input: msg.payload = array of ha-api WebSocket responses (from Join after Split)
+    //        msg.importCounts = { totalInFile, skippedUnchanged, skippedMissing, toUpdate }
     // Output 1: msg configured for HA persistent notification
-
     // Output 2: JSON result for HTTP Response to browser
 
-
     msg.res = msg._originalRes;
-
     delete msg._originalRes;
 
-
     const responses = Array.isArray(msg.payload) ? msg.payload : [msg.payload];
-
     const counts = msg.importCounts || {};
 
-
     let updated = 0;
-
     let failed = 0;
-
 
     for (const res of responses) {
         if (res && res.entity_id) {
@@ -46,29 +33,20 @@
         }
     }
 
-
-    const skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing ||
-    0);
-
+    const skipped = (counts.skippedUnchanged || 0) + (counts.skippedMissing || 0);
 
     // Output 2: HTTP Response to browser
-
     const httpMsg = {
         payload: { updated, skipped, failed },
         statusCode: 200,
         res: msg.res,
     };
 
-
     // Output 1: HA persistent notification
-
     const haBaseUrl = "http://supervisor/core";
-
     const haToken = env.get("SUPERVISOR_TOKEN");
 
-
     let notifyMsg = null;
-
 
     if (haToken) {
         notifyMsg = {
@@ -86,23 +64,21 @@
         };
     }
 
-
     node.status({
         fill: failed > 0 ? "yellow" : "green",
         shape: "dot",
         text: `${updated} updated, ${skipped} skipped, ${failed} failed`,
     });
 
-
     return [notifyMsg, httpMsg];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1670
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - e686216d7dd9f13c
@@ -310,39 +286,39 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 380
-  "y": 560
+  'y': 560
   g: 3296e5f0fcd2c737
   wires:
     - - 40e089e9bdbb5373
 - id: 0d5ca59cd7836171
   type: split
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   splt: \n
   spltType: str
   arraySplt: 1
   arraySpltType: len
   stream: false
-  addname: ""
+  addname: ''
   property: payload
   x: 970
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - c2e0c58f22ff4794
 - id: 12a57f6a07d0bf1a
   type: link out
   z: bfa6336b0d45dc23
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 590
-  "y": 420
+  'y': 420
   g: export_config_group_001
   l: true
   wires: []
@@ -351,9 +327,9 @@
   z: bfa6336b0d45dc23
   name: Import Configuration
   x: 94
-  "y": 519
+  'y': 519
   style:
-    stroke: "#3d85c6"
+    stroke: '#3d85c6'
     label: true
   nodes:
     - 080d3da2e1d0d2ff
@@ -379,10 +355,10 @@
   type: http response
   z: bfa6336b0d45dc23
   name: http response
-  statusCode: ""
+  statusCode: ''
   headers: {}
   x: 600
-  "y": 560
+  'y': 560
   g: 3296e5f0fcd2c737
   wires: []
 - id: 47ac3adc971d73eb
@@ -393,7 +369,7 @@
   links:
     - a1e89f48333c8256
   x: 570
-  "y": 780
+  'y': 780
   g: 3296e5f0fcd2c737
   l: true
   wires: []
@@ -405,18 +381,18 @@
   links:
     - a1e89f48333c8256
   x: 1890
-  "y": 340
+  'y': 340
   g: export_config_group_001
   l: true
   wires: []
 - id: 48af3768692e8e47
   type: http response
   z: bfa6336b0d45dc23
-  name: ""
-  statusCode: ""
+  name: ''
+  statusCode: ''
   headers: {}
   x: 970
-  "y": 700
+  'y': 700
   g: 3296e5f0fcd2c737
   wires: []
 - id: 50bc401ae974546e
@@ -427,9 +403,9 @@
   method: get
   upload: false
   skipBodyParsing: false
-  swaggerDoc: ""
+  swaggerDoc: ''
   x: 170
-  "y": 560
+  'y': 560
   g: 3296e5f0fcd2c737
   wires:
     - - 0bd062c51b9e4b8b
@@ -455,18 +431,18 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 360
-  "y": 780
+  'y': 780
   g: 3296e5f0fcd2c737
   wires:
     - - 47ac3adc971d73eb
 - id: 614d0e17e66848f3
   type: note
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   content: |-
     # Comfig Templates
     LibreCoach auto-discovers your RV's devices, but the
@@ -476,7 +452,7 @@
     with the community. Other owners with a similar RV can
     import your file to get meaningful names without starting from scratch.
   x: 350
-  "y": 140
+  'y': 140
   wires: []
 - id: 616a7d5b8036c0b5
   type: http in
@@ -486,82 +462,76 @@
   method: post
   upload: false
   skipBodyParsing: false
-  swaggerDoc: ""
+  swaggerDoc: ''
   x: 180
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - 83e45c7061bd9e49
 - id: 6a3efcac3894a63f
   type: ha-api
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   server: d568dc0e5978b830
   version: 1
   debugenabled: false
   protocol: websocket
   method: get
-  path: ""
-  data: ""
+  path: ''
+  data: ''
   dataType: jsonata
   responseType: json
   outputProperties:
     - property: payload
       propertyType: msg
-      value: ""
+      value: ''
       valueType: results
   x: 1350
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - d3b9548ea352bc6c
 - id: 6ea3c976edca4420
   type: http request
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   method: use
   ret: obj
   paytoqs: ignore
-  url: ""
-  tls: ""
+  url: ''
+  tls: ''
   persist: false
-  proxy: ""
+  proxy: ''
   insecureHTTPParser: false
-  authType: ""
+  authType: ''
   senderr: false
   headers: []
   x: 570
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - a439179f7b78685a
 - id: 6fe721da58a82100
   type: http response
   z: bfa6336b0d45dc23
-  name: ""
-  statusCode: ""
+  name: ''
+  statusCode: ''
   headers: {}
   x: 1850
-  "y": 700
+  'y': 700
   g: 3296e5f0fcd2c737
   wires: []
 - id: 83e45c7061bd9e49
   type: function
   z: bfa6336b0d45dc23
   name: import_validation
-  func: >
+  func: |
     // Validates incoming import JSON and prepares HA states request
-
     // Input: msg.payload = parsed JSON body from POST /librecoach/import
-
-    // Output 1: valid → msg configured for GET /api/states (with
-    msg.importConfig)
-
+    // Output 1: valid → msg configured for GET /api/states (with msg.importConfig)
     // Output 2: error → msg.payload = error JSON for HTTP Response
 
-
     const data = msg.payload;
-
 
     if (!data || typeof data !== "object") {
       msg.payload = { error: "Invalid request: expected a JSON object." };
@@ -569,18 +539,14 @@
       return [null, msg];
     }
 
-
     if (!data.entities || typeof data.entities !== "object") {
       msg.payload = { error: "Invalid file: missing 'entities' key." };
       msg.statusCode = 400;
       return [null, msg];
     }
 
-
     const haBaseUrl = "http://supervisor/core";
-
     const haToken = env.get("SUPERVISOR_TOKEN");
-
 
     if (!haToken) {
       msg.payload = {
@@ -590,13 +556,9 @@
       return [null, msg];
     }
 
-
     const allEntities = Object.values(data.entities);
-
     const customized = [];
-
     let skippedUnchanged = 0;
-
 
     for (const entity of allEntities) {
       if (
@@ -613,25 +575,19 @@
       }
     }
 
-
     msg.importConfig = {
       customized: customized,
       skippedUnchanged: skippedUnchanged,
       totalInFile: allEntities.length,
     };
 
-
     msg.url = `${haBaseUrl}/api/states`;
-
     msg.method = "GET";
-
     msg.headers = {
       Authorization: `Bearer ${haToken}`,
       "Content-Type": "application/json",
     };
-
     msg.payload = "";
-
 
     node.status({
       fill: "blue",
@@ -639,16 +595,15 @@
       text: `${customized.length} customized of ${allEntities.length}`,
     });
 
-
     return [msg, null];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 370
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - 6ea3c976edca4420
@@ -657,25 +612,16 @@
   type: function
   z: bfa6336b0d45dc23
   name: import_build_plan
-  func: >
+  func: |
     // Cross-references import entities with current HA entities
-
     // Input:
-
     //   msg.payload = array of state objects from GET /api/states
-
     //   msg.importConfig = { customized, skippedUnchanged, totalInFile }
-
-    // Output 1: msg.payload = array of { entity_id, friendly_name } for Split
-    pipeline
-
+    // Output 1: msg.payload = array of { entity_id, friendly_name } for Split pipeline
     // Output 2: msg.payload = early HTTP response when no entities to update
 
-
     const states = msg.payload;
-
     const config = msg.importConfig;
-
 
     if (!Array.isArray(states) || !config) {
         msg.payload = { error: "Failed to retrieve HA states." };
@@ -683,18 +629,12 @@
         return [null, msg];
     }
 
-
     // Build set of entity IDs currently in HA
-
     const haEntityIds = new Set(states.map((s) => s.entity_id));
 
-
     // Cross-reference: only include entities that exist in HA
-
     const toUpdate = [];
-
     let skippedMissing = 0;
-
 
     for (const entity of config.customized) {
         if (haEntityIds.has(entity.entity_id)) {
@@ -704,16 +644,13 @@
         }
     }
 
-
     // Store counts for summarize_import
-
     msg.importCounts = {
         totalInFile: config.totalInFile,
         skippedUnchanged: config.skippedUnchanged,
         skippedMissing: skippedMissing,
         toUpdate: toUpdate.length,
     };
-
 
     if (toUpdate.length === 0) {
         msg.payload = {
@@ -727,9 +664,7 @@
         return [null, msg];
     }
 
-
     msg.payload = toUpdate;
-
 
     node.status({
         fill: "blue",
@@ -737,16 +672,15 @@
         text: `${toUpdate.length} to update, ${skippedMissing} skipped`,
     });
 
-
     return [msg, null];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 770
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - 0d5ca59cd7836171
@@ -756,7 +690,7 @@
   z: bfa6336b0d45dc23
   name: HA in
   topic: librecoach/import/trigger
-  qos: "2"
+  qos: '2'
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -764,7 +698,7 @@
   rh: 0
   inputs: 0
   x: 170
-  "y": 780
+  'y': 780
   g: 3296e5f0fcd2c737
   wires:
     - - 55dd74b672a2f509
@@ -797,11 +731,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1160
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - 6a3efcac3894a63f
@@ -809,28 +743,18 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_notify_url
-  func: >
+  func: |
     // Stores filename and prepares notification payload
-
-    // Input: msg from Notify Export Complete (has msg.entityCount,
-    msg.exportFilename)
-
+    // Input: msg from Notify Export Complete (has msg.entityCount, msg.exportFilename)
     // Output: msg.payload configured for notify_user
-
 
     const filename = msg.exportFilename || "librecoach_config.json";
 
-
     // Store filename in flow context for the download endpoint
-
     flow.set("exportFilename", filename);
 
-
-    const haBaseUrl = env.get("HA_BASE_URL") ||
-    "http://homeassistant.local:8123";
-
+    const haBaseUrl = env.get("HA_BASE_URL") || "http://homeassistant.local:8123";
     const downloadUrl = `${haBaseUrl}/local/librecoach_download.html`;
-
 
     msg.payload = {
       title: "LibreCoach Export Complete",
@@ -841,30 +765,28 @@
       }
     };
 
-
     node.status({
       fill: "green",
       shape: "dot",
       text: "Notification prepared",
     });
 
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1690
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - 47f3c921ae62126a
 - id: d3b9548ea352bc6c
   type: join
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   mode: custom
   build: array
   property: payload
@@ -874,26 +796,26 @@
   joinerType: str
   useparts: false
   accumulate: false
-  timeout: ""
+  timeout: ''
   count: importCounts.toUpdate
   reduceRight: false
-  reduceExp: ""
-  reduceInit: ""
-  reduceInitType: ""
-  reduceFixup: ""
+  reduceExp: ''
+  reduceInit: ''
+  reduceInitType: ''
+  reduceFixup: ''
   x: 1490
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - - 080d3da2e1d0d2ff
 - id: dda95ad4c2e65ea7
   type: http response
   z: bfa6336b0d45dc23
-  name: ""
-  statusCode: ""
+  name: ''
+  statusCode: ''
   headers: {}
   x: 550
-  "y": 700
+  'y': 700
   g: 3296e5f0fcd2c737
   wires: []
 - id: de184f27cbcc117f
@@ -904,30 +826,30 @@
   filenameType: msg
   appendNewline: true
   createDir: true
-  overwriteFile: "true"
+  overwriteFile: 'true'
   encoding: none
   x: 1500
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - c53cf5f35f59ccd6
 - id: e686216d7dd9f13c
   type: http request
   z: bfa6336b0d45dc23
-  name: ""
+  name: ''
   method: use
   ret: obj
   paytoqs: ignore
-  url: ""
-  tls: ""
+  url: ''
+  tls: ''
   persist: false
-  proxy: ""
+  proxy: ''
   insecureHTTPParser: false
-  authType: ""
+  authType: ''
   senderr: false
   headers: []
   x: 1870
-  "y": 640
+  'y': 640
   g: 3296e5f0fcd2c737
   wires:
     - []
@@ -936,9 +858,9 @@
   z: bfa6336b0d45dc23
   name: Export Configuration
   x: 94
-  "y": 299
+  'y': 299
   style:
-    stroke: "#3d85c6"
+    stroke: '#3d85c6'
     label: true
   nodes:
     - 12a57f6a07d0bf1a
@@ -958,7 +880,7 @@
   z: bfa6336b0d45dc23
   name: Export Entities Trigger (Standard Cards)
   topic: librecoach/export/entities/default/trigger
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -966,7 +888,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 980
+  'y': 980
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001
@@ -978,10 +900,10 @@
   filenameType: msg
   appendNewline: false
   createDir: true
-  overwriteFile: "true"
+  overwriteFile: 'true'
   encoding: none
   x: 1140
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_notify_001
@@ -989,26 +911,16 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_entities_notify
-  func: >
+  func: |
     // Prepares persistent notification for entity list export
-
     // Input: msg with msg.exportFilename, msg.entityCount, and (per variant)
-
     //        msg.downloadPage, msg.notificationId, msg.notifyTitle
-
     // Output: msg.payload configured for notify_user
 
-
     const filename = msg.exportFilename || "librecoach_dashboard_prompt.txt";
-
-    const downloadPage = msg.downloadPage ||
-    "librecoach_download_dashboard.html";
-
-    const haBaseUrl = env.get("HA_BASE_URL") ||
-    "http://homeassistant.local:8123";
-
+    const downloadPage = msg.downloadPage || "librecoach_download_dashboard.html";
+    const haBaseUrl = env.get("HA_BASE_URL") || "http://homeassistant.local:8123";
     const downloadUrl = `${haBaseUrl}/local/${downloadPage}`;
-
 
     msg.payload = {
       title: msg.notifyTitle || "LibreCoach AI Dashboard Prompt",
@@ -1017,18 +929,16 @@
       data: { filename },
     };
 
-
     node.status({ fill: "green", shape: "dot", text: "Notification prepared" });
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1340
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - fa104ff19bbee333
@@ -1036,19 +946,13 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_entities_prepare
-  func: >
-    // Sets up HA Template API call to render the full LibreCoach entity list
-    with area info
-
+  func: |
+    // Sets up HA Template API call to render the full LibreCoach entity list with area info
     // Input: msg (triggered by export button)
-
     // Output: msg configured for POST /api/template
 
-
     const haBaseUrl = "http://supervisor/core";
-
     const haToken = env.get("SUPERVISOR_TOKEN");
-
 
     if (!haToken) {
       node.error("SUPERVISOR_TOKEN not configured.", msg);
@@ -1056,90 +960,50 @@
       return null;
     }
 
-
     msg.headers = {
       Authorization: `Bearer ${haToken}`,
       "Content-Type": "application/json",
     };
-
     msg.url = `${haBaseUrl}/api/template`;
 
-
     // Jinja2 template rendered by HA — catches every LibreCoach entity via
-
     // device manufacturer check (authoritative) plus keyword fallbacks.
-
     // Sorted by area so output groups naturally by room for dashboard building.
-
     const template = `{%- set ns = namespace(rows=[]) -%}
-
     {%- for s in states -%}
-
     {%- set eid = s.entity_id -%}
-
     {%- set domain = eid.split('.')[0] -%}
-
     {%- if domain == 'automation' -%}{%- continue -%}{%- endif -%}
-
     {%- if 'librecoach_victron_' in eid -%}{%- continue -%}{%- endif -%}
-
     {%- set dev_id = device_id(eid) -%}
-
-    {%- set is_lc = dev_id is not none and device_attr(dev_id, 'manufacturer')
-    == 'LibreCoach' -%}
-
-    {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or
-    'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or
-    'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or
-    'librecoach' in eid or 'rv_' in eid -%}
-
+    {%- set is_lc = dev_id is not none and device_attr(dev_id, 'manufacturer') == 'LibreCoach' -%}
+    {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or 'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or 'librecoach' in eid or 'rv_' in eid -%}
     {%- set area = area_name(eid) | default('(no area)', true) -%}
-
     {%- set fname = s.attributes.friendly_name | default(eid) -%}
-
-    {%- if fname.startswith('LibreCoach:') and domain not in ('button', 'text',
-    'select') and 'record_unknown' not in eid -%}{%- continue -%}{%- endif -%}
-
-    {%- if 'switch_' in eid and fname.startswith('Switches ') -%}{%- continue
-    -%}{%- endif -%}
-
-    {%- if s.state in ('unavailable', 'unknown') and domain not in ('button',
-    'text', 'select') -%}{%- continue -%}{%- endif -%}
-
+    {%- if fname.startswith('LibreCoach:') and domain not in ('button', 'text', 'select') and 'record_unknown' not in eid -%}{%- continue -%}{%- endif -%}
+    {%- if 'switch_' in eid and fname.startswith('Switches ') -%}{%- continue -%}{%- endif -%}
+    {%- if s.state in ('unavailable', 'unknown') and domain not in ('button', 'text', 'select') -%}{%- continue -%}{%- endif -%}
     {%- set dc = s.attributes.device_class | default('') -%}
-
     {%- set unit = s.attributes.unit_of_measurement | default('') -%}
-
-    {%- set dimmable = 'true' if 'brightness' in
-    s.attributes.get('supported_color_modes', []) else 'false' -%}
-
-    {%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~
-    '|' ~ dc ~ '|' ~ unit ~ '|' ~ dimmable] -%}
-
+    {%- set dimmable = 'true' if 'brightness' in s.attributes.get('supported_color_modes', []) else 'false' -%}
+    {%- set ns.rows = ns.rows + [area ~ '|' ~ domain ~ '|' ~ eid ~ '|' ~ fname ~ '|' ~ dc ~ '|' ~ unit ~ '|' ~ dimmable] -%}
     {%- endif -%}
-
     {%- endfor -%}
-
     AREA|DOMAIN|ENTITY_ID|FRIENDLY_NAME|DEVICE_CLASS|UNIT|DIMMABLE
-
     {%- for row in ns.rows | sort %}
-
     {{ row }}
-
     {%- endfor %}`;
 
-
     msg.payload = { template };
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 470
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - export_entities_http_001
@@ -1147,20 +1011,14 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_entities_publish
-  func: >
+  func: |
     // Writes AI dashboard prompt and HTML download page to /homeassistant/www/
-
     // Input: msg.payload = rendered string from POST /api/template
-
     //        msg.topic   = trigger topic; "/entities/default/" selects the
-
     //                      standard-cards-only variant (no custom: cards)
-
     // Output: two messages to File Write node (text file + HTML download page)
 
-
     const content = msg.payload;
-
     if (!content || typeof content !== "string") {
       node.error(
         "Invalid response from /api/template — expected rendered string",
@@ -1170,17 +1028,11 @@
       return null;
     }
 
-
-    const PROMPT_HEADER = `You are building a Home Assistant dashboard YAML for
-    an RV control system
-
+    const PROMPT_HEADER = `You are building a Home Assistant dashboard YAML for an RV control system
     called LibreCoach. The dashboard title is "LibreCoach". Use the entity data
-
     at the bottom of this file.
 
-
     --- STEP 1: WEB SEARCH (REQUIRED BEFORE WRITING ANY YAML) ---
-
     Search the web for current documentation on:
       1. "lovelace-mushroom" — current card types, options, feature lists,
          and any breaking changes or deprecations since 2024
@@ -1191,50 +1043,30 @@
 
     HA and mushroom update frequently. Do not rely solely on training data.
 
-
-    --- GLOBAL NAVIGATION ORDER (memorize this — it governs every badge list)
-    ---
+    --- GLOBAL NAVIGATION ORDER (memorize this — it governs every badge list) ---
       1. Lights  2. Doors  3. AC  4. Heat  5. Shades  6. Locks  7. Tanks  8. Energy  9. Misc
     Navigation paths: /dashboard-librecoach/<lowercase-name>
-
-    Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner,
-    mdi:heat-wave,
+    Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner, mdi:heat-wave,
       mdi:roller-shade, mdi:lock, mdi:water, mdi:transmission-tower, mdi:cog-outline
 
     --- STEP 2: REQUIRED CONSTRAINTS ---
-
     • ONLY use: custom:mushroom-* cards and native HA cards (tile, gauge,
       entities, button, history-graph, glance, sensor)
-    • Do NOT use: custom:button-card, layout-card, or any other third-party
-    cards
-
+    • Do NOT use: custom:button-card, layout-card, or any other third-party cards
     • Dashboard must be optimized for MOBILE (compact, touch-friendly)
-
     • ALL views use type: masonry — no sections views
-
-    • Navigation badges: every view gets the full set (minus current view) — see
-    STEP 4.1
-
+    • Navigation badges: every view gets the full set (minus current view) — see STEP 4.1
     • Group entities by area using type: vertical-stack with title: <area name>
-
-    • If an entity has no area, infer one from its name/entity_id — never use
-    "(no area)" as a title
-
-    • If FRIENDLY_NAME is blank or equals the entity_id, derive a readable name
-    from the
+    • If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a title
+    • If FRIENDLY_NAME is blank or equals the entity_id, derive a readable name from the
       entity_id (drop the domain, replace underscores with spaces, Title-Case it) — never display a raw entity_id
-    • Goal: place ~95% of entities. If you can't confidently fit one on a
-    specific view,
+    • Goal: place ~95% of entities. If you can't confidently fit one on a specific view,
       put it in Misc — never silently drop an entity
     • Dashboard path prefix: /dashboard-librecoach/
-
     • Use the exact mdi: icons shown in the examples below — do not substitute
 
-
     --- STEP 3: PRE-PROCESSING — DO THIS BEFORE WRITING ANY YAML ---
-
-    Scan the entire entity data at the bottom of this file and produce a mental
-    checklist:
+    Scan the entire entity data at the bottom of this file and produce a mental checklist:
       a. Which of the 9 views will be created? (apply the rules in the view list below)
       b. Record the final list of active views — this is the ONLY set of badges you will
          place on every view. Do not add or remove badges mid-generation.
@@ -1251,9 +1083,7 @@
       path: misc      title: Misc      icon: mdi:cog-outline     (EVERYTHING not placed on another view — never drop an entity; see STEP 10)
 
     --- STEP 4: EXACT CARD TEMPLATES ---
-
     Copy these patterns exactly, including icon values.
-
 
     ## Light (dimmable, DIMMABLE=true):
       type: custom:mushroom-light-card
@@ -1272,8 +1102,7 @@
       secondary_info: none
       show_brightness_control: false
 
-    ## Shade column headers (first vertical-stack in the Shades view, title:
-    Shades):
+    ## Shade column headers (first vertical-stack in the Shades view, title: Shades):
       type: horizontal-stack
       cards:
         - type: horizontal-stack
@@ -1305,8 +1134,7 @@
       icon: mdi:white-balance-sunny
       secondary_info: none
 
-    ## Doors view — wrap EVERY door in ONE 2-column grid; each door is a
-    vertical-stack:
+    ## Doors view — wrap EVERY door in ONE 2-column grid; each door is a vertical-stack:
       type: grid
       square: false
       columns: 2
@@ -1408,8 +1236,7 @@
       tap_action:
         action: toggle
 
-    ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is
-    "%"):
+    ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is "%"):
       type: gauge
       entity: sensor.librecoach_victron_system_battery_state_of_charge
       name: House
@@ -1421,8 +1248,7 @@
         yellow: 25
         red: 0
 
-    ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V";
-    house or starter):
+    ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V"; house or starter):
       type: gauge
       entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
       name: Starter
@@ -1442,9 +1268,7 @@
       entity: light.switch_57
 
     --- STEP 4.1: NAVIGATION BADGE PROTOCOL ---
-
     All views are masonry. Use a top-level badges: list on every view.
-
     Omit only the badge for the current view. Keep the Global Navigation Order.
 
       badges:
@@ -1549,80 +1373,44 @@
             navigation_path: /dashboard-librecoach/misc
 
     --- STEP 5: LIGHTS VIEW LAYOUT ---
-
     type: masonry. For each area:
-
     • One type: vertical-stack with title: <area name>
-
-    • Inside the stack: one type: grid card (square: false, columns: 2)
-    containing all lights for that area
-
+    • Inside the stack: one type: grid card (square: false, columns: 2) containing all lights for that area
     • Dimmable lights (DIMMABLE=true) use the dimmable template above
-
     • Non-dimmable lights (DIMMABLE=false) use the non-dimmable template
-
     • Light groups (entity_id contains switch_g_) are always non-dimmable,
       place them at the end of their area grid
 
     --- STEP 6: DOORS VIEW LAYOUT ---
-
-    type: masonry. Wrap ALL door locations in a single type: grid (square:
-    false, columns: 2)
-
-    so each door occupies a half-width cell — never let a door card span the
-    full view width.
-
-    Each door location is one type: vertical-stack with title: <location name>
-    inside that grid,
-
-    holding the Open button then the Close button (show_name: true, show_icon:
-    false, show_state: false).
-
-    Door entities are lights named "<place> door open" / "<place> door close";
-    pair them by place.
-
+    type: masonry. Wrap ALL door locations in a single type: grid (square: false, columns: 2)
+    so each door occupies a half-width cell — never let a door card span the full view width.
+    Each door location is one type: vertical-stack with title: <location name> inside that grid,
+    holding the Open button then the Close button (show_name: true, show_icon: false, show_state: false).
+    Door entities are lights named "<place> door open" / "<place> door close"; pair them by place.
 
     --- STEP 7: AC VIEW LAYOUT ---
-
     type: masonry.
-
-    • One vertical-stack title: MicroAir Zones containing a type: grid (columns:
-    2, square: false)
+    • One vertical-stack title: MicroAir Zones containing a type: grid (columns: 2, square: false)
       with all zone tile cards inside it — never place zone tiles loose in the stack
-    • One vertical-stack title: Temperature containing a glance card that lists
-    every
+    • One vertical-stack title: Temperature containing a glance card that lists every
       sensor with DEVICE_CLASS temperature (use name: type: area, or the friendly name
       when the sensor has no area)
 
     --- STEP 8: HEAT VIEW LAYOUT ---
-
     type: masonry.
-
-    • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false)
-    with aquahot_* light cards
-
-    • vertical-stack title: Floor Heat → type: grid (columns: 2, square: false)
-    with tile
+    • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* light cards
+    • vertical-stack title: Floor Heat → type: grid (columns: 2, square: false) with tile
       cards for each floor_heat zone inside it
-    • vertical-stack title: Zone Thermostats → type: grid (columns: 2, square:
-    false) with
+    • vertical-stack title: Zone Thermostats → type: grid (columns: 2, square: false) with
       tile cards for every thermostat_zone_* or furnace_* climate inside it
-    • vertical-stack title: Temperature → type: grid (columns: 2, square: false)
-    with sensor cards
+    • vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
       (graph: none, detail: 1, name: type: area) for sensors with DEVICE_CLASS temperature
 
     --- STEP 9: SHADES VIEW LAYOUT ---
-
     type: masonry. Each area is a type: vertical-stack with title: <area name>.
-
-    The two-column night|day layout uses a single type: grid (columns: 2,
-    square: false)
-
+    The two-column night|day layout uses a single type: grid (columns: 2, square: false)
     inside each vertical-stack — NOT individual horizontal-stacks per pair.
-
-    Using a grid guarantees every card is half-width, including lone unpaired
-    shades.
-
+    Using a grid guarantees every card is half-width, including lone unpaired shades.
 
     Structure:
       1. First vertical-stack — title: Shades (the column header row):
@@ -1642,31 +1430,17 @@
              then its paired day cover (secondary_info: none, icon: mdi:white-balance-sunny).
            Repeat for each pair within the area. Unpaired covers go in the same grid as a
            single half-width card — never place any shade card outside a grid.
-    Pair shades by base FRIENDLY_NAME: the one containing "night" is the night
-    cover, "day" the day cover.
-
+    Pair shades by base FRIENDLY_NAME: the one containing "night" is the night cover, "day" the day cover.
 
     --- STEP 9.1: LOCKS VIEW LAYOUT ---
-
-    type: masonry. All locks go in a single vertical-stack title: Locks,
-    regardless of
-
-    their AREA value. Inside that stack: one type: grid (square: false, columns:
-    2)
-
-    containing every lock button card. Do NOT split locks by area — ignore AREA
-    for locks.
-
-    The button's own name (show_name: true, show_icon: true) identifies each
-    lock.
-
+    type: masonry. All locks go in a single vertical-stack title: Locks, regardless of
+    their AREA value. Inside that stack: one type: grid (square: false, columns: 2)
+    containing every lock button card. Do NOT split locks by area — ignore AREA for locks.
+    The button's own name (show_name: true, show_icon: true) identifies each lock.
 
     --- STEP 10: MISC VIEW LAYOUT ---
-
     type: masonry.
-
-    • Use this exact YAML structure for the LibreCoach Tools card (include only
-    entities
+    • Use this exact YAML structure for the LibreCoach Tools card (include only entities
       present in the entity data; omit the entire entry if the entity is absent):
 
       type: vertical-stack
@@ -1697,38 +1471,26 @@
               name:
                 type: entity
 
-    • AFTER the Tools card, add a vertical-stack title: Other holding every
-    entity not shown
+    • AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
       on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
       sensors/binary_sensors into type: entities cards, others as tile/button cards.
       This is the catch-all — do not silently drop entities.
 
     --- STEP 11: TANKS VIEW LAYOUT ---
-
-    type: masonry. Use a single vertical-stack title: Water Management (or no
-    title):
-
-    • Water pump and autofill mushroom-entity-card switches FIRST — always
-    include color: blue
-
+    type: masonry. Use a single vertical-stack title: Water Management (or no title):
+    • Water pump and autofill mushroom-entity-card switches FIRST — always include color: blue
     • Then tank gauges: fresh water uses the fresh gauge template,
       black/grey tanks use the inverted gauge template
     • Any other water-system switch (e.g. dump valves) also gets color: blue
 
-
     --- STEP 12: ENERGY VIEW LAYOUT ---
-
     type: masonry.
-
-    • vertical-stack title: Batteries → one gauge per battery sensor (pick the
-    SOC gauge
+    • vertical-stack title: Batteries → one gauge per battery sensor (pick the SOC gauge
       when its UNIT is "%", the Voltage gauge when its UNIT is "V"), then the power/inverter
       toggle button if one exists
 
     --- STEP 13: ENTITY DATA FORMAT ---
-
-    The 7-column pipe-delimited data below lists LibreCoach entities (some may
-    be unlabeled).
+    The 7-column pipe-delimited data below lists LibreCoach entities (some may be unlabeled).
       AREA          — HA area; use for grouping. If AREA is "(no area)", infer a
                       logical room or category from the entity_id and friendly_name
                       (e.g. "Living Room", "Bedroom", "Exterior") — never display
@@ -1751,50 +1513,27 @@
       Areas: Entry, Living Room, Kitchen, Bedroom, Bath, Potty, Exterior
 
     --- OUTPUT ---
-
     Produce complete, valid HA dashboard YAML ready to paste into
-
     Settings → Dashboards → LibreCoach → Raw Config Editor.
-
     Do not truncate or summarize.
 
-
-    Use the closest matching card template for each entity. If an entity truly
-    has no
-
-    sensible card, place it in the Misc → Other catch-all rather than discarding
-    it.
-
+    Use the closest matching card template for each entity. If an entity truly has no
+    sensible card, place it in the Misc → Other catch-all rather than discarding it.
 
     `;
 
-
-    const DEFAULT_PROMPT_HEADER = `You are building a Home Assistant dashboard
-    YAML for an RV control system
-
+    const DEFAULT_PROMPT_HEADER = `You are building a Home Assistant dashboard YAML for an RV control system
     called LibreCoach. The dashboard title is "LibreCoach". Use the entity data
-
     at the bottom of this file.
 
-
     --- IMPORTANT: STANDARD CARDS ONLY ---
-
-    This dashboard MUST work on a stock Home Assistant install with NO custom
-    cards
-
-    or HACS frontend resources installed. Use ONLY built-in Home Assistant
-    cards.
-
+    This dashboard MUST work on a stock Home Assistant install with NO custom cards
+    or HACS frontend resources installed. Use ONLY built-in Home Assistant cards.
     NEVER output a card whose type starts with "custom:" — no mushroom, no
-
-    button-card, no layout-card, no auto-entities, nothing third-party. If you
-    are
-
+    button-card, no layout-card, no auto-entities, nothing third-party. If you are
     tempted to reach for a custom card, use the native equivalent shown below.
 
-
     --- STEP 1: WEB SEARCH (REQUIRED BEFORE WRITING ANY YAML) ---
-
     Search the web for current documentation on:
       1. "Home Assistant tile card" — current features list (light-brightness,
          cover-open-close, cover-position, climate-hvac-modes, target-temperature,
@@ -1805,51 +1544,31 @@
 
     HA updates frequently. Do not rely solely on training data.
 
-
-    --- GLOBAL NAVIGATION ORDER (memorize this — it governs every badge list)
-    ---
+    --- GLOBAL NAVIGATION ORDER (memorize this — it governs every badge list) ---
       1. Lights  2. Doors  3. AC  4. Heat  5. Shades  6. Locks  7. Tanks  8. Energy  9. Misc
     Navigation paths: /dashboard-librecoach/<lowercase-name>
-
-    Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner,
-    mdi:heat-wave,
+    Icons in order: mdi:light-recessed, mdi:door, mdi:air-conditioner, mdi:heat-wave,
       mdi:roller-shade, mdi:lock, mdi:water, mdi:transmission-tower, mdi:cog-outline
 
     --- STEP 2: REQUIRED CONSTRAINTS ---
-
     • ONLY use native HA cards: tile, gauge, entities, button, glance, grid,
       vertical-stack, horizontal-stack, history-graph, thermostat, sensor
     • NEVER use any custom:* card. No exceptions.
-
     • Every tile card MUST include hide_state: true (hide the entity state text)
-
     • Dashboard must be optimized for MOBILE (compact, touch-friendly)
-
     • ALL views use type: masonry — no sections views
-
-    • Navigation badges: every view gets the full set (minus current view) — see
-    STEP 4.1
-
+    • Navigation badges: every view gets the full set (minus current view) — see STEP 4.1
     • Group entities by area using type: vertical-stack with title: <area name>
-
-    • If an entity has no area, infer one from its name/entity_id — never use
-    "(no area)" as a title
-
-    • If FRIENDLY_NAME is blank or equals the entity_id, derive a readable name
-    from the
+    • If an entity has no area, infer one from its name/entity_id — never use "(no area)" as a title
+    • If FRIENDLY_NAME is blank or equals the entity_id, derive a readable name from the
       entity_id (drop the domain, replace underscores with spaces, Title-Case it) — never display a raw entity_id
-    • Goal: place ~95% of entities. If you can't confidently fit one on a
-    specific view,
+    • Goal: place ~95% of entities. If you can't confidently fit one on a specific view,
       put it in Misc — never silently drop an entity
     • Dashboard path prefix: /dashboard-librecoach/
-
     • Use the exact mdi: icons shown in the examples below — do not substitute
 
-
     --- STEP 3: PRE-PROCESSING — DO THIS BEFORE WRITING ANY YAML ---
-
-    Scan the entire entity data at the bottom of this file and produce a mental
-    checklist:
+    Scan the entire entity data at the bottom of this file and produce a mental checklist:
       a. Which of the 9 views will be created? (apply the rules in the view list below)
       b. Record the final list of active views — this is the ONLY set of badges you will
          place on every view. Do not add or remove badges mid-generation.
@@ -1866,9 +1585,7 @@
       path: misc      title: Misc      icon: mdi:cog-outline     (EVERYTHING not placed on another view — never drop an entity; see STEP 10)
 
     --- STEP 4: EXACT CARD TEMPLATES (NATIVE CARDS ONLY) ---
-
     Copy these patterns exactly, including icon values.
-
 
     ## Light (dimmable, DIMMABLE=true) — tile with brightness slider:
       type: tile
@@ -1905,8 +1622,7 @@
       features:
         - type: cover-open-close
 
-    ## Doors view — wrap EVERY door in ONE 2-column grid; each door is a
-    vertical-stack:
+    ## Doors view — wrap EVERY door in ONE 2-column grid; each door is a vertical-stack:
       type: grid
       square: false
       columns: 2
@@ -2009,8 +1725,7 @@
       tap_action:
         action: toggle
 
-    ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is
-    "%"):
+    ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is "%"):
       type: gauge
       entity: sensor.librecoach_victron_system_battery_state_of_charge
       name: House
@@ -2022,8 +1737,7 @@
         yellow: 25
         red: 0
 
-    ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V";
-    house or starter):
+    ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V"; house or starter):
       type: gauge
       entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
       name: Starter
@@ -2043,9 +1757,7 @@
       entity: light.switch_57
 
     --- STEP 4.1: NAVIGATION BADGE PROTOCOL ---
-
     All views are masonry. Use a top-level badges: list on every view.
-
     Omit only the badge for the current view. Keep the Global Navigation Order.
 
       badges:
@@ -2150,80 +1862,44 @@
             navigation_path: /dashboard-librecoach/misc
 
     --- STEP 5: LIGHTS VIEW LAYOUT ---
-
     type: masonry. For each area:
-
     • One type: vertical-stack with title: <area name>
-
-    • Inside the stack: one type: grid card (square: false, columns: 2)
-    containing all lights for that area
-
+    • Inside the stack: one type: grid card (square: false, columns: 2) containing all lights for that area
     • Dimmable lights (DIMMABLE=true) use the dimmable tile template above
-
     • Non-dimmable lights (DIMMABLE=false) use the plain tile template
-
     • Light groups (entity_id contains switch_g_) are always non-dimmable,
       place them at the end of their area grid
 
     --- STEP 6: DOORS VIEW LAYOUT ---
-
-    type: masonry. Wrap ALL door locations in a single type: grid (square:
-    false, columns: 2)
-
-    so each door occupies a half-width cell — never let a door card span the
-    full view width.
-
-    Each door location is one type: vertical-stack with title: <location name>
-    inside that grid,
-
-    holding the Open button then the Close button (show_name: true, show_icon:
-    false, show_state: false).
-
-    Door entities are lights named "<place> door open" / "<place> door close";
-    pair them by place.
-
+    type: masonry. Wrap ALL door locations in a single type: grid (square: false, columns: 2)
+    so each door occupies a half-width cell — never let a door card span the full view width.
+    Each door location is one type: vertical-stack with title: <location name> inside that grid,
+    holding the Open button then the Close button (show_name: true, show_icon: false, show_state: false).
+    Door entities are lights named "<place> door open" / "<place> door close"; pair them by place.
 
     --- STEP 7: AC VIEW LAYOUT ---
-
     type: masonry.
-
-    • One vertical-stack title: MicroAir Zones containing a type: grid (columns:
-    2, square: false)
+    • One vertical-stack title: MicroAir Zones containing a type: grid (columns: 2, square: false)
       with all zone tile cards inside it — never place zone tiles loose in the stack
-    • One vertical-stack title: Temperature containing a glance card that lists
-    every
+    • One vertical-stack title: Temperature containing a glance card that lists every
       sensor with DEVICE_CLASS temperature (use name: type: area, or the friendly name
       when the sensor has no area)
 
     --- STEP 8: HEAT VIEW LAYOUT ---
-
     type: masonry.
-
-    • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false)
-    with aquahot_* tile cards
-
-    • vertical-stack title: Floor Heat → type: grid (columns: 2, square: false)
-    with tile
+    • vertical-stack title: Aqua-Hot → type: grid (columns: 2, square: false) with aquahot_* tile cards
+    • vertical-stack title: Floor Heat → type: grid (columns: 2, square: false) with tile
       cards for each floor_heat zone inside it
-    • vertical-stack title: Zone Thermostats → type: grid (columns: 2, square:
-    false) with
+    • vertical-stack title: Zone Thermostats → type: grid (columns: 2, square: false) with
       tile cards for every thermostat_zone_* or furnace_* climate inside it
-    • vertical-stack title: Temperature → type: grid (columns: 2, square: false)
-    with sensor cards
+    • vertical-stack title: Temperature → type: grid (columns: 2, square: false) with sensor cards
       (graph: none, detail: 1, name: type: area) for sensors with DEVICE_CLASS temperature
 
     --- STEP 9: SHADES VIEW LAYOUT ---
-
     type: masonry. Each area is a type: vertical-stack with title: <area name>.
-
-    The two-column night|day layout uses a single type: grid (columns: 2,
-    square: false)
-
+    The two-column night|day layout uses a single type: grid (columns: 2, square: false)
     inside each vertical-stack — NOT individual horizontal-stacks per pair.
-
-    Using a grid guarantees every card is half-width, including lone unpaired
-    shades.
-
+    Using a grid guarantees every card is half-width, including lone unpaired shades.
 
     Structure:
       1. If cover.all_night and cover.all_day exist — vertical-stack title: All:
@@ -2234,31 +1910,17 @@
              then its paired day cover tile (icon: mdi:white-balance-sunny).
            Repeat for each pair within the area. Unpaired covers go in the same grid as a
            single half-width card — never place any shade card outside a grid.
-    Pair shades by base FRIENDLY_NAME: the one containing "night" is the night
-    cover, "day" the day cover.
-
+    Pair shades by base FRIENDLY_NAME: the one containing "night" is the night cover, "day" the day cover.
 
     --- STEP 9.1: LOCKS VIEW LAYOUT ---
-
-    type: masonry. All locks go in a single vertical-stack title: Locks,
-    regardless of
-
-    their AREA value. Inside that stack: one type: grid (square: false, columns:
-    2)
-
-    containing every lock button card. Do NOT split locks by area — ignore AREA
-    for locks.
-
-    The button's own name (show_name: true, show_icon: true) identifies each
-    lock.
-
+    type: masonry. All locks go in a single vertical-stack title: Locks, regardless of
+    their AREA value. Inside that stack: one type: grid (square: false, columns: 2)
+    containing every lock button card. Do NOT split locks by area — ignore AREA for locks.
+    The button's own name (show_name: true, show_icon: true) identifies each lock.
 
     --- STEP 10: MISC VIEW LAYOUT ---
-
     type: masonry.
-
-    • Use this exact YAML structure for the LibreCoach Tools card (include only
-    entities
+    • Use this exact YAML structure for the LibreCoach Tools card (include only entities
       present in the entity data; omit the entire entry if the entity is absent):
 
       type: vertical-stack
@@ -2289,37 +1951,26 @@
               name:
                 type: entity
 
-    • AFTER the Tools card, add a vertical-stack title: Other holding every
-    entity not shown
+    • AFTER the Tools card, add a vertical-stack title: Other holding every entity not shown
       on any other view (e.g. generator_*, furnace_* status, geo_*, update): group related
       sensors/binary_sensors into type: entities cards, others as tile/button cards.
       This is the catch-all — do not silently drop entities.
 
     --- STEP 11: TANKS VIEW LAYOUT ---
-
-    type: masonry. Use a single vertical-stack title: Water Management (or no
-    title):
-
+    type: masonry. Use a single vertical-stack title: Water Management (or no title):
     • Water pump and autofill tile switches FIRST — always include color: blue
-
     • Then tank gauges: fresh water uses the fresh gauge template,
       black/grey tanks use the inverted gauge template
     • Any other water-system switch (e.g. dump valves) also gets color: blue
 
-
     --- STEP 12: ENERGY VIEW LAYOUT ---
-
     type: masonry.
-
-    • vertical-stack title: Batteries → one gauge per battery sensor (pick the
-    SOC gauge
+    • vertical-stack title: Batteries → one gauge per battery sensor (pick the SOC gauge
       when its UNIT is "%", the Voltage gauge when its UNIT is "V"), then the power/inverter
       toggle button if one exists
 
     --- STEP 13: ENTITY DATA FORMAT ---
-
-    The 7-column pipe-delimited data below lists LibreCoach entities (some may
-    be unlabeled).
+    The 7-column pipe-delimited data below lists LibreCoach entities (some may be unlabeled).
       AREA          — HA area; use for grouping. If AREA is "(no area)", infer a
                       logical room or category from the entity_id and friendly_name
                       (e.g. "Living Room", "Bedroom", "Exterior") — never display
@@ -2342,31 +1993,18 @@
       Areas: Entry, Living Room, Kitchen, Bedroom, Bath, Potty, Exterior
 
     --- OUTPUT ---
-
     Produce complete, valid HA dashboard YAML ready to paste into
-
     Settings → Dashboards → LibreCoach → Raw Config Editor.
-
     Do not truncate or summarize.
 
-
-    Use the closest matching card template for each entity. If an entity truly
-    has no
-
-    sensible card, place it in the Misc → Other catch-all rather than discarding
-    it.
-
+    Use the closest matching card template for each entity. If an entity truly has no
+    sensible card, place it in the Misc → Other catch-all rather than discarding it.
     Remember: NO custom:* cards anywhere in the output.
-
 
     `;
 
-
-    // Select the standard-cards-only variant when the default-trigger topic
-    fired.
-
+    // Select the standard-cards-only variant when the default-trigger topic fired.
     const isDefault = (msg.topic || "").includes("/entities/default/");
-
     const variant = isDefault
       ? {
           header: DEFAULT_PROMPT_HEADER,
@@ -2384,7 +2022,6 @@
         };
 
     const fullContent = variant.header + content;
-
     const lineCount = content
       .split("\n")
       .filter((l) => l.trim() && !l.startsWith("AREA")).length;
@@ -2397,61 +2034,44 @@
       notifyTitle: variant.title,
     };
 
-
     const textMsg = {
       filename: `/homeassistant/www/${variant.filename}`,
       payload: fullContent,
       ...common,
     };
 
-
     const htmlMsg = {
       filename: `/homeassistant/www/${variant.downloadPage}`,
       payload: `<!DOCTYPE html>
     <html><head><title>${variant.title}</title></head>
-
     <body>
-
     <script>
-
     var a = document.createElement("a");
-
     a.href = "/local/${variant.filename}";
-
     a.download = "${variant.filename}";
-
     document.body.appendChild(a);
-
     a.click();
-
     setTimeout(function() { window.close(); }, 1000);
-
     </script>
-
-    <p>Your download should start automatically. If not, <a
-    href="/local/${variant.filename}" download="${variant.filename}">click
-    here</a>.</p>
-
+    <p>Your download should start automatically. If not, <a href="/local/${variant.filename}" download="${variant.filename}">click here</a>.</p>
     </body></html>`,
       ...common,
     };
-
 
     node.status({
       fill: "green",
       shape: "dot",
       text: `${lineCount} entities${isDefault ? " (standard)" : ""}`,
     });
-
     return [[textMsg, htmlMsg]];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 940
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - export_entities_file_001
@@ -2460,9 +2080,9 @@
   z: bfa6336b0d45dc23
   name: Export AI Dashboard Prompt
   x: 94
-  "y": 879
+  'y': 879
   style:
-    stroke: "#3d85c6"
+    stroke: '#3d85c6'
     label: true
   nodes:
     - export_entities_default_mqtt_in_001
@@ -2480,16 +2100,16 @@
   method: POST
   ret: txt
   paytoqs: ignore
-  url: ""
-  tls: ""
+  url: ''
+  tls: ''
   persist: false
-  proxy: ""
+  proxy: ''
   insecureHTTPParser: false
-  authType: ""
+  authType: ''
   senderr: false
   headers: []
   x: 710
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_publish_001
@@ -2498,7 +2118,7 @@
   z: bfa6336b0d45dc23
   name: Export Entities Trigger
   topic: librecoach/export/entities/trigger
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -2506,7 +2126,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001
@@ -2514,17 +2134,12 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_ha_config
-  func: >
+  func: |
     // Builds export configuration from Home Assistant states
-
     // Input:
-
     //   msg.states - Array from /api/states
-
     //   msg.rvInfo - Object with RV metadata (manufacturer, model, year, other)
-
     // Output: msg.exportConfig (object), msg.exportFilename (string)
-
 
     const ENTITY_PATTERNS = [
       /^light\.switch_\d+$/,
@@ -2538,15 +2153,12 @@
       /^light\.aquahot_(burner|ac_1|ac_2|engine)$/,
     ];
 
-
     if (!msg.states || !Array.isArray(msg.states)) {
       node.error("Input missing 'states' array from /api/states", msg);
       return null;
     }
 
-
     const entities = {};
-
 
     for (const state of msg.states) {
       const entityId = state.entity_id;
@@ -2599,7 +2211,6 @@
       };
     }
 
-
     const exportConfig = {
       export_date: new Date().toISOString(),
       rv_info: msg.rvInfo || {
@@ -2611,12 +2222,9 @@
       entities: entities,
     };
 
-
     msg.exportConfig = exportConfig;
 
-
     const rvInfo = msg.rvInfo || {};
-
     const filenameParts = ["manufacturer", "model", "year", "other"]
       .map((key) => (rvInfo[key] || "").toString().trim())
       .filter((val) => val.length > 0 && val !== "Unknown")
@@ -2628,20 +2236,17 @@
         : "librecoach_config.json";
 
     const entityCount = Object.keys(entities).length;
-
-    node.status({ fill: "green", shape: "dot", text: `${entityCount} entities`
-    });
-
+    node.status({ fill: "green", shape: "dot", text: `${entityCount} entities` });
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1090
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - export_func_publish_url_001
@@ -2649,30 +2254,21 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_publish_url
-  func: >
+  func: |
     // Writes export config and download page to /homeassistant/www/
-
     // Input: msg.exportConfig (object from Build Export Config)
-
     //        msg.exportFilename (dynamic filename from export_ha_config)
-
-    // Output: two messages to File Write node (JSON export + HTML download
-    page)
-
+    // Output: two messages to File Write node (JSON export + HTML download page)
 
     if (!msg.exportConfig) {
         node.error("Missing exportConfig object", msg);
         return null;
     }
 
-
     const entityCount = Object.keys(msg.exportConfig.entities || {}).length;
-
     const filename = msg.exportFilename || "librecoach_config.json";
 
-
     // Message 1: the JSON export file
-
     const jsonMsg = {
         filename: `/homeassistant/www/${filename}`,
         payload: JSON.stringify(msg.exportConfig, null, 2),
@@ -2680,50 +2276,35 @@
         exportFilename: filename,
     };
 
-
     // Message 2: HTML download page that auto-triggers the file download
-
     const htmlMsg = {
         filename: "/homeassistant/www/librecoach_download.html",
         payload: `<!DOCTYPE html>
     <html><head><title>LibreCoach Download</title></head>
-
     <body>
-
     <script>
-
     var a = document.createElement("a");
-
     a.href = "/local/${filename}";
-
     a.download = "${filename}";
-
     document.body.appendChild(a);
-
     a.click();
-
     setTimeout(function() { window.close(); }, 1000);
-
     </script>
-
-    <p>Your download should start automatically. If not, <a
-    href="/local/${filename}" download="${filename}">click here</a>.</p>
-
+    <p>Your download should start automatically. If not, <a href="/local/${filename}" download="${filename}">click here</a>.</p>
     </body></html>`,
         entityCount: entityCount,
         exportFilename: filename,
     };
 
-
     return [[jsonMsg, htmlMsg]];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1310
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - de184f27cbcc117f
@@ -2771,11 +2352,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 400
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - export_http_states_001
@@ -2783,43 +2364,30 @@
   type: function
   z: bfa6336b0d45dc23
   name: store_rv_info
-  func: >
+  func: |
     // Stores RV info values from text input entities to flow context
-
     // Input: msg.topic = "librecoach/rv_info/{field}/set"
-
     //        msg.payload = value string
-
     // Output: Republishes to state topic for HA sync
 
-
     // Parse the topic to get the field name
-
     const topicMatch = msg.topic.match(/^librecoach\/rv_info\/(\w+)\/set$/);
-
     if (!topicMatch) {
       node.warn(`Unexpected topic format: ${msg.topic}`);
       return null;
     }
 
-
     const field = topicMatch[1];
-
     const value = String(msg.payload).trim();
 
-
     // Valid fields
-
     const validFields = ["rv_manufacturer", "rv_model", "rv_year", "rv_other"];
-
     if (!validFields.includes(field)) {
       node.warn(`Unknown RV info field: ${field}`);
       return null;
     }
 
-
     // Get current RV info from flow context or initialize
-
     let rvInfo = flow.get("rvInfo") || {
       rv_manufacturer: "",
       rv_model: "",
@@ -2827,42 +2395,30 @@
       rv_other: "",
     };
 
-
     // Update the field
-
     rvInfo[field] = value;
 
-
     // Store back to flow context
-
     flow.set("rvInfo", rvInfo);
 
-
-    // Also persist to global file store so create_user_toggles.js can restore
-    on restart
-
+    // Also persist to global file store so create_user_toggles.js can restore on restart
     global.set(field, value, "file");
 
-
     // Republish to state topic for HA to confirm the update
-
     msg.topic = `librecoach/rv_info/${field}`;
-
     msg.payload = value;
 
-
     node.status({ fill: "green", shape: "dot" });
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 370
-  "y": 420
+  'y': 420
   g: export_config_group_001
   wires:
     - - 12a57f6a07d0bf1a
@@ -2870,46 +2426,36 @@
   type: function
   z: bfa6336b0d45dc23
   name: export_store_ha_states
-  func: >
+  func: |
     // Stores Home Assistant states response
-
-    // Input: msg.payload = response from GET /api/states (array of state
-    objects)
-
+    // Input: msg.payload = response from GET /api/states (array of state objects)
     // Output: msg with states array ready for export function
 
-
     // Validate response
-
     if (!msg.payload || !Array.isArray(msg.payload)) {
       node.error("Invalid response from /api/states - expected array", msg);
       return null;
     }
 
-
     // Store states in message for downstream processing
-
     msg.states = msg.payload;
 
-
     // Log count for debugging
-
     node.status({
       fill: "blue",
       shape: "dot",
       text: `${msg.states.length} entities`,
     });
 
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 850
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - export_func_build_001
@@ -2920,16 +2466,16 @@
   method: GET
   ret: obj
   paytoqs: ignore
-  url: ""
-  tls: ""
+  url: ''
+  tls: ''
   persist: false
-  proxy: ""
+  proxy: ''
   insecureHTTPParser: false
-  authType: ""
+  authType: ''
   senderr: false
   headers: []
   x: 620
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - export_func_store_states_001
@@ -2938,7 +2484,7 @@
   z: bfa6336b0d45dc23
   name: RV Info Input
   topic: librecoach/rv_info/+/set
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -2946,7 +2492,7 @@
   rh: 0
   inputs: 0
   x: 190
-  "y": 420
+  'y': 420
   g: export_config_group_001
   wires:
     - - export_func_store_rv_001
@@ -2955,7 +2501,7 @@
   z: bfa6336b0d45dc23
   name: Export Trigger
   topic: librecoach/export/trigger
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -2963,7 +2509,7 @@
   rh: 0
   inputs: 0
   x: 190
-  "y": 340
+  'y': 340
   g: export_config_group_001
   wires:
     - - export_func_read_rv_001
@@ -2975,7 +2521,7 @@
   links:
     - a1e89f48333c8256
   x: 1550
-  "y": 920
+  'y': 920
   g: export_entities_group_001
   l: true
   wires: []

@@ -4,7 +4,7 @@
   env: []
   normalizedLabel: aquahot
   disabled: false
-  info: ""
+  info: ''
 - id: 1bd7e1d4c5f3864a
   type: debug
   z: 384249601e37ba22
@@ -15,21 +15,21 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 620
-  "y": 420
+  'y': 420
   g: 5811945b9bad79dc
   wires: []
 - id: 1c1403c14b577fb4
   type: link out
   z: 384249601e37ba22
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 1290
-  "y": 480
+  'y': 480
   g: 5811945b9bad79dc
   l: true
   wires: []
@@ -37,14 +37,10 @@
   type: function
   z: 384249601e37ba22
   name: status_aquahot_1
-  func: >
+  func: |
     // HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
-
-    // Self-creating: publishes MQTT discovery on first valid reading per
-    instance.
-
+    // Self-creating: publishes MQTT discovery on first valid reading per instance.
     // Output 1: MQTT messages (discovery + state)
-
 
     if (
       !msg.payload ||
@@ -54,20 +50,14 @@
       return null;
     }
 
-
     const instance = msg.payload.instance;
-
     const status = msg.payload.status;
 
-
-    if (status === "Not Available" || status === "Reserved" || status ===
-    "Error") {
+    if (status === "Not Available" || status === "Reserved" || status === "Error") {
       return null;
     }
 
-
     // Validate instance is one of the expected values
-
     const instanceConfig = {
       burner: { name: "Diesel Burner", icon: "mdi:fire" },
       ac_1: { name: "AC Element 1", icon: "mdi:lightning-bolt" },
@@ -75,32 +65,21 @@
       engine: { name: "Engine Pre-heat", icon: "mdi:engine" },
     };
 
-
     const config = instanceConfig[instance];
-
     if (!config) {
       return null;
     }
 
-
     const haStatus = status.toUpperCase();
-
     const entityId = `aquahot_${instance}`;
-
     const componentType = "light";
-
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
-
 
     const messages = [];
 
-
     // Self-creating discovery: publish config on first valid reading
-
     const CREATED_KEY = "aquahotCreated";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     if (!created[instance]) {
       messages.push({
@@ -126,24 +105,21 @@
       flow.set(CREATED_KEY, created);
     }
 
-
     // State update
-
     messages.push({
       topic: stateTopic,
       payload: haStatus,
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 910
-  "y": 480
+  'y': 480
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4
@@ -151,66 +127,44 @@
   type: function
   z: 384249601e37ba22
   name: status_aquahot_2
-  func: >
+  func: |
     // Publishes proprietary AquaHot zone entity states to MQTT state topics.
-
-    // Also publishes MQTT discovery configs the first time a valid value is
-    received.
-
+    // Also publishes MQTT discovery configs the first time a valid value is received.
     //
-
     // ROUTING: This node handles 5 DGN names. Four are proprietary AquaHot DGNs
-
-    // (FF01, FF2F, FF2E, 6C00) routed from decode_aquahot_status_2. The fifth
-    is
-
-    // WATERHEATER_STATUS_2 (1FE99) which must ALSO be routed here (in addition
-    to
-
+    // (FF01, FF2F, FF2E, 6C00) routed from decode_aquahot_status_2. The fifth is
+    // WATERHEATER_STATUS_2 (1FE99) which must ALSO be routed here (in addition to
     // status_waterheater) so zone_active flags can update the climate entities.
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
-
     const p = msg.payload;
-
     const dgn_name = p.dgn_name;
-
     const messages = [];
-
 
     // === Device definition ===
 
-
     // Shared device explicitly with standard water heater entities
-
     const device = {
       identifiers: ["librecoach-aquahot"],
       name: "Aqua-Hot",
       manufacturer: "LibreCoach",
     };
 
-
     // === Flow context ===
 
-
     const CREATED_KEY = "aquahot_zone_entities_created_v2";
-
     const created = flow.get(CREATED_KEY) || {};
-
 
     function markCreated(entityId) {
       created[entityId] = true;
       flow.set(CREATED_KEY, created);
     }
 
-
     // === Discovery config builders ===
-
 
     function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
       const cfg = {
@@ -230,7 +184,6 @@
       };
     }
 
-
     function binarySensorConfig(entityId, name, deviceClass, icon) {
       return {
         topic: `homeassistant/binary_sensor/${entityId}/config`,
@@ -248,19 +201,15 @@
       };
     }
 
-
     // === Helpers ===
-
 
     function stateMsg(topic, payload) {
       return { topic, payload };
     }
 
-
     function onOff(value) {
       return value ? "ON" : "OFF";
     }
-
 
     function publishSensor(entityId, stateValue, configFn, canCreate = true) {
       if (!created[entityId]) {
@@ -271,7 +220,6 @@
       messages.push(stateMsg(`homeassistant/sensor/${entityId}/state`, stateValue));
     }
 
-
     function publishBinary(entityId, stateValue, configFn) {
       if (!created[entityId]) {
         messages.push(configFn());
@@ -281,7 +229,6 @@
         stateMsg(`homeassistant/binary_sensor/${entityId}/state`, stateValue),
       );
     }
-
 
     function switchConfig(entityId, name, icon, commandTopic) {
       return {
@@ -300,7 +247,6 @@
       };
     }
 
-
     function publishSwitch(entityId, stateValue, configFn) {
       if (!created[entityId]) {
         messages.push(configFn());
@@ -308,7 +254,6 @@
       }
       messages.push(stateMsg(`homeassistant/switch/${entityId}/state`, stateValue));
     }
-
 
     function climateConfig(entityId, name) {
       const cfg = {
@@ -329,7 +274,6 @@
         payload: cfg,
       };
     }
-
 
     function publishClimate(entityId, mode, temp, action, configFn) {
       const isNew = !created[entityId];
@@ -362,18 +306,13 @@
       }
     }
 
-
     // Parse hex format helper
-
     function toHex(val) {
       return "0x" + val.toString(16).toUpperCase().padStart(2, "0");
     }
 
-
     // === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
-
     // Provides current zone temperature
-
     if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
       const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2
 
@@ -402,12 +341,8 @@
       }
     }
 
-
     // === AQUAHOT_COMMAND_2 (FF2F) ===
-
-    // Event-driven commands from 0x9E. Not periodic — only sent on state
-    changes.
-
+    // Event-driven commands from 0x9E. Not periodic — only sent on state changes.
     else if (dgn_name === "AQUAHOT_COMMAND_2") {
       if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
         // Quiet Mode on/off
@@ -436,16 +371,10 @@
       }
     }
 
-
     // === WATERHEATER_STATUS_2 (1FE99) — AquaHot zone active flags ===
-
     // On AquaHot systems, byte 2 bits 0 and 2 encode per-zone active state.
-
     // VALIDATED: C0=none, C1=zone_0, C4=zone_1, C5=both (from recordings)
-
-    // Route WATERHEATER_STATUS_2 to this node in addition to the standard
-    decoder.
-
+    // Route WATERHEATER_STATUS_2 to this node in addition to the standard decoder.
     else if (dgn_name === "WATERHEATER_STATUS_2") {
       if (Array.isArray(p.zone_active)) {
         for (let i = 0; i < p.zone_active.length; i++) {
@@ -467,9 +396,7 @@
       }
     }
 
-
     // === AQUAHOT_STATUS_2 (6C00) ===
-
     else if (dgn_name === "AQUAHOT_STATUS_2") {
       const nn = toHex(p.sub_index).substring(2);
       if (p.value_a !== undefined && p.value_a !== null) {
@@ -486,9 +413,7 @@
       }
     }
 
-
     // === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
-
     else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
       const nn = toHex(p.sub_index).substring(2);
 
@@ -506,21 +431,19 @@
       }
     }
 
-
     if (messages.length === 0) {
       return null;
     }
-
 
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 910
-  "y": 540
+  'y': 540
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4
@@ -529,9 +452,9 @@
   z: 384249601e37ba22
   name: Aqua-Hot
   x: 74
-  "y": 259
+  'y': 259
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 1bd7e1d4c5f3864a
@@ -608,11 +531,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 600
-  "y": 480
+  'y': 480
   g: 5811945b9bad79dc
   wires:
     - - 43cd836c21f66b26
@@ -626,10 +549,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 590
-  "y": 360
+  'y': 360
   g: 5811945b9bad79dc
   wires: []
 - id: 7a1eed2a34490b2a
@@ -642,32 +565,32 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 580
-  "y": 840
+  'y': 840
   g: 5811945b9bad79dc
   wires: []
 - id: 871009c15ad9a99b
   type: debug
   z: 384249601e37ba22
-  name: "AQUAHOT_THERMOSTAT_STATUS_1 "
+  name: 'AQUAHOT_THERMOSTAT_STATUS_1 '
   active: false
   tosidebar: true
   console: false
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 640
-  "y": 780
+  'y': 780
   g: 5811945b9bad79dc
   wires: []
 - id: 8ae5ee1969cf9219
   type: note
   z: 384249601e37ba22
-  name: ""
+  name: ''
   content: |-
     # Aqua-Hot
     AquaHot hydronic heating systems use two different protocols
@@ -676,7 +599,7 @@
     This flow decodes both variants to report the status of the
     diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
   x: 350
-  "y": 120
+  'y': 120
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug
@@ -688,10 +611,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 580
-  "y": 300
+  'y': 300
   g: 5811945b9bad79dc
   wires: []
 - id: 914be705da0531dd
@@ -701,7 +624,7 @@
   links:
     - 3f467bbd66a21eb9
   x: 690
-  "y": 600
+  'y': 600
   g: 5811945b9bad79dc
   l: true
   wires:
@@ -710,28 +633,18 @@
   type: function
   z: 384249601e37ba22
   name: decode_aquahot_status_2
-  func: >
+  func: |
     // Decoder for Proprietary AquaHot _2 DGNs:
-
-    // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E
-    (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
-
+    // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
     //
-
-    // Note: These are NOT part of the standard RV-C specification. Decoding is
-    based on
-
-    // reverse-engineered analysis of recordings. Confidence levels differ per
-    field.
-
+    // Note: These are NOT part of the standard RV-C specification. Decoding is based on
+    // reverse-engineered analysis of recordings. Confidence levels differ per field.
 
     function decodeUint16(data, startByte) {
         return data[startByte] | (data[startByte + 1] << 8);
     }
 
-
     // === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
-
     function decodeZoneThermostat(data, result) {
         // Byte 0: Zone Index [HIGH confidence] (00=Zone 1, 01=Zone 2)
         result.zone_index = data[0];
@@ -762,9 +675,7 @@
         result.unknown_byte7 = data[7];
     }
 
-
     // === AQUAHOT_COMMAND_2 (FF2F) ===
-
     function decodeCommand(data, result) {
         // Byte 0: Instance [HIGH confidence] (Always 0x01)
         result.instance = data[0];
@@ -796,9 +707,7 @@
         // Bytes 4-7: Reserved/Padding [HIGH confidence]
     }
 
-
     // === AQUAHOT_STATUS_2 (6C00) ===
-
     function decodeStatus(data, result) {
         // Byte 0: Instance [HIGH confidence] (0xFF = all zones)
         result.instance = data[0];
@@ -813,9 +722,7 @@
         result.value_d = data[5];
     }
 
-
     // === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
-
     function decodeSystemStatus(data, result) {
         // Byte 0: Instance [HIGH confidence] (Always 0x01)
         result.instance = data[0];
@@ -834,9 +741,7 @@
         // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)
     }
 
-
     // === Main Decode Function ===
-
 
     function decodeAquaHotZone(dgn, dgn_name, data) {
         const result = {
@@ -874,35 +779,27 @@
         return result;
     }
 
-
     // === Node-RED Parsing ===
-
 
     if (!msg.payload || typeof msg.payload !== "object") {
         node.warn("Invalid payload: expected object");
         return null;
     }
 
-
     const incomingPayload = msg.payload;
-
     const { dgn, dgn_name, data_payload } = incomingPayload;
-
 
     if (!dgn || !dgn_name || !data_payload) {
         node.warn("Missing required fields: dgn, dgn_name, data_payload");
         return null;
     }
 
-
     if (typeof data_payload !== "string" || data_payload.length % 2 !== 0) {
         node.warn("Invalid data_payload: must be even-length hex string");
         return null;
     }
 
-
     const dataBytes = [];
-
     for (let i = 0; i < data_payload.length; i += 2) {
         const hexByte = data_payload.substring(i, i + 2);
         const byteValue = parseInt(hexByte, 16);
@@ -913,9 +810,7 @@
         dataBytes.push(byteValue);
     }
 
-
     const decodedData = decodeAquaHotZone(dgn, dgn_name, dataBytes);
-
 
     if (decodedData.error) {
         incomingPayload.decoding_error = decodedData.error;
@@ -923,27 +818,23 @@
         return msg;
     }
 
-
     // Merge the incoming payload and the decoded data
-
     msg.payload = {
         ...incomingPayload,
         ...decodedData,
     };
 
-
     delete msg.payload.data_payload;
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 600
-  "y": 540
+  'y': 540
   g: 5811945b9bad79dc
   wires:
     - - 443fd5ec55d7111b
@@ -957,10 +848,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 600
-  "y": 720
+  'y': 720
   g: 5811945b9bad79dc
   wires: []
 - id: cd5a041811bc2c9a
@@ -970,7 +861,7 @@
   links:
     - 398683928338f9c6
   x: 160
-  "y": 540
+  'y': 540
   g: 5811945b9bad79dc
   l: true
   wires:
@@ -981,22 +872,22 @@
   name: Every 60s
   props:
     - p: payload
-  repeat: "60"
-  crontab: ""
+  repeat: '60'
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 710
-  "y": 660
+  'y': 660
   g: 5811945b9bad79dc
   wires:
     - - ff1234567890abcd
 - id: ee4192410344e659
   type: switch
   z: 384249601e37ba22
-  name: ""
+  name: ''
   property: payload.dgn_name
   propertyType: msg
   rules:
@@ -1022,14 +913,14 @@
       v: AQUAHOT_COMMAND_1
       vt: str
     - t: eq
-      v: "AQUAHOT_THERMOSTAT_STATUS_1 "
+      v: 'AQUAHOT_THERMOSTAT_STATUS_1 '
       vt: str
     - t: else
-  checkall: "true"
+  checkall: 'true'
   repair: false
   outputs: 9
   x: 330
-  "y": 540
+  'y': 540
   g: 5811945b9bad79dc
   wires:
     - - 8d93a86dc09f4c57
@@ -1079,11 +970,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 950
-  "y": 660
+  'y': 660
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4

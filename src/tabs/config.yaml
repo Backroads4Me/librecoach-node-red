@@ -4,7 +4,7 @@
   env: []
   normalizedLabel: config
   disabled: false
-  info: ""
+  info: ''
 - id: 012b02175347902e
   type: inject
   z: 292e70a6ba25b323
@@ -13,15 +13,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
-  onceDelay: ".1"
-  topic: ""
-  payload: ""
+  onceDelay: '.1'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 220
-  "y": 1300
+  'y': 1300
   g: f81ca31c89243206
   wires:
     - - d6680567062a0908
@@ -32,7 +32,7 @@
   links:
     - 88e5fa035bedb48c
   x: 1110
-  "y": 1620
+  'y': 1620
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -45,7 +45,7 @@
   links:
     - fbc5efde2c447eda
   x: 1760
-  "y": 400
+  'y': 400
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -64,11 +64,11 @@
   outputs: 0
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1150
-  "y": 600
+  'y': 600
   g: ceee39e4b10d6030
   wires: []
 - id: 07b8bcce03f19e8f
@@ -79,15 +79,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
-  onceDelay: "30"
-  topic: ""
-  payload: ""
+  onceDelay: '30'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 1140
-  "y": 1020
+  'y': 1020
   g: 8ef86a1c4b59d8e1
   wires:
     - - 73abad3deeed31e8
@@ -107,23 +107,23 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 2080
-  "y": 540
+  'y': 540
   g: 9dd6a98018824be9
   wires:
     - []
 - id: 0a63b31d61802934
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 690
-  "y": 1300
+  'y': 1300
   g: f81ca31c89243206
   l: true
   wires: []
@@ -133,15 +133,15 @@
   name: On start
   props:
     - p: reset
-      v: "true"
+      v: 'true'
       vt: bool
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
   onceDelay: 0.1
-  topic: ""
+  topic: ''
   x: 1120
-  "y": 380
+  'y': 380
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -150,9 +150,9 @@
   z: 292e70a6ba25b323
   name: Recording unknown DGNs
   x: 94
-  "y": 1659
+  'y': 1659
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 4bea6d59dec3cdde
@@ -165,18 +165,18 @@
 - id: 1ac6e0fa1cbb3852
   type: mqtt out
   z: 292e70a6ba25b323
-  name: "MQTT Out: Retain FALSE"
-  topic: ""
-  qos: "0"
-  retain: "false"
-  respTopic: ""
-  contentType: ""
-  userProps: ""
-  correl: ""
-  expiry: ""
+  name: 'MQTT Out: Retain FALSE'
+  topic: ''
+  qos: '0'
+  retain: 'false'
+  respTopic: ''
+  contentType: ''
+  userProps: ''
+  correl: ''
+  expiry: ''
   broker: 80727e60a251c36c
   x: 630
-  "y": 600
+  'y': 600
   g: 3c819b7900145438
   wires: []
 - id: 1becc1dacb0ecaf8
@@ -222,11 +222,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 450
-  "y": 1480
+  'y': 1480
   g: f67b4a374db41b27
   wires:
     - - 5ffb64e684c20ea8
@@ -240,7 +240,7 @@
     - 2343c8c12f2081fa
     - a58b5f05c8346eab
   x: 1420
-  "y": 1160
+  'y': 1160
   g: 8ef86a1c4b59d8e1
   l: true
   wires: []
@@ -249,7 +249,7 @@
   z: 292e70a6ba25b323
   name: Config in
   topic: librecoach/config/#
-  qos: "1"
+  qos: '1'
   datatype: auto
   broker: 80727e60a251c36c
   nl: false
@@ -257,7 +257,7 @@
   rh: 0
   inputs: 0
   x: 180
-  "y": 680
+  'y': 680
   g: 3c819b7900145438
   wires:
     - - c9d298bbaa855984
@@ -266,7 +266,7 @@
   z: 292e70a6ba25b323
   name: CAN in
   topic: can/raw
-  qos: "1"
+  qos: '1'
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -274,23 +274,23 @@
   rh: 0
   inputs: 0
   x: 930
-  "y": 460
+  'y': 460
   g: f09f79586501cb0b
   wires:
     - - 8d7d5d3ea117cf79
 - id: 21dfe84b8adafa6e
   type: rbe
   z: 292e70a6ba25b323
-  name: ""
+  name: ''
   func: rbe
-  gap: ""
-  start: ""
+  gap: ''
+  start: ''
   inout: out
   septopics: true
   property: payload
   topi: filter_key
   x: 1290
-  "y": 460
+  'y': 460
   g: f09f79586501cb0b
   wires:
     - - a6594a9464d8fe4e
@@ -299,31 +299,20 @@
   type: function
   z: 292e70a6ba25b323
   name: record_unknown_capture
-  func: >
+  func: |
     // Record Unknown CAN — Terminal Capture Sink
-
     // Sits AFTER the routing switch at the end of the line.
-
     // Only receives DGNs routed to it (UNKNOWN, PROPRIETARY, COMMAND, STATUS).
-
     // Auto-stop: 2 minutes elapsed OR 1000 messages captured
-
     // Output 1: MQTT state (auto-stop off message)
-
     // Output 2: Changed messages (debug passthrough)
 
-
     const MAX_MESSAGES = 1000;
-
     const MAX_DURATION_MS = 10 * 60 * 1000;
-
     const TIMEZONE = "America/New_York";
 
-
     // STATUS DGNs allowed through — discrete state only, no analog sensors.
-
     // COMMAND, UNKNOWN, and PROPRIETARY always pass without this check.
-
     const STATUS_WHITELIST = [
       "AC_LOAD_STATUS",
       "AC_LOAD_STATUS_2",
@@ -383,14 +372,9 @@
       "WINDOW_SHADE_CONTROL_STATUS",
     ];
 
-
     // --- STATUS whitelist check ---
-
-    // COMMAND, UNKNOWN, PROPRIETARY always pass. Known STATUS must be
-    whitelisted.
-
+    // COMMAND, UNKNOWN, PROPRIETARY always pass. Known STATUS must be whitelisted.
     const dgn_name = msg.payload.dgn_name;
-
     if (
       dgn_name !== "UNKNOWN" &&
       dgn_name !== "PROPRIETARY" &&
@@ -400,45 +384,29 @@
       return [null, null];
     }
 
-
     // --- Parse data bytes from hex string ---
-
     const raw = msg.payload.originalMessage || "";
-
     const dataHex = msg.payload.data_payload || "";
-
     const byteHexPairs = dataHex.match(/.{1,2}/g) || [];
-
     const instanceId =
       byteHexPairs.length > 0 ? parseInt(byteHexPairs[0], 16) : null;
     const data = byteHexPairs.map((h) => h.toUpperCase()).join(" ");
 
-
     const seenKey = `${msg.payload.dgn}:${instanceId}`;
 
-
     // RBE node upstream handles deduplication.
-
-    // Any message reaching this node is considered a legitimate event to
-    capture.
-
+    // Any message reaching this node is considered a legitimate event to capture.
     const changed = true;
 
-
     // Pass all received messages to output 2 for debug
-
     const debugMsg = { payload: { seenKey, data, dgn_name } };
 
-
     // Gate on recording state
-
     const recording = global.get("recordUnknown", "file");
-
     if (!recording) {
       node.status({ fill: "grey", shape: "ring", text: "Stopped" });
       return [null, debugMsg];
     }
-
     if (!changed) {
       const curLog = global.get("recordUnknownLog", "file") || [];
       node.status({
@@ -449,18 +417,12 @@
       return [null, null];
     }
 
-
     // --- Timing ---
-
     const log = global.get("recordUnknownLog", "file") || [];
-
     const startTime = global.get("recordUnknownStart", "file") || Date.now();
-
     const elapsed = Date.now() - startTime;
 
-
     // Check auto-stop before adding
-
     if (log.length >= MAX_MESSAGES || elapsed >= MAX_DURATION_MS) {
       global.set("recordUnknown", false, "file");
 
@@ -481,15 +443,12 @@
       return [offMsg, debugMsg];
     }
 
-
     // --- Local timestamp ---
-
     const localISO = new Date()
       .toLocaleString("sv-SE", { timeZone: TIMEZONE, hour12: false })
       .replace(" ", "T");
 
     // --- Build log entry ---
-
     log.push({
       timestamp: localISO,
       dgn: msg.payload.dgn,
@@ -498,9 +457,7 @@
       data: data,
       raw_can: raw,
     });
-
     global.set("recordUnknownLog", log, "file");
-
 
     node.status({
       fill: "red",
@@ -508,16 +465,15 @@
       text: `Recording... ${log.length}`,
     });
 
-
     return [null, debugMsg];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1530
-  "y": 300
+  'y': 300
   g: f09f79586501cb0b
   wires:
     - - 6376d98589368f2b
@@ -531,7 +487,7 @@
     - 00b1afc9a96aca8e
     - cd5a041811bc2c9a
   x: 1770
-  "y": 360
+  'y': 360
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -540,9 +496,9 @@
   z: 292e70a6ba25b323
   name: MQTT
   x: 94
-  "y": 239
+  'y': 239
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 1ac6e0fa1cbb3852
@@ -566,11 +522,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1150
-  "y": 660
+  'y': 660
   g: ceee39e4b10d6030
   wires:
     - []
@@ -578,84 +534,51 @@
   type: function
   z: 292e70a6ba25b323
   name: poll_shades
-  func: >-
+  func: |-
     // Polling Function for Shades
-
     // Requests WINDOW_SHADE_CONTROL_STATUS (1FEDE)
 
-
     // --- Configuration ---
-
     // The source address of this Node-RED system.
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254; // 0xFE
-
-    const PRIORITY = 6;       // Standard priority for requests (Included in
-    18EAFF)
-
+    const PRIORITY = 6;       // Standard priority for requests (Included in 18EAFF)
     const DGN = "18EAFF";     // DGN for a broadcast request message
 
-
     // The DGN for WINDOW_SHADE_CONTROL_STATUS
-
     const REQUESTED_DGN = "01FEDE";
 
-
     // Build the data payload
-
-    // The payload is the DGN being requested, sent in 3-byte little-endian
-    format.
-
+    // The payload is the DGN being requested, sent in 3-byte little-endian format.
     // The remaining 5 bytes are padded with 0xFF.
-
     const requestedDgnInt = parseInt(REQUESTED_DGN, 16);
-
     const dataPayloadBytes = new Uint8Array(8);
-
     dataPayloadBytes.fill(0xFF); // Pad the entire payload with 0xFF first
-
     dataPayloadBytes[0] = requestedDgnInt & 0xFF;         // Byte 1: DE
-
     dataPayloadBytes[1] = (requestedDgnInt >> 8) & 0xFF;  // Byte 2: FE
-
     dataPayloadBytes[2] = (requestedDgnInt >> 16) & 0xFF; // Byte 3: 01
-
-    const data_payload_hex = Array.from(dataPayloadBytes).map(b =>
-    b.toString(16).padStart(2, '0')).join('');
-
+    const data_payload_hex = Array.from(dataPayloadBytes).map(b => b.toString(16).padStart(2, '0')).join('');
 
     // Construct the CAN ID
-
-    // Combine the DGN (which already includes Priority 6 and PGN 0xEAFF) with
-    the Source Address.
-
+    // Combine the DGN (which already includes Priority 6 and PGN 0xEAFF) with the Source Address.
     const dgnInt = parseInt(DGN, 16);
-
     const canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, '0');
 
-
     // Construct the final output message in CAN bus format
-
     msg.topic = "can/send";
-
     msg.payload = `${canIdHex.toUpperCase()}#${data_payload_hex.toUpperCase()}`;
 
-
-    // node.warn(`[Poll Shades] Sending global request for shade status. CAN:
-    ${msg.payload}`);
-
+    // node.warn(`[Poll Shades] Sending global request for shade status. CAN: ${msg.payload}`);
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1390
-  "y": 1000
+  'y': 1000
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -667,7 +590,7 @@
   links:
     - f01db5ebc3ae2e18
   x: 1800
-  "y": 680
+  'y': 680
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -676,7 +599,7 @@
   z: 292e70a6ba25b323
   name: Recording trigger
   topic: librecoach/export/unknown/trigger
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -684,7 +607,7 @@
   rh: 0
   inputs: 0
   x: 200
-  "y": 1820
+  'y': 1820
   g: 1250cab4e8633d65
   wires:
     - - f3ee6dc19b0155a0
@@ -749,11 +672,11 @@
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 470
-  "y": 920
+  'y': 920
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
@@ -766,7 +689,7 @@
   links:
     - 00b1afc9a96aca8e
   x: 1770
-  "y": 440
+  'y': 440
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -775,7 +698,7 @@
   z: 292e70a6ba25b323
   name: Location updates
   topic: can/status/geo
-  qos: "2"
+  qos: '2'
   datatype: json
   broker: 80727e60a251c36c
   nl: false
@@ -783,7 +706,7 @@
   rh: 0
   inputs: 0
   x: 200
-  "y": 1560
+  'y': 1560
   g: f67b4a374db41b27
   wires:
     - - a8a757fe3b31cf9c
@@ -795,15 +718,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
-  onceDelay: "5"
-  topic: ""
-  payload: ""
+  onceDelay: '5'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 260
-  "y": 840
+  'y': 840
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
@@ -812,9 +735,9 @@
   z: 292e70a6ba25b323
   name: RV-C Time Sync
   x: 994
-  "y": 1799
+  'y': 1799
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - bce5d439a67df7da
@@ -826,15 +749,15 @@
   name: Reset
   props:
     - p: reset
-      v: "true"
+      v: 'true'
       vt: bool
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
+  topic: ''
   x: 1130
-  "y": 340
+  'y': 340
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -843,7 +766,7 @@
   z: 292e70a6ba25b323
   name: HA in
   topic: homeassistant/climate/+/set_preset_mode
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -851,7 +774,7 @@
   rh: 0
   inputs: 0
   x: 170
-  "y": 400
+  'y': 400
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -859,45 +782,45 @@
 - id: 55071115a3fe7c2c
   type: delay
   z: 292e70a6ba25b323
-  name: ""
+  name: ''
   pauseType: delay
-  timeout: "250"
+  timeout: '250'
   timeoutUnits: milliseconds
-  rate: "1"
-  nbRateUnits: "1"
+  rate: '1'
+  nbRateUnits: '1'
   rateUnits: second
-  randomFirst: "1"
-  randomLast: "5"
+  randomFirst: '1'
+  randomLast: '5'
   randomUnits: seconds
   drop: false
   allowrate: false
   outputs: 1
   x: 890
-  "y": 920
+  'y': 920
   g: 8ef86a1c4b59d8e1
   wires:
     - - 6423c433e099d2a5
 - id: 5ffb64e684c20ea8
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 730
-  "y": 1500
+  'y': 1500
   g: f67b4a374db41b27
   l: true
   wires: []
 - id: 6376d98589368f2b
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 1810
-  "y": 280
+  'y': 280
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -905,39 +828,25 @@
   type: function
   z: 292e70a6ba25b323
   name: address_claim_success
-  func: >
+  func: |
     // RV-C Address Claim Success Function
-
-    // Called after 250ms timer expires - finalizes address claim if no conflict
-    lost
-
+    // Called after 250ms timer expires - finalizes address claim if no conflict lost
     // Reference: RV-C Spec Section 3.3.2 - Source Address Claiming
-
     //
-
     // IMPORTANT: This does NOT send a second ADDRESS_CLAIMED message.
-
     // We already sent ADDRESS_CLAIMED at the start of the process.
-
     // Success = 250ms timer expires without losing a conflict.
 
-
     // Get the address we were trying to claim when this timer started
-
     const claimedAddress = msg.claiming_address;
-
 
     if (claimedAddress === undefined || claimedAddress === null) {
       node.error("No address to claim - timer message missing claiming_address");
       return null;
     }
 
-
-    // Check if this timer is still valid (claim hasn't been cancelled by
-    monitor)
-
+    // Check if this timer is still valid (claim hasn't been cancelled by monitor)
     const claimInProgress = flow.get("claim_in_progress");
-
     if (!claimInProgress) {
       // Claim was cancelled during the 250ms window (we lost a conflict)
       node.warn(
@@ -946,11 +855,8 @@
       return null;
     }
 
-
     // Verify we're still trying to claim the same address
-
     const currentClaimingAddress = flow.get("claiming_address");
-
     if (currentClaimingAddress !== claimedAddress) {
       node.warn(
         `Timer expired for address ${claimedAddress}, but we're now trying ${currentClaimingAddress} - ignoring stale timer`,
@@ -958,46 +864,32 @@
       return null;
     }
 
-
     // SUCCESS! No conflict detected during the 250ms monitoring window
-
     // Store the claimed address to global context
-
     global.set("rvc_source_address", claimedAddress);
 
-
     // Clear claiming flags
-
     flow.set("claim_in_progress", false);
-
     flow.set("claiming_address", null);
-
     flow.set("our_device_name", null);
 
-
-    //node.warn(`Successfully claimed address ${claimedAddress}
-    (0x${claimedAddress.toString(16).toUpperCase()})`);
-
-    //node.warn(`Address stored to global.rvc_source_address:
-    ${claimedAddress}`);
-
+    //node.warn(`Successfully claimed address ${claimedAddress} (0x${claimedAddress.toString(16).toUpperCase()})`);
+    //node.warn(`Address stored to global.rvc_source_address: ${claimedAddress}`);
 
     node.log(
       `Successfully claimed address ${claimedAddress} (0x${claimedAddress.toString(16).toUpperCase()})`,
     );
 
-
     // Return msg to trigger downstream polling
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1110
-  "y": 920
+  'y': 920
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1013,7 +905,7 @@
   links:
     - a3b957142479c075
   x: 570
-  "y": 380
+  'y': 380
   g: 3c819b7900145438
   l: true
   wires: []
@@ -1021,60 +913,40 @@
   type: function
   z: 292e70a6ba25b323
   name: poll_locks
-  func: >
+  func: |
     // Polling Function for Locks
-
     // Requests LOCK_STATUS (1FEE5)
 
-
     // --- Configuration ---
-
     // The source address of this Node-RED system.
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-
     const PRIORITY = 6;       // Standard priority for requests
-
     const DGN = "18EAFF";     // DGN for a broadcast request message
 
-
     // Build the data payload
-
-    // This is the DGN for LOCK_STATUS (1FEE5), sent in little-endian format
-    (least-significant byte first).
-
+    // This is the DGN for LOCK_STATUS (1FEE5), sent in little-endian format (least-significant byte first).
     const data_payload = "E5FE01FFFFFFFF";
 
-
     // Construct the CAN ID
-
     const dgnInt = parseInt(DGN, 16);
-
     const canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, '0');
 
-
     // Construct the final output message in CAN bus format
-
     msg.topic = "can/send";
-
     msg.payload = `${canIdHex.toUpperCase()}#${data_payload.toUpperCase()}`;
 
-
-    //node.warn(`[Poll Locks] Sending global request for lock status. CAN:
-    ${msg.payload}`);
-
+    //node.warn(`[Poll Locks] Sending global request for lock status. CAN: ${msg.payload}`);
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1380
-  "y": 960
+  'y': 960
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1082,21 +954,14 @@
   type: function
   z: 292e70a6ba25b323
   name: beta_handle_toggle
-  func: >-
-    // Handles enable/disable of Beta features and tracks beta entities for
-    automatic deletion.
-
+  func: |-
+    // Handles enable/disable of Beta features and tracks beta entities for automatic deletion.
     // Input can be both config trigger and MQTT discovery configs.
-
     // Output 1 → MQTT Out (entity creation configs or entity deletion payloads)
-
     // Output 2 → Filter nodes (reset on enable)
 
-
     // 1. Handle config enable/disable messages
-
     const key = msg.topic.split("/").pop();
-
     if (key === "beta_enabled") {
       const enabled = msg.payload.toString() === "true";
 
@@ -1132,9 +997,7 @@
       return [msgs, null];
     }
 
-
     // 2. Handle incoming discovery config messages (from beta Create nodes)
-
     if (
       msg.topic &&
       msg.topic.startsWith("homeassistant/") &&
@@ -1165,18 +1028,16 @@
       }
     }
 
-
     // Ignore unknown messages
-
     return [null, null];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1410
-  "y": 1620
+  'y': 1620
   g: 9e47041ed71c4494
   wires:
     - - e38f32a1f6d36bfb
@@ -1185,66 +1046,47 @@
   type: function
   z: 292e70a6ba25b323
   name: poll_dc_dimmer_3
-  func: >
+  func: |
     // Polling Function for DC Dimmer
-
     // Requests DC_DIMMER_STATUS_3 (1FEDA)
 
-
     // --- Configuration ---
-
     // The source address of this Node-RED system.
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-
     const PRIORITY = 6; // Standard priority for requests
-
     const DGN = "18EAFF"; // DGN for a broadcast request message
 
-
     // Build the data payload
-
-    // This is the DGN for DC_DIMMER_STATUS_3 (1FEDA), sent in little-endian
-    format (least-significant byte first).
-
+    // This is the DGN for DC_DIMMER_STATUS_3 (1FEDA), sent in little-endian format (least-significant byte first).
     const data_payload = "DAFE01FFFFFFFF";
 
-
     // Construct the CAN ID
-
     const dgnInt = parseInt(DGN, 16);
-
     const canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, "0");
 
-
     // Construct the final output message in CAN bus format
-
     msg.topic = "can/send";
-
     msg.payload = `${canIdHex.toUpperCase()}#${data_payload.toUpperCase()}`;
 
-
     node.log(`Polling started`);
-
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1410
-  "y": 920
+  'y': 920
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
 - id: 74329f13cbbc528a
   type: link in
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain FALSE"
+  name: 'MQTT out: Retain FALSE'
   links:
     - a2334b77d3764815
     - 6aa079d768e1571c
@@ -1252,7 +1094,7 @@
     - d95299a44e1d7ed5
     - c83c6b2b70c927a3
   x: 230
-  "y": 600
+  'y': 600
   g: 3c819b7900145438
   l: true
   wires:
@@ -1268,7 +1110,7 @@
   sendError: false
   allProps: false
   x: 1320
-  "y": 1480
+  'y': 1480
   g: 9cfcca5efde78052
   wires:
     - - c78420a075d43408
@@ -1280,15 +1122,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
-  onceDelay: "0.1"
-  topic: ""
-  payload: ""
+  onceDelay: '0.1'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 1120
-  "y": 1480
+  'y': 1480
   g: 9cfcca5efde78052
   wires:
     - - 74c7e4a6cc2508eb
@@ -1296,40 +1138,40 @@
   type: inject
   z: 292e70a6ba25b323
   d: true
-  name: ""
+  name: ''
   props:
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 980
-  "y": 660
+  'y': 660
   g: ceee39e4b10d6030
   wires:
     - - 3d07bdca6b71b669
 - id: 8337a7f0dd0435d6
   type: http request
   z: 292e70a6ba25b323
-  name: ""
+  name: ''
   method: use
   ret: obj
   paytoqs: ignore
-  url: ""
-  tls: ""
+  url: ''
+  tls: ''
   persist: false
-  proxy: ""
+  proxy: ''
   insecureHTTPParser: false
-  authType: ""
+  authType: ''
   senderr: false
   headers: []
   x: 1550
-  "y": 1300
+  'y': 1300
   g: efe52fc701f550cf
   wires:
     - []
@@ -1342,10 +1184,10 @@
     claims an address on the CAN bus, stores user option settings,
     and sets up the global state that all other flows depend on.
     This runs first — nothing else works without it.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
+  bgcolor: '#f3e5ab'
+  textcolor: '#333333'
   x: 330
-  "y": 140
+  'y': 140
   wires: []
 - id: 880ca1b6bf10b8d2
   type: function
@@ -1395,11 +1237,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 450
-  "y": 1700
+  'y': 1700
   g: 1250cab4e8633d65
   wires:
     - - dca8346e061f1d42
@@ -1414,7 +1256,7 @@
     - 027d238476871cfe
     - ac17a780a9a1dbcf
   x: 620
-  "y": 680
+  'y': 680
   g: 3c819b7900145438
   l: true
   wires: []
@@ -1422,28 +1264,21 @@
   type: function
   z: 292e70a6ba25b323
   name: decode_rvc_can
-  func: >
+  func: |
     // RV-C CAN Message Parser
-
     // Decodes a raw CAN message to output only the fields needed for
-
     // downstream routing (dgn_name) and decoding (data_payload).
-
 
     const originalMessage = msg.payload;
 
-
     // Validate input
-
     if (!originalMessage || typeof originalMessage !== "string") {
       node.warn(
         "Invalid message payload: expected string, got " + typeof originalMessage,
       );
       return null;
     }
-
     const dgnMap = global.get("dgnMap");
-
     if (!dgnMap) {
       node.error(
         "dgnMap not found in global context. Ensure the map is initialized.",
@@ -1451,54 +1286,36 @@
       return null;
     }
 
-
     // Parse CAN message format: CANID#PAYLOAD
-
     const parts = originalMessage.split("#");
-
     if (parts.length !== 2) {
       node.warn("Invalid CAN message format: " + originalMessage);
       return null;
     }
-
     const canIdHex = parts[0];
-
     const data_payload = parts[1];
-
     const canIdNum = parseInt(canIdHex, 16);
-
 
     if (isNaN(canIdNum)) {
       node.warn("Invalid CAN ID: " + canIdHex);
       return null;
     }
 
-
     // Extract PGN (4-digit) and DGN (5-digit) keys
 
-
     // Get the 4-digit J1939 PGN (PF + PS). This value is consistent.
-
     const pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)
-
     const ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)
-
     let pgn = ((pf << 8) | ps).toString(16).toUpperCase();
 
-
     // Ensure 4 characters for known PGNs (e.g., EF4D)
-
     while (pgn.length < 4) {
       pgn = "0" + pgn;
     }
 
-
     // PDU1 handling: For PF < 240, PS is destination address, not part of DGN
-
     // Replace PS with 00 for lookup (with exceptions)
-
     let lookupPgn = pgn;
-
     if (pf < 0xf0) {
       // PDU1 format
       if (pf === 0xef) {
@@ -1517,42 +1334,26 @@
       }
     }
 
-
     // The lookup DGN starts as the lookup PGN
-
     let dgn = lookupPgn;
-
     let dgn_name;
 
-
     // --- DGN Conversion and Primary Lookup ---
-
     // Extract Data Page (DP) bit from CAN ID (bit 24)
-
     const dp = (canIdNum >> 24) & 1;
-
     if (dp) {
       dgn = "1" + lookupPgn;
     }
-
     dgn_name = dgnMap.get(dgn);
 
-
     // For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)
-
     let destination_address = null;
-
     if (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {
       destination_address = ps;
     }
 
-
-    // Fallback: some PDU2 devices transmit with DP=0 instead of DP=1
-    (non-conformant).
-
-    // If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the
-    table.
-
+    // Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).
+    // If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.
     if (!dgn_name && dp === 0 && pf >= 0xf0) {
       const altDgn = "1" + lookupPgn;
       const altName = dgnMap.get(altDgn);
@@ -1562,9 +1363,7 @@
       }
     }
 
-
     // Fallback logic for proprietary PGNs not in lookup table
-
     if (!dgn_name) {
       if (pgn === "EF64") {
         dgn_name = "AQUAHOT_COMMAND_1";
@@ -1591,13 +1390,10 @@
       }
     }
 
-
     // Final output
-
     if (!dgn_name) {
       dgn_name = "UNKNOWN";
     }
-
 
     const singleInstanceDgns = {
       WATER_PUMP_STATUS: "water_pump",
@@ -1609,11 +1405,8 @@
       WASTEDUMP_STATUS: "wastedump",
     };
 
-
     // These DGNs are defined by RV-C as single-instance devices; byte 0 is a
-
     // status/command bit field, not a device instance.
-
     const instance =
       singleInstanceDgns[dgn_name] || parseInt(data_payload.substring(0, 2), 16);
 
@@ -1626,16 +1419,10 @@
       data_payload: data_payload,
     };
 
-
     msg.filter_key = `${dgn_name}_${instance}`;
 
-
-    // Bypass RBE/deduplication exclusively for DC_DIMMER_COMMAND_2 "Toggle"
-    buttons.
-
-    // Byte 3 equals: 0x05 (Toggle). Other commands will naturally change byte
-    values.
-
+    // Bypass RBE/deduplication exclusively for DC_DIMMER_COMMAND_2 "Toggle" buttons.
+    // Byte 3 equals: 0x05 (Toggle). Other commands will naturally change byte values.
     if (dgn_name === "DC_DIMMER_COMMAND_2" && data_payload.length >= 8) {
       const cmdByte = parseInt(data_payload.substring(6, 8), 16);
       if (cmdByte === 0x05) {
@@ -1643,16 +1430,15 @@
       }
     }
 
-
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1100
-  "y": 460
+  'y': 460
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -1686,11 +1472,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1390
-  "y": 1120
+  'y': 1120
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1699,9 +1485,9 @@
   z: 292e70a6ba25b323
   name: Claim CAN source address
   x: 94
-  "y": 799
+  'y': 799
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 07b8bcce03f19e8f
@@ -1724,9 +1510,9 @@
   z: 292e70a6ba25b323
   name: Load RV-C Dgn Names
   x: 994
-  "y": 1439
+  'y': 1439
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 74c7e4a6cc2508eb
@@ -1738,10 +1524,10 @@
   z: 292e70a6ba25b323
   name: Rest unique list
   x: 1694
-  "y": 499
+  'y': 499
   g: f09f79586501cb0b
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 092c751dcdd12270
@@ -1753,9 +1539,9 @@
   z: 292e70a6ba25b323
   name: BETA Testing
   x: 994
-  "y": 1579
+  'y': 1579
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 027d238476871cfe
@@ -1768,7 +1554,7 @@
   z: 292e70a6ba25b323
   name: HA in
   topic: homeassistant/climate/+/set_mode
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -1776,7 +1562,7 @@
   rh: 0
   inputs: 0
   x: 170
-  "y": 340
+  'y': 340
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -1791,7 +1577,7 @@
     - cd73ee739dad9f59
     - fa104ff19bbee333
   x: 1080
-  "y": 1300
+  'y': 1300
   g: efe52fc701f550cf
   l: true
   wires:
@@ -1799,12 +1585,12 @@
 - id: a2334b77d3764815
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain FALSE"
+  name: 'MQTT out: Retain FALSE'
   mode: link
   links:
     - 74329f13cbbc528a
   x: 1680
-  "y": 840
+  'y': 840
   g: 8ef86a1c4b59d8e1
   l: true
   wires: []
@@ -1816,22 +1602,22 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: false
   onceDelay: 0.1
-  topic: ""
-  payload: ""
+  topic: ''
+  payload: ''
   payloadType: date
   x: 1810
-  "y": 540
+  'y': 540
   g: 9dd6a98018824be9
   wires:
     - - 092c751dcdd12270
 - id: a6594a9464d8fe4e
   type: switch
   z: 292e70a6ba25b323
-  name: ""
+  name: ''
   property: payload.dgn_name
   propertyType: msg
   rules:
@@ -1856,11 +1642,11 @@
     - t: eq
       v: PROPRIETARY
       vt: str
-  checkall: "false"
+  checkall: 'false'
   repair: false
   outputs: 7
   x: 1470
-  "y": 460
+  'y': 460
   g: f09f79586501cb0b
   wires:
     - - 398683928338f9c6
@@ -1966,11 +1752,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 430
-  "y": 1560
+  'y': 1560
   g: f67b4a374db41b27
   wires:
     - - 5ffb64e684c20ea8
@@ -1981,7 +1767,7 @@
   links:
     - 88e5fa035bedb48c
   x: 210
-  "y": 1480
+  'y': 1480
   g: f67b4a374db41b27
   l: true
   wires:
@@ -2079,11 +1865,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 710
-  "y": 840
+  'y': 840
   g: 8ef86a1c4b59d8e1
   wires:
     - - 55071115a3fe7c2c
@@ -2093,7 +1879,7 @@
   z: 292e70a6ba25b323
   name: HA in
   topic: homeassistant/+/+/set
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -2101,7 +1887,7 @@
   rh: 0
   inputs: 0
   x: 170
-  "y": 280
+  'y': 280
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -2110,60 +1896,40 @@
   type: function
   z: 292e70a6ba25b323
   name: poll_autofill
-  func: >
+  func: |
     // Polling Function for Autofill
-
     // Requests AUTOFILL_STATUS (1FFB1)
 
-
     // --- Configuration ---
-
     // The source address of this Node-RED system.
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-
     const PRIORITY = 6;       // Standard priority for requests
-
     const DGN = "18EAFF";     // DGN for a broadcast request message
 
-
     // Build the data payload
-
-    // This is the DGN for AUTOFILL_STATUS (1FFB1), sent in little-endian format
-    (least-significant byte first).
-
+    // This is the DGN for AUTOFILL_STATUS (1FFB1), sent in little-endian format (least-significant byte first).
     const data_payload = "B1FB01FFFFFFFF";
 
-
     // Construct the CAN ID
-
     const dgnInt = parseInt(DGN, 16);
-
     const canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, '0');
 
-
     // Construct the final output message in CAN bus format
-
     msg.topic = "can/send";
-
     msg.payload = `${canIdHex.toUpperCase()}#${data_payload.toUpperCase()}`;
 
-
-    //node.warn(`[Poll AutoFill] Sending global request for autofill status.
-    CAN: ${msg.payload}`);
-
+    //node.warn(`[Poll AutoFill] Sending global request for autofill status. CAN: ${msg.payload}`);
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1390
-  "y": 1080
+  'y': 1080
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -2175,15 +1941,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: "60"
-  crontab: ""
+  repeat: '60'
+  crontab: ''
   once: true
-  onceDelay: "10"
-  topic: ""
-  payload: ""
+  onceDelay: '10'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 1110
-  "y": 1840
+  'y': 1840
   g: 5169613bd2735138
   wires:
     - - dd22c9c987534342
@@ -2195,15 +1961,15 @@
     - p: payload
     - p: topic
       vt: str
-  repeat: ""
-  crontab: ""
+  repeat: ''
+  crontab: ''
   once: true
-  onceDelay: "3"
-  topic: ""
-  payload: ""
+  onceDelay: '3'
+  topic: ''
+  payload: ''
   payloadType: date
   x: 220
-  "y": 1340
+  'y': 1340
   g: f81ca31c89243206
   wires:
     - - d6680567062a0908
@@ -2211,21 +1977,15 @@
   type: function
   z: 292e70a6ba25b323
   name: unique_unknown
-  func: >
+  func: |
     // Unique Filter for Unknown Messages
 
-
-    // Retrieve existing messages from flow context, or initialize as empty
-    array
-
+    // Retrieve existing messages from flow context, or initialize as empty array
     let uniqueUnknown = flow.get("uniqueUnknown") || [];
-
 
     let newMsgStr = JSON.stringify(msg.payload.dgn);
 
-
     // Check if it's a new unique message
-
     if (!uniqueUnknown.includes(newMsgStr)) {
         uniqueUnknown.push(newMsgStr);
         flow.set("uniqueUnknown", uniqueUnknown);
@@ -2234,42 +1994,40 @@
         return msg;
     }
 
-
     // Return nothing if duplicate
-
     return null;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1810
-  "y": 600
+  'y': 600
   g: 9dd6a98018824be9
   wires:
     - - eea1641469efb23f
 - id: c78420a075d43408
   type: json
   z: 292e70a6ba25b323
-  name: ""
+  name: ''
   property: payload
-  action: ""
+  action: ''
   pretty: false
   x: 1530
-  "y": 1480
+  'y': 1480
   g: 9cfcca5efde78052
   wires:
     - - cd670f6465b6374b
 - id: c83c6b2b70c927a3
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain FALSE"
+  name: 'MQTT out: Retain FALSE'
   mode: link
   links:
     - 74329f13cbbc528a
   x: 1570
-  "y": 1840
+  'y': 1840
   g: 5169613bd2735138
   l: true
   wires: []
@@ -2277,51 +2035,43 @@
   type: function
   z: 292e70a6ba25b323
   name: store_config_globals
-  func: >
+  func: |
     const key = msg.topic.split("/").pop();
-
     const val = msg.payload.toString() === "true";
 
-
     if (key === "victron_enabled") global.set("victronEnabled", val);
-
     if (key === "beta_enabled") global.set("betaEnabled", val);
-
     if (key === "microair_enabled") global.set("microairEnabled", val);
-
     if (key === "geo_enabled") global.set("geoEnabled", val);
-
-    if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val,
-    "file");
-
+    if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val, "file");
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 380
-  "y": 680
+  'y': 680
   g: 3c819b7900145438
   wires:
     - - 88e5fa035bedb48c
 - id: cacf35b859af22a9
   type: mqtt out
   z: 292e70a6ba25b323
-  name: "MQTT Out: Retain TRUE"
-  topic: ""
-  qos: "0"
-  retain: "true"
-  respTopic: ""
-  contentType: ""
-  userProps: ""
-  correl: ""
-  expiry: ""
+  name: 'MQTT Out: Retain TRUE'
+  topic: ''
+  qos: '0'
+  retain: 'true'
+  respTopic: ''
+  contentType: ''
+  userProps: ''
+  correl: ''
+  expiry: ''
   broker: 80727e60a251c36c
   x: 630
-  "y": 500
+  'y': 500
   g: 3c819b7900145438
   wires: []
 - id: cd670f6465b6374b
@@ -2348,13 +2098,13 @@
     });
     return null;
   outputs: 0
-  timeout: ""
+  timeout: ''
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1740
-  "y": 1480
+  'y': 1480
   g: 9cfcca5efde78052
   wires: []
 - id: cd73ee739dad9f59
@@ -2365,7 +2115,7 @@
   links:
     - a1e89f48333c8256
   x: 690
-  "y": 1840
+  'y': 1840
   g: 1250cab4e8633d65
   l: true
   wires: []
@@ -2373,10 +2123,10 @@
   type: group
   z: 292e70a6ba25b323
   x: 874
-  "y": 559
+  'y': 559
   g: f09f79586501cb0b
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 03a998942a940736
@@ -2390,10 +2140,10 @@
   filenameType: msg
   appendNewline: true
   createDir: true
-  overwriteFile: "true"
+  overwriteFile: 'true'
   encoding: none
   x: 680
-  "y": 1800
+  'y': 1800
   g: 1250cab4e8633d65
   wires:
     - []
@@ -2403,7 +2153,7 @@
   name: BETA TEST
   links: []
   x: 1090
-  "y": 1680
+  'y': 1680
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -2418,70 +2168,50 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 570
-  "y": 320
+  'y': 320
   g: 3c819b7900145438
   wires: []
 - id: d3cc901dd2fbd359
   type: function
   z: 292e70a6ba25b323
   name: poll_water_pump
-  func: >
+  func: |
     // Polling Function for Water Pump
-
     // Requests WATER_PUMP_STATUS (1FFB3)
 
-
     // --- Configuration ---
-
     // The source address of this Node-RED system.
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-
     const PRIORITY = 6;       // Standard priority for requests
-
     const DGN = "18EAFF";     // DGN for a broadcast request message
 
-
     // Build the data payload
-
-    // This is the DGN for WATER_PUMP_STATUS (1FFB3), sent in little-endian
-    format (least-significant byte first).
-
+    // This is the DGN for WATER_PUMP_STATUS (1FFB3), sent in little-endian format (least-significant byte first).
     const data_payload = "B3FB01FFFFFFFF";
 
-
     // Construct the CAN ID
-
     const dgnInt = parseInt(DGN, 16);
-
     const canIdInt = (dgnInt << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, '0');
 
-
     // Construct the final output message in CAN bus format
-
     msg.topic = "can/send";
-
     msg.payload = `${canIdHex.toUpperCase()}#${data_payload.toUpperCase()}`;
 
-
-    //node.warn(`[Poll Water Pump] Sending global request for water pump status.
-    CAN: ${msg.payload}`);
-
+    //node.warn(`[Poll Water Pump] Sending global request for water pump status. CAN: ${msg.payload}`);
 
     return msg;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1410
-  "y": 1040
+  'y': 1040
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -2489,9 +2219,8 @@
   type: function
   z: 292e70a6ba25b323
   name: create_user_toggles
-  func: >
+  func: |
     // Creates LibreCoach: System config toggles via MQTT Discovery
-
 
     const device = {
       identifiers: ["librecoach-system"],
@@ -2499,15 +2228,11 @@
       manufacturer: "LibreCoach",
     };
 
-
     const messages = [];
-
 
     // === Import/Export & RV Info ===
 
-
     // Export Configuration button
-
     messages.push({
       topic: "homeassistant/button/librecoach_export_config/config",
       payload: {
@@ -2520,9 +2245,7 @@
       },
     });
 
-
     // Import Configuration button
-
     messages.push({
       topic: "homeassistant/button/librecoach_import_config/config",
       payload: {
@@ -2535,9 +2258,7 @@
       },
     });
 
-
     // RV Info fields
-
     const rvFields = [
       {
         id: "rv_manufacturer",
@@ -2549,7 +2270,6 @@
       { id: "rv_year", name: "RV Year", icon: "mdi:calendar", max: 4 },
       { id: "rv_other", name: "RV Other", icon: "mdi:note-text", max: 100 },
     ];
-
 
     for (const field of rvFields) {
       // Config
@@ -2576,12 +2296,9 @@
       });
     }
 
-
     // === Unknown CAN Recording ===
 
-
     // Switch - Record Unknown CAN
-
     messages.push({
       topic: "homeassistant/switch/librecoach_record_unknown/config",
       payload: {
@@ -2601,20 +2318,15 @@
       },
     });
 
-
     // State - Record Unknown CAN default off
-
     global.set("recordUnknown", false, "file");
-
     messages.push({
       topic: "homeassistant/switch/librecoach_record_unknown/state",
       payload: 0,
       retain: true,
     });
 
-
     // Export AI Dashboard Prompt button (mushroom/custom cards)
-
     messages.push({
       topic: "homeassistant/button/librecoach_export_entities/config",
       payload: {
@@ -2627,10 +2339,7 @@
       },
     });
 
-
-    // Export AI Dashboard Prompt button (standard HA cards only — no HACS
-    needed)
-
+    // Export AI Dashboard Prompt button (standard HA cards only — no HACS needed)
     messages.push({
       topic: "homeassistant/button/librecoach_export_entities_default/config",
       payload: {
@@ -2643,9 +2352,7 @@
       },
     });
 
-
     // Button - Export Unknown Recording
-
     messages.push({
       topic: "homeassistant/button/librecoach_export_unknown/config",
       payload: {
@@ -2658,11 +2365,8 @@
       },
     });
 
-
     // === Cleanup Old Entities ===
-
     // Send empty payload to delete orphaned entities from Home Assistant
-
 
     const cleanupTopics = [
       "homeassistant/switch/victron_integration/config",
@@ -2670,11 +2374,9 @@
       "homeassistant/switch/librecoach_beta_testing/config",
     ];
 
-
     for (const topic of cleanupTopics) {
       messages.push({ topic: topic, payload: "" });
     }
-
 
     node.status({
       fill: "green",
@@ -2682,16 +2384,15 @@
       text: `System Entities Created`,
     });
 
-
     return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 440
-  "y": 1300
+  'y': 1300
   g: f81ca31c89243206
   wires:
     - - 0a63b31d61802934
@@ -2705,21 +2406,21 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 1790
-  "y": 320
+  'y': 320
   g: f09f79586501cb0b
   wires: []
 - id: dca8346e061f1d42
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 730
-  "y": 1700
+  'y': 1700
   g: 1250cab4e8633d65
   l: true
   wires: []
@@ -2764,11 +2465,11 @@
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1310
-  "y": 1300
+  'y': 1300
   g: efe52fc701f550cf
   wires:
     - - 8337a7f0dd0435d6
@@ -2776,66 +2477,37 @@
   type: function
   z: 292e70a6ba25b323
   name: rvc_time_sync
-  func: >
+  func: |
     // Broadcasts DATE_TIME_STATUS to the RV-C network (DGN 1FFFFh, §6.4)
-
-    // Fires every 60s via inject node. Gated by timeSyncEnabled global
-    (default: false).
-
-    // Note: spec nominal interval is 1000 ms; 60s is adequate for clock
-    correction without
-
-    // competing with a hardware master. No source-address arbitration is
-    implemented here.
-
+    // Fires every 60s via inject node. Gated by timeSyncEnabled global (default: false).
+    // Note: spec nominal interval is 1000 ms; 60s is adequate for clock correction without
+    // competing with a hardware master. No source-address arbitration is implemented here.
 
     // --- Configuration ---
-
     const PRIORITY = 6;
-
     const DGN = 0x1FFFF;
-
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
-
     // --- Feature Gate ---
-
     const timeSyncEnabled = global.get("timeSyncEnabled", "file");
-
     if (!timeSyncEnabled) return null;
 
-
     // --- Current Time ---
-
     const dt = new Date();
 
-
     // --- Helpers ---
-
     // RV-C DOW: 1=Sunday..7=Saturday (JS getDay(): 0=Sun..6=Sat)
-
     const rvcDow = (jsDow) => (jsDow === 0 ? 1 : jsDow + 1);
 
-
-    // Derive TZ code from system UTC offset: std offset in hours, minus 1 if
-    DST active
-
+    // Derive TZ code from system UTC offset: std offset in hours, minus 1 if DST active
     const jan = new Date(dt.getFullYear(), 0, 1).getTimezoneOffset();
-
     const jul = new Date(dt.getFullYear(), 6, 1).getTimezoneOffset();
-
     const std = Math.max(jan, jul);
-
     const isDst = dt.getTimezoneOffset() < std;
-
     const tzCode = isDst ? std / 60 - 1 : std / 60;
 
-
     // --- Payload ---
-
-    // Byte layout per RV-C §6.4 Table 6.4.2b: year(offset 2000), month, day,
-    dow, hour, min, sec, tz
-
+    // Byte layout per RV-C §6.4 Table 6.4.2b: year(offset 2000), month, day, dow, hour, min, sec, tz
     const dataBytes = [
       Math.max(0, Math.min(255, dt.getFullYear() - 2000)), // Byte 0: Year (2000..2255)
       dt.getMonth() + 1,                                   // Byte 1: Month (1..12)
@@ -2847,17 +2519,13 @@
       tzCode & 0xff,                                        // Byte 7: Timezone code
     ];
 
-
     // --- Build and Send ---
-
     const dataHex = dataBytes
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
       .toUpperCase();
     const canIdInt = (PRIORITY << 26) | (DGN << 8) | SOURCE_ADDRESS;
-
     const canIdHex = canIdInt.toString(16).padStart(8, "0").toUpperCase();
-
 
     node.status({
       fill: "green",
@@ -2865,16 +2533,15 @@
       text: `${dt.getMonth() + 1}/${dt.getDate()} ${dt.getHours().toString().padStart(2, "0")}:${dt.getMinutes().toString().padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")} tz=${tzCode}`,
     });
 
-
     return { topic: "can/send", payload: `${canIdHex}#${dataHex}` };
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1320
-  "y": 1840
+  'y': 1840
   g: 5169613bd2735138
   wires:
     - - c83c6b2b70c927a3
@@ -2883,47 +2550,39 @@
   z: 292e70a6ba25b323
   d: true
   name: beta_gate
-  func: >
-    // A simple gate node to allow messages to pass only if Beta features are
-    enabled.
-
+  func: |
+    // A simple gate node to allow messages to pass only if Beta features are enabled.
 
     // Check the global betaEnabled flag
-
     const isBetaEnabled = global.get("betaEnabled");
 
-
     // If beta is enabled, pass the message through unmodified.
-
-    // Otherwise, return null to drop the message and stop the flow along this
-    path.
-
+    // Otherwise, return null to drop the message and stop the flow along this path.
     if (isBetaEnabled === true) {
       return msg;
     }
-
 
     return null;
   outputs: 1
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 1420
-  "y": 1680
+  'y': 1680
   g: 9e47041ed71c4494
   wires:
     - []
 - id: e38f32a1f6d36bfb
   type: link out
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   mode: link
   links:
     - f658418a7b9b4857
   x: 1670
-  "y": 1620
+  'y': 1620
   g: 9e47041ed71c4494
   l: true
   wires: []
@@ -2937,10 +2596,10 @@
   tostatus: false
   complete: payload
   targetType: msg
-  statusVal: ""
+  statusVal: ''
   statusType: auto
   x: 2100
-  "y": 600
+  'y': 600
   g: 9dd6a98018824be9
   wires: []
 - id: efe52fc701f550cf
@@ -2948,9 +2607,9 @@
   z: 292e70a6ba25b323
   name: Notifications
   x: 994
-  "y": 1259
+  'y': 1259
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 8337a7f0dd0435d6
@@ -2963,7 +2622,7 @@
   links:
     - 45414bacecada477
   x: 220
-  "y": 920
+  'y': 920
   g: 8ef86a1c4b59d8e1
   l: true
   wires:
@@ -2973,9 +2632,9 @@
   z: 292e70a6ba25b323
   name: CAN message routing
   x: 848
-  "y": 239
+  'y': 239
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 02bdfc59de71b5a5
@@ -2997,16 +2656,12 @@
   type: function
   z: 292e70a6ba25b323
   name: record_unknown_export
-  func: >
+  func: |
     // Export Unknown CAN Recording
-
     // Reads recordUnknownLog from global context
-
     // Output: [[jsonMsg, htmlMsg], notifyMsg] to File Write node
 
-
     const TIMEZONE = "America/New_York";
-
 
     function getLocalISO(ms) {
       if (!ms) return null;
@@ -3015,11 +2670,8 @@
         .replace(" ", "T");
     }
 
-
     const log = global.get("recordUnknownLog", "file") || [];
-
     const startTime = global.get("recordUnknownStart", "file");
-
 
     const report = {
       recording_start: getLocalISO(startTime),
@@ -3028,48 +2680,30 @@
       messages: log,
     };
 
-
     // Static filename replaces old files every time
-
     const filename = "librecoach_unknown_recording.json";
-
 
     const jsonMsg = {
       filename: `/homeassistant/www/${filename}`,
       payload: JSON.stringify(report, null, 2),
     };
 
-
     const htmlMsg = {
       filename: "/homeassistant/www/librecoach_download_recording.html",
       payload: `<!DOCTYPE html>
     <html><head><title>LibreCoach Download</title></head>
-
     <body>
-
     <script>
-
     var a = document.createElement("a");
-
     a.href = "/local/${filename}";
-
     a.download = "${filename}";
-
     document.body.appendChild(a);
-
     a.click();
-
     setTimeout(function() { window.close(); }, 1000);
-
     </script>
-
-    <p>Your download should start automatically. If not, <a
-    href="/local/${filename}" download="${filename}">click here</a>.</p>
-
+    <p>Your download should start automatically. If not, <a href="/local/${filename}" download="${filename}">click here</a>.</p>
     </body></html>`,
-
     };
-
 
     const notifyMsg = {
       payload: {
@@ -3079,23 +2713,21 @@
       },
     };
 
-
     node.status({
       fill: "green",
       shape: "dot",
       text: `Exported ${log.length} messages`,
     });
 
-
     return [[jsonMsg, htmlMsg], notifyMsg];
   outputs: 2
   timeout: 0
   noerr: 0
-  initialize: ""
-  finalize: ""
+  initialize: ''
+  finalize: ''
   libs: []
   x: 450
-  "y": 1820
+  'y': 1820
   g: 1250cab4e8633d65
   wires:
     - - cfa55144f4a17a5c
@@ -3103,7 +2735,7 @@
 - id: f658418a7b9b4857
   type: link in
   z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
+  name: 'MQTT out: Retain TRUE'
   links:
     - d38c75bc1474be23
     - d3a13b531babee66
@@ -3122,7 +2754,7 @@
     - 6376d98589368f2b
     - 5ffb64e684c20ea8
   x: 230
-  "y": 500
+  'y': 500
   g: 3c819b7900145438
   l: true
   wires:
@@ -3132,9 +2764,9 @@
   z: 292e70a6ba25b323
   name: GPS Updates
   x: 94
-  "y": 1439
+  'y': 1439
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 1becc1dacb0ecaf8
@@ -3147,9 +2779,9 @@
   z: 292e70a6ba25b323
   name: User input
   x: 94
-  "y": 1259
+  'y': 1259
   style:
-    stroke: "#777777"
+    stroke: '#777777'
     label: true
   nodes:
     - 012b02175347902e
@@ -3161,7 +2793,7 @@
   z: 292e70a6ba25b323
   name: Recording toggle
   topic: librecoach/record_unknown/set
-  qos: "1"
+  qos: '1'
   datatype: utf8
   broker: 80727e60a251c36c
   nl: false
@@ -3169,7 +2801,7 @@
   rh: 0
   inputs: 0
   x: 200
-  "y": 1700
+  'y': 1700
   g: 1250cab4e8633d65
   wires:
     - - 880ca1b6bf10b8d2
