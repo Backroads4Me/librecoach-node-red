@@ -135,7 +135,7 @@ flowchart TD
 | [Config](./config.md) | 26 | 0 | 15 | 7 |
 | [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
-| [HA Commands](./ha-commands.md) | 15 | 0 | 2 | 1 |
+| [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
 | [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
 | [Victron](./victron.md) | 13 | 0 | 4 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |

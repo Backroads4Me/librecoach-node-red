@@ -150,6 +150,9 @@ const cleanupTopics = [
   "homeassistant/switch/victron_integration/config",
   "homeassistant/switch/librecoach_testing_beta/config",
   "homeassistant/switch/librecoach_beta_testing/config",
+  "homeassistant/binary_sensor/generator_running/config",
+  "homeassistant/sensor/generator_demand_summary/config",
+  "homeassistant/binary_sensor/generator_demand_active/config",
 ];
 
 for (const topic of cleanupTopics) {

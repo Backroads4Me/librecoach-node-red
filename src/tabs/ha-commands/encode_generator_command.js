@@ -13,7 +13,7 @@ switch (command) {
     demandByte = 0x01; // bits 0-1 = 01 = Generator power demanded
     break;
   case "OFF":
-    demandByte = 0x00; // bits 0-1 = 00 = No demand
+    demandByte = 0x40; // demand off + manual override to actively stop the genset
     break;
   default:
     node.warn(

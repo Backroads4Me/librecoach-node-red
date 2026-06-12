@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `b3d80c5dc947ec88`
 - **Disabled:** false
-- **Node count:** 27
-- **Function nodes:** 15
+- **Node count:** 28
+- **Function nodes:** 16
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 2
@@ -313,6 +313,40 @@ Encodes MQTT Climate commands into FURNACE_COMMAND messages (1FFE6)
 
 ---
 
+### encode_generator_command
+- **File:** [`encode_generator_command.js`](../tabs/ha-commands/encode_generator_command.js)
+- **Node ID:** `6c7a6786667fe3dd`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_6aa079d768e1["MQTT out_ Retain FALSE"]:::link
+  n_6c7a6786667f["encode_generator_command"]:::fn
+  n_89946e1c7a57["89946e1c7a570ed0"]:::fn
+  n_6c7a6786667f -->|out 0| n_6aa079d768e1
+  n_89946e1c7a57 -->|out 12| n_6c7a6786667f
+```
+
+#### Msg contract
+Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)
+§6.35.3 — preferred method for network-initiated start/stop (respects Quiet Time)
+
+#### Upstream
+- 89946e1c7a570ed0 (switch) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain FALSE (link out) — this tab
+
+---
+
 ### encode_generic_indicator_command
 - **File:** [`encode_generic_indicator_command.js`](../tabs/ha-commands/encode_generic_indicator_command.js)
 - **Node ID:** `eea2c8f34cb0db28`
@@ -551,7 +585,7 @@ _None._
 
 ## Other Nodes
 
-- 89946e1c7a570ed0 (switch) — id `89946e1c7a570ed0`, in: 1, out: 13
+- 89946e1c7a570ed0 (switch) — id `89946e1c7a570ed0`, in: 1, out: 14
 - 9f10dee2300ff666 (note) — id `9f10dee2300ff666`, in: 0, out: 0
 - HA climate (mqtt in) — id `51fdd54bd04e39e2`, in: 0, out: 1
 - Home Assistant climate encoding (group) — id `7183c5f0ad762adb`, in: 0, out: 0
