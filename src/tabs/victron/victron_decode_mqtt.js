@@ -4,6 +4,11 @@
 const victronEnabled = global.get("victronEnabled");
 if (!victronEnabled) return null;
 
+// Track liveness for the availability watchdog in victron_keep_alive. Venus OS
+// has no native online/offline topic, so the freshness of inbound N/+/# data is
+// our connectivity signal.
+global.set("victronLastSeen", Date.now());
+
 const topic = msg.topic;
 if (!topic || typeof topic !== "string") return null;
 

@@ -230,7 +230,7 @@ Output 2 → Filter nodes (reset on enable)
 ### victron_keep_alive
 - **File:** [`victron_keep_alive.js`](../tabs/victron/victron_keep_alive.js)
 - **Node ID:** `36f5f1a727dfd1ca`
-- **Outputs:** 1
+- **Outputs:** 2
 
 #### Neighborhood
 ```mermaid
@@ -242,14 +242,17 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_36f5f1a727df["victron_keep_alive"]:::fn
+  n_bd38c37850a3["MQTT out_ Retain TRUE"]:::link
   n_c80ea298a372["Victron out"]:::fn
   n_f9d1a59e25ce["Repeat"]:::fn
   n_36f5f1a727df -->|out 0| n_c80ea298a372
+  n_36f5f1a727df -->|out 1| n_bd38c37850a3
   n_f9d1a59e25ce -->|out 0| n_36f5f1a727df
 ```
 
 #### Msg contract
-_No documented msg contract._
+Output 1: Victron keepalive (-> "Victron out")
+Output 2: derived availability status (-> "MQTT out: Retain TRUE")
 
 #### Upstream
 - Repeat (inject) — this tab
@@ -257,6 +260,8 @@ _No documented msg contract._
 #### Downstream
 - **Output 0:**
   - Victron out (mqtt out) — this tab
+- **Output 1:**
+  - MQTT out: Retain TRUE (link out) — this tab
 
 ---
 

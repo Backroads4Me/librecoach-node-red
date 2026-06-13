@@ -344,6 +344,11 @@ const payload = {
   icon: haMetadata.icon,
   state_topic: stateTopic,
   value_template: "{{ value_json.value }}",
+  availability_mode: "all",
+  availability: [
+    { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+    { topic: "librecoach/victron/status", payload_available: "online", payload_not_available: "offline" },
+  ],
   device: {
     identifiers: ["librecoach-victron"],
     name: "Victron",

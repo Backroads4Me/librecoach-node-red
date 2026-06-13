@@ -45,6 +45,11 @@ function climateConfig(entityId, name) {
     temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,
     temperature_unit: "F",
     action_topic: `homeassistant/climate/${entityId}/action/state`,
+    availability_mode: "all",
+    availability: [
+      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+    ],
     device,
   };
   return {
@@ -59,6 +64,11 @@ function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
     unique_id: entityId,
     default_entity_id: `sensor.${entityId}`,
     state_topic: `homeassistant/sensor/${entityId}/state`,
+    availability_mode: "all",
+    availability: [
+      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+    ],
     device,
   };
   if (unit) cfg.unit_of_measurement = unit;
@@ -83,6 +93,11 @@ function binarySensorConfig(entityId, name, deviceClass, icon) {
       payload_off: "OFF",
       device_class: deviceClass,
       icon,
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device,
     },
   };

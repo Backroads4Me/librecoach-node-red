@@ -15,15 +15,15 @@
   birthRetain: "false"
   birthPayload: ""
   birthMsg: {}
-  closeTopic: ""
+  closeTopic: librecoach/nodered/status
   closeQos: "0"
-  closeRetain: "false"
-  closePayload: ""
+  closeRetain: "true"
+  closePayload: offline
   closeMsg: {}
-  willTopic: ""
+  willTopic: librecoach/nodered/status
   willQos: "0"
-  willRetain: "false"
-  willPayload: ""
+  willRetain: "true"
+  willPayload: offline
   willMsg: {}
   userProps: ""
   sessionExpiry: ""

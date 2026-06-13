@@ -223,20 +223,42 @@
   z: 1fde0c4ffb03727e
   name: victron_keep_alive
   func: |-
+    // Output 1: Victron keepalive (-> "Victron out")
+    // Output 2: derived availability status (-> "MQTT out: Retain TRUE")
     const victronEnabled = global.get("victronEnabled");
     if (!victronEnabled) return null;
 
+    // --- Keepalive (output 1) ---
     const portalId = global.get("victronPortalId", "file");
-
+    let keepaliveMsg = null;
     if (portalId) {
-        msg.topic = `R/${portalId}/keepalive`;
-
-        msg.payload = { "keepalive-options": ["suppress-republish"] };
-
-        return msg;
+        keepaliveMsg = {
+            topic: `R/${portalId}/keepalive`,
+            payload: { "keepalive-options": ["suppress-republish"] },
+        };
     }
-    return null;
-  outputs: 1
+
+    // --- Availability watchdog (output 2) ---
+    // Venus OS publishes no online/offline topic, so derive one from data freshness.
+    // victron_decode_mqtt stamps victronLastSeen on every inbound N/+/# message.
+    // STALE_MS spans ~3 keepalive cycles so a single missed publish won't flap.
+    const STALE_MS = 90000;
+    const lastSeen = global.get("victronLastSeen") || 0;
+    const fresh = lastSeen > 0 && Date.now() - lastSeen < STALE_MS;
+    const desired = fresh ? "online" : "offline";
+
+    let statusMsg = null;
+    if (desired !== context.get("victronStatusPublished")) {
+        context.set("victronStatusPublished", desired);
+        statusMsg = {
+            topic: "librecoach/victron/status",
+            payload: desired,
+            retain: true,
+        };
+    }
+
+    return [keepaliveMsg, statusMsg];
+  outputs: 2
   timeout: 0
   noerr: 0
   initialize: ""
@@ -247,6 +269,7 @@
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
+    - - bd38c37850a3e832
 - id: 3fd699a116881ab0
   type: delay
   z: 1fde0c4ffb03727e

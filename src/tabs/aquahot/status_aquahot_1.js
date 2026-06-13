@@ -53,6 +53,11 @@ if (!created[instance]) {
       state_topic: stateTopic,
       payload_on: "ON",
       payload_off: "OFF",
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-aquahot"],
         name: "Aqua-Hot",

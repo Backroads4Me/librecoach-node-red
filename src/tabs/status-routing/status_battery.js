@@ -65,6 +65,11 @@ if (!created[instance]) {
       unit_of_measurement: "V",
       device_class: "voltage",
       value_template: "{{ value | float | round(2) }}",
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-energy"],
         name: "Energy",

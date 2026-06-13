@@ -62,6 +62,11 @@ if (!created[instance]) {
             value_template: "{{ value_json.state }}",
             position_template: "{{ value_json.position | int }}",
             optimistic: false,
+            availability_mode: "all",
+            availability: [
+              { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+              { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            ],
             device: {
                 identifiers: ["librecoach-shades"],
                 name: "Shades",
