@@ -574,6 +574,25 @@
   g: ceee39e4b10d6030
   wires:
     - []
+- id: 3e9c6f1a2b4d5e6f
+  type: inject
+  z: 292e70a6ba25b323
+  name: Flows loaded
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "10"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 220
+  "y": 1380
+  wires:
+    - - 9d8e7f6a5b4c3d2e
 - id: 3f5eb271f702c8f3
   type: function
   z: 292e70a6ba25b323
@@ -1733,6 +1752,30 @@
     - 7e609140970f546c
     - c78420a075d43408
     - cd670f6465b6374b
+- id: 9d8e7f6a5b4c3d2e
+  type: function
+  z: 292e70a6ba25b323
+  name: publish_nodered_ready
+  func: |
+    // Publishes the retained readiness flag after LibreCoach flows have loaded.
+    // The orchestrator (run.sh wait_for_nodered_api) blocks on this retained
+    // topic before continuing startup; it clears the topic before any Node-RED
+    // (re)start so a stale flag from a previous run can never satisfy the wait.
+    // Input: startup inject (delayed so MQTT subscriptions are registered)
+    // Output: retained message via "MQTT Out: Retain TRUE"
+    msg.topic = "librecoach/nodered/ready";
+    msg.payload = "online";
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 450
+  "y": 1380
+  wires:
+    - - cacf35b859af22a9
 - id: 9dd6a98018824be9
   type: group
   z: 292e70a6ba25b323

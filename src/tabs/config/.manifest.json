@@ -167,6 +167,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "9d8e7f6a5b4c3d2e": {
+    "nodeId": "9d8e7f6a5b4c3d2e",
+    "name": "publish_nodered_ready",
+    "sanitizedName": "publish_nodered_ready",
+    "fileName": "publish_nodered_ready",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "a8a757fe3b31cf9c": {
     "nodeId": "a8a757fe3b31cf9c",
     "name": "geo_status",

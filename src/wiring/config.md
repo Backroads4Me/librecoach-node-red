@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 91
-- **Function nodes:** 26
+- **Node count:** 93
+- **Function nodes:** 27
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 15
@@ -694,6 +694,44 @@ Requests WATER_PUMP_STATUS (1FFB3)
 
 ---
 
+### publish_nodered_ready
+- **File:** [`publish_nodered_ready.js`](../tabs/config/publish_nodered_ready.js)
+- **Node ID:** `9d8e7f6a5b4c3d2e`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_3e9c6f1a2b4d["Flows loaded"]:::fn
+  n_9d8e7f6a5b4c["publish_nodered_ready"]:::fn
+  n_cacf35b859af["MQTT Out_ Retain TRUE"]:::fn
+  n_3e9c6f1a2b4d -->|out 0| n_9d8e7f6a5b4c
+  n_9d8e7f6a5b4c -->|out 0| n_cacf35b859af
+```
+
+#### Msg contract
+Publishes the retained readiness flag after LibreCoach flows have loaded.
+The orchestrator (run.sh wait_for_nodered_api) blocks on this retained
+topic before continuing startup; it clears the topic before any Node-RED
+(re)start so a stale flag from a previous run can never satisfy the wait.
+Input: startup inject (delayed so MQTT subscriptions are registered)
+Output: retained message via "MQTT Out: Retain TRUE"
+
+#### Upstream
+- Flows loaded (inject) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT Out: Retain TRUE (mqtt out) — this tab
+
+---
+
 ### record_unknown_capture
 - **File:** [`record_unknown_capture.js`](../tabs/config/record_unknown_capture.js)
 - **Node ID:** `3935564c9401e95d`
@@ -1047,6 +1085,7 @@ _None._
 - Config in (mqtt in) — id `21029b71ed58348c`, in: 0, out: 1
 - Device discovery (inject) — id `07b8bcce03f19e8f`, in: 0, out: 7
 - Every 60s (inject) — id `bce5d439a67df7da`, in: 0, out: 1
+- Flows loaded (inject) — id `3e9c6f1a2b4d5e6f`, in: 0, out: 1
 - GPS Updates (group) — id `f67b4a374db41b27`, in: 0, out: 0
 - HA in (mqtt in) — id `54cd7e4a8959a77c`, in: 0, out: 2
 - HA in (mqtt in) — id `9e9b11b9441e51db`, in: 0, out: 2
@@ -1060,7 +1099,7 @@ _None._
 - Location updates (mqtt in) — id `50dfcea54d80866b`, in: 0, out: 1
 - MQTT (group) — id `3c819b7900145438`, in: 0, out: 0
 - MQTT Out: Retain FALSE (mqtt out) — id `1ac6e0fa1cbb3852`, in: 1, out: 0
-- MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 1, out: 0
+- MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 2, out: 0
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0
 - On start (inject) — id `0c76b4a89a0e60ca`, in: 0, out: 1

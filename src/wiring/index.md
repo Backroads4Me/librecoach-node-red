@@ -132,7 +132,7 @@ flowchart TD
 
 | Tab | Functions | Subflow instances | Link out | Link in |
 |---|---|---|---|---|
-| [Config](./config.md) | 26 | 0 | 15 | 7 |
+| [Config](./config.md) | 27 | 0 | 15 | 7 |
 | [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
 | [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
