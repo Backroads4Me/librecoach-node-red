@@ -955,7 +955,7 @@
 - id: export_entities_default_mqtt_in_001
   type: mqtt in
   z: bfa6336b0d45dc23
-  name: Export Entities Trigger (Standard Cards)
+  name: Export Entities Trigger (Standard)
   topic: librecoach/export/entities/default/trigger
   qos: "1"
   datatype: utf8
@@ -964,7 +964,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 250
   "y": 980
   g: export_entities_group_001
   wires:
@@ -979,7 +979,7 @@
   createDir: true
   overwriteFile: "true"
   encoding: none
-  x: 1140
+  x: 1240
   "y": 920
   g: export_entities_group_001
   wires:
@@ -1026,7 +1026,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1340
+  x: 1440
   "y": 920
   g: export_entities_group_001
   wires:
@@ -1088,9 +1088,9 @@
     == 'LibreCoach' -%}
 
     {%- if is_lc or 'switch_' in eid or 'tank_' in eid or 'thermostat' in eid or
-    'aquahot' in eid or 'generator' in eid or 'waterheater' in eid or
-    'circ_pump' in eid or 'battery_house' in eid or 'signal_quality' in eid or
-    'librecoach' in eid or 'rv_' in eid -%}
+    'aquahot' in eid or 'generator' in eid or 'hughes_' in eid or 'waterheater'
+    in eid or 'circ_pump' in eid or 'battery_house' in eid or 'signal_quality'
+    in eid or 'librecoach' in eid or 'rv_' in eid -%}
 
     {%- set area = area_name(eid) | default('(no area)', true) -%}
 
@@ -1137,7 +1137,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 470
+  x: 570
   "y": 920
   g: export_entities_group_001
   wires:
@@ -2449,7 +2449,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 940
+  x: 1040
   "y": 920
   g: export_entities_group_001
   wires:
@@ -2458,7 +2458,7 @@
   type: group
   z: bfa6336b0d45dc23
   name: Export AI Dashboard Prompt
-  x: 44
+  x: 94
   "y": 879
   style:
     stroke: "#3d85c6"
@@ -2487,7 +2487,7 @@
   authType: ""
   senderr: false
   headers: []
-  x: 710
+  x: 810
   "y": 920
   g: export_entities_group_001
   wires:
@@ -2495,7 +2495,7 @@
 - id: export_entities_mqtt_in_001
   type: mqtt in
   z: bfa6336b0d45dc23
-  name: Export Entities Trigger
+  name: Export Entities Trigger (Mushroom)
   topic: librecoach/export/entities/trigger
   qos: "1"
   datatype: utf8
@@ -2504,7 +2504,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 260
   "y": 920
   g: export_entities_group_001
   wires:
@@ -2973,7 +2973,7 @@
   mode: link
   links:
     - a1e89f48333c8256
-  x: 1550
+  x: 1650
   "y": 920
   g: export_entities_group_001
   l: true

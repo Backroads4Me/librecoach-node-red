@@ -559,6 +559,11 @@
           unit_of_measurement: "V",
           device_class: "voltage",
           value_template: "{{ value | float | round(2) }}",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-energy"],
             name: "Energy",
@@ -1524,6 +1529,11 @@
           device_class: "temperature",
           state_class: "measurement",
           unit_of_measurement: "°F",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-climate"],
             name: "Climate",
@@ -1672,6 +1682,11 @@
         schema: "json",
         command_topic: commandTopic,
         state_topic: stateTopic,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device: {
           identifiers: ["librecoach-switches"],
           name: "Switches",
@@ -2233,6 +2248,11 @@
           state_topic: stateTopic,
           payload_on: "ON",
           payload_off: "OFF",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-water"],
             name: "Water",
@@ -3237,6 +3257,11 @@
         unique_id: entityId,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       if (unit) cfg.unit_of_measurement = unit;
@@ -3262,6 +3287,11 @@
           payload_off: "OFF",
           device_class: deviceClass,
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };
@@ -3761,6 +3791,11 @@
           action_topic: `${baseTopic}/action/state`,
           temperature_unit: "F",
           temp_step: 1,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       });
@@ -4305,6 +4340,11 @@
           state_topic: stateTopic,
           unit_of_measurement: "%",
           value_template: "{{ value | float }}",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-water"],
             name: "Water",
@@ -4510,6 +4550,11 @@
         unique_id: entityId,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       if (unit) cfg.unit_of_measurement = unit;
@@ -4535,6 +4580,11 @@
           payload_off: "OFF",
           device_class: deviceClass,
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };
@@ -4688,6 +4738,11 @@
               payload_on: "ON",
               payload_off: "OFF",
               icon: "mdi:engine",
+              availability_mode: "all",
+              availability: [
+                { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+              ],
               device,
             },
           });
@@ -4981,6 +5036,11 @@
         temperature_command_topic: `homeassistant/climate/${entityId}/temp/set`,
         temperature_unit: "F",
         action_topic: `homeassistant/climate/${entityId}/action/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       return {
@@ -4995,6 +5055,11 @@
         unique_id: entityId,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       if (unit) cfg.unit_of_measurement = unit;
@@ -5019,6 +5084,11 @@
           payload_off: "OFF",
           device_class: deviceClass,
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };
@@ -6167,6 +6237,11 @@
                 value_template: "{{ value_json.state }}",
                 position_template: "{{ value_json.position | int }}",
                 optimistic: false,
+                availability_mode: "all",
+                availability: [
+                  { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                  { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                ],
                 device: {
                     identifiers: ["librecoach-shades"],
                     name: "Shades",
@@ -6708,6 +6783,11 @@
       temperature_unit: "F",
 
       // Link entities to a common device for better HA grouping
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-climate"],
         name: "Climate",
@@ -7342,6 +7422,11 @@
                 state_class: "measurement",
                 entity_category: "diagnostic",
                 value_template: "{{ value | float | round(2) }}",
+                availability_mode: "all",
+                availability: [
+                  { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                  { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                ],
                 device,
             });
 
@@ -7368,6 +7453,11 @@
                 state_topic: stateTopic,
                 entity_category: "diagnostic",
                 value_template: "{{ value | int }}",
+                availability_mode: "all",
+                availability: [
+                  { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                  { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                ],
                 device,
             });
 
@@ -7765,6 +7855,11 @@
           state_topic: stateTopic,
           payload_on: "ON",
           payload_off: "OFF",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-water"],
             name: "Water",
@@ -7878,6 +7973,11 @@
           state_locked: "LOCKED",
           state_unlocked: "UNLOCKED",
           optimistic: true,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-locks"],
             name: "Locks",
@@ -7920,6 +8020,11 @@
           state_locked: "LOCKED",
           state_unlocked: "UNLOCKED",
           optimistic: false,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-locks"],
             name: "Locks",
@@ -8645,6 +8750,11 @@
         schema: "json",
         state_topic: stateTopic,
         command_topic: commandTopic,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device: {
           identifiers: ["librecoach-switches"],
           name: "Switches",
@@ -9096,6 +9206,11 @@
             schema: "json",
             command_topic: commandTopic,
             state_topic: stateTopic,
+            availability_mode: "all",
+            availability: [
+              { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+              { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            ],
             device: {
                 identifiers: ["librecoach-switches"],
                 name: "Switches",
@@ -10196,6 +10311,11 @@
         schema: "json",
         command_topic: commandTopic,
         state_topic: stateTopic,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device: {
           identifiers: ["librecoach-switches"],
           name: "Switches",
@@ -10316,6 +10436,11 @@
         unique_id: entityId,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       if (unit) cfg.unit_of_measurement = unit;
@@ -10340,6 +10465,11 @@
           payload_off: "OFF",
           device_class: deviceClass,
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };

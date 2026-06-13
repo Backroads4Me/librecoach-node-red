@@ -131,7 +131,7 @@
 
     - Enter your thermostat bluetooth email and password
   x: 390
-  "y": 132
+  "y": 120
   wires: []
 - id: 52b505b69f88888d
   type: link out
@@ -596,9 +596,7 @@
 
     // Add auto if supported (MAV bits 8-11)
 
-    // Add dry if supported (MAV bit 6)
-
-    // Default: include both unless MAV explicitly excludes them
+    // Dry mode is intentionally not exposed to Home Assistant controls.
 
     if (zoneConfig.MAV) {
       const mav = zoneConfig.MAV;
@@ -606,13 +604,9 @@
       if (mav & (0x100 | 0x200 | 0x400 | 0x800)) {
         modes.push("auto");
       }
-      // Dry mode: bit 6
-      if (mav & 0x40) {
-        modes.push("dry");
-      }
     } else {
-      // No config yet — include everything as default
-      modes.push("auto", "dry");
+      // No config yet — include auto by default
+      modes.push("auto");
     }
 
 
@@ -680,10 +674,10 @@
       current_temperature_template:
         "{{ value_json.facePlateTemperature | default(0) }}",
 
-      // Target temperature (single setpoint for cool/heat/dry)
+      // Target temperature (single setpoint for cool/heat)
       temperature_command_topic: tempCommand,
       temperature_state_topic: stateTopic,
-      temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,
+      temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,
 
       // Auto mode high/low setpoints
       temperature_high_command_topic: tempHighCommand,
@@ -732,24 +726,139 @@
     };
 
 
-    msg.topic = discoveryTopic;
+    const messages = [
+      {
+        topic: discoveryTopic,
+        payload: discoveryPayload,
+        entityId,
+      },
+    ];
 
-    msg.payload = discoveryPayload;
 
-    msg.entityId = entityId;
+    const diagnosticDevice = {
+      identifiers: [`librecoach-ble-microair-${safeMac}`],
+      name: `MicroAir ${mac}`,
+      manufacturer: "LibreCoach",
+      via_device: "librecoach-climate",
+    };
+
+
+    const diagnostics = [
+      {
+        component: "binary_sensor",
+        id: `microair_${safeMac}_availability`,
+        payload: {
+          name: "BLE Availability",
+          unique_id: `microair_${safeMac}_availability`,
+          default_entity_id: `binary_sensor.microair_${safeMac}_availability`,
+          device_class: "connectivity",
+          entity_category: "diagnostic",
+          state_topic: `librecoach/ble/microair/${mac}/available`,
+          payload_on: "online",
+          payload_off: "offline",
+          device: diagnosticDevice,
+        },
+      },
+      {
+        component: "sensor",
+        id: `microair_${safeMac}_last_success`,
+        payload: {
+          name: "BLE Last Success",
+          unique_id: `microair_${safeMac}_last_success`,
+          default_entity_id: `sensor.microair_${safeMac}_last_success`,
+          entity_category: "diagnostic",
+          device_class: "timestamp",
+          // ha-addons publishes an ISO8601 timestamp on this dedicated topic.
+          state_topic: `librecoach/ble/microair/${mac}/last_success`,
+          device: diagnosticDevice,
+        },
+      },
+      {
+        component: "sensor",
+        id: `microair_${safeMac}_failure_count`,
+        payload: {
+          name: "BLE Failure Count",
+          unique_id: `microair_${safeMac}_failure_count`,
+          default_entity_id: `sensor.microair_${safeMac}_failure_count`,
+          entity_category: "diagnostic",
+          state_class: "measurement",
+          // ha-addons publishes a plain integer on this dedicated topic.
+          state_topic: `librecoach/ble/microair/${mac}/failure_count`,
+          device: diagnosticDevice,
+        },
+      },
+      {
+        component: "sensor",
+        id: `microair_${safeMac}_last_error`,
+        payload: {
+          name: "BLE Last Error",
+          unique_id: `microair_${safeMac}_last_error`,
+          default_entity_id: `sensor.microair_${safeMac}_last_error`,
+          entity_category: "diagnostic",
+          // ha-addons publishes none | auth_failed | connectivity on this topic,
+          // distinguishing an auth failure from a connectivity/range/power failure.
+          state_topic: `librecoach/ble/microair/${mac}/last_error`,
+          device: diagnosticDevice,
+        },
+      },
+      {
+        component: "button",
+        id: `microair_${safeMac}_reconnect`,
+        payload: {
+          name: "BLE Reconnect",
+          unique_id: `microair_${safeMac}_reconnect`,
+          default_entity_id: `button.microair_${safeMac}_reconnect`,
+          icon: "mdi:bluetooth-connect",
+          entity_category: "config",
+          // Forces an immediate retry instead of waiting out the backoff schedule.
+          command_topic: `librecoach/ble/microair/${mac}/reconnect`,
+          availability_topic: "librecoach/nodered/status",
+          device: diagnosticDevice,
+        },
+      },
+      {
+        component: "button",
+        id: `microair_${safeMac}_clear_errors`,
+        payload: {
+          name: "BLE Clear Errors",
+          unique_id: `microair_${safeMac}_clear_errors`,
+          default_entity_id: `button.microair_${safeMac}_clear_errors`,
+          icon: "mdi:alert-circle-check",
+          entity_category: "config",
+          // Resets failure_count / last_error and the backoff cadence.
+          command_topic: `librecoach/ble/microair/${mac}/clear_errors`,
+          availability_topic: "librecoach/nodered/status",
+          device: diagnosticDevice,
+        },
+      },
+    ];
+
+
+    for (const diagnostic of diagnostics) {
+      messages.push({
+        topic: `homeassistant/${diagnostic.component}/${diagnostic.id}/config`,
+        payload: diagnostic.payload,
+      });
+    }
 
 
     // Track discovery topic for cleanup when disabled
 
     let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
 
-    if (!discoveryTopics.includes(discoveryTopic)) {
-      discoveryTopics.push(discoveryTopic);
-      global.set("microairDiscoveryTopics", discoveryTopics, "file");
+    for (const message of messages) {
+      if (
+        message.topic.startsWith("homeassistant/") &&
+        !discoveryTopics.includes(message.topic)
+      ) {
+        discoveryTopics.push(message.topic);
+      }
     }
 
+    global.set("microairDiscoveryTopics", discoveryTopics, "file");
 
-    return msg;
+
+    return [messages];
   outputs: 1
   timeout: 0
   noerr: 0
@@ -872,7 +981,6 @@
       fan_only: 1,
       cool: 2,
       heat: 5,
-      dry: 6,
       auto: 11,
     };
 
@@ -909,8 +1017,6 @@
         change.cool_sp = temp;
       } else if (currentMode === "heat") {
         change.heat_sp = temp;
-      } else if (currentMode === "dry") {
-        change.dry_sp = temp;
       } else if (currentMode === "auto") {
         // HA MQTT climate sends a single temp for auto mode via this topic.
         // Set both setpoints — HA should use temp_high/temp_low topics for
@@ -962,7 +1068,7 @@
       if (currentMode === "fan_only") {
         // Fan-only mode doesn't support auto — default to max speed
         change.fanOnly = fanValue === 128 ? maxFanSpeed : fanValue;
-      } else if (currentMode === "cool" || currentMode === "dry") {
+      } else if (currentMode === "cool") {
         change.coolFan = fanValue;
       } else if (currentMode === "heat") {
         // Gas furnace (mode 3,4) vs electric heat (mode 5,6,7,12)
@@ -1078,7 +1184,7 @@
         3: "heat",
         4: "heat",
         5: "heat",
-        6: "dry",
+        6: "off",
         7: "heat",
         8: "auto",
         9: "auto",
@@ -1113,8 +1219,6 @@
     if ("cool_sp" in changes) optimistic.cool_sp = changes.cool_sp;
 
     if ("heat_sp" in changes) optimistic.heat_sp = changes.heat_sp;
-
-    if ("dry_sp" in changes) optimistic.dry_sp = changes.dry_sp;
 
     if ("autoCool_sp" in changes) optimistic.autoCool_sp = changes.autoCool_sp;
 
@@ -1151,8 +1255,6 @@
     else if (mode === "heat")
       fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;
     else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num || 0;
-
-    else if (mode === "dry") fanNum = optimistic.dry_fan_mode_num || 0;
 
     optimistic.fan_mode = FAN_MODE_MAP[fanNum] || "auto";
 

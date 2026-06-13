@@ -139,6 +139,7 @@ flowchart TD
 | [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
 | [Victron](./victron.md) | 13 | 0 | 4 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
+| [Hughes Power Watchdog](./hughes.md) | 3 | 0 | 0 | 0 |
 | [Templates](./templates.md) | 15 | 0 | 4 | 0 |
 | [Delete HA Entity](./delete-ha-entity.md) | 1 | 0 | 1 | 0 |
 
@@ -198,5 +199,5 @@ _None._
 | Name | Type | Used by |
 |---|---|---|
 | Home Assistant | server | 1 node across 1 tab |
-| Mosquitto | mqtt-broker | 20 nodes across 5 tabs |
+| Mosquitto | mqtt-broker | 26 nodes across 6 tabs |
 | Victron Cerbo GX | mqtt-broker | 4 nodes across 1 tab |

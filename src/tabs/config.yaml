@@ -122,7 +122,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 690
+  x: 730
   "y": 1300
   g: f81ca31c89243206
   l: true
@@ -1788,8 +1788,9 @@
   libs: []
   x: 450
   "y": 1380
+  g: f81ca31c89243206
   wires:
-    - - cacf35b859af22a9
+    - - 0a63b31d61802934
 - id: 9dd6a98018824be9
   type: group
   z: 292e70a6ba25b323
@@ -2346,6 +2347,8 @@
 
     if (key === "microair_enabled") global.set("microairEnabled", val);
 
+    if (key === "hughes_enabled") global.set("hughesEnabled", val);
+
     if (key === "geo_enabled") global.set("geoEnabled", val);
 
     if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val,
@@ -2557,6 +2560,9 @@
     };
 
 
+    const NODE_RED_AVAILABILITY_TOPIC = "librecoach/nodered/status";
+
+
     const messages = [];
 
 
@@ -2701,6 +2707,23 @@
     });
 
 
+    // BLE lock reset tool
+
+    messages.push({
+      topic: "homeassistant/button/librecoach_ble_reset_locks/config",
+      payload: {
+        name: "Forget BLE Devices",
+        unique_id: "librecoach_ble_reset_locks",
+        default_entity_id: "button.librecoach_ble_reset_locks",
+        icon: "mdi:bluetooth-off",
+        command_topic: "librecoach/ble/reset_locks",
+        entity_category: "config",
+        device: device,
+        availability_topic: NODE_RED_AVAILABILITY_TOPIC,
+      },
+    });
+
+
     // Button - Export Unknown Recording
 
     messages.push({
@@ -2725,14 +2748,24 @@
       "homeassistant/switch/victron_integration/config",
       "homeassistant/switch/librecoach_testing_beta/config",
       "homeassistant/switch/librecoach_beta_testing/config",
-      "homeassistant/binary_sensor/generator_running/config",
-      "homeassistant/sensor/generator_demand_summary/config",
-      "homeassistant/binary_sensor/generator_demand_active/config",
     ];
 
 
     for (const topic of cleanupTopics) {
       messages.push({ topic: topic, payload: "" });
+    }
+
+
+    for (const message of messages) {
+      if (
+        message.topic &&
+        message.topic.startsWith("homeassistant/") &&
+        message.payload &&
+        typeof message.payload === "object" &&
+        !message.payload.availability_topic
+      ) {
+        message.payload.availability_topic = NODE_RED_AVAILABILITY_TOPIC;
+      }
     }
 
 
@@ -3214,6 +3247,7 @@
   nodes:
     - 012b02175347902e
     - 0a63b31d61802934
+    - 9d8e7f6a5b4c3d2e
     - c2e1bc849357fcb4
     - d6680567062a0908
 - id: ff7901a611c1e1aa

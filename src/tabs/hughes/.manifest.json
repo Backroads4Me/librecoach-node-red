@@ -1,0 +1,38 @@
+{
+  "2a7f019c3d4e5b63": {
+    "nodeId": "2a7f019c3d4e5b63",
+    "name": "hughes_process_state",
+    "sanitizedName": "hughes_process_state",
+    "fileName": "hughes_process_state",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "5a7f019c3d4e5b66": {
+    "nodeId": "5a7f019c3d4e5b66",
+    "name": "hughes_encode_command",
+    "sanitizedName": "hughes_encode_command",
+    "fileName": "hughes_encode_command",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "8b7f019c3d4e5b69": {
+    "nodeId": "8b7f019c3d4e5b69",
+    "name": "hughes_handle_toggle",
+    "sanitizedName": "hughes_handle_toggle",
+    "fileName": "hughes_handle_toggle",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  }
+}

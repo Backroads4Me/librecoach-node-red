@@ -350,6 +350,11 @@
         schema: "json",
         command_topic: commandTopic,
         state_topic: stateTopic,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device: {
           identifiers: ["librecoach-switches"],
           name: "Switches",
@@ -429,7 +434,7 @@
     their state, even when the lights don't broadcast a status response.
     If a panel says "turn on light 17," we now know light 17 exists and is on.
   x: 310
-  "y": 132
+  "y": 144
   wires: []
 - id: b07052c69f7b857c
   type: function
@@ -803,6 +808,11 @@
           schema: "json",
           command_topic: `homeassistant/light/${entityId}/set`,
           state_topic: `homeassistant/light/${entityId}/state`,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-switches"],
             name: "Switches",
