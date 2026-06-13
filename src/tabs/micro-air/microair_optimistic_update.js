@@ -45,7 +45,7 @@ if ("mode" in changes) {
     3: "heat",
     4: "heat",
     5: "heat",
-    6: "dry",
+    6: "off",
     7: "heat",
     8: "auto",
     9: "auto",
@@ -77,7 +77,6 @@ if ("mode" in changes) {
 // Setpoint changes
 if ("cool_sp" in changes) optimistic.cool_sp = changes.cool_sp;
 if ("heat_sp" in changes) optimistic.heat_sp = changes.heat_sp;
-if ("dry_sp" in changes) optimistic.dry_sp = changes.dry_sp;
 if ("autoCool_sp" in changes) optimistic.autoCool_sp = changes.autoCool_sp;
 if ("autoHeat_sp" in changes) optimistic.autoHeat_sp = changes.autoHeat_sp;
 
@@ -100,7 +99,6 @@ else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num || 0;
 else if (mode === "heat")
   fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;
 else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num || 0;
-else if (mode === "dry") fanNum = optimistic.dry_fan_mode_num || 0;
 optimistic.fan_mode = FAN_MODE_MAP[fanNum] || "auto";
 
 // Power state

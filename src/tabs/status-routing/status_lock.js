@@ -57,6 +57,11 @@ if (!created[0]) {
       state_locked: "LOCKED",
       state_unlocked: "UNLOCKED",
       optimistic: true,
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-locks"],
         name: "Locks",
@@ -93,6 +98,11 @@ if (!created[instance]) {
       state_locked: "LOCKED",
       state_unlocked: "UNLOCKED",
       optimistic: false,
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-locks"],
         name: "Locks",

@@ -86,6 +86,11 @@ const payload = {
   temperature_unit: "F",
 
   // Link entities to a common device for better HA grouping
+  availability_mode: "all",
+  availability: [
+    { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+    { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+  ],
   device: {
     identifiers: ["librecoach-climate"],
     name: "Climate",

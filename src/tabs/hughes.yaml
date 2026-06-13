@@ -1,0 +1,557 @@
+- id: 8a7f019c3d4e5b60
+  type: tab
+  label: Hughes
+  env: []
+  normalizedLabel: hughes
+  disabled: false
+  info: ""
+- id: 0a7f019c3d4e5b61
+  type: note
+  z: 8a7f019c3d4e5b60
+  content: |-
+    # Hughes Power Watchdog
+
+    Enable Hughes in the LibreCoach add-on configuration.
+    Gen 1 is monitoring-only;
+    Gen 2 also supports relay, neutral, and energy reset.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 300
+  "y": 120
+  wires: []
+- id: 1a7f019c3d4e5b62
+  type: mqtt in
+  z: 8a7f019c3d4e5b60
+  name: Hughes state
+  topic: librecoach/ble/hughes/+/state
+  qos: "2"
+  datatype: json
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 210
+  "y": 300
+  g: e2a57851c2fe7bca
+  wires:
+    - - 2a7f019c3d4e5b63
+- id: 2a7f019c3d4e5b63
+  type: function
+  z: 8a7f019c3d4e5b60
+  name: hughes_process_state
+  func: >
+    // Create/update Home Assistant MQTT Discovery entities from Hughes BLE
+    state.
+
+    // Input: librecoach/ble/hughes/{mac}/state
+
+    // Output: discovery messages for retained MQTT output.
+
+
+    if (!global.get("hughesEnabled")) return null;
+
+
+    const parts = (msg.topic || "").split("/");
+
+    if (parts.length !== 5 || parts[0] !== "librecoach" || parts[2] !==
+    "hughes") {
+      return null;
+    }
+
+
+    let state = msg.payload;
+
+    if (typeof state === "string") {
+      try {
+        state = JSON.parse(state);
+      } catch (error) {
+        node.warn(`Invalid Hughes state JSON: ${error.message}`);
+        return null;
+      }
+    }
+
+    if (!state || typeof state !== "object" || !state.protocol) return null;
+
+
+    const mac = parts[3].toLowerCase();
+
+    const safeMac = mac.replace(/:/g, "_");
+
+    const baseId = `hughes_${safeMac}`;
+
+    const stateTopic = `librecoach/ble/hughes/${mac}/state`;
+
+    const availabilityTopic = `librecoach/ble/hughes/${mac}/available`;
+
+    const device = {
+      identifiers: [baseId],
+      name: `Hughes Power Watchdog ${mac}`,
+      manufacturer: "Hughes Autoformers",
+      model: `${state.protocol}${state.is_50a ? " 50A" : " 30A"}`,
+    };
+
+    const availability = [
+      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+      { topic: availabilityTopic, payload_available: "online", payload_not_available: "offline" },
+    ];
+
+
+    global.set(`${baseId}_state`, state, "file");
+
+
+    const signature = JSON.stringify({
+      protocol: state.protocol,
+      is_50a: Boolean(state.is_50a),
+      supports_control: Boolean(state.supports_control),
+      has_booster: Boolean(state.has_booster),
+    });
+
+    if (global.get(`${baseId}_discovery_signature`, "file") === signature)
+    return null;
+
+    global.set(`${baseId}_discovery_signature`, signature, "file");
+
+
+    const messages = [];
+
+    const tracked = global.get("hughesDiscoveryTopics", "file") || [];
+
+
+    function add(component, suffix, payload) {
+      const entityId = `${baseId}_${suffix}`;
+      const topic = `homeassistant/${component}/${entityId}/config`;
+      payload.unique_id = entityId;
+      payload.default_entity_id = `${component}.${entityId}`;
+      payload.device = device;
+      if (!payload.availability && !payload.availability_topic) {
+        payload.availability_mode = "all";
+        payload.availability = availability;
+      }
+      messages.push({ topic, payload });
+      if (!tracked.includes(topic)) tracked.push(topic);
+    }
+
+
+    function sensor(suffix, name, field, unit, deviceClass, stateClass, icon) {
+      const payload = {
+        name,
+        state_topic: stateTopic,
+        value_template: `{{ value_json.${field} if value_json.${field} is not none else 'unknown' }}`,
+      };
+      if (unit) payload.unit_of_measurement = unit;
+      if (deviceClass) payload.device_class = deviceClass;
+      if (stateClass) payload.state_class = stateClass;
+      if (icon) payload.icon = icon;
+      add("sensor", suffix, payload);
+    }
+
+
+    sensor("voltage_l1", "Shore Voltage L1", "voltage_l1", "V", "voltage",
+    "measurement");
+
+    sensor("current_l1", "Shore Current L1", "current_l1", "A", "current",
+    "measurement");
+
+    sensor("power_l1", "Shore Power L1", "power_l1", "W", "power",
+    "measurement");
+
+    sensor("frequency_l1", "Shore Frequency L1", "frequency_l1", "Hz",
+    "frequency", "measurement");
+
+    sensor("energy", "Cumulative Energy", "energy_kwh", "kWh", "energy",
+    "total_increasing");
+
+    sensor("combined_power", "Combined Shore Power", "combined_power", "W",
+    "power", "measurement");
+
+    sensor("error_code", "Error Code", "error_code", null, null, null,
+    "mdi:alert-circle-outline");
+
+    sensor("error_description", "Error Description", "error_description", null,
+    null, null, "mdi:text-box-alert-outline");
+
+
+    if (state.is_50a) {
+      sensor("voltage_l2", "Shore Voltage L2", "voltage_l2", "V", "voltage", "measurement");
+      sensor("current_l2", "Shore Current L2", "current_l2", "A", "current", "measurement");
+      sensor("power_l2", "Shore Power L2", "power_l2", "W", "power", "measurement");
+      sensor("frequency_l2", "Shore Frequency L2", "frequency_l2", "Hz", "frequency", "measurement");
+    }
+
+
+    if (state.supports_control) {
+      add("binary_sensor", "relay_status", {
+        name: "Relay Status",
+        state_topic: stateTopic,
+        value_template: "{{ 'ON' if value_json.relay_status == 0 else 'OFF' }}",
+        payload_on: "ON",
+        payload_off: "OFF",
+        device_class: "power",
+      });
+      add("binary_sensor", "neutral_detection_status", {
+        name: "Neutral Detection Status",
+        state_topic: stateTopic,
+        value_template: "{{ 'OFF' if value_json.neutral_detection == 0 else 'ON' }}",
+        payload_on: "ON",
+        payload_off: "OFF",
+        device_class: "problem",
+      });
+      add("switch", "relay", {
+        name: "Shore Power Relay",
+        state_topic: stateTopic,
+        value_template: "{{ 'ON' if value_json.relay_status == 0 else 'OFF' }}",
+        command_topic: `homeassistant/switch/${baseId}_relay/set`,
+        payload_on: "ON",
+        payload_off: "OFF",
+        icon: "mdi:power-plug",
+      });
+      add("switch", "neutral_detection", {
+        name: "Neutral Detection",
+        state_topic: stateTopic,
+        value_template: "{{ 'ON' if value_json.neutral_detection == 0 else 'OFF' }}",
+        command_topic: `homeassistant/switch/${baseId}_neutral_detection/set`,
+        payload_on: "ON",
+        payload_off: "OFF",
+        icon: "mdi:shield-check",
+      });
+      add("button", "reset_energy", {
+        name: "Reset Energy Counter",
+        command_topic: `homeassistant/button/${baseId}_reset_energy/set`,
+        payload_press: "PRESS",
+        icon: "mdi:counter",
+        entity_category: "config",
+      });
+    }
+
+
+    if (state.has_booster) {
+      sensor("output_voltage", "Output Voltage", "output_voltage", "V", "voltage", "measurement");
+      sensor("temperature", "Device Temperature", "temperature", "°C", "temperature", "measurement");
+      add("binary_sensor", "boost_active", {
+        name: "Boost Active",
+        state_topic: stateTopic,
+        value_template: "{{ 'ON' if value_json.boost_mode == 1 else 'OFF' }}",
+        payload_on: "ON",
+        payload_off: "OFF",
+        icon: "mdi:lightning-bolt",
+      });
+    }
+
+
+    add("binary_sensor", "ble_availability", {
+      name: "BLE Availability",
+      state_topic: availabilityTopic,
+      payload_on: "online",
+      payload_off: "offline",
+      device_class: "connectivity",
+      entity_category: "diagnostic",
+      availability_topic: "librecoach/nodered/status",
+    });
+
+    add("sensor", "ble_last_success", {
+      name: "BLE Last Success",
+      state_topic: `librecoach/ble/hughes/${mac}/last_success`,
+      device_class: "timestamp",
+      entity_category: "diagnostic",
+    });
+
+    add("sensor", "ble_failure_count", {
+      name: "BLE Failure Count",
+      state_topic: `librecoach/ble/hughes/${mac}/failure_count`,
+      state_class: "measurement",
+      entity_category: "diagnostic",
+    });
+
+    add("sensor", "ble_last_error", {
+      name: "BLE Last Error",
+      state_topic: `librecoach/ble/hughes/${mac}/last_error`,
+      entity_category: "diagnostic",
+    });
+
+    add("button", "ble_reconnect", {
+      name: "BLE Reconnect",
+      command_topic: `librecoach/ble/hughes/${mac}/reconnect`,
+      icon: "mdi:bluetooth-connect",
+      entity_category: "config",
+      availability_topic: "librecoach/nodered/status",
+    });
+
+    add("button", "ble_clear_errors", {
+      name: "BLE Clear Errors",
+      command_topic: `librecoach/ble/hughes/${mac}/clear_errors`,
+      icon: "mdi:alert-circle-check",
+      entity_category: "config",
+      availability_topic: "librecoach/nodered/status",
+    });
+
+
+    global.set("hughesDiscoveryTopics", tracked, "file");
+
+    node.status({ fill: "green", shape: "dot", text: `${state.protocol}
+    ${state.is_50a ? "50A" : "30A"}` });
+
+    return [messages];
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 480
+  "y": 300
+  g: e2a57851c2fe7bca
+  wires:
+    - - 3a7f019c3d4e5b64
+- id: 3a7f019c3d4e5b64
+  type: mqtt out
+  z: 8a7f019c3d4e5b60
+  name: Discovery retain true
+  topic: ""
+  qos: "1"
+  retain: "true"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 750
+  "y": 300
+  g: e2a57851c2fe7bca
+  wires: []
+- id: 4a7f019c3d4e5b65
+  type: mqtt in
+  z: 8a7f019c3d4e5b60
+  name: Hughes HA commands
+  topic: homeassistant/+/+/set
+  qos: "2"
+  datatype: auto-detect
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 240
+  "y": 380
+  g: e2a57851c2fe7bca
+  wires:
+    - - 5a7f019c3d4e5b66
+- id: 5a7f019c3d4e5b66
+  type: function
+  z: 8a7f019c3d4e5b60
+  name: hughes_encode_command
+  func: >
+    // Convert Home Assistant Hughes commands to the add-on MQTT command
+    contract.
+
+    // Output 1: bridge command. Output 2: optimistic state update.
+
+
+    if (!global.get("hughesEnabled")) return null;
+
+
+    const parts = (msg.topic || "").split("/");
+
+    if (parts.length !== 4 || parts[0] !== "homeassistant" || parts[3] !==
+    "set") return null;
+
+
+    const component = parts[1];
+
+    const entityId = parts[2];
+
+    if (!entityId.startsWith("hughes_")) return null;
+
+
+    let suffix;
+
+    if (component === "switch" && entityId.endsWith("_neutral_detection")) {
+      suffix = "neutral_detection";
+    } else if (component === "switch" && entityId.endsWith("_relay")) {
+      suffix = "relay";
+    } else if (component === "button" && entityId.endsWith("_reset_energy")) {
+      suffix = "reset_energy";
+    } else {
+      return null;
+    }
+
+
+    const baseId = entityId.slice(0, -(suffix.length + 1));
+
+    const safeMac = baseId.slice("hughes_".length);
+
+    const mac = safeMac.replace(/_/g, ":");
+
+    const bridgeTopic = `librecoach/ble/hughes/${mac}/set`;
+
+
+    let command;
+
+    if (suffix === "reset_energy") {
+      command = { command: "reset_energy" };
+    } else {
+      const enabled = msg.payload.toString().toUpperCase() === "ON";
+      command = { command: suffix, value: enabled };
+    }
+
+
+    const bridgeMsg = { topic: bridgeTopic, payload: JSON.stringify(command) };
+
+    if (suffix === "reset_energy") return [bridgeMsg, null];
+
+
+    const stateKey = `${baseId}_state`;
+
+    const optimistic = { ...(global.get(stateKey, "file") || {}) };
+
+    if (!optimistic.protocol) return [bridgeMsg, null];
+
+    if (suffix === "relay") optimistic.relay_status = command.value ? 0 : 1;
+
+    if (suffix === "neutral_detection") optimistic.neutral_detection =
+    command.value ? 0 : 1;
+
+    global.set(stateKey, optimistic, "file");
+
+
+    return [
+      bridgeMsg,
+      { topic: `librecoach/ble/hughes/${mac}/state`, payload: JSON.stringify(optimistic) },
+    ];
+  outputs: 2
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 500
+  "y": 380
+  g: e2a57851c2fe7bca
+  wires:
+    - - 6a7f019c3d4e5b67
+    - - 6a7f019c3d4e5b67
+- id: 6a7f019c3d4e5b67
+  type: mqtt out
+  z: 8a7f019c3d4e5b60
+  name: Commands and optimistic state
+  topic: ""
+  qos: "1"
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 790
+  "y": 380
+  g: e2a57851c2fe7bca
+  wires: []
+- id: 7a7f019c3d4e5b68
+  type: mqtt in
+  z: 8a7f019c3d4e5b60
+  name: Hughes enabled
+  topic: librecoach/config/hughes_enabled
+  qos: "2"
+  datatype: auto-detect
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 220
+  "y": 460
+  g: e2a57851c2fe7bca
+  wires:
+    - - 8b7f019c3d4e5b69
+- id: 8b7f019c3d4e5b69
+  type: function
+  z: 8a7f019c3d4e5b60
+  name: hughes_handle_toggle
+  func: >
+    // Enable/disable Hughes entity processing and remove discovery on disable.
+
+
+    const key = (msg.topic || "").split("/").pop();
+
+    if (key !== "hughes_enabled") return null;
+
+
+    const enabled = msg.payload.toString() === "true";
+
+    global.set("hughesEnabled", enabled);
+
+    if (enabled) {
+      node.status({ fill: "green", shape: "dot", text: "Enabled" });
+      return null;
+    }
+
+
+    const topics = global.get("hughesDiscoveryTopics", "file") || [];
+
+    for (const topic of topics) node.send({ topic, payload: "" });
+
+    global.set("hughesDiscoveryTopics", [], "file");
+
+
+    const keys = global.keys ? global.keys("file") : [];
+
+    for (const contextKey of keys) {
+      if (contextKey.startsWith("hughes_") && contextKey.endsWith("_discovery_signature")) {
+        global.set(contextKey, undefined, "file");
+      }
+    }
+
+
+    node.status({ fill: "red", shape: "dot", text: `Disabled - removed
+    ${topics.length}` });
+
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 480
+  "y": 460
+  g: e2a57851c2fe7bca
+  wires:
+    - - 9a7f019c3d4e5b6a
+- id: 9a7f019c3d4e5b6a
+  type: mqtt out
+  z: 8a7f019c3d4e5b60
+  name: Discovery cleanup retain true
+  topic: ""
+  qos: "1"
+  retain: "true"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 780
+  "y": 460
+  g: e2a57851c2fe7bca
+  wires: []
+- id: e2a57851c2fe7bca
+  type: group
+  z: 8a7f019c3d4e5b60
+  name: Hughes Power Watchdog
+  x: 114
+  "y": 259
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - 1a7f019c3d4e5b62
+    - 2a7f019c3d4e5b63
+    - 3a7f019c3d4e5b64
+    - 4a7f019c3d4e5b65
+    - 5a7f019c3d4e5b66
+    - 6a7f019c3d4e5b67
+    - 7a7f019c3d4e5b68
+    - 8b7f019c3d4e5b69
+    - 9a7f019c3d4e5b6a

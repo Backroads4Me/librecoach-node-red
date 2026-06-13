@@ -38,6 +38,11 @@ function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
     unique_id: entityId,
     default_entity_id: `sensor.${entityId}`,
     state_topic: `homeassistant/sensor/${entityId}/state`,
+    availability_mode: "all",
+    availability: [
+      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+    ],
     device,
   };
   if (unit) cfg.unit_of_measurement = unit;
@@ -62,6 +67,11 @@ function binarySensorConfig(entityId, name, deviceClass, icon) {
       payload_off: "OFF",
       device_class: deviceClass,
       icon,
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      ],
       device,
     },
   };
@@ -104,10 +114,6 @@ function publishBinary(entityId, stateValue, configFn) {
 // --- STATUS_1 ---
 
 if (dgn_name === "GENERATOR_STATUS_1") {
-  if (typeof p.generator_running === "boolean") {
-    flow.set("generator_running", p.generator_running);
-  }
-
   if (typeof p.status === "string" && p.status !== "Not Available") {
     publishSensor("generator_status", p.status, () =>
       sensorConfig(
@@ -168,6 +174,18 @@ if (dgn_name === "GENERATOR_STATUS_1") {
     );
   }
 
+  // Binary sensors — false is a valid state
+  if (typeof p.generator_running === "boolean") {
+    publishBinary("generator_running", onOff(p.generator_running), () =>
+      binarySensorConfig(
+        "generator_running",
+        "Generator Running",
+        "running",
+        "mdi:engine",
+      ),
+    );
+  }
+
   if (typeof p.generator_fault === "boolean") {
     publishBinary("generator_fault", onOff(p.generator_fault), () =>
       binarySensorConfig(
@@ -192,6 +210,11 @@ if (dgn_name === "GENERATOR_STATUS_1") {
           payload_on: "ON",
           payload_off: "OFF",
           icon: "mdi:engine",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       });
@@ -207,17 +230,10 @@ if (dgn_name === "GENERATOR_STATUS_1") {
 
   // --- STATUS_2 ---
 } else if (dgn_name === "GENERATOR_STATUS_2") {
-  const generatorActive =
-    (typeof p.engine_rpm === "number" && p.engine_rpm > 0) ||
-    flow.get("generator_running") === true;
-
   if (typeof p.coolant_temperature === "number") {
-    const coolantTemperature = generatorActive
-      ? Math.round(p.coolant_temperature)
-      : 0;
     publishSensor(
       "generator_coolant_temp",
-      coolantTemperature,
+      p.coolant_temperature,
       () =>
         sensorConfig(
           "generator_coolant_temp",
@@ -227,7 +243,7 @@ if (dgn_name === "GENERATOR_STATUS_1") {
           "measurement",
           "mdi:thermometer",
         ),
-      generatorActive,
+      p.coolant_temperature > 100, // running engine threshold (~38°C+)
     );
   }
 
@@ -291,6 +307,36 @@ if (dgn_name === "GENERATOR_STATUS_1") {
 
   // --- GENERATOR_DEMAND_STATUS ---
 } else if (dgn_name === "GENERATOR_DEMAND_STATUS") {
+  if (
+    typeof p.demand_summary === "string" &&
+    p.demand_summary !== "Not Available"
+  ) {
+    publishSensor("generator_demand_summary", p.demand_summary, () =>
+      sensorConfig(
+        "generator_demand_summary",
+        "Generator Demand",
+        null,
+        null,
+        null,
+        "mdi:engine",
+      ),
+    );
+  }
+
+  if (typeof p.generator_should_run === "boolean") {
+    publishBinary(
+      "generator_demand_active",
+      onOff(p.generator_should_run),
+      () =>
+        binarySensorConfig(
+          "generator_demand_active",
+          "Generator Demand Active",
+          "running",
+          "mdi:engine",
+        ),
+    );
+  }
+
   if (typeof p.quiet_time_active === "boolean") {
     publishBinary("generator_quiet_time", onOff(p.quiet_time_active), () =>
       binarySensorConfig(

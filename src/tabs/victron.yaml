@@ -222,21 +222,63 @@
   type: function
   z: 1fde0c4ffb03727e
   name: victron_keep_alive
-  func: |-
+  func: >
+    // Output 1: Victron keepalive (-> "Victron out")
+
+    // Output 2: derived availability status (-> "MQTT out: Retain TRUE")
+
     const victronEnabled = global.get("victronEnabled");
+
     if (!victronEnabled) return null;
+
+
+    // --- Keepalive (output 1) ---
 
     const portalId = global.get("victronPortalId", "file");
 
+    let keepaliveMsg = null;
+
     if (portalId) {
-        msg.topic = `R/${portalId}/keepalive`;
-
-        msg.payload = { "keepalive-options": ["suppress-republish"] };
-
-        return msg;
+        keepaliveMsg = {
+            topic: `R/${portalId}/keepalive`,
+            payload: { "keepalive-options": ["suppress-republish"] },
+        };
     }
-    return null;
-  outputs: 1
+
+
+    // --- Availability watchdog (output 2) ---
+
+    // Venus OS publishes no online/offline topic, so derive one from data
+    freshness.
+
+    // victron_decode_mqtt stamps victronLastSeen on every inbound N/+/#
+    message.
+
+    // STALE_MS spans ~3 keepalive cycles so a single missed publish won't flap.
+
+    const STALE_MS = 90000;
+
+    const lastSeen = global.get("victronLastSeen") || 0;
+
+    const fresh = lastSeen > 0 && Date.now() - lastSeen < STALE_MS;
+
+    const desired = fresh ? "online" : "offline";
+
+
+    let statusMsg = null;
+
+    if (desired !== context.get("victronStatusPublished")) {
+        context.set("victronStatusPublished", desired);
+        statusMsg = {
+            topic: "librecoach/victron/status",
+            payload: desired,
+            retain: true,
+        };
+    }
+
+
+    return [keepaliveMsg, statusMsg];
+  outputs: 2
   timeout: 0
   noerr: 0
   initialize: ""
@@ -247,6 +289,7 @@
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
+    - - bd38c37850a3e832
 - id: 3fd699a116881ab0
   type: delay
   z: 1fde0c4ffb03727e
@@ -557,7 +600,7 @@
     - GX device LAN network security set to Unsecured
     - MQTT enabed on the GX device
   x: 350
-  "y": 140
+  "y": 152
   wires: []
 - id: 9be2b9ec5c4f51d4
   type: rbe
@@ -665,6 +708,17 @@
     const victronEnabled = global.get("victronEnabled");
 
     if (!victronEnabled) return null;
+
+
+    // Track liveness for the availability watchdog in victron_keep_alive. Venus
+    OS
+
+    // has no native online/offline topic, so the freshness of inbound N/+/#
+    data is
+
+    // our connectivity signal.
+
+    global.set("victronLastSeen", Date.now());
 
 
     const topic = msg.topic;
@@ -1401,6 +1455,11 @@
       icon: haMetadata.icon,
       state_topic: stateTopic,
       value_template: "{{ value_json.value }}",
+      availability_mode: "all",
+      availability: [
+        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+        { topic: "librecoach/victron/status", payload_available: "online", payload_not_available: "offline" },
+      ],
       device: {
         identifiers: ["librecoach-victron"],
         name: "Victron",

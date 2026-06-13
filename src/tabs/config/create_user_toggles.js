@@ -6,6 +6,8 @@ const device = {
   manufacturer: "LibreCoach",
 };
 
+const NODE_RED_AVAILABILITY_TOPIC = "librecoach/nodered/status";
+
 const messages = [];
 
 // === Import/Export & RV Info ===
@@ -130,6 +132,21 @@ messages.push({
   },
 });
 
+// BLE lock reset tool
+messages.push({
+  topic: "homeassistant/button/librecoach_ble_reset_locks/config",
+  payload: {
+    name: "Forget BLE Devices",
+    unique_id: "librecoach_ble_reset_locks",
+    default_entity_id: "button.librecoach_ble_reset_locks",
+    icon: "mdi:bluetooth-off",
+    command_topic: "librecoach/ble/reset_locks",
+    entity_category: "config",
+    device: device,
+    availability_topic: NODE_RED_AVAILABILITY_TOPIC,
+  },
+});
+
 // Button - Export Unknown Recording
 messages.push({
   topic: "homeassistant/button/librecoach_export_unknown/config",
@@ -150,13 +167,22 @@ const cleanupTopics = [
   "homeassistant/switch/victron_integration/config",
   "homeassistant/switch/librecoach_testing_beta/config",
   "homeassistant/switch/librecoach_beta_testing/config",
-  "homeassistant/binary_sensor/generator_running/config",
-  "homeassistant/sensor/generator_demand_summary/config",
-  "homeassistant/binary_sensor/generator_demand_active/config",
 ];
 
 for (const topic of cleanupTopics) {
   messages.push({ topic: topic, payload: "" });
+}
+
+for (const message of messages) {
+  if (
+    message.topic &&
+    message.topic.startsWith("homeassistant/") &&
+    message.payload &&
+    typeof message.payload === "object" &&
+    !message.payload.availability_topic
+  ) {
+    message.payload.availability_topic = NODE_RED_AVAILABILITY_TOPIC;
+  }
 }
 
 node.status({

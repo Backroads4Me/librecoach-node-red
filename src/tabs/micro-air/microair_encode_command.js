@@ -40,7 +40,6 @@ const MODE_MAP = {
   fan_only: 1,
   cool: 2,
   heat: 5,
-  dry: 6,
   auto: 11,
 };
 
@@ -77,8 +76,6 @@ if (topic.endsWith("/mode/set")) {
     change.cool_sp = temp;
   } else if (currentMode === "heat") {
     change.heat_sp = temp;
-  } else if (currentMode === "dry") {
-    change.dry_sp = temp;
   } else if (currentMode === "auto") {
     // HA MQTT climate sends a single temp for auto mode via this topic.
     // Set both setpoints — HA should use temp_high/temp_low topics for
@@ -130,7 +127,7 @@ if (topic.endsWith("/mode/set")) {
   if (currentMode === "fan_only") {
     // Fan-only mode doesn't support auto — default to max speed
     change.fanOnly = fanValue === 128 ? maxFanSpeed : fanValue;
-  } else if (currentMode === "cool" || currentMode === "dry") {
+  } else if (currentMode === "cool") {
     change.coolFan = fanValue;
   } else if (currentMode === "heat") {
     // Gas furnace (mode 3,4) vs electric heat (mode 5,6,7,12)

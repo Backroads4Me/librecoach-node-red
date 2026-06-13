@@ -40,21 +40,16 @@ const maxFanSpeed =
 let modes = ["off", "cool", "heat", "fan_only"];
 
 // Add auto if supported (MAV bits 8-11)
-// Add dry if supported (MAV bit 6)
-// Default: include both unless MAV explicitly excludes them
+// Dry mode is intentionally not exposed to Home Assistant controls.
 if (zoneConfig.MAV) {
   const mav = zoneConfig.MAV;
   // Auto modes: bits 8, 9, 10, 11
   if (mav & (0x100 | 0x200 | 0x400 | 0x800)) {
     modes.push("auto");
   }
-  // Dry mode: bit 6
-  if (mav & 0x40) {
-    modes.push("dry");
-  }
 } else {
-  // No config yet — include everything as default
-  modes.push("auto", "dry");
+  // No config yet — include auto by default
+  modes.push("auto");
 }
 
 // --- Determine fan modes from observed max speed ---
@@ -109,10 +104,10 @@ const discoveryPayload = {
   current_temperature_template:
     "{{ value_json.facePlateTemperature | default(0) }}",
 
-  // Target temperature (single setpoint for cool/heat/dry)
+  // Target temperature (single setpoint for cool/heat)
   temperature_command_topic: tempCommand,
   temperature_state_topic: stateTopic,
-  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'dry' %}{{ value_json.dry_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,
+  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,
 
   // Auto mode high/low setpoints
   temperature_high_command_topic: tempHighCommand,
@@ -160,15 +155,128 @@ const discoveryPayload = {
   availability_topic: `librecoach/ble/microair/${mac}/available`,
 };
 
-msg.topic = discoveryTopic;
-msg.payload = discoveryPayload;
-msg.entityId = entityId;
+const messages = [
+  {
+    topic: discoveryTopic,
+    payload: discoveryPayload,
+    entityId,
+  },
+];
+
+const diagnosticDevice = {
+  identifiers: [`librecoach-ble-microair-${safeMac}`],
+  name: `MicroAir ${mac}`,
+  manufacturer: "LibreCoach",
+  via_device: "librecoach-climate",
+};
+
+const diagnostics = [
+  {
+    component: "binary_sensor",
+    id: `microair_${safeMac}_availability`,
+    payload: {
+      name: "BLE Availability",
+      unique_id: `microair_${safeMac}_availability`,
+      default_entity_id: `binary_sensor.microair_${safeMac}_availability`,
+      device_class: "connectivity",
+      entity_category: "diagnostic",
+      state_topic: `librecoach/ble/microair/${mac}/available`,
+      payload_on: "online",
+      payload_off: "offline",
+      device: diagnosticDevice,
+    },
+  },
+  {
+    component: "sensor",
+    id: `microair_${safeMac}_last_success`,
+    payload: {
+      name: "BLE Last Success",
+      unique_id: `microair_${safeMac}_last_success`,
+      default_entity_id: `sensor.microair_${safeMac}_last_success`,
+      entity_category: "diagnostic",
+      device_class: "timestamp",
+      // ha-addons publishes an ISO8601 timestamp on this dedicated topic.
+      state_topic: `librecoach/ble/microair/${mac}/last_success`,
+      device: diagnosticDevice,
+    },
+  },
+  {
+    component: "sensor",
+    id: `microair_${safeMac}_failure_count`,
+    payload: {
+      name: "BLE Failure Count",
+      unique_id: `microair_${safeMac}_failure_count`,
+      default_entity_id: `sensor.microair_${safeMac}_failure_count`,
+      entity_category: "diagnostic",
+      state_class: "measurement",
+      // ha-addons publishes a plain integer on this dedicated topic.
+      state_topic: `librecoach/ble/microair/${mac}/failure_count`,
+      device: diagnosticDevice,
+    },
+  },
+  {
+    component: "sensor",
+    id: `microair_${safeMac}_last_error`,
+    payload: {
+      name: "BLE Last Error",
+      unique_id: `microair_${safeMac}_last_error`,
+      default_entity_id: `sensor.microair_${safeMac}_last_error`,
+      entity_category: "diagnostic",
+      // ha-addons publishes none | auth_failed | connectivity on this topic,
+      // distinguishing an auth failure from a connectivity/range/power failure.
+      state_topic: `librecoach/ble/microair/${mac}/last_error`,
+      device: diagnosticDevice,
+    },
+  },
+  {
+    component: "button",
+    id: `microair_${safeMac}_reconnect`,
+    payload: {
+      name: "BLE Reconnect",
+      unique_id: `microair_${safeMac}_reconnect`,
+      default_entity_id: `button.microair_${safeMac}_reconnect`,
+      icon: "mdi:bluetooth-connect",
+      entity_category: "config",
+      // Forces an immediate retry instead of waiting out the backoff schedule.
+      command_topic: `librecoach/ble/microair/${mac}/reconnect`,
+      availability_topic: "librecoach/nodered/status",
+      device: diagnosticDevice,
+    },
+  },
+  {
+    component: "button",
+    id: `microair_${safeMac}_clear_errors`,
+    payload: {
+      name: "BLE Clear Errors",
+      unique_id: `microair_${safeMac}_clear_errors`,
+      default_entity_id: `button.microair_${safeMac}_clear_errors`,
+      icon: "mdi:alert-circle-check",
+      entity_category: "config",
+      // Resets failure_count / last_error and the backoff cadence.
+      command_topic: `librecoach/ble/microair/${mac}/clear_errors`,
+      availability_topic: "librecoach/nodered/status",
+      device: diagnosticDevice,
+    },
+  },
+];
+
+for (const diagnostic of diagnostics) {
+  messages.push({
+    topic: `homeassistant/${diagnostic.component}/${diagnostic.id}/config`,
+    payload: diagnostic.payload,
+  });
+}
 
 // Track discovery topic for cleanup when disabled
 let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
-if (!discoveryTopics.includes(discoveryTopic)) {
-  discoveryTopics.push(discoveryTopic);
-  global.set("microairDiscoveryTopics", discoveryTopics, "file");
+for (const message of messages) {
+  if (
+    message.topic.startsWith("homeassistant/") &&
+    !discoveryTopics.includes(message.topic)
+  ) {
+    discoveryTopics.push(message.topic);
+  }
 }
+global.set("microairDiscoveryTopics", discoveryTopics, "file");
 
-return msg;
+return [messages];

@@ -132,13 +132,14 @@ flowchart TD
 
 | Tab | Functions | Subflow instances | Link out | Link in |
 |---|---|---|---|---|
-| [Config](./config.md) | 26 | 0 | 15 | 7 |
+| [Config](./config.md) | 27 | 0 | 15 | 7 |
 | [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
 | [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
 | [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
 | [Victron](./victron.md) | 13 | 0 | 4 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
+| [Hughes Power Watchdog](./hughes.md) | 3 | 0 | 0 | 0 |
 | [Templates](./templates.md) | 15 | 0 | 4 | 0 |
 | [Delete HA Entity](./delete-ha-entity.md) | 1 | 0 | 1 | 0 |
 
@@ -198,5 +199,5 @@ _None._
 | Name | Type | Used by |
 |---|---|---|
 | Home Assistant | server | 1 node across 1 tab |
-| Mosquitto | mqtt-broker | 20 nodes across 5 tabs |
+| Mosquitto | mqtt-broker | 26 nodes across 6 tabs |
 | Victron Cerbo GX | mqtt-broker | 4 nodes across 1 tab |

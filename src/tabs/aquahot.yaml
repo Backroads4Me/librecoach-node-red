@@ -114,6 +114,11 @@
           state_topic: stateTopic,
           payload_on: "ON",
           payload_off: "OFF",
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device: {
             identifiers: ["librecoach-aquahot"],
             name: "Aqua-Hot",
@@ -218,6 +223,11 @@
         unique_id: entityId,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       if (unit) cfg.unit_of_measurement = unit;
@@ -243,6 +253,11 @@
           payload_off: "OFF",
           device_class: deviceClass,
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };
@@ -295,6 +310,11 @@
           payload_on: "ON",
           payload_off: "OFF",
           icon,
+          availability_mode: "all",
+          availability: [
+            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          ],
           device,
         },
       };
@@ -322,6 +342,11 @@
         temperature_unit: "F",
         action_topic: `homeassistant/climate/${entityId}/action/state`,
         optimistic: true,
+        availability_mode: "all",
+        availability: [
+          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        ],
         device,
       };
       return {
@@ -675,7 +700,7 @@
     This flow decodes both variants to report the status of the
     diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
   x: 350
-  "y": 132
+  "y": 120
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug
