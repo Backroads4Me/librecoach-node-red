@@ -36,20 +36,22 @@ const maxFanSpeed =
   global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
 
 // --- Determine available modes ---
-// Always include these base modes; MAV only removes modes we're sure aren't supported
-let modes = ["off", "cool", "heat", "fan_only"];
-
-// Add auto if supported (MAV bits 8-11)
-// Dry mode is intentionally not exposed to Home Assistant controls.
+// Dry mode remains intentionally hidden from Home Assistant controls.
+let modes;
 if (zoneConfig.MAV) {
   const mav = zoneConfig.MAV;
-  // Auto modes: bits 8, 9, 10, 11
-  if (mav & (0x100 | 0x200 | 0x400 | 0x800)) {
+  modes = ["off"];
+  if (mav & (1 << 1)) modes.push("fan_only");
+  if (mav & (1 << 2)) modes.push("cool");
+  if (mav & ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))) {
+    modes.push("heat");
+  }
+  if (mav & ((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11))) {
     modes.push("auto");
   }
 } else {
-  // No config yet — include auto by default
-  modes.push("auto");
+  // Preserve broad compatibility until the device returns capability data.
+  modes = ["off", "cool", "heat", "fan_only", "auto"];
 }
 
 // --- Determine fan modes from observed max speed ---
