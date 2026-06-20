@@ -27,8 +27,10 @@
   content: |-
     # Delete HA Entity
     Removes devices from Home Assistant when they're no longer needed.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 330
-  "y": 92
+  "y": 80
   wires: []
 - id: 802228bc8d89d80a
   type: inject

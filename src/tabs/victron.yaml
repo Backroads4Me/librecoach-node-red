@@ -599,8 +599,10 @@
     - The GX device connected to the same network as LibreCoach
     - GX device LAN network security set to Unsecured
     - MQTT enabed on the GX device
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 350
-  "y": 140
+  "y": 164
   wires: []
 - id: 9be2b9ec5c4f51d4
   type: rbe
@@ -866,8 +868,17 @@
 
     const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
 
-    if (flow.get(cacheKey) === processedValue) return null;
+    const discoveryKey = `${serviceType}_${instance}_${dbusPath}`;
 
+    const uniqueVictron = global.get("uniqueVictron") || [];
+
+    const discoverySeen = uniqueVictron.includes(discoveryKey);
+
+    const alwaysPublishState =
+      dbusPath === "/Mode" || dbusPath === "/Ac/ActiveIn/CurrentLimit";
+    if (flow.get(cacheKey) === processedValue && discoverySeen &&
+    !alwaysPublishState)
+      return null;
     flow.set(cacheKey, processedValue);
 
 
@@ -1099,6 +1110,7 @@
       },
       "A DC": { device_class: "current", unit: "A", icon: "mdi:current-dc" },
       "A AC": { device_class: "current", unit: "A", icon: "mdi:current-ac" },
+      A: { device_class: "current", unit: "A", icon: "mdi:current-ac" },
       W: { device_class: "power", unit: "W", icon: "mdi:flash" },
       kWh: { device_class: "energy", unit: "kWh", icon: "mdi:lightning-bolt" },
       Ah: { device_class: null, unit: "Ah", icon: "mdi:battery-charging" },
@@ -1232,7 +1244,7 @@
     // === Build Entity ID ===
 
 
-    // Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage
+    // Convert dbus_path to safe ID component: /Dc/0/Voltage -> _dc_0_voltage
 
     let safePath = dbus_path.replace(/^\//, "").replace(/\//g,
     "_").toLowerCase();
@@ -1317,14 +1329,14 @@
 
     const displayName = product_name
       ? product_name
-          .split(/\s+/)
-          .filter((w) => /^[a-zA-Z]/.test(w))
-          .slice(0, 2)
-          .join(" ")
+        .split(/\s+/)
+        .filter((w) => /^[a-zA-Z]/.test(w))
+        .slice(0, 2)
+        .join(" ")
       : "";
 
-    // Prefix with device display name (e.g., "MultiPlus-II — Inverter DC
-    Power")
+    // Prefix with device display name, for example "MultiPlus-II - Inverter DC
+    Power".
 
     // System service uses "System" prefix instead of product name.
 
@@ -1361,6 +1373,7 @@
       "/Ac/ActiveIn/L2/P": "W",
       "/Ac/ActiveIn/Total/P": "W",
       "/Ac/ActiveIn/L1/F": "Hz",
+      "/Ac/ActiveIn/CurrentLimit": "A",
       "/Ac/Out/L1/V": "V AC",
       "/Ac/Out/L1/I": "A AC",
       "/Ac/Out/L1/P": "W",
@@ -1427,7 +1440,9 @@
 
     let componentType = "sensor";
 
-    if (writable && isEnum) {
+    if (dbus_path.endsWith("/CurrentLimit")) {
+      componentType = "number";
+    } else if (writable && isEnum) {
       if (dbus_path.includes("/Relay/")) {
         componentType = "switch";
       } else {
@@ -1446,12 +1461,25 @@
     const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 
 
+    function buildDefaultEntityId() {
+      const objectId = `librecoach_${entityId}`
+        .replace(/-/g, "_")
+        .replace(/_currentlimit(?=$|_)/g, "_current_limit")
+        .replace(/[^a-z0-9_]/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_+|_+$/g, "");
+
+      return `${componentType}.${objectId}`;
+    }
+
+
     // === Build Discovery Payload ===
 
 
     const payload = {
       name: friendlyName,
       unique_id: entityId,
+      default_entity_id: buildDefaultEntityId(),
       icon: haMetadata.icon,
       state_topic: stateTopic,
       value_template: "{{ value_json.value }}",
@@ -1521,8 +1549,8 @@
     }
 
 
-    // Apply precision formatting for numeric values (excluding switches &
-    selects)
+    // Apply precision formatting for numeric values, excluding switches and
+    selects.
 
     if (componentType === "sensor" || componentType === "number") {
       // Default to 1 decimal place if not specified
@@ -1640,16 +1668,28 @@
 
     const lastValues = context.get("lastValues") || {};
 
+    const publishedState = context.get("publishedState") || {};
+
     const cacheKey = `${service_type}_${instance}_${dbus_path}`;
 
+    const alwaysPublishState =
+      dbus_path === "/Mode" || dbus_path === "/Ac/ActiveIn/CurrentLimit";
 
-    if (lastValues[cacheKey] === roundedValue) {
+    if (
+      lastValues[cacheKey] === roundedValue &&
+      publishedState[cacheKey] &&
+      !alwaysPublishState
+    ) {
       return null; // Block if rounded value hasn't changed
     }
 
     lastValues[cacheKey] = roundedValue;
 
+    publishedState[cacheKey] = true;
+
     context.set("lastValues", lastValues);
+
+    context.set("publishedState", publishedState);
 
 
     // 3. Build Entity ID (Status Logic)

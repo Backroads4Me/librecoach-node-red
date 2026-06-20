@@ -130,8 +130,10 @@
     tab
 
     - Enter your thermostat bluetooth email and password
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 390
-  "y": 132
+  "y": 120
   wires: []
 - id: 52b505b69f88888d
   type: link out
@@ -620,6 +622,7 @@
     const discoveryPayload = {
       name: `MicroAir Zone ${zone + 1}`,
       unique_id: uniqueId,
+      default_entity_id: `climate.${entityId}`,
       icon: "mdi:thermostat",
 
       // Mode
@@ -658,12 +661,12 @@
       // Heat type presets (only included when multiple heat sources available)
       ...(presetModes.length > 1
         ? {
-            preset_mode_command_topic: presetCommand,
-            preset_mode_state_topic: stateTopic,
-            preset_mode_value_template:
-              "{{ value_json.heat_source | default('none') }}",
-            preset_modes: presetModes,
-          }
+          preset_mode_command_topic: presetCommand,
+          preset_mode_state_topic: stateTopic,
+          preset_mode_value_template:
+            "{{ value_json.heat_source | default('none') }}",
+          preset_modes: presetModes,
+        }
         : {}),
 
       // Temperature limits

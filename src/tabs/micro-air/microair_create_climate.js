@@ -94,6 +94,7 @@ if (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {
 const discoveryPayload = {
   name: `MicroAir Zone ${zone + 1}`,
   unique_id: uniqueId,
+  default_entity_id: `climate.${entityId}`,
   icon: "mdi:thermostat",
 
   // Mode
@@ -132,12 +133,12 @@ const discoveryPayload = {
   // Heat type presets (only included when multiple heat sources available)
   ...(presetModes.length > 1
     ? {
-        preset_mode_command_topic: presetCommand,
-        preset_mode_state_topic: stateTopic,
-        preset_mode_value_template:
-          "{{ value_json.heat_source | default('none') }}",
-        preset_modes: presetModes,
-      }
+      preset_mode_command_topic: presetCommand,
+      preset_mode_state_topic: stateTopic,
+      preset_mode_value_template:
+        "{{ value_json.heat_source | default('none') }}",
+      preset_modes: presetModes,
+    }
     : {}),
 
   // Temperature limits

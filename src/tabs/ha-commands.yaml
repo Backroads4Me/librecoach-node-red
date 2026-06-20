@@ -974,8 +974,10 @@
 
     and translates the command appropriately then broadcast out on your RV
     devices.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 420
-  "y": 112
+  "y": 100
   wires: []
 - id: a37da245aba53b96
   type: function

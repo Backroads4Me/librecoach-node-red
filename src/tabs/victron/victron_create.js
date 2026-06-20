@@ -39,6 +39,7 @@ const unitMap = {
   },
   "A DC": { device_class: "current", unit: "A", icon: "mdi:current-dc" },
   "A AC": { device_class: "current", unit: "A", icon: "mdi:current-ac" },
+  A: { device_class: "current", unit: "A", icon: "mdi:current-ac" },
   W: { device_class: "power", unit: "W", icon: "mdi:flash" },
   kWh: { device_class: "energy", unit: "kWh", icon: "mdi:lightning-bolt" },
   Ah: { device_class: null, unit: "Ah", icon: "mdi:battery-charging" },
@@ -167,7 +168,7 @@ const friendlyNameMap = {
 
 // === Build Entity ID ===
 
-// Convert dbus_path to safe ID component: /Dc/0/Voltage → _dc_0_voltage
+// Convert dbus_path to safe ID component: /Dc/0/Voltage -> _dc_0_voltage
 let safePath = dbus_path.replace(/^\//, "").replace(/\//g, "_").toLowerCase();
 
 // === Standardization Rules ===
@@ -228,13 +229,13 @@ const baseName =
 // Build short display name from first two alpha words of product name
 const displayName = product_name
   ? product_name
-      .split(/\s+/)
-      .filter((w) => /^[a-zA-Z]/.test(w))
-      .slice(0, 2)
-      .join(" ")
+    .split(/\s+/)
+    .filter((w) => /^[a-zA-Z]/.test(w))
+    .slice(0, 2)
+    .join(" ")
   : "";
 
-// Prefix with device display name (e.g., "MultiPlus-II — Inverter DC Power")
+// Prefix with device display name, for example "MultiPlus-II - Inverter DC Power".
 // System service uses "System" prefix instead of product name.
 const prefix = service_type === "system" ? "System" : displayName;
 const friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;
@@ -266,6 +267,7 @@ const unitOverrides = {
   "/Ac/ActiveIn/L2/P": "W",
   "/Ac/ActiveIn/Total/P": "W",
   "/Ac/ActiveIn/L1/F": "Hz",
+  "/Ac/ActiveIn/CurrentLimit": "A",
   "/Ac/Out/L1/V": "V AC",
   "/Ac/Out/L1/I": "A AC",
   "/Ac/Out/L1/P": "W",
@@ -321,7 +323,9 @@ if (!haMetadata) {
 // === Determine HA Component Type ===
 
 let componentType = "sensor";
-if (writable && isEnum) {
+if (dbus_path.endsWith("/CurrentLimit")) {
+  componentType = "number";
+} else if (writable && isEnum) {
   if (dbus_path.includes("/Relay/")) {
     componentType = "switch";
   } else {
@@ -336,11 +340,23 @@ if (writable && isEnum) {
 const discoveryTopic = `homeassistant/${componentType}/${entityId}/config`;
 const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 
+function buildDefaultEntityId() {
+  const objectId = `librecoach_${entityId}`
+    .replace(/-/g, "_")
+    .replace(/_currentlimit(?=$|_)/g, "_current_limit")
+    .replace(/[^a-z0-9_]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+
+  return `${componentType}.${objectId}`;
+}
+
 // === Build Discovery Payload ===
 
 const payload = {
   name: friendlyName,
   unique_id: entityId,
+  default_entity_id: buildDefaultEntityId(),
   icon: haMetadata.icon,
   state_topic: stateTopic,
   value_template: "{{ value_json.value }}",
@@ -402,7 +418,7 @@ if (haMetadata.unit && componentType !== "select") {
   payload.unit_of_measurement = haMetadata.unit;
 }
 
-// Apply precision formatting for numeric values (excluding switches & selects)
+// Apply precision formatting for numeric values, excluding switches and selects.
 if (componentType === "sensor" || componentType === "number") {
   // Default to 1 decimal place if not specified
   const precision =

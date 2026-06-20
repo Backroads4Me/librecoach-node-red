@@ -4474,6 +4474,8 @@
     This flow reads those messages, discovers what devices are in your
     RV, creates the appropriate entities in Home Assistant,
     and publishes their status.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 300
   "y": 140
   wires: []

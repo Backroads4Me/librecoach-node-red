@@ -132,18 +132,16 @@ messages.push({
   },
 });
 
-// BLE lock reset tool
+// Bluetooth device reset tool
 messages.push({
-  topic: "homeassistant/button/librecoach_ble_reset_locks/config",
+  topic: "homeassistant/button/librecoach_forget_bluetooth/config",
   payload: {
-    name: "Forget BLE Devices",
-    unique_id: "librecoach_ble_reset_locks",
-    default_entity_id: "button.librecoach_ble_reset_locks",
+    name: "Forget Bluetooth Devices",
+    unique_id: "librecoach_forget_bluetooth",
+    default_entity_id: "button.librecoach_forget_bluetooth",
     icon: "mdi:bluetooth-off",
     command_topic: "librecoach/ble/reset_locks",
-    entity_category: "config",
     device: device,
-    availability_topic: NODE_RED_AVAILABILITY_TOPIC,
   },
 });
 
@@ -164,6 +162,7 @@ messages.push({
 // Send empty payload to delete orphaned entities from Home Assistant
 
 const cleanupTopics = [
+  "homeassistant/button/librecoach_ble_reset_locks/config",
   "homeassistant/switch/victron_integration/config",
   "homeassistant/switch/librecoach_testing_beta/config",
   "homeassistant/switch/librecoach_beta_testing/config",

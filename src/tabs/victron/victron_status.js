@@ -24,13 +24,22 @@ if (typeof value === "number") {
 
 // 2. Report by Exception (Filter Logic)
 const lastValues = context.get("lastValues") || {};
+const publishedState = context.get("publishedState") || {};
 const cacheKey = `${service_type}_${instance}_${dbus_path}`;
+const alwaysPublishState =
+  dbus_path === "/Mode" || dbus_path === "/Ac/ActiveIn/CurrentLimit";
 
-if (lastValues[cacheKey] === roundedValue) {
+if (
+  lastValues[cacheKey] === roundedValue &&
+  publishedState[cacheKey] &&
+  !alwaysPublishState
+) {
   return null; // Block if rounded value hasn't changed
 }
 lastValues[cacheKey] = roundedValue;
+publishedState[cacheKey] = true;
 context.set("lastValues", lastValues);
+context.set("publishedState", publishedState);
 
 // 3. Build Entity ID (Status Logic)
 const safePathRaw = dbus_path

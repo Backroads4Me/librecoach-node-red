@@ -132,7 +132,13 @@ if (typeof rawValue === "number") {
 
 // === 4. Early RBE Filter ===
 const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
-if (flow.get(cacheKey) === processedValue) return null;
+const discoveryKey = `${serviceType}_${instance}_${dbusPath}`;
+const uniqueVictron = global.get("uniqueVictron") || [];
+const discoverySeen = uniqueVictron.includes(discoveryKey);
+const alwaysPublishState =
+  dbusPath === "/Mode" || dbusPath === "/Ac/ActiveIn/CurrentLimit";
+if (flow.get(cacheKey) === processedValue && discoverySeen && !alwaysPublishState)
+  return null;
 flow.set(cacheKey, processedValue);
 
 // === 5. Map Lookup ===

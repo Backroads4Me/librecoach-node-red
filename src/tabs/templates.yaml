@@ -474,6 +474,8 @@
     "Entry Door" — you can export that configuration and share it
     with the community. Other owners with a similar RV can
     import your file to get meaningful names without starting from scratch.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 350
   "y": 140
   wires: []

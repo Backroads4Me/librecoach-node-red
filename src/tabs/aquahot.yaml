@@ -699,8 +699,10 @@
     messages, newer ones use a mix of standard RV-C and proprietary.
     This flow decodes both variants to report the status of the
     diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
   x: 350
-  "y": 132
+  "y": 140
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug
