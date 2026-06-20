@@ -20,6 +20,11 @@ module.exports = {
     file: { module: "localfilesystem" }, // Persistent storage for flows
   },
 
+  // Expose the deployed Node-RED project version to Function nodes.
+  functionGlobalContext: {
+    librecoach_version: require("./package.json").version,
+  },
+
   // Editor settings
   editorTheme: {
     theme: "dark",
