@@ -700,7 +700,7 @@
     This flow decodes both variants to report the status of the
     diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
   x: 350
-  "y": 120
+  "y": 132
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug

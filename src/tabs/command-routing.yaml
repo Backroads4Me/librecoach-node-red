@@ -434,7 +434,7 @@
     their state, even when the lights don't broadcast a status response.
     If a panel says "turn on light 17," we now know light 17 exists and is on.
   x: 310
-  "y": 144
+  "y": 140
   wires: []
 - id: b07052c69f7b857c
   type: function

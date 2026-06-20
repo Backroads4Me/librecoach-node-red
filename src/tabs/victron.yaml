@@ -600,7 +600,7 @@
     - GX device LAN network security set to Unsecured
     - MQTT enabed on the GX device
   x: 350
-  "y": 152
+  "y": 140
   wires: []
 - id: 9be2b9ec5c4f51d4
   type: rbe
