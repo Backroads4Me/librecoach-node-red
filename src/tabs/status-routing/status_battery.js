@@ -64,7 +64,7 @@ if (!created[instance]) {
       state_topic: stateTopic,
       unit_of_measurement: "V",
       device_class: "voltage",
-      value_template: "{{ value | float | round(2) }}",
+      value_template: "{{ value | float(0) | round(2) }}",
       availability_mode: "all",
       availability: [
         { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },

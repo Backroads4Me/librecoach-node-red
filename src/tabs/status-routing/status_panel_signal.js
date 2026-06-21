@@ -63,11 +63,11 @@ if (dgnName === "WIRELESS_PANEL_SIGNAL_STATUS") {
             unit_of_measurement: "dBm",
             state_class: "measurement",
             entity_category: "diagnostic",
-            value_template: "{{ value | float | round(2) }}",
+            value_template: "{{ value | float(0) | round(2) }}",
             availability_mode: "all",
             availability: [
-              { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-              { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
             ],
             device,
         });
@@ -96,8 +96,8 @@ if (dgnName === "WIRELESS_PANEL_QUALITY_STATUS") {
             value_template: "{{ value | int }}",
             availability_mode: "all",
             availability: [
-              { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-              { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
+                { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
             ],
             device,
         });

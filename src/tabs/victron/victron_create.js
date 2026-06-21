@@ -359,7 +359,7 @@ const payload = {
   default_entity_id: buildDefaultEntityId(),
   icon: haMetadata.icon,
   state_topic: stateTopic,
-  value_template: "{{ value_json.value }}",
+  value_template: "{{ (value_json | default({'value': ''})).value }}",
   availability_mode: "all",
   availability: [
     { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
@@ -389,7 +389,7 @@ if (componentType === "switch") {
   payload.state_off = "OFF";
   payload.optimistic = false;
   payload.value_template =
-    "{{ 'ON' if value_json.value | int == 1 else 'OFF' }}";
+    "{{ 'ON' if (value_json | default({'value': 0})).value | int == 1 else 'OFF' }}";
 } else if (componentType === "number") {
   // Safe defaults for unknown numeric writable paths
   payload.min = 0;
@@ -423,7 +423,7 @@ if (componentType === "sensor" || componentType === "number") {
   // Default to 1 decimal place if not specified
   const precision =
     haMetadata.precision !== undefined ? haMetadata.precision : 1;
-  payload.value_template = `{{ value_json.value | float | round(${precision}) }}`;
+  payload.value_template = `{{ (value_json | default({'value': 0})).value | float | round(${precision}) }}`;
 }
 
 // For enum values, build a Jinja2 template to map numeric values to labels
@@ -441,7 +441,7 @@ if (isEnum && componentType === "select") {
   const mapEntries = Object.entries(mappings)
     .map(([k, v]) => `'${k}': '${v}'`)
     .join(", ");
-  payload.value_template = `{% set m = {${mapEntries}} %}{{ m.get(value_json.value | string, value_json.value) }}`;
+  payload.value_template = `{% set vj = value_json | default({'value': ''}) %}{% set m = {${mapEntries}} %}{{ m.get(vj.value | string, vj.value) }}`;
 
   if (componentType === "select") {
     payload.options = Object.values(mappings);
