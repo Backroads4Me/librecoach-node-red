@@ -657,6 +657,21 @@
   "y": 360
   g: 5811945b9bad79dc
   wires: []
+- id: 7957e06c0f83dc0f
+  type: note
+  z: 384249601e37ba22
+  content: |-
+    # Aqua-Hot
+    AquaHot hydronic heating systems use two different protocols
+    depending on the model year. Older systems use proprietary
+    messages, newer ones use a mix of standard RV-C and proprietary.
+    This flow decodes both variants to report the status of the
+    diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 350
+  "y": 132
+  wires: []
 - id: 7a1eed2a34490b2a
   type: debug
   z: 384249601e37ba22
@@ -688,21 +703,6 @@
   x: 640
   "y": 780
   g: 5811945b9bad79dc
-  wires: []
-- id: 8ae5ee1969cf9219
-  type: note
-  z: 384249601e37ba22
-  content: |-
-    # Aqua-Hot
-    AquaHot hydronic heating systems use two different protocols
-    depending on the model year. Older systems use proprietary
-    messages, newer ones use a mix of standard RV-C and proprietary.
-    This flow decodes both variants to report the status of the
-    diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 350
-  "y": 140
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug

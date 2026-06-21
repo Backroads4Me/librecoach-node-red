@@ -162,6 +162,20 @@
     - 4f86998be2551032
     - 54bee06f72b5c1f5
     - 86dc00dfc2dbcd9e
+- id: 7b3bea66c275f68a
+  type: note
+  z: 7ecdba18640c1184
+  content: |-
+    # Commands
+    Your RV's wall panels send commands to lights over the CAN bus.
+    This flow listens to that traffic to discover lights and infer
+    their state, even when the lights don't broadcast a status response.
+    If a panel says "turn on light 17," we now know light 17 exists and is on.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 330
+  "y": 120
+  wires: []
 - id: 86dc00dfc2dbcd9e
   type: inject
   z: 7ecdba18640c1184
@@ -424,20 +438,6 @@
   "y": 300
   wires:
     - - 102272ba5b34f5e1
-- id: 962bb2f334b27886
-  type: note
-  z: 7ecdba18640c1184
-  content: |-
-    # Commands
-    Your RV's wall panels send commands to lights over the CAN bus.
-    This flow listens to that traffic to discover lights and infer
-    their state, even when the lights don't broadcast a status response.
-    If a panel says "turn on light 17," we now know light 17 exists and is on.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 310
-  "y": 120
-  wires: []
 - id: b07052c69f7b857c
   type: function
   z: 7ecdba18640c1184

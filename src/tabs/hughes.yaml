@@ -5,19 +5,6 @@
   normalizedLabel: hughes
   disabled: false
   info: ""
-- id: 0a7f019c3d4e5b61
-  type: note
-  z: 8a7f019c3d4e5b60
-  content: |-
-    # Hughes Power Watchdog
-    Enable Hughes in the LibreCoach add-on configuration.
-    Gen 1 is monitoring-only;
-    Gen 2 also supports relay, neutral, and energy reset.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 300
-  "y": 120
-  wires: []
 - id: 1a7f019c3d4e5b62
   type: mqtt in
   z: 8a7f019c3d4e5b60
@@ -336,6 +323,19 @@
   g: e2a57851c2fe7bca
   wires:
     - - 5a7f019c3d4e5b66
+- id: 4e3aba05a55488d2
+  type: note
+  z: 8a7f019c3d4e5b60
+  content: |-
+    # Hughes Power Watchdog
+    Enable Hughes in the LibreCoach add-on configuration.
+    Gen 1 is monitoring-only;
+    Gen 2 also supports relay, neutral, and energy reset.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 300
+  "y": 100
+  wires: []
 - id: 5a7f019c3d4e5b66
   type: function
   z: 8a7f019c3d4e5b60

@@ -94,7 +94,7 @@ if (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {
 const discoveryPayload = {
   name: `MicroAir Zone ${zone + 1}`,
   unique_id: uniqueId,
-  default_entity_id: `climate.${entityId}`,
+  default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,
   icon: "mdi:thermostat",
 
   // Mode

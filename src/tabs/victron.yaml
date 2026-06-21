@@ -135,6 +135,20 @@
   "y": 1040
   g: 8aac091f0fffbf22
   wires: []
+- id: 12bdacfac6d380c0
+  type: group
+  z: 1fde0c4ffb03727e
+  name: One time migration
+  x: 774
+  "y": 1119
+  g: 8aac091f0fffbf22
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - 4cf79060d3abc4ce
+    - 8eea5bdc848fa31d
+    - f242b1b5d30cadd1
 - id: 19993b80c1009e61
   type: function
   z: 1fde0c4ffb03727e
@@ -325,6 +339,21 @@
     - 2343c8c12f2081fa
     - 9401b2d19494b1c2
     - ce787dfcc75988be
+- id: 44a63dad48ab3ced
+  type: note
+  z: 1fde0c4ffb03727e
+  content: |-
+    # Victron
+    ## For the Victron functionality to work you'll need:
+    - A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)
+    - The GX device connected to the same network as LibreCoach
+    - GX device LAN network security set to Unsecured
+    - MQTT enabed on the GX device
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 350
+  "y": 140
+  wires: []
 - id: 48292ec85eb70ee5
   type: function
   z: 1fde0c4ffb03727e
@@ -385,6 +414,54 @@
   wires:
     - - e371075d4dbfc113
     - - 71ac45fb64bf70c9
+- id: 4cf79060d3abc4ce
+  type: function
+  z: 1fde0c4ffb03727e
+  name: victron_migrate
+  func: |-
+    // One-shot migration: purge pre-v1.3 Victron discovery configs so entities
+    // are recreated with the new `default_entity_id` IDs.
+
+    const TARGET = "entityid-librecoach-v1";
+
+    // Already migrated for this marker version — nothing to do.
+    if (global.get("victronEntityIdMigration", "file") === TARGET) {
+        node.status({ fill: "grey", shape: "ring", text: "migration: done" });
+        return null;
+    }
+
+    const topics = global.get("victronDiscoveryTopics", "file") || [];
+
+    // 1. Delete old discovery configs
+    topics.forEach((topic) => {
+        node.send({ topic: topic, payload: "" });
+    });
+
+    // 2. Reset filter/tracking
+    global.set("uniqueVictron", []);
+    global.set("victronDiscoveryTopics", [], "file");
+
+    // 3. Stamp the marker so this never runs again for this version.
+    global.set("victronEntityIdMigration", TARGET, "file");
+
+    node.status({
+        fill: "blue",
+        shape: "dot",
+        text: `migration: purged ${topics.length}`,
+    });
+
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1080
+  "y": 1160
+  g: 12bdacfac6d380c0
+  wires:
+    - - 8eea5bdc848fa31d
 - id: 68214a83740efc26
   type: inject
   z: 1fde0c4ffb03727e
@@ -490,6 +567,7 @@
     - 0b2b4c52d68092cc
     - 0b4d0850eae8a0b4
     - 1284b5e380db32be
+    - 12bdacfac6d380c0
     - 19993b80c1009e61
     - 1a548b4f42a93938
     - 2ff7b2c41ee41253
@@ -524,6 +602,18 @@
     - eced66f05a1796cd
     - f3f99ba42088c9b1
     - f9d1a59e25ce32dd
+- id: 8eea5bdc848fa31d
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 1290
+  "y": 1160
+  g: 12bdacfac6d380c0
+  l: true
+  wires: []
 - id: 8fdd1d506d28b9b6
   type: link in
   z: 1fde0c4ffb03727e
@@ -589,21 +679,6 @@
   g: 8aac091f0fffbf22
   wires:
     - - e1032a6a79ae3e4c
-- id: 990c3568d504c86e
-  type: note
-  z: 1fde0c4ffb03727e
-  content: |-
-    # Victron
-    ## For the Victron functionality to work you'll need:
-    - A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)
-    - The GX device connected to the same network as LibreCoach
-    - GX device LAN network security set to Unsecured
-    - MQTT enabed on the GX device
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 350
-  "y": 164
-  wires: []
 - id: 9be2b9ec5c4f51d4
   type: rbe
   z: 1fde0c4ffb03727e
@@ -2045,6 +2120,26 @@
   wires:
     - - c80ea298a37232a2
     - - f3f99ba42088c9b1
+- id: f242b1b5d30cadd1
+  type: inject
+  z: 1fde0c4ffb03727e
+  name: Load on Start
+  props:
+    - p: payload
+    - p: topic
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: "20"
+  topic: ""
+  payload: ""
+  payloadType: date
+  x: 900
+  "y": 1160
+  g: 12bdacfac6d380c0
+  wires:
+    - - 4cf79060d3abc4ce
 - id: f3f99ba42088c9b1
   type: link out
   z: 1fde0c4ffb03727e

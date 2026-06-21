@@ -9,50 +9,37 @@
   type: group
   z: 222c995b7790b8de
   name: Delete Home Assistant Entity
-  x: 74
-  "y": 179
+  x: 94
+  "y": 199
   style:
     stroke: "#777777"
     label: true
   nodes:
-    - 802228bc8d89d80a
+    - 3a8f7d7760059de3
     - 8c13a65ec0410f0d
-    - 9539a951b2c7a1a9
     - a2d2ed96ff4615f9
     - abd1e06a1927df6d
     - d38c75bc1474be23
-- id: 69c114a873c4c716
-  type: note
-  z: 222c995b7790b8de
-  content: |-
-    # Delete HA Entity
-    Removes devices from Home Assistant when they're no longer needed.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 330
-  "y": 80
-  wires: []
-- id: 802228bc8d89d80a
+- id: 3a8f7d7760059de3
   type: inject
   z: 222c995b7790b8de
-  name: Delete sensor
+  name: inject topic
   props:
-    - p: type
-      v: sensor
-      vt: str
-    - p: entityId
-      v: black
+    - p: payload
+    - p: topic
       vt: str
   repeat: ""
   crontab: ""
   once: false
   onceDelay: 0.1
-  topic: ""
-  x: 190
-  "y": 220
+  topic: homeassistant/climate/microair_78_e3_6d_fc_5e_ce_zone_3/config
+  payload: ""
+  payloadType: str
+  x: 200
+  "y": 360
   g: 04e375b0c463df72
   wires:
-    - - a2d2ed96ff4615f9
+    - - d38c75bc1474be23
 - id: 8c13a65ec0410f0d
   type: inject
   z: 222c995b7790b8de
@@ -69,31 +56,11 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 180
-  "y": 340
+  x: 200
+  "y": 300
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
-- id: 9539a951b2c7a1a9
-  type: inject
-  z: 222c995b7790b8de
-  name: ""
-  props:
-    - p: payload
-    - p: topic
-      vt: str
-  repeat: ""
-  crontab: ""
-  once: false
-  onceDelay: 0.1
-  topic: homeassistant/sensor/librecoach_system_librecoach_config_download/config
-  payload: ""
-  payloadType: str
-  x: 170
-  "y": 400
-  g: 04e375b0c463df72
-  wires:
-    - - d38c75bc1474be23
 - id: a2d2ed96ff4615f9
   type: function
   z: 222c995b7790b8de
@@ -114,8 +81,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 420
-  "y": 280
+  x: 440
+  "y": 240
   g: 04e375b0c463df72
   wires:
     - - d38c75bc1474be23
@@ -135,8 +102,8 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 190
-  "y": 280
+  x: 210
+  "y": 240
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
@@ -147,8 +114,19 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 710
-  "y": 280
+  x: 730
+  "y": 240
   g: 04e375b0c463df72
   l: true
+  wires: []
+- id: f815ee479e02a96a
+  type: note
+  z: 222c995b7790b8de
+  content: |-
+    # Delete HA Entity
+    Removes devices from Home Assistant when they're no longer needed.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 350
+  "y": 80
   wires: []

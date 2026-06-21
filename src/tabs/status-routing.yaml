@@ -4463,7 +4463,7 @@
   g: ee5f54f521f5ecda
   wires:
     - []
-- id: 88fb7ba5374d2d47
+- id: 884b31653ea1e0c3
   type: note
   z: 3e5f038a4f5a8b9a
   content: |-
@@ -4476,7 +4476,7 @@
     and publishes their status.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
-  x: 300
+  x: 320
   "y": 140
   wires: []
 - id: 893d80d1125057e8

@@ -102,7 +102,7 @@
   finalize: ""
   libs: []
   x: 1670
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - e686216d7dd9f13c
@@ -314,7 +314,7 @@
   finalize: ""
   libs: []
   x: 380
-  "y": 560
+  "y": 520
   g: 3296e5f0fcd2c737
   wires:
     - - 40e089e9bdbb5373
@@ -330,7 +330,7 @@
   addname: ""
   property: payload
   x: 970
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - c2e0c58f22ff4794
@@ -342,7 +342,7 @@
   links:
     - f658418a7b9b4857
   x: 590
-  "y": 420
+  "y": 380
   g: export_config_group_001
   l: true
   wires: []
@@ -351,7 +351,7 @@
   z: bfa6336b0d45dc23
   name: Import Configuration
   x: 94
-  "y": 519
+  "y": 479
   style:
     stroke: "#3d85c6"
     label: true
@@ -382,7 +382,7 @@
   statusCode: ""
   headers: {}
   x: 600
-  "y": 560
+  "y": 520
   g: 3296e5f0fcd2c737
   wires: []
 - id: 47ac3adc971d73eb
@@ -393,7 +393,7 @@
   links:
     - a1e89f48333c8256
   x: 570
-  "y": 780
+  "y": 740
   g: 3296e5f0fcd2c737
   l: true
   wires: []
@@ -405,7 +405,7 @@
   links:
     - a1e89f48333c8256
   x: 1890
-  "y": 340
+  "y": 300
   g: export_config_group_001
   l: true
   wires: []
@@ -416,7 +416,7 @@
   statusCode: ""
   headers: {}
   x: 970
-  "y": 700
+  "y": 660
   g: 3296e5f0fcd2c737
   wires: []
 - id: 50bc401ae974546e
@@ -429,7 +429,7 @@
   skipBodyParsing: false
   swaggerDoc: ""
   x: 170
-  "y": 560
+  "y": 520
   g: 3296e5f0fcd2c737
   wires:
     - - 0bd062c51b9e4b8b
@@ -459,26 +459,10 @@
   finalize: ""
   libs: []
   x: 360
-  "y": 780
+  "y": 740
   g: 3296e5f0fcd2c737
   wires:
     - - 47ac3adc971d73eb
-- id: 614d0e17e66848f3
-  type: note
-  z: bfa6336b0d45dc23
-  content: |-
-    # Comfig Templates
-    LibreCoach auto-discovers your RV's devices, but the
-    default entity names are generic — "Switch 12," "Lock 3."
-    Once you've renamed them to match your rig — "Bedroom Lights,"
-    "Entry Door" — you can export that configuration and share it
-    with the community. Other owners with a similar RV can
-    import your file to get meaningful names without starting from scratch.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 350
-  "y": 140
-  wires: []
 - id: 616a7d5b8036c0b5
   type: http in
   z: bfa6336b0d45dc23
@@ -489,7 +473,7 @@
   skipBodyParsing: false
   swaggerDoc: ""
   x: 180
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - 83e45c7061bd9e49
@@ -512,7 +496,7 @@
       value: ""
       valueType: results
   x: 1350
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - d3b9548ea352bc6c
@@ -532,7 +516,7 @@
   senderr: false
   headers: []
   x: 570
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - a439179f7b78685a
@@ -543,7 +527,7 @@
   statusCode: ""
   headers: {}
   x: 1850
-  "y": 700
+  "y": 660
   g: 3296e5f0fcd2c737
   wires: []
 - id: 83e45c7061bd9e49
@@ -649,7 +633,7 @@
   finalize: ""
   libs: []
   x: 370
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - 6ea3c976edca4420
@@ -747,7 +731,7 @@
   finalize: ""
   libs: []
   x: 770
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - 0d5ca59cd7836171
@@ -765,7 +749,7 @@
   rh: 0
   inputs: 0
   x: 170
-  "y": 780
+  "y": 740
   g: 3296e5f0fcd2c737
   wires:
     - - 55dd74b672a2f509
@@ -802,7 +786,7 @@
   finalize: ""
   libs: []
   x: 1160
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - 6a3efcac3894a63f
@@ -858,7 +842,7 @@
   finalize: ""
   libs: []
   x: 1690
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - 47f3c921ae62126a
@@ -883,10 +867,24 @@
   reduceInitType: ""
   reduceFixup: ""
   x: 1490
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - - 080d3da2e1d0d2ff
+- id: d841fab74e0dbe0d
+  type: note
+  z: bfa6336b0d45dc23
+  content: |-
+    # Comfig Templates
+    Once you've renamed them to match your rig ("Bedroom Lights,"
+    "Entry Door", etc.) you can export that configuration and share it
+    with the community. Other owners with a similar RV can import
+    your file to get meaningful names without starting from scratch.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 330
+  "y": 128
+  wires: []
 - id: dda95ad4c2e65ea7
   type: http response
   z: bfa6336b0d45dc23
@@ -894,7 +892,7 @@
   statusCode: ""
   headers: {}
   x: 550
-  "y": 700
+  "y": 660
   g: 3296e5f0fcd2c737
   wires: []
 - id: de184f27cbcc117f
@@ -908,7 +906,7 @@
   overwriteFile: "true"
   encoding: none
   x: 1500
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - c53cf5f35f59ccd6
@@ -928,7 +926,7 @@
   senderr: false
   headers: []
   x: 1870
-  "y": 640
+  "y": 600
   g: 3296e5f0fcd2c737
   wires:
     - []
@@ -937,7 +935,7 @@
   z: bfa6336b0d45dc23
   name: Export Configuration
   x: 94
-  "y": 299
+  "y": 259
   style:
     stroke: "#3d85c6"
     label: true
@@ -967,7 +965,7 @@
   rh: 0
   inputs: 0
   x: 250
-  "y": 980
+  "y": 940
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001
@@ -982,7 +980,7 @@
   overwriteFile: "true"
   encoding: none
   x: 1240
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - export_entities_func_notify_001
@@ -1029,7 +1027,7 @@
   finalize: ""
   libs: []
   x: 1440
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - fa104ff19bbee333
@@ -1140,7 +1138,7 @@
   finalize: ""
   libs: []
   x: 570
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - export_entities_http_001
@@ -2452,7 +2450,7 @@
   finalize: ""
   libs: []
   x: 1040
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - export_entities_file_001
@@ -2461,7 +2459,7 @@
   z: bfa6336b0d45dc23
   name: Export AI Dashboard Prompt
   x: 94
-  "y": 879
+  "y": 839
   style:
     stroke: "#3d85c6"
     label: true
@@ -2490,7 +2488,7 @@
   senderr: false
   headers: []
   x: 810
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - export_entities_func_publish_001
@@ -2507,7 +2505,7 @@
   rh: 0
   inputs: 0
   x: 260
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   wires:
     - - export_entities_func_prepare_001
@@ -2642,7 +2640,7 @@
   finalize: ""
   libs: []
   x: 1090
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - export_func_publish_url_001
@@ -2724,7 +2722,7 @@
   finalize: ""
   libs: []
   x: 1310
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - de184f27cbcc117f
@@ -2776,7 +2774,7 @@
   finalize: ""
   libs: []
   x: 400
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - export_http_states_001
@@ -2863,7 +2861,7 @@
   finalize: ""
   libs: []
   x: 370
-  "y": 420
+  "y": 380
   g: export_config_group_001
   wires:
     - - 12a57f6a07d0bf1a
@@ -2910,7 +2908,7 @@
   finalize: ""
   libs: []
   x: 850
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - export_func_build_001
@@ -2930,7 +2928,7 @@
   senderr: false
   headers: []
   x: 620
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - export_func_store_states_001
@@ -2947,7 +2945,7 @@
   rh: 0
   inputs: 0
   x: 190
-  "y": 420
+  "y": 380
   g: export_config_group_001
   wires:
     - - export_func_store_rv_001
@@ -2964,7 +2962,7 @@
   rh: 0
   inputs: 0
   x: 190
-  "y": 340
+  "y": 300
   g: export_config_group_001
   wires:
     - - export_func_read_rv_001
@@ -2976,7 +2974,7 @@
   links:
     - a1e89f48333c8256
   x: 1650
-  "y": 920
+  "y": 880
   g: export_entities_group_001
   l: true
   wires: []

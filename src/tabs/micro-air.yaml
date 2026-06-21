@@ -116,25 +116,6 @@
   g: cd4c55cd4f675905
   wires:
     - - 205af5b7fa62d8ac
-- id: 514aeab5c0897a23
-  type: note
-  z: e3804d2dd0b81928
-  content: >-
-    # Micro-Air Thermostats
-
-    ## For the Micro-Air functionality to work you'll need:
-
-    - A Micro-Air EasyTouch RV Thermostat
-
-    - Enable the Micro-Air integration in the LibreCoach addon conifiguration
-    tab
-
-    - Enter your thermostat bluetooth email and password
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 390
-  "y": 120
-  wires: []
 - id: 52b505b69f88888d
   type: link out
   z: e3804d2dd0b81928
@@ -622,7 +603,7 @@
     const discoveryPayload = {
       name: `MicroAir Zone ${zone + 1}`,
       unique_id: uniqueId,
-      default_entity_id: `climate.${entityId}`,
+      default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,
       icon: "mdi:thermostat",
 
       // Mode
@@ -1286,6 +1267,25 @@
   g: fe7cf55a75689b88
   wires:
     - - ab025c05d155f4ee
+- id: f9d555c29cf29919
+  type: note
+  z: e3804d2dd0b81928
+  content: >-
+    # Micro-Air Thermostats
+
+    ## For the Micro-Air functionality to work you'll need:
+
+    - A Micro-Air EasyTouch RV Thermostat
+
+    - Enable the Micro-Air integration in the LibreCoach addon conifiguration
+    tab
+
+    - Enter your thermostat bluetooth email and password
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 390
+  "y": 120
+  wires: []
 - id: fe7cf55a75689b88
   type: group
   z: e3804d2dd0b81928
