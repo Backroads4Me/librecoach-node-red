@@ -310,7 +310,7 @@ _None._
 
 ## Other Nodes
 
-- 962bb2f334b27886 (note) — id `962bb2f334b27886`, in: 0, out: 0
+- 7b3bea66c275f68a (note) — id `7b3bea66c275f68a`, in: 0, out: 0
 - COMMAND (switch) — id `c063a09a82cdd204`, in: 1, out: 4
 - New COMMAND (debug) — id `bc59e15bf069f17d`, in: 1, out: 0
 - New DC_DIMMER cmd (debug) — id `0f09356f283bfae7`, in: 1, out: 0

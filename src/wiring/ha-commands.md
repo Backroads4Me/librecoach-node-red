@@ -585,8 +585,8 @@ _None._
 
 ## Other Nodes
 
+- 30ef9fee5a95fa78 (note) — id `30ef9fee5a95fa78`, in: 0, out: 0
 - 89946e1c7a570ed0 (switch) — id `89946e1c7a570ed0`, in: 1, out: 14
-- 9f10dee2300ff666 (note) — id `9f10dee2300ff666`, in: 0, out: 0
 - HA climate (mqtt in) — id `51fdd54bd04e39e2`, in: 0, out: 1
 - Home Assistant climate encoding (group) — id `7183c5f0ad762adb`, in: 0, out: 0
 - Home Assistant command encoding (group) — id `aea9d97e0563bd83`, in: 0, out: 0

@@ -708,11 +708,11 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_0a63b31d6180["MQTT out_ Retain TRUE"]:::link
   n_3e9c6f1a2b4d["Flows loaded"]:::fn
   n_9d8e7f6a5b4c["publish_nodered_ready"]:::fn
-  n_cacf35b859af["MQTT Out_ Retain TRUE"]:::fn
   n_3e9c6f1a2b4d -->|out 0| n_9d8e7f6a5b4c
-  n_9d8e7f6a5b4c -->|out 0| n_cacf35b859af
+  n_9d8e7f6a5b4c -->|out 0| n_0a63b31d6180
 ```
 
 #### Msg contract
@@ -728,7 +728,7 @@ Output: retained messages via "MQTT Out: Retain TRUE"
 
 #### Downstream
 - **Output 0:**
-  - MQTT Out: Retain TRUE (mqtt out) — this tab
+  - MQTT out: Retain TRUE (link out) — this tab
 
 ---
 
@@ -1052,6 +1052,7 @@ _None._
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Config`
+  - MQTT out: Retain TRUE in tab `Victron`
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Victron`
@@ -1075,9 +1076,9 @@ _None._
 
 - 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 2
 - 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 2, out: 1
+- 74c442b643175f2f (note) — id `74c442b643175f2f`, in: 0, out: 0
 - 8037e09fbf4ac87b (inject) — id `8037e09fbf4ac87b`, in: 0, out: 1
 - 8337a7f0dd0435d6 (http request) — id `8337a7f0dd0435d6`, in: 1, out: 0
-- 8504190e422dfe4c (note) — id `8504190e422dfe4c`, in: 0, out: 0
 - BETA Testing (group) — id `9e47041ed71c4494`, in: 0, out: 0
 - CAN in (mqtt in) — id `2110ea4d0b85f784`, in: 0, out: 1
 - CAN message routing (group) — id `f09f79586501cb0b`, in: 0, out: 0
@@ -1099,7 +1100,7 @@ _None._
 - Location updates (mqtt in) — id `50dfcea54d80866b`, in: 0, out: 1
 - MQTT (group) — id `3c819b7900145438`, in: 0, out: 0
 - MQTT Out: Retain FALSE (mqtt out) — id `1ac6e0fa1cbb3852`, in: 1, out: 0
-- MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 2, out: 0
+- MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 1, out: 0
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0
 - On start (inject) — id `0c76b4a89a0e60ca`, in: 0, out: 1

@@ -15,6 +15,7 @@ flowchart TD
   subgraph n_1fde0c4ffb03["Victron"]
     n_2343c8c12f20["Reset Victron"]:::link
     n_71ac45fb64bf["Reset Victron filters"]:::link
+    n_8eea5bdc848f["MQTT out_ Retain TRUE"]:::link
     n_8fdd1d506d28["CONFIG_GLOBALS"]:::link
     n_b1b68ff387e0["Reset Victron filters"]:::link
     n_bd38c37850a3["MQTT out_ Retain TRUE"]:::link
@@ -111,6 +112,7 @@ flowchart TD
   n_88e5fa035bed --> n_8fdd1d506d28
   n_88e5fa035bed --> n_ac17a780a9a1
   n_88e5fa035bed --> n_bb154cf7301d
+  n_8eea5bdc848f --> n_f658418a7b9b
   n_950e9ce65422 --> n_f658418a7b9b
   n_a2334b77d376 --> n_74329f13cbbc
   n_b104a7e82aef --> n_f658418a7b9b
@@ -137,9 +139,9 @@ flowchart TD
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
 | [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
 | [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
-| [Victron](./victron.md) | 13 | 0 | 4 | 4 |
+| [Victron](./victron.md) | 14 | 0 | 5 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
-| [Hughes Power Watchdog](./hughes.md) | 3 | 0 | 0 | 0 |
+| [Hughes](./hughes.md) | 3 | 0 | 0 | 0 |
 | [Templates](./templates.md) | 15 | 0 | 4 | 0 |
 | [Delete HA Entity](./delete-ha-entity.md) | 1 | 0 | 1 | 0 |
 
@@ -178,6 +180,7 @@ _None._
 | CONFIG_GLOBALS | Config | → | CONFIG_GLOBALS | Victron |
 | CONFIG_GLOBALS | Config | → | CONFIG_GLOBALS | Config |
 | CONFIG_GLOBALS | Config | → | CONFIG_GLOBALS | Micro-Air |
+| MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Micro-Air | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain FALSE | Config | → | MQTT out: Retain FALSE | Config |
 | MQTT out: Retain TRUE | Micro-Air | → | MQTT out: Retain TRUE | Config |
