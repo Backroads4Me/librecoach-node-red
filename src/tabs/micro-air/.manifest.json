@@ -1,9 +1,9 @@
 {
   "205af5b7fa62d8ac": {
     "nodeId": "205af5b7fa62d8ac",
-    "name": "Reset function",
-    "sanitizedName": "Reset function",
-    "fileName": "Reset function",
+    "name": "reset_uniqueMicroair",
+    "sanitizedName": "reset_uniqueMicroair",
+    "fileName": "reset_uniqueMicroair",
     "isVue": false,
     "isFun": true,
     "hasCode": true,

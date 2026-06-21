@@ -216,7 +216,7 @@
     "type": "function",
     "z": "292e70a6ba25b323",
     "d": true,
-    "name": "Tally",
+    "name": "tally",
     "func": "// Tally node (temporary diagnostic)\nconst counts = flow.get(\"dgnCounts\") || {};\nconst name = msg.payload.dgn_name;\ncounts[name] = (counts[name] || 0) + 1;\nflow.set(\"dgnCounts\", counts);\nreturn msg; // pass through unmodified\n",
     "outputs": 0,
     "timeout": 0,
@@ -347,7 +347,7 @@
     "id": "092c751dcdd12270",
     "type": "function",
     "z": "292e70a6ba25b323",
-    "name": "Reset function",
+    "name": "reset_uniqueUnknown",
     "func": "flow.set(\"uniqueUnknown\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -355,7 +355,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 2080,
+    "x": 2100,
     "y": 540,
     "g": "9dd6a98018824be9",
     "wires": [
@@ -366,7 +366,7 @@
     "id": "09640adb1fd08fbb",
     "type": "function",
     "z": "3e5f038a4f5a8b9a",
-    "name": "Reset function",
+    "name": "reset_uniqueDecodedStatus",
     "func": "flow.set(\"uniqueDecodedStatus\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -374,7 +374,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1040,
+    "x": 1080,
     "y": 2140,
     "g": "eb51c1f2d0d389d1",
     "wires": [
@@ -893,7 +893,7 @@
     "id": "205af5b7fa62d8ac",
     "type": "function",
     "z": "e3804d2dd0b81928",
-    "name": "Reset function",
+    "name": "reset_uniqueMicroair",
     "func": "global.set(\"uniqueMicroair\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -901,7 +901,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1380,
+    "x": 1400,
     "y": 600,
     "g": "cd4c55cd4f675905",
     "wires": [
@@ -1398,7 +1398,7 @@
     "type": "function",
     "z": "292e70a6ba25b323",
     "d": true,
-    "name": "Tally report",
+    "name": "tally_report",
     "func": "node.warn(JSON.stringify(flow.get(\"dgnCounts\")))",
     "outputs": 1,
     "timeout": 0,
@@ -1583,7 +1583,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 350,
-    "y": 152,
+    "y": 164,
     "wires": []
   },
   {
@@ -1818,7 +1818,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 300,
-    "y": 100,
+    "y": 112,
     "wires": []
   },
   {
@@ -1849,7 +1849,7 @@
     "id": "4f86998be2551032",
     "type": "function",
     "z": "7ecdba18640c1184",
-    "name": "Reset function",
+    "name": "reset_uniqueDcDimmerCmd",
     "func": "global.set(\"uniqueDcDimmerCmd\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -1857,7 +1857,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 920,
+    "x": 960,
     "y": 460,
     "g": "54c9dde7767b8935",
     "wires": [
@@ -2937,7 +2937,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {
@@ -3066,14 +3066,14 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 350,
-    "y": 132,
+    "y": 144,
     "wires": []
   },
   {
     "id": "7a0956cdace18b52",
     "type": "function",
     "z": "3e5f038a4f5a8b9a",
-    "name": "Reset function",
+    "name": "reset_uniqueFloorHeat",
     "func": "flow.set(\"uniqueFloorHeat\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -3081,7 +3081,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 400,
+    "x": 420,
     "y": 1740,
     "g": "1f7fde87c1ab1f51",
     "wires": [
@@ -3136,7 +3136,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {
@@ -3372,7 +3372,7 @@
     "id": "870bf91817db9d08",
     "type": "function",
     "z": "3e5f038a4f5a8b9a",
-    "name": "Reset function",
+    "name": "reset_FloorHeatLevels",
     "func": "// --- Reset persistent and in-memory context cleanly ---\n\n// Helper function to clear both stores\nfunction clearContext(key) {\n    // Remove persistent value\n    global.set(key, undefined, \"file\");\n    // Remove in-memory value\n    global.set(key, undefined);\n}\n\n// --- Clear specific global variables ---\nclearContext(\"uniqueFloorHeatLevels\");\nclearContext(\"floorHeatLevelMap\");\n\n// --- Clear specific flow variables ---\nflow.set(\"uniqueFloorHeat\", undefined, \"file\");\nflow.set(\"uniqueFloorHeat\", undefined);\nflow.set(\"floorHeatLevelMap\", undefined, \"file\");\nflow.set(\"floorHeatLevelMap\", undefined);\n\nnode.warn(\"Context cleared\");\nreturn null;",
     "outputs": 1,
     "timeout": 0,
@@ -3380,7 +3380,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 400,
+    "x": 420,
     "y": 1860,
     "g": "ee5f54f521f5ecda",
     "wires": [
@@ -4017,7 +4017,7 @@
     "id": "9401b2d19494b1c2",
     "type": "function",
     "z": "1fde0c4ffb03727e",
-    "name": "Reset function",
+    "name": "reset_victron",
     "func": "global.set(\"uniqueVictron\", []);\nglobal.set(\"victronDiscoveryTopics\", [], \"file\");\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -4025,7 +4025,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1320,
+    "x": 1310,
     "y": 1040,
     "g": "3ffa68cfd2195db1",
     "wires": [
@@ -6650,7 +6650,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 128,
+    "y": 140,
     "wires": []
   },
   {
@@ -8233,7 +8233,7 @@
     "id": "f96e5b3b013a2b8f",
     "type": "function",
     "z": "7ecdba18640c1184",
-    "name": "Reset function",
+    "name": "reset_uniqueCommand",
     "func": "flow.set(\"uniqueCommand\", []);\nreturn null;  // Nothing needs to go downstream\n",
     "outputs": 1,
     "timeout": 0,
@@ -8241,7 +8241,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 920,
+    "x": 950,
     "y": 640,
     "g": "081183d6c363e792",
     "wires": [
@@ -8286,7 +8286,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 390,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {

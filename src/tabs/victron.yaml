@@ -352,7 +352,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 350
-  "y": 152
+  "y": 164
   wires: []
 - id: 48292ec85eb70ee5
   type: function
@@ -647,7 +647,7 @@
 - id: 9401b2d19494b1c2
   type: function
   z: 1fde0c4ffb03727e
-  name: Reset function
+  name: reset_victron
   func: |
     global.set("uniqueVictron", []);
     global.set("victronDiscoveryTopics", [], "file");
@@ -658,7 +658,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1320
+  x: 1310
   "y": 1040
   g: 3ffa68cfd2195db1
   wires:

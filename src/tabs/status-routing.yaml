@@ -299,7 +299,7 @@
 - id: 09640adb1fd08fbb
   type: function
   z: 3e5f038a4f5a8b9a
-  name: Reset function
+  name: reset_uniqueDecodedStatus
   func: |
     flow.set("uniqueDecodedStatus", []);
     return null;  // Nothing needs to go downstream
@@ -309,7 +309,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1040
+  x: 1080
   "y": 2140
   g: eb51c1f2d0d389d1
   wires:
@@ -4395,7 +4395,7 @@
 - id: 7a0956cdace18b52
   type: function
   z: 3e5f038a4f5a8b9a
-  name: Reset function
+  name: reset_uniqueFloorHeat
   func: |
     flow.set("uniqueFloorHeat", []);
     return null;  // Nothing needs to go downstream
@@ -4405,7 +4405,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 400
+  x: 420
   "y": 1740
   g: 1f7fde87c1ab1f51
   wires:
@@ -4428,7 +4428,7 @@
 - id: 870bf91817db9d08
   type: function
   z: 3e5f038a4f5a8b9a
-  name: Reset function
+  name: reset_FloorHeatLevels
   func: |-
     // --- Reset persistent and in-memory context cleanly ---
 
@@ -4458,7 +4458,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 400
+  x: 420
   "y": 1860
   g: ee5f54f521f5ecda
   wires:

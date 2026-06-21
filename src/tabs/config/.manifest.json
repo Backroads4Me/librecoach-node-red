@@ -1,9 +1,9 @@
 {
   "03a998942a940736": {
     "nodeId": "03a998942a940736",
-    "name": "Tally",
-    "sanitizedName": "Tally",
-    "fileName": "Tally",
+    "name": "tally",
+    "sanitizedName": "tally",
+    "fileName": "tally",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
@@ -13,9 +13,9 @@
   },
   "092c751dcdd12270": {
     "nodeId": "092c751dcdd12270",
-    "name": "Reset function",
-    "sanitizedName": "Reset function",
-    "fileName": "Reset function",
+    "name": "reset_uniqueUnknown",
+    "sanitizedName": "reset_uniqueUnknown",
+    "fileName": "reset_uniqueUnknown",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
@@ -49,9 +49,9 @@
   },
   "3d07bdca6b71b669": {
     "nodeId": "3d07bdca6b71b669",
-    "name": "Tally report",
-    "sanitizedName": "Tally report",
-    "fileName": "Tally report",
+    "name": "tally_report",
+    "sanitizedName": "tally_report",
+    "fileName": "tally_report",
     "isVue": false,
     "isFun": true,
     "hasCode": true,

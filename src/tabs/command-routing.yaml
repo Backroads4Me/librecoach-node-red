@@ -94,7 +94,7 @@
 - id: 4f86998be2551032
   type: function
   z: 7ecdba18640c1184
-  name: Reset function
+  name: reset_uniqueDcDimmerCmd
   func: |
     global.set("uniqueDcDimmerCmd", []);
     return null;  // Nothing needs to go downstream
@@ -104,7 +104,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 920
+  x: 960
   "y": 460
   g: 54c9dde7767b8935
   wires:
@@ -174,7 +174,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 330
-  "y": 120
+  "y": 132
   wires: []
 - id: 86dc00dfc2dbcd9e
   type: inject
@@ -1115,7 +1115,7 @@
 - id: f96e5b3b013a2b8f
   type: function
   z: 7ecdba18640c1184
-  name: Reset function
+  name: reset_uniqueCommand
   func: |
     flow.set("uniqueCommand", []);
     return null;  // Nothing needs to go downstream
@@ -1125,7 +1125,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 920
+  x: 950
   "y": 640
   g: 081183d6c363e792
   wires:

@@ -20,7 +20,7 @@
 - id: 205af5b7fa62d8ac
   type: function
   z: e3804d2dd0b81928
-  name: Reset function
+  name: reset_uniqueMicroair
   func: |
     global.set("uniqueMicroair", []);
     return null;  // Nothing needs to go downstream
@@ -30,7 +30,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1380
+  x: 1400
   "y": 600
   g: cd4c55cd4f675905
   wires:
@@ -1284,7 +1284,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 390
-  "y": 120
+  "y": 132
   wires: []
 - id: fe7cf55a75689b88
   type: group

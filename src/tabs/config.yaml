@@ -53,7 +53,7 @@
   type: function
   z: 292e70a6ba25b323
   d: true
-  name: Tally
+  name: tally
   func: |
     // Tally node (temporary diagnostic)
     const counts = flow.get("dgnCounts") || {};
@@ -100,7 +100,7 @@
 - id: 092c751dcdd12270
   type: function
   z: 292e70a6ba25b323
-  name: Reset function
+  name: reset_uniqueUnknown
   func: |
     flow.set("uniqueUnknown", []);
     return null;  // Nothing needs to go downstream
@@ -110,7 +110,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 2080
+  x: 2100
   "y": 540
   g: 9dd6a98018824be9
   wires:
@@ -561,7 +561,7 @@
   type: function
   z: 292e70a6ba25b323
   d: true
-  name: Tally report
+  name: tally_report
   func: node.warn(JSON.stringify(flow.get("dgnCounts")))
   outputs: 1
   timeout: 0
@@ -1288,7 +1288,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 330
-  "y": 120
+  "y": 132
   wires: []
 - id: 74c7e4a6cc2508eb
   type: file in

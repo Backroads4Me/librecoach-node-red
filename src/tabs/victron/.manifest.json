@@ -61,9 +61,9 @@
   },
   "9401b2d19494b1c2": {
     "nodeId": "9401b2d19494b1c2",
-    "name": "Reset function",
-    "sanitizedName": "Reset function",
-    "fileName": "Reset function",
+    "name": "reset_victron",
+    "sanitizedName": "reset_victron",
+    "fileName": "reset_victron",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
