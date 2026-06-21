@@ -15,99 +15,6 @@
 
 ## Function Nodes
 
-### Reset function
-- **File:** [`Reset function.js`](../tabs/status-routing/Reset function.js)
-- **Node ID:** `09640adb1fd08fbb`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_09640adb1fd0["Reset function"]:::fn
-  n_ffd5bc5ca569["Reset unique"]:::fn
-  n_ffd5bc5ca569 -->|out 0| n_09640adb1fd0
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
-### Reset function
-- **File:** [`Reset function(2).js`](../tabs/status-routing/Reset function(2).js)
-- **Node ID:** `7a0956cdace18b52`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_7a0956cdace1["Reset function"]:::fn
-  n_893d80d11250["Reset floor heat"]:::link
-  n_a9069efd6410["Reset unique"]:::fn
-  n_893d80d11250 -->|out 0| n_7a0956cdace1
-  n_a9069efd6410 -->|out 0| n_7a0956cdace1
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset floor heat (link in) — this tab
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
-### Reset function
-- **File:** [`Reset function(3).js`](../tabs/status-routing/Reset function(3).js)
-- **Node ID:** `870bf91817db9d08`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_56aa8b5c045b["Reset unique"]:::fn
-  n_870bf91817db["Reset function"]:::fn
-  n_56aa8b5c045b -->|out 0| n_870bf91817db
-```
-
-#### Msg contract
---- Reset persistent and in-memory context cleanly ---
-
-#### Upstream
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
 ### create_floor_heat
 - **File:** [`create_floor_heat.js`](../tabs/status-routing/create_floor_heat.js)
 - **Node ID:** `b3e18602b6affaf5`
@@ -1169,6 +1076,99 @@ Decodes WINDOW_SHADE_CONTROL_STATUS messages (1FEDE)
 #### Downstream
 - **Output 0:**
   - status_shade (function) — this tab, file: [`status_shade.js`](../tabs/status-routing/status_shade.js)
+
+---
+
+### reset_FloorHeatLevels
+- **File:** [`reset_FloorHeatLevels.js`](../tabs/status-routing/reset_FloorHeatLevels.js)
+- **Node ID:** `870bf91817db9d08`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_56aa8b5c045b["Reset unique"]:::fn
+  n_870bf91817db["reset_FloorHeatLevels"]:::fn
+  n_56aa8b5c045b -->|out 0| n_870bf91817db
+```
+
+#### Msg contract
+--- Reset persistent and in-memory context cleanly ---
+
+#### Upstream
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
+
+---
+
+### reset_uniqueDecodedStatus
+- **File:** [`reset_uniqueDecodedStatus.js`](../tabs/status-routing/reset_uniqueDecodedStatus.js)
+- **Node ID:** `09640adb1fd08fbb`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_09640adb1fd0["reset_uniqueDecodedStatus"]:::fn
+  n_ffd5bc5ca569["Reset unique"]:::fn
+  n_ffd5bc5ca569 -->|out 0| n_09640adb1fd0
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
+
+---
+
+### reset_uniqueFloorHeat
+- **File:** [`reset_uniqueFloorHeat.js`](../tabs/status-routing/reset_uniqueFloorHeat.js)
+- **Node ID:** `7a0956cdace18b52`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_7a0956cdace1["reset_uniqueFloorHeat"]:::fn
+  n_893d80d11250["Reset floor heat"]:::link
+  n_a9069efd6410["Reset unique"]:::fn
+  n_893d80d11250 -->|out 0| n_7a0956cdace1
+  n_a9069efd6410 -->|out 0| n_7a0956cdace1
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset floor heat (link in) — this tab
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
 
 ---
 

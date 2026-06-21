@@ -15,66 +15,6 @@
 
 ## Function Nodes
 
-### Reset function
-- **File:** [`Reset function.js`](../tabs/command-routing/Reset function.js)
-- **Node ID:** `4f86998be2551032`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_4f86998be255["Reset function"]:::fn
-  n_86dc00dfc2db["Reset unique"]:::fn
-  n_86dc00dfc2db -->|out 0| n_4f86998be255
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
-### Reset function
-- **File:** [`Reset function(2).js`](../tabs/command-routing/Reset function(2).js)
-- **Node ID:** `f96e5b3b013a2b8f`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_b2cbbdbaab1f["Reset unique"]:::fn
-  n_f96e5b3b013a["Reset function"]:::fn
-  n_b2cbbdbaab1f -->|out 0| n_f96e5b3b013a
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
 ### decode_dc_dimmer_command_2
 - **File:** [`decode_dc_dimmer_command_2.js`](../tabs/command-routing/decode_dc_dimmer_command_2.js)
 - **Node ID:** `b07052c69f7b857c`
@@ -143,6 +83,66 @@ Unhandled types are logged to flow context "unknownGenericIndicatorCmd" for futu
 #### Downstream
 - **Output 0:**
   - status_generic_indicator_cmd (function) — this tab, file: [`status_generic_indicator_cmd.js`](../tabs/command-routing/status_generic_indicator_cmd.js)
+
+---
+
+### reset_uniqueCommand
+- **File:** [`reset_uniqueCommand.js`](../tabs/command-routing/reset_uniqueCommand.js)
+- **Node ID:** `f96e5b3b013a2b8f`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_b2cbbdbaab1f["Reset unique"]:::fn
+  n_f96e5b3b013a["reset_uniqueCommand"]:::fn
+  n_b2cbbdbaab1f -->|out 0| n_f96e5b3b013a
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
+
+---
+
+### reset_uniqueDcDimmerCmd
+- **File:** [`reset_uniqueDcDimmerCmd.js`](../tabs/command-routing/reset_uniqueDcDimmerCmd.js)
+- **Node ID:** `4f86998be2551032`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_4f86998be255["reset_uniqueDcDimmerCmd"]:::fn
+  n_86dc00dfc2db["Reset unique"]:::fn
+  n_86dc00dfc2db -->|out 0| n_4f86998be255
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
 
 ---
 

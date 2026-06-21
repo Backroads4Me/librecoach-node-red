@@ -15,98 +15,6 @@
 
 ## Function Nodes
 
-### Reset function
-- **File:** [`Reset function.js`](../tabs/config/Reset function.js)
-- **Node ID:** `092c751dcdd12270`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_092c751dcdd1["Reset function"]:::fn
-  n_a4028527eb23["Reset unique"]:::fn
-  n_a4028527eb23 -->|out 0| n_092c751dcdd1
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
-### Tally
-- **File:** [`Tally.js`](../tabs/config/Tally.js)
-- **Node ID:** `03a998942a940736`
-- **Outputs:** 0
-- **Disabled:** true
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_03a998942a94["Tally"]:::fn:::disabled
-  n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
-  n_a6594a9464d8 -->|out 1| n_03a998942a94
-```
-
-#### Msg contract
-Tally node (temporary diagnostic)
-
-#### Upstream
-- a6594a9464d8fe4e (switch) — this tab
-
-#### Downstream
-_None._
-
----
-
-### Tally report
-- **File:** [`Tally report.js`](../tabs/config/Tally report.js)
-- **Node ID:** `3d07bdca6b71b669`
-- **Outputs:** 1
-- **Disabled:** true
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_3d07bdca6b71["Tally report"]:::fn:::disabled
-  n_8037e09fbf4a["8037e09fbf4ac87b"]:::fn:::disabled
-  n_8037e09fbf4a -->|out 0| n_3d07bdca6b71
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- 8037e09fbf4ac87b (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
 ### address_claim_monitor
 - **File:** [`address_claim_monitor.js`](../tabs/config/address_claim_monitor.js)
 - **Node ID:** `4e46ba83df00a31b`
@@ -850,6 +758,36 @@ Output: retained state publish back to HA
 
 ---
 
+### reset_uniqueUnknown
+- **File:** [`reset_uniqueUnknown.js`](../tabs/config/reset_uniqueUnknown.js)
+- **Node ID:** `092c751dcdd12270`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_092c751dcdd1["reset_uniqueUnknown"]:::fn
+  n_a4028527eb23["Reset unique"]:::fn
+  n_a4028527eb23 -->|out 0| n_092c751dcdd1
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
+
+---
+
 ### rvc_time_sync
 - **File:** [`rvc_time_sync.js`](../tabs/config/rvc_time_sync.js)
 - **Node ID:** `dd22c9c987534342`
@@ -943,6 +881,68 @@ Convert the data to a Map when initially storing it
 
 #### Upstream
 - c78420a075d43408 (json) — this tab
+
+#### Downstream
+_None._
+
+---
+
+### tally
+- **File:** [`tally.js`](../tabs/config/tally.js)
+- **Node ID:** `03a998942a940736`
+- **Outputs:** 0
+- **Disabled:** true
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_03a998942a94["tally"]:::fn:::disabled
+  n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
+  n_a6594a9464d8 -->|out 1| n_03a998942a94
+```
+
+#### Msg contract
+Tally node (temporary diagnostic)
+
+#### Upstream
+- a6594a9464d8fe4e (switch) — this tab
+
+#### Downstream
+_None._
+
+---
+
+### tally_report
+- **File:** [`tally_report.js`](../tabs/config/tally_report.js)
+- **Node ID:** `3d07bdca6b71b669`
+- **Outputs:** 1
+- **Disabled:** true
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_3d07bdca6b71["tally_report"]:::fn:::disabled
+  n_8037e09fbf4a["8037e09fbf4ac87b"]:::fn:::disabled
+  n_8037e09fbf4a -->|out 0| n_3d07bdca6b71
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- 8037e09fbf4ac87b (inject) — this tab
 
 #### Downstream
 _None._
@@ -1075,8 +1075,8 @@ _None._
 ## Other Nodes
 
 - 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 2
+- 375ced2f0a80dc5c (note) — id `375ced2f0a80dc5c`, in: 0, out: 0
 - 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 2, out: 1
-- 74c442b643175f2f (note) — id `74c442b643175f2f`, in: 0, out: 0
 - 8037e09fbf4ac87b (inject) — id `8037e09fbf4ac87b`, in: 0, out: 1
 - 8337a7f0dd0435d6 (http request) — id `8337a7f0dd0435d6`, in: 1, out: 0
 - BETA Testing (group) — id `9e47041ed71c4494`, in: 0, out: 0

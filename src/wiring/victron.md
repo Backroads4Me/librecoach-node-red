@@ -15,39 +15,6 @@
 
 ## Function Nodes
 
-### Reset function
-- **File:** [`Reset function.js`](../tabs/victron/Reset function.js)
-- **Node ID:** `9401b2d19494b1c2`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_2343c8c12f20["Reset Victron"]:::link
-  n_9401b2d19494["Reset function"]:::fn
-  n_ce787dfcc759["Reset unique"]:::fn
-  n_2343c8c12f20 -->|out 0| n_9401b2d19494
-  n_ce787dfcc759 -->|out 0| n_9401b2d19494
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset Victron (link in) — this tab
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
 ### flush
 - **File:** [`flush.js`](../tabs/victron/flush.js)
 - **Node ID:** `19993b80c1009e61`
@@ -78,6 +45,39 @@ _No documented msg contract._
 #### Downstream
 - **Output 0:**
   - 89759b3d2d9812c8 (delay) — this tab
+
+---
+
+### reset_victron
+- **File:** [`reset_victron.js`](../tabs/victron/reset_victron.js)
+- **Node ID:** `9401b2d19494b1c2`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_2343c8c12f20["Reset Victron"]:::link
+  n_9401b2d19494["reset_victron"]:::fn
+  n_ce787dfcc759["Reset unique"]:::fn
+  n_2343c8c12f20 -->|out 0| n_9401b2d19494
+  n_ce787dfcc759 -->|out 0| n_9401b2d19494
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset Victron (link in) — this tab
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
 
 ---
 

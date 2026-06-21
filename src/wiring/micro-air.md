@@ -15,39 +15,6 @@
 
 ## Function Nodes
 
-### Reset function
-- **File:** [`Reset function.js`](../tabs/micro-air/Reset function.js)
-- **Node ID:** `205af5b7fa62d8ac`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_205af5b7fa62["Reset function"]:::fn
-  n_36941b7928b3["Reset unique"]:::fn
-  n_a58b5f05c834["Reset Micro-Air"]:::link
-  n_36941b7928b3 -->|out 0| n_205af5b7fa62
-  n_a58b5f05c834 -->|out 0| n_205af5b7fa62
-```
-
-#### Msg contract
-_No documented msg contract._
-
-#### Upstream
-- Reset Micro-Air (link in) — this tab
-- Reset unique (inject) — this tab
-
-#### Downstream
-_None._
-
----
-
 ### microair_create_climate
 - **File:** [`microair_create_climate.js`](../tabs/micro-air/microair_create_climate.js)
 - **Node ID:** `c92f3be74ab20d69`
@@ -349,6 +316,39 @@ Output 2: Sensor (outdoor temp — triggers create_microair_sensor.js)
   - microair_create_climate (function) — this tab, file: [`microair_create_climate.js`](../tabs/micro-air/microair_create_climate.js)
 - **Output 1:**
   - microair_create_sensor (function) — this tab, file: [`microair_create_sensor.js`](../tabs/micro-air/microair_create_sensor.js)
+
+---
+
+### reset_uniqueMicroair
+- **File:** [`reset_uniqueMicroair.js`](../tabs/micro-air/reset_uniqueMicroair.js)
+- **Node ID:** `205af5b7fa62d8ac`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_205af5b7fa62["reset_uniqueMicroair"]:::fn
+  n_36941b7928b3["Reset unique"]:::fn
+  n_a58b5f05c834["Reset Micro-Air"]:::link
+  n_36941b7928b3 -->|out 0| n_205af5b7fa62
+  n_a58b5f05c834 -->|out 0| n_205af5b7fa62
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Reset Micro-Air (link in) — this tab
+- Reset unique (inject) — this tab
+
+#### Downstream
+_None._
 
 ---
 
