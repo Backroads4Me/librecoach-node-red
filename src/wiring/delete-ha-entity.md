@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `222c995b7790b8de`
 - **Disabled:** false
-- **Node count:** 8
+- **Node count:** 7
 - **Function nodes:** 1
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -29,12 +29,10 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_802228bc8d89["Delete sensor"]:::fn
   n_8c13a65ec041["Delete light"]:::fn
   n_a2d2ed96ff46["Delete HA entity"]:::fn
   n_abd1e06a1927["Delete switch"]:::fn
   n_d38c75bc1474["MQTT out_ Retain TRUE"]:::link
-  n_802228bc8d89 -->|out 0| n_a2d2ed96ff46
   n_8c13a65ec041 -->|out 0| n_a2d2ed96ff46
   n_a2d2ed96ff46 -->|out 0| n_d38c75bc1474
   n_abd1e06a1927 -->|out 0| n_a2d2ed96ff46
@@ -45,7 +43,6 @@ _No documented msg contract._
 
 #### Upstream
 - Delete light (inject) — this tab
-- Delete sensor (inject) — this tab
 - Delete switch (inject) — this tab
 
 #### Downstream
@@ -77,9 +74,8 @@ _None._
 
 ## Other Nodes
 
-- 69c114a873c4c716 (note) — id `69c114a873c4c716`, in: 0, out: 0
-- 9539a951b2c7a1a9 (inject) — id `9539a951b2c7a1a9`, in: 0, out: 1
 - Delete Home Assistant Entity (group) — id `04e375b0c463df72`, in: 0, out: 0
 - Delete light (inject) — id `8c13a65ec0410f0d`, in: 0, out: 1
-- Delete sensor (inject) — id `802228bc8d89d80a`, in: 0, out: 1
 - Delete switch (inject) — id `abd1e06a1927df6d`, in: 0, out: 1
+- f815ee479e02a96a (note) — id `f815ee479e02a96a`, in: 0, out: 0
+- inject topic (inject) — id `3a8f7d7760059de3`, in: 0, out: 1

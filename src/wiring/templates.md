@@ -76,8 +76,8 @@ Input: msg (triggered by export button)
 Output: msg configured for POST /api/template
 
 #### Upstream
-- Export Entities Trigger (Standard Cards) (mqtt in) — this tab
-- Export Entities Trigger (mqtt in) — this tab
+- Export Entities Trigger (Mushroom) (mqtt in) — this tab
+- Export Entities Trigger (Standard) (mqtt in) — this tab
 
 #### Downstream
 - **Output 0:**
@@ -593,14 +593,13 @@ _None._
 
 - 0d5ca59cd7836171 (split) — id `0d5ca59cd7836171`, in: 1, out: 1
 - 48af3768692e8e47 (http response) — id `48af3768692e8e47`, in: 1, out: 0
-- 614d0e17e66848f3 (note) — id `614d0e17e66848f3`, in: 0, out: 0
 - 6a3efcac3894a63f (ha-api) — id `6a3efcac3894a63f`, in: 1, out: 1
 - 6ea3c976edca4420 (http request) — id `6ea3c976edca4420`, in: 1, out: 1
 - 6fe721da58a82100 (http response) — id `6fe721da58a82100`, in: 1, out: 0
 - Export AI Dashboard Prompt (group) — id `export_entities_group_001`, in: 0, out: 0
 - Export Configuration (group) — id `export_config_group_001`, in: 0, out: 0
-- Export Entities Trigger (mqtt in) — id `export_entities_mqtt_in_001`, in: 0, out: 1
-- Export Entities Trigger (Standard Cards) (mqtt in) — id `export_entities_default_mqtt_in_001`, in: 0, out: 1
+- Export Entities Trigger (Mushroom) (mqtt in) — id `export_entities_mqtt_in_001`, in: 0, out: 1
+- Export Entities Trigger (Standard) (mqtt in) — id `export_entities_default_mqtt_in_001`, in: 0, out: 1
 - Export Trigger (mqtt in) — id `export_mqtt_in_trigger_001`, in: 0, out: 1
 - GET /api/states (http request) — id `export_http_states_001`, in: 1, out: 1
 - HA in (mqtt in) — id `ac639050da7648b9`, in: 0, out: 1
@@ -610,6 +609,7 @@ _None._
 - Write file (file) — id `de184f27cbcc117f`, in: 1, out: 1
 - Write file (file) — id `export_entities_file_001`, in: 1, out: 1
 - d3b9548ea352bc6c (join) — id `d3b9548ea352bc6c`, in: 1, out: 1
+- d841fab74e0dbe0d (note) — id `d841fab74e0dbe0d`, in: 0, out: 0
 - dda95ad4c2e65ea7 (http response) — id `dda95ad4c2e65ea7`, in: 1, out: 0
 - e686216d7dd9f13c (http request) — id `e686216d7dd9f13c`, in: 1, out: 0
 - http get (http in) — id `50bc401ae974546e`, in: 0, out: 1

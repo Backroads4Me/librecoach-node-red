@@ -388,7 +388,6 @@ _None._
 
 ## Other Nodes
 
-- 514aeab5c0897a23 (note) — id `514aeab5c0897a23`, in: 0, out: 0
 - HA climate (mqtt in) — id `f937b8d3f3e0c24e`, in: 0, out: 1
 - Micro-Air config (mqtt in) — id `feeabea8484a11e6`, in: 0, out: 1
 - Micro-Air status (mqtt in) — id `d5cb654b4dad986f`, in: 0, out: 1
@@ -398,3 +397,4 @@ _None._
 - ab025c05d155f4ee (switch) — id `ab025c05d155f4ee`, in: 1, out: 1
 - dbc862c066d96221 (delay) — id `dbc862c066d96221`, in: 1, out: 1
 - eef231d415615180 (rbe) — id `eef231d415615180`, in: 2, out: 1
+- f9d555c29cf29919 (note) — id `f9d555c29cf29919`, in: 0, out: 0

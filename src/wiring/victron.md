@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `1fde0c4ffb03727e`
 - **Disabled:** false
-- **Node count:** 42
-- **Function nodes:** 13
+- **Node count:** 46
+- **Function nodes:** 14
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 4
+- **Link out (outbound):** 5
 - **Link in (inbound):** 4
 
 ## Function Nodes
@@ -265,6 +265,40 @@ Output 2: derived availability status (-> "MQTT out: Retain TRUE")
 
 ---
 
+### victron_migrate
+- **File:** [`victron_migrate.js`](../tabs/victron/victron_migrate.js)
+- **Node ID:** `4cf79060d3abc4ce`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_4cf79060d3ab["victron_migrate"]:::fn
+  n_8eea5bdc848f["MQTT out_ Retain TRUE"]:::link
+  n_f242b1b5d30c["Load on Start"]:::fn
+  n_4cf79060d3ab -->|out 0| n_8eea5bdc848f
+  n_f242b1b5d30c -->|out 0| n_4cf79060d3ab
+```
+
+#### Msg contract
+One-shot migration: purge pre-v1.3 Victron discovery configs so entities
+are recreated with the new `default_entity_id` IDs.
+
+#### Upstream
+- Load on Start (inject) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
 ### victron_poll_devices
 - **File:** [`victron_poll_devices.js`](../tabs/victron/victron_poll_devices.js)
 - **Node ID:** `ea38d37ac8c3ab57`
@@ -471,6 +505,8 @@ _None._
 ## Link Nodes
 
 ### Outbound (link out)
+- **MQTT out: Retain TRUE** (`8eea5bdc848fa31d`) →
+  - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`bd38c37850a3e832`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`e371075d4dbfc113`) →
@@ -498,15 +534,17 @@ _None._
 ## Other Nodes
 
 - 3fd699a116881ab0 (delay) — id `3fd699a116881ab0`, in: 1, out: 1
+- 44a63dad48ab3ced (note) — id `44a63dad48ab3ced`, in: 0, out: 0
 - 89759b3d2d9812c8 (delay) — id `89759b3d2d9812c8`, in: 2, out: 1
 - 943309ad88255256 (rbe) — id `943309ad88255256`, in: 1, out: 1
-- 990c3568d504c86e (note) — id `990c3568d504c86e`, in: 0, out: 0
 - 9be2b9ec5c4f51d4 (rbe) — id `9be2b9ec5c4f51d4`, in: 2, out: 1
 - Load on Start (inject) — id `0b2b4c52d68092cc`, in: 0, out: 1
 - Load on Start (inject) — id `1a548b4f42a93938`, in: 0, out: 1
 - Load on Start (inject) — id `6ba061be2ab168c5`, in: 0, out: 1
 - Load on Start (inject) — id `70c7d357a6f48e4a`, in: 0, out: 1
+- Load on Start (inject) — id `f242b1b5d30cadd1`, in: 0, out: 1
 - On start (inject) — id `68214a83740efc26`, in: 0, out: 1
+- One time migration (group) — id `12bdacfac6d380c0`, in: 0, out: 0
 - Read Victron CSV (file in) — id `d1a2b3c4e5f6780b`, in: 1, out: 1
 - Repeat (inject) — id `f9d1a59e25ce32dd`, in: 0, out: 1
 - Reset unique (inject) — id `ce787dfcc75988be`, in: 0, out: 1

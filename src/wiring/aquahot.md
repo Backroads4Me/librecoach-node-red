@@ -226,7 +226,7 @@ _None._
 
 ## Other Nodes
 
-- 8ae5ee1969cf9219 (note) — id `8ae5ee1969cf9219`, in: 0, out: 0
+- 7957e06c0f83dc0f (note) — id `7957e06c0f83dc0f`, in: 0, out: 0
 - AQUAHOT_COMMAND_1 (debug) — id `c5fdb5067c820e76`, in: 2, out: 0
 - AQUAHOT_STATUS_1 (debug) — id `691871e1972d2296`, in: 2, out: 0
 - AQUAHOT_SYSTEM_STATUS_2 (debug) — id `1bd7e1d4c5f3864a`, in: 1, out: 0
