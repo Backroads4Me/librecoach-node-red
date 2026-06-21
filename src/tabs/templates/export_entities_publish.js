@@ -223,8 +223,10 @@ Copy these patterns exactly, including icon values.
     action: toggle
 
 ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is "%"):
+## Use the actual battery SOC sensor from the entity data below — exact IDs vary
+## by hardware (most coaches have no Victron gear); never assume this example ID.
   type: gauge
-  entity: sensor.librecoach_victron_system_battery_state_of_charge
+  entity: sensor.battery_house_state_of_charge
   name: House
   min: 0
   max: 100
@@ -235,8 +237,10 @@ Copy these patterns exactly, including icon values.
     red: 0
 
 ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V"; house or starter):
+## Use the actual voltage sensor from the entity data below — exact IDs vary by
+## hardware (most coaches have no Victron gear); never assume this example ID.
   type: gauge
-  entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
+  entity: sensor.battery_starter_voltage
   name: Starter
   min: 11.5
   max: 14.5
@@ -712,8 +716,10 @@ Copy these patterns exactly, including icon values.
     action: toggle
 
 ## Battery gauge — STATE OF CHARGE (use when that battery sensor's UNIT is "%"):
+## Use the actual battery SOC sensor from the entity data below — exact IDs vary
+## by hardware (most coaches have no Victron gear); never assume this example ID.
   type: gauge
-  entity: sensor.librecoach_victron_system_battery_state_of_charge
+  entity: sensor.battery_house_state_of_charge
   name: House
   min: 0
   max: 100
@@ -724,8 +730,10 @@ Copy these patterns exactly, including icon values.
     red: 0
 
 ## Battery gauge — VOLTAGE (use when that battery sensor's UNIT is "V"; house or starter):
+## Use the actual voltage sensor from the entity data below — exact IDs vary by
+## hardware (most coaches have no Victron gear); never assume this example ID.
   type: gauge
-  entity: sensor.librecoach_victron_smartshunt_ip65_auxiliary_battery_voltage
+  entity: sensor.battery_starter_voltage
   name: Starter
   min: 11.5
   max: 14.5
@@ -993,19 +1001,19 @@ Remember: NO custom:* cards anywhere in the output.
 const isDefault = (msg.topic || "").includes("/entities/default/");
 const variant = isDefault
   ? {
-      header: DEFAULT_PROMPT_HEADER,
-      filename: "librecoach_dashboard_prompt_default.txt",
-      downloadPage: "librecoach_download_dashboard_default.html",
-      notificationId: "librecoach_export_entities_default",
-      title: "LibreCoach Dashboard Prompt (Standard Cards)",
-    }
+    header: DEFAULT_PROMPT_HEADER,
+    filename: "librecoach_dashboard_prompt_default.txt",
+    downloadPage: "librecoach_download_dashboard_default.html",
+    notificationId: "librecoach_export_entities_default",
+    title: "LibreCoach Dashboard Prompt (Standard Cards)",
+  }
   : {
-      header: PROMPT_HEADER,
-      filename: "librecoach_dashboard_prompt.txt",
-      downloadPage: "librecoach_download_dashboard.html",
-      notificationId: "librecoach_export_entities",
-      title: "LibreCoach AI Dashboard Prompt (Mushroom Cards)",
-    };
+    header: PROMPT_HEADER,
+    filename: "librecoach_dashboard_prompt.txt",
+    downloadPage: "librecoach_download_dashboard.html",
+    notificationId: "librecoach_export_entities",
+    title: "LibreCoach AI Dashboard Prompt (Mushroom Cards)",
+  };
 
 const fullContent = variant.header + content;
 const lineCount = content

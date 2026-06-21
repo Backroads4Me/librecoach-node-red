@@ -295,6 +295,19 @@
   wires:
     - - a6594a9464d8fe4e
       - 3935564c9401e95d
+- id: 375ced2f0a80dc5c
+  type: note
+  z: 292e70a6ba25b323
+  content: |-
+    # Config
+    System configuration and initialization. Loads reference files,
+    claims an address on the CAN bus, stores user option settings,
+    and sets up the global state that all other flows depend on.
+  bgcolor: "#f3e5ab"
+  textcolor: "#333333"
+  x: 330
+  "y": 120
+  wires: []
 - id: 3935564c9401e95d
   type: function
   z: 292e70a6ba25b323
@@ -1276,20 +1289,6 @@
   l: true
   wires:
     - - 1ac6e0fa1cbb3852
-- id: 74c442b643175f2f
-  type: note
-  z: 292e70a6ba25b323
-  content: |-
-    # Config
-    System configuration and initialization. Loads reference files,
-    claims an address on the CAN bus, stores user option settings,
-    and sets up the global state that all other flows depend on.
-    This runs first — nothing else works without it.
-  bgcolor: "#f3e5ab"
-  textcolor: "#333333"
-  x: 330
-  "y": 132
-  wires: []
 - id: 74c7e4a6cc2508eb
   type: file in
   z: 292e70a6ba25b323
