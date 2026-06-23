@@ -27,7 +27,7 @@ module.exports = {
 
   // Editor settings
   editorTheme: {
-    theme: "dark",
+    theme: "dark-modern",
     tours: false,
     projects: { enabled: false, workflow: { mode: "manual" } },
   },
