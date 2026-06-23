@@ -47,18 +47,6 @@
     "hasFinalize": false,
     "hasInfo": false
   },
-  "4cf79060d3abc4ce": {
-    "nodeId": "4cf79060d3abc4ce",
-    "name": "victron_migrate",
-    "sanitizedName": "victron_migrate",
-    "fileName": "victron_migrate",
-    "isVue": false,
-    "isFun": true,
-    "hasCode": true,
-    "hasInitialize": false,
-    "hasFinalize": false,
-    "hasInfo": false
-  },
   "9401b2d19494b1c2": {
     "nodeId": "9401b2d19494b1c2",
     "name": "reset_victron",

@@ -41,11 +41,4 @@ msg.payload = discoveryPayload;
 msg.stateTopic = stateTopic;
 msg.entityId = entityId;
 
-// Track discovery topic for cleanup when disabled
-let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
-if (!discoveryTopics.includes(discoveryTopic)) {
-  discoveryTopics.push(discoveryTopic);
-  global.set("microairDiscoveryTopics", discoveryTopics, "file");
-}
-
 return msg;

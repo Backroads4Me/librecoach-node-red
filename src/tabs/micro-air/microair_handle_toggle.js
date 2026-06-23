@@ -15,10 +15,11 @@ if (enabled) {
   return [{ reset: true }, null];
 }
 
-// === Disable: delete all tracked entities from HA ===
-const discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
+// === Disable: delete all MicroAir entities ===
+const index = global.get("discoveryIndex", "file") || {};
+const topics = index.microair || [];
 
-if (discoveryTopics.length === 0) {
+if (topics.length === 0) {
   node.status({
     fill: "yellow",
     shape: "ring",
@@ -27,18 +28,18 @@ if (discoveryTopics.length === 0) {
   return [null, null];
 }
 
-discoveryTopics.forEach((topic) => {
+// Send retained empty payloads to output 2 (MQTT Out) to remove the configs.
+topics.forEach((topic) => {
   node.send([null, { topic: topic, payload: "" }]);
 });
 
-// Clear persisted tracking state
-global.set("microairDiscoveryTopics", [], "file");
+// Clear the ingest unique-filter so re-enable rediscovers cleanly.
 global.set("uniqueMicroair", []);
 
 node.status({
   fill: "red",
   shape: "dot",
-  text: `Disabled — removed ${discoveryTopics.length} entities`,
+  text: `Disabled — removed ${topics.length} entities`,
 });
 
 return [null, null];

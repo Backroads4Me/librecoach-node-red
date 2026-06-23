@@ -39,17 +39,25 @@
   type: function
   z: e3804d2dd0b81928
   name: microair_handle_toggle
-  func: |
+  func: >
     // Handles enable/disable of MicroAir integration via addon config
+
     // Input: msg from librecoach/config/microair_enabled ("true" / "false")
+
     // Output 1 → Filter nodes (reset on enable)
+
     // Output 2 → MQTT Out (entity deletion on disable)
 
+
     // Only handle microair_enabled messages
+
     const key = msg.topic.split("/").pop();
+
     if (key !== "microair_enabled") return [null, null];
 
+
     const enabled = msg.payload.toString() === "true";
+
 
     if (enabled) {
       node.status({ fill: "green", shape: "dot", text: "Enabled" });
@@ -57,10 +65,15 @@
       return [{ reset: true }, null];
     }
 
-    // === Disable: delete all tracked entities from HA ===
-    const discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
 
-    if (discoveryTopics.length === 0) {
+    // === Disable: delete all MicroAir entities ===
+
+    const index = global.get("discoveryIndex", "file") || {};
+
+    const topics = index.microair || [];
+
+
+    if (topics.length === 0) {
       node.status({
         fill: "yellow",
         shape: "ring",
@@ -69,19 +82,26 @@
       return [null, null];
     }
 
-    discoveryTopics.forEach((topic) => {
+
+    // Send retained empty payloads to output 2 (MQTT Out) to remove the
+    configs.
+
+    topics.forEach((topic) => {
       node.send([null, { topic: topic, payload: "" }]);
     });
 
-    // Clear persisted tracking state
-    global.set("microairDiscoveryTopics", [], "file");
+
+    // Clear the ingest unique-filter so re-enable rediscovers cleanly.
+
     global.set("uniqueMicroair", []);
+
 
     node.status({
       fill: "red",
       shape: "dot",
-      text: `Disabled — removed ${discoveryTopics.length} entities`,
+      text: `Disabled — removed ${topics.length} entities`,
     });
+
 
     return [null, null];
   outputs: 2
@@ -243,13 +263,6 @@
 
     msg.stateTopic = stateTopic;
     msg.entityId = entityId;
-
-    // Track discovery topic for cleanup when disabled
-    let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
-    if (!discoveryTopics.includes(discoveryTopic)) {
-      discoveryTopics.push(discoveryTopic);
-      global.set("microairDiscoveryTopics", discoveryTopics, "file");
-    }
 
     return msg;
   outputs: 1
@@ -552,7 +565,10 @@
       modes = ["off"];
       if (mav & (1 << 1)) modes.push("fan_only");
       if (mav & (1 << 2)) modes.push("cool");
-      if (mav & ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))) {
+      if (
+        mav &
+        ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))
+      ) {
         modes.push("heat");
       }
       if (mav & ((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11))) {
@@ -778,18 +794,6 @@
         payload: diagnostic.payload,
       });
     }
-
-    // Track discovery topic for cleanup when disabled
-    let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
-    for (const message of messages) {
-      if (
-        message.topic.startsWith("homeassistant/") &&
-        !discoveryTopics.includes(message.topic)
-      ) {
-        discoveryTopics.push(message.topic);
-      }
-    }
-    global.set("microairDiscoveryTopics", discoveryTopics, "file");
 
     return [messages];
   outputs: 1
@@ -1284,7 +1288,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 390
-  "y": 132
+  "y": 120
   wires: []
 - id: fe7cf55a75689b88
   type: group

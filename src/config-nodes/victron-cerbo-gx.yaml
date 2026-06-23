@@ -4,7 +4,7 @@
   broker: venus.local
   port: 1883
   clientid: ""
-  autoConnect: true
+  autoConnect: false
   usetls: false
   protocolVersion: 4
   keepalive: 60

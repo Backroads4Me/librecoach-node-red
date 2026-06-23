@@ -26,10 +26,9 @@ const baseId = `hughes_${safeMac}`;
 const stateTopic = `librecoach/ble/hughes/${mac}/state`;
 const availabilityTopic = `librecoach/ble/hughes/${mac}/available`;
 const device = {
-  identifiers: [baseId],
-  name: `Hughes Power Watchdog ${mac}`,
-  manufacturer: "Hughes Autoformers",
-  model: `${state.protocol}${state.is_50a ? " 50A" : " 30A"}`,
+  identifiers: ["librecoach-hughes"],
+  name: "Hughes",
+  manufacturer: "LibreCoach",
 };
 const availability = [
   { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
@@ -48,7 +47,6 @@ if (global.get(`${baseId}_discovery_signature`, "file") === signature) return nu
 global.set(`${baseId}_discovery_signature`, signature, "file");
 
 const messages = [];
-const tracked = global.get("hughesDiscoveryTopics", "file") || [];
 
 function add(component, suffix, payload) {
   const entityId = `${baseId}_${suffix}`;
@@ -61,7 +59,6 @@ function add(component, suffix, payload) {
     payload.availability = availability;
   }
   messages.push({ topic, payload });
-  if (!tracked.includes(topic)) tracked.push(topic);
 }
 
 function sensor(suffix, name, field, unit, deviceClass, stateClass, icon) {
@@ -191,6 +188,5 @@ add("button", "ble_clear_errors", {
   availability_topic: "librecoach/nodered/status",
 });
 
-global.set("hughesDiscoveryTopics", tracked, "file");
 node.status({ fill: "green", shape: "dot", text: `${state.protocol} ${state.is_50a ? "50A" : "30A"}` });
 return [messages];

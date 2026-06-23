@@ -32,7 +32,7 @@
   links:
     - 88e5fa035bedb48c
   x: 1110
-  "y": 1620
+  "y": 1780
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -306,7 +306,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 330
-  "y": 120
+  "y": 132
   wires: []
 - id: 3935564c9401e95d
   type: function
@@ -844,7 +844,7 @@
   z: 292e70a6ba25b323
   name: RV-C Time Sync
   x: 994
-  "y": 1799
+  "y": 1499
   style:
     stroke: "#777777"
     label: true
@@ -1208,7 +1208,7 @@
   finalize: ""
   libs: []
   x: 1410
-  "y": 1620
+  "y": 1780
   g: 9e47041ed71c4494
   wires:
     - - e38f32a1f6d36bfb
@@ -1283,6 +1283,7 @@
     - 52b505b69f88888d
     - d95299a44e1d7ed5
     - c83c6b2b70c927a3
+    - 7bc46b723c0314f1
   x: 230
   "y": 600
   g: 3c819b7900145438
@@ -1300,7 +1301,7 @@
   sendError: false
   allProps: false
   x: 1320
-  "y": 1480
+  "y": 1420
   g: 9cfcca5efde78052
   wires:
     - - c78420a075d43408
@@ -1320,7 +1321,7 @@
   payload: ""
   payloadType: date
   x: 1120
-  "y": 1480
+  "y": 1420
   g: 9cfcca5efde78052
   wires:
     - - 74c7e4a6cc2508eb
@@ -1742,7 +1743,7 @@
   z: 292e70a6ba25b323
   name: Load RV-C Dgn Names
   x: 994
-  "y": 1439
+  "y": 1379
   style:
     stroke: "#777777"
     label: true
@@ -1810,7 +1811,7 @@
   z: 292e70a6ba25b323
   name: BETA Testing
   x: 994
-  "y": 1579
+  "y": 1739
   style:
     stroke: "#777777"
     label: true
@@ -2031,6 +2032,102 @@
   g: f67b4a374db41b27
   wires:
     - - 5ffb64e684c20ea8
+- id: aba7ef0da2fb2851
+  type: function
+  z: 292e70a6ba25b323
+  name: discovery_index
+  func: >
+    // Indexes retained HA discovery configs by integration prefix so disable
+
+    // handlers can delete an integration's entities.
+
+    // Input: retained messages on homeassistant/+/+/config
+
+
+    const PREFIXES = ["victron", "microair", "hughes"];
+
+
+    const topic = msg.topic;
+
+    if (typeof topic !== "string" || !topic.startsWith("homeassistant/")) return
+    null;
+
+
+    const index = global.get("discoveryIndex", "file") || {};
+
+
+    // Empty payload = entity removed; drop the topic from every bucket.
+
+    const raw = msg.payload;
+
+    const isEmpty =
+        raw === "" ||
+        raw === null ||
+        raw === undefined ||
+        (typeof raw === "object" && Object.keys(raw).length === 0);
+
+    if (isEmpty) {
+        let changed = false;
+        for (const p of PREFIXES) {
+            const arr = index[p];
+            if (arr) {
+                const i = arr.indexOf(topic);
+                if (i !== -1) {
+                    arr.splice(i, 1);
+                    changed = true;
+                }
+            }
+        }
+        if (changed) global.set("discoveryIndex", index, "file");
+        return null;
+    }
+
+
+    // Parse the config payload to read unique_id.
+
+    let cfg = raw;
+
+    if (typeof raw === "string") {
+        try {
+            cfg = JSON.parse(raw);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    const uniqueId = cfg && cfg.unique_id;
+
+    if (typeof uniqueId !== "string") return null;
+
+
+    // Bucket by the integration prefix this entity belongs to.
+
+    const prefix = PREFIXES.find((p) => uniqueId.startsWith(p + "_"));
+
+    if (!prefix) return null;
+
+
+    const bucket = index[prefix] || (index[prefix] = []);
+
+    if (!bucket.includes(topic)) {
+        bucket.push(topic);
+        global.set("discoveryIndex", index, "file");
+        node.status({ fill: "blue", shape: "dot", text: `${prefix}: ${bucket.length}` });
+    }
+
+
+    return null;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1360
+  "y": 1660
+  g: bc622f80fe99faa0
+  wires:
+    - []
 - id: ac17a780a9a1dbcf
   type: link in
   z: 292e70a6ba25b323
@@ -2224,6 +2321,18 @@
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
+- id: bc622f80fe99faa0
+  type: group
+  z: 292e70a6ba25b323
+  name: MQTT discovery
+  x: 994
+  "y": 1619
+  style:
+    stroke: "#777777"
+    label: true
+  nodes:
+    - aba7ef0da2fb2851
+    - e71f0cb356427a9c
 - id: bce5d439a67df7da
   type: inject
   z: 292e70a6ba25b323
@@ -2240,7 +2349,7 @@
   payload: ""
   payloadType: date
   x: 1110
-  "y": 1840
+  "y": 1540
   g: 5169613bd2735138
   wires:
     - - dd22c9c987534342
@@ -2314,7 +2423,7 @@
   action: ""
   pretty: false
   x: 1530
-  "y": 1480
+  "y": 1420
   g: 9cfcca5efde78052
   wires:
     - - cd670f6465b6374b
@@ -2326,7 +2435,7 @@
   links:
     - 74329f13cbbc528a
   x: 1570
-  "y": 1840
+  "y": 1540
   g: 5169613bd2735138
   l: true
   wires: []
@@ -2413,7 +2522,7 @@
   finalize: ""
   libs: []
   x: 1740
-  "y": 1480
+  "y": 1420
   g: 9cfcca5efde78052
   wires: []
 - id: cd73ee739dad9f59
@@ -2462,7 +2571,7 @@
   name: BETA TEST
   links: []
   x: 1090
-  "y": 1680
+  "y": 1840
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -2965,7 +3074,7 @@
   finalize: ""
   libs: []
   x: 1320
-  "y": 1840
+  "y": 1540
   g: 5169613bd2735138
   wires:
     - - c83c6b2b70c927a3
@@ -3002,7 +3111,7 @@
   finalize: ""
   libs: []
   x: 1420
-  "y": 1680
+  "y": 1840
   g: 9e47041ed71c4494
   wires:
     - []
@@ -3014,10 +3123,27 @@
   links:
     - f658418a7b9b4857
   x: 1670
-  "y": 1620
+  "y": 1780
   g: 9e47041ed71c4494
   l: true
   wires: []
+- id: e71f0cb356427a9c
+  type: mqtt in
+  z: 292e70a6ba25b323
+  name: HA discovery configs
+  topic: homeassistant/+/+/config
+  qos: "1"
+  datatype: auto
+  broker: 80727e60a251c36c
+  nl: false
+  rap: true
+  rh: 0
+  inputs: 0
+  x: 1120
+  "y": 1660
+  g: bc622f80fe99faa0
+  wires:
+    - - aba7ef0da2fb2851
 - id: eea1641469efb23f
   type: debug
   z: 292e70a6ba25b323

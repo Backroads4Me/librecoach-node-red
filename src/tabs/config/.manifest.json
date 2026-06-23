@@ -191,6 +191,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "aba7ef0da2fb2851": {
+    "nodeId": "aba7ef0da2fb2851",
+    "name": "discovery_index",
+    "sanitizedName": "discovery_index",
+    "fileName": "discovery_index",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "b846bc1605dae821": {
     "nodeId": "b846bc1605dae821",
     "name": "address_claim_request",

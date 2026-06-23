@@ -362,8 +362,16 @@ const payload = {
   value_template: "{{ (value_json | default({'value': ''})).value }}",
   availability_mode: "all",
   availability: [
-    { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-    { topic: "librecoach/victron/status", payload_available: "online", payload_not_available: "offline" },
+    {
+      topic: "librecoach/nodered/status",
+      payload_available: "online",
+      payload_not_available: "offline",
+    },
+    {
+      topic: "librecoach/victron/status",
+      payload_available: "online",
+      payload_not_available: "offline",
+    },
   ],
   device: {
     identifiers: ["librecoach-victron"],
@@ -448,12 +456,13 @@ if (isEnum && componentType === "select") {
   }
 }
 
-// Track discovery topic for cleanup on disable (file store — survives restarts)
-let discoveryTopics = global.get("victronDiscoveryTopics", "file") || [];
-if (!discoveryTopics.includes(discoveryTopic)) {
-  discoveryTopics.push(discoveryTopic);
-  global.set("victronDiscoveryTopics", discoveryTopics, "file");
+// Republish the discovery config only when its payload changes.
+const sigKey = `victron_${entityId}_dsig`;
+const signature = JSON.stringify(payload);
+if (global.get(sigKey, "file") === signature) {
+  return null;
 }
+global.set(sigKey, signature, "file");
 
 // Prepare final message
 msg.topic = discoveryTopic;

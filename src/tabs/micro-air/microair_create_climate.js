@@ -43,7 +43,10 @@ if (zoneConfig.MAV) {
   modes = ["off"];
   if (mav & (1 << 1)) modes.push("fan_only");
   if (mav & (1 << 2)) modes.push("cool");
-  if (mav & ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))) {
+  if (
+    mav &
+    ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))
+  ) {
     modes.push("heat");
   }
   if (mav & ((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11))) {
@@ -269,17 +272,5 @@ for (const diagnostic of diagnostics) {
     payload: diagnostic.payload,
   });
 }
-
-// Track discovery topic for cleanup when disabled
-let discoveryTopics = global.get("microairDiscoveryTopics", "file") || [];
-for (const message of messages) {
-  if (
-    message.topic.startsWith("homeassistant/") &&
-    !discoveryTopics.includes(message.topic)
-  ) {
-    discoveryTopics.push(message.topic);
-  }
-}
-global.set("microairDiscoveryTopics", discoveryTopics, "file");
 
 return [messages];

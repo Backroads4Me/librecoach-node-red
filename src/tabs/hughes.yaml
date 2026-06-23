@@ -71,10 +71,9 @@
     const availabilityTopic = `librecoach/ble/hughes/${mac}/available`;
 
     const device = {
-      identifiers: [baseId],
-      name: `Hughes Power Watchdog ${mac}`,
-      manufacturer: "Hughes Autoformers",
-      model: `${state.protocol}${state.is_50a ? " 50A" : " 30A"}`,
+      identifiers: ["librecoach-hughes"],
+      name: "Hughes",
+      manufacturer: "LibreCoach",
     };
 
     const availability = [
@@ -101,8 +100,6 @@
 
     const messages = [];
 
-    const tracked = global.get("hughesDiscoveryTopics", "file") || [];
-
 
     function add(component, suffix, payload) {
       const entityId = `${baseId}_${suffix}`;
@@ -115,7 +112,6 @@
         payload.availability = availability;
       }
       messages.push({ topic, payload });
-      if (!tracked.includes(topic)) tracked.push(topic);
     }
 
 
@@ -272,8 +268,6 @@
     });
 
 
-    global.set("hughesDiscoveryTopics", tracked, "file");
-
     node.status({ fill: "green", shape: "dot", text: `${state.protocol}
     ${state.is_50a ? "50A" : "30A"}` });
 
@@ -334,7 +328,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 300
-  "y": 112
+  "y": 124
   wires: []
 - id: 5a7f019c3d4e5b66
   type: function
@@ -469,8 +463,14 @@
   z: 8a7f019c3d4e5b60
   name: hughes_handle_toggle
   func: >
-    // Enable/disable Hughes entity processing and remove discovery on disable.
+    // Handles enable/disable of Hughes integration via addon config
 
+    // Input: msg from librecoach/config/hughes_enabled ("true" / "false")
+
+    // Output → MQTT Out (entity deletion on disable)
+
+
+    // Only handle hughes_enabled messages
 
     const key = (msg.topic || "").split("/").pop();
 
@@ -481,18 +481,33 @@
 
     global.set("hughesEnabled", enabled);
 
+
     if (enabled) {
       node.status({ fill: "green", shape: "dot", text: "Enabled" });
       return null;
     }
 
 
-    const topics = global.get("hughesDiscoveryTopics", "file") || [];
+    // === Disable: delete all Hughes entities ===
+
+    const index = global.get("discoveryIndex", "file") || {};
+
+    const topics = index.hughes || [];
+
+
+    if (topics.length === 0) {
+      node.status({ fill: "yellow", shape: "ring", text: "Disabled (no entities)" });
+      return null;
+    }
+
+
+    // Send retained empty payloads to remove the configs.
 
     for (const topic of topics) node.send({ topic, payload: "" });
 
-    global.set("hughesDiscoveryTopics", [], "file");
 
+    // Clear the per-entity discovery signatures so re-enable republishes
+    cleanly.
 
     const keys = global.keys ? global.keys("file") : [];
 
