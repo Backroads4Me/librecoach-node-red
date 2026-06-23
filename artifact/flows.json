@@ -1248,7 +1248,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {
@@ -4138,8 +4138,8 @@
     "id": "9d8e7f6a5b4c3d2e",
     "type": "function",
     "z": "292e70a6ba25b323",
-    "name": "publish_nodered_ready",
-    "func": "// Publishes the retained readiness flag after LibreCoach flows have loaded.\n// The orchestrator (run.sh wait_for_nodered_api) blocks on this retained\n// topic before continuing startup; it clears the topic before any Node-RED\n// (re)start so a stale flag from a previous run can never satisfy the wait.\n// Input: startup inject (delayed so MQTT subscriptions are registered)\n// Output: retained messages via \"MQTT Out: Retain TRUE\"\nconst now = new Date().toISOString();\nconst version = global.get(\"librecoach_version\") || \"unknown\";\n\nreturn [[\n  {\n    topic: \"librecoach/nodered/status\",\n    payload: \"online\",\n  },\n  {\n    topic: \"librecoach/nodered/ready\",\n    payload: JSON.stringify({\n      ready: true,\n      version,\n      updated_at: now,\n    }),\n  },\n]];\n",
+    "name": "publish_nodered_status",
+    "func": "// Publishes the retained online status after LibreCoach flows have loaded.\n// Input: startup inject (delayed so MQTT subscriptions are registered)\n// Output: retained message via \"MQTT Out: Retain TRUE\"\nreturn [[\n  {\n    topic: \"librecoach/nodered/status\",\n    payload: \"online\",\n  },\n]];",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,

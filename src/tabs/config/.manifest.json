@@ -169,9 +169,9 @@
   },
   "9d8e7f6a5b4c3d2e": {
     "nodeId": "9d8e7f6a5b4c3d2e",
-    "name": "publish_nodered_ready",
-    "sanitizedName": "publish_nodered_ready",
-    "fileName": "publish_nodered_ready",
+    "name": "publish_nodered_status",
+    "sanitizedName": "publish_nodered_status",
+    "fileName": "publish_nodered_status",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
