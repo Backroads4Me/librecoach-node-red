@@ -306,7 +306,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 330
-  "y": 132
+  "y": 144
   wires: []
 - id: 3935564c9401e95d
   type: function
@@ -2428,25 +2428,16 @@
   type: function
   z: 292e70a6ba25b323
   name: store_config_globals
-  func: >
+  func: |
     const key = msg.topic.split("/").pop();
-
     const val = msg.payload.toString() === "true";
 
-
     if (key === "victron_enabled") global.set("victronEnabled", val);
-
     if (key === "beta_enabled") global.set("betaEnabled", val);
-
     if (key === "microair_enabled") global.set("microairEnabled", val);
-
     if (key === "hughes_enabled") global.set("hughesEnabled", val);
-
     if (key === "geo_enabled") global.set("geoEnabled", val);
-
-    if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val,
-    "file");
-
+    if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val);
 
     return msg;
   outputs: 1
@@ -2978,14 +2969,14 @@
 
     const PRIORITY = 6;
 
-    const DGN = 0x1FFFF;
+    const DGN = 0x1ffff;
 
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
 
     // --- Feature Gate ---
 
-    const timeSyncEnabled = global.get("timeSyncEnabled", "file");
+    const timeSyncEnabled = global.get("timeSyncEnabled");
 
     if (!timeSyncEnabled) return null;
 
@@ -3023,13 +3014,13 @@
 
     const dataBytes = [
       Math.max(0, Math.min(255, dt.getFullYear() - 2000)), // Byte 0: Year (2000..2255)
-      dt.getMonth() + 1,                                   // Byte 1: Month (1..12)
-      dt.getDate(),                                         // Byte 2: Day (1..31)
-      rvcDow(dt.getDay()),                                  // Byte 3: Day of week (1..7)
-      dt.getHours(),                                        // Byte 4: Hour (0..23)
-      dt.getMinutes(),                                      // Byte 5: Minute (0..59)
-      dt.getSeconds(),                                      // Byte 6: Second (0..59)
-      tzCode & 0xff,                                        // Byte 7: Timezone code
+      dt.getMonth() + 1, // Byte 1: Month (1..12)
+      dt.getDate(), // Byte 2: Day (1..31)
+      rvcDow(dt.getDay()), // Byte 3: Day of week (1..7)
+      dt.getHours(), // Byte 4: Hour (0..23)
+      dt.getMinutes(), // Byte 5: Minute (0..59)
+      dt.getSeconds(), // Byte 6: Second (0..59)
+      tzCode & 0xff, // Byte 7: Timezone code
     ];
 
 

@@ -5,11 +5,11 @@
 
 // --- Configuration ---
 const PRIORITY = 6;
-const DGN = 0x1FFFF;
+const DGN = 0x1ffff;
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
 // --- Feature Gate ---
-const timeSyncEnabled = global.get("timeSyncEnabled", "file");
+const timeSyncEnabled = global.get("timeSyncEnabled");
 if (!timeSyncEnabled) return null;
 
 // --- Current Time ---
@@ -30,13 +30,13 @@ const tzCode = isDst ? std / 60 - 1 : std / 60;
 // Byte layout per RV-C §6.4 Table 6.4.2b: year(offset 2000), month, day, dow, hour, min, sec, tz
 const dataBytes = [
   Math.max(0, Math.min(255, dt.getFullYear() - 2000)), // Byte 0: Year (2000..2255)
-  dt.getMonth() + 1,                                   // Byte 1: Month (1..12)
-  dt.getDate(),                                         // Byte 2: Day (1..31)
-  rvcDow(dt.getDay()),                                  // Byte 3: Day of week (1..7)
-  dt.getHours(),                                        // Byte 4: Hour (0..23)
-  dt.getMinutes(),                                      // Byte 5: Minute (0..59)
-  dt.getSeconds(),                                      // Byte 6: Second (0..59)
-  tzCode & 0xff,                                        // Byte 7: Timezone code
+  dt.getMonth() + 1, // Byte 1: Month (1..12)
+  dt.getDate(), // Byte 2: Day (1..31)
+  rvcDow(dt.getDay()), // Byte 3: Day of week (1..7)
+  dt.getHours(), // Byte 4: Hour (0..23)
+  dt.getMinutes(), // Byte 5: Minute (0..59)
+  dt.getSeconds(), // Byte 6: Second (0..59)
+  tzCode & 0xff, // Byte 7: Timezone code
 ];
 
 // --- Build and Send ---

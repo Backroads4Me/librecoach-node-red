@@ -6,6 +6,6 @@ if (key === "beta_enabled") global.set("betaEnabled", val);
 if (key === "microair_enabled") global.set("microairEnabled", val);
 if (key === "hughes_enabled") global.set("hughesEnabled", val);
 if (key === "geo_enabled") global.set("geoEnabled", val);
-if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val, "file");
+if (key === "rvc_time_sync_enabled") global.set("timeSyncEnabled", val);
 
 return msg;
