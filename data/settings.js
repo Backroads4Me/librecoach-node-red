@@ -17,7 +17,7 @@ module.exports = {
   contextStorage: {
     default: "memoryOnly", // Fast ephemeral storage
     memoryOnly: { module: "memory" },
-    file: { module: "localfilesystem" }, // Persistent storage for flows
+    file: { module: "localfilesystem", config: { dir: "/share/.librecoach/context" } }, // Persistent across add-on reinstalls
   },
 
   // Expose the deployed Node-RED project version to Function nodes.
