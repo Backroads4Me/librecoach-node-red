@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 93
-- **Function nodes:** 27
+- **Node count:** 96
+- **Function nodes:** 28
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 15
@@ -282,6 +282,38 @@ downstream routing (dgn_name) and decoding (data_payload).
 #### Downstream
 - **Output 0:**
   - 21dfe84b8adafa6e (rbe) — this tab
+
+---
+
+### discovery_index
+- **File:** [`discovery_index.js`](../tabs/config/discovery_index.js)
+- **Node ID:** `aba7ef0da2fb2851`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_aba7ef0da2fb["discovery_index"]:::fn
+  n_e71f0cb35642["HA discovery configs"]:::fn
+  n_e71f0cb35642 -->|out 0| n_aba7ef0da2fb
+```
+
+#### Msg contract
+Indexes retained HA discovery configs by integration prefix so disable
+handlers can delete an integration's entities.
+Input: retained messages on homeassistant/+/+/config
+
+#### Upstream
+- HA discovery configs (mqtt in) — this tab
+
+#### Downstream
+_None._
 
 ---
 
@@ -602,8 +634,8 @@ Requests WATER_PUMP_STATUS (1FFB3)
 
 ---
 
-### publish_nodered_ready
-- **File:** [`publish_nodered_ready.js`](../tabs/config/publish_nodered_ready.js)
+### publish_nodered_status
+- **File:** [`publish_nodered_status.js`](../tabs/config/publish_nodered_status.js)
 - **Node ID:** `9d8e7f6a5b4c3d2e`
 - **Outputs:** 1
 
@@ -618,18 +650,15 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_0a63b31d6180["MQTT out_ Retain TRUE"]:::link
   n_3e9c6f1a2b4d["Flows loaded"]:::fn
-  n_9d8e7f6a5b4c["publish_nodered_ready"]:::fn
+  n_9d8e7f6a5b4c["publish_nodered_status"]:::fn
   n_3e9c6f1a2b4d -->|out 0| n_9d8e7f6a5b4c
   n_9d8e7f6a5b4c -->|out 0| n_0a63b31d6180
 ```
 
 #### Msg contract
-Publishes the retained readiness flag after LibreCoach flows have loaded.
-The orchestrator (run.sh wait_for_nodered_api) blocks on this retained
-topic before continuing startup; it clears the topic before any Node-RED
-(re)start so a stale flag from a previous run can never satisfy the wait.
+Publishes the retained online status after LibreCoach flows have loaded.
 Input: startup inject (delayed so MQTT subscriptions are registered)
-Output: retained messages via "MQTT Out: Retain TRUE"
+Output: retained message via "MQTT Out: Retain TRUE"
 
 #### Upstream
 - Flows loaded (inject) — this tab
@@ -1052,7 +1081,6 @@ _None._
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Config`
-  - MQTT out: Retain TRUE in tab `Victron`
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Micro-Air`
   - MQTT out: Retain TRUE in tab `Victron`
@@ -1088,6 +1116,7 @@ _None._
 - Every 60s (inject) — id `bce5d439a67df7da`, in: 0, out: 1
 - Flows loaded (inject) — id `3e9c6f1a2b4d5e6f`, in: 0, out: 1
 - GPS Updates (group) — id `f67b4a374db41b27`, in: 0, out: 0
+- HA discovery configs (mqtt in) — id `e71f0cb356427a9c`, in: 0, out: 1
 - HA in (mqtt in) — id `54cd7e4a8959a77c`, in: 0, out: 2
 - HA in (mqtt in) — id `9e9b11b9441e51db`, in: 0, out: 2
 - HA in (mqtt in) — id `b86f82e84d961549`, in: 0, out: 2
@@ -1101,6 +1130,7 @@ _None._
 - MQTT (group) — id `3c819b7900145438`, in: 0, out: 0
 - MQTT Out: Retain FALSE (mqtt out) — id `1ac6e0fa1cbb3852`, in: 1, out: 0
 - MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 1, out: 0
+- MQTT discovery (group) — id `bc622f80fe99faa0`, in: 0, out: 0
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0
 - On start (inject) — id `0c76b4a89a0e60ca`, in: 0, out: 1

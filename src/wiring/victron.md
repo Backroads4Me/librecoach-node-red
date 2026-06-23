@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `1fde0c4ffb03727e`
 - **Disabled:** false
-- **Node count:** 46
-- **Function nodes:** 14
+- **Node count:** 43
+- **Function nodes:** 13
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 5
+- **Link out (outbound):** 4
 - **Link in (inbound):** 4
 
 ## Function Nodes
@@ -187,7 +187,7 @@ Encodes HA commands to Victron MQTT format
 ### victron_handle_toggle
 - **File:** [`victron_handle_toggle.js`](../tabs/victron/victron_handle_toggle.js)
 - **Node ID:** `48292ec85eb70ee5`
-- **Outputs:** 2
+- **Outputs:** 3
 
 #### Neighborhood
 ```mermaid
@@ -200,20 +200,23 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_3fd699a11688["3fd699a116881ab0"]:::fn
   n_48292ec85eb7["victron_handle_toggle"]:::fn
+  n_711d5e849935["Victron out"]:::fn
   n_71ac45fb64bf["Reset Victron filters"]:::link
   n_8fdd1d506d28["CONFIG_GLOBALS"]:::link
   n_e371075d4dbf["MQTT out_ Retain TRUE"]:::link
   n_3fd699a11688 -->|out 0| n_48292ec85eb7
-  n_48292ec85eb7 -->|out 0| n_e371075d4dbf
-  n_48292ec85eb7 -->|out 1| n_71ac45fb64bf
+  n_48292ec85eb7 -->|out 0| n_711d5e849935
+  n_48292ec85eb7 -->|out 1| n_e371075d4dbf
+  n_48292ec85eb7 -->|out 2| n_71ac45fb64bf
   n_8fdd1d506d28 -->|out 0| n_48292ec85eb7
 ```
 
 #### Msg contract
 Handles enable/disable of Victron integration via addon config
 Input: msg from librecoach/config/victron_enabled ("true" / "false")
-Output 1 → MQTT Out (entity deletion on disable)
-Output 2 → Filter nodes (reset on enable)
+Output 1 → Victron out (GX broker connect/disconnect control)
+Output 2 → MQTT Out (entity deletion on disable)
+Output 3 → Filter nodes (reset on enable)
 
 #### Upstream
 - 3fd699a116881ab0 (delay) — this tab
@@ -221,8 +224,10 @@ Output 2 → Filter nodes (reset on enable)
 
 #### Downstream
 - **Output 0:**
-  - MQTT out: Retain TRUE (link out) — this tab
+  - Victron out (mqtt out) — this tab
 - **Output 1:**
+  - MQTT out: Retain TRUE (link out) — this tab
+- **Output 2:**
   - Reset Victron filters (link out) — this tab
 
 ---
@@ -261,40 +266,6 @@ Output 2: derived availability status (-> "MQTT out: Retain TRUE")
 - **Output 0:**
   - Victron out (mqtt out) — this tab
 - **Output 1:**
-  - MQTT out: Retain TRUE (link out) — this tab
-
----
-
-### victron_migrate
-- **File:** [`victron_migrate.js`](../tabs/victron/victron_migrate.js)
-- **Node ID:** `4cf79060d3abc4ce`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_4cf79060d3ab["victron_migrate"]:::fn
-  n_8eea5bdc848f["MQTT out_ Retain TRUE"]:::link
-  n_f242b1b5d30c["Load on Start"]:::fn
-  n_4cf79060d3ab -->|out 0| n_8eea5bdc848f
-  n_f242b1b5d30c -->|out 0| n_4cf79060d3ab
-```
-
-#### Msg contract
-One-shot migration: purge pre-v1.3 Victron discovery configs so entities
-are recreated with the new `default_entity_id` IDs.
-
-#### Upstream
-- Load on Start (inject) — this tab
-
-#### Downstream
-- **Output 0:**
   - MQTT out: Retain TRUE (link out) — this tab
 
 ---
@@ -505,8 +476,6 @@ _None._
 ## Link Nodes
 
 ### Outbound (link out)
-- **MQTT out: Retain TRUE** (`8eea5bdc848fa31d`) →
-  - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`bd38c37850a3e832`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`e371075d4dbfc113`) →
@@ -542,9 +511,7 @@ _None._
 - Load on Start (inject) — id `1a548b4f42a93938`, in: 0, out: 1
 - Load on Start (inject) — id `6ba061be2ab168c5`, in: 0, out: 1
 - Load on Start (inject) — id `70c7d357a6f48e4a`, in: 0, out: 1
-- Load on Start (inject) — id `f242b1b5d30cadd1`, in: 0, out: 1
 - On start (inject) — id `68214a83740efc26`, in: 0, out: 1
-- One time migration (group) — id `12bdacfac6d380c0`, in: 0, out: 0
 - Read Victron CSV (file in) — id `d1a2b3c4e5f6780b`, in: 1, out: 1
 - Repeat (inject) — id `f9d1a59e25ce32dd`, in: 0, out: 1
 - Reset unique (inject) — id `ce787dfcc75988be`, in: 0, out: 1
@@ -554,5 +521,6 @@ _None._
 - Victron Instance (mqtt in) — id `3057b4acf81dc8db`, in: 0, out: 2
 - Victron MQTT (mqtt in) — id `903a7fac6108ac58`, in: 0, out: 1
 - Victron ProductName (mqtt in) — id `2ff7b2c41ee41253`, in: 0, out: 1
+- Victron out (mqtt out) — id `711d5e8499354c05`, in: 1, out: 0
 - Victron out (mqtt out) — id `c80ea298a37232a2`, in: 3, out: 0
 - a95d74d20270f69b (rbe) — id `a95d74d20270f69b`, in: 3, out: 1

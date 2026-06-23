@@ -74,7 +74,9 @@ flowchart LR
 ```
 
 #### Msg contract
-Enable/disable Hughes entity processing and remove discovery on disable.
+Handles enable/disable of Hughes integration via addon config
+Input: msg from librecoach/config/hughes_enabled ("true" / "false")
+Output → MQTT Out (entity deletion on disable)
 
 #### Upstream
 - Hughes enabled (mqtt in) — this tab
