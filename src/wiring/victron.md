@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `1fde0c4ffb03727e`
 - **Disabled:** false
-- **Node count:** 43
+- **Node count:** 42
 - **Function nodes:** 13
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -198,28 +198,28 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_3fd699a11688["3fd699a116881ab0"]:::fn
   n_48292ec85eb7["victron_handle_toggle"]:::fn
   n_711d5e849935["Victron out"]:::fn
   n_71ac45fb64bf["Reset Victron filters"]:::link
+  n_89759b3d2d98["89759b3d2d9812c8"]:::fn
   n_8fdd1d506d28["CONFIG_GLOBALS"]:::link
   n_e371075d4dbf["MQTT out_ Retain TRUE"]:::link
-  n_3fd699a11688 -->|out 0| n_48292ec85eb7
   n_48292ec85eb7 -->|out 0| n_711d5e849935
   n_48292ec85eb7 -->|out 1| n_e371075d4dbf
   n_48292ec85eb7 -->|out 2| n_71ac45fb64bf
+  n_89759b3d2d98 -->|out 0| n_48292ec85eb7
   n_8fdd1d506d28 -->|out 0| n_48292ec85eb7
 ```
 
 #### Msg contract
-Handles enable/disable of Victron integration via addon config
-Input: msg from librecoach/config/victron_enabled ("true" / "false")
-Output 1 → Victron out (GX broker connect/disconnect control)
-Output 2 → MQTT Out (entity deletion on disable)
-Output 3 → Filter nodes (reset on enable)
+Reconciles the Victron GX broker connection to the desired enabled state.
+
+Output 1 -> Victron out  (GX broker connect/disconnect control)
+Output 2 -> MQTT Out      (entity deletion on disable)
+Output 3 -> Filter nodes  (reset on enable)
 
 #### Upstream
-- 3fd699a116881ab0 (delay) — this tab
+- 89759b3d2d9812c8 (delay) — this tab
 - CONFIG_GLOBALS (link in) — this tab
 
 #### Downstream
@@ -250,23 +250,23 @@ flowchart LR
   n_bd38c37850a3["MQTT out_ Retain TRUE"]:::link
   n_c80ea298a372["Victron out"]:::fn
   n_f9d1a59e25ce["Repeat"]:::fn
-  n_36f5f1a727df -->|out 0| n_c80ea298a372
-  n_36f5f1a727df -->|out 1| n_bd38c37850a3
+  n_36f5f1a727df -->|out 0| n_bd38c37850a3
+  n_36f5f1a727df -->|out 1| n_c80ea298a372
   n_f9d1a59e25ce -->|out 0| n_36f5f1a727df
 ```
 
 #### Msg contract
-Output 1: Victron keepalive (-> "Victron out")
-Output 2: derived availability status (-> "MQTT out: Retain TRUE")
+Output 1: derived availability status (-> "MQTT out: Retain TRUE")
+Output 2: Victron keepalive (-> "Victron out")
 
 #### Upstream
 - Repeat (inject) — this tab
 
 #### Downstream
 - **Output 0:**
-  - Victron out (mqtt out) — this tab
-- **Output 1:**
   - MQTT out: Retain TRUE (link out) — this tab
+- **Output 1:**
+  - Victron out (mqtt out) — this tab
 
 ---
 
@@ -502,7 +502,6 @@ _None._
 
 ## Other Nodes
 
-- 3fd699a116881ab0 (delay) — id `3fd699a116881ab0`, in: 1, out: 1
 - 44a63dad48ab3ced (note) — id `44a63dad48ab3ced`, in: 0, out: 0
 - 89759b3d2d9812c8 (delay) — id `89759b3d2d9812c8`, in: 2, out: 1
 - 943309ad88255256 (rbe) — id `943309ad88255256`, in: 1, out: 1
