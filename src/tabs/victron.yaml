@@ -223,16 +223,16 @@
   z: 1fde0c4ffb03727e
   name: victron_keep_alive
   func: >
-    // Output 1: Victron keepalive (-> "Victron out")
+    // Output 1: derived availability status (-> "MQTT out: Retain TRUE")
 
-    // Output 2: derived availability status (-> "MQTT out: Retain TRUE")
+    // Output 2: Victron keepalive (-> "Victron out")
 
     const victronEnabled = global.get("victronEnabled");
 
     if (!victronEnabled) return null;
 
 
-    // --- Keepalive (output 1) ---
+    // --- Keepalive (output 2) ---
 
     const portalId = global.get("victronPortalId", "file");
 
@@ -246,7 +246,7 @@
     }
 
 
-    // --- Availability watchdog (output 2) ---
+    // --- Availability watchdog (output 1) ---
 
     // Venus OS publishes no online/offline topic, so derive one from data
     freshness.
@@ -277,7 +277,7 @@
     }
 
 
-    return [keepaliveMsg, statusMsg];
+    return [statusMsg, keepaliveMsg];
   outputs: 2
   timeout: 0
   noerr: 0
@@ -288,29 +288,8 @@
   "y": 680
   g: 8aac091f0fffbf22
   wires:
-    - - c80ea298a37232a2
     - - bd38c37850a3e832
-- id: 3fd699a116881ab0
-  type: delay
-  z: 1fde0c4ffb03727e
-  name: ""
-  pauseType: delay
-  timeout: "1"
-  timeoutUnits: seconds
-  rate: "1"
-  nbRateUnits: "1"
-  rateUnits: second
-  randomFirst: "1"
-  randomLast: "5"
-  randomUnits: seconds
-  drop: false
-  allowrate: false
-  outputs: 1
-  x: 720
-  "y": 400
-  g: 8aac091f0fffbf22
-  wires:
-    - - 48292ec85eb70ee5
+    - - c80ea298a37232a2
 - id: 3ffa68cfd2195db1
   type: group
   z: 1fde0c4ffb03727e
@@ -338,47 +317,52 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 350
-  "y": 140
+  "y": 152
   wires: []
 - id: 48292ec85eb70ee5
   type: function
   z: 1fde0c4ffb03727e
   name: victron_handle_toggle
-  func: >-
-    // Handles enable/disable of Victron integration via addon config
+  func: >
+    // Reconciles the Victron GX broker connection to the desired enabled state.
 
-    // Input: msg from librecoach/config/victron_enabled ("true" / "false")
+    //
 
-    // Output 1 → Victron out (GX broker connect/disconnect control)
+    // Output 1 -> Victron out  (GX broker connect/disconnect control)
 
-    // Output 2 → MQTT Out (entity deletion on disable)
+    // Output 2 -> MQTT Out      (entity deletion on disable)
 
-    // Output 3 → Filter nodes (reset on enable)
-
-
-    // Only handle victron_enabled messages
-
-    const key = msg.topic.split("/").pop();
-
-    if (key !== "victron_enabled") return [null, null, null];
+    // Output 3 -> Filter nodes  (reset on enable)
 
 
-    const enabled = msg.payload.toString() === "true";
+    const enabled = global.get("victronEnabled") === true;
+
+    const wasEnabled = context.get("reconciledEnabled");
 
 
     if (enabled) {
       node.status({ fill: "green", shape: "dot", text: "Enabled" });
-      // Connect to the GX broker and reset filters.
-      return [{ action: "connect" }, null, { reset: true }];
+      // Reset the ingest filters only on a real disabled -> enabled transition.
+      const resetMsg = wasEnabled === true ? null : { reset: true };
+      context.set("reconciledEnabled", true);
+      // connect is idempotent: node-red ignores it when already connected/connecting.
+      return [{ action: "connect" }, null, resetMsg];
     }
 
 
-    // === Disable ===
+    // === Disabled ===
 
-    // Disconnect from the GX broker while disabled.
+    context.set("reconciledEnabled", false);
 
-    node.send([{ action: "disconnect" }, null, null]);
 
+    // Disconnect only on a real enabled -> disabled transition.
+
+    if (wasEnabled === true) {
+      node.send([{ action: "disconnect" }, null, null]);
+    }
+
+
+    // Remove any HA entities still advertised for Victron.
 
     const index = global.get("discoveryIndex", "file") || {};
 
@@ -386,11 +370,7 @@
 
 
     if (topics.length === 0) {
-      node.status({
-        fill: "yellow",
-        shape: "ring",
-        text: "Disabled (no entities)",
-      });
+      node.status({ fill: "yellow", shape: "ring", text: "Disabled" });
       return [null, null, null];
     }
 
@@ -403,18 +383,16 @@
     });
 
 
-    // Clear the ingest unique-filter so re-enable rediscovers cleanly.
+    // Clear discovery state so a future enable rediscovers and republishes
+    cleanly.
 
     global.set("uniqueVictron", []);
-
-
-    // Clear per-entity discovery signatures so re-enable republishes every
-    config.
 
     const keys = global.keys ? global.keys("file") : [];
 
     for (const k of keys) {
-      if (k.startsWith("victron_") && k.endsWith("_dsig")) global.set(k, undefined, "file");
+      if (k.startsWith("victron_") && k.endsWith("_dsig"))
+        global.set(k, undefined, "file");
     }
 
 
@@ -531,8 +509,8 @@
   z: 1fde0c4ffb03727e
   name: ""
   pauseType: delay
-  timeout: "1"
-  timeoutUnits: days
+  timeout: "20"
+  timeoutUnits: seconds
   rate: "1"
   nbRateUnits: "1"
   rateUnits: day
@@ -542,11 +520,11 @@
   drop: false
   allowrate: false
   outputs: 1
-  x: 560
+  x: 580
   "y": 400
   g: 8aac091f0fffbf22
   wires:
-    - - 3fd699a116881ab0
+    - - 48292ec85eb70ee5
 - id: 8aac091f0fffbf22
   type: group
   z: 1fde0c4ffb03727e
@@ -565,7 +543,6 @@
     - 2ff7b2c41ee41253
     - 3057b4acf81dc8db
     - 36f5f1a727dfd1ca
-    - 3fd699a116881ab0
     - 3ffa68cfd2195db1
     - 48292ec85eb70ee5
     - 68214a83740efc26

@@ -1132,7 +1132,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 420,
-    "y": 100,
+    "y": 112,
     "wires": []
   },
   {
@@ -1221,7 +1221,7 @@
     "type": "function",
     "z": "1fde0c4ffb03727e",
     "name": "victron_keep_alive",
-    "func": "// Output 1: Victron keepalive (-> \"Victron out\")\n// Output 2: derived availability status (-> \"MQTT out: Retain TRUE\")\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\n// --- Keepalive (output 1) ---\nconst portalId = global.get(\"victronPortalId\", \"file\");\nlet keepaliveMsg = null;\nif (portalId) {\n    keepaliveMsg = {\n        topic: `R/${portalId}/keepalive`,\n        payload: { \"keepalive-options\": [\"suppress-republish\"] },\n    };\n}\n\n// --- Availability watchdog (output 2) ---\n// Venus OS publishes no online/offline topic, so derive one from data freshness.\n// victron_decode_mqtt stamps victronLastSeen on every inbound N/+/# message.\n// STALE_MS spans ~3 keepalive cycles so a single missed publish won't flap.\nconst STALE_MS = 90000;\nconst lastSeen = global.get(\"victronLastSeen\") || 0;\nconst fresh = lastSeen > 0 && Date.now() - lastSeen < STALE_MS;\nconst desired = fresh ? \"online\" : \"offline\";\n\nlet statusMsg = null;\nif (desired !== context.get(\"victronStatusPublished\")) {\n    context.set(\"victronStatusPublished\", desired);\n    statusMsg = {\n        topic: \"librecoach/victron/status\",\n        payload: desired,\n        retain: true,\n    };\n}\n\nreturn [keepaliveMsg, statusMsg];\n",
+    "func": "// Output 1: derived availability status (-> \"MQTT out: Retain TRUE\")\n// Output 2: Victron keepalive (-> \"Victron out\")\nconst victronEnabled = global.get(\"victronEnabled\");\nif (!victronEnabled) return null;\n\n// --- Keepalive (output 2) ---\nconst portalId = global.get(\"victronPortalId\", \"file\");\nlet keepaliveMsg = null;\nif (portalId) {\n    keepaliveMsg = {\n        topic: `R/${portalId}/keepalive`,\n        payload: { \"keepalive-options\": [\"suppress-republish\"] },\n    };\n}\n\n// --- Availability watchdog (output 1) ---\n// Venus OS publishes no online/offline topic, so derive one from data freshness.\n// victron_decode_mqtt stamps victronLastSeen on every inbound N/+/# message.\n// STALE_MS spans ~3 keepalive cycles so a single missed publish won't flap.\nconst STALE_MS = 90000;\nconst lastSeen = global.get(\"victronLastSeen\") || 0;\nconst fresh = lastSeen > 0 && Date.now() - lastSeen < STALE_MS;\nconst desired = fresh ? \"online\" : \"offline\";\n\nlet statusMsg = null;\nif (desired !== context.get(\"victronStatusPublished\")) {\n    context.set(\"victronStatusPublished\", desired);\n    statusMsg = {\n        topic: \"librecoach/victron/status\",\n        payload: desired,\n        retain: true,\n    };\n}\n\nreturn [statusMsg, keepaliveMsg];\n",
     "outputs": 2,
     "timeout": 0,
     "noerr": 0,
@@ -1233,10 +1233,10 @@
     "g": "8aac091f0fffbf22",
     "wires": [
       [
-        "c80ea298a37232a2"
+        "bd38c37850a3e832"
       ],
       [
-        "bd38c37850a3e832"
+        "c80ea298a37232a2"
       ]
     ]
   },
@@ -1248,7 +1248,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 144,
+    "y": 120,
     "wires": []
   },
   {
@@ -1471,32 +1471,6 @@
     ]
   },
   {
-    "id": "3fd699a116881ab0",
-    "type": "delay",
-    "z": "1fde0c4ffb03727e",
-    "name": "",
-    "pauseType": "delay",
-    "timeout": "1",
-    "timeoutUnits": "seconds",
-    "rate": "1",
-    "nbRateUnits": "1",
-    "rateUnits": "second",
-    "randomFirst": "1",
-    "randomLast": "5",
-    "randomUnits": "seconds",
-    "drop": false,
-    "allowrate": false,
-    "outputs": 1,
-    "x": 720,
-    "y": 400,
-    "g": "8aac091f0fffbf22",
-    "wires": [
-      [
-        "48292ec85eb70ee5"
-      ]
-    ]
-  },
-  {
     "id": "3ffa68cfd2195db1",
     "type": "group",
     "z": "1fde0c4ffb03727e",
@@ -1576,7 +1550,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 350,
-    "y": 140,
+    "y": 152,
     "wires": []
   },
   {
@@ -1649,7 +1623,7 @@
     "type": "function",
     "z": "1fde0c4ffb03727e",
     "name": "victron_handle_toggle",
-    "func": "// Handles enable/disable of Victron integration via addon config\n// Input: msg from librecoach/config/victron_enabled (\"true\" / \"false\")\n// Output 1 → Victron out (GX broker connect/disconnect control)\n// Output 2 → MQTT Out (entity deletion on disable)\n// Output 3 → Filter nodes (reset on enable)\n\n// Only handle victron_enabled messages\nconst key = msg.topic.split(\"/\").pop();\nif (key !== \"victron_enabled\") return [null, null, null];\n\nconst enabled = msg.payload.toString() === \"true\";\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Connect to the GX broker and reset filters.\n  return [{ action: \"connect\" }, null, { reset: true }];\n}\n\n// === Disable ===\n// Disconnect from the GX broker while disabled.\nnode.send([{ action: \"disconnect\" }, null, null]);\n\nconst index = global.get(\"discoveryIndex\", \"file\") || {};\nconst topics = index.victron || [];\n\nif (topics.length === 0) {\n  node.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Disabled (no entities)\",\n  });\n  return [null, null, null];\n}\n\n// Send retained empty payloads to output 2 (MQTT Out) to remove the configs.\ntopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }, null]);\n});\n\n// Clear the ingest unique-filter so re-enable rediscovers cleanly.\nglobal.set(\"uniqueVictron\", []);\n\n// Clear per-entity discovery signatures so re-enable republishes every config.\nconst keys = global.keys ? global.keys(\"file\") : [];\nfor (const k of keys) {\n  if (k.startsWith(\"victron_\") && k.endsWith(\"_dsig\")) global.set(k, undefined, \"file\");\n}\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${topics.length} entities`,\n});\n\nreturn [null, null, null];",
+    "func": "// Reconciles the Victron GX broker connection to the desired enabled state.\n//\n// Output 1 -> Victron out  (GX broker connect/disconnect control)\n// Output 2 -> MQTT Out      (entity deletion on disable)\n// Output 3 -> Filter nodes  (reset on enable)\n\nconst enabled = global.get(\"victronEnabled\") === true;\nconst wasEnabled = context.get(\"reconciledEnabled\");\n\nif (enabled) {\n  node.status({ fill: \"green\", shape: \"dot\", text: \"Enabled\" });\n  // Reset the ingest filters only on a real disabled -> enabled transition.\n  const resetMsg = wasEnabled === true ? null : { reset: true };\n  context.set(\"reconciledEnabled\", true);\n  // connect is idempotent: node-red ignores it when already connected/connecting.\n  return [{ action: \"connect\" }, null, resetMsg];\n}\n\n// === Disabled ===\ncontext.set(\"reconciledEnabled\", false);\n\n// Disconnect only on a real enabled -> disabled transition.\nif (wasEnabled === true) {\n  node.send([{ action: \"disconnect\" }, null, null]);\n}\n\n// Remove any HA entities still advertised for Victron.\nconst index = global.get(\"discoveryIndex\", \"file\") || {};\nconst topics = index.victron || [];\n\nif (topics.length === 0) {\n  node.status({ fill: \"yellow\", shape: \"ring\", text: \"Disabled\" });\n  return [null, null, null];\n}\n\n// Send retained empty payloads to output 2 (MQTT Out) to remove the configs.\ntopics.forEach((topic) => {\n  node.send([null, { topic: topic, payload: \"\" }, null]);\n});\n\n// Clear discovery state so a future enable rediscovers and republishes cleanly.\nglobal.set(\"uniqueVictron\", []);\nconst keys = global.keys ? global.keys(\"file\") : [];\nfor (const k of keys) {\n  if (k.startsWith(\"victron_\") && k.endsWith(\"_dsig\"))\n    global.set(k, undefined, \"file\");\n}\n\nnode.status({\n  fill: \"red\",\n  text: `Disabled — removed ${topics.length} entities`,\n});\n\nreturn [null, null, null];\n",
     "outputs": 3,
     "timeout": 0,
     "noerr": 0,
@@ -3119,7 +3093,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {
@@ -3462,8 +3436,8 @@
     "z": "1fde0c4ffb03727e",
     "name": "",
     "pauseType": "delay",
-    "timeout": "1",
-    "timeoutUnits": "days",
+    "timeout": "20",
+    "timeoutUnits": "seconds",
     "rate": "1",
     "nbRateUnits": "1",
     "rateUnits": "day",
@@ -3473,12 +3447,12 @@
     "drop": false,
     "allowrate": false,
     "outputs": 1,
-    "x": 560,
+    "x": 580,
     "y": 400,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
-        "3fd699a116881ab0"
+        "48292ec85eb70ee5"
       ]
     ]
   },
@@ -3651,7 +3625,6 @@
       "2ff7b2c41ee41253",
       "3057b4acf81dc8db",
       "36f5f1a727dfd1ca",
-      "3fd699a116881ab0",
       "48292ec85eb70ee5",
       "68214a83740efc26",
       "6ba061be2ab168c5",
@@ -6653,7 +6626,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 330,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {
@@ -8280,7 +8253,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "x": 390,
-    "y": 120,
+    "y": 132,
     "wires": []
   },
   {

@@ -1,34 +1,35 @@
-// Handles enable/disable of Victron integration via addon config
-// Input: msg from librecoach/config/victron_enabled ("true" / "false")
-// Output 1 → Victron out (GX broker connect/disconnect control)
-// Output 2 → MQTT Out (entity deletion on disable)
-// Output 3 → Filter nodes (reset on enable)
+// Reconciles the Victron GX broker connection to the desired enabled state.
+//
+// Output 1 -> Victron out  (GX broker connect/disconnect control)
+// Output 2 -> MQTT Out      (entity deletion on disable)
+// Output 3 -> Filter nodes  (reset on enable)
 
-// Only handle victron_enabled messages
-const key = msg.topic.split("/").pop();
-if (key !== "victron_enabled") return [null, null, null];
-
-const enabled = msg.payload.toString() === "true";
+const enabled = global.get("victronEnabled") === true;
+const wasEnabled = context.get("reconciledEnabled");
 
 if (enabled) {
   node.status({ fill: "green", shape: "dot", text: "Enabled" });
-  // Connect to the GX broker and reset filters.
-  return [{ action: "connect" }, null, { reset: true }];
+  // Reset the ingest filters only on a real disabled -> enabled transition.
+  const resetMsg = wasEnabled === true ? null : { reset: true };
+  context.set("reconciledEnabled", true);
+  // connect is idempotent: node-red ignores it when already connected/connecting.
+  return [{ action: "connect" }, null, resetMsg];
 }
 
-// === Disable ===
-// Disconnect from the GX broker while disabled.
-node.send([{ action: "disconnect" }, null, null]);
+// === Disabled ===
+context.set("reconciledEnabled", false);
 
+// Disconnect only on a real enabled -> disabled transition.
+if (wasEnabled === true) {
+  node.send([{ action: "disconnect" }, null, null]);
+}
+
+// Remove any HA entities still advertised for Victron.
 const index = global.get("discoveryIndex", "file") || {};
 const topics = index.victron || [];
 
 if (topics.length === 0) {
-  node.status({
-    fill: "yellow",
-    shape: "ring",
-    text: "Disabled (no entities)",
-  });
+  node.status({ fill: "yellow", shape: "ring", text: "Disabled" });
   return [null, null, null];
 }
 
@@ -37,13 +38,12 @@ topics.forEach((topic) => {
   node.send([null, { topic: topic, payload: "" }, null]);
 });
 
-// Clear the ingest unique-filter so re-enable rediscovers cleanly.
+// Clear discovery state so a future enable rediscovers and republishes cleanly.
 global.set("uniqueVictron", []);
-
-// Clear per-entity discovery signatures so re-enable republishes every config.
 const keys = global.keys ? global.keys("file") : [];
 for (const k of keys) {
-  if (k.startsWith("victron_") && k.endsWith("_dsig")) global.set(k, undefined, "file");
+  if (k.startsWith("victron_") && k.endsWith("_dsig"))
+    global.set(k, undefined, "file");
 }
 
 node.status({

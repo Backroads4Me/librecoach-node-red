@@ -1,9 +1,9 @@
-// Output 1: Victron keepalive (-> "Victron out")
-// Output 2: derived availability status (-> "MQTT out: Retain TRUE")
+// Output 1: derived availability status (-> "MQTT out: Retain TRUE")
+// Output 2: Victron keepalive (-> "Victron out")
 const victronEnabled = global.get("victronEnabled");
 if (!victronEnabled) return null;
 
-// --- Keepalive (output 1) ---
+// --- Keepalive (output 2) ---
 const portalId = global.get("victronPortalId", "file");
 let keepaliveMsg = null;
 if (portalId) {
@@ -13,7 +13,7 @@ if (portalId) {
     };
 }
 
-// --- Availability watchdog (output 2) ---
+// --- Availability watchdog (output 1) ---
 // Venus OS publishes no online/offline topic, so derive one from data freshness.
 // victron_decode_mqtt stamps victronLastSeen on every inbound N/+/# message.
 // STALE_MS spans ~3 keepalive cycles so a single missed publish won't flap.
@@ -32,4 +32,4 @@ if (desired !== context.get("victronStatusPublished")) {
     };
 }
 
-return [keepaliveMsg, statusMsg];
+return [statusMsg, keepaliveMsg];
