@@ -7,6 +7,10 @@
  * - Minimal configuration
  ******************************************************************************/
 
+// MQTT credentials
+process.env.MQTT_USER = "librecoach";
+process.env.MQTT_PASS = "One23four";
+
 module.exports = {
   // Flow file and credentials
   flowFile: "flows.json",
