@@ -71,7 +71,6 @@ const messages = [];
 
 for (const { entityId, displayName } of targets) {
   let isDimmable = dimmableIndicators.includes(entityId);
-  let needsRecreate = false;
 
   // Intermediate brightness (1-199 raw = 0.5-99.5%) or Ramp → dimmable
   if (!isDimmable) {
@@ -83,11 +82,14 @@ for (const { entityId, displayName } of targets) {
     ) {
       dimmableIndicators.push(entityId);
       isDimmable = true;
-      needsRecreate = true;
     }
   }
 
-  if (!created[entityId] || needsRecreate) {
+  // (Re)publish whenever advertised capability differs from last published —
+  // self-corrects after any context/broker desync.
+  const desiredMode = isDimmable ? "brightness" : "onoff";
+
+  if (created[entityId] !== desiredMode) {
     const config = {
       name: displayName,
       unique_id: entityId,
@@ -98,8 +100,17 @@ for (const { entityId, displayName } of targets) {
       state_topic: `homeassistant/light/${entityId}/state`,
       availability_mode: "all",
       availability: [
-        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        {
+          topic: "librecoach/nodered/status",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
+        {
+          topic: "can/status",
+          value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
       ],
       device: {
         identifiers: ["librecoach-switches"],
@@ -121,7 +132,7 @@ for (const { entityId, displayName } of targets) {
       payload: config,
     });
 
-    created[entityId] = true;
+    created[entityId] = desiredMode;
   }
 
   if (isDimmable && typeof brightness === "number" && brightness > 0) {

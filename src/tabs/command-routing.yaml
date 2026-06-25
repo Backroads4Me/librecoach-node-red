@@ -174,7 +174,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 330
-  "y": 132
+  "y": 144
   wires: []
 - id: 86dc00dfc2dbcd9e
   type: inject
@@ -292,15 +292,12 @@
 
     let isDimmable = dimmableLights.includes(instance);
 
-    let needsRecreate = false;
-
 
     function markDimmable() {
       if (!isDimmable) {
         dimmableLights.push(instance);
         global.set("dimmableLights", dimmableLights, "file");
         isDimmable = true;
-        needsRecreate = true;
       }
     }
 
@@ -350,12 +347,18 @@
 
     // --- Self-creating discovery ---
 
+    // (Re)publish whenever advertised capability differs from last published —
+
+    // self-corrects after any context/broker desync. See status_dc_dimmer_3.js.
+
     const CREATED_KEY = "dcDimmerCmdCreated";
 
     const created = flow.get(CREATED_KEY) || {};
 
+    const desiredMode = isDimmable ? "brightness" : "onoff";
 
-    if (!created[instance] || needsRecreate) {
+
+    if (created[instance] !== desiredMode) {
       const config = {
         name: `Switch ${instance}`,
         unique_id: entityId,
@@ -366,8 +369,17 @@
         state_topic: stateTopic,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device: {
           identifiers: ["librecoach-switches"],
@@ -389,7 +401,7 @@
         payload: config,
       });
 
-      created[instance] = true;
+      created[instance] = desiredMode;
       flow.set(CREATED_KEY, created);
     }
 
@@ -785,7 +797,6 @@
 
     for (const { entityId, displayName } of targets) {
       let isDimmable = dimmableIndicators.includes(entityId);
-      let needsRecreate = false;
 
       // Intermediate brightness (1-199 raw = 0.5-99.5%) or Ramp → dimmable
       if (!isDimmable) {
@@ -797,11 +808,14 @@
         ) {
           dimmableIndicators.push(entityId);
           isDimmable = true;
-          needsRecreate = true;
         }
       }
 
-      if (!created[entityId] || needsRecreate) {
+      // (Re)publish whenever advertised capability differs from last published —
+      // self-corrects after any context/broker desync.
+      const desiredMode = isDimmable ? "brightness" : "onoff";
+
+      if (created[entityId] !== desiredMode) {
         const config = {
           name: displayName,
           unique_id: entityId,
@@ -812,8 +826,17 @@
           state_topic: `homeassistant/light/${entityId}/state`,
           availability_mode: "all",
           availability: [
-            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            {
+              topic: "librecoach/nodered/status",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
+            {
+              topic: "can/status",
+              value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
           ],
           device: {
             identifiers: ["librecoach-switches"],
@@ -835,7 +858,7 @@
           payload: config,
         });
 
-        created[entityId] = true;
+        created[entityId] = desiredMode;
       }
 
       if (isDimmable && typeof brightness === "number" && brightness > 0) {

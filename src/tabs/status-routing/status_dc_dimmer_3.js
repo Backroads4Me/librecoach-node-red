@@ -26,14 +26,12 @@ if (!statusBackedInstances.includes(instance)) {
 // Dimmable detection
 const dimmableLights = global.get("dimmableLights", "file") || [];
 let isDimmable = dimmableLights.includes(instance);
-let needsRecreate = false;
 
 function markDimmable() {
   if (!isDimmable) {
     dimmableLights.push(instance);
     global.set("dimmableLights", dimmableLights, "file");
     isDimmable = true;
-    needsRecreate = true;
   }
 }
 
@@ -73,11 +71,13 @@ const commandTopic = `homeassistant/light/${entityId}/set`;
 
 const messages = [];
 
-// Self-creating discovery: publish config on first valid reading
+// Self-creating discovery: (re)publish whenever advertised capability differs
+// from last published — self-corrects after any context/broker desync.
 const CREATED_KEY = "dcDimmerCreated";
 const created = flow.get(CREATED_KEY) || {};
+const desiredMode = isDimmable ? "brightness" : "onoff";
 
-if (!created[instance] || needsRecreate) {
+if (created[instance] !== desiredMode) {
   const config = {
     name: `Switch ${instance}`,
     unique_id: entityId,
@@ -88,8 +88,17 @@ if (!created[instance] || needsRecreate) {
     state_topic: stateTopic,
     availability_mode: "all",
     availability: [
-      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      {
+        topic: "librecoach/nodered/status",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
+      {
+        topic: "can/status",
+        value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
     ],
     device: {
       identifiers: ["librecoach-switches"],
@@ -111,7 +120,7 @@ if (!created[instance] || needsRecreate) {
     payload: config,
   });
 
-  created[instance] = true;
+  created[instance] = desiredMode;
   flow.set(CREATED_KEY, created);
 }
 

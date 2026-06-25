@@ -1610,15 +1610,12 @@
 
     let isDimmable = dimmableLights.includes(instance);
 
-    let needsRecreate = false;
-
 
     function markDimmable() {
       if (!isDimmable) {
         dimmableLights.push(instance);
         global.set("dimmableLights", dimmableLights, "file");
         isDimmable = true;
-        needsRecreate = true;
       }
     }
 
@@ -1666,14 +1663,19 @@
     const messages = [];
 
 
-    // Self-creating discovery: publish config on first valid reading
+    // Self-creating discovery: (re)publish whenever advertised capability
+    differs
+
+    // from last published — self-corrects after any context/broker desync.
 
     const CREATED_KEY = "dcDimmerCreated";
 
     const created = flow.get(CREATED_KEY) || {};
 
+    const desiredMode = isDimmable ? "brightness" : "onoff";
 
-    if (!created[instance] || needsRecreate) {
+
+    if (created[instance] !== desiredMode) {
       const config = {
         name: `Switch ${instance}`,
         unique_id: entityId,
@@ -1684,8 +1686,17 @@
         state_topic: stateTopic,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device: {
           identifiers: ["librecoach-switches"],
@@ -1707,7 +1718,7 @@
         payload: config,
       });
 
-      created[instance] = true;
+      created[instance] = desiredMode;
       flow.set(CREATED_KEY, created);
     }
 
@@ -8667,10 +8678,12 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: status_dc_driver
-  func: |
+  func: >
     // HA Status Publisher for DC Component Driver (Lights representation)
 
+
     const payload = msg.payload;
+
 
     if (
       !payload ||
@@ -8680,16 +8693,23 @@
       return null;
     }
 
+
     const driver_index = payload.driver_index;
+
     if (driver_index === undefined) return null;
 
+
     // Use flow context for discovery check
+
     let knownDrivers = flow.get("knownDcDrivers");
+
     if (!knownDrivers) {
       knownDrivers = {};
     }
 
+
     // We need either STATUS_1 or STATUS_6 to do something useful
+
     if (
       payload.dgn_name !== "DC_COMPONENT_DRIVER_STATUS_1" &&
       payload.dgn_name !== "DC_COMPONENT_DRIVER_STATUS_6"
@@ -8697,19 +8717,20 @@
       return null;
     }
 
+
     let driver = knownDrivers[driver_index];
+
     if (!driver) {
       driver = {
         has_status1: false,
         has_status6: false,
-        created: false,
+        publishedMode: null,
         is_dimmable: false,
         last_brightness: 100,
       };
       knownDrivers[driver_index] = driver;
     }
 
-    let needsRecreate = false;
 
     if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_1") {
       driver.has_status1 = true;
@@ -8721,29 +8742,42 @@
       }
     }
 
+
     if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_6") {
       driver.has_status6 = true;
       driver.brightness = Math.round(Math.min(100, payload.pwm_duty_cycle)); // 0-100%
 
       if (payload.pwm_duty_cycle > 0 && payload.pwm_duty_cycle < 100) {
-        if (!driver.is_dimmable) {
-          driver.is_dimmable = true;
-          if (driver.created) {
-            needsRecreate = true; // Mark for upgrade to dimmable
-            driver.created = false; // Force re-creation
-          }
-        }
+        driver.is_dimmable = true;
       }
     }
 
+
     const messages = [];
 
+
     const entityId = `switch_${driver_index}`;
+
     const stateTopic = `homeassistant/light/${entityId}/state`;
+
     const commandTopic = `homeassistant/light/${entityId}/set`;
 
-    // Create entity if not created and we have either status
-    if (!driver.created && (driver.has_status1 || driver.has_status6)) {
+
+    // Self-creating discovery: (re)publish whenever advertised capability
+    differs
+
+    // from last published — self-corrects after any context/broker desync.
+
+    const desiredMode = driver.is_dimmable ? "brightness" : "onoff";
+
+
+    // Create/update entity if the published mode is stale and we have either
+    status
+
+    if (
+      driver.publishedMode !== desiredMode &&
+      (driver.has_status1 || driver.has_status6)
+    ) {
       let config = {
         name: `Switch ${driver_index}`,
         unique_id: entityId,
@@ -8754,8 +8788,17 @@
         command_topic: commandTopic,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device: {
           identifiers: ["librecoach-switches"],
@@ -8777,17 +8820,19 @@
         payload: config,
       });
 
-      driver.created = true;
+      driver.publishedMode = desiredMode;
     }
 
+
     // Publish state updates
-    if (driver.created) {
+
+    if (driver.publishedMode) {
       let stateOut = {
         state: driver.state || "OFF",
       };
 
-      // Only output color_mode if we aren't currently waiting for a dimmable config to apply
-      if (driver.is_dimmable && !needsRecreate) {
+      // color_mode must match the advertised discovery config for this cycle
+      if (driver.is_dimmable) {
         stateOut.color_mode = "brightness";
         if (driver.brightness !== undefined) {
           stateOut.brightness = driver.brightness;
@@ -8805,9 +8850,12 @@
       });
     }
 
+
     flow.set("knownDcDrivers", knownDrivers);
 
+
     if (messages.length === 0) return null;
+
 
     return [messages];
   outputs: 1
@@ -9138,15 +9186,12 @@
 
     let isDimmable = dimmableLights.includes(instance);
 
-    let needsRecreate = false;
-
 
     function markDimmable() {
         if (!isDimmable) {
             dimmableLights.push(instance);
             global.set("dimmableLights", dimmableLights, "file");
             isDimmable = true;
-            needsRecreate = true;
         }
     }
 
@@ -9192,14 +9237,19 @@
     const messages = [];
 
 
-    // Self-creating discovery: publish config on first valid reading
+    // Self-creating discovery: (re)publish whenever advertised capability
+    differs
+
+    // from last published — self-corrects after any context/broker desync.
 
     const CREATED_KEY = "dcLoadCreated";
 
     const created = flow.get(CREATED_KEY) || {};
 
+    const desiredMode = isDimmable ? "brightness" : "onoff";
 
-    if (!created[instance] || needsRecreate) {
+
+    if (created[instance] !== desiredMode) {
         const config = {
             name: `Switch ${instance}`,
             unique_id: entityId,
@@ -9210,8 +9260,17 @@
             state_topic: stateTopic,
             availability_mode: "all",
             availability: [
-              { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-              { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+                {
+                    topic: "librecoach/nodered/status",
+                    payload_available: "online",
+                    payload_not_available: "offline",
+                },
+                {
+                    topic: "can/status",
+                    value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+                    payload_available: "online",
+                    payload_not_available: "offline",
+                },
             ],
             device: {
                 identifiers: ["librecoach-switches"],
@@ -9233,7 +9292,7 @@
             payload: config,
         });
 
-        created[instance] = true;
+        created[instance] = desiredMode;
         flow.set(CREATED_KEY, created);
     }
 
@@ -10243,15 +10302,12 @@
 
     let isDimmable = dimmableAcLoads.includes(instance);
 
-    let needsRecreate = false;
-
 
     function markDimmable() {
       if (!isDimmable) {
         dimmableAcLoads.push(instance);
         global.set("dimmableAcLoads", dimmableAcLoads, "file");
         isDimmable = true;
-        needsRecreate = true;
       }
     }
 
@@ -10297,14 +10353,19 @@
     const messages = [];
 
 
-    // Self-creating discovery: publish config on first valid reading
+    // Self-creating discovery: (re)publish whenever advertised capability
+    differs
+
+    // from last published — self-corrects after any context/broker desync.
 
     const CREATED_KEY = "acLoadCreated";
 
     const created = flow.get(CREATED_KEY) || {};
 
+    const desiredMode = isDimmable ? "brightness" : "onoff";
 
-    if (!created[instance] || needsRecreate) {
+
+    if (created[instance] !== desiredMode) {
       const config = {
         name: `AC Load ${instance}`,
         unique_id: entityId,
@@ -10315,8 +10376,17 @@
         state_topic: stateTopic,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device: {
           identifiers: ["librecoach-switches"],
@@ -10338,7 +10408,7 @@
         payload: config,
       });
 
-      created[instance] = true;
+      created[instance] = desiredMode;
       flow.set(CREATED_KEY, created);
     }
 

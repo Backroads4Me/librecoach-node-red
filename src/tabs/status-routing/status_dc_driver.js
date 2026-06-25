@@ -32,14 +32,12 @@ if (!driver) {
   driver = {
     has_status1: false,
     has_status6: false,
-    created: false,
+    publishedMode: null,
     is_dimmable: false,
     last_brightness: 100,
   };
   knownDrivers[driver_index] = driver;
 }
-
-let needsRecreate = false;
 
 if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_1") {
   driver.has_status1 = true;
@@ -56,13 +54,7 @@ if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_6") {
   driver.brightness = Math.round(Math.min(100, payload.pwm_duty_cycle)); // 0-100%
 
   if (payload.pwm_duty_cycle > 0 && payload.pwm_duty_cycle < 100) {
-    if (!driver.is_dimmable) {
-      driver.is_dimmable = true;
-      if (driver.created) {
-        needsRecreate = true; // Mark for upgrade to dimmable
-        driver.created = false; // Force re-creation
-      }
-    }
+    driver.is_dimmable = true;
   }
 }
 
@@ -72,8 +64,15 @@ const entityId = `switch_${driver_index}`;
 const stateTopic = `homeassistant/light/${entityId}/state`;
 const commandTopic = `homeassistant/light/${entityId}/set`;
 
-// Create entity if not created and we have either status
-if (!driver.created && (driver.has_status1 || driver.has_status6)) {
+// Self-creating discovery: (re)publish whenever advertised capability differs
+// from last published — self-corrects after any context/broker desync.
+const desiredMode = driver.is_dimmable ? "brightness" : "onoff";
+
+// Create/update entity if the published mode is stale and we have either status
+if (
+  driver.publishedMode !== desiredMode &&
+  (driver.has_status1 || driver.has_status6)
+) {
   let config = {
     name: `Switch ${driver_index}`,
     unique_id: entityId,
@@ -84,8 +83,17 @@ if (!driver.created && (driver.has_status1 || driver.has_status6)) {
     command_topic: commandTopic,
     availability_mode: "all",
     availability: [
-      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      {
+        topic: "librecoach/nodered/status",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
+      {
+        topic: "can/status",
+        value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
     ],
     device: {
       identifiers: ["librecoach-switches"],
@@ -107,17 +115,17 @@ if (!driver.created && (driver.has_status1 || driver.has_status6)) {
     payload: config,
   });
 
-  driver.created = true;
+  driver.publishedMode = desiredMode;
 }
 
 // Publish state updates
-if (driver.created) {
+if (driver.publishedMode) {
   let stateOut = {
     state: driver.state || "OFF",
   };
 
-  // Only output color_mode if we aren't currently waiting for a dimmable config to apply
-  if (driver.is_dimmable && !needsRecreate) {
+  // color_mode must match the advertised discovery config for this cycle
+  if (driver.is_dimmable) {
     stateOut.color_mode = "brightness";
     if (driver.brightness !== undefined) {
       stateOut.brightness = driver.brightness;
