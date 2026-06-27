@@ -78,6 +78,17 @@ const created = flow.get(CREATED_KEY) || {};
 const desiredMode = isDimmable ? "brightness" : "onoff";
 
 if (created[instance] !== desiredMode) {
+  // HA won't hot-swap supported_color_modes on an already-registered entity
+  // (a later discovery claiming ["brightness"] is silently ignored). When the
+  // capability changes, first publish an empty retained payload to remove the
+  // entity, then republish so HA recreates it fresh with the new capability.
+  if (created[instance] !== undefined) {
+    messages.push({
+      topic: `homeassistant/light/${entityId}/config`,
+      payload: "",
+    });
+  }
+
   const config = {
     name: `Switch ${instance}`,
     unique_id: entityId,
