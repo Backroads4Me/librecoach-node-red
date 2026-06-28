@@ -13,8 +13,11 @@ if (
 const driver_index = payload.driver_index;
 if (driver_index === undefined) return null;
 
-// Use flow context for discovery check
-let knownDrivers = flow.get("knownDcDrivers");
+// Persist discovery state in the FILE store so published capability and
+// dimmability survive Node-RED restarts. With flow (memory) context this reset
+// every boot, so the first plain on/off status after a restart re-published an
+// onoff config and downgraded an already-dimmable entity. See status_dc_dimmer_3.js.
+let knownDrivers = global.get("knownDcDrivers", "file");
 if (!knownDrivers) {
   knownDrivers = {};
 }
@@ -64,8 +67,14 @@ const entityId = `switch_${driver_index}`;
 const stateTopic = `homeassistant/light/${entityId}/state`;
 const commandTopic = `homeassistant/light/${entityId}/set`;
 
-// Self-creating discovery: (re)publish whenever advertised capability differs
-// from last published — self-corrects after any context/broker desync.
+// Self-creating discovery. HA won't hot-swap supported_color_modes on an
+// existing entity, so an onoff -> brightness change requires delete-then-recreate.
+// Dimmability is monotonic (only a fractional PWM proves a driver can dim; a
+// full-on/off reading does not), so we never downgrade brightness -> onoff —
+// this stops a plain on/off status from re-stickng a dimmable entity to a toggle.
+if (driver.publishedMode === "brightness") {
+  driver.is_dimmable = true;
+}
 const desiredMode = driver.is_dimmable ? "brightness" : "onoff";
 
 // Create/update entity if the published mode is stale and we have either status
@@ -73,6 +82,13 @@ if (
   driver.publishedMode !== desiredMode &&
   (driver.has_status1 || driver.has_status6)
 ) {
+  // Remove any existing retained config first so HA recreates the entity fresh
+  // with the new capability. Harmless no-op if nothing is retained yet.
+  messages.push({
+    topic: `homeassistant/light/${entityId}/config`,
+    payload: "",
+  });
+
   let config = {
     name: `Switch ${driver_index}`,
     unique_id: entityId,
@@ -143,7 +159,7 @@ if (driver.publishedMode) {
   });
 }
 
-flow.set("knownDcDrivers", knownDrivers);
+global.set("knownDcDrivers", knownDrivers, "file");
 
 if (messages.length === 0) return null;
 
