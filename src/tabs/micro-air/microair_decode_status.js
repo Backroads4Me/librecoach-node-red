@@ -70,6 +70,20 @@ const internalMsg = {
   payload: standardizedMsg,
 };
 
+// --- Remap fan_mode using the observed-speed-aware map ---
+// The BLE add-on labels fan values with a fixed 3-speed map (2 = "medium"),
+// but a 2-speed unit reports "high" as value 2. Recompute fan_mode here from
+// the add-on-selected fan_mode_num so it matches the dynamic fan_modes list
+// advertised by microair_create_climate.js (otherwise HA discards the update
+// as an unknown fan mode and the UI stays stuck on the previous speed).
+const FAN_MODE_MAP =
+  currentMax >= 3
+    ? { 0: "auto", 1: "low", 2: "medium", 3: "high", 128: "auto" } // 3-speed
+    : { 0: "auto", 1: "low", 2: "high", 128: "auto" }; // 2-speed
+if (typeof payload.fan_mode_num === "number") {
+  payload.fan_mode = FAN_MODE_MAP[payload.fan_mode_num] || "auto";
+}
+
 // --- 2. Send original payload to per-zone HA state topic (stringified) ---
 const haStateMsg = {
   topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,
