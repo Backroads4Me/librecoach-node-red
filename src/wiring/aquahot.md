@@ -111,8 +111,11 @@ flowchart LR
 ```
 
 #### Msg contract
-Republishes AquaHot zone pump states from flow context every 60 seconds.
+Republishes AquaHot zone pump states from global file context every 60 seconds.
 This keeps MQTT retain state fresh if Node-RED restarts after the broker.
+Global (not flow) context is required: the states are written by
+status_waterheater.js on the Status routing tab, and flow context does
+not cross tabs.
 
 #### Upstream
 - Every 60s (inject) — this tab

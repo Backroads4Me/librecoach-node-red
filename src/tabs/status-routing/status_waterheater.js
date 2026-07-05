@@ -263,7 +263,12 @@ if (dgn_name === "WATERHEATER_STATUS") {
   }
 
   // AquaHot 125D — diesel burner switch (controlled via 1FE98 toggle)
+  // Physical state is cached in global file context so
+  // encode_waterheater_command_2 (HA commands tab) can compare desired vs.
+  // actual state before toggling — 1FE98 is a toggle, not a set/clear, so
+  // toggling blind can reverse a command that raced with the physical panel.
   if (typeof p.burner_active === "boolean") {
+    global.set("aquahot_burner_active", p.burner_active, "file");
     publishSwitch("aquahot_diesel_burner", onOff(p.burner_active), () =>
       switchConfig(
         "aquahot_diesel_burner",
@@ -276,6 +281,7 @@ if (dgn_name === "WATERHEATER_STATUS") {
 
   // AquaHot 125D — electric element switch (controlled via 1FE98 toggle)
   if (typeof p.ac_element_active === "boolean") {
+    global.set("aquahot_electric_active", p.ac_element_active, "file");
     publishSwitch("aquahot_electric_element", onOff(p.ac_element_active), () =>
       switchConfig(
         "aquahot_electric_element",
@@ -418,7 +424,9 @@ else if (dgn_name === "CIRCULATION_PUMP_STATUS") {
         "mdi:pump",
       ),
     );
-    flow.set("aquahot_pump_front_state", onOff(p.front_pump_running));
+    // Global file context: read by republish_aquahot_pump_state.js on the
+    // Aqua-Hot tab, so flow context would not be visible there.
+    global.set("aquahot_pump_front_state", onOff(p.front_pump_running), "file");
   }
 
   if (typeof p.floor_pump_running === "boolean") {
@@ -430,7 +438,7 @@ else if (dgn_name === "CIRCULATION_PUMP_STATUS") {
         "mdi:pump",
       ),
     );
-    flow.set("aquahot_pump_floor_state", onOff(p.floor_pump_running));
+    global.set("aquahot_pump_floor_state", onOff(p.floor_pump_running), "file");
   }
 }
 

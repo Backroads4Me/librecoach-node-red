@@ -42,16 +42,37 @@ function sendFF2F(cmdType, isOn) {
   node.send({ topic: "can/send", payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}` });
 }
 
+// 1FE98 burner/electric commands are TOGGLES, not set/clear. The AquaHot's
+// physical state (cached from WATERHEATER_STATUS 1FFF7 by status_waterheater.js
+// on the Status routing tab, via global file context — flow context does not
+// cross tabs) must differ from the desired command before toggling; toggling
+// blind can reverse a command that raced with the physical panel.
+function toggleIfNeeded(stateKey, byte1, label) {
+  const desiredOn = command === "ON";
+  const currentOn = global.get(stateKey, "file");
+
+  if (currentOn === desiredOn) {
+    node.status({ fill: "grey", shape: "dot", text: `${label} already ${command}` });
+    return;
+  }
+
+  if (currentOn === undefined) {
+    node.warn(`[encode_waterheater_command_2] ${label}: no known physical state yet, sending toggle anyway`);
+  }
+
+  send1FE98(byte1, 0xFF);
+  // Optimistically assume the toggle lands so a rapid second command doesn't
+  // re-toggle before the next status frame; the next 1FFF7 corrects it.
+  global.set(stateKey, desiredOn, "file");
+  node.status({ fill: "blue", shape: "dot", text: `${label} toggle -> ${command}` });
+}
+
 switch (entityId) {
   case "aquahot_diesel_burner":
-    // Toggle semantics — send toggle regardless of ON/OFF command
-    send1FE98(0xF6, 0xFF);
-    node.status({ fill: "blue", shape: "dot", text: `Diesel burner toggle (${command})` });
+    toggleIfNeeded("aquahot_burner_active", 0xF6, "Diesel burner");
     break;
   case "aquahot_electric_element":
-    // Toggle semantics
-    send1FE98(0x6F, 0xFF);
-    node.status({ fill: "blue", shape: "dot", text: `Electric element toggle (${command})` });
+    toggleIfNeeded("aquahot_electric_active", 0x6F, "Electric element");
     break;
   case "aquahot_quiet_mode":
     sendFF2F(0x07, command === "ON");
