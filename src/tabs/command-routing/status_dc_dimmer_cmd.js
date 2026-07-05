@@ -95,38 +95,58 @@ if (typeof levelRaw === "number" && levelRaw <= 200) {
 
 // --- Entity identifiers — switch_N (same as STATUS_3 path) ---
 const entityId = `switch_${instance}`;
+const entityName = `Switch ${instance}`;
 const stateTopic = `homeassistant/light/${entityId}/state`;
 const commandTopic = `homeassistant/light/${entityId}/set`;
 
 const messages = [];
 
-// --- Self-creating discovery ---
 // Capability is persisted in the FILE store (shared key with the status path,
-// status_dc_dimmer_3.js) so this block runs only on a genuine capability change
+// status_dc_dimmer_3.js) so discovery runs only on a genuine capability change
 // rather than on every restart, and so the two paths never fight over switch_N.
-// Dimmability is monotonic, so we never downgrade brightness -> onoff. HA can't
-// hot-swap supported_color_modes, so a change requires delete-then-recreate.
 const PUBLISHED_KEY = "dcDimmerPublishedMode";
 const publishedModes = global.get(PUBLISHED_KEY, "file") || {};
 const priorMode = publishedModes[instance];
+
+// ============================================================================
+// SHARED BLOCK: light discovery publish (delete-then-recreate on mode change)
+// Identical copies in: status_dc_dimmer_3.js (status-routing),
+//   status_dc_dimmer_cmd.js (command-routing), status_dc_driver.js
+//   (status-routing) — edit all three together, keep byte-identical.
+//
+// HA won't hot-swap supported_color_modes on an existing entity (a later
+// discovery claiming ["brightness"] is silently ignored), so an
+// onoff -> brightness change requires delete-then-recreate. Dimmability is
+// monotonic — a light only ever proves it CAN dim, absence of a dim reading
+// is not proof it can't — so we never downgrade brightness -> onoff.
+//
+// Inputs:  entityId, entityName, stateTopic, commandTopic, isDimmable (let),
+//          priorMode, messages[]
+// Outputs: sets desiredMode (persist it after the block on change); may
+//          upgrade isDimmable; pushes discovery messages onto messages[]
+// ============================================================================
 const desiredMode =
   isDimmable || priorMode === "brightness" ? "brightness" : "onoff";
 
-// Keep isDimmable aligned with the capability we will actually publish.
+// Keep isDimmable aligned with the capability we will actually publish so the
+// state payload advertises the matching color_mode.
 if (desiredMode === "brightness") {
   isDimmable = true;
 }
 
 if (priorMode !== desiredMode) {
-  // Remove any existing retained config first so HA recreates the entity fresh
-  // with the new capability. Harmless no-op if nothing is retained yet.
+  // Remove any existing retained config first, then republish so HA recreates
+  // the entity fresh with the new capability. Unconditional within this block:
+  // it heals an already-registered entity stuck on the wrong mode (priorMode
+  // may be undefined on the first deploy even though HA has a stale entity).
+  // Removing a non-existent/unretained config is a harmless no-op.
   messages.push({
     topic: `homeassistant/light/${entityId}/config`,
     payload: "",
   });
 
   const config = {
-    name: `Switch ${instance}`,
+    name: entityName,
     unique_id: entityId,
     default_entity_id: `light.${entityId}`,
     icon: "mdi:light-recessed",
@@ -166,7 +186,10 @@ if (priorMode !== desiredMode) {
     topic: `homeassistant/light/${entityId}/config`,
     payload: config,
   });
+}
+// ==================== END SHARED BLOCK: light discovery ====================
 
+if (priorMode !== desiredMode) {
   publishedModes[instance] = desiredMode;
   global.set(PUBLISHED_KEY, publishedModes, "file");
 }
@@ -192,9 +215,7 @@ if (haStatus === "ON") {
 
 messages.push({
   topic: stateTopic,
-  payload: JSON.stringify(stateObj),
+  payload: stateObj,
 });
-
-if (messages.length === 0) return null;
 
 return [messages];

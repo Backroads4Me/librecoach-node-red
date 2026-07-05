@@ -22,7 +22,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   x: 420
-  "y": 112
+  "y": 100
   wires: []
 - id: 31e6105322d72319
   type: debug
@@ -630,41 +630,75 @@
   type: function
   z: b3d80c5dc947ec88
   name: encode_dc_dimmer_command_2
-  func: |
+  func: >
     // Encodes DC_DIMMER_COMMAND_2 messages (1FEDB)
 
+
     // --- Configuration ---
+
     const CMD_SET_BRIGHTNESS = 0x00;
+
     const CMD_ON = 0x01;
+
     const CMD_OFF = 0x03;
+
     const CMD_STOP = 0x04;
+
     const CMD_RAMP_UP_DOWN = 0x15;
+
     const CMD_UNLOCK = 0x22;
+
     const LEVEL_FULL_ON = 200;
+
     const NON_GROUP = 0xff;
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "1FEDB";
 
+
     // --- Input Validation ---
+
     const instance = msg.instance;
+
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
       node.warn(`[encode_dc_dimmer_command_2] Invalid instance: ${instance}`);
       return null;
     }
 
+
     // --- Parse Command ---
-    // All lights use JSON schema: msg.payload is always an object
-    const command = msg.payload.state;
-    const brightness = msg.payload.brightness;
+
+    // All lights use JSON schema, so msg.payload is normally an object. Fall
+    back
+
+    // to msg.command (always set by decode_ha_command) for plain-string
+    payloads,
+
+    // so a string "OFF" is never misread as a toggle-on.
+
+    const isJsonPayload = msg.payload !== null && typeof msg.payload ===
+    "object";
+
+    const command = isJsonPayload ? msg.payload.state : msg.command;
+
+    const brightness = isJsonPayload ? msg.payload.brightness : undefined;
+
 
     // Check if this is a dimmable light
+
     const dimmableLights = global.get("dimmableLights", "file") || [];
+
     const isDimmable = dimmableLights.includes(instance);
 
+
     // --- Command Mapping ---
+
     let commandCode, desiredLevel;
+
 
     if (command === "OFF") {
       commandCode = CMD_OFF;
@@ -685,7 +719,9 @@
       desiredLevel = LEVEL_FULL_ON;
     }
 
+
     // --- Helper Functions ---
+
     function buildCanMessage(instance, desiredLevel, commandCode) {
       const dataBytes = new Array(8).fill(0xff);
       dataBytes[0] = instance; // Byte 0: Instance
@@ -708,26 +744,36 @@
       return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;
     }
 
+
     // --- Store last brightness for dimmable recall ---
+
     if (brightness !== undefined && brightness > 0) {
       global.set("dimmerBrightness_" + instance, brightness, "file");
     }
 
+
     // --- Build and Send ---
+
     // Message 1: UNLOCK
+
     node.send({
       topic: "can/send",
       payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),
     });
 
+
     // Message 2: Command
+
     node.send({
       topic: "can/send",
       payload: buildCanMessage(instance, desiredLevel, commandCode),
     });
 
+
     // Messages 3-4: Save brightness to dimmer memory (dimmable lights only)
+
     // After SET_BRIGHTNESS, send Ramp Up/Down + Stop to trigger memory save.
+
     if (isDimmable && commandCode === CMD_SET_BRIGHTNESS && desiredLevel > 0) {
       node.send({
         topic: "can/send",
@@ -738,6 +784,7 @@
         payload: buildCanMessage(instance, 0, CMD_STOP),
       });
     }
+
 
     return null;
   outputs: 1
@@ -1154,35 +1201,62 @@
   type: function
   z: b3d80c5dc947ec88
   name: encode_ac_load_command
-  func: |
+  func: >
     // Encodes AC_LOAD_COMMAND messages (DGN 1FFBEh, §6.22.4)
 
+
     const CMD_SET_LEVEL = 0x00;
+
     const CMD_ON = 0x01;
+
     const CMD_OFF = 0x03;
+
     const CMD_STOP = 0x04;
+
     const CMD_UNLOCK = 0x22;
+
     const LEVEL_FULL_ON = 200;
+
     const NON_GROUP = 0xff;
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const DGN = "1FFBE";
 
+
     const instance = msg.instance;
+
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
       node.warn(`[encode_ac_load_command] Invalid instance: ${instance}`);
       return null;
     }
 
-    // Parse command — JSON schema: msg.payload is always an object
-    const command = msg.payload.state;
-    const brightness = msg.payload.brightness;
+
+    // Parse command — JSON schema: msg.payload is normally an object. Fall back
+
+    // to msg.command (always set by decode_ha_command) for plain-string
+    payloads,
+
+    // so a string "OFF" is never misread as a toggle-on.
+
+    const isJsonPayload = msg.payload !== null && typeof msg.payload ===
+    "object";
+
+    const command = isJsonPayload ? msg.payload.state : msg.command;
+
+    const brightness = isJsonPayload ? msg.payload.brightness : undefined;
+
 
     const dimmableAcLoads = global.get("dimmableAcLoads", "file") || [];
+
     const isDimmable = dimmableAcLoads.includes(instance);
 
+
     let commandCode, desiredLevel;
+
 
     if (command === "OFF") {
       commandCode = CMD_OFF;
@@ -1199,6 +1273,7 @@
       commandCode = CMD_ON;
       desiredLevel = LEVEL_FULL_ON;
     }
+
 
     function buildCanMessage(inst, level, cmd) {
       const dataBytes = new Array(8).fill(0xff);
@@ -1222,22 +1297,29 @@
       return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;
     }
 
+
     // Store last brightness for dimmable recall
+
     if (brightness !== undefined && brightness > 0) {
       global.set("acLoadBrightness_" + instance, brightness, "file");
     }
 
+
     // Message 1: UNLOCK
+
     node.send({
       topic: "can/send",
       payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),
     });
 
+
     // Message 2: Command
+
     node.send({
       topic: "can/send",
       payload: buildCanMessage(instance, desiredLevel, commandCode),
     });
+
 
     return null;
   outputs: 1
@@ -1763,39 +1845,69 @@
   type: function
   z: b3d80c5dc947ec88
   name: encode_dc_load_command
-  func: |
+  func: >
     // Encodes DC_LOAD_COMMAND messages (DGN 1FFBCh, §6.23.4)
 
+
     // --- Configuration ---
+
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
+
     const PRIORITY = 6;
+
     const CMD_SET_LEVEL = 0x00;
+
     const CMD_ON = 0x01;
+
     const CMD_OFF = 0x03;
+
     const CMD_STOP = 0x04;
+
     const CMD_UNLOCK = 0x22;
+
     const LEVEL_FULL_ON = 200;
+
     const NON_GROUP = 0xff;
+
     const DGN = "1FFBC";
 
+
     // --- Input Validation ---
+
     const instance = msg.instance;
+
 
     if (typeof instance !== "number" || instance < 1 || instance > 250) {
         node.warn(`[encode_dc_load_command] Invalid instance: ${instance}`);
         return null;
     }
 
+
     // --- Parse Command ---
-    // JSON schema: payload is always an object
-    const command = msg.payload.state;
-    const brightness = msg.payload.brightness;
+
+    // JSON schema: payload is normally an object. Fall back to msg.command
+
+    // (always set by decode_ha_command) for plain-string payloads, so a string
+
+    // "OFF" is never misread as a toggle-on.
+
+    const isJsonPayload = msg.payload !== null && typeof msg.payload ===
+    "object";
+
+    const command = isJsonPayload ? msg.payload.state : msg.command;
+
+    const brightness = isJsonPayload ? msg.payload.brightness : undefined;
+
 
     const dimmableLights = global.get("dimmableLights", "file") || [];
+
     const isDimmable = dimmableLights.includes(instance);
 
+
     // --- Command Mapping ---
+
     let commandCode, desiredLevel;
+
 
     if (command === "OFF") {
         commandCode = CMD_OFF;
@@ -1813,7 +1925,9 @@
         desiredLevel = LEVEL_FULL_ON;
     }
 
+
     // --- Helper Functions ---
+
     function buildCanMessage(instance, level, cmd) {
         const dataBytes = new Array(8).fill(0xff);
         dataBytes[0] = instance; // Byte 0: Instance
@@ -1836,23 +1950,31 @@
         return `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`;
     }
 
+
     // --- Store last brightness for dimmable recall ---
+
     if (brightness !== undefined && brightness > 0) {
         global.set("dimmerBrightness_" + instance, brightness, "file");
     }
 
+
     // --- Build and Send ---
+
     // Message 1: UNLOCK
+
     node.send({
         topic: "can/send",
         payload: buildCanMessage(instance, desiredLevel, CMD_UNLOCK),
     });
 
+
     // Message 2: Command
+
     node.send({
         topic: "can/send",
         payload: buildCanMessage(instance, desiredLevel, commandCode),
     });
+
 
     return null;
   outputs: 1

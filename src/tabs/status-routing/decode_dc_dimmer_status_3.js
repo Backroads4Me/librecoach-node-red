@@ -338,8 +338,13 @@ function decodeDCDimmerMessage(dgn, data) {
     }
   }
 
-  // Validate instance - DC Dimmer valid instances are 1-250
-  if (result.instance < 1 || result.instance > 250) {
+  // Validate instance - DC Dimmer valid instances are 1-250. A missing
+  // instance (short frame, no fields decoded) is also invalid.
+  if (
+    typeof result.instance !== "number" ||
+    result.instance < 1 ||
+    result.instance > 250
+  ) {
     node.warn(
       `Invalid DC dimmer instance: ${result.instance} (${result.instance_name}) - message ignored`,
     );

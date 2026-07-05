@@ -2,7 +2,11 @@
 
 const payload = msg.payload;
 
-if (!payload || !payload.dgn_name.startsWith("DC_COMPONENT_DRIVER_STATUS_")) {
+if (
+  !payload ||
+  !payload.dgn_name ||
+  !payload.dgn_name.startsWith("DC_COMPONENT_DRIVER_STATUS_")
+) {
   return null;
 }
 
@@ -51,7 +55,12 @@ switch (payload.dgn_name) {
     break;
   }
   case "DC_COMPONENT_DRIVER_STATUS_6": {
-    out.pwm_duty_cycle = parseInt(bytePairs[3], 16) * 0.5;
+    // 0-200 raw = 0-100% (0.5% per step); 201-255 are RV-C special values
+    // (error/reserved/not available) — leave pwm_duty_cycle unset for those.
+    const pwmRaw = parseInt(bytePairs[3], 16);
+    if (pwmRaw <= 200) {
+      out.pwm_duty_cycle = pwmRaw * 0.5;
+    }
     const b4 = parseInt(bytePairs[4], 16);
     out.direction = b4 & 0x03;
     out.lock_status = (b4 >> 2) & 0x03;

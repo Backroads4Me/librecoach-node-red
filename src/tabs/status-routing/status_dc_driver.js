@@ -54,49 +54,76 @@ if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_1") {
 
 if (payload.dgn_name === "DC_COMPONENT_DRIVER_STATUS_6") {
   driver.has_status6 = true;
-  driver.brightness = Math.round(Math.min(100, payload.pwm_duty_cycle)); // 0-100%
+  // pwm_duty_cycle is absent when the decoder saw an RV-C special value
+  // (error/not available) — keep the previous brightness in that case.
+  if (typeof payload.pwm_duty_cycle === "number") {
+    driver.brightness = Math.round(Math.min(100, payload.pwm_duty_cycle)); // 0-100%
 
-  if (payload.pwm_duty_cycle > 0 && payload.pwm_duty_cycle < 100) {
-    driver.is_dimmable = true;
+    if (payload.pwm_duty_cycle > 0 && payload.pwm_duty_cycle < 100) {
+      driver.is_dimmable = true;
+    }
   }
 }
 
 const messages = [];
 
 const entityId = `switch_${driver_index}`;
+const entityName = `Switch ${driver_index}`;
 const stateTopic = `homeassistant/light/${entityId}/state`;
 const commandTopic = `homeassistant/light/${entityId}/set`;
 
-// Self-creating discovery. HA won't hot-swap supported_color_modes on an
-// existing entity, so an onoff -> brightness change requires delete-then-recreate.
-// Dimmability is monotonic (only a fractional PWM proves a driver can dim; a
-// full-on/off reading does not), so we never downgrade brightness -> onoff —
-// this stops a plain on/off status from re-stickng a dimmable entity to a toggle.
-if (driver.publishedMode === "brightness") {
-  driver.is_dimmable = true;
-}
-const desiredMode = driver.is_dimmable ? "brightness" : "onoff";
+// Capability is persisted per driver in knownDcDrivers (file store, saved at
+// the end of this node) so discovery runs only on a genuine capability change,
+// never on every restart. Only a fractional PWM proves a driver can dim; a
+// full-on/off reading does not.
+const priorMode = driver.publishedMode;
+let isDimmable = driver.is_dimmable;
 
-// Create/update entity if the published mode is stale and we have either status
-if (
-  driver.publishedMode !== desiredMode &&
-  (driver.has_status1 || driver.has_status6)
-) {
-  // Remove any existing retained config first so HA recreates the entity fresh
-  // with the new capability. Harmless no-op if nothing is retained yet.
+// ============================================================================
+// SHARED BLOCK: light discovery publish (delete-then-recreate on mode change)
+// Identical copies in: status_dc_dimmer_3.js (status-routing),
+//   status_dc_dimmer_cmd.js (command-routing), status_dc_driver.js
+//   (status-routing) — edit all three together, keep byte-identical.
+//
+// HA won't hot-swap supported_color_modes on an existing entity (a later
+// discovery claiming ["brightness"] is silently ignored), so an
+// onoff -> brightness change requires delete-then-recreate. Dimmability is
+// monotonic — a light only ever proves it CAN dim, absence of a dim reading
+// is not proof it can't — so we never downgrade brightness -> onoff.
+//
+// Inputs:  entityId, entityName, stateTopic, commandTopic, isDimmable (let),
+//          priorMode, messages[]
+// Outputs: sets desiredMode (persist it after the block on change); may
+//          upgrade isDimmable; pushes discovery messages onto messages[]
+// ============================================================================
+const desiredMode =
+  isDimmable || priorMode === "brightness" ? "brightness" : "onoff";
+
+// Keep isDimmable aligned with the capability we will actually publish so the
+// state payload advertises the matching color_mode.
+if (desiredMode === "brightness") {
+  isDimmable = true;
+}
+
+if (priorMode !== desiredMode) {
+  // Remove any existing retained config first, then republish so HA recreates
+  // the entity fresh with the new capability. Unconditional within this block:
+  // it heals an already-registered entity stuck on the wrong mode (priorMode
+  // may be undefined on the first deploy even though HA has a stale entity).
+  // Removing a non-existent/unretained config is a harmless no-op.
   messages.push({
     topic: `homeassistant/light/${entityId}/config`,
     payload: "",
   });
 
-  let config = {
-    name: `Switch ${driver_index}`,
+  const config = {
+    name: entityName,
     unique_id: entityId,
     default_entity_id: `light.${entityId}`,
     icon: "mdi:light-recessed",
     schema: "json",
-    state_topic: stateTopic,
     command_topic: commandTopic,
+    state_topic: stateTopic,
     availability_mode: "all",
     availability: [
       {
@@ -118,7 +145,7 @@ if (
     },
   };
 
-  if (driver.is_dimmable) {
+  if (isDimmable) {
     config.brightness = true;
     config.brightness_scale = 100;
     config.supported_color_modes = ["brightness"];
@@ -130,12 +157,16 @@ if (
     topic: `homeassistant/light/${entityId}/config`,
     payload: config,
   });
-
-  driver.publishedMode = desiredMode;
 }
+// ==================== END SHARED BLOCK: light discovery ====================
 
-// Publish state updates
-if (driver.publishedMode) {
+driver.is_dimmable = isDimmable;
+driver.publishedMode = desiredMode;
+
+// Publish state updates — but only once STATUS_1 has told us on/off.
+// A STATUS_6-only driver has brightness but unknown state; publishing
+// the "OFF" default would show a lit light as off in HA.
+if (driver.publishedMode && driver.has_status1) {
   let stateOut = {
     state: driver.state || "OFF",
   };

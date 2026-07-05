@@ -22,9 +22,12 @@ if (typeof instance !== "number" || instance < 1 || instance > 250) {
 }
 
 // --- Parse Command ---
-// All lights use JSON schema: msg.payload is always an object
-const command = msg.payload.state;
-const brightness = msg.payload.brightness;
+// All lights use JSON schema, so msg.payload is normally an object. Fall back
+// to msg.command (always set by decode_ha_command) for plain-string payloads,
+// so a string "OFF" is never misread as a toggle-on.
+const isJsonPayload = msg.payload !== null && typeof msg.payload === "object";
+const command = isJsonPayload ? msg.payload.state : msg.command;
+const brightness = isJsonPayload ? msg.payload.brightness : undefined;
 
 // Check if this is a dimmable light
 const dimmableLights = global.get("dimmableLights", "file") || [];
