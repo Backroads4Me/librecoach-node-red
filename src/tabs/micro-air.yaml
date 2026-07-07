@@ -12,7 +12,7 @@
   links:
     - cdc4754f4c43430d
   x: 230
-  "y": 480
+  "y": 460
   g: fe7cf55a75689b88
   l: true
   wires:
@@ -31,7 +31,7 @@
   finalize: ""
   libs: []
   x: 1400
-  "y": 600
+  "y": 580
   g: cd4c55cd4f675905
   wires:
     - []
@@ -111,7 +111,7 @@
   finalize: ""
   libs: []
   x: 630
-  "y": 320
+  "y": 300
   g: fe7cf55a75689b88
   wires:
     - - cdc4754f4c43430d
@@ -132,7 +132,7 @@
   payload: ""
   payloadType: date
   x: 1150
-  "y": 600
+  "y": 580
   g: cd4c55cd4f675905
   wires:
     - - 205af5b7fa62d8ac
@@ -144,7 +144,7 @@
   links:
     - 74329f13cbbc528a
   x: 1130
-  "y": 740
+  "y": 720
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -156,7 +156,7 @@
   links:
     - f658418a7b9b4857
   x: 910
-  "y": 340
+  "y": 320
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -212,7 +212,7 @@
   finalize: ""
   libs: []
   x: 630
-  "y": 580
+  "y": 560
   g: fe7cf55a75689b88
   wires:
     - - ba611b1fa95bf468
@@ -272,7 +272,7 @@
   finalize: ""
   libs: []
   x: 1130
-  "y": 440
+  "y": 420
   g: fe7cf55a75689b88
   wires:
     - - 950e9ce654224317
@@ -284,7 +284,7 @@
   links:
     - f658418a7b9b4857
   x: 1390
-  "y": 420
+  "y": 400
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -295,7 +295,7 @@
   links:
     - 1e244bad0304bb74
   x: 1140
-  "y": 540
+  "y": 520
   g: cd4c55cd4f675905
   l: true
   wires:
@@ -315,7 +315,7 @@
   repair: false
   outputs: 2
   x: 350
-  "y": 720
+  "y": 700
   g: fe7cf55a75689b88
   wires:
     - - e1cc8c52948f9b2a
@@ -351,6 +351,9 @@
     // --- Cache zone state for command encoding ---
     const safeMac = mac.replace(/:/g, "_");
     global.set(`microair_${safeMac}_zone_${zone}`, payload, "file");
+    // Also refresh the memory store so polled state supersedes any optimistic
+    // state written there by microair_optimistic_update.js
+    global.set(`microair_${safeMac}_zone_${zone}`, payload);
 
     // --- Persist last-used heat mode so it survives off/on cycles ---
     const HEAT_MODES = [3, 4, 5, 7, 12];
@@ -377,12 +380,13 @@
 
     // --- Remap fan_mode using the canonical protocol map ---
     // Recompute fan_mode from the add-on-selected fan_mode_num so the label
-    // always matches the fixed fan_modes list advertised by
+    // always matches the fan_modes list advertised by
     // microair_create_climate.js (otherwise HA discards the update as an
     // unknown fan mode and the UI stays stuck on the previous speed).
+    // 0 = Off (thermostat panel label; fan-only and furnace modes).
     // 2 = Manual High (not medium); 3 = top speed on 3-speed units.
     const FAN_MODE_MAP = {
-      0: "auto",
+      0: "off",
       1: "low",
       2: "high",
       3: "high",
@@ -409,7 +413,7 @@
   finalize: ""
   libs: []
   x: 630
-  "y": 420
+  "y": 400
   g: fe7cf55a75689b88
   wires:
     - - 599ffbccfb7cd415
@@ -422,7 +426,7 @@
   links:
     - f658418a7b9b4857
   x: 1130
-  "y": 700
+  "y": 680
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -495,7 +499,7 @@
   finalize: ""
   libs: []
   x: 880
-  "y": 420
+  "y": 400
   g: fe7cf55a75689b88
   wires:
     - - c92f3be74ab20d69
@@ -507,7 +511,7 @@
   links:
     - 88e5fa035bedb48c
   x: 230
-  "y": 320
+  "y": 300
   g: fe7cf55a75689b88
   l: true
   wires:
@@ -603,12 +607,25 @@
     }
 
 
-    // --- Fixed protocol-confirmed fan modes (not derived from observed state)
-    ---
+    // --- Static superset of fan modes ---
 
-    // Gas/furnace fan is autonomous; decode/encode force it to auto.
+    // Protocol values: 0=off, 1=low, 2=high, 65/66=cycled, 128=auto.
 
-    const fanModes = ["auto", "low", "high", "Cycled Low", "Cycled High"];
+    // Per-mode validity ("auto" invalid in fan-only/furnace, "off" invalid in
+
+    // compressor modes) is enforced by microair_encode_command.js, which
+    reverts
+
+    // invalid picks. A mode-dependent list was tried and abandoned: HA's
+    in-place
+
+    // discovery updates race the state stream, leaving stale fan labels stuck
+    in
+
+    // the UI after HVAC mode changes.
+
+    const fanModes = ["auto", "off", "low", "high", "Cycled Low", "Cycled
+    High"];
 
 
     // --- Determine heat type presets from MAV ---
@@ -689,12 +706,12 @@
       // Heat type presets (only included when multiple heat sources available)
       ...(presetModes.length > 1
         ? {
-          preset_mode_command_topic: presetCommand,
-          preset_mode_state_topic: stateTopic,
-          preset_mode_value_template:
-            "{{ value_json.heat_source | default('none') }}",
-          preset_modes: presetModes,
-        }
+            preset_mode_command_topic: presetCommand,
+            preset_mode_state_topic: stateTopic,
+            preset_mode_value_template:
+              "{{ value_json.heat_source | default('none') }}",
+            preset_modes: presetModes,
+          }
         : {}),
 
       // Temperature limits
@@ -839,7 +856,7 @@
   finalize: ""
   libs: []
   x: 1130
-  "y": 400
+  "y": 380
   g: fe7cf55a75689b88
   wires:
     - - 950e9ce654224317
@@ -848,7 +865,7 @@
   z: e3804d2dd0b81928
   name: Rest unique list
   x: 1034
-  "y": 499
+  "y": 479
   g: fe7cf55a75689b88
   style:
     stroke: "#777777"
@@ -865,7 +882,7 @@
   links:
     - 1d411b577497f7ae
   x: 900
-  "y": 300
+  "y": 280
   g: fe7cf55a75689b88
   l: true
   wires: []
@@ -882,7 +899,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 420
+  "y": 400
   g: fe7cf55a75689b88
   wires:
     - - eef231d415615180
@@ -903,7 +920,7 @@
   allowrate: false
   outputs: 1
   x: 420
-  "y": 320
+  "y": 300
   g: fe7cf55a75689b88
   wires:
     - - 2f91d31ed0be26b1
@@ -936,8 +953,14 @@
 
     if (!mac || isNaN(zone)) return null;
 
-    // Read cached zone state for mode-aware encoding
-    const cached = global.get(`microair_${safeMac}_zone_${zone}`, "file") || {};
+    // Read cached zone state for mode-aware encoding.
+    // Prefer the memory store — microair_optimistic_update.js writes there
+    // immediately after a command, so it reflects HA-initiated mode changes
+    // before the next BLE poll refreshes the file store.
+    const cached =
+      global.get(`microair_${safeMac}_zone_${zone}`) ||
+      global.get(`microair_${safeMac}_zone_${zone}`, "file") ||
+      {};
     const currentMode = cached.mode || "off";
     const currentModeNum = cached.mode_num || 0;
 
@@ -953,18 +976,30 @@
       auto: 11,
     };
 
-    // Canonical protocol fan map: 1=Manual Low, 2=Manual High,
+    // Canonical protocol fan map: 0=Off, 1=Manual Low, 2=Manual High,
     // 65=Cycled Low, 66=Cycled High, 128=Auto. "medium" is not a device mode.
+    // "off" is only valid in fan-only and gas/furnace heat; "auto" is only
+    // valid in compressor modes (cool, electric heat, auto).
     const FAN_MAP = {
       auto: 128,
+      off: 0,
       low: 1,
       high: 2,
       "Cycled Low": 65,
       "Cycled High": 66,
     };
 
-    // Gas/furnace heat modes have an autonomous fan
+    // Gas/furnace heat modes: fan supports off/low/high/cycled but not auto
     const GAS_HEAT_MODES = [3, 4, 13];
+
+    // Reject an invalid command by asking microair_optimistic_update to
+    // republish the cached zone state, snapping the HA UI back immediately
+    // instead of waiting for the next BLE poll.
+    function revert() {
+      msg.payload = { Type: "Revert", Changes: { zone: zone } };
+      msg.topic = `librecoach/ble/microair/${mac}/set`;
+      return msg;
+    }
 
     if (topic.endsWith("/mode/set")) {
       // HA sends: "cool", "heat", "off", etc.
@@ -1021,44 +1056,46 @@
       if (val in PRESET_MAP) {
         change.mode = PRESET_MAP[val];
         change.power = 1;
-        // Set the correct fan field for this heat type
-        const fanNum =
-          change.mode === 3 || change.mode === 4
-            ? cached.furnace_fan_mode_num || 128
-            : cached.heat_fan_mode_num || 128;
-        if (change.mode === 3 || change.mode === 4) {
-          change.gasFan = fanNum;
+        // Set the correct fan field for this heat type. Gas/furnace fan has no
+        // auto (valid: 0=off, 1=low, 2=high, 65/66=cycled) — 0 is a legitimate
+        // cached value, so use ?? and never fall back to 128 for gas modes.
+        if (GAS_HEAT_MODES.includes(change.mode)) {
+          change.gasFan = cached.furnace_fan_mode_num ?? 0;
         } else {
-          change.eleFan = fanNum;
+          change.eleFan = cached.heat_fan_mode_num ?? 128;
         }
       } else {
         return null;
       }
     } else if (topic.endsWith("/fan/set")) {
-      // HA sends: "auto", "low", "high", "Cycled Low", "Cycled High"
+      // HA sends: "auto", "off", "low", "high", "Cycled Low", "Cycled High"
       if (!(val in FAN_MAP)) return null;
 
       const fanValue = FAN_MAP[val];
 
       // Use mode-specific fan key based on current HVAC mode
       if (currentMode === "fan_only") {
-        // Fan-only mode doesn't support auto — default to high
-        change.fanOnly = fanValue === 128 ? 2 : fanValue;
+        // Fan-only has no auto (0 = off)
+        if (fanValue === 128) return revert();
+        change.fanOnly = fanValue;
       } else if (currentMode === "cool") {
+        if (fanValue === 0) return revert();
         change.coolFan = fanValue;
       } else if (currentMode === "heat") {
-        // Gas furnace (mode 3,4,13) fan is autonomous: auto passes through,
-        // any other speed request is ignored. Electric heat (5,6,7,12) → eleFan.
         if (GAS_HEAT_MODES.includes(currentModeNum)) {
-          if (fanValue !== 128) return null;
-          change.gasFan = 128;
+          // Gas furnace fan has no auto (0 = off)
+          if (fanValue === 128) return revert();
+          change.gasFan = fanValue;
         } else {
+          if (fanValue === 0) return revert();
           change.eleFan = fanValue;
         }
       } else if (currentMode === "auto") {
+        if (fanValue === 0) return revert();
         change.autoFan = fanValue;
       } else {
         // Fallback: use coolFan
+        if (fanValue === 0) return revert();
         change.coolFan = fanValue;
       }
     } else {
@@ -1083,7 +1120,7 @@
   finalize: ""
   libs: []
   x: 580
-  "y": 720
+  "y": 700
   g: fe7cf55a75689b88
   wires:
     - - e2335c226769f307
@@ -1110,7 +1147,11 @@
 
     const command = msg.payload;
 
-    if (!command || command.Type !== "Change" || !command.Changes)
+    if (
+      !command ||
+      (command.Type !== "Change" && command.Type !== "Revert") ||
+      !command.Changes
+    )
       return [null, msg];
 
     const changes = command.Changes;
@@ -1130,9 +1171,29 @@
     const safeMac = mac.replace(/:/g, "_");
 
 
-    // Read cached state
+    // Read cached state (memory holds the latest optimistic state; the file
 
-    const cached = global.get(`microair_${safeMac}_zone_${zone}`);
+    // store is refreshed by microair_decode_status.js on each BLE poll)
+
+    const cached =
+      global.get(`microair_${safeMac}_zone_${zone}`) ||
+      global.get(`microair_${safeMac}_zone_${zone}`, "file");
+
+    // Revert: microair_encode_command rejected an invalid command — republish
+
+    // the cached state so the HA UI snaps back, and send nothing to the bridge.
+
+    if (command.Type === "Revert") {
+      if (!cached) return [null, null];
+      return [
+        {
+          topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,
+          payload: JSON.stringify(cached),
+        },
+        null,
+      ];
+    }
+
 
     if (!cached) {
       // No cached state yet — can't build optimistic update, just forward command
@@ -1183,6 +1244,10 @@
           changes.mode,
           "file",
         );
+      } else {
+        // Preset (heat_source) only applies in heat mode — drop it so the HA
+        // preset selector reads "none" in every other HVAC mode
+        delete optimistic.heat_source;
       }
     }
 
@@ -1213,10 +1278,12 @@
 
     // Canonical protocol fan map (must match decode/encode/discovery):
 
+    // 0 = Off (fan-only and furnace modes);
+
     // 2 = Manual High (not medium); 3 = top speed on 3-speed units.
 
     const FAN_MODE_MAP = {
-      0: "auto",
+      0: "off",
       1: "low",
       2: "high",
       3: "high",
@@ -1225,19 +1292,26 @@
       128: "auto",
     };
 
+    const GAS_HEAT_MODES = [3, 4, 13];
+
     const mode = optimistic.mode || "off";
 
     let fanNum = 0;
 
-    if (mode === "fan_only") fanNum = optimistic.fan_mode_num || 0;
+    if (mode === "fan_only") fanNum = optimistic.fan_mode_num ?? 0;
 
-    else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num || 0;
+    else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num ?? 0;
 
     else if (mode === "heat")
-      fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;
-    else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num || 0;
+      // 0 is a valid value (off), so pick the field by heat type, not truthiness
+      fanNum = GAS_HEAT_MODES.includes(optimistic.mode_num)
+        ? (optimistic.furnace_fan_mode_num ?? 0)
+        : (optimistic.heat_fan_mode_num ?? 0);
+    else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num ?? 0;
 
     optimistic.fan_mode = FAN_MODE_MAP[fanNum] || "auto";
+
+    optimistic.fan_mode_num = fanNum;
 
 
     // Power state
@@ -1277,7 +1351,7 @@
   finalize: ""
   libs: []
   x: 860
-  "y": 720
+  "y": 700
   g: fe7cf55a75689b88
   wires:
     - - b104a7e82aefcb21
@@ -1294,7 +1368,7 @@
   property: payload
   topi: payload.zone
   x: 430
-  "y": 420
+  "y": 400
   g: fe7cf55a75689b88
   wires:
     - - ae5fb4f1c3213c0a
@@ -1311,7 +1385,7 @@
   rh: 0
   inputs: 0
   x: 200
-  "y": 720
+  "y": 700
   g: fe7cf55a75689b88
   wires:
     - - ab025c05d155f4ee
@@ -1331,15 +1405,16 @@
     - Enter your thermostat bluetooth email and password
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 150
   x: 390
-  "y": 132
+  "y": 120
   wires: []
 - id: fe7cf55a75689b88
   type: group
   z: e3804d2dd0b81928
   name: Micro-Air status
   x: 114
-  "y": 259
+  "y": 239
   style:
     stroke: "#777777"
     label: true
@@ -1379,7 +1454,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 580
+  "y": 560
   g: fe7cf55a75689b88
   wires:
     - - 7605393317b3c471

@@ -127,6 +127,7 @@
     Removes devices from Home Assistant when they're no longer needed.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 78
   x: 350
   "y": 80
   wires: []

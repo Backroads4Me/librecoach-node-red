@@ -7,7 +7,11 @@
 // immediately so the HA UI updates without waiting for the next poll cycle.
 
 const command = msg.payload;
-if (!command || command.Type !== "Change" || !command.Changes)
+if (
+  !command ||
+  (command.Type !== "Change" && command.Type !== "Revert") ||
+  !command.Changes
+)
   return [null, msg];
 
 const changes = command.Changes;
@@ -20,8 +24,25 @@ if (topicParts.length < 5) return [null, msg];
 const mac = topicParts[3];
 const safeMac = mac.replace(/:/g, "_");
 
-// Read cached state
-const cached = global.get(`microair_${safeMac}_zone_${zone}`);
+// Read cached state (memory holds the latest optimistic state; the file
+// store is refreshed by microair_decode_status.js on each BLE poll)
+const cached =
+  global.get(`microair_${safeMac}_zone_${zone}`) ||
+  global.get(`microair_${safeMac}_zone_${zone}`, "file");
+
+// Revert: microair_encode_command rejected an invalid command — republish
+// the cached state so the HA UI snaps back, and send nothing to the bridge.
+if (command.Type === "Revert") {
+  if (!cached) return [null, null];
+  return [
+    {
+      topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,
+      payload: JSON.stringify(cached),
+    },
+    null,
+  ];
+}
+
 if (!cached) {
   // No cached state yet — can't build optimistic update, just forward command
   return [null, msg];
@@ -67,6 +88,10 @@ if ("mode" in changes) {
       changes.mode,
       "file",
     );
+  } else {
+    // Preset (heat_source) only applies in heat mode — drop it so the HA
+    // preset selector reads "none" in every other HVAC mode
+    delete optimistic.heat_source;
   }
 }
 
@@ -84,9 +109,10 @@ if ("eleFan" in changes) optimistic.heat_fan_mode_num = changes.eleFan;
 if ("autoFan" in changes) optimistic.auto_fan_mode_num = changes.autoFan;
 
 // Canonical protocol fan map (must match decode/encode/discovery):
+// 0 = Off (fan-only and furnace modes);
 // 2 = Manual High (not medium); 3 = top speed on 3-speed units.
 const FAN_MODE_MAP = {
-  0: "auto",
+  0: "off",
   1: "low",
   2: "high",
   3: "high",
@@ -94,14 +120,19 @@ const FAN_MODE_MAP = {
   66: "Cycled High",
   128: "auto",
 };
+const GAS_HEAT_MODES = [3, 4, 13];
 const mode = optimistic.mode || "off";
 let fanNum = 0;
-if (mode === "fan_only") fanNum = optimistic.fan_mode_num || 0;
-else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num || 0;
+if (mode === "fan_only") fanNum = optimistic.fan_mode_num ?? 0;
+else if (mode === "cool") fanNum = optimistic.cool_fan_mode_num ?? 0;
 else if (mode === "heat")
-  fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;
-else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num || 0;
+  // 0 is a valid value (off), so pick the field by heat type, not truthiness
+  fanNum = GAS_HEAT_MODES.includes(optimistic.mode_num)
+    ? (optimistic.furnace_fan_mode_num ?? 0)
+    : (optimistic.heat_fan_mode_num ?? 0);
+else if (mode === "auto") fanNum = optimistic.auto_fan_mode_num ?? 0;
 optimistic.fan_mode = FAN_MODE_MAP[fanNum] || "auto";
+optimistic.fan_mode_num = fanNum;
 
 // Power state
 if ("power" in changes) {

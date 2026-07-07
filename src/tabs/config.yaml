@@ -305,8 +305,9 @@
     and sets up the global state that all other flows depend on.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 126
   x: 330
-  "y": 124
+  "y": 100
   wires: []
 - id: 3935564c9401e95d
   type: function

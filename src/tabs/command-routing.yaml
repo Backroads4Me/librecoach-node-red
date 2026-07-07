@@ -173,6 +173,7 @@
     If a panel says "turn on light 17," we now know light 17 exists and is on.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 150
   x: 330
   "y": 120
   wires: []

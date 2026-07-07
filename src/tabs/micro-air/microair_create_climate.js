@@ -55,9 +55,14 @@ if (zoneConfig.MAV) {
   modes = ["off", "cool", "heat", "fan_only", "auto"];
 }
 
-// --- Fixed protocol-confirmed fan modes (not derived from observed state) ---
-// Gas/furnace fan is autonomous; decode/encode force it to auto.
-const fanModes = ["auto", "low", "high", "Cycled Low", "Cycled High"];
+// --- Static superset of fan modes ---
+// Protocol values: 0=off, 1=low, 2=high, 65/66=cycled, 128=auto.
+// Per-mode validity ("auto" invalid in fan-only/furnace, "off" invalid in
+// compressor modes) is enforced by microair_encode_command.js, which reverts
+// invalid picks. A mode-dependent list was tried and abandoned: HA's in-place
+// discovery updates race the state stream, leaving stale fan labels stuck in
+// the UI after HVAC mode changes.
+const fanModes = ["auto", "off", "low", "high", "Cycled Low", "Cycled High"];
 
 // --- Determine heat type presets from MAV ---
 const HEAT_TYPE_PRESETS = {
@@ -128,12 +133,12 @@ const discoveryPayload = {
   // Heat type presets (only included when multiple heat sources available)
   ...(presetModes.length > 1
     ? {
-      preset_mode_command_topic: presetCommand,
-      preset_mode_state_topic: stateTopic,
-      preset_mode_value_template:
-        "{{ value_json.heat_source | default('none') }}",
-      preset_modes: presetModes,
-    }
+        preset_mode_command_topic: presetCommand,
+        preset_mode_state_topic: stateTopic,
+        preset_mode_value_template:
+          "{{ value_json.heat_source | default('none') }}",
+        preset_modes: presetModes,
+      }
     : {}),
 
   // Temperature limits

@@ -24,6 +24,9 @@ if (zone === undefined) return null;
 // --- Cache zone state for command encoding ---
 const safeMac = mac.replace(/:/g, "_");
 global.set(`microair_${safeMac}_zone_${zone}`, payload, "file");
+// Also refresh the memory store so polled state supersedes any optimistic
+// state written there by microair_optimistic_update.js
+global.set(`microair_${safeMac}_zone_${zone}`, payload);
 
 // --- Persist last-used heat mode so it survives off/on cycles ---
 const HEAT_MODES = [3, 4, 5, 7, 12];
@@ -50,12 +53,13 @@ const internalMsg = {
 
 // --- Remap fan_mode using the canonical protocol map ---
 // Recompute fan_mode from the add-on-selected fan_mode_num so the label
-// always matches the fixed fan_modes list advertised by
+// always matches the fan_modes list advertised by
 // microair_create_climate.js (otherwise HA discards the update as an
 // unknown fan mode and the UI stays stuck on the previous speed).
+// 0 = Off (thermostat panel label; fan-only and furnace modes).
 // 2 = Manual High (not medium); 3 = top speed on 3-speed units.
 const FAN_MODE_MAP = {
-  0: "auto",
+  0: "off",
   1: "low",
   2: "high",
   3: "high",

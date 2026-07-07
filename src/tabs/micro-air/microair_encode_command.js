@@ -22,8 +22,14 @@ const zone = parseInt(subParts[zoneIdx + 1]);
 
 if (!mac || isNaN(zone)) return null;
 
-// Read cached zone state for mode-aware encoding
-const cached = global.get(`microair_${safeMac}_zone_${zone}`, "file") || {};
+// Read cached zone state for mode-aware encoding.
+// Prefer the memory store — microair_optimistic_update.js writes there
+// immediately after a command, so it reflects HA-initiated mode changes
+// before the next BLE poll refreshes the file store.
+const cached =
+  global.get(`microair_${safeMac}_zone_${zone}`) ||
+  global.get(`microair_${safeMac}_zone_${zone}`, "file") ||
+  {};
 const currentMode = cached.mode || "off";
 const currentModeNum = cached.mode_num || 0;
 
@@ -39,18 +45,30 @@ const MODE_MAP = {
   auto: 11,
 };
 
-// Canonical protocol fan map: 1=Manual Low, 2=Manual High,
+// Canonical protocol fan map: 0=Off, 1=Manual Low, 2=Manual High,
 // 65=Cycled Low, 66=Cycled High, 128=Auto. "medium" is not a device mode.
+// "off" is only valid in fan-only and gas/furnace heat; "auto" is only
+// valid in compressor modes (cool, electric heat, auto).
 const FAN_MAP = {
   auto: 128,
+  off: 0,
   low: 1,
   high: 2,
   "Cycled Low": 65,
   "Cycled High": 66,
 };
 
-// Gas/furnace heat modes have an autonomous fan
+// Gas/furnace heat modes: fan supports off/low/high/cycled but not auto
 const GAS_HEAT_MODES = [3, 4, 13];
+
+// Reject an invalid command by asking microair_optimistic_update to
+// republish the cached zone state, snapping the HA UI back immediately
+// instead of waiting for the next BLE poll.
+function revert() {
+  msg.payload = { Type: "Revert", Changes: { zone: zone } };
+  msg.topic = `librecoach/ble/microair/${mac}/set`;
+  return msg;
+}
 
 if (topic.endsWith("/mode/set")) {
   // HA sends: "cool", "heat", "off", etc.
@@ -107,44 +125,46 @@ if (topic.endsWith("/mode/set")) {
   if (val in PRESET_MAP) {
     change.mode = PRESET_MAP[val];
     change.power = 1;
-    // Set the correct fan field for this heat type
-    const fanNum =
-      change.mode === 3 || change.mode === 4
-        ? cached.furnace_fan_mode_num || 128
-        : cached.heat_fan_mode_num || 128;
-    if (change.mode === 3 || change.mode === 4) {
-      change.gasFan = fanNum;
+    // Set the correct fan field for this heat type. Gas/furnace fan has no
+    // auto (valid: 0=off, 1=low, 2=high, 65/66=cycled) — 0 is a legitimate
+    // cached value, so use ?? and never fall back to 128 for gas modes.
+    if (GAS_HEAT_MODES.includes(change.mode)) {
+      change.gasFan = cached.furnace_fan_mode_num ?? 0;
     } else {
-      change.eleFan = fanNum;
+      change.eleFan = cached.heat_fan_mode_num ?? 128;
     }
   } else {
     return null;
   }
 } else if (topic.endsWith("/fan/set")) {
-  // HA sends: "auto", "low", "high", "Cycled Low", "Cycled High"
+  // HA sends: "auto", "off", "low", "high", "Cycled Low", "Cycled High"
   if (!(val in FAN_MAP)) return null;
 
   const fanValue = FAN_MAP[val];
 
   // Use mode-specific fan key based on current HVAC mode
   if (currentMode === "fan_only") {
-    // Fan-only mode doesn't support auto — default to high
-    change.fanOnly = fanValue === 128 ? 2 : fanValue;
+    // Fan-only has no auto (0 = off)
+    if (fanValue === 128) return revert();
+    change.fanOnly = fanValue;
   } else if (currentMode === "cool") {
+    if (fanValue === 0) return revert();
     change.coolFan = fanValue;
   } else if (currentMode === "heat") {
-    // Gas furnace (mode 3,4,13) fan is autonomous: auto passes through,
-    // any other speed request is ignored. Electric heat (5,6,7,12) → eleFan.
     if (GAS_HEAT_MODES.includes(currentModeNum)) {
-      if (fanValue !== 128) return null;
-      change.gasFan = 128;
+      // Gas furnace fan has no auto (0 = off)
+      if (fanValue === 128) return revert();
+      change.gasFan = fanValue;
     } else {
+      if (fanValue === 0) return revert();
       change.eleFan = fanValue;
     }
   } else if (currentMode === "auto") {
+    if (fanValue === 0) return revert();
     change.autoFan = fanValue;
   } else {
     // Fallback: use coolFan
+    if (fanValue === 0) return revert();
     change.coolFan = fanValue;
   }
 } else {

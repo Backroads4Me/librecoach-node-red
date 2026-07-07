@@ -21,7 +21,7 @@
   payload: ""
   payloadType: date
   x: 280
-  "y": 720
+  "y": 700
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -38,7 +38,7 @@
   rh: 0
   inputs: 0
   x: 210
-  "y": 860
+  "y": 840
   g: 8aac091f0fffbf22
   wires:
     - - eced66f05a1796cd
@@ -132,7 +132,7 @@
   finalize: ""
   libs: []
   x: 760
-  "y": 1040
+  "y": 1020
   g: 8aac091f0fffbf22
   wires: []
 - id: 19993b80c1009e61
@@ -147,7 +147,7 @@
   finalize: ""
   libs: []
   x: 410
-  "y": 380
+  "y": 360
   g: 8aac091f0fffbf22
   wires:
     - - 89759b3d2d9812c8
@@ -167,7 +167,7 @@
   payload: ""
   payloadType: date
   x: 240
-  "y": 940
+  "y": 920
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f6780b
@@ -178,7 +178,7 @@
   links:
     - 1e244bad0304bb74
   x: 1050
-  "y": 980
+  "y": 960
   g: 3ffa68cfd2195db1
   l: true
   wires:
@@ -196,7 +196,7 @@
   rh: 0
   inputs: 0
   x: 240
-  "y": 1040
+  "y": 1020
   g: 8aac091f0fffbf22
   wires:
     - - 9be2b9ec5c4f51d4
@@ -213,7 +213,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 340
+  "y": 320
   g: 8aac091f0fffbf22
   wires:
     - - 19993b80c1009e61
@@ -285,7 +285,7 @@
   finalize: ""
   libs: []
   x: 830
-  "y": 680
+  "y": 660
   g: 8aac091f0fffbf22
   wires:
     - - bd38c37850a3e832
@@ -295,7 +295,7 @@
   z: 1fde0c4ffb03727e
   name: Rest unique list
   x: 954
-  "y": 939
+  "y": 919
   g: 8aac091f0fffbf22
   style:
     stroke: "#777777"
@@ -316,8 +316,9 @@
     - MQTT enabed on the GX device
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 174
   x: 350
-  "y": 140
+  "y": 120
   wires: []
 - id: 48292ec85eb70ee5
   type: function
@@ -410,7 +411,7 @@
   finalize: ""
   libs: []
   x: 920
-  "y": 440
+  "y": 420
   g: 8aac091f0fffbf22
   wires:
     - - 711d5e8499354c05
@@ -430,7 +431,7 @@
   onceDelay: "0.3"
   topic: ""
   x: 220
-  "y": 580
+  "y": 560
   g: 8aac091f0fffbf22
   wires:
     - - a95d74d20270f69b
@@ -450,7 +451,7 @@
   payload: ""
   payloadType: date
   x: 340
-  "y": 760
+  "y": 740
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -470,7 +471,7 @@
   payload: ""
   payloadType: date
   x: 400
-  "y": 800
+  "y": 780
   g: 8aac091f0fffbf22
   wires:
     - - ea38d37ac8c3ab57
@@ -488,7 +489,7 @@
   expiry: ""
   broker: 68237e1473ec01aa
   x: 1250
-  "y": 380
+  "y": 360
   g: 8aac091f0fffbf22
   wires: []
 - id: 71ac45fb64bf70c9
@@ -500,7 +501,7 @@
     - db3ce2f66f852ca6
     - b1b68ff387e01a3a
   x: 1270
-  "y": 520
+  "y": 500
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -521,7 +522,7 @@
   allowrate: false
   outputs: 1
   x: 580
-  "y": 400
+  "y": 380
   g: 8aac091f0fffbf22
   wires:
     - - 48292ec85eb70ee5
@@ -530,7 +531,7 @@
   z: 1fde0c4ffb03727e
   name: Victron GX device configuration
   x: 114
-  "y": 279
+  "y": 259
   style:
     stroke: "#777777"
     label: true
@@ -579,7 +580,7 @@
   links:
     - 88e5fa035bedb48c
   x: 230
-  "y": 440
+  "y": 420
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -598,7 +599,7 @@
   rh: 0
   inputs: 0
   x: 210
-  "y": 520
+  "y": 500
   g: 8aac091f0fffbf22
   wires:
     - - a95d74d20270f69b
@@ -628,7 +629,7 @@
   finalize: ""
   libs: []
   x: 1310
-  "y": 1040
+  "y": 1020
   g: 3ffa68cfd2195db1
   wires:
     - []
@@ -644,7 +645,7 @@
   property: payload
   topi: topic
   x: 410
-  "y": 320
+  "y": 300
   g: 8aac091f0fffbf22
   wires:
     - - e1032a6a79ae3e4c
@@ -660,7 +661,7 @@
   property: payload
   topi: topic
   x: 450
-  "y": 1040
+  "y": 1020
   g: 8aac091f0fffbf22
   wires:
     - - 1284b5e380db32be
@@ -676,7 +677,7 @@
   property: payload
   topi: topic
   x: 370
-  "y": 520
+  "y": 500
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f67801
@@ -687,7 +688,7 @@
   links:
     - 71ac45fb64bf70c9
   x: 230
-  "y": 1120
+  "y": 1100
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -700,7 +701,7 @@
   links:
     - f658418a7b9b4857
   x: 1290
-  "y": 600
+  "y": 580
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -718,7 +719,7 @@
   expiry: ""
   broker: 68237e1473ec01aa
   x: 1250
-  "y": 740
+  "y": 720
   g: 8aac091f0fffbf22
   wires: []
 - id: ce787dfcc75988be
@@ -737,7 +738,7 @@
   payload: ""
   payloadType: date
   x: 1070
-  "y": 1040
+  "y": 1020
   g: 3ffa68cfd2195db1
   wires:
     - - 9401b2d19494b1c2
@@ -1024,7 +1025,7 @@
   finalize: ""
   libs: []
   x: 560
-  "y": 520
+  "y": 500
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f67804
@@ -1096,7 +1097,7 @@
   finalize: ""
   libs: []
   x: 820
-  "y": 520
+  "y": 500
   g: 8aac091f0fffbf22
   wires:
     - - 71ac45fb64bf70c9
@@ -1677,7 +1678,7 @@
   finalize: ""
   libs: []
   x: 1040
-  "y": 560
+  "y": 540
   g: 8aac091f0fffbf22
   wires:
     - - bd38c37850a3e832
@@ -1830,7 +1831,7 @@
   finalize: ""
   libs: []
   x: 820
-  "y": 600
+  "y": 580
   g: 8aac091f0fffbf22
   wires:
     - - bd38c37850a3e832
@@ -1845,7 +1846,7 @@
   sendError: false
   allProps: false
   x: 490
-  "y": 940
+  "y": 920
   g: 8aac091f0fffbf22
   wires:
     - - d1a2b3c4e5f6780c
@@ -1913,7 +1914,7 @@
   finalize: ""
   libs: []
   x: 750
-  "y": 940
+  "y": 920
   g: 8aac091f0fffbf22
   wires: []
 - id: db3ce2f66f852ca6
@@ -1923,7 +1924,7 @@
   links:
     - 71ac45fb64bf70c9
   x: 230
-  "y": 620
+  "y": 600
   g: 8aac091f0fffbf22
   l: true
   wires:
@@ -1953,7 +1954,7 @@
   finalize: ""
   libs: []
   x: 620
-  "y": 320
+  "y": 300
   g: 8aac091f0fffbf22
   wires: []
 - id: e371075d4dbfc113
@@ -1964,7 +1965,7 @@
   links:
     - f658418a7b9b4857
   x: 1290
-  "y": 440
+  "y": 420
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -1993,7 +1994,7 @@
   finalize: ""
   libs: []
   x: 840
-  "y": 740
+  "y": 720
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
@@ -2094,7 +2095,7 @@
   finalize: ""
   libs: []
   x: 840
-  "y": 860
+  "y": 840
   g: 8aac091f0fffbf22
   wires:
     - - c80ea298a37232a2
@@ -2107,7 +2108,7 @@
   links:
     - f658418a7b9b4857
   x: 1290
-  "y": 860
+  "y": 840
   g: 8aac091f0fffbf22
   l: true
   wires: []
@@ -2127,7 +2128,7 @@
   payload: ""
   payloadType: date
   x: 220
-  "y": 680
+  "y": 660
   g: 8aac091f0fffbf22
   wires:
     - - 36f5f1a727dfd1ca

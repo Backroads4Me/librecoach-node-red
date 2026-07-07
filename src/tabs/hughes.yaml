@@ -18,7 +18,7 @@
   rh: 0
   inputs: 0
   x: 190
-  "y": 280
+  "y": 260
   g: e2a57851c2fe7bca
   wires:
     - - 2a7f019c3d4e5b63
@@ -279,7 +279,7 @@
   finalize: ""
   libs: []
   x: 460
-  "y": 280
+  "y": 260
   g: e2a57851c2fe7bca
   wires:
     - - 3a7f019c3d4e5b64
@@ -297,7 +297,7 @@
   expiry: ""
   broker: 80727e60a251c36c
   x: 730
-  "y": 280
+  "y": 260
   g: e2a57851c2fe7bca
   wires: []
 - id: 4a7f019c3d4e5b65
@@ -313,7 +313,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 360
+  "y": 340
   g: e2a57851c2fe7bca
   wires:
     - - 5a7f019c3d4e5b66
@@ -327,8 +327,9 @@
     Gen 2 also supports relay, neutral, and energy reset.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 126
   x: 300
-  "y": 120
+  "y": 100
   wires: []
 - id: 5a7f019c3d4e5b66
   type: function
@@ -419,7 +420,7 @@
   finalize: ""
   libs: []
   x: 480
-  "y": 360
+  "y": 340
   g: e2a57851c2fe7bca
   wires:
     - - 6a7f019c3d4e5b67
@@ -438,7 +439,7 @@
   expiry: ""
   broker: 80727e60a251c36c
   x: 770
-  "y": 360
+  "y": 340
   g: e2a57851c2fe7bca
   wires: []
 - id: 7a7f019c3d4e5b68
@@ -454,7 +455,7 @@
   rh: 0
   inputs: 0
   x: 200
-  "y": 440
+  "y": 420
   g: e2a57851c2fe7bca
   wires:
     - - 8b7f019c3d4e5b69
@@ -529,7 +530,7 @@
   finalize: ""
   libs: []
   x: 460
-  "y": 440
+  "y": 420
   g: e2a57851c2fe7bca
   wires:
     - - 9a7f019c3d4e5b6a
@@ -547,7 +548,7 @@
   expiry: ""
   broker: 80727e60a251c36c
   x: 760
-  "y": 440
+  "y": 420
   g: e2a57851c2fe7bca
   wires: []
 - id: e2a57851c2fe7bca
@@ -555,7 +556,7 @@
   z: 8a7f019c3d4e5b60
   name: Hughes Power Watchdog
   x: 94
-  "y": 239
+  "y": 219
   style:
     stroke: "#777777"
     label: true

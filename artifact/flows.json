@@ -418,7 +418,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 280,
-    "y": 720,
+    "y": 700,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -440,7 +440,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 210,
-    "y": 860,
+    "y": 840,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -599,7 +599,7 @@
     "finalize": "",
     "libs": [],
     "x": 760,
-    "y": 1040,
+    "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": []
   },
@@ -648,7 +648,7 @@
     "finalize": "",
     "libs": [],
     "x": 410,
-    "y": 380,
+    "y": 360,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -678,7 +678,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 240,
-    "y": 940,
+    "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -700,7 +700,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 190,
-    "y": 280,
+    "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -827,7 +827,7 @@
       "cdc4754f4c43430d"
     ],
     "x": 230,
-    "y": 480,
+    "y": 460,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": [
@@ -884,7 +884,7 @@
     "finalize": "",
     "libs": [],
     "x": 1400,
-    "y": 600,
+    "y": 580,
     "g": "cd4c55cd4f675905",
     "wires": [
       []
@@ -965,7 +965,7 @@
       "1e244bad0304bb74"
     ],
     "x": 1050,
-    "y": 980,
+    "y": 960,
     "g": "3ffa68cfd2195db1",
     "l": true,
     "wires": [
@@ -987,7 +987,7 @@
     "finalize": "",
     "libs": [],
     "x": 460,
-    "y": 280,
+    "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -1068,7 +1068,7 @@
     "finalize": "",
     "libs": [],
     "x": 630,
-    "y": 320,
+    "y": 300,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -1093,7 +1093,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 240,
-    "y": 1040,
+    "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -1115,7 +1115,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 220,
-    "y": 340,
+    "y": 320,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -1131,8 +1131,9 @@
     "content": "# HA Commands\nWhen you tap a button in Home Assistant - turn on a light, open a shade, lock a door -\nthis flow receives that request, figures out what type of device you're controlling\nand translates the command appropriately then broadcast out on your RV devices.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 126,
     "x": 420,
-    "y": 112,
+    "y": 100,
     "wires": []
   },
   {
@@ -1208,7 +1209,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 1150,
-    "y": 600,
+    "y": 580,
     "g": "cd4c55cd4f675905",
     "wires": [
       [
@@ -1229,7 +1230,7 @@
     "finalize": "",
     "libs": [],
     "x": 830,
-    "y": 680,
+    "y": 660,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -1247,8 +1248,9 @@
     "content": "# Config\nSystem configuration and initialization. Loads reference files,\nclaims an address on the CAN bus, stores user option settings,\nand sets up the global state that all other flows depend on.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 126,
     "x": 330,
-    "y": 124,
+    "y": 100,
     "wires": []
   },
   {
@@ -1306,7 +1308,7 @@
     "expiry": "",
     "broker": "80727e60a251c36c",
     "x": 730,
-    "y": 280,
+    "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": []
   },
@@ -1476,7 +1478,7 @@
     "z": "1fde0c4ffb03727e",
     "name": "Rest unique list",
     "x": 954,
-    "y": 939,
+    "y": 919,
     "g": "8aac091f0fffbf22",
     "style": {
       "stroke": "#777777",
@@ -1549,8 +1551,9 @@
     "content": "# Victron\n## For the Victron functionality to work you'll need:\n- A Victron GX device (Cerbo GX, Ekrano GX, Venus GX, etc.)\n- The GX device connected to the same network as LibreCoach\n- GX device LAN network security set to Unsecured\n- MQTT enabed on the GX device",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 174,
     "x": 350,
-    "y": 140,
+    "y": 120,
     "wires": []
   },
   {
@@ -1631,7 +1634,7 @@
     "finalize": "",
     "libs": [],
     "x": 920,
-    "y": 440,
+    "y": 420,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -1729,7 +1732,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 220,
-    "y": 360,
+    "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -1766,8 +1769,9 @@
     "content": "# Hughes Power Watchdog\nEnable Hughes in the LibreCoach add-on configuration.\nGen 1 is monitoring-only;\nGen 2 also supports relay, neutral, and energy reset.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 126,
     "x": 300,
-    "y": 120,
+    "y": 100,
     "wires": []
   },
   {
@@ -1968,7 +1972,7 @@
       "74329f13cbbc528a"
     ],
     "x": 1130,
-    "y": 740,
+    "y": 720,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": []
@@ -2216,7 +2220,7 @@
       "f658418a7b9b4857"
     ],
     "x": 910,
-    "y": 340,
+    "y": 320,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": []
@@ -2234,7 +2238,7 @@
     "finalize": "",
     "libs": [],
     "x": 480,
-    "y": 360,
+    "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -2454,7 +2458,7 @@
     "onceDelay": "0.3",
     "topic": "",
     "x": 220,
-    "y": 580,
+    "y": 560,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -2599,7 +2603,7 @@
     "expiry": "",
     "broker": "80727e60a251c36c",
     "x": 770,
-    "y": 360,
+    "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": []
   },
@@ -2682,7 +2686,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 340,
-    "y": 760,
+    "y": 740,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -2790,7 +2794,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 400,
-    "y": 800,
+    "y": 780,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -2813,7 +2817,7 @@
     "expiry": "",
     "broker": "68237e1473ec01aa",
     "x": 1250,
-    "y": 380,
+    "y": 360,
     "g": "8aac091f0fffbf22",
     "wires": []
   },
@@ -2849,7 +2853,7 @@
       "b1b68ff387e01a3a"
     ],
     "x": 1270,
-    "y": 520,
+    "y": 500,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": []
@@ -2951,7 +2955,7 @@
     "finalize": "",
     "libs": [],
     "x": 630,
-    "y": 580,
+    "y": 560,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -2990,7 +2994,7 @@
     "finalize": "",
     "libs": [],
     "x": 1130,
-    "y": 440,
+    "y": 420,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -3022,8 +3026,9 @@
     "content": "# Aqua-Hot\nAquaHot hydronic heating systems use two different protocols\ndepending on the model year. Older systems use proprietary\nmessages, newer ones use a mix of standard RV-C and proprietary.\nThis flow decodes both variants to report the status of the\ndiesel burner, AC heating elements, engine pre-heat, and zone temperatures.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 174,
     "x": 350,
-    "y": 152,
+    "y": 120,
     "wires": []
   },
   {
@@ -3077,7 +3082,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 200,
-    "y": 440,
+    "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -3092,6 +3097,7 @@
     "content": "# Commands\nYour RV's wall panels send commands to lights over the CAN bus.\nThis flow listens to that traffic to discover lights and infer\ntheir state, even when the lights don't broadcast a status response.\nIf a panel says \"turn on light 17,\" we now know light 17 exists and is on.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 150,
     "x": 330,
     "y": 120,
     "wires": []
@@ -3390,6 +3396,7 @@
     "content": "# Status\nYour RV devices constantly broadcast their status.\nLights report if they're on or off, tanks report their levels,\nthermostats report temperatures.\nThis flow reads those messages, discovers what devices are in your\nRV, creates the appropriate entities in Home Assistant,\nand publishes their status.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 174,
     "x": 320,
     "y": 140,
     "wires": []
@@ -3448,7 +3455,7 @@
     "allowrate": false,
     "outputs": 1,
     "x": 580,
-    "y": 400,
+    "y": 380,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -3611,7 +3618,7 @@
     "z": "1fde0c4ffb03727e",
     "name": "Victron GX device configuration",
     "x": 114,
-    "y": 279,
+    "y": 259,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -3669,7 +3676,7 @@
     "finalize": "",
     "libs": [],
     "x": 460,
-    "y": 440,
+    "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": [
       [
@@ -3806,7 +3813,7 @@
       "88e5fa035bedb48c"
     ],
     "x": 230,
-    "y": 440,
+    "y": 420,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": [
@@ -3830,7 +3837,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 210,
-    "y": 520,
+    "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -3967,7 +3974,7 @@
     "finalize": "",
     "libs": [],
     "x": 1310,
-    "y": 1040,
+    "y": 1020,
     "g": "3ffa68cfd2195db1",
     "wires": [
       []
@@ -3986,7 +3993,7 @@
     "property": "payload",
     "topi": "topic",
     "x": 410,
-    "y": 320,
+    "y": 300,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -4004,7 +4011,7 @@
       "f658418a7b9b4857"
     ],
     "x": 1390,
-    "y": 420,
+    "y": 400,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": []
@@ -4064,7 +4071,7 @@
     "expiry": "",
     "broker": "80727e60a251c36c",
     "x": 760,
-    "y": 440,
+    "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": []
   },
@@ -4081,7 +4088,7 @@
     "property": "payload",
     "topi": "topic",
     "x": 450,
-    "y": 1040,
+    "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -4765,7 +4772,7 @@
       "1e244bad0304bb74"
     ],
     "x": 1140,
-    "y": 540,
+    "y": 520,
     "g": "cd4c55cd4f675905",
     "l": true,
     "wires": [
@@ -4972,7 +4979,7 @@
     "property": "payload",
     "topi": "topic",
     "x": 370,
-    "y": 520,
+    "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -5021,7 +5028,7 @@
     "repair": false,
     "outputs": 2,
     "x": 350,
-    "y": 720,
+    "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -5176,7 +5183,7 @@
     "type": "function",
     "z": "e3804d2dd0b81928",
     "name": "microair_decode_status",
-    "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n\nconst topic = msg.topic;\nif (!topic) return null;\n\n// Drop incoming BLE data if the integration is disabled\nif (global.get(\"microairEnabled\") === false) {\n  return null;\n}\n\nconst parts = topic.split(\"/\");\n// Expecting: librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// --- Cache zone state for command encoding ---\nconst safeMac = mac.replace(/:/g, \"_\");\nglobal.set(`microair_${safeMac}_zone_${zone}`, payload, \"file\");\n\n// --- Persist last-used heat mode so it survives off/on cycles ---\nconst HEAT_MODES = [3, 4, 5, 7, 12];\nif (HEAT_MODES.includes(payload.mode_num)) {\n  global.set(\n    `microair_${safeMac}_zone_${zone}_lastheat`,\n    payload.mode_num,\n    \"file\",\n  );\n}\n\n// --- 1. Send standardized internal message ---\nconst standardizedMsg = {\n  mac: mac,\n  zone: zone,\n  value: payload, // full original payload\n  outdoor_temperature: payload.outdoorTemperature,\n};\n\nconst internalMsg = {\n  topic: `librecoach/microair/${mac}/zone/${zone}`,\n  payload: standardizedMsg,\n};\n\n// --- Remap fan_mode using the canonical protocol map ---\n// Recompute fan_mode from the add-on-selected fan_mode_num so the label\n// always matches the fixed fan_modes list advertised by\n// microair_create_climate.js (otherwise HA discards the update as an\n// unknown fan mode and the UI stays stuck on the previous speed).\n// 2 = Manual High (not medium); 3 = top speed on 3-speed units.\nconst FAN_MODE_MAP = {\n  0: \"auto\",\n  1: \"low\",\n  2: \"high\",\n  3: \"high\",\n  65: \"Cycled Low\",\n  66: \"Cycled High\",\n  128: \"auto\",\n};\nif (typeof payload.fan_mode_num === \"number\") {\n  payload.fan_mode = FAN_MODE_MAP[payload.fan_mode_num] || \"auto\";\n}\n\n// --- 2. Send original payload to per-zone HA state topic (stringified) ---\nconst haStateMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(payload), // <--- critical fix\n};\n\n// Return both messages\nreturn [haStateMsg, internalMsg];\n",
+    "func": "// Decode MicroAir Status\n// Topic: librecoach/ble/microair/{mac}/state\n\nconst topic = msg.topic;\nif (!topic) return null;\n\n// Drop incoming BLE data if the integration is disabled\nif (global.get(\"microairEnabled\") === false) {\n  return null;\n}\n\nconst parts = topic.split(\"/\");\n// Expecting: librecoach/ble/microair/{mac}/state\nif (parts.length < 5) return null;\n\nconst mac = parts[3];\nconst payload = msg.payload;\n\nif (!payload || typeof payload !== \"object\") return null;\n\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\n// --- Cache zone state for command encoding ---\nconst safeMac = mac.replace(/:/g, \"_\");\nglobal.set(`microair_${safeMac}_zone_${zone}`, payload, \"file\");\n// Also refresh the memory store so polled state supersedes any optimistic\n// state written there by microair_optimistic_update.js\nglobal.set(`microair_${safeMac}_zone_${zone}`, payload);\n\n// --- Persist last-used heat mode so it survives off/on cycles ---\nconst HEAT_MODES = [3, 4, 5, 7, 12];\nif (HEAT_MODES.includes(payload.mode_num)) {\n  global.set(\n    `microair_${safeMac}_zone_${zone}_lastheat`,\n    payload.mode_num,\n    \"file\",\n  );\n}\n\n// --- 1. Send standardized internal message ---\nconst standardizedMsg = {\n  mac: mac,\n  zone: zone,\n  value: payload, // full original payload\n  outdoor_temperature: payload.outdoorTemperature,\n};\n\nconst internalMsg = {\n  topic: `librecoach/microair/${mac}/zone/${zone}`,\n  payload: standardizedMsg,\n};\n\n// --- Remap fan_mode using the canonical protocol map ---\n// Recompute fan_mode from the add-on-selected fan_mode_num so the label\n// always matches the fan_modes list advertised by\n// microair_create_climate.js (otherwise HA discards the update as an\n// unknown fan mode and the UI stays stuck on the previous speed).\n// 0 = Off (thermostat panel label; fan-only and furnace modes).\n// 2 = Manual High (not medium); 3 = top speed on 3-speed units.\nconst FAN_MODE_MAP = {\n  0: \"off\",\n  1: \"low\",\n  2: \"high\",\n  3: \"high\",\n  65: \"Cycled Low\",\n  66: \"Cycled High\",\n  128: \"auto\",\n};\nif (typeof payload.fan_mode_num === \"number\") {\n  payload.fan_mode = FAN_MODE_MAP[payload.fan_mode_num] || \"auto\";\n}\n\n// --- 2. Send original payload to per-zone HA state topic (stringified) ---\nconst haStateMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(payload), // <--- critical fix\n};\n\n// Return both messages\nreturn [haStateMsg, internalMsg];\n",
     "outputs": 2,
     "timeout": 0,
     "noerr": 0,
@@ -5184,7 +5191,7 @@
     "finalize": "",
     "libs": [],
     "x": 630,
-    "y": 420,
+    "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -5277,7 +5284,7 @@
       "f658418a7b9b4857"
     ],
     "x": 1130,
-    "y": 700,
+    "y": 680,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": []
@@ -5291,7 +5298,7 @@
       "71ac45fb64bf70c9"
     ],
     "x": 230,
-    "y": 1120,
+    "y": 1100,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": [
@@ -5490,7 +5497,7 @@
     "finalize": "",
     "libs": [],
     "x": 880,
-    "y": 420,
+    "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -5530,7 +5537,7 @@
       "88e5fa035bedb48c"
     ],
     "x": 230,
-    "y": 320,
+    "y": 300,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": [
@@ -5613,7 +5620,7 @@
       "f658418a7b9b4857"
     ],
     "x": 1290,
-    "y": 600,
+    "y": 580,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": []
@@ -5897,7 +5904,7 @@
     "expiry": "",
     "broker": "68237e1473ec01aa",
     "x": 1250,
-    "y": 740,
+    "y": 720,
     "g": "8aac091f0fffbf22",
     "wires": []
   },
@@ -5941,7 +5948,7 @@
     "type": "function",
     "z": "e3804d2dd0b81928",
     "name": "microair_create_climate",
-    "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config (MAV, SPL) and observed max fan speed\n// for dynamic modes, fan modes, and temperature limits\n\nconst microairEnabled = global.get(\"microairEnabled\");\nif (!microairEnabled) return null;\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Per-zone state and config topics ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Command topics\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\nconst presetCommand = `${baseCommand}/preset/set`;\n\n// --- Read cached config ---\nconst zoneConfig =\n  global.get(`microair_${safeMac}_zone_${zone}_config`, \"file\") || {};\n\n// --- Determine available modes ---\n// Dry mode remains intentionally hidden from Home Assistant controls.\nlet modes;\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  modes = [\"off\"];\n  if (mav & (1 << 1)) modes.push(\"fan_only\");\n  if (mav & (1 << 2)) modes.push(\"cool\");\n  if (\n    mav &\n    ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))\n  ) {\n    modes.push(\"heat\");\n  }\n  if (mav & ((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11))) {\n    modes.push(\"auto\");\n  }\n} else {\n  // Preserve broad compatibility until the device returns capability data.\n  modes = [\"off\", \"cool\", \"heat\", \"fan_only\", \"auto\"];\n}\n\n// --- Fixed protocol-confirmed fan modes (not derived from observed state) ---\n// Gas/furnace fan is autonomous; decode/encode force it to auto.\nconst fanModes = [\"auto\", \"low\", \"high\", \"Cycled Low\", \"Cycled High\"];\n\n// --- Determine heat type presets from MAV ---\nconst HEAT_TYPE_PRESETS = {\n  \"Heat Pump\": 5,\n  Furnace: 4,\n  \"Gas Furnace\": 3,\n  \"Heat Strip\": 7,\n  \"Electric Heat\": 12,\n};\nlet presetModes = [];\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  for (const [name, bit] of Object.entries(HEAT_TYPE_PRESETS)) {\n    if (mav & (1 << bit)) {\n      presetModes.push(name);\n    }\n  }\n}\n\n// --- Determine temp limits from SPL ---\nlet minTemp = 50;\nlet maxTemp = 90;\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// --- Discovery payload ---\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Heat type presets (only included when multiple heat sources available)\n  ...(presetModes.length > 1\n    ? {\n      preset_mode_command_topic: presetCommand,\n      preset_mode_state_topic: stateTopic,\n      preset_mode_value_template:\n        \"{{ value_json.heat_source | default('none') }}\",\n      preset_modes: presetModes,\n    }\n    : {}),\n\n  // Temperature limits\n  temperature_unit: \"F\",\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nconst messages = [\n  {\n    topic: discoveryTopic,\n    payload: discoveryPayload,\n    entityId,\n  },\n];\n\nconst diagnosticDevice = {\n  identifiers: [`librecoach-ble-microair-${safeMac}`],\n  name: `MicroAir ${mac}`,\n  manufacturer: \"LibreCoach\",\n  via_device: \"librecoach-climate\",\n};\n\nconst diagnostics = [\n  {\n    component: \"binary_sensor\",\n    id: `microair_${safeMac}_availability`,\n    payload: {\n      name: \"BLE Availability\",\n      unique_id: `microair_${safeMac}_availability`,\n      default_entity_id: `binary_sensor.microair_${safeMac}_availability`,\n      device_class: \"connectivity\",\n      entity_category: \"diagnostic\",\n      state_topic: `librecoach/ble/microair/${mac}/available`,\n      payload_on: \"online\",\n      payload_off: \"offline\",\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_last_success`,\n    payload: {\n      name: \"BLE Last Success\",\n      unique_id: `microair_${safeMac}_last_success`,\n      default_entity_id: `sensor.microair_${safeMac}_last_success`,\n      entity_category: \"diagnostic\",\n      device_class: \"timestamp\",\n      // ha-addons publishes an ISO8601 timestamp on this dedicated topic.\n      state_topic: `librecoach/ble/microair/${mac}/last_success`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_failure_count`,\n    payload: {\n      name: \"BLE Failure Count\",\n      unique_id: `microair_${safeMac}_failure_count`,\n      default_entity_id: `sensor.microair_${safeMac}_failure_count`,\n      entity_category: \"diagnostic\",\n      state_class: \"measurement\",\n      // ha-addons publishes a plain integer on this dedicated topic.\n      state_topic: `librecoach/ble/microair/${mac}/failure_count`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_last_error`,\n    payload: {\n      name: \"BLE Last Error\",\n      unique_id: `microair_${safeMac}_last_error`,\n      default_entity_id: `sensor.microair_${safeMac}_last_error`,\n      entity_category: \"diagnostic\",\n      // ha-addons publishes none | auth_failed | connectivity on this topic,\n      // distinguishing an auth failure from a connectivity/range/power failure.\n      state_topic: `librecoach/ble/microair/${mac}/last_error`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"button\",\n    id: `microair_${safeMac}_reconnect`,\n    payload: {\n      name: \"BLE Reconnect\",\n      unique_id: `microair_${safeMac}_reconnect`,\n      default_entity_id: `button.microair_${safeMac}_reconnect`,\n      icon: \"mdi:bluetooth-connect\",\n      entity_category: \"config\",\n      // Forces an immediate retry instead of waiting out the backoff schedule.\n      command_topic: `librecoach/ble/microair/${mac}/reconnect`,\n      availability_topic: \"librecoach/nodered/status\",\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"button\",\n    id: `microair_${safeMac}_clear_errors`,\n    payload: {\n      name: \"BLE Clear Errors\",\n      unique_id: `microair_${safeMac}_clear_errors`,\n      default_entity_id: `button.microair_${safeMac}_clear_errors`,\n      icon: \"mdi:alert-circle-check\",\n      entity_category: \"config\",\n      // Resets failure_count / last_error and the backoff cadence.\n      command_topic: `librecoach/ble/microair/${mac}/clear_errors`,\n      availability_topic: \"librecoach/nodered/status\",\n      device: diagnosticDevice,\n    },\n  },\n];\n\nfor (const diagnostic of diagnostics) {\n  messages.push({\n    topic: `homeassistant/${diagnostic.component}/${diagnostic.id}/config`,\n    payload: diagnostic.payload,\n  });\n}\n\nreturn [messages];\n",
+    "func": "// Create MicroAir Climate Entity for Home Assistant\n// Uses cached zone config (MAV, SPL) and observed max fan speed\n// for dynamic modes, fan modes, and temperature limits\n\nconst microairEnabled = global.get(\"microairEnabled\");\nif (!microairEnabled) return null;\n\nconst payload = msg.payload;\nif (!payload || !payload.mac) return null;\n\nconst mac = payload.mac;\nconst safeMac = mac.replace(/:/g, \"_\");\nconst zone = payload.zone;\nif (zone === undefined) return null;\n\nconst uniqueId = `microair_${safeMac}_zone_${zone}`;\nconst entityId = uniqueId;\n\n// --- Per-zone state and config topics ---\nconst stateTopic = `librecoach/ble/microair/${mac}/zone/${zone}/state`;\nconst discoveryTopic = `homeassistant/climate/${entityId}/config`;\n\n// Command topics\nconst baseCommand = `homeassistant/climate/${entityId}`;\nconst modeCommand = `${baseCommand}/mode/set`;\nconst tempCommand = `${baseCommand}/temp/set`;\nconst tempHighCommand = `${baseCommand}/temp_high/set`;\nconst tempLowCommand = `${baseCommand}/temp_low/set`;\nconst fanCommand = `${baseCommand}/fan/set`;\nconst presetCommand = `${baseCommand}/preset/set`;\n\n// --- Read cached config ---\nconst zoneConfig =\n  global.get(`microair_${safeMac}_zone_${zone}_config`, \"file\") || {};\n\n// --- Determine available modes ---\n// Dry mode remains intentionally hidden from Home Assistant controls.\nlet modes;\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  modes = [\"off\"];\n  if (mav & (1 << 1)) modes.push(\"fan_only\");\n  if (mav & (1 << 2)) modes.push(\"cool\");\n  if (\n    mav &\n    ((1 << 3) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 12) | (1 << 13))\n  ) {\n    modes.push(\"heat\");\n  }\n  if (mav & ((1 << 8) | (1 << 9) | (1 << 10) | (1 << 11))) {\n    modes.push(\"auto\");\n  }\n} else {\n  // Preserve broad compatibility until the device returns capability data.\n  modes = [\"off\", \"cool\", \"heat\", \"fan_only\", \"auto\"];\n}\n\n// --- Static superset of fan modes ---\n// Protocol values: 0=off, 1=low, 2=high, 65/66=cycled, 128=auto.\n// Per-mode validity (\"auto\" invalid in fan-only/furnace, \"off\" invalid in\n// compressor modes) is enforced by microair_encode_command.js, which reverts\n// invalid picks. A mode-dependent list was tried and abandoned: HA's in-place\n// discovery updates race the state stream, leaving stale fan labels stuck in\n// the UI after HVAC mode changes.\nconst fanModes = [\"auto\", \"off\", \"low\", \"high\", \"Cycled Low\", \"Cycled High\"];\n\n// --- Determine heat type presets from MAV ---\nconst HEAT_TYPE_PRESETS = {\n  \"Heat Pump\": 5,\n  Furnace: 4,\n  \"Gas Furnace\": 3,\n  \"Heat Strip\": 7,\n  \"Electric Heat\": 12,\n};\nlet presetModes = [];\nif (zoneConfig.MAV) {\n  const mav = zoneConfig.MAV;\n  for (const [name, bit] of Object.entries(HEAT_TYPE_PRESETS)) {\n    if (mav & (1 << bit)) {\n      presetModes.push(name);\n    }\n  }\n}\n\n// --- Determine temp limits from SPL ---\nlet minTemp = 50;\nlet maxTemp = 90;\nif (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {\n  minTemp = Math.min(zoneConfig.SPL[0], zoneConfig.SPL[2]);\n  maxTemp = Math.max(zoneConfig.SPL[1], zoneConfig.SPL[3]);\n}\n\n// --- Discovery payload ---\nconst discoveryPayload = {\n  name: `MicroAir Zone ${zone + 1}`,\n  unique_id: uniqueId,\n  default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,\n  icon: \"mdi:thermostat\",\n\n  // Mode\n  mode_command_topic: modeCommand,\n  mode_state_topic: stateTopic,\n  mode_state_template: \"{{ value_json.mode | default('off') }}\",\n\n  // Current measured temperature\n  current_temperature_topic: stateTopic,\n  current_temperature_template:\n    \"{{ value_json.facePlateTemperature | default(0) }}\",\n\n  // Target temperature (single setpoint for cool/heat)\n  temperature_command_topic: tempCommand,\n  temperature_state_topic: stateTopic,\n  temperature_state_template: `{% if value_json.mode == 'heat' %}{{ value_json.heat_sp | default(0) }}{% elif value_json.mode == 'auto' %}{{ value_json.cool_sp | default(0) }}{% else %}{{ value_json.cool_sp | default(0) }}{% endif %}`,\n\n  // Auto mode high/low setpoints\n  temperature_high_command_topic: tempHighCommand,\n  temperature_high_state_topic: stateTopic,\n  temperature_high_state_template: \"{{ value_json.autoCool_sp | default(0) }}\",\n\n  temperature_low_command_topic: tempLowCommand,\n  temperature_low_state_topic: stateTopic,\n  temperature_low_state_template: \"{{ value_json.autoHeat_sp | default(0) }}\",\n\n  // Fan Mode\n  fan_mode_command_topic: fanCommand,\n  fan_mode_state_topic: stateTopic,\n  fan_mode_state_template: \"{{ value_json.fan_mode | default('auto') }}\",\n\n  // Available modes and fan modes\n  modes: modes,\n  fan_modes: fanModes,\n\n  // Heat type presets (only included when multiple heat sources available)\n  ...(presetModes.length > 1\n    ? {\n        preset_mode_command_topic: presetCommand,\n        preset_mode_state_topic: stateTopic,\n        preset_mode_value_template:\n          \"{{ value_json.heat_source | default('none') }}\",\n        preset_modes: presetModes,\n      }\n    : {}),\n\n  // Temperature limits\n  temperature_unit: \"F\",\n  min_temp: minTemp,\n  max_temp: maxTemp,\n  temp_step: 1,\n\n  // Device info\n  device: {\n    identifiers: [\"librecoach-climate\"],\n    name: \"Climate\",\n    manufacturer: \"LibreCoach\",\n  },\n\n  // Availability\n  availability_topic: `librecoach/ble/microair/${mac}/available`,\n};\n\nconst messages = [\n  {\n    topic: discoveryTopic,\n    payload: discoveryPayload,\n    entityId,\n  },\n];\n\nconst diagnosticDevice = {\n  identifiers: [`librecoach-ble-microair-${safeMac}`],\n  name: `MicroAir ${mac}`,\n  manufacturer: \"LibreCoach\",\n  via_device: \"librecoach-climate\",\n};\n\nconst diagnostics = [\n  {\n    component: \"binary_sensor\",\n    id: `microair_${safeMac}_availability`,\n    payload: {\n      name: \"BLE Availability\",\n      unique_id: `microair_${safeMac}_availability`,\n      default_entity_id: `binary_sensor.microair_${safeMac}_availability`,\n      device_class: \"connectivity\",\n      entity_category: \"diagnostic\",\n      state_topic: `librecoach/ble/microair/${mac}/available`,\n      payload_on: \"online\",\n      payload_off: \"offline\",\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_last_success`,\n    payload: {\n      name: \"BLE Last Success\",\n      unique_id: `microair_${safeMac}_last_success`,\n      default_entity_id: `sensor.microair_${safeMac}_last_success`,\n      entity_category: \"diagnostic\",\n      device_class: \"timestamp\",\n      // ha-addons publishes an ISO8601 timestamp on this dedicated topic.\n      state_topic: `librecoach/ble/microair/${mac}/last_success`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_failure_count`,\n    payload: {\n      name: \"BLE Failure Count\",\n      unique_id: `microair_${safeMac}_failure_count`,\n      default_entity_id: `sensor.microair_${safeMac}_failure_count`,\n      entity_category: \"diagnostic\",\n      state_class: \"measurement\",\n      // ha-addons publishes a plain integer on this dedicated topic.\n      state_topic: `librecoach/ble/microair/${mac}/failure_count`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"sensor\",\n    id: `microair_${safeMac}_last_error`,\n    payload: {\n      name: \"BLE Last Error\",\n      unique_id: `microair_${safeMac}_last_error`,\n      default_entity_id: `sensor.microair_${safeMac}_last_error`,\n      entity_category: \"diagnostic\",\n      // ha-addons publishes none | auth_failed | connectivity on this topic,\n      // distinguishing an auth failure from a connectivity/range/power failure.\n      state_topic: `librecoach/ble/microair/${mac}/last_error`,\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"button\",\n    id: `microair_${safeMac}_reconnect`,\n    payload: {\n      name: \"BLE Reconnect\",\n      unique_id: `microair_${safeMac}_reconnect`,\n      default_entity_id: `button.microair_${safeMac}_reconnect`,\n      icon: \"mdi:bluetooth-connect\",\n      entity_category: \"config\",\n      // Forces an immediate retry instead of waiting out the backoff schedule.\n      command_topic: `librecoach/ble/microair/${mac}/reconnect`,\n      availability_topic: \"librecoach/nodered/status\",\n      device: diagnosticDevice,\n    },\n  },\n  {\n    component: \"button\",\n    id: `microair_${safeMac}_clear_errors`,\n    payload: {\n      name: \"BLE Clear Errors\",\n      unique_id: `microair_${safeMac}_clear_errors`,\n      default_entity_id: `button.microair_${safeMac}_clear_errors`,\n      icon: \"mdi:alert-circle-check\",\n      entity_category: \"config\",\n      // Resets failure_count / last_error and the backoff cadence.\n      command_topic: `librecoach/ble/microair/${mac}/clear_errors`,\n      availability_topic: \"librecoach/nodered/status\",\n      device: diagnosticDevice,\n    },\n  },\n];\n\nfor (const diagnostic of diagnostics) {\n  messages.push({\n    topic: `homeassistant/${diagnostic.component}/${diagnostic.id}/config`,\n    payload: diagnostic.payload,\n  });\n}\n\nreturn [messages];\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -5949,7 +5956,7 @@
     "finalize": "",
     "libs": [],
     "x": 1130,
-    "y": 400,
+    "y": 380,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -6043,7 +6050,7 @@
     "z": "e3804d2dd0b81928",
     "name": "Rest unique list",
     "x": 1034,
-    "y": 499,
+    "y": 479,
     "g": "fe7cf55a75689b88",
     "style": {
       "stroke": "#777777",
@@ -6136,7 +6143,7 @@
       "1d411b577497f7ae"
     ],
     "x": 900,
-    "y": 300,
+    "y": 280,
     "g": "fe7cf55a75689b88",
     "l": true,
     "wires": []
@@ -6163,7 +6170,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 1070,
-    "y": 1040,
+    "y": 1020,
     "g": "3ffa68cfd2195db1",
     "wires": [
       [
@@ -6259,7 +6266,7 @@
     "finalize": "",
     "libs": [],
     "x": 560,
-    "y": 520,
+    "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -6281,7 +6288,7 @@
     "finalize": "",
     "libs": [],
     "x": 820,
-    "y": 520,
+    "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -6305,7 +6312,7 @@
     "finalize": "",
     "libs": [],
     "x": 1040,
-    "y": 560,
+    "y": 540,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -6326,7 +6333,7 @@
     "finalize": "",
     "libs": [],
     "x": 820,
-    "y": 600,
+    "y": 580,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -6346,7 +6353,7 @@
     "sendError": false,
     "allProps": false,
     "x": 490,
-    "y": 940,
+    "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -6367,7 +6374,7 @@
     "finalize": "",
     "libs": [],
     "x": 750,
-    "y": 940,
+    "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": []
   },
@@ -6551,7 +6558,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 220,
-    "y": 420,
+    "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -6625,6 +6632,7 @@
     "content": "# Comfig Templates\nOnce you've renamed them to match your rig (\"Bedroom Lights,\"\n\"Entry Door\", etc.) you can export that configuration and share it\nwith the community. Other owners with a similar RV can import\nyour file to get meaningful names without starting from scratch.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 150,
     "x": 330,
     "y": 120,
     "wires": []
@@ -6669,7 +6677,7 @@
       "71ac45fb64bf70c9"
     ],
     "x": 230,
-    "y": 620,
+    "y": 600,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": [
@@ -6696,7 +6704,7 @@
     "allowrate": false,
     "outputs": 1,
     "x": 420,
-    "y": 320,
+    "y": 300,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -6864,7 +6872,7 @@
     "finalize": "",
     "libs": [],
     "x": 620,
-    "y": 320,
+    "y": 300,
     "g": "8aac091f0fffbf22",
     "wires": []
   },
@@ -6921,7 +6929,7 @@
     "type": "function",
     "z": "e3804d2dd0b81928",
     "name": "microair_encode_command",
-    "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n// Reads cached zone state from global context for mode-aware encoding\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// Read cached zone state for mode-aware encoding\nconst cached = global.get(`microair_${safeMac}_zone_${zone}`, \"file\") || {};\nconst currentMode = cached.mode || \"off\";\nconst currentModeNum = cached.mode_num || 0;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n  off: 0,\n  fan_only: 1,\n  cool: 2,\n  heat: 5,\n  auto: 11,\n};\n\n// Canonical protocol fan map: 1=Manual Low, 2=Manual High,\n// 65=Cycled Low, 66=Cycled High, 128=Auto. \"medium\" is not a device mode.\nconst FAN_MAP = {\n  auto: 128,\n  low: 1,\n  high: 2,\n  \"Cycled Low\": 65,\n  \"Cycled High\": 66,\n};\n\n// Gas/furnace heat modes have an autonomous fan\nconst GAS_HEAT_MODES = [3, 4, 13];\n\nif (topic.endsWith(\"/mode/set\")) {\n  // HA sends: \"cool\", \"heat\", \"off\", etc.\n  if (val in MODE_MAP) {\n    let modeNum = MODE_MAP[val];\n    // Preserve last-used heat type when switching back to heat mode\n    if (val === \"heat\") {\n      const lastHeat = global.get(\n        `microair_${safeMac}_zone_${zone}_lastheat`,\n        \"file\",\n      );\n      if (lastHeat) {\n        modeNum = lastHeat;\n      }\n    }\n    change.mode = modeNum;\n    change.power = 1;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // HA sends number: 72\n  // Set only the setpoint for the current HVAC mode\n  const temp = parseFloat(val);\n  if (currentMode === \"cool\") {\n    change.cool_sp = temp;\n  } else if (currentMode === \"heat\") {\n    change.heat_sp = temp;\n  } else if (currentMode === \"auto\") {\n    // HA MQTT climate sends a single temp for auto mode via this topic.\n    // Set both setpoints — HA should use temp_high/temp_low topics for\n    // separate auto setpoints, but fallback keeps behavior reasonable.\n    change.autoCool_sp = temp;\n    change.autoHeat_sp = temp;\n  } else {\n    // Fallback: set cool_sp as default\n    change.cool_sp = temp;\n  }\n} else if (topic.endsWith(\"/temp_high/set\")) {\n  // Auto mode high setpoint (cool target)\n  change.autoCool_sp = parseFloat(val);\n} else if (topic.endsWith(\"/temp_low/set\")) {\n  // Auto mode low setpoint (heat target)\n  change.autoHeat_sp = parseFloat(val);\n} else if (topic.endsWith(\"/preset/set\")) {\n  // HA sends: \"Heat Pump\", \"Furnace\", \"Gas Furnace\", etc.\n  const PRESET_MAP = {\n    \"Heat Pump\": 5,\n    Furnace: 4,\n    \"Gas Furnace\": 3,\n    \"Heat Strip\": 7,\n    \"Electric Heat\": 12,\n  };\n  if (val in PRESET_MAP) {\n    change.mode = PRESET_MAP[val];\n    change.power = 1;\n    // Set the correct fan field for this heat type\n    const fanNum =\n      change.mode === 3 || change.mode === 4\n        ? cached.furnace_fan_mode_num || 128\n        : cached.heat_fan_mode_num || 128;\n    if (change.mode === 3 || change.mode === 4) {\n      change.gasFan = fanNum;\n    } else {\n      change.eleFan = fanNum;\n    }\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/fan/set\")) {\n  // HA sends: \"auto\", \"low\", \"high\", \"Cycled Low\", \"Cycled High\"\n  if (!(val in FAN_MAP)) return null;\n\n  const fanValue = FAN_MAP[val];\n\n  // Use mode-specific fan key based on current HVAC mode\n  if (currentMode === \"fan_only\") {\n    // Fan-only mode doesn't support auto — default to high\n    change.fanOnly = fanValue === 128 ? 2 : fanValue;\n  } else if (currentMode === \"cool\") {\n    change.coolFan = fanValue;\n  } else if (currentMode === \"heat\") {\n    // Gas furnace (mode 3,4,13) fan is autonomous: auto passes through,\n    // any other speed request is ignored. Electric heat (5,6,7,12) → eleFan.\n    if (GAS_HEAT_MODES.includes(currentModeNum)) {\n      if (fanValue !== 128) return null;\n      change.gasFan = 128;\n    } else {\n      change.eleFan = fanValue;\n    }\n  } else if (currentMode === \"auto\") {\n    change.autoFan = fanValue;\n  } else {\n    // Fallback: use coolFan\n    change.coolFan = fanValue;\n  }\n} else {\n  // Unknown topic suffix\n  return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n  Type: \"Change\",\n  Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
+    "func": "// Encode MicroAir Command to MQTT\n// Input: HA command payload (string or number)\n// Topic determines command type: .../mode/set, .../temp/set, .../fan/set\n// Reads cached zone state from global context for mode-aware encoding\n\nconst topic = msg.topic;\nconst parts = topic.split(\"/\");\n// Expected: homeassistant/climate/microair_{safeMac}_zone_{z}/{cmd}/set\n\n// 1. Extract Entity ID\nconst entityPart = parts[2]; // microair_{safeMac}_zone_{z}\nif (!entityPart || !entityPart.startsWith(\"microair_\")) return null;\n\nconst subParts = entityPart.split(\"_\");\n// microair, 78, e3, 6d, fc, 5e, ce, zone, {z}\nconst zoneIdx = subParts.indexOf(\"zone\");\nif (zoneIdx < 2) return null;\n\nconst safeMac = subParts.slice(1, zoneIdx).join(\"_\");\nconst mac = subParts.slice(1, zoneIdx).join(\":\");\nconst zone = parseInt(subParts[zoneIdx + 1]);\n\nif (!mac || isNaN(zone)) return null;\n\n// Read cached zone state for mode-aware encoding.\n// Prefer the memory store — microair_optimistic_update.js writes there\n// immediately after a command, so it reflects HA-initiated mode changes\n// before the next BLE poll refreshes the file store.\nconst cached =\n  global.get(`microair_${safeMac}_zone_${zone}`) ||\n  global.get(`microair_${safeMac}_zone_${zone}`, \"file\") ||\n  {};\nconst currentMode = cached.mode || \"off\";\nconst currentModeNum = cached.mode_num || 0;\n\n// 2. Determine Command Type\nlet change = {};\nlet val = msg.payload;\n\nconst MODE_MAP = {\n  off: 0,\n  fan_only: 1,\n  cool: 2,\n  heat: 5,\n  auto: 11,\n};\n\n// Canonical protocol fan map: 0=Off, 1=Manual Low, 2=Manual High,\n// 65=Cycled Low, 66=Cycled High, 128=Auto. \"medium\" is not a device mode.\n// \"off\" is only valid in fan-only and gas/furnace heat; \"auto\" is only\n// valid in compressor modes (cool, electric heat, auto).\nconst FAN_MAP = {\n  auto: 128,\n  off: 0,\n  low: 1,\n  high: 2,\n  \"Cycled Low\": 65,\n  \"Cycled High\": 66,\n};\n\n// Gas/furnace heat modes: fan supports off/low/high/cycled but not auto\nconst GAS_HEAT_MODES = [3, 4, 13];\n\n// Reject an invalid command by asking microair_optimistic_update to\n// republish the cached zone state, snapping the HA UI back immediately\n// instead of waiting for the next BLE poll.\nfunction revert() {\n  msg.payload = { Type: \"Revert\", Changes: { zone: zone } };\n  msg.topic = `librecoach/ble/microair/${mac}/set`;\n  return msg;\n}\n\nif (topic.endsWith(\"/mode/set\")) {\n  // HA sends: \"cool\", \"heat\", \"off\", etc.\n  if (val in MODE_MAP) {\n    let modeNum = MODE_MAP[val];\n    // Preserve last-used heat type when switching back to heat mode\n    if (val === \"heat\") {\n      const lastHeat = global.get(\n        `microair_${safeMac}_zone_${zone}_lastheat`,\n        \"file\",\n      );\n      if (lastHeat) {\n        modeNum = lastHeat;\n      }\n    }\n    change.mode = modeNum;\n    change.power = 1;\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/temp/set\")) {\n  // HA sends number: 72\n  // Set only the setpoint for the current HVAC mode\n  const temp = parseFloat(val);\n  if (currentMode === \"cool\") {\n    change.cool_sp = temp;\n  } else if (currentMode === \"heat\") {\n    change.heat_sp = temp;\n  } else if (currentMode === \"auto\") {\n    // HA MQTT climate sends a single temp for auto mode via this topic.\n    // Set both setpoints — HA should use temp_high/temp_low topics for\n    // separate auto setpoints, but fallback keeps behavior reasonable.\n    change.autoCool_sp = temp;\n    change.autoHeat_sp = temp;\n  } else {\n    // Fallback: set cool_sp as default\n    change.cool_sp = temp;\n  }\n} else if (topic.endsWith(\"/temp_high/set\")) {\n  // Auto mode high setpoint (cool target)\n  change.autoCool_sp = parseFloat(val);\n} else if (topic.endsWith(\"/temp_low/set\")) {\n  // Auto mode low setpoint (heat target)\n  change.autoHeat_sp = parseFloat(val);\n} else if (topic.endsWith(\"/preset/set\")) {\n  // HA sends: \"Heat Pump\", \"Furnace\", \"Gas Furnace\", etc.\n  const PRESET_MAP = {\n    \"Heat Pump\": 5,\n    Furnace: 4,\n    \"Gas Furnace\": 3,\n    \"Heat Strip\": 7,\n    \"Electric Heat\": 12,\n  };\n  if (val in PRESET_MAP) {\n    change.mode = PRESET_MAP[val];\n    change.power = 1;\n    // Set the correct fan field for this heat type. Gas/furnace fan has no\n    // auto (valid: 0=off, 1=low, 2=high, 65/66=cycled) — 0 is a legitimate\n    // cached value, so use ?? and never fall back to 128 for gas modes.\n    if (GAS_HEAT_MODES.includes(change.mode)) {\n      change.gasFan = cached.furnace_fan_mode_num ?? 0;\n    } else {\n      change.eleFan = cached.heat_fan_mode_num ?? 128;\n    }\n  } else {\n    return null;\n  }\n} else if (topic.endsWith(\"/fan/set\")) {\n  // HA sends: \"auto\", \"off\", \"low\", \"high\", \"Cycled Low\", \"Cycled High\"\n  if (!(val in FAN_MAP)) return null;\n\n  const fanValue = FAN_MAP[val];\n\n  // Use mode-specific fan key based on current HVAC mode\n  if (currentMode === \"fan_only\") {\n    // Fan-only has no auto (0 = off)\n    if (fanValue === 128) return revert();\n    change.fanOnly = fanValue;\n  } else if (currentMode === \"cool\") {\n    if (fanValue === 0) return revert();\n    change.coolFan = fanValue;\n  } else if (currentMode === \"heat\") {\n    if (GAS_HEAT_MODES.includes(currentModeNum)) {\n      // Gas furnace fan has no auto (0 = off)\n      if (fanValue === 128) return revert();\n      change.gasFan = fanValue;\n    } else {\n      if (fanValue === 0) return revert();\n      change.eleFan = fanValue;\n    }\n  } else if (currentMode === \"auto\") {\n    if (fanValue === 0) return revert();\n    change.autoFan = fanValue;\n  } else {\n    // Fallback: use coolFan\n    if (fanValue === 0) return revert();\n    change.coolFan = fanValue;\n  }\n} else {\n  // Unknown topic suffix\n  return null;\n}\n\nchange.zone = zone;\n\n// 3. Construct Bridge Message\nmsg.payload = {\n  Type: \"Change\",\n  Changes: change,\n};\nmsg.topic = `librecoach/ble/microair/${mac}/set`;\n\nreturn msg;\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -6929,7 +6937,7 @@
     "finalize": "",
     "libs": [],
     "x": 580,
-    "y": 720,
+    "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -6942,7 +6950,7 @@
     "type": "function",
     "z": "e3804d2dd0b81928",
     "name": "microair_optimistic_update",
-    "func": "// Optimistic MicroAir State Update\n// Input: Encoded bridge command from microair_encode_command.js\n// Output 1: Optimistic HA state update (MQTT out to HA state topic)\n// Output 2: Original bridge command passthrough (MQTT out to bridge /set topic)\n//\n// Merges pending changes into cached zone state and publishes\n// immediately so the HA UI updates without waiting for the next poll cycle.\n\nconst command = msg.payload;\nif (!command || command.Type !== \"Change\" || !command.Changes)\n  return [null, msg];\n\nconst changes = command.Changes;\nconst zone = changes.zone;\n\n// Extract MAC from the bridge topic: librecoach/ble/microair/{mac}/set\nconst topicParts = msg.topic.split(\"/\");\nif (topicParts.length < 5) return [null, msg];\n\nconst mac = topicParts[3];\nconst safeMac = mac.replace(/:/g, \"_\");\n\n// Read cached state\nconst cached = global.get(`microair_${safeMac}_zone_${zone}`);\nif (!cached) {\n  // No cached state yet — can't build optimistic update, just forward command\n  return [null, msg];\n}\n\n// Build optimistic state by merging changes into cached state\nconst optimistic = Object.assign({}, cached);\n\n// Mode changes\nif (\"mode\" in changes) {\n  optimistic.mode_num = changes.mode;\n  // Map numeric mode to string mode\n  const MODE_NUM_TO_MODE = {\n    0: \"off\",\n    1: \"fan_only\",\n    2: \"cool\",\n    3: \"heat\",\n    4: \"heat\",\n    5: \"heat\",\n    6: \"off\",\n    7: \"heat\",\n    8: \"auto\",\n    9: \"auto\",\n    10: \"auto\",\n    11: \"auto\",\n    12: \"heat\",\n  };\n  optimistic.mode = MODE_NUM_TO_MODE[changes.mode] || \"off\";\n\n  // Update heat_source for preset state reporting\n  const HEAT_TYPE_REVERSE = {\n    5: \"Heat Pump\",\n    4: \"Furnace\",\n    3: \"Gas Furnace\",\n    7: \"Heat Strip\",\n    12: \"Electric Heat\",\n  };\n  if (changes.mode in HEAT_TYPE_REVERSE) {\n    optimistic.heat_source = HEAT_TYPE_REVERSE[changes.mode];\n    // Persist last-used heat mode so it survives off/on cycles\n    global.set(\n      `microair_${safeMac}_zone_${zone}_lastheat`,\n      changes.mode,\n      \"file\",\n    );\n  }\n}\n\n// Setpoint changes\nif (\"cool_sp\" in changes) optimistic.cool_sp = changes.cool_sp;\nif (\"heat_sp\" in changes) optimistic.heat_sp = changes.heat_sp;\nif (\"autoCool_sp\" in changes) optimistic.autoCool_sp = changes.autoCool_sp;\nif (\"autoHeat_sp\" in changes) optimistic.autoHeat_sp = changes.autoHeat_sp;\n\n// Fan changes — update the correct fan field\nif (\"fanOnly\" in changes) optimistic.fan_mode_num = changes.fanOnly;\nif (\"coolFan\" in changes) optimistic.cool_fan_mode_num = changes.coolFan;\nif (\"gasFan\" in changes) optimistic.furnace_fan_mode_num = changes.gasFan;\nif (\"eleFan\" in changes) optimistic.heat_fan_mode_num = changes.eleFan;\nif (\"autoFan\" in changes) optimistic.auto_fan_mode_num = changes.autoFan;\n\n// Canonical protocol fan map (must match decode/encode/discovery):\n// 2 = Manual High (not medium); 3 = top speed on 3-speed units.\nconst FAN_MODE_MAP = {\n  0: \"auto\",\n  1: \"low\",\n  2: \"high\",\n  3: \"high\",\n  65: \"Cycled Low\",\n  66: \"Cycled High\",\n  128: \"auto\",\n};\nconst mode = optimistic.mode || \"off\";\nlet fanNum = 0;\nif (mode === \"fan_only\") fanNum = optimistic.fan_mode_num || 0;\nelse if (mode === \"cool\") fanNum = optimistic.cool_fan_mode_num || 0;\nelse if (mode === \"heat\")\n  fanNum = optimistic.heat_fan_mode_num || optimistic.furnace_fan_mode_num || 0;\nelse if (mode === \"auto\") fanNum = optimistic.auto_fan_mode_num || 0;\noptimistic.fan_mode = FAN_MODE_MAP[fanNum] || \"auto\";\n\n// Power state\nif (\"power\" in changes) {\n  optimistic.on = changes.power === 1;\n  optimistic.off = changes.power === 0;\n}\n\n// Update cache with optimistic state\nglobal.set(`microair_${safeMac}_zone_${zone}`, optimistic);\n\n// Output 1: Publish optimistic state to HA state topic\nconst haMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(optimistic),\n};\n\n// Output 2: Forward original command to bridge\nconst bridgeMsg = {\n  topic: msg.topic,\n  payload: msg.payload,\n};\n\nreturn [haMsg, bridgeMsg];\n",
+    "func": "// Optimistic MicroAir State Update\n// Input: Encoded bridge command from microair_encode_command.js\n// Output 1: Optimistic HA state update (MQTT out to HA state topic)\n// Output 2: Original bridge command passthrough (MQTT out to bridge /set topic)\n//\n// Merges pending changes into cached zone state and publishes\n// immediately so the HA UI updates without waiting for the next poll cycle.\n\nconst command = msg.payload;\nif (\n  !command ||\n  (command.Type !== \"Change\" && command.Type !== \"Revert\") ||\n  !command.Changes\n)\n  return [null, msg];\n\nconst changes = command.Changes;\nconst zone = changes.zone;\n\n// Extract MAC from the bridge topic: librecoach/ble/microair/{mac}/set\nconst topicParts = msg.topic.split(\"/\");\nif (topicParts.length < 5) return [null, msg];\n\nconst mac = topicParts[3];\nconst safeMac = mac.replace(/:/g, \"_\");\n\n// Read cached state (memory holds the latest optimistic state; the file\n// store is refreshed by microair_decode_status.js on each BLE poll)\nconst cached =\n  global.get(`microair_${safeMac}_zone_${zone}`) ||\n  global.get(`microair_${safeMac}_zone_${zone}`, \"file\");\n\n// Revert: microair_encode_command rejected an invalid command — republish\n// the cached state so the HA UI snaps back, and send nothing to the bridge.\nif (command.Type === \"Revert\") {\n  if (!cached) return [null, null];\n  return [\n    {\n      topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n      payload: JSON.stringify(cached),\n    },\n    null,\n  ];\n}\n\nif (!cached) {\n  // No cached state yet — can't build optimistic update, just forward command\n  return [null, msg];\n}\n\n// Build optimistic state by merging changes into cached state\nconst optimistic = Object.assign({}, cached);\n\n// Mode changes\nif (\"mode\" in changes) {\n  optimistic.mode_num = changes.mode;\n  // Map numeric mode to string mode\n  const MODE_NUM_TO_MODE = {\n    0: \"off\",\n    1: \"fan_only\",\n    2: \"cool\",\n    3: \"heat\",\n    4: \"heat\",\n    5: \"heat\",\n    6: \"off\",\n    7: \"heat\",\n    8: \"auto\",\n    9: \"auto\",\n    10: \"auto\",\n    11: \"auto\",\n    12: \"heat\",\n  };\n  optimistic.mode = MODE_NUM_TO_MODE[changes.mode] || \"off\";\n\n  // Update heat_source for preset state reporting\n  const HEAT_TYPE_REVERSE = {\n    5: \"Heat Pump\",\n    4: \"Furnace\",\n    3: \"Gas Furnace\",\n    7: \"Heat Strip\",\n    12: \"Electric Heat\",\n  };\n  if (changes.mode in HEAT_TYPE_REVERSE) {\n    optimistic.heat_source = HEAT_TYPE_REVERSE[changes.mode];\n    // Persist last-used heat mode so it survives off/on cycles\n    global.set(\n      `microair_${safeMac}_zone_${zone}_lastheat`,\n      changes.mode,\n      \"file\",\n    );\n  } else {\n    // Preset (heat_source) only applies in heat mode — drop it so the HA\n    // preset selector reads \"none\" in every other HVAC mode\n    delete optimistic.heat_source;\n  }\n}\n\n// Setpoint changes\nif (\"cool_sp\" in changes) optimistic.cool_sp = changes.cool_sp;\nif (\"heat_sp\" in changes) optimistic.heat_sp = changes.heat_sp;\nif (\"autoCool_sp\" in changes) optimistic.autoCool_sp = changes.autoCool_sp;\nif (\"autoHeat_sp\" in changes) optimistic.autoHeat_sp = changes.autoHeat_sp;\n\n// Fan changes — update the correct fan field\nif (\"fanOnly\" in changes) optimistic.fan_mode_num = changes.fanOnly;\nif (\"coolFan\" in changes) optimistic.cool_fan_mode_num = changes.coolFan;\nif (\"gasFan\" in changes) optimistic.furnace_fan_mode_num = changes.gasFan;\nif (\"eleFan\" in changes) optimistic.heat_fan_mode_num = changes.eleFan;\nif (\"autoFan\" in changes) optimistic.auto_fan_mode_num = changes.autoFan;\n\n// Canonical protocol fan map (must match decode/encode/discovery):\n// 0 = Off (fan-only and furnace modes);\n// 2 = Manual High (not medium); 3 = top speed on 3-speed units.\nconst FAN_MODE_MAP = {\n  0: \"off\",\n  1: \"low\",\n  2: \"high\",\n  3: \"high\",\n  65: \"Cycled Low\",\n  66: \"Cycled High\",\n  128: \"auto\",\n};\nconst GAS_HEAT_MODES = [3, 4, 13];\nconst mode = optimistic.mode || \"off\";\nlet fanNum = 0;\nif (mode === \"fan_only\") fanNum = optimistic.fan_mode_num ?? 0;\nelse if (mode === \"cool\") fanNum = optimistic.cool_fan_mode_num ?? 0;\nelse if (mode === \"heat\")\n  // 0 is a valid value (off), so pick the field by heat type, not truthiness\n  fanNum = GAS_HEAT_MODES.includes(optimistic.mode_num)\n    ? (optimistic.furnace_fan_mode_num ?? 0)\n    : (optimistic.heat_fan_mode_num ?? 0);\nelse if (mode === \"auto\") fanNum = optimistic.auto_fan_mode_num ?? 0;\noptimistic.fan_mode = FAN_MODE_MAP[fanNum] || \"auto\";\noptimistic.fan_mode_num = fanNum;\n\n// Power state\nif (\"power\" in changes) {\n  optimistic.on = changes.power === 1;\n  optimistic.off = changes.power === 0;\n}\n\n// Update cache with optimistic state\nglobal.set(`microair_${safeMac}_zone_${zone}`, optimistic);\n\n// Output 1: Publish optimistic state to HA state topic\nconst haMsg = {\n  topic: `librecoach/ble/microair/${mac}/zone/${zone}/state`,\n  payload: JSON.stringify(optimistic),\n};\n\n// Output 2: Forward original command to bridge\nconst bridgeMsg = {\n  topic: msg.topic,\n  payload: msg.payload,\n};\n\nreturn [haMsg, bridgeMsg];\n",
     "outputs": 2,
     "timeout": 0,
     "noerr": 0,
@@ -6950,7 +6958,7 @@
     "finalize": "",
     "libs": [],
     "x": 860,
-    "y": 720,
+    "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -6988,7 +6996,7 @@
     "z": "8a7f019c3d4e5b60",
     "name": "Hughes Power Watchdog",
     "x": 94,
-    "y": 239,
+    "y": 219,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -7035,7 +7043,7 @@
       "f658418a7b9b4857"
     ],
     "x": 1290,
-    "y": 440,
+    "y": 420,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": []
@@ -7194,7 +7202,7 @@
     "finalize": "",
     "libs": [],
     "x": 840,
-    "y": 740,
+    "y": 720,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -7253,7 +7261,7 @@
     "finalize": "",
     "libs": [],
     "x": 840,
-    "y": 860,
+    "y": 840,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -7473,7 +7481,7 @@
     "property": "payload",
     "topi": "payload.zone",
     "x": 430,
-    "y": 420,
+    "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -8013,7 +8021,7 @@
       "f658418a7b9b4857"
     ],
     "x": 1290,
-    "y": 860,
+    "y": 840,
     "g": "8aac091f0fffbf22",
     "l": true,
     "wires": []
@@ -8114,6 +8122,7 @@
     "content": "# Delete HA Entity\nRemoves devices from Home Assistant when they're no longer needed.",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 78,
     "x": 350,
     "y": 80,
     "wires": []
@@ -8171,7 +8180,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 200,
-    "y": 720,
+    "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
       [
@@ -8237,7 +8246,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 220,
-    "y": 680,
+    "y": 660,
     "g": "8aac091f0fffbf22",
     "wires": [
       [
@@ -8252,8 +8261,9 @@
     "content": "# Micro-Air Thermostats\n## For the Micro-Air functionality to work you'll need:\n- A Micro-Air EasyTouch RV Thermostat\n- Enable the Micro-Air integration in the LibreCoach addon conifiguration tab\n- Enter your thermostat bluetooth email and password",
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
+    "noteHeight": 150,
     "x": 390,
-    "y": 132,
+    "y": 120,
     "wires": []
   },
   {
@@ -8311,7 +8321,7 @@
     "z": "e3804d2dd0b81928",
     "name": "Micro-Air status",
     "x": 114,
-    "y": 259,
+    "y": 239,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -8355,7 +8365,7 @@
     "rh": 0,
     "inputs": 0,
     "x": 220,
-    "y": 580,
+    "y": 560,
     "g": "fe7cf55a75689b88",
     "wires": [
       [

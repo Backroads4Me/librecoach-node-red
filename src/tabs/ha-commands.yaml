@@ -21,8 +21,9 @@
     devices.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 126
   x: 420
-  "y": 112
+  "y": 100
   wires: []
 - id: 31e6105322d72319
   type: debug

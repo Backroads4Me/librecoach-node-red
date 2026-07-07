@@ -4583,6 +4583,7 @@
     and publishes their status.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 174
   x: 320
   "y": 140
   wires: []

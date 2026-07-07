@@ -882,6 +882,7 @@
     your file to get meaningful names without starting from scratch.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 150
   x: 330
   "y": 120
   wires: []

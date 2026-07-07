@@ -669,8 +669,9 @@
     diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
+  noteHeight: 174
   x: 350
-  "y": 152
+  "y": 120
   wires: []
 - id: 7a1eed2a34490b2a
   type: debug
