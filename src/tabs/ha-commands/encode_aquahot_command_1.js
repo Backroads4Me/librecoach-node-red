@@ -2,10 +2,8 @@
 
 // --- Configuration ---
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
-const DESTINATION_ADDRESS = 0x9f; // Aqua-Hot Module
-const PRIORITY = 6; // Confirmed priority for Aqua-Hot control
-const PGN = "EF64";
-const PGN_INT = parseInt(PGN, 16);
+const canIdInt = (6 << 26) | (0xef64 << 8) | SOURCE_ADDRESS;
+const CAN_ID_HEX = canIdInt.toString(16).padStart(8, "0").toUpperCase();
 const CONTROL_BYTE = 0xab; // First data byte for all commands
 
 // --- Command Mapping (PGN EF64) ---
@@ -62,15 +60,16 @@ const dataHex = dataBytes
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
 
-// --- Construct CAN ID ---
-// PGN EF64 is a PDU1 format (PF < 240) so the destination address (0x9F) goes in the last byte
-const canIdInt = (PRIORITY << 26) | (PGN_INT << 8) | DESTINATION_ADDRESS;
-const canIdHex = canIdInt.toString(16).padStart(8, "0");
-
 // --- Send Message ---
 node.send({
     topic: "can/send",
-    payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,
+    payload: `${CAN_ID_HEX}#${dataHex.toUpperCase()}`,
+});
+
+node.status({
+    fill: "blue",
+    shape: "dot",
+    text: `${instance} -> ${command}`,
 });
 
 return null;
