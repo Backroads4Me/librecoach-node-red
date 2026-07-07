@@ -35,34 +35,12 @@ if (HEAT_MODES.includes(payload.mode_num)) {
   );
 }
 
-// --- Observe max fan speed (accumulate over time) ---
-const maxSpeedKey = `microair_${safeMac}_zone_${zone}_maxfan`;
-let prevMax = global.get(maxSpeedKey, "file") || 0;
-const fanFields = [
-  payload.fan_mode_num,
-  payload.cool_fan_mode_num,
-  payload.heat_fan_mode_num,
-  payload.auto_fan_mode_num,
-  payload.furnace_fan_mode_num,
-];
-let currentMax = prevMax;
-for (const v of fanFields) {
-  if (typeof v === "number" && v < 128 && v > currentMax) {
-    currentMax = v;
-  }
-}
-if (currentMax > prevMax) {
-  global.set(maxSpeedKey, currentMax, "file");
-}
-
 // --- 1. Send standardized internal message ---
 const standardizedMsg = {
   mac: mac,
   zone: zone,
   value: payload, // full original payload
   outdoor_temperature: payload.outdoorTemperature,
-  max_fan_speed: currentMax,
-  max_fan_changed: currentMax > prevMax,
 };
 
 const internalMsg = {
@@ -70,16 +48,21 @@ const internalMsg = {
   payload: standardizedMsg,
 };
 
-// --- Remap fan_mode using the observed-speed-aware map ---
-// The BLE add-on labels fan values with a fixed 3-speed map (2 = "medium"),
-// but a 2-speed unit reports "high" as value 2. Recompute fan_mode here from
-// the add-on-selected fan_mode_num so it matches the dynamic fan_modes list
-// advertised by microair_create_climate.js (otherwise HA discards the update
-// as an unknown fan mode and the UI stays stuck on the previous speed).
-const FAN_MODE_MAP =
-  currentMax >= 3
-    ? { 0: "auto", 1: "low", 2: "medium", 3: "high", 128: "auto" } // 3-speed
-    : { 0: "auto", 1: "low", 2: "high", 128: "auto" }; // 2-speed
+// --- Remap fan_mode using the canonical protocol map ---
+// Recompute fan_mode from the add-on-selected fan_mode_num so the label
+// always matches the fixed fan_modes list advertised by
+// microair_create_climate.js (otherwise HA discards the update as an
+// unknown fan mode and the UI stays stuck on the previous speed).
+// 2 = Manual High (not medium); 3 = top speed on 3-speed units.
+const FAN_MODE_MAP = {
+  0: "auto",
+  1: "low",
+  2: "high",
+  3: "high",
+  65: "Cycled Low",
+  66: "Cycled High",
+  128: "auto",
+};
 if (typeof payload.fan_mode_num === "number") {
   payload.fan_mode = FAN_MODE_MAP[payload.fan_mode_num] || "auto";
 }

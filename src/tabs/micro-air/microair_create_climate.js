@@ -29,11 +29,9 @@ const tempLowCommand = `${baseCommand}/temp_low/set`;
 const fanCommand = `${baseCommand}/fan/set`;
 const presetCommand = `${baseCommand}/preset/set`;
 
-// --- Read cached config and observed capabilities ---
+// --- Read cached config ---
 const zoneConfig =
   global.get(`microair_${safeMac}_zone_${zone}_config`, "file") || {};
-const maxFanSpeed =
-  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
 
 // --- Determine available modes ---
 // Dry mode remains intentionally hidden from Home Assistant controls.
@@ -57,15 +55,9 @@ if (zoneConfig.MAV) {
   modes = ["off", "cool", "heat", "fan_only", "auto"];
 }
 
-// --- Determine fan modes from observed max speed ---
-let fanModes;
-if (maxFanSpeed >= 3) {
-  // 3-speed system
-  fanModes = ["low", "medium", "high", "auto"];
-} else {
-  // 2-speed system (default)
-  fanModes = ["low", "high", "auto"];
-}
+// --- Fixed protocol-confirmed fan modes (not derived from observed state) ---
+// Gas/furnace fan is autonomous; decode/encode force it to auto.
+const fanModes = ["auto", "low", "high", "Cycled Low", "Cycled High"];
 
 // --- Determine heat type presets from MAV ---
 const HEAT_TYPE_PRESETS = {

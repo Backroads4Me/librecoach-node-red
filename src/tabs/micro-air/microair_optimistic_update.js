@@ -27,10 +27,6 @@ if (!cached) {
   return [null, msg];
 }
 
-// Read observed max fan speed for dynamic mapping
-const maxFanSpeed =
-  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
-
 // Build optimistic state by merging changes into cached state
 const optimistic = Object.assign({}, cached);
 
@@ -87,11 +83,17 @@ if ("gasFan" in changes) optimistic.furnace_fan_mode_num = changes.gasFan;
 if ("eleFan" in changes) optimistic.heat_fan_mode_num = changes.eleFan;
 if ("autoFan" in changes) optimistic.auto_fan_mode_num = changes.autoFan;
 
-// Dynamic fan mode map based on observed speed count
-const FAN_MODE_MAP =
-  maxFanSpeed >= 3
-    ? { 0: "auto", 1: "low", 2: "medium", 3: "high", 128: "auto" } // 3-speed
-    : { 0: "auto", 1: "low", 2: "high", 128: "auto" }; // 2-speed
+// Canonical protocol fan map (must match decode/encode/discovery):
+// 2 = Manual High (not medium); 3 = top speed on 3-speed units.
+const FAN_MODE_MAP = {
+  0: "auto",
+  1: "low",
+  2: "high",
+  3: "high",
+  65: "Cycled Low",
+  66: "Cycled High",
+  128: "auto",
+};
 const mode = optimistic.mode || "off";
 let fanNum = 0;
 if (mode === "fan_only") fanNum = optimistic.fan_mode_num || 0;

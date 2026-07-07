@@ -21,8 +21,8 @@ const sensorKey = `microair_${mac}_zone_${zone}_sensor`;
 
 const out = [null, null];
 
-// Config update or capability change → force re-discovery of climate entity
-const forceRediscovery = payload.config_updated || payload.max_fan_changed;
+// Config update → force re-discovery of climate entity
+const forceRediscovery = payload.config_updated;
 
 // 1. Check Climate Entity
 if (!uniqueMicroair.includes(climateKey) || forceRediscovery) {

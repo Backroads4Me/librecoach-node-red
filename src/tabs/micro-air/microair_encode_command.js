@@ -27,10 +27,6 @@ const cached = global.get(`microair_${safeMac}_zone_${zone}`, "file") || {};
 const currentMode = cached.mode || "off";
 const currentModeNum = cached.mode_num || 0;
 
-// Read observed max fan speed for dynamic mapping
-const maxFanSpeed =
-  global.get(`microair_${safeMac}_zone_${zone}_maxfan`, "file") || 2;
-
 // 2. Determine Command Type
 let change = {};
 let val = msg.payload;
@@ -43,11 +39,18 @@ const MODE_MAP = {
   auto: 11,
 };
 
-// Dynamic fan map based on observed speed count
-const FAN_MAP =
-  maxFanSpeed >= 3
-    ? { low: 1, medium: 2, high: 3, auto: 128 } // 3-speed
-    : { low: 1, high: 2, auto: 128 }; // 2-speed
+// Canonical protocol fan map: 1=Manual Low, 2=Manual High,
+// 65=Cycled Low, 66=Cycled High, 128=Auto. "medium" is not a device mode.
+const FAN_MAP = {
+  auto: 128,
+  low: 1,
+  high: 2,
+  "Cycled Low": 65,
+  "Cycled High": 66,
+};
+
+// Gas/furnace heat modes have an autonomous fan
+const GAS_HEAT_MODES = [3, 4, 13];
 
 if (topic.endsWith("/mode/set")) {
   // HA sends: "cool", "heat", "off", etc.
@@ -118,21 +121,23 @@ if (topic.endsWith("/mode/set")) {
     return null;
   }
 } else if (topic.endsWith("/fan/set")) {
-  // HA sends: "low", "high", "medium", "auto"
+  // HA sends: "auto", "low", "high", "Cycled Low", "Cycled High"
   if (!(val in FAN_MAP)) return null;
 
   const fanValue = FAN_MAP[val];
 
   // Use mode-specific fan key based on current HVAC mode
   if (currentMode === "fan_only") {
-    // Fan-only mode doesn't support auto — default to max speed
-    change.fanOnly = fanValue === 128 ? maxFanSpeed : fanValue;
+    // Fan-only mode doesn't support auto — default to high
+    change.fanOnly = fanValue === 128 ? 2 : fanValue;
   } else if (currentMode === "cool") {
     change.coolFan = fanValue;
   } else if (currentMode === "heat") {
-    // Gas furnace (mode 3,4) vs electric heat (mode 5,6,7,12)
-    if (currentModeNum === 3 || currentModeNum === 4) {
-      change.gasFan = fanValue;
+    // Gas furnace (mode 3,4,13) fan is autonomous: auto passes through,
+    // any other speed request is ignored. Electric heat (5,6,7,12) → eleFan.
+    if (GAS_HEAT_MODES.includes(currentModeNum)) {
+      if (fanValue !== 128) return null;
+      change.gasFan = 128;
     } else {
       change.eleFan = fanValue;
     }
