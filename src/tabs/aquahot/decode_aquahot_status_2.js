@@ -103,6 +103,23 @@ function decodeSystemStatus(data, result) {
     result.secondary_value = decodeUint16(data, 4);
 
     // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)
+
+    // This burst is the AquaHot's own acknowledgment of an AQUAHOT_COMMAND_2
+    // (FF2F), fired after ANY FF2F is seen on the bus regardless of source.
+    // Sub-index 0x07 confirms Quiet Mode; 0x0A confirms Interior Heating
+    // Priority. Confirmed via bus capture: value flips to 0x01 immediately
+    // after the corresponding FF2F command lands, whether sent by the panel
+    // or by LibreCoach itself. This is a more reliable status source than
+    // the raw FF2F echo, since LibreCoach's own outgoing FF2F commands are
+    // not looped back into its own decode pipeline.
+    // 0xFF is the no-data fill — don't report a false OFF for it.
+    if (data[3] !== 0xff) {
+        if (data[1] === 0x07) {
+            result.quiet_mode_confirmed_on = data[3] === 0x01;
+        } else if (data[1] === 0x0a) {
+            result.interior_heating_confirmed_on = data[3] === 0x01;
+        }
+    }
 }
 
 // === Main Decode Function ===

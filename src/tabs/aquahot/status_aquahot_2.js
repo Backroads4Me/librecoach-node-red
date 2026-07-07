@@ -44,8 +44,17 @@ function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
     state_topic: `homeassistant/sensor/${entityId}/state`,
     availability_mode: "all",
     availability: [
-      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      {
+        topic: "librecoach/nodered/status",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
+      {
+        topic: "can/status",
+        value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
     ],
     device,
   };
@@ -73,8 +82,17 @@ function binarySensorConfig(entityId, name, deviceClass, icon) {
       icon,
       availability_mode: "all",
       availability: [
-        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        {
+          topic: "librecoach/nodered/status",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
+        {
+          topic: "can/status",
+          value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
       ],
       device,
     },
@@ -124,8 +142,17 @@ function switchConfig(entityId, name, icon, commandTopic) {
       icon,
       availability_mode: "all",
       availability: [
-        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        {
+          topic: "librecoach/nodered/status",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
+        {
+          topic: "can/status",
+          value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
       ],
       device,
     },
@@ -154,8 +181,17 @@ function climateConfig(entityId, name) {
     optimistic: true,
     availability_mode: "all",
     availability: [
-      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      {
+        topic: "librecoach/nodered/status",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
+      {
+        topic: "can/status",
+        value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
     ],
     device,
   };
@@ -236,27 +272,29 @@ if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
 else if (dgn_name === "AQUAHOT_COMMAND_2") {
   if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
     // Quiet Mode on/off
-    publishSwitch(
-      "aquahot_quiet_mode",
-      onOff(p.quiet_mode_on),
-      () => switchConfig(
+    publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_on), () =>
+      switchConfig(
         "aquahot_quiet_mode",
         "Quiet Mode",
         "mdi:volume-off",
         "homeassistant/switch/aquahot_quiet_mode/set",
       ),
     );
-  } else if (p.command_type === 0x0a && typeof p.interior_heating_on === "boolean") {
+  } else if (
+    p.command_type === 0x0a &&
+    typeof p.interior_heating_on === "boolean"
+  ) {
     // Interior Heating Priority on/off
     publishSwitch(
       "aquahot_interior_heating",
       onOff(p.interior_heating_on),
-      () => switchConfig(
-        "aquahot_interior_heating",
-        "Interior Heating Priority",
-        "mdi:home-thermometer",
-        "homeassistant/switch/aquahot_interior_heating/set",
-      ),
+      () =>
+        switchConfig(
+          "aquahot_interior_heating",
+          "Interior Heating Priority",
+          "mdi:home-thermometer",
+          "homeassistant/switch/aquahot_interior_heating/set",
+        ),
     );
   }
 }
@@ -276,13 +314,24 @@ else if (dgn_name === "WATERHEATER_STATUS_2") {
         climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
       );
     }
-    // Store per-zone active state for downstream use
-    if (typeof p.zone_active[0] === "boolean") {
-      flow.set("aquahot_zone_front_active", p.zone_active[0]);
-    }
-    if (typeof p.zone_active[1] === "boolean") {
-      flow.set("aquahot_zone_floor_active", p.zone_active[1]);
-    }
+  }
+
+  // Corroborating confirmation, independent of the raw FF2F echo — 1FE99
+  // is broadcast continuously by the AquaHot regardless of who issued the
+  // last command, so this self-heals even when LibreCoach's own outgoing
+  // commands aren't looped back into decode.
+  if (typeof p.interior_heating_confirmed_on === "boolean") {
+    publishSwitch(
+      "aquahot_interior_heating",
+      onOff(p.interior_heating_confirmed_on),
+      () =>
+        switchConfig(
+          "aquahot_interior_heating",
+          "Interior Heating Priority",
+          "mdi:home-thermometer",
+          "homeassistant/switch/aquahot_interior_heating/set",
+        ),
+    );
   }
 }
 
@@ -316,6 +365,20 @@ else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
         null,
         null,
         "mdi:information",
+      ),
+    );
+  }
+
+  // Corroborating confirmation, independent of the raw FF2F echo — this
+  // burst fires after ANY FF2F, including LibreCoach's own commands that
+  // are not looped back into the decode pipeline.
+  if (typeof p.quiet_mode_confirmed_on === "boolean") {
+    publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_confirmed_on), () =>
+      switchConfig(
+        "aquahot_quiet_mode",
+        "Quiet Mode",
+        "mdi:volume-off",
+        "homeassistant/switch/aquahot_quiet_mode/set",
       ),
     );
   }

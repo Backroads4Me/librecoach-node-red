@@ -3085,8 +3085,16 @@
       const elecLowTempRaw = (byte6 >> 4) & 0x03; // Bits 4-5
       result.electric_low_temperature = decode2BitWarning(elecLowTempRaw);
 
-      const elecLowInputRaw = (byte6 >> 6) & 0x03; // Bits 6-7
-      result.electric_low_input = decode2BitOnOff(elecLowInputRaw);
+      // AquaHot 125D: bits 6-7 are independently confirmed via bus capture as
+      // burner active (bit 6) and interior heating priority active (bit 7),
+      // NOT the generic RV-C 2-bit "electric low input" field — so that field is
+      // intentionally not decoded here. Confirmed by observing 0x83->0x43 (interior heat off,
+      // burner unchanged) and 0x83->0x03 (burner off, interior heat unchanged)
+      // transitions. Broadcast regardless of who issued the command, so it
+      // self-heals even when LibreCoach's own outgoing commands aren't looped
+      // back into decode.
+      result.interior_heating_confirmed_on = (byte6 & 0x80) !== 0;
+      result.burner_confirmed_on = (byte6 & 0x40) !== 0;
 
       // Byte 7: Electric High Element Status Flags
       const byte7 = data[7];
@@ -3358,8 +3366,17 @@
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device,
       };
@@ -3388,8 +3405,17 @@
           icon,
           availability_mode: "all",
           availability: [
-            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            {
+              topic: "librecoach/nodered/status",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
+            {
+              topic: "can/status",
+              value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
           ],
           device,
         },
@@ -3620,6 +3646,12 @@
     // === WATERHEATER_STATUS_2 (1FE99) ===
 
     else if (dgn_name === "WATERHEATER_STATUS_2") {
+      // AquaHot 125D: byte 6 bit 6 corroborates burner physical state (see
+      // decode_waterheater_status.js).
+      if (typeof p.burner_confirmed_on === "boolean") {
+        global.set("aquahot_burner_active", p.burner_confirmed_on, "file");
+      }
+
       if (typeof p.status === "string" && p.status !== "Not Available") {
         publishSensor(`waterheater_${i}_status`, p.status, () =>
           sensorConfig(

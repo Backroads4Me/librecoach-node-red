@@ -46,8 +46,17 @@ function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
     state_topic: `homeassistant/sensor/${entityId}/state`,
     availability_mode: "all",
     availability: [
-      { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-      { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+      {
+        topic: "librecoach/nodered/status",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
+      {
+        topic: "can/status",
+        value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+        payload_available: "online",
+        payload_not_available: "offline",
+      },
     ],
     device,
   };
@@ -75,8 +84,17 @@ function binarySensorConfig(entityId, name, deviceClass, icon) {
       icon,
       availability_mode: "all",
       availability: [
-        { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-        { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+        {
+          topic: "librecoach/nodered/status",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
+        {
+          topic: "can/status",
+          value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+          payload_available: "online",
+          payload_not_available: "offline",
+        },
       ],
       device,
     },
@@ -295,6 +313,12 @@ if (dgn_name === "WATERHEATER_STATUS") {
 
 // === WATERHEATER_STATUS_2 (1FE99) ===
 else if (dgn_name === "WATERHEATER_STATUS_2") {
+  // AquaHot 125D: byte 6 bit 6 corroborates burner physical state (see
+  // decode_waterheater_status.js).
+  if (typeof p.burner_confirmed_on === "boolean") {
+    global.set("aquahot_burner_active", p.burner_confirmed_on, "file");
+  }
+
   if (typeof p.status === "string" && p.status !== "Not Available") {
     publishSensor(`waterheater_${i}_status`, p.status, () =>
       sensorConfig(

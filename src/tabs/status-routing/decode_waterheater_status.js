@@ -243,8 +243,16 @@ function decodeStatus2(data, result) {
   const elecLowTempRaw = (byte6 >> 4) & 0x03; // Bits 4-5
   result.electric_low_temperature = decode2BitWarning(elecLowTempRaw);
 
-  const elecLowInputRaw = (byte6 >> 6) & 0x03; // Bits 6-7
-  result.electric_low_input = decode2BitOnOff(elecLowInputRaw);
+  // AquaHot 125D: bits 6-7 are independently confirmed via bus capture as
+  // burner active (bit 6) and interior heating priority active (bit 7),
+  // NOT the generic RV-C 2-bit "electric low input" field — so that field is
+  // intentionally not decoded here. Confirmed by observing 0x83->0x43 (interior heat off,
+  // burner unchanged) and 0x83->0x03 (burner off, interior heat unchanged)
+  // transitions. Broadcast regardless of who issued the command, so it
+  // self-heals even when LibreCoach's own outgoing commands aren't looped
+  // back into decode.
+  result.interior_heating_confirmed_on = (byte6 & 0x80) !== 0;
+  result.burner_confirmed_on = (byte6 & 0x40) !== 0;
 
   // Byte 7: Electric High Element Status Flags
   const byte7 = data[7];

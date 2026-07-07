@@ -225,8 +225,17 @@
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device,
       };
@@ -255,8 +264,17 @@
           icon,
           availability_mode: "all",
           availability: [
-            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            {
+              topic: "librecoach/nodered/status",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
+            {
+              topic: "can/status",
+              value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
           ],
           device,
         },
@@ -312,8 +330,17 @@
           icon,
           availability_mode: "all",
           availability: [
-            { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-            { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+            {
+              topic: "librecoach/nodered/status",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
+            {
+              topic: "can/status",
+              value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+              payload_available: "online",
+              payload_not_available: "offline",
+            },
           ],
           device,
         },
@@ -344,8 +371,17 @@
         optimistic: true,
         availability_mode: "all",
         availability: [
-          { topic: "librecoach/nodered/status", payload_available: "online", payload_not_available: "offline" },
-          { topic: "can/status", value_template: "{{ 'online' if value == 'online' else 'offline' }}", payload_available: "online", payload_not_available: "offline" },
+          {
+            topic: "librecoach/nodered/status",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
+          {
+            topic: "can/status",
+            value_template: "{{ 'online' if value == 'online' else 'offline' }}",
+            payload_available: "online",
+            payload_not_available: "offline",
+          },
         ],
         device,
       };
@@ -436,27 +472,29 @@
     else if (dgn_name === "AQUAHOT_COMMAND_2") {
       if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
         // Quiet Mode on/off
-        publishSwitch(
-          "aquahot_quiet_mode",
-          onOff(p.quiet_mode_on),
-          () => switchConfig(
+        publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_on), () =>
+          switchConfig(
             "aquahot_quiet_mode",
             "Quiet Mode",
             "mdi:volume-off",
             "homeassistant/switch/aquahot_quiet_mode/set",
           ),
         );
-      } else if (p.command_type === 0x0a && typeof p.interior_heating_on === "boolean") {
+      } else if (
+        p.command_type === 0x0a &&
+        typeof p.interior_heating_on === "boolean"
+      ) {
         // Interior Heating Priority on/off
         publishSwitch(
           "aquahot_interior_heating",
           onOff(p.interior_heating_on),
-          () => switchConfig(
-            "aquahot_interior_heating",
-            "Interior Heating Priority",
-            "mdi:home-thermometer",
-            "homeassistant/switch/aquahot_interior_heating/set",
-          ),
+          () =>
+            switchConfig(
+              "aquahot_interior_heating",
+              "Interior Heating Priority",
+              "mdi:home-thermometer",
+              "homeassistant/switch/aquahot_interior_heating/set",
+            ),
         );
       }
     }
@@ -482,13 +520,24 @@
             climateConfig(`aquahot_zone_${z}`, `Zone ${z}`),
           );
         }
-        // Store per-zone active state for downstream use
-        if (typeof p.zone_active[0] === "boolean") {
-          flow.set("aquahot_zone_front_active", p.zone_active[0]);
-        }
-        if (typeof p.zone_active[1] === "boolean") {
-          flow.set("aquahot_zone_floor_active", p.zone_active[1]);
-        }
+      }
+
+      // Corroborating confirmation, independent of the raw FF2F echo — 1FE99
+      // is broadcast continuously by the AquaHot regardless of who issued the
+      // last command, so this self-heals even when LibreCoach's own outgoing
+      // commands aren't looped back into decode.
+      if (typeof p.interior_heating_confirmed_on === "boolean") {
+        publishSwitch(
+          "aquahot_interior_heating",
+          onOff(p.interior_heating_confirmed_on),
+          () =>
+            switchConfig(
+              "aquahot_interior_heating",
+              "Interior Heating Priority",
+              "mdi:home-thermometer",
+              "homeassistant/switch/aquahot_interior_heating/set",
+            ),
+        );
       }
     }
 
@@ -526,6 +575,20 @@
             null,
             null,
             "mdi:information",
+          ),
+        );
+      }
+
+      // Corroborating confirmation, independent of the raw FF2F echo — this
+      // burst fires after ANY FF2F, including LibreCoach's own commands that
+      // are not looped back into the decode pipeline.
+      if (typeof p.quiet_mode_confirmed_on === "boolean") {
+        publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_confirmed_on), () =>
+          switchConfig(
+            "aquahot_quiet_mode",
+            "Quiet Mode",
+            "mdi:volume-off",
+            "homeassistant/switch/aquahot_quiet_mode/set",
           ),
         );
       }
@@ -859,6 +922,23 @@
         result.secondary_value = decodeUint16(data, 4);
 
         // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)
+
+        // This burst is the AquaHot's own acknowledgment of an AQUAHOT_COMMAND_2
+        // (FF2F), fired after ANY FF2F is seen on the bus regardless of source.
+        // Sub-index 0x07 confirms Quiet Mode; 0x0A confirms Interior Heating
+        // Priority. Confirmed via bus capture: value flips to 0x01 immediately
+        // after the corresponding FF2F command lands, whether sent by the panel
+        // or by LibreCoach itself. This is a more reliable status source than
+        // the raw FF2F echo, since LibreCoach's own outgoing FF2F commands are
+        // not looped back into its own decode pipeline.
+        // 0xFF is the no-data fill — don't report a false OFF for it.
+        if (data[3] !== 0xff) {
+            if (data[1] === 0x07) {
+                result.quiet_mode_confirmed_on = data[3] === 0x01;
+            } else if (data[1] === 0x0a) {
+                result.interior_heating_confirmed_on = data[3] === 0x01;
+            }
+        }
     }
 
 
