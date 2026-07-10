@@ -57,6 +57,12 @@ if (
   safePath = safePath.replace("dc_0", "dc_out");
 }
 
+// Must stay in sync with the same normalization in victron_create —
+// mismatched safePath means state topics no longer match discovery configs.
+safePath = safePath
+  .replace("chargepower", "charge_power")
+  .replace("inverterpower", "inverter_power")
+  .replace("totaloutputpower", "total_output_power");
 safePath = safePath
   .replace("_activein", "_in")
   .replace("_active_in", "_in")

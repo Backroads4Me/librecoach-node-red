@@ -238,4 +238,48 @@ for (const pair of powerTotalPairs) {
   }
 }
 
+// === 8. Synthetic VE.Bus Flow Sensors ===
+// Power-flow cards need directional (positive-only) values, but the VE.Bus
+// DC side is one signed sensor. Derive charge/invert splits and the total
+// power the device delivers on both sides (AC out + DC charge).
+function sendSynthetic(path, value) {
+  const rounded = Math.round(value * 10) / 10;
+  const rbeKey = `rbe_${serviceType}_${instance}_${path}`;
+  const seen = uniqueVictron.includes(`${serviceType}_${instance}_${path}`);
+  if (flow.get(rbeKey) === rounded && seen) return;
+  flow.set(rbeKey, rounded);
+  node.send({
+    payload: { ...basePayload, dbus_path: path, value: rounded, unit: "W" },
+  });
+}
+
+if (serviceType === "vebus") {
+  const flowKey = `vebusflow_${instance}`;
+  const st = flow.get(flowKey) || {};
+  let touched = false;
+
+  if (dbusPath === "/Dc/0/Power") {
+    st.dc = processedValue;
+    touched = true;
+  }
+  if (dbusPath === "/Ac/Out/L1/P" || dbusPath === "/Ac/Out/L2/P") {
+    const t = flow.get(`total_vebus_${instance}_/Ac/Out/Total/P`) || {};
+    if (t.l1 !== undefined && t.l2 !== undefined) {
+      st.acOut = (Number(t.l1) || 0) + (Number(t.l2) || 0);
+      touched = true;
+    }
+  }
+
+  if (touched) {
+    flow.set(flowKey, st);
+    if (st.dc !== undefined) {
+      sendSynthetic("/Dc/0/ChargePower", Math.max(0, st.dc));
+      sendSynthetic("/Dc/0/InverterPower", Math.max(0, -st.dc));
+      if (st.acOut !== undefined) {
+        sendSynthetic("/TotalOutputPower", st.acOut + Math.max(0, st.dc));
+      }
+    }
+  }
+}
+
 return msg;

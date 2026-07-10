@@ -1039,6 +1039,56 @@
     }
 
 
+    // === 8. Synthetic VE.Bus Flow Sensors ===
+
+    // Power-flow cards need directional (positive-only) values, but the VE.Bus
+
+    // DC side is one signed sensor. Derive charge/invert splits and the total
+
+    // power the device delivers on both sides (AC out + DC charge).
+
+    function sendSynthetic(path, value) {
+      const rounded = Math.round(value * 10) / 10;
+      const rbeKey = `rbe_${serviceType}_${instance}_${path}`;
+      const seen = uniqueVictron.includes(`${serviceType}_${instance}_${path}`);
+      if (flow.get(rbeKey) === rounded && seen) return;
+      flow.set(rbeKey, rounded);
+      node.send({
+        payload: { ...basePayload, dbus_path: path, value: rounded, unit: "W" },
+      });
+    }
+
+
+    if (serviceType === "vebus") {
+      const flowKey = `vebusflow_${instance}`;
+      const st = flow.get(flowKey) || {};
+      let touched = false;
+
+      if (dbusPath === "/Dc/0/Power") {
+        st.dc = processedValue;
+        touched = true;
+      }
+      if (dbusPath === "/Ac/Out/L1/P" || dbusPath === "/Ac/Out/L2/P") {
+        const t = flow.get(`total_vebus_${instance}_/Ac/Out/Total/P`) || {};
+        if (t.l1 !== undefined && t.l2 !== undefined) {
+          st.acOut = (Number(t.l1) || 0) + (Number(t.l2) || 0);
+          touched = true;
+        }
+      }
+
+      if (touched) {
+        flow.set(flowKey, st);
+        if (st.dc !== undefined) {
+          sendSynthetic("/Dc/0/ChargePower", Math.max(0, st.dc));
+          sendSynthetic("/Dc/0/InverterPower", Math.max(0, -st.dc));
+          if (st.acOut !== undefined) {
+            sendSynthetic("/TotalOutputPower", st.acOut + Math.max(0, st.dc));
+          }
+        }
+      }
+    }
+
+
     return msg;
   outputs: 1
   timeout: 0
@@ -1271,6 +1321,9 @@
       "vebus:/State": "Inverter State",
       "vebus:/Mode": "Inverter Mode",
       "vebus:/Relay/0/State": "Inverter Relay",
+      "vebus:/Dc/0/ChargePower": "Charge Power",
+      "vebus:/Dc/0/InverterPower": "Inverter Power",
+      "vebus:/TotalOutputPower": "Total Output Power",
       "vebus:/Ac/ActiveIn/Connected": "Shore Power Connected",
       "vebus:/Alarms/LowBattery": "Low Battery Alarm",
       "vebus:/Alarms/Overload": "Overload Alarm",
@@ -1351,6 +1404,10 @@
 
     // 2. Term normalization
 
+    safePath = safePath
+      .replace("chargepower", "charge_power")
+      .replace("inverterpower", "inverter_power")
+      .replace("totaloutputpower", "total_output_power");
     safePath = safePath.replace("_activein", "_in");
 
     safePath = safePath.replace("_active_in", "_in");
@@ -1405,10 +1462,10 @@
 
     const displayName = product_name
       ? product_name
-          .split(/\s+/)
-          .filter((w) => /^[a-zA-Z]/.test(w))
-          .slice(0, 2)
-          .join(" ")
+        .split(/\s+/)
+        .filter((w) => /^[a-zA-Z]/.test(w))
+        .slice(0, 2)
+        .join(" ")
       : "";
 
     // Prefix with device display name, for example "MultiPlus-II - Inverter DC
@@ -1817,6 +1874,14 @@
     }
 
 
+    // Must stay in sync with the same normalization in victron_create —
+
+    // mismatched safePath means state topics no longer match discovery configs.
+
+    safePath = safePath
+      .replace("chargepower", "charge_power")
+      .replace("inverterpower", "inverter_power")
+      .replace("totaloutputpower", "total_output_power");
     safePath = safePath
       .replace("_activein", "_in")
       .replace("_active_in", "_in")

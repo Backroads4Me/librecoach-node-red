@@ -130,6 +130,9 @@ const friendlyNameMap = {
   "vebus:/State": "Inverter State",
   "vebus:/Mode": "Inverter Mode",
   "vebus:/Relay/0/State": "Inverter Relay",
+  "vebus:/Dc/0/ChargePower": "Charge Power",
+  "vebus:/Dc/0/InverterPower": "Inverter Power",
+  "vebus:/TotalOutputPower": "Total Output Power",
   "vebus:/Ac/ActiveIn/Connected": "Shore Power Connected",
   "vebus:/Alarms/LowBattery": "Low Battery Alarm",
   "vebus:/Alarms/Overload": "Overload Alarm",
@@ -197,6 +200,10 @@ if (service_type === "solarcharger" && safePath.includes("dc_0")) {
 }
 
 // 2. Term normalization
+safePath = safePath
+  .replace("chargepower", "charge_power")
+  .replace("inverterpower", "inverter_power")
+  .replace("totaloutputpower", "total_output_power");
 safePath = safePath.replace("_activein", "_in");
 safePath = safePath.replace("_active_in", "_in");
 safePath = safePath.replace("_active_input", "_in");
@@ -238,10 +245,10 @@ const baseName =
 // Build short display name from first two alpha words of product name
 const displayName = product_name
   ? product_name
-      .split(/\s+/)
-      .filter((w) => /^[a-zA-Z]/.test(w))
-      .slice(0, 2)
-      .join(" ")
+    .split(/\s+/)
+    .filter((w) => /^[a-zA-Z]/.test(w))
+    .slice(0, 2)
+    .join(" ")
   : "";
 
 // Prefix with device display name, for example "MultiPlus-II - Inverter DC Power".
