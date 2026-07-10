@@ -157,34 +157,33 @@
   z: b3d80c5dc947ec88
   name: encode_generator_command
   func: >
-    // Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)
+    // Encodes GENERATOR_COMMAND messages (1FFDA)
 
-    // §6.35.3 — preferred method for network-initiated start/stop (respects
-    Quiet Time)
+    // RV-C §6.18.25 — direct generator start/stop.
 
 
     const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;
 
     const PRIORITY = 6;
 
-    const DGN = "1FEFF";
+    const DGN = "1FFDA";
 
 
     const command = msg.command; // Expects "ON" or "OFF"
 
 
-    let demandByte;
+    let commandByte;
 
     switch (command) {
       case "ON":
-        demandByte = 0x01; // bits 0-1 = 01 = Generator power demanded
+        commandByte = 0x01; // Start
         break;
       case "OFF":
-        demandByte = 0x00; // bits 0-1 = 00 = No demand
+        commandByte = 0x00; // Stop
         break;
       default:
         node.warn(
-          `[encode_generator_demand_command] Invalid command: "${command}". Expected "ON" or "OFF"`,
+          `[encode_generator_command] Invalid command: "${command}". Expected "ON" or "OFF"`,
         );
         return null;
     }
@@ -192,12 +191,12 @@
 
     const dataBytes = new Array(8).fill(0xff);
 
-    dataBytes[0] = demandByte;
+    dataBytes[0] = commandByte;
 
 
-    const dataHex = dataBytes
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
+    const dataHex = dataBytes.map((b) => b.toString(16).padStart(2,
+    "0")).join("");
+
 
     const dgnInt = parseInt(DGN, 16);
 

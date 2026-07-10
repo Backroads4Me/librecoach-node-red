@@ -286,7 +286,9 @@
       "e19247ab204a8e12"
     ],
     "x": 114,
-    "y": 839
+    "y": 839,
+    "w": 1312,
+    "h": 202
   },
   {
     "id": "8aac091f0fffbf22",
@@ -461,7 +463,9 @@
       "eea2c8f34cb0db28"
     ],
     "x": 114,
-    "y": 219
+    "y": 219,
+    "w": 1312,
+    "h": 562
   },
   {
     "id": "bc622f80fe99faa0",
@@ -5039,7 +5043,7 @@
     "z": "b3d80c5dc947ec88",
     "g": "aea9d97e0563bd83",
     "name": "encode_generator_command",
-    "func": "// Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)\n// §6.35.3 — preferred method for network-initiated start/stop (respects Quiet Time)\n\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FEFF\";\n\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\nlet demandByte;\nswitch (command) {\n  case \"ON\":\n    demandByte = 0x01; // bits 0-1 = 01 = Generator power demanded\n    break;\n  case \"OFF\":\n    demandByte = 0x00; // bits 0-1 = 00 = No demand\n    break;\n  default:\n    node.warn(\n      `[encode_generator_demand_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = demandByte;\n\nconst dataHex = dataBytes\n  .map((b) => b.toString(16).padStart(2, \"0\"))\n  .join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
+    "func": "// Encodes GENERATOR_COMMAND messages (1FFDA)\n// RV-C §6.18.25 — direct generator start/stop.\n\nconst SOURCE_ADDRESS = global.get(\"rvc_source_address\") || 254;\nconst PRIORITY = 6;\nconst DGN = \"1FFDA\";\n\nconst command = msg.command; // Expects \"ON\" or \"OFF\"\n\nlet commandByte;\nswitch (command) {\n  case \"ON\":\n    commandByte = 0x01; // Start\n    break;\n  case \"OFF\":\n    commandByte = 0x00; // Stop\n    break;\n  default:\n    node.warn(\n      `[encode_generator_command] Invalid command: \"${command}\". Expected \"ON\" or \"OFF\"`,\n    );\n    return null;\n}\n\nconst dataBytes = new Array(8).fill(0xff);\ndataBytes[0] = commandByte;\n\nconst dataHex = dataBytes.map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n\nconst dgnInt = parseInt(DGN, 16);\nconst canIdInt = (PRIORITY << 26) | (dgnInt << 8) | SOURCE_ADDRESS;\nconst canIdHex = canIdInt.toString(16).padStart(8, \"0\");\n\nnode.send({\n  topic: \"can/send\",\n  payload: `${canIdHex.toUpperCase()}#${dataHex.toUpperCase()}`,\n});\n\nreturn null;\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
