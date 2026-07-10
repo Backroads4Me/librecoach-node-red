@@ -1,7 +1,7 @@
 {
     "name": "LibreCoach",
     "description": "A Node-RED project for controlling and monitoring RV systems. Visit LibreCoach.com for more information.",
-    "version": "1.3.4",
+    "version": "1.4.0",
     "license": "GPL-3.0-or-later",
     "dependencies": {
         "node-red-contrib-home-assistant-websocket": "0.80.3",
