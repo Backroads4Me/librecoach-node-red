@@ -1,3 +1,4 @@
+// Aqua-Hot 400/600-Series systems
 // Status Updater for Aqua-Hot
 // Decodes proprietary AQUAHOT status byte into individual status messages
 

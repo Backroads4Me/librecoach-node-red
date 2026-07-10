@@ -38,6 +38,8 @@
   z: 384249601e37ba22
   name: status_aquahot_1
   func: >
+    // Aqua-Hot 400/600-Series systems
+
     // HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
 
     // Self-creating: publishes MQTT discovery on first valid reading per
@@ -157,6 +159,8 @@
   z: 384249601e37ba22
   name: status_aquahot_2
   func: >
+    // Aqua-Hot 100/200-Series systems
+
     // Publishes proprietary AquaHot zone entity states to MQTT state topics.
 
     // Also publishes MQTT discovery configs the first time a valid value is
@@ -643,6 +647,7 @@
   z: 384249601e37ba22
   name: decode_aquahot_status_1
   func: |
+    // Aqua-Hot 400/600-Series systems
     // Status Updater for Aqua-Hot
     // Decodes proprietary AQUAHOT status byte into individual status messages
 
@@ -801,6 +806,8 @@
   z: 384249601e37ba22
   name: decode_aquahot_status_2
   func: >
+    // Aqua-Hot 100/200-Series systems
+
     // Decoder for Proprietary AquaHot _2 DGNs:
 
     // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E

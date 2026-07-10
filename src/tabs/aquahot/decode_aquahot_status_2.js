@@ -1,3 +1,4 @@
+// Aqua-Hot 100/200-Series systems
 // Decoder for Proprietary AquaHot _2 DGNs:
 // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
 //

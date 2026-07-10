@@ -97,6 +97,8 @@ if (!dgn_name && dp === 0 && pf >= 0xf0) {
 }
 
 // Fallback logic for proprietary PGNs not in lookup table
+// Aqua-Hot 100/200-Series systems = AQUAHOT_1
+// Aqua-Hot 400/600-Series systems = AQUAHOT_2
 if (!dgn_name) {
   if (pgn === "EF64") {
     dgn_name = "AQUAHOT_COMMAND_1";

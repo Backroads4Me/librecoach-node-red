@@ -1,3 +1,4 @@
+// Aqua-Hot 400/600-Series systems
 // HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
 // Self-creating: publishes MQTT discovery on first valid reading per instance.
 // Output 1: MQTT messages (discovery + state)
