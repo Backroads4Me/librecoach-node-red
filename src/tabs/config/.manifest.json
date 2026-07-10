@@ -323,6 +323,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "e768c973d1faa66f": {
+    "nodeId": "e768c973d1faa66f",
+    "name": "migrations",
+    "sanitizedName": "migrations",
+    "fileName": "migrations",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "f3ee6dc19b0155a0": {
     "nodeId": "f3ee6dc19b0155a0",
     "name": "record_unknown_export",

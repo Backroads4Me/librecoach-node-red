@@ -36,9 +36,13 @@ const pathWhitelist = {
     "/Ac/ActiveIn/ActiveInput",
     "/Ac/ActiveIn/Source",
     "/Dc/System/Power",
+    "/Dc/Battery/TimeToGo",
+    "/SystemState/State",
     "/Relay/0/State",
     "/Relay/1/State",
   ],
+  // Overlaps with system:/Dc/Battery/*, which mirrors only the elected battery
+  // monitor — per-device paths are kept so additional shunts/BMS batteries report.
   battery: [
     "/Dc/0/Voltage",
     "/Dc/0/Current",
@@ -46,10 +50,13 @@ const pathWhitelist = {
     "/Dc/0/Temperature",
     "/Dc/1/Voltage",
     "/Soc",
+    "/ConsumedAmphours",
+    "/Alarms/LowVoltage",
   ],
   solarcharger: [
     "/Yield/Power",
     "/Yield/System",
+    "/History/Daily/0/Yield",
     "/Dc/0/Voltage",
     "/Dc/0/Current",
     "/Pv/V",
@@ -101,6 +108,10 @@ const pathWhitelist = {
     "/State",
     "/Mode",
     "/Relay/0/State",
+    "/Ac/ActiveIn/Connected",
+    "/Alarms/LowBattery",
+    "/Alarms/Overload",
+    "/Alarms/HighTemperature",
   ],
 };
 
@@ -121,6 +132,10 @@ try {
   rawValue = msg.payload;
 }
 
+// Venus publishes TimeToGo as null when not discharging (infinite). Publish 0
+// so the HA sensor clears instead of holding its last discharge value.
+if (rawValue === null && dbusPath.endsWith("/TimeToGo")) rawValue = 0;
+
 if (rawValue === null || rawValue === undefined) return null;
 
 let processedValue = rawValue;
@@ -137,7 +152,11 @@ const uniqueVictron = global.get("uniqueVictron") || [];
 const discoverySeen = uniqueVictron.includes(discoveryKey);
 const alwaysPublishState =
   dbusPath === "/Mode" || dbusPath === "/Ac/ActiveIn/CurrentLimit";
-if (flow.get(cacheKey) === processedValue && discoverySeen && !alwaysPublishState)
+if (
+  flow.get(cacheKey) === processedValue &&
+  discoverySeen &&
+  !alwaysPublishState
+)
   return null;
 flow.set(cacheKey, processedValue);
 

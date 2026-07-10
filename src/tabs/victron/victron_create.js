@@ -83,6 +83,8 @@ const friendlyNameMap = {
   "system:/Ac/ActiveIn/ActiveInput": "Active AC Input",
   "system:/Ac/ActiveIn/Source": "AC Input Source",
   "system:/Dc/System/Power": "DC Loads Power",
+  "system:/Dc/Battery/TimeToGo": "Battery Time to Go",
+  "system:/SystemState/State": "System State",
   "system:/Ac/Consumption/Total/Power": "AC Consumption Total",
   "system:/Ac/Grid/Total/Power": "Shore Power Total",
   "system:/Relay/0/State": "Relay 1",
@@ -94,9 +96,12 @@ const friendlyNameMap = {
   "battery:/Dc/0/Temperature": "Battery Temperature",
   "battery:/Dc/1/Voltage": "Auxiliary Battery Voltage",
   "battery:/Soc": "Battery SOC",
+  "battery:/ConsumedAmphours": "Consumed Amp Hours",
+  "battery:/Alarms/LowVoltage": "Low Voltage Alarm",
   // solarcharger
   "solarcharger:/Yield/Power": "Solar Power",
   "solarcharger:/Yield/System": "Solar Total Yield",
+  "solarcharger:/History/Daily/0/Yield": "Solar Yield Today",
   "solarcharger:/Dc/0/Voltage": "Solar Battery Voltage",
   "solarcharger:/Dc/0/Current": "Solar Charge Current",
   "solarcharger:/Pv/V": "Solar Panel Voltage",
@@ -125,6 +130,10 @@ const friendlyNameMap = {
   "vebus:/State": "Inverter State",
   "vebus:/Mode": "Inverter Mode",
   "vebus:/Relay/0/State": "Inverter Relay",
+  "vebus:/Ac/ActiveIn/Connected": "Shore Power Connected",
+  "vebus:/Alarms/LowBattery": "Low Battery Alarm",
+  "vebus:/Alarms/Overload": "Overload Alarm",
+  "vebus:/Alarms/HighTemperature": "High Temperature Alarm",
   // charger
   "charger:/Dc/0/Voltage": "Output Voltage",
   "charger:/Dc/0/Current": "Output Current",
@@ -229,10 +238,10 @@ const baseName =
 // Build short display name from first two alpha words of product name
 const displayName = product_name
   ? product_name
-    .split(/\s+/)
-    .filter((w) => /^[a-zA-Z]/.test(w))
-    .slice(0, 2)
-    .join(" ")
+      .split(/\s+/)
+      .filter((w) => /^[a-zA-Z]/.test(w))
+      .slice(0, 2)
+      .join(" ")
   : "";
 
 // Prefix with device display name, for example "MultiPlus-II - Inverter DC Power".
@@ -284,6 +293,16 @@ const unitOverrides = {
   "/Dc/Pv/Power": "W",
   "/Dc/Pv/Current": "A DC",
   "/Dc/System/Power": "W",
+  "/Dc/Battery/TimeToGo": "seconds",
+  "/ConsumedAmphours": "Ah",
+  "/History/Daily/0/Yield": "kWh",
+  "/SystemState/State":
+    "0=Off;1=Low Power;2=Fault;3=Bulk Charging;4=Absorption Charging;5=Float Charging;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Assisting;11=Power Supply;244=Sustain;252=External Control",
+  "/Ac/ActiveIn/Connected": "0=Disconnected;1=Connected",
+  "/Alarms/LowVoltage": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/LowBattery": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/Overload": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/HighTemperature": "0=Ok;1=Warning;2=Alarm",
   "/Ac/Consumption/L1/Power": "W",
   "/Ac/Consumption/L2/Power": "W",
   "/Ac/Consumption/Total/Power": "W",
@@ -418,7 +437,10 @@ if (componentType === "switch") {
 // Add device_class if defined
 if (haMetadata.device_class && componentType !== "select") {
   payload.device_class = haMetadata.device_class;
-  payload.state_class = "measurement";
+  // Energy counters must be total_increasing to qualify for HA's Energy
+  // dashboard; resets (e.g. daily yield at midnight) are handled natively.
+  payload.state_class =
+    haMetadata.device_class === "energy" ? "total_increasing" : "measurement";
 }
 
 // Add unit_of_measurement if defined (excluding select)
@@ -426,16 +448,18 @@ if (haMetadata.unit && componentType !== "select") {
   payload.unit_of_measurement = haMetadata.unit;
 }
 
-// Apply precision formatting for numeric values, excluding switches and selects.
-if (componentType === "sensor" || componentType === "number") {
+// Apply precision formatting for numeric values, excluding switches, selects,
+// and enum sensors (which get a label-mapping template below).
+if (!isEnum && (componentType === "sensor" || componentType === "number")) {
   // Default to 1 decimal place if not specified
   const precision =
     haMetadata.precision !== undefined ? haMetadata.precision : 1;
   payload.value_template = `{{ (value_json | default({'value': 0})).value | float | round(${precision}) }}`;
 }
 
-// For enum values, build a Jinja2 template to map numeric values to labels
-if (isEnum && componentType === "select") {
+// For enum values, build a Jinja2 template to map numeric values to labels.
+// Applies to selects and to read-only enum sensors (states, alarms).
+if (isEnum && componentType !== "switch") {
   const enumParts = effectiveUnit.split(";").map((p) => p.trim());
   const mappings = {};
   for (const part of enumParts) {
@@ -449,7 +473,9 @@ if (isEnum && componentType === "select") {
   const mapEntries = Object.entries(mappings)
     .map(([k, v]) => `'${k}': '${v}'`)
     .join(", ");
-  payload.value_template = `{% set vj = value_json | default({'value': ''}) %}{% set m = {${mapEntries}} %}{{ m.get(vj.value | string, vj.value) }}`;
+  // Values arrive as numbers (possibly decoded as floats); normalize to a
+  // whole-number string so keys like '9' match.
+  payload.value_template = `{% set vj = value_json | default({'value': ''}) %}{% set m = {${mapEntries}} %}{{ m.get(vj.value | int(-1) | string, vj.value) }}`;
 
   if (componentType === "select") {
     payload.options = Object.values(mappings);
