@@ -21,7 +21,10 @@ module.exports = {
   contextStorage: {
     default: "memoryOnly", // Fast ephemeral storage
     memoryOnly: { module: "memory" },
-    file: { module: "localfilesystem", config: { dir: "/share/.librecoach" } }, // Persistent across add-on reinstalls
+    // Persistent across add-on reinstalls and channel switches. Lives in the
+    // preserve dir, NOT /share/.librecoach — that dir is re-deployed with
+    // `rsync --delete` on every add-on start and must hold no runtime state.
+    file: { module: "localfilesystem", config: { dir: "/share/.librecoach-preserve" } },
   },
 
   // Expose the deployed Node-RED project version to Function nodes.
