@@ -68,10 +68,13 @@ function decodeStartBatteryVoltage(value) {
 
 // STATUS_2 - Byte 1: Coolant temperature (uint8, °C, -40 offset per Table 5.3)
 // Output in °F by default to match project convention (see decode_thermostat_ambient_status.js)
+// Rounded to a whole degree: the 1°C sensor resolution carries no real
+// sub-degree precision, and with the genset off the unpowered sensor rails
+// low — a rounded "0" reads as idle where "-0.4" looks broken.
 function decodeCoolantTemperature(value, isCelsius = false) {
   if (value <= 250) {
     const tempC = value - 40; // -40°C to +210°C range
-    return isCelsius ? tempC : parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
+    return isCelsius ? tempC : Math.round((tempC * 9) / 5 + 32);
   } else if (value === 251) {
     return "Error";
   } else if (value === 252) {

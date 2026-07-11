@@ -112,12 +112,10 @@ function decodeStatus(data, result) {
   result.setpoint_temperature = decodeTemperature(setpointRaw);
   result.raw_setpoint_temperature = setpointRaw;
 
-  // Bytes 4-5: Water Temp
-  // AquaHot 125D uses raw LE uint16 / 128 = °C (not standard RV-C Kelvin encoding)
+  // Bytes 4-5: Water Temp (Tank Thermistor)
+  // Standard RV-C Kelvin encoding
   const waterTempRaw = decodeUint16(data, 4);
-  const waterTempC = parseFloat((waterTempRaw / 128).toFixed(1));
-  result.water_temperature_c = waterTempC;
-  result.water_temperature = parseFloat(((waterTempC * 9) / 5 + 32).toFixed(1));
+  result.water_temperature = decodeTemperature(waterTempRaw);
   result.raw_water_temperature = waterTempRaw;
 
   // Byte 6: Thermostat, Burner, AC Element, High Temp
@@ -181,6 +179,10 @@ function decodeStatus2(data, result) {
   result.coolant_low = coolantLevelRaw === 1;
 
   const hotWaterPriorityRaw = (byte2 >> 6) & 0x03; // Bits 6-7
+  // UNCONFIRMED against real behavior: a live faucet-draw test (2026-07,
+  // burner + interior heat running) never moved this field off 0b11
+  // "Not Available" — either the draw was too brief to trigger a priority
+  // switch or the bit position is wrong. Treat with skepticism.
   result.hot_water_priority = decodeHotWaterPriority(hotWaterPriorityRaw);
 
   // Byte 3: Output Statuses
@@ -243,16 +245,19 @@ function decodeStatus2(data, result) {
   const elecLowTempRaw = (byte6 >> 4) & 0x03; // Bits 4-5
   result.electric_low_temperature = decode2BitWarning(elecLowTempRaw);
 
-  // AquaHot 125D: bits 6-7 are independently confirmed via bus capture as
-  // burner active (bit 6) and interior heating priority active (bit 7),
-  // NOT the generic RV-C 2-bit "electric low input" field — so that field is
-  // intentionally not decoded here. Confirmed by observing 0x83->0x43 (interior heat off,
-  // burner unchanged) and 0x83->0x03 (burner off, interior heat unchanged)
-  // transitions. Broadcast regardless of who issued the command, so it
-  // self-heals even when LibreCoach's own outgoing commands aren't looped
-  // back into decode.
+  // AquaHot 100/200 Series: bits 6-7 are independently confirmed via bus capture as
+  // "any heat source active" (bit 6) and interior heating priority active
+  // (bit 7), NOT the generic RV-C 2-bit "electric low input" field — so that
+  // field is intentionally not decoded here. Bit 7 confirmed by 0x83->0x43
+  // (interior heat off) and 0x83->0x03 (burner off) transitions. Bit 6 was
+  // initially believed burner-specific, but an electric-only toggle also
+  // flipped it (0x03->0x43), so it must NOT feed the burner toggle-guard
+  // cache — burner state comes solely from 1FFF7. Broadcast regardless of
+  // who issued the command, so bit 7 self-heals the interior-heating switch
+  // even when LibreCoach's own outgoing commands aren't looped back into
+  // decode.
   result.interior_heating_confirmed_on = (byte6 & 0x80) !== 0;
-  result.burner_confirmed_on = (byte6 & 0x40) !== 0;
+  result.any_heat_confirmed_on = (byte6 & 0x40) !== 0;
 
   // Byte 7: Electric High Element Status Flags
   const byte7 = data[7];

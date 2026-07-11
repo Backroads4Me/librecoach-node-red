@@ -3,7 +3,8 @@
 // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
 //
 // Note: These are NOT part of the standard RV-C specification. Decoding is based on
-// reverse-engineered analysis of recordings. Confidence levels differ per field.
+// reverse-engineered analysis of recordings. Confidence levels differ per field:
+// fields marked CONFIRMED were verified against live hardware
 
 function decodeUint16(data, startByte) {
     return data[startByte] | (data[startByte + 1] << 8);
@@ -30,7 +31,7 @@ function decodeZoneThermostat(data, result) {
     // Byte 5: Unknown [LOW confidence]
     result.unknown_byte5 = data[5];
 
-    // Byte 6: Temperature [HIGH confidence for sub-index 01, °F]
+    // Byte 6: Temperature (sub-index 01, direct °F) — CONFIRMED
     if (data[1] === 0x01 && data[6] !== 0xff) {
         result.zone_temperature = data[6];
     }
@@ -45,9 +46,9 @@ function decodeCommand(data, result) {
     // Byte 0: Instance [HIGH confidence] (Always 0x01)
     result.instance = data[0];
 
-    // Byte 1: Command Type [HIGH confidence]
-    //   0x07 = Quiet Mode (observed during quiet mode on/off from 0x9E)
-    //   0x0A = Interior Heating Priority (observed during interior heating on/off from 0x9E)
+    // Byte 1: Command Type — CONFIRMED
+    //   0x07 = Quiet Mode
+    //   0x0A = Interior Heating Priority
     result.command_type = data[1];
     if (data[1] === 0x07) {
         result.command_name = "Quiet Mode";
@@ -59,7 +60,7 @@ function decodeCommand(data, result) {
 
     // Byte 2: Reserved [HIGH confidence] (Always 0x00)
 
-    // Byte 3: Meaning depends on command type
+    // Byte 3: Meaning depends on command type — on/off semantics CONFIRMED
     result.value_raw = data[3];
     if (data[1] === 0x07) {
         // Quiet Mode: byte 3 = on/off (0x01=On, 0x00=Off)
@@ -92,12 +93,14 @@ function decodeSystemStatus(data, result) {
     // Byte 0: Instance [HIGH confidence] (Always 0x01)
     result.instance = data[0];
 
-    // Byte 1: Sub-Index [HIGH confidence] (0x00 through 0x0B observed)
+    // Byte 1: Sub-Index [HIGH confidence] (0x00 through 0x0B observed).
+    // Only 0x07 (quiet mode) and 0x0A (interior heating) are CONFIRMED
     result.sub_index = data[1];
 
     // Byte 2: Reserved [HIGH confidence] (Always 0xFF)
 
-    // Byte 3: Value (primary) [MEDIUM confidence]
+    // Byte 3: Value (primary) [MEDIUM confidence except sub-indexes
+    // 0x07/0x0A, where on/off semantics are CONFIRMED]
     result.primary_value = data[3];
 
     // Bytes 4-5: Value (secondary) [LOW confidence]

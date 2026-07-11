@@ -280,7 +280,7 @@ if (dgn_name === "WATERHEATER_STATUS") {
     );
   }
 
-  // AquaHot 125D — diesel burner switch (controlled via 1FE98 toggle)
+  // Aqua-Hot 100/200 series — diesel burner switch (controlled via 1FE98 toggle)
   // Physical state is cached in global file context so
   // encode_waterheater_command_2 (HA commands tab) can compare desired vs.
   // actual state before toggling — 1FE98 is a toggle, not a set/clear, so
@@ -297,7 +297,7 @@ if (dgn_name === "WATERHEATER_STATUS") {
     );
   }
 
-  // AquaHot 125D — electric element switch (controlled via 1FE98 toggle)
+  // Aqua-Hot 100/200 series — electric element switch (controlled via 1FE98 toggle)
   if (typeof p.ac_element_active === "boolean") {
     global.set("aquahot_electric_active", p.ac_element_active, "file");
     publishSwitch("aquahot_electric_element", onOff(p.ac_element_active), () =>
@@ -313,11 +313,12 @@ if (dgn_name === "WATERHEATER_STATUS") {
 
 // === WATERHEATER_STATUS_2 (1FE99) ===
 else if (dgn_name === "WATERHEATER_STATUS_2") {
-  // AquaHot 125D: byte 6 bit 6 corroborates burner physical state (see
-  // decode_waterheater_status.js).
-  if (typeof p.burner_confirmed_on === "boolean") {
-    global.set("aquahot_burner_active", p.burner_confirmed_on, "file");
-  }
+  // NOTE: do NOT write the aquahot_burner_active toggle-guard cache from
+  // 1FE99 byte 6 bit 6 — live testing showed that bit means "any heat
+  // source active" (it also flips for electric-only operation), and 1FE99
+  // broadcasts continuously, so it would keep overwriting the correct
+  // 1FFF7-derived value during electric-only runs. Burner state comes
+  // solely from WATERHEATER_STATUS (1FFF7) above.
 
   if (typeof p.status === "string" && p.status !== "Not Available") {
     publishSensor(`waterheater_${i}_status`, p.status, () =>
@@ -438,7 +439,7 @@ else if (dgn_name === "CIRCULATION_PUMP_STATUS") {
     );
   }
 
-  // AquaHot 125D: per-zone pump binary sensors (byte 3 in 1FE97)
+  // Aqua-Hot 100/200 series: per-zone pump binary sensors (byte 3 in 1FE97)
   if (typeof p.front_pump_running === "boolean") {
     publishBinary("aquahot_front_pump", onOff(p.front_pump_running), () =>
       aquahotBinarySensorConfig(

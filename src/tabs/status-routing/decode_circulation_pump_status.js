@@ -69,7 +69,7 @@ function decodeCirculationPumpStatusMessage(dgn, data) {
   result.temperature_status = decode2BitStatus(temperatureRaw);
   result.temperature_warning = temperatureRaw === 1;
 
-  // Byte 3: AquaHot 125D per-zone pump state
+  // Byte 3: Aqua-Hot 100/200 series per-zone pump state
   if (data.length >= 4) {
     result.front_pump_running = (data[3] & 0x01) === 1; // bit 0
     result.floor_pump_running = (data[3] & 0x10) === 0x10; // bit 4
