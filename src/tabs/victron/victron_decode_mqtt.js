@@ -132,9 +132,16 @@ try {
   rawValue = msg.payload;
 }
 
-// Venus publishes TimeToGo as null when not discharging (infinite). Publish 0
-// so the HA sensor clears instead of holding its last discharge value.
-if (rawValue === null && dbusPath.endsWith("/TimeToGo")) rawValue = 0;
+// Venus encodes "not discharging" TimeToGo as null, 0, or the 864000 s
+// (10-day) infinity cap, and can flap between them while charging. Normalize
+// all three to a non-numeric marker so they survive the pipeline's null gates;
+// the HA discovery template renders any non-numeric value as unknown.
+if (
+  dbusPath.endsWith("/TimeToGo") &&
+  (rawValue === null || rawValue === 0 || rawValue >= 864000)
+) {
+  rawValue = "unknown";
+}
 
 if (rawValue === null || rawValue === undefined) return null;
 

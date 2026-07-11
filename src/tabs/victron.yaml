@@ -908,12 +908,22 @@
     }
 
 
-    // Venus publishes TimeToGo as null when not discharging (infinite). Publish
-    0
+    // Venus encodes "not discharging" TimeToGo as null, 0, or the 864000 s
 
-    // so the HA sensor clears instead of holding its last discharge value.
+    // (10-day) infinity cap, and can flap between them while charging.
+    Normalize
 
-    if (rawValue === null && dbusPath.endsWith("/TimeToGo")) rawValue = 0;
+    // all three to a non-numeric marker so they survive the pipeline's null
+    gates;
+
+    // the HA discovery template renders any non-numeric value as unknown.
+
+    if (
+      dbusPath.endsWith("/TimeToGo") &&
+      (rawValue === null || rawValue === 0 || rawValue >= 864000)
+    ) {
+      rawValue = "unknown";
+    }
 
 
     if (rawValue === null || rawValue === undefined) return null;
@@ -1713,6 +1723,18 @@
       const precision =
         haMetadata.precision !== undefined ? haMetadata.precision : 1;
       payload.value_template = `{{ (value_json | default({'value': 0})).value | float | round(${precision}) }}`;
+    }
+
+
+    // Time to Go arrives in seconds; report it in hours for readability. The
+
+    // decoder sends a non-numeric marker while charging (Venus publishes null),
+
+    // which renders as unknown here.
+
+    if (dbus_path === "/Dc/Battery/TimeToGo") {
+      payload.unit_of_measurement = "h";
+      payload.value_template = `{% set v = (value_json | default({'value': none})).value %}{{ (v | float / 3600) | round(1) if v is number else None }}`;
     }
 
 

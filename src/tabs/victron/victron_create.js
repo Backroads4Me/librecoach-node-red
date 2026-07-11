@@ -464,6 +464,14 @@ if (!isEnum && (componentType === "sensor" || componentType === "number")) {
   payload.value_template = `{{ (value_json | default({'value': 0})).value | float | round(${precision}) }}`;
 }
 
+// Time to Go arrives in seconds; report it in hours for readability. The
+// decoder sends a non-numeric marker while charging (Venus publishes null),
+// which renders as unknown here.
+if (dbus_path === "/Dc/Battery/TimeToGo") {
+  payload.unit_of_measurement = "h";
+  payload.value_template = `{% set v = (value_json | default({'value': none})).value %}{{ (v | float / 3600) | round(1) if v is number else None }}`;
+}
+
 // For enum values, build a Jinja2 template to map numeric values to labels.
 // Applies to selects and to read-only enum sensors (states, alarms).
 if (isEnum && componentType !== "switch") {
