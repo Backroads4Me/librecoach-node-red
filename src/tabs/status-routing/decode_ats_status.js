@@ -29,7 +29,7 @@ function decodeSourceInUse(value) {
     } else if (value === 253) {
         return "No Source Active";
     } else if (value === 254) {
-        return "Reserved";
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }

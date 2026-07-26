@@ -20,9 +20,9 @@ function decodeATSACInstance(value) {
     } else if (value === 252) {
         return "Not Supported";
     } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
         return "Reserved";
+    } else if (value === 254) {
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }
@@ -34,30 +34,28 @@ function decodeACVoltage(value) {
     if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
     } else if (value === 65533) {
-        return "Out of Range";
-    } else if (value === 65534) {
         return "Reserved";
+    } else if (value === 65534) {
+        return "Out of Range";
     } else if (value === 65535) {
         return "Not Available";
     }
     return "Invalid";
 }
 
-function decodeACCurrent(value) {
-    // AC RMS current (see Table 5.3 - standard RV-C scaling)
-    // Special case: 0x7D00 (32000) often represents zero in RV-C AC measurements
-    if (value === 32000) {
-        return 0; // Special zero encoding
-    } else if (value <= 65530) {
-        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-    } else if (value === 65533) {
-        return "Out of Range";
-    } else if (value === 65534) {
-        return "Reserved";
-    } else if (value === 65535) {
-        return "Not Available";
-    }
-    return "Invalid";
+// RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+// raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+// negative current (charging/import) is a raw value below 32000.
+// Special values per Table 3.2.3b.
+function decodeACCurrent(raw) {
+  if (raw === 65535) return "Not Available";
+  if (raw === 65534) return "Out of Range";
+  if (raw === 65533) return "Reserved";
+
+  const amps = raw * 0.05 - 1600;
+  if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+  return parseFloat(amps.toFixed(2));
 }
 
 function decodeFrequency(value) {
@@ -65,9 +63,9 @@ function decodeFrequency(value) {
     if (value <= 64000) {
         return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
     } else if (value === 65533) {
-        return "Out of Range";
-    } else if (value === 65534) {
         return "Reserved";
+    } else if (value === 65534) {
+        return "Out of Range";
     } else if (value === 65535) {
         return "Not Available";
     }

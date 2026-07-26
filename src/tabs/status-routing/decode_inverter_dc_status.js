@@ -19,20 +19,13 @@ function decodeInverterInstance(value) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
   return "Invalid";
-}
-
-function decodeDCSourceInstance(value) {
-  // DC source instance per §6.18 (DC Source)
-  // 0=Invalid, 1-250=valid instances, 255=Not Available
-  if (value === 255) return null;
-  return value;
 }
 
 function decodeDCVoltage(value) {
@@ -40,35 +33,28 @@ function decodeDCVoltage(value) {
   if (value <= 64000) {
     return parseFloat((value * 0.05).toFixed(2)); // 0.05V per step
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }
   return "Invalid";
 }
 
-function decodeDCCurrent(value) {
-  // DC Current in amperes (0.05A resolution, signed)
-  const MAX_VALID = 2147483600;
+// RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+// raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+// negative current (charging/import) is a raw value below 32000.
+// Special values per Table 3.2.3b.
+function decodeDCCurrent(raw) {
+  if (raw === 65535) return "Not Available";
+  if (raw === 65534) return "Out of Range";
+  if (raw === 65533) return "Reserved";
 
-  // Handle signed 32-bit value
-  let signedValue = value;
-  if (value > 2147483647) {
-    signedValue = value - 4294967296; // Convert from unsigned to signed
-  }
+  const amps = raw * 0.05 - 1600;
+  if (amps < -1600 || amps > 1612.5) return "Invalid";
 
-  if (Math.abs(signedValue) <= MAX_VALID) {
-    return parseFloat((signedValue * 0.05).toFixed(2)); // 0.05A per step
-  } else if (value === 2147483645) {
-    return "Out of Range";
-  } else if (value === 2147483646) {
-    return "Reserved";
-  } else if (value === 2147483647) {
-    return "Not Available";
-  }
-  return "Invalid";
+  return parseFloat(amps.toFixed(2));
 }
 
 function decodeTemperature(value) {
@@ -81,9 +67,9 @@ function decodeTemperature(value) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -121,19 +107,6 @@ function decodeUint16(data, startByte) {
   return data[startByte] | (data[startByte + 1] << 8);
 }
 
-function decodeUint32(data, startByte) {
-  // Decode 32-bit value (little-endian)
-  if (!data || startByte + 3 >= data.length) {
-    return 4294967295; // Not available
-  }
-  return (
-    data[startByte] |
-    (data[startByte + 1] << 8) |
-    (data[startByte + 2] << 16) |
-    (data[startByte + 3] << 24)
-  );
-}
-
 // === Main Decode Function ===
 
 function decodeInverterDCMessage(dgn, data) {
@@ -142,20 +115,17 @@ function decodeInverterDCMessage(dgn, data) {
     dgn_name: "INVERTER_DC_STATUS",
   };
 
-  // Decode INVERTER_DC_STATUS message (8 bytes typical)
-  if (data.length >= 8) {
+  // INVERTER_DC_STATUS (RV-C): byte 0 instance, 1-2 voltage, 3-4 amperage
+  if (data.length >= 5) {
     // Byte 0: Inverter Instance
     result.instance = decodeInverterInstance(data[0]);
 
-    // Byte 1: DC source instance
-    result.dc_source_instance = decodeDCSourceInstance(data[1]);
-
-    // Bytes 2-3: DC Voltage (uint16, little-endian)
-    const voltageRaw = decodeUint16(data, 2);
+    // Bytes 1-2: DC Voltage (uint16, little-endian)
+    const voltageRaw = decodeUint16(data, 1);
     result.dc_voltage = decodeDCVoltage(voltageRaw);
 
-    // Bytes 4-7: DC Current (uint32, little-endian, signed)
-    const currentRaw = decodeUint32(data, 4);
+    // Bytes 3-4: DC Amperage (uint16, little-endian)
+    const currentRaw = decodeUint16(data, 3);
     result.dc_current = decodeDCCurrent(currentRaw);
 
     // Raw values for debugging

@@ -1,6 +1,6 @@
 # librecoach-node-red
 
-Workspace rules: `../../../AGENTS.md`
+Workspace rules: `../../AGENTS.md`
 
 
 ## Wiring map — start here for topology

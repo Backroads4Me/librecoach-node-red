@@ -21,9 +21,9 @@ function decodeLoadInstance(value) {
     } else if (value === 252) {
         return "Not Supported";
     } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
         return "Reserved";
+    } else if (value === 254) {
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }
@@ -57,9 +57,9 @@ function decodeOperatingLevel(value) {
     } else if (value === 252) {
         return "Load Delay Active";
     } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
         return "Reserved";
+    } else if (value === 254) {
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }
@@ -112,22 +112,31 @@ function decodeDelay(value) {
     return "Invalid";
 }
 
-function decodeCurrent(value) {
-    // Current in amperes per Table 5.3 (0.05A resolution for small values)
-    if (value <= 250) {
-        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-    } else if (value === 251) {
-        return "Error";
-    } else if (value === 252) {
-        return "Not Supported";
-    } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
-        return "Reserved";
-    } else if (value === 255) {
-        return "Not Available";
-    }
-    return "Invalid";
+// RV-C Table 5.3 — amperage, uint8: 1 A/bit, no offset. Range 0 to 250 A.
+// Special values per Table 3.2.3b. Raw 251-252 fall between the physical
+// maximum and the standard special values, so they carry no defined meaning.
+function decodeAmperage8(raw) {
+  if (raw === 255) return "Not Available";
+  if (raw === 254) return "Out of Range";
+  if (raw === 253) return "Reserved";
+  if (raw > 250) return "Invalid";
+
+  return raw;
+}
+
+// RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+// raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+// negative current (charging/import) is a raw value below 32000.
+// Special values per Table 3.2.3b.
+function decodeAmperage16(raw) {
+  if (raw === 65535) return "Not Available";
+  if (raw === 65534) return "Out of Range";
+  if (raw === 65533) return "Reserved";
+
+  const amps = raw * 0.05 - 1600;
+  if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+  return parseFloat(amps.toFixed(2));
 }
 
 function decodeUint16(data, startByte) {
@@ -175,11 +184,11 @@ function decodeACLoadMessage(dgn, data) {
             result.activation_delay = decodeDelay(data[4]);
 
             // Byte 5: Demanded current
-            result.demanded_current = decodeCurrent(data[5]);
+            result.demanded_current = decodeAmperage8(data[5]);
 
             // Bytes 6-7: Present current (uint16, little-endian)
             const presentCurrentRaw = decodeUint16(data, 6);
-            result.present_current = decodeCurrent(Math.min(presentCurrentRaw, 255)); // Scale down if needed
+            result.present_current = decodeAmperage16(presentCurrentRaw);
 
             // Raw values for debugging
             result.raw_present_current = presentCurrentRaw;

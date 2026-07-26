@@ -57,9 +57,9 @@ function decodeStartBatteryVoltage(value) {
   if (value <= 65530) {
     return parseFloat((value * 0.05).toFixed(2));
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }
@@ -80,9 +80,9 @@ function decodeCoolantTemperature(value, isCelsius = false) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -98,9 +98,9 @@ function decodeOilPressure(value) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -112,9 +112,9 @@ function decodeEngineRPM(value) {
   if (value <= 65530) {
     return parseFloat((value * 0.125).toFixed(2));
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }
@@ -126,9 +126,9 @@ function decodeFuelRate(value) {
   if (value <= 65530) {
     return parseFloat((value * 0.05).toFixed(2));
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }

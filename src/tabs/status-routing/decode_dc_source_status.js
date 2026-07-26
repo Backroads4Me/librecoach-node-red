@@ -43,23 +43,26 @@ function decodeDCVoltage(value) {
   return "Invalid";
 }
 
-// Decodes DC Current (32-bit signed)
-function decodeDCCurrent32bit(value) {
-  if (value === 4294967295) return "Not Available";
+// RV-C Table 5.3 — amperage, uint32: 0.001 A/bit, offset-encoded with 0 A at
+// raw 0x77359400 (2,000,000,000). Range -2,000,000 to 2,221,081.2 A.
+// NOT two's complement — negative current is a raw value below the zero point.
+// Callers must pass an unsigned value; see the >>> 0 at the reconstruction.
+// Special values per Table 3.2.3b.
+function decodeDCCurrent32bit(raw) {
+  if (raw === 4294967295) return "Not Available";
+  if (raw === 4294967294) return "Out of Range";
+  if (raw === 4294967293) return "Reserved";
 
-  // Convert 32-bit unsigned to signed
-  if (value > 2147483647) {
-    value = value - 4294967296;
-  }
+  const amps = raw * 0.001 - 2000000;
+  if (amps < -2000000 || amps > 2221081.2) return "Invalid";
 
-  // The spec does not define the range for current.
-  return parseFloat((value * 0.05).toFixed(2));
+  return parseFloat(amps.toFixed(3));
 }
 
 // Decodes Temperature (uint16, 0.03125°C/bit, Kelvin base, output °F)
 function decodeTemperature(value) {
   if (value <= 64000) {
-    const tempC = value * 0.03125 - 273.15;
+    const tempC = value * 0.03125 - 273;
     return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
   }
   if (value === 65535) return "Not Available";
@@ -97,7 +100,10 @@ function decodeDCSourceStatus1(data) {
   const voltage = (data[3] << 8) | data[2];
   result.dc_voltage_V = decodeDCVoltage(voltage);
 
-  const current = (data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4];
+  // JS bitwise operators yield a signed int32; >>> 0 restores the unsigned
+  // value the uint32 amperage helper expects.
+  const current =
+    ((data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4]) >>> 0;
   result.dc_current_A = decodeDCCurrent32bit(current);
 
   return result;
