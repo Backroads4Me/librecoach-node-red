@@ -42,9 +42,9 @@ function decodePercentage(value, step = 1) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -59,9 +59,9 @@ function decodeDeadband(value) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }

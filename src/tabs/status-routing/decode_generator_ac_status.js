@@ -27,27 +27,28 @@ function decodeACVoltage(value) {
   if (value <= 65530) {
     return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }
   return "Invalid";
 }
 
-function decodeACCurrent(value) {
-  // AC RMS current (Table 5.3 - uint16, 0.05A/bit, -1600A offset)
-  if (value <= 65530) {
-    return parseFloat((value * 0.05 - 1600).toFixed(2));
-  } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
-    return "Reserved";
-  } else if (value === 65535) {
-    return "Not Available";
-  }
-  return "Invalid";
+// RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+// raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+// negative current (charging/import) is a raw value below 32000.
+// Special values per Table 3.2.3b.
+function decodeACCurrent(raw) {
+  if (raw === 65535) return "Not Available";
+  if (raw === 65534) return "Out of Range";
+  if (raw === 65533) return "Reserved";
+
+  const amps = raw * 0.05 - 1600;
+  if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+  return parseFloat(amps.toFixed(2));
 }
 
 function decodeFrequency(value) {
@@ -55,9 +56,9 @@ function decodeFrequency(value) {
   if (value <= 64000) {
     return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }

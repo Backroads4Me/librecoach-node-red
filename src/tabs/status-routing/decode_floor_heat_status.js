@@ -53,13 +53,13 @@ function decodeScheduleMode(value) {
 }
 
 //Decodes a standard RV-C temperature value (uint16).
-// Uses 0.03125°C resolution (per RVC spec) with -273.15°C offset (Kelvin).
+// RV-C Table 5.3: uint16 temperature, 0.03125 °C/bit, -273 offset.
 function decodeTemperature(value, isCelsius = false) {
   if (value === 0) {
     return "Not Available";
   } else if (value <= 65530) {
     const tempK = value * 0.03125; // Kelvin
-    const tempC = tempK - 273.15; // Convert to Celsius
+    const tempC = tempK - 273; // per Table 5.3
 
     if (isCelsius) {
       return parseFloat(tempC.toFixed(1));
@@ -68,9 +68,9 @@ function decodeTemperature(value, isCelsius = false) {
       return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
     }
   } else if (value === 65533) {
-    return "Out of Range";
-  } else if (value === 65534) {
     return "Reserved";
+  } else if (value === 65534) {
+    return "Out of Range";
   } else if (value === 65535) {
     return "Not Available";
   }
@@ -85,9 +85,9 @@ function decodeDeadband(value) {
   } else if (value === 251) {
     return "Error";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }

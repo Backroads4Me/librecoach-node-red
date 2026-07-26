@@ -14,11 +14,19 @@ function decodeDCVoltage(raw) {
   return parseFloat((raw * 0.05).toFixed(2));
 }
 
-// DC current with -1600A offset: uint16 LE, 0.05A/bit
-// 32000 = 0A (special zero), values encode as (amps + 1600) / 0.05
+// RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+// raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+// negative current (charging/import) is a raw value below 32000.
+// Special values per Table 3.2.3b.
 function decodeDCCurrentOffset(raw) {
-  if (raw === 65535 || raw === 65534) return null;
-  return parseFloat((raw * 0.05 - 1600).toFixed(2));
+  if (raw === 65535) return "Not Available";
+  if (raw === 65534) return "Out of Range";
+  if (raw === 65533) return "Reserved";
+
+  const amps = raw * 0.05 - 1600;
+  if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+  return parseFloat(amps.toFixed(2));
 }
 
 // Charging stage byte

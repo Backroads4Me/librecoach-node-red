@@ -37,6 +37,7 @@ flowchart LR
 ```
 
 #### Msg contract
+Aqua-Hot 400/600-Series systems
 Status Updater for Aqua-Hot
 Decodes proprietary AQUAHOT status byte into individual status messages
 
@@ -74,11 +75,13 @@ flowchart LR
 ```
 
 #### Msg contract
+Aqua-Hot 100/200-Series systems
 Decoder for Proprietary AquaHot _2 DGNs:
 FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
 
 Note: These are NOT part of the standard RV-C specification. Decoding is based on
-reverse-engineered analysis of recordings. Confidence levels differ per field.
+reverse-engineered analysis of recordings. Confidence levels differ per field:
+fields marked CONFIRMED were verified against live hardware
 
 #### Upstream
 - ee4192410344e659 (switch) — this tab
@@ -148,6 +151,7 @@ flowchart LR
 ```
 
 #### Msg contract
+Aqua-Hot 400/600-Series systems
 HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
 Self-creating: publishes MQTT discovery on first valid reading per instance.
 Output 1: MQTT messages (discovery + state)
@@ -185,6 +189,7 @@ flowchart LR
 ```
 
 #### Msg contract
+Aqua-Hot 100/200-Series systems
 Publishes proprietary AquaHot zone entity states to MQTT state topics.
 Also publishes MQTT discovery configs the first time a valid value is received.
 

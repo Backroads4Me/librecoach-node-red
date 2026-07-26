@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 96
-- **Function nodes:** 28
+- **Node count:** 99
+- **Function nodes:** 29
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 15
@@ -383,6 +383,49 @@ Self-creating: publishes MQTT discovery on first valid reading.
 #### Downstream
 - **Output 0:**
   - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
+### migrations
+- **File:** [`migrations.js`](../tabs/config/migrations.js)
+- **Node ID:** `e768c973d1faa66f`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_9dc97e8a5aa1["Load 5 seconds after Start"]:::fn
+  n_e768c973d1fa["migrations"]:::fn
+  n_9dc97e8a5aa1 -->|out 0| n_e768c973d1fa
+```
+
+#### Msg contract
+One-time migration runner.
+
+Runs once at startup (inject node). Each migration executes exactly once
+per install; completed ids are recorded in the file-backed global context
+key "migrationsRun", which survives restarts and add-on upgrades.
+
+Rules:
+- APPEND-ONLY: never edit or remove a shipped entry's id — installs in the
+  field have it recorded and matching is by id.
+- IDEMPOTENT: write each migration so re-running is harmless (the ledger
+  is a courtesy, not a lock — a wiped context re-runs everything).
+- Keep migrations self-contained one-time actions (clear context keys,
+  publish MQTT cleanup, rename stored state). Recurring logic belongs in
+  the owning tab, not here.
+
+#### Upstream
+- Load 5 seconds after Start (inject) — this tab
+
+#### Downstream
+_None._
 
 ---
 
@@ -1122,6 +1165,7 @@ _None._
 - HA in (mqtt in) — id `b86f82e84d961549`, in: 0, out: 2
 - HA in (debug) — id `d34a8c1fd2cc4320`, in: 3, out: 0
 - Load 5 seconds after Start (inject) — id `515386b6b0d01893`, in: 0, out: 1
+- Load 5 seconds after Start (inject) — id `9dc97e8a5aa12888`, in: 0, out: 1
 - Load RV-C Dgn Names (group) — id `9cfcca5efde78052`, in: 0, out: 0
 - Load on Start (inject) — id `012b02175347902e`, in: 0, out: 1
 - Load on Start (inject) — id `7e609140970f546c`, in: 0, out: 1
@@ -1134,6 +1178,7 @@ _None._
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0
 - On start (inject) — id `0c76b4a89a0e60ca`, in: 0, out: 1
+- One time migrations (group) — id `a06746acafc5968d`, in: 0, out: 0
 - RV-C Time Sync (group) — id `5169613bd2735138`, in: 0, out: 0
 - Read DGN table (file in) — id `74c7e4a6cc2508eb`, in: 1, out: 1
 - Recorded message (debug) — id `d79041ca83ce8b8c`, in: 1, out: 0

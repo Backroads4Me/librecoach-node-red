@@ -24,7 +24,7 @@ const lowestLevelRaw = levels.length > 0 ? levels[0] : null;
 const decodeTempFromRaw = (rawValue) => {
   if (rawValue === 0 || rawValue > 65530) return 0;
   const tempK = rawValue * 0.03125;
-  const tempC = tempK - 273.15;
+  const tempC = tempK - 273; // per Table 5.3
   return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
 };
 

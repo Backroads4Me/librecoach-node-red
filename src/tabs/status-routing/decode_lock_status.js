@@ -21,9 +21,9 @@ function decodeInstance(value) {
     } else if (value === 252) {
         return "Not Supported";
     } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
         return "Reserved";
+    } else if (value === 254) {
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }
@@ -58,9 +58,9 @@ function decodePosition(value) {
     } else if (value === 252) {
         return "Not Supported";
     } else if (value === 253) {
-        return "Out of Range";
-    } else if (value === 254) {
         return "Reserved";
+    } else if (value === 254) {
+        return "Out of Range";
     } else if (value === 255) {
         return "Not Available";
     }
@@ -72,9 +72,9 @@ function decodeVoltage(value) {
     if (value === 65535) {
         return "Not Available";
     } else if (value === 65534) {
-        return "Reserved";
-    } else if (value === 65533) {
         return "Out of Range";
+    } else if (value === 65533) {
+        return "Reserved";
     } else if (value === 65532) {
         return "Error";
     } else if (value <= 65530) {

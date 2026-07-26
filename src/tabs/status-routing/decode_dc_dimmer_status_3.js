@@ -21,9 +21,9 @@ function decodeDimmerInstance(value) {
   } else if (value === 252) {
     return "Not Supported";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -39,31 +39,25 @@ function decodeBrightnessLevel(value) {
   } else if (value === 252) {
     return "Output Flashing";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
   return "Invalid";
 }
 
-function decodeDCCurrent(value) {
-  // DC Current per Table 5.3 (0.05A resolution for small currents)
-  if (value <= 250) {
-    return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-  } else if (value === 251) {
-    return "Error";
-  } else if (value === 252) {
-    return "Not Supported";
-  } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
-    return "Reserved";
-  } else if (value === 255) {
-    return "Not Available";
-  }
-  return "Invalid";
+// RV-C Table 5.3 — amperage, uint8: 1 A/bit, no offset. Range 0 to 250 A.
+// Special values per Table 3.2.3b. Raw 251-252 fall between the physical
+// maximum and the standard special values, so they carry no defined meaning.
+function decodeAmperage8(raw) {
+  if (raw === 255) return "Not Available";
+  if (raw === 254) return "Out of Range";
+  if (raw === 253) return "Reserved";
+  if (raw > 250) return "Invalid";
+
+  return raw;
 }
 
 function decodeChannelFault(value) {
@@ -130,9 +124,9 @@ function decodeOperatingStatus(value) {
   } else if (value === 252) {
     return "Output Flashing";
   } else if (value === 253) {
-    return "Out of Range";
-  } else if (value === 254) {
     return "Reserved";
+  } else if (value === 254) {
+    return "Out of Range";
   } else if (value === 255) {
     return "Not Available";
   }
@@ -295,16 +289,17 @@ function decodeDCDimmerMessage(dgn, data) {
     if (data.length >= 8) {
       result.instance = data[0];
       result.instance_name = decodeDimmerInstance(data[0]);
-      result.red_current = decodeDCCurrent(data[2]);
-      result.green_current = decodeDCCurrent(data[3]);
-      result.blue_current = decodeDCCurrent(data[4]);
+      result.master_current = decodeAmperage8(data[1]);
+      result.red_current = decodeAmperage8(data[2]);
+      result.green_current = decodeAmperage8(data[3]);
+      result.blue_current = decodeAmperage8(data[4]);
 
       // Byte 5: Fault bits
       const faultInfo = decodeFaultByte(data[5]);
       Object.assign(result, faultInfo);
 
       if (data.length > 6) {
-        result.white_current = decodeDCCurrent(data[6]);
+        result.white_current = decodeAmperage8(data[6]);
       }
 
       if (data.length > 7) {

@@ -335,8 +335,8 @@ flowchart LR
 ```
 
 #### Msg contract
-Encodes GENERATOR_DEMAND_COMMAND messages (1FEFF)
-§6.35.3 — preferred method for network-initiated start/stop (respects Quiet Time)
+Encodes GENERATOR_COMMAND messages (1FFDA)
+RV-C §6.18.25 — direct generator start/stop.
 
 #### Upstream
 - 89946e1c7a570ed0 (switch) — this tab
