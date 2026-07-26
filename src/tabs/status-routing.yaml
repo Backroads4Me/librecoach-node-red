@@ -65,18 +65,27 @@
     }
 
 
-    // Decodes DC Current (32-bit signed)
+    // RV-C Table 5.3 — amperage, uint32: 0.001 A/bit, offset-encoded with 0 A
+    at
 
-    function decodeDCCurrent32bit(value) {
-      if (value === 4294967295) return "Not Available";
+    // raw 0x77359400 (2,000,000,000). Range -2,000,000 to 2,221,081.2 A.
 
-      // Convert 32-bit unsigned to signed
-      if (value > 2147483647) {
-        value = value - 4294967296;
-      }
+    // NOT two's complement — negative current is a raw value below the zero
+    point.
 
-      // The spec does not define the range for current.
-      return parseFloat((value * 0.05).toFixed(2));
+    // Callers must pass an unsigned value; see the >>> 0 at the reconstruction.
+
+    // Special values per Table 3.2.3b.
+
+    function decodeDCCurrent32bit(raw) {
+      if (raw === 4294967295) return "Not Available";
+      if (raw === 4294967294) return "Out of Range";
+      if (raw === 4294967293) return "Reserved";
+
+      const amps = raw * 0.001 - 2000000;
+      if (amps < -2000000 || amps > 2221081.2) return "Invalid";
+
+      return parseFloat(amps.toFixed(3));
     }
 
 
@@ -84,7 +93,7 @@
 
     function decodeTemperature(value) {
       if (value <= 64000) {
-        const tempC = value * 0.03125 - 273.15;
+        const tempC = value * 0.03125 - 273;
         return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
       }
       if (value === 65535) return "Not Available";
@@ -126,7 +135,10 @@
       const voltage = (data[3] << 8) | data[2];
       result.dc_voltage_V = decodeDCVoltage(voltage);
 
-      const current = (data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4];
+      // JS bitwise operators yield a signed int32; >>> 0 restores the unsigned
+      // value the uint32 amperage helper expects.
+      const current =
+        ((data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4]) >>> 0;
       result.dc_current_A = decodeDCCurrent32bit(current);
 
       return result;
@@ -802,9 +814,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -821,9 +833,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -839,9 +851,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -1124,9 +1136,9 @@
       } else if (value === 252) {
         return "Output Flashing";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -1867,18 +1879,23 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_dc_dimmer_status_3
-  func: |
+  func: >
     // DC Dimmer Decoder
+
     // Decodes DC_DIMMER_STATUS_1/2/3 messages (1FFBB, 1FFBA, 1FEDA)
 
+
     // --- Helper Functions ---
+
 
     function decodeBits(value, startBit, endBit) {
       const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;
       return (value & mask) >> startBit;
     }
 
+
     // --- DC_DIMMER_STATUS Specific Decoders ---
+
 
     function decodeDimmerInstance(value) {
       // Dimmer instance interpretation
@@ -1891,14 +1908,15 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
       return "Invalid";
     }
+
 
     function decodeBrightnessLevel(value) {
       // Brightness level (0-200% per Table 5.3)
@@ -1909,32 +1927,32 @@
       } else if (value === 252) {
         return "Output Flashing";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
       return "Invalid";
     }
 
-    function decodeDCCurrent(value) {
-      // DC Current per Table 5.3 (0.05A resolution for small currents)
-      if (value <= 250) {
-        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-      } else if (value === 251) {
-        return "Error";
-      } else if (value === 252) {
-        return "Not Supported";
-      } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
-        return "Reserved";
-      } else if (value === 255) {
-        return "Not Available";
-      }
-      return "Invalid";
+
+    // RV-C Table 5.3 — amperage, uint8: 1 A/bit, no offset. Range 0 to 250 A.
+
+    // Special values per Table 3.2.3b. Raw 251-252 fall between the physical
+
+    // maximum and the standard special values, so they carry no defined
+    meaning.
+
+    function decodeAmperage8(raw) {
+      if (raw === 255) return "Not Available";
+      if (raw === 254) return "Out of Range";
+      if (raw === 253) return "Reserved";
+      if (raw > 250) return "Invalid";
+
+      return raw;
     }
+
 
     function decodeChannelFault(value) {
       // Channel fault status (2-bit field)
@@ -1946,6 +1964,7 @@
       };
       return faultStates[value] || "Unknown";
     }
+
 
     function decodeFaultByte(value) {
       // Decode fault bits from byte 5 (STATUS_2)
@@ -1971,6 +1990,7 @@
       };
     }
 
+
     function decodeGroupBitmap(value) {
       // Group membership bitmap (7 groups max)
       if (value === 0) {
@@ -1991,6 +2011,7 @@
       return groups.length > 0 ? `Groups: ${groups.join(", ")}` : "No Groups";
     }
 
+
     function decodeOperatingStatus(value) {
       // Operating status for STATUS_3
       if (value <= 200) {
@@ -2000,14 +2021,15 @@
       } else if (value === 252) {
         return "Output Flashing";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
       return "Invalid";
     }
+
 
     function decodeStatus3Byte3(value) {
       // Decode status bits from byte 3 (STATUS_3)
@@ -2032,6 +2054,7 @@
         enable_status: enableStates[enableStatus] || "Unknown",
       };
     }
+
 
     function decodeLastCommand(value) {
       // Last executed command (STATUS_3)
@@ -2072,6 +2095,7 @@
       return commands[value] || `Unknown Command ${value}`;
     }
 
+
     function decodeDelayDuration(value) {
       // Delay/Duration field (STATUS_3)
       if (value === 0) {
@@ -2089,6 +2113,7 @@
       }
       return "Invalid";
     }
+
 
     function decodeStatus3Byte6(value) {
       // Decode status bits from byte 6 (STATUS_3)
@@ -2117,7 +2142,9 @@
       };
     }
 
+
     // --- Main Decode Function ---
+
 
     function decodeDCDimmerMessage(dgn, data) {
       // Map DGN hex codes to specific names for unified routing
@@ -2165,16 +2192,17 @@
         if (data.length >= 8) {
           result.instance = data[0];
           result.instance_name = decodeDimmerInstance(data[0]);
-          result.red_current = decodeDCCurrent(data[2]);
-          result.green_current = decodeDCCurrent(data[3]);
-          result.blue_current = decodeDCCurrent(data[4]);
+          result.master_current = decodeAmperage8(data[1]);
+          result.red_current = decodeAmperage8(data[2]);
+          result.green_current = decodeAmperage8(data[3]);
+          result.blue_current = decodeAmperage8(data[4]);
 
           // Byte 5: Fault bits
           const faultInfo = decodeFaultByte(data[5]);
           Object.assign(result, faultInfo);
 
           if (data.length > 6) {
-            result.white_current = decodeDCCurrent(data[6]);
+            result.white_current = decodeAmperage8(data[6]);
           }
 
           if (data.length > 7) {
@@ -2241,29 +2269,39 @@
       return result;
     }
 
+
     // --- Main Logic ---
 
+
     // Validate input payload
+
     if (!msg.payload || typeof msg.payload !== "object") {
       node.warn("Invalid payload: expected object");
       return null;
     }
 
+
     const incomingPayload = msg.payload;
+
     const { dgn, data_payload } = incomingPayload;
+
 
     if (!dgn || !data_payload) {
       node.warn("Missing required fields: dgn and/or data_payload");
       return null;
     }
 
+
     // Validate and convert hex payload to byte array
+
     if (typeof data_payload !== "string" || data_payload.length % 2 !== 0) {
       node.warn("Invalid data_payload: must be even-length hex string");
       return null;
     }
 
+
     const dataBytes = [];
+
     for (let i = 0; i < data_payload.length; i += 2) {
       const hexByte = data_payload.substring(i, i + 2);
       const byteValue = parseInt(hexByte, 16);
@@ -2274,26 +2312,35 @@
       dataBytes.push(byteValue);
     }
 
+
     // Decode the DC_DIMMER_STATUS message
+
     const decodedData = decodeDCDimmerMessage(dgn, dataBytes);
 
+
     // Handle null return (invalid instance filtered out)
+
     if (!decodedData) {
       return null;
     }
 
+
     // Handle decode errors
+
     if (decodedData.error) {
       incomingPayload.decoding_error = decodedData.error;
       msg.payload = incomingPayload;
       return msg;
     }
 
+
     // Merge the incoming payload and the decoded data into a single flat object
+
     msg.payload = {
       ...incomingPayload,
       ...decodedData,
     };
+
 
     return msg;
   outputs: 1
@@ -2445,9 +2492,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -2645,11 +2692,19 @@
       return parseFloat((raw * 0.05).toFixed(2));
     }
 
-    // DC current with -1600A offset: uint16 LE, 0.05A/bit
-    // 32000 = 0A (special zero), values encode as (amps + 1600) / 0.05
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
     function decodeDCCurrentOffset(raw) {
-      if (raw === 65535 || raw === 65534) return null;
-      return parseFloat((raw * 0.05 - 1600).toFixed(2));
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     // Charging stage byte
@@ -2844,12 +2899,12 @@
 
     // Decodes a standard RV-C temperature value (uint16).
 
-    // Uses 0.03125°C resolution (per RVC spec) with -273.15°C offset (Kelvin).
+    // RV-C Table 5.3: uint16 temperature, 0.03125 °C/bit, -273 offset.
 
     function decodeTemperature(value, isCelsius = false) {
       if (value <= 65530) {
         const tempK = value * 0.03125; // Kelvin
-        const tempC = tempK - 273.15; // Convert to Celsius
+        const tempC = tempK - 273; // per Table 5.3
 
         if (isCelsius) {
           return parseFloat(tempC.toFixed(1));
@@ -2858,9 +2913,9 @@
           return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
         }
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -4118,9 +4173,9 @@
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(2));
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -4149,9 +4204,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -4169,9 +4224,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -4185,9 +4240,9 @@
       if (value <= 65530) {
         return parseFloat((value * 0.125).toFixed(2));
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -4201,9 +4256,9 @@
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(2));
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -5440,30 +5495,28 @@
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
       return "Invalid";
     }
 
-    function decodeACCurrent(value) {
-      // AC RMS current (see Table 5.3 - standard RV-C scaling)
-      // Special case: 0x7D00 (32000) often represents zero in RV-C AC measurements
-      if (value === 32000) {
-        return 0; // Special zero encoding
-      } else if (value <= 65530) {
-        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-      } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
-        return "Reserved";
-      } else if (value === 65535) {
-        return "Not Available";
-      }
-      return "Invalid";
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
+    function decodeACCurrent(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodeFrequency(value) {
@@ -5471,9 +5524,9 @@
       if (value <= 64000) {
         return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -5973,7 +6026,7 @@
         } else if (value === 253) {
             return "No Source Active";
         } else if (value === 254) {
-            return "Reserved";
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
@@ -6449,9 +6502,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -6473,9 +6526,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -6634,30 +6687,28 @@
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
       return "Invalid";
     }
 
-    function decodeACCurrent(value) {
-      // AC RMS current (see Table 5.3 - standard RV-C scaling)
-      // Special case: 0x7D00 (32000) often represents zero in RV-C AC measurements
-      if (value === 32000) {
-        return 0; // Special zero encoding
-      } else if (value <= 65530) {
-        return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-      } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
-        return "Reserved";
-      } else if (value === 65535) {
-        return "Not Available";
-      }
-      return "Invalid";
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
+    function decodeACCurrent(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodeFrequency(value) {
@@ -6665,9 +6716,9 @@
       if (value <= 64000) {
         return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -6870,7 +6921,7 @@
     const decodeTempFromRaw = (rawValue) => {
       if (rawValue === 0 || rawValue > 65530) return 0;
       const tempK = rawValue * 0.03125;
-      const tempC = tempK - 273.15;
+      const tempC = tempK - 273; // per Table 5.3
       return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
     };
 
@@ -7021,20 +7072,13 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
       return "Invalid";
-    }
-
-    function decodeDCSourceInstance(value) {
-      // DC source instance per §6.18 (DC Source)
-      // 0=Invalid, 1-250=valid instances, 255=Not Available
-      if (value === 255) return null;
-      return value;
     }
 
     function decodeDCVoltage(value) {
@@ -7042,35 +7086,28 @@
       if (value <= 64000) {
         return parseFloat((value * 0.05).toFixed(2)); // 0.05V per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
       return "Invalid";
     }
 
-    function decodeDCCurrent(value) {
-      // DC Current in amperes (0.05A resolution, signed)
-      const MAX_VALID = 2147483600;
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
+    function decodeDCCurrent(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
 
-      // Handle signed 32-bit value
-      let signedValue = value;
-      if (value > 2147483647) {
-        signedValue = value - 4294967296; // Convert from unsigned to signed
-      }
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
 
-      if (Math.abs(signedValue) <= MAX_VALID) {
-        return parseFloat((signedValue * 0.05).toFixed(2)); // 0.05A per step
-      } else if (value === 2147483645) {
-        return "Out of Range";
-      } else if (value === 2147483646) {
-        return "Reserved";
-      } else if (value === 2147483647) {
-        return "Not Available";
-      }
-      return "Invalid";
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodeTemperature(value) {
@@ -7083,9 +7120,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -7123,19 +7160,6 @@
       return data[startByte] | (data[startByte + 1] << 8);
     }
 
-    function decodeUint32(data, startByte) {
-      // Decode 32-bit value (little-endian)
-      if (!data || startByte + 3 >= data.length) {
-        return 4294967295; // Not available
-      }
-      return (
-        data[startByte] |
-        (data[startByte + 1] << 8) |
-        (data[startByte + 2] << 16) |
-        (data[startByte + 3] << 24)
-      );
-    }
-
     // === Main Decode Function ===
 
     function decodeInverterDCMessage(dgn, data) {
@@ -7144,20 +7168,17 @@
         dgn_name: "INVERTER_DC_STATUS",
       };
 
-      // Decode INVERTER_DC_STATUS message (8 bytes typical)
-      if (data.length >= 8) {
+      // INVERTER_DC_STATUS (RV-C): byte 0 instance, 1-2 voltage, 3-4 amperage
+      if (data.length >= 5) {
         // Byte 0: Inverter Instance
         result.instance = decodeInverterInstance(data[0]);
 
-        // Byte 1: DC source instance
-        result.dc_source_instance = decodeDCSourceInstance(data[1]);
-
-        // Bytes 2-3: DC Voltage (uint16, little-endian)
-        const voltageRaw = decodeUint16(data, 2);
+        // Bytes 1-2: DC Voltage (uint16, little-endian)
+        const voltageRaw = decodeUint16(data, 1);
         result.dc_voltage = decodeDCVoltage(voltageRaw);
 
-        // Bytes 4-7: DC Current (uint32, little-endian, signed)
-        const currentRaw = decodeUint32(data, 4);
+        // Bytes 3-4: DC Amperage (uint16, little-endian)
+        const currentRaw = decodeUint16(data, 3);
         result.dc_current = decodeDCCurrent(currentRaw);
 
         // Raw values for debugging
@@ -7265,9 +7286,9 @@
         } else if (value === 252) {
             return "Not Supported";
         } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
             return "Reserved";
+        } else if (value === 254) {
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
@@ -7279,30 +7300,28 @@
         if (value <= 65530) {
             return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
         } else if (value === 65533) {
-            return "Out of Range";
-        } else if (value === 65534) {
             return "Reserved";
+        } else if (value === 65534) {
+            return "Out of Range";
         } else if (value === 65535) {
             return "Not Available";
         }
         return "Invalid";
     }
 
-    function decodeACCurrent(value) {
-        // AC RMS current (see Table 5.3 - standard RV-C scaling)
-        // Special case: 0x7D00 (32000) often represents zero in RV-C AC measurements
-        if (value === 32000) {
-            return 0; // Special zero encoding
-        } else if (value <= 65530) {
-            return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-        } else if (value === 65533) {
-            return "Out of Range";
-        } else if (value === 65534) {
-            return "Reserved";
-        } else if (value === 65535) {
-            return "Not Available";
-        }
-        return "Invalid";
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
+    function decodeACCurrent(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodeFrequency(value) {
@@ -7310,9 +7329,9 @@
         if (value <= 64000) {
             return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
         } else if (value === 65533) {
-            return "Out of Range";
-        } else if (value === 65534) {
             return "Reserved";
+        } else if (value === 65534) {
+            return "Out of Range";
         } else if (value === 65535) {
             return "Not Available";
         }
@@ -7641,18 +7660,23 @@
   type: function
   z: 3e5f038a4f5a8b9a
   name: decode_ac_load_status
-  func: |
+  func: >
     // Status Updater for AC Load
+
     // Decodes AC_LOAD_STATUS messages (1FFBF)
 
+
     // === Helper Functions ===
+
 
     function decodeBits(value, startBit, endBit) {
         const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;
         return (value & mask) >> startBit;
     }
 
+
     // === AC_LOAD_STATUS Specific Decoders ===
+
 
     function decodeLoadInstance(value) {
         // Load instance interpretation
@@ -7665,14 +7689,15 @@
         } else if (value === 252) {
             return "Not Supported";
         } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
             return "Reserved";
+        } else if (value === 254) {
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
         return "Invalid";
     }
+
 
     function decodeGroupBitmap(value) {
         // Group membership bitmap (7 groups max)
@@ -7694,6 +7719,7 @@
         return groups.length > 0 ? `Groups: ${groups.join(", ")}` : "No Groups";
     }
 
+
     function decodeOperatingLevel(value) {
         // Operating status/level (0-100% for dimmable, or special values)
         if (value <= 200) {
@@ -7701,14 +7727,15 @@
         } else if (value === 252) {
             return "Load Delay Active";
         } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
             return "Reserved";
+        } else if (value === 254) {
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
         return "Invalid";
     }
+
 
     function decodeOperatingMode(value) {
         // Operating mode (2-bit field)
@@ -7721,6 +7748,7 @@
         return modes[value] || "Unknown";
     }
 
+
     function decodeVariableCapability(value) {
         // Variable level capability (2-bit field)
         const capabilities = {
@@ -7731,6 +7759,7 @@
         };
         return capabilities[value] || "Unknown";
     }
+
 
     function decodePriority(value) {
         // Load priority (4-bit field)
@@ -7744,6 +7773,7 @@
         return "Invalid";
     }
 
+
     function decodeDelay(value) {
         // Delay before load activation
         if (value <= 240) {
@@ -7756,23 +7786,43 @@
         return "Invalid";
     }
 
-    function decodeCurrent(value) {
-        // Current in amperes per Table 5.3 (0.05A resolution for small values)
-        if (value <= 250) {
-            return parseFloat((value * 0.05).toFixed(2)); // 0.05A per step
-        } else if (value === 251) {
-            return "Error";
-        } else if (value === 252) {
-            return "Not Supported";
-        } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
-            return "Reserved";
-        } else if (value === 255) {
-            return "Not Available";
-        }
-        return "Invalid";
+
+    // RV-C Table 5.3 — amperage, uint8: 1 A/bit, no offset. Range 0 to 250 A.
+
+    // Special values per Table 3.2.3b. Raw 251-252 fall between the physical
+
+    // maximum and the standard special values, so they carry no defined
+    meaning.
+
+    function decodeAmperage8(raw) {
+      if (raw === 255) return "Not Available";
+      if (raw === 254) return "Out of Range";
+      if (raw === 253) return "Reserved";
+      if (raw > 250) return "Invalid";
+
+      return raw;
     }
+
+
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+
+    // negative current (charging/import) is a raw value below 32000.
+
+    // Special values per Table 3.2.3b.
+
+    function decodeAmperage16(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
+    }
+
 
     function decodeUint16(data, startByte) {
         // Decode 16-bit value (little-endian)
@@ -7782,7 +7832,9 @@
         return data[startByte] | (data[startByte + 1] << 8);
     }
 
+
     // === Main Decode Function ===
+
 
     function decodeACLoadMessage(dgn, data) {
         const result = {
@@ -7819,11 +7871,11 @@
                 result.activation_delay = decodeDelay(data[4]);
 
                 // Byte 5: Demanded current
-                result.demanded_current = decodeCurrent(data[5]);
+                result.demanded_current = decodeAmperage8(data[5]);
 
                 // Bytes 6-7: Present current (uint16, little-endian)
                 const presentCurrentRaw = decodeUint16(data, 6);
-                result.present_current = decodeCurrent(Math.min(presentCurrentRaw, 255)); // Scale down if needed
+                result.present_current = decodeAmperage16(presentCurrentRaw);
 
                 // Raw values for debugging
                 result.raw_present_current = presentCurrentRaw;
@@ -7900,29 +7952,39 @@
         return result;
     }
 
+
     // === Main Logic ===
 
+
     // Validate input payload
+
     if (!msg.payload || typeof msg.payload !== "object") {
         node.warn("Invalid payload: expected object");
         return null;
     }
 
+
     const incomingPayload = msg.payload;
+
     const { dgn, data_payload } = incomingPayload;
+
 
     if (!dgn || !data_payload) {
         node.warn("Missing required fields: dgn and/or data_payload");
         return null;
     }
 
+
     // Validate and convert hex payload to byte array
+
     if (typeof data_payload !== "string" || data_payload.length % 2 !== 0) {
         node.warn("Invalid data_payload: must be even-length hex string");
         return null;
     }
 
+
     const dataBytes = [];
+
     for (let i = 0; i < data_payload.length; i += 2) {
         const hexByte = data_payload.substring(i, i + 2);
         const byteValue = parseInt(hexByte, 16);
@@ -7933,24 +7995,33 @@
         dataBytes.push(byteValue);
     }
 
+
     // Decode the AC_LOAD_STATUS message
+
     const decodedData = decodeACLoadMessage(dgn, dataBytes);
 
+
     // Handle decode errors
+
     if (decodedData.error) {
         incomingPayload.decoding_error = decodedData.error;
         msg.payload = incomingPayload;
         return msg;
     }
 
+
     // Merge the incoming payload and the decoded data into a single flat object
+
     msg.payload = {
         ...incomingPayload,
         ...decodedData,
     };
 
+
     // Clean up the final object by removing the raw data field
+
     delete msg.payload.data_payload;
+
 
     return msg;
   outputs: 1
@@ -8533,13 +8604,13 @@
     }
 
     //Decodes a standard RV-C temperature value (uint16).
-    // Uses 0.03125°C resolution (per RVC spec) with -273.15°C offset (Kelvin).
+    // RV-C Table 5.3: uint16 temperature, 0.03125 °C/bit, -273 offset.
     function decodeTemperature(value, isCelsius = false) {
       if (value === 0) {
         return "Not Available";
       } else if (value <= 65530) {
         const tempK = value * 0.03125; // Kelvin
-        const tempC = tempK - 273.15; // Convert to Celsius
+        const tempC = tempK - 273; // per Table 5.3
 
         if (isCelsius) {
           return parseFloat(tempC.toFixed(1));
@@ -8548,9 +8619,9 @@
           return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));
         }
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
@@ -8565,9 +8636,9 @@
       } else if (value === 251) {
         return "Error";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -9151,9 +9222,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -9168,9 +9239,9 @@
       } else if (value === 252) {
         return "Not Supported";
       } else if (value === 253) {
-        return "Out of Range";
-      } else if (value === 254) {
         return "Reserved";
+      } else if (value === 254) {
+        return "Out of Range";
       } else if (value === 255) {
         return "Not Available";
       }
@@ -9936,9 +10007,9 @@
         } else if (value === 252) {
             return "Not Supported";
         } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
             return "Reserved";
+        } else if (value === 254) {
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
@@ -9973,9 +10044,9 @@
         } else if (value === 252) {
             return "Not Supported";
         } else if (value === 253) {
-            return "Out of Range";
-        } else if (value === 254) {
             return "Reserved";
+        } else if (value === 254) {
+            return "Out of Range";
         } else if (value === 255) {
             return "Not Available";
         }
@@ -9987,9 +10058,9 @@
         if (value === 65535) {
             return "Not Available";
         } else if (value === 65534) {
-            return "Reserved";
-        } else if (value === 65533) {
             return "Out of Range";
+        } else if (value === 65533) {
+            return "Reserved";
         } else if (value === 65532) {
             return "Error";
         } else if (value <= 65530) {
@@ -10223,11 +10294,19 @@
       return parseFloat((raw * 0.05).toFixed(2));
     }
 
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
     function decodeDCCurrent(raw) {
-      // Table 5.3: 0.05 A/bit, 65535=Not Available, 65534=Out of Range
-      if (raw === 65535) return null;
+      if (raw === 65535) return "Not Available";
       if (raw === 65534) return "Out of Range";
-      return parseFloat((raw * 0.05).toFixed(2));
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodePercent(raw) {
@@ -11027,27 +11106,28 @@
       if (value <= 65530) {
         return parseFloat((value * 0.05).toFixed(1)); // 0.05V per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
       return "Invalid";
     }
 
-    function decodeACCurrent(value) {
-      // AC RMS current (Table 5.3 - uint16, 0.05A/bit, -1600A offset)
-      if (value <= 65530) {
-        return parseFloat((value * 0.05 - 1600).toFixed(2));
-      } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
-        return "Reserved";
-      } else if (value === 65535) {
-        return "Not Available";
-      }
-      return "Invalid";
+    // RV-C Table 5.3 — amperage, uint16: 0.05 A/bit, offset-encoded with 0 A at
+    // raw 0x7D00 (32000). Range -1600 to 1612.5 A. NOT two's complement —
+    // negative current (charging/import) is a raw value below 32000.
+    // Special values per Table 3.2.3b.
+    function decodeACCurrent(raw) {
+      if (raw === 65535) return "Not Available";
+      if (raw === 65534) return "Out of Range";
+      if (raw === 65533) return "Reserved";
+
+      const amps = raw * 0.05 - 1600;
+      if (amps < -1600 || amps > 1612.5) return "Invalid";
+
+      return parseFloat(amps.toFixed(2));
     }
 
     function decodeFrequency(value) {
@@ -11055,9 +11135,9 @@
       if (value <= 64000) {
         return parseFloat((value / 128).toFixed(2)); // 1/128 Hz per step
       } else if (value === 65533) {
-        return "Out of Range";
-      } else if (value === 65534) {
         return "Reserved";
+      } else if (value === 65534) {
+        return "Out of Range";
       } else if (value === 65535) {
         return "Not Available";
       }
