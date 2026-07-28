@@ -44,8 +44,8 @@
   mode: link
   links:
     - fbc5efde2c447eda
-  x: 1760
-  "y": 400
+  x: 1800
+  "y": 420
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -67,8 +67,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1150
-  "y": 600
+  x: 1210
+  "y": 620
   g: ceee39e4b10d6030
   wires: []
 - id: 07b8bcce03f19e8f
@@ -110,7 +110,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 2100
+  x: 2140
   "y": 540
   g: 9dd6a98018824be9
   wires:
@@ -140,8 +140,8 @@
   once: true
   onceDelay: 0.1
   topic: ""
-  x: 1120
-  "y": 380
+  x: 1180
+  "y": 400
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -175,7 +175,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 630
+  x: 730
   "y": 600
   g: 3c819b7900145438
   wires: []
@@ -273,8 +273,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 930
-  "y": 460
+  x: 990
+  "y": 480
   g: f09f79586501cb0b
   wires:
     - - 8d7d5d3ea117cf79
@@ -289,8 +289,8 @@
   septopics: true
   property: payload
   topi: filter_key
-  x: 1290
-  "y": 460
+  x: 1350
+  "y": 480
   g: f09f79586501cb0b
   wires:
     - - a6594a9464d8fe4e
@@ -530,7 +530,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1530
+  x: 1570
   "y": 300
   g: f09f79586501cb0b
   wires:
@@ -544,8 +544,8 @@
   links:
     - 00b1afc9a96aca8e
     - cd5a041811bc2c9a
-  x: 1770
-  "y": 360
+  x: 1810
+  "y": 380
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -568,6 +568,7 @@
     - 9e9b11b9441e51db
     - b86f82e84d961549
     - c9d298bbaa855984
+    - ca7e7aa2d0a0d001
     - cacf35b859af22a9
     - d34a8c1fd2cc4320
     - f658418a7b9b4857
@@ -583,8 +584,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1150
-  "y": 660
+  x: 1210
+  "y": 680
   g: ceee39e4b10d6030
   wires:
     - []
@@ -699,8 +700,8 @@
   mode: link
   links:
     - f01db5ebc3ae2e18
-  x: 1800
-  "y": 680
+  x: 1840
+  "y": 700
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -725,22 +726,63 @@
   type: function
   z: 292e70a6ba25b323
   name: address_claim_monitor
-  func: |-
+  func: >
     // RV-C Address Claim Monitor Function
+
     // Assumes it ONLY receives decoded ADDRESS_CLAIMED messages (DGN EE00)
+
     // Compares device NAMEs to determine winner in case of conflict
 
-    const claimInProgress = flow.get("claim_in_progress");
-    if (!claimInProgress) {
-      return null; // Not in the claiming process
-    }
+
+    const claimInProgress = flow.get("claim_in_progress") === true;
 
     const claimingAddress = flow.get("claiming_address");
+
     const ourDeviceName = flow.get("our_device_name");
-    const competitorName = msg.payload.data_payload.toUpperCase();
+
+    if (
+      !Number.isInteger(claimingAddress) ||
+      typeof ourDeviceName !== "string" ||
+      (global.get("rvc_address_claim_lost") === true && !claimInProgress)
+    ) {
+      return null;
+    }
+
+
+    const competitorName = String(msg.payload.data_payload || "").toUpperCase();
+
     const sourceAddressInt = parseInt(msg.payload.sourceAddress, 16);
 
+
+    if (!/^[0-9A-F]{16}$/.test(competitorName)) {
+      node.warn(`Ignoring malformed ADDRESS_CLAIMED NAME: ${competitorName}`);
+      return null;
+    }
+
+
+    // RV-C 3.3.3 transmits the NAME least-significant byte first, so payload
+    byte 7
+
+    // -- which carries the arbitrary-address-capable bit -- is the most
+    significant
+
+    // for arbitration. The bytes must be reversed before comparing; converting
+    the
+
+    // wire string directly treats byte 0 as most significant and silently
+    inverts
+
+    // which node wins the address.
+
+    function nameValue(wireName) {
+      return BigInt(
+        "0x" + wireName.match(/../g).reverse().join(""),
+      );
+    }
+
+
     // Check if a message is for the same address we are trying to claim
+
     if (sourceAddressInt === claimingAddress) {
       // First, verify this isn't our own message being echoed back.
       // If the NAMEs are identical, it's our own claim. Ignore it and let the timer run.
@@ -754,43 +796,74 @@
       node.warn(`Our NAME: ${ourDeviceName}, Competitor NAME: ${competitorName}`);
 
       // Compare NAMEs - Lower numerical value wins
-      const ourNameValue = BigInt("0x" + ourDeviceName);
-      const competitorNameValue = BigInt("0x" + competitorName);
+      const ourNameValue = nameValue(ourDeviceName);
+      const competitorNameValue = nameValue(competitorName);
 
       if (ourNameValue < competitorNameValue) {
-        // WE WIN
         node.warn(
-          `We WIN the conflict. Continuing to claim address ${claimingAddress}`,
+          `We WIN the conflict at address ${claimingAddress}; re-asserting our NAME ` +
+            `${ourDeviceName} over competing NAME ${competitorName}.`,
         );
-        return null;
+        const canId =
+          ((6 << 26) | (0xee00 << 8) | claimingAddress) >>> 0;
+        const assertion = {
+          topic: "can/send",
+          payload:
+            `${canId.toString(16).padStart(8, "0").toUpperCase()}#` +
+            ourDeviceName,
+          address_claim_management: true,
+        };
+        // Output 3 drives the 250 ms quiet timer, which ends at
+        // address_claim_success. Resetting it clears whatever was pending, and the
+        // message that follows starts a fresh window; that node identifies the
+        // claim from msg.claiming_address, so the restart carries the address and
+        // nothing else. It is a trigger, not a frame.
+
+        // Win branch
+        return [
+          null,            // 1: no retry
+          assertion,       // 2: transmit
+          claimInProgress  // 3: timer
+            ? [{ reset: true }, { claiming_address: claimingAddress }]
+            : null,
+        ];
       } else {
-        // WE LOSE
-        node.warn(
-          `We LOSE the conflict. Cancelling timer and trying next address.`,
+        const addressHex = claimingAddress
+          .toString(16)
+          .padStart(2, "0")
+          .toUpperCase();
+        global.set("rvc_address_claim_lost", true);
+        global.set("rvc_source_address", null);
+        node.error(
+          `RV-C ADDRESS LOST: address ${claimingAddress} (0x${addressHex}); ` +
+            `our NAME ${ourDeviceName}; competing NAME ${competitorName}; ` +
+            `competing NAME won. CAN traffic is blocked while claiming the next address.`,
         );
         flow.set("claim_in_progress", false);
-
-        const retryMsg = { topic: "address_claim_retry" };
-        const resetTimerMsg = { reset: true };
-
-        return [retryMsg, resetTimerMsg];
+        // Lose branch
+        return [
+          { topic: "address_claim_retry" },          // 1
+          null,                                      // 2
+          claimInProgress ? { reset: true } : null,  // 3
+        ];
       }
     }
 
+
     // If we reach here, it's a claim for a different address, so ignore it.
+
     return null;
-  outputs: 4
+  outputs: 3
   timeout: 0
   noerr: 0
   initialize: ""
   finalize: ""
   libs: []
   x: 470
-  "y": 920
+  "y": 900
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
-    - - 55071115a3fe7c2c
     - - a2334b77d3764815
     - - 55071115a3fe7c2c
 - id: 4fa9b9fdc36c83da
@@ -800,8 +873,8 @@
   mode: link
   links:
     - 00b1afc9a96aca8e
-  x: 1770
-  "y": 440
+  x: 1810
+  "y": 460
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -868,8 +941,8 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 1130
-  "y": 340
+  x: 1190
+  "y": 360
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -931,7 +1004,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1810
+  x: 1850
   "y": 280
   g: f09f79586501cb0b
   l: true
@@ -999,6 +1072,7 @@
     // Store the claimed address to global context
 
     global.set("rvc_source_address", claimedAddress);
+
     global.set("rvc_address_claim_lost", false);
 
 
@@ -1006,7 +1080,8 @@
 
     flow.set("claim_in_progress", false);
 
-    // Keep the claimed address and NAME available for continuous conflict defence.
+    // Keep the claimed address and NAME available for continuous conflict
+    defence.
 
     flow.set("claiming_address", claimedAddress);
 
@@ -1287,40 +1362,13 @@
     - 52b505b69f88888d
     - d95299a44e1d7ed5
     - c83c6b2b70c927a3
+    - a493ca49e16bb03c
   x: 230
   "y": 600
   g: 3c819b7900145438
   l: true
   wires:
     - - ca7e7aa2d0a0d001
-- id: ca7e7aa2d0a0d001
-  type: function
-  z: 292e70a6ba25b323
-  name: can_transmit_guard
-  func: |-
-    // Prevent any CAN transmission after LibreCoach loses its claimed address.
-
-    if (
-      msg.topic === "can/send" &&
-      (msg.suppress_can_send === true ||
-        (global.get("rvc_address_claim_lost") === true &&
-          msg.address_claim_management !== true))
-    ) {
-      return null;
-    }
-
-    return msg;
-  outputs: 1
-  timeout: 0
-  noerr: 0
-  initialize: ""
-  finalize: ""
-  libs: []
-  x: 420
-  "y": 600
-  g: 3c819b7900145438
-  wires:
-    - - 1ac6e0fa1cbb3852
 - id: 74c7e4a6cc2508eb
   type: file in
   z: 292e70a6ba25b323
@@ -1372,8 +1420,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 980
-  "y": 660
+  x: 1040
+  "y": 680
   g: ceee39e4b10d6030
   wires:
     - - 3d07bdca6b71b669
@@ -1533,6 +1581,10 @@
 
     const ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)
 
+    const sourceAddress = (canIdNum & 0xff)
+      .toString(16)
+      .padStart(2, "0")
+      .toUpperCase();
     let pgn = ((pf << 8) | ps).toString(16).toUpperCase();
 
 
@@ -1677,6 +1729,7 @@
       dgn_name: dgn_name,
       instance: instance,
       destination_address: destination_address,
+      sourceAddress: sourceAddress,
       data_payload: data_payload,
     };
 
@@ -1705,8 +1758,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1100
-  "y": 460
+  x: 1160
+  "y": 480
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -1836,7 +1889,7 @@
   type: group
   z: 292e70a6ba25b323
   name: Rest unique list
-  x: 1694
+  x: 1734
   "y": 499
   g: f09f79586501cb0b
   style:
@@ -1914,7 +1967,7 @@
   mode: link
   links:
     - 74329f13cbbc528a
-  x: 1680
+  x: 1710
   "y": 840
   g: 8ef86a1c4b59d8e1
   l: true
@@ -1934,11 +1987,23 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1810
+  x: 1850
   "y": 540
   g: 9dd6a98018824be9
   wires:
     - - 092c751dcdd12270
+- id: a493ca49e16bb03c
+  type: link out
+  z: 292e70a6ba25b323
+  name: "MQTT out: Retain FALSE"
+  mode: link
+  links:
+    - 74329f13cbbc528a
+  x: 2110
+  "y": 660
+  g: f09f79586501cb0b
+  l: true
+  wires: []
 - id: a6594a9464d8fe4e
   type: switch
   z: 292e70a6ba25b323
@@ -1970,8 +2035,8 @@
   checkall: "false"
   repair: false
   outputs: 7
-  x: 1470
-  "y": 460
+  x: 1510
+  "y": 480
   g: f09f79586501cb0b
   wires:
     - - 398683928338f9c6
@@ -1982,53 +2047,6 @@
     - - ac1a1dd2e5f00e01
     - - 45414bacecada477
     - []
-- id: ac1a1dd2e5f00e01
-  type: function
-  z: 292e70a6ba25b323
-  name: address_claim_responder
-  func: |-
-    // Answer requests for ADDRESS_CLAIMED after LibreCoach has claimed an address.
-
-    const claimedAddress = global.get("rvc_source_address");
-    const deviceName = flow.get("our_device_name");
-    const request = msg.payload || {};
-    const data = String(request.data_payload || "").toUpperCase();
-
-    if (
-      global.get("rvc_address_claim_lost") === true ||
-      !Number.isInteger(claimedAddress) ||
-      typeof deviceName !== "string" ||
-      !/^[0-9A-F]{16}$/.test(deviceName)
-    ) {
-      return null;
-    }
-
-    // Requested DGN is little-endian in bytes 0-2: EE00h = 00 EE 00.
-    if (data.length < 6 || data.substring(0, 6) !== "00EE00") {
-      return null;
-    }
-
-    const destination = request.destination_address;
-    if (destination !== claimedAddress && destination !== 0xff) {
-      return null;
-    }
-
-    const canId = ((6 << 26) | (0xee00 << 8) | claimedAddress) >>> 0;
-    msg.topic = "can/send";
-    msg.payload = `${canId.toString(16).padStart(8, "0").toUpperCase()}#${deviceName.toUpperCase()}`;
-    msg.address_claim_management = true;
-    return msg;
-  outputs: 1
-  timeout: 0
-  noerr: 0
-  initialize: ""
-  finalize: ""
-  libs: []
-  x: 1740
-  "y": 520
-  g: f09f79586501cb0b
-  wires:
-    - - a2334b77d3764815
 - id: a8a757fe3b31cf9c
   type: function
   z: 292e70a6ba25b323
@@ -2240,6 +2258,78 @@
   l: true
   wires:
     - - 1becc1dacb0ecaf8
+- id: ac1a1dd2e5f00e01
+  type: function
+  z: 292e70a6ba25b323
+  name: address_claim_responder
+  func: >
+    // Answer requests for ADDRESS_CLAIMED after LibreCoach has claimed an
+    address.
+
+
+    const claimedAddress = global.get("rvc_source_address");
+
+    const deviceName = flow.get("our_device_name");
+
+    const request = msg.payload || {};
+
+    const data = String(request.data_payload || "").toUpperCase();
+
+
+    if (
+      global.get("rvc_address_claim_lost") === true ||
+      !Number.isInteger(claimedAddress) ||
+      typeof deviceName !== "string" ||
+      !/^[0-9A-F]{16}$/.test(deviceName)
+    ) {
+      return null;
+    }
+
+
+    // Requested DGN is little-endian in bytes 0-2: EE00h = 00 EE 00.
+
+    if (data.length < 6 || data.substring(0, 6) !== "00EE00") {
+      return null;
+    }
+
+
+    // RV-C 3.2.4.3 forbids requesting ADDRESS_CLAIM globally, so a conforming
+    node
+
+    // addresses the request to us. Answering FFh anyway is deliberate: it costs
+    one
+
+    // frame and keeps LibreCoach visible to diagnostic tools that get this
+    wrong.
+
+    const destination = request.destination_address;
+
+    if (destination !== claimedAddress && destination !== 0xff) {
+      return null;
+    }
+
+
+    const canId = ((6 << 26) | (0xee00 << 8) | claimedAddress) >>> 0;
+
+    msg.topic = "can/send";
+
+    msg.payload = `${canId.toString(16).padStart(8,
+    "0").toUpperCase()}#${deviceName.toUpperCase()}`;
+
+    msg.address_claim_management = true;
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1850
+  "y": 660
+  g: f09f79586501cb0b
+  wires:
+    - - a493ca49e16bb03c
 - id: b846bc1605dae821
   type: function
   z: 292e70a6ba25b323
@@ -2511,8 +2601,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1810
-  "y": 600
+  x: 1850
+  "y": 580
   g: 9dd6a98018824be9
   wires:
     - - eea1641469efb23f
@@ -2567,6 +2657,47 @@
   g: 3c819b7900145438
   wires:
     - - 88e5fa035bedb48c
+- id: ca7e7aa2d0a0d001
+  type: function
+  z: 292e70a6ba25b323
+  name: can_transmit_guard
+  func: >-
+    // Prevent any CAN transmission after LibreCoach loses its claimed address.
+
+    //
+
+    // Every CAN frame leaves through the unretained MQTT path with topic
+
+    // "can/send"; retained publishes are Home Assistant state and never reach
+    the
+
+    // bus. Address-management frames are exempt, because claiming a new address
+    is
+
+    // the only way out of the lost state.
+
+
+    if (
+      msg.topic === "can/send" &&
+      global.get("rvc_address_claim_lost") === true &&
+      msg.address_claim_management !== true
+    ) {
+      return null;
+    }
+
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 480
+  "y": 600
+  g: 3c819b7900145438
+  wires:
+    - - 1ac6e0fa1cbb3852
 - id: cacf35b859af22a9
   type: mqtt out
   z: 292e70a6ba25b323
@@ -2580,7 +2711,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 630
+  x: 730
   "y": 500
   g: 3c819b7900145438
   wires: []
@@ -2632,8 +2763,8 @@
 - id: ceee39e4b10d6030
   type: group
   z: 292e70a6ba25b323
-  x: 874
-  "y": 559
+  x: 934
+  "y": 579
   g: f09f79586501cb0b
   style:
     stroke: "#777777"
@@ -2999,7 +3130,7 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 1790
+  x: 1830
   "y": 320
   g: f09f79586501cb0b
   wires: []
@@ -3347,8 +3478,8 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 2100
-  "y": 600
+  x: 2140
+  "y": 580
   g: 9dd6a98018824be9
   wires: []
 - id: efe52fc701f550cf
@@ -3371,7 +3502,7 @@
   links:
     - 45414bacecada477
   x: 220
-  "y": 920
+  "y": 900
   g: 8ef86a1c4b59d8e1
   l: true
   wires:
@@ -3380,7 +3511,7 @@
   type: group
   z: 292e70a6ba25b323
   name: CAN message routing
-  x: 848
+  x: 908
   "y": 239
   style:
     stroke: "#777777"
@@ -3398,7 +3529,9 @@
     - 6376d98589368f2b
     - 8d7d5d3ea117cf79
     - 9dd6a98018824be9
+    - a493ca49e16bb03c
     - a6594a9464d8fe4e
+    - ac1a1dd2e5f00e01
     - ceee39e4b10d6030
     - d79041ca83ce8b8c
 - id: f3ee6dc19b0155a0

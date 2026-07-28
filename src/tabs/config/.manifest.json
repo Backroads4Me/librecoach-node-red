@@ -203,18 +203,6 @@
     "hasFinalize": false,
     "hasInfo": false
   },
-  "b846bc1605dae821": {
-    "nodeId": "b846bc1605dae821",
-    "name": "address_claim_request",
-    "sanitizedName": "address_claim_request",
-    "fileName": "address_claim_request",
-    "isVue": false,
-    "isFun": true,
-    "hasCode": true,
-    "hasInitialize": false,
-    "hasFinalize": false,
-    "hasInfo": false
-  },
   "ac1a1dd2e5f00e01": {
     "nodeId": "ac1a1dd2e5f00e01",
     "name": "address_claim_responder",
@@ -227,11 +215,11 @@
     "hasFinalize": false,
     "hasInfo": false
   },
-  "ca7e7aa2d0a0d001": {
-    "nodeId": "ca7e7aa2d0a0d001",
-    "name": "can_transmit_guard",
-    "sanitizedName": "can_transmit_guard",
-    "fileName": "can_transmit_guard",
+  "b846bc1605dae821": {
+    "nodeId": "b846bc1605dae821",
+    "name": "address_claim_request",
+    "sanitizedName": "address_claim_request",
+    "fileName": "address_claim_request",
     "isVue": false,
     "isFun": true,
     "hasCode": true,
@@ -268,6 +256,18 @@
     "name": "store_config_globals",
     "sanitizedName": "store_config_globals",
     "fileName": "store_config_globals",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "ca7e7aa2d0a0d001": {
+    "nodeId": "ca7e7aa2d0a0d001",
+    "name": "can_transmit_guard",
+    "sanitizedName": "can_transmit_guard",
+    "fileName": "can_transmit_guard",
     "isVue": false,
     "isFun": true,
     "hasCode": true,

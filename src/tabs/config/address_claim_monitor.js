@@ -63,12 +63,18 @@ if (sourceAddressInt === claimingAddress) {
         ourDeviceName,
       address_claim_management: true,
     };
+    // Output 3 drives the 250 ms quiet timer, which ends at
+    // address_claim_success. Resetting it clears whatever was pending, and the
+    // message that follows starts a fresh window; that node identifies the
+    // claim from msg.claiming_address, so the restart carries the address and
+    // nothing else. It is a trigger, not a frame.
+
+    // Win branch
     return [
-      null,
-      claimInProgress ? { reset: true } : null,
-      assertion,
-      claimInProgress
-        ? { ...assertion, suppress_can_send: true }
+      null,            // 1: no retry
+      assertion,       // 2: transmit
+      claimInProgress  // 3: timer
+        ? [{ reset: true }, { claiming_address: claimingAddress }]
         : null,
     ];
   } else {
@@ -84,11 +90,11 @@ if (sourceAddressInt === claimingAddress) {
         `competing NAME won. CAN traffic is blocked while claiming the next address.`,
     );
     flow.set("claim_in_progress", false);
+    // Lose branch
     return [
-      { topic: "address_claim_retry" },
-      claimInProgress ? { reset: true } : null,
-      null,
-      null,
+      { topic: "address_claim_retry" },          // 1
+      null,                                      // 2
+      claimInProgress ? { reset: true } : null,  // 3
     ];
   }
 }
