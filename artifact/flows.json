@@ -6195,7 +6195,7 @@
     "type": "function",
     "z": "292e70a6ba25b323",
     "name": "store_dgn_map",
-    "func": "// Convert the data to a Map when initially storing it\nconst dgnMap = new Map(\n  msg.payload.map((entry) => [entry.Hex.toString().toUpperCase(), entry.DGN]),\n);\n\n// Store the Map in global context\nglobal.set(\"dgnMap\", dgnMap);\n\n// Count the number of records\nconst decoderCount = dgnMap.size;\n\n// Update the node status to indicate success\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Reference loaded\",\n});\nreturn null;\n",
+    "func": "// Convert the data to a Map when initially storing it\nconst dgnMap = new Map(\n  msg.payload.map((entry) => [entry.Hex.toString().toUpperCase(), entry.DGN]),\n);\n\n// PDU1 DGNs are listed in the reference without the leading data-page digit --\n// REQUEST_FOR_DGN is \"EA00\", not \"0EA00\". decode_rvc_can builds a five\n// character key, so those entries are indexed under both forms or the lookup\n// misses and the message is routed as UNKNOWN.\nfor (const [hex, name] of [...dgnMap]) {\n  if (hex.length === 4) {\n    dgnMap.set(\"0\" + hex, name);\n  }\n}\n\n// Store the Map in global context\nglobal.set(\"dgnMap\", dgnMap);\n\n// Count the number of records\nconst decoderCount = dgnMap.size;\n\n// Update the node status to indicate success\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: \"Reference loaded\",\n});\nreturn null;\n",
     "outputs": 0,
     "timeout": "",
     "noerr": 0,

@@ -3,6 +3,16 @@ const dgnMap = new Map(
   msg.payload.map((entry) => [entry.Hex.toString().toUpperCase(), entry.DGN]),
 );
 
+// PDU1 DGNs are listed in the reference without the leading data-page digit --
+// REQUEST_FOR_DGN is "EA00", not "0EA00". decode_rvc_can builds a five
+// character key, so those entries are indexed under both forms or the lookup
+// misses and the message is routed as UNKNOWN.
+for (const [hex, name] of [...dgnMap]) {
+  if (hex.length === 4) {
+    dgnMap.set("0" + hex, name);
+  }
+}
+
 // Store the Map in global context
 global.set("dgnMap", dgnMap);
 
