@@ -36,11 +36,12 @@ if (currentClaimingAddress !== claimedAddress) {
 // SUCCESS! No conflict detected during the 250ms monitoring window
 // Store the claimed address to global context
 global.set("rvc_source_address", claimedAddress);
+global.set("rvc_address_claim_lost", false);
 
 // Clear claiming flags
 flow.set("claim_in_progress", false);
-flow.set("claiming_address", null);
-flow.set("our_device_name", null);
+// Keep the claimed address and NAME available for continuous conflict defence.
+flow.set("claiming_address", claimedAddress);
 
 //node.warn(`Successfully claimed address ${claimedAddress} (0x${claimedAddress.toString(16).toUpperCase()})`);
 //node.warn(`Address stored to global.rvc_source_address: ${claimedAddress}`);

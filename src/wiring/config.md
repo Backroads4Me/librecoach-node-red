@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 99
-- **Function nodes:** 29
+- **Node count:** 101
+- **Function nodes:** 31
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 15
@@ -18,7 +18,7 @@
 ### address_claim_monitor
 - **File:** [`address_claim_monitor.js`](../tabs/config/address_claim_monitor.js)
 - **Node ID:** `4e46ba83df00a31b`
-- **Outputs:** 2
+- **Outputs:** 4
 
 #### Neighborhood
 ```mermaid
@@ -31,10 +31,13 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_4e46ba83df00["address_claim_monitor"]:::fn
   n_55071115a3fe["55071115a3fe7c2c"]:::fn
+  n_a2334b77d376["MQTT out_ Retain FALSE"]:::link
   n_b846bc1605da["address_claim_request"]:::fn
   n_f01db5ebc3ae["ADDRESS_CLAIMED"]:::link
   n_4e46ba83df00 -->|out 0| n_b846bc1605da
   n_4e46ba83df00 -->|out 1| n_55071115a3fe
+  n_4e46ba83df00 -->|out 2| n_a2334b77d376
+  n_4e46ba83df00 -->|out 3| n_55071115a3fe
   n_f01db5ebc3ae -->|out 0| n_4e46ba83df00
 ```
 
@@ -50,6 +53,10 @@ Compares device NAMEs to determine winner in case of conflict
 - **Output 0:**
   - address_claim_request (function) — this tab, file: [`address_claim_request.js`](../tabs/config/address_claim_request.js)
 - **Output 1:**
+  - 55071115a3fe7c2c (delay) — this tab
+- **Output 2:**
+  - MQTT out: Retain FALSE (link out) — this tab
+- **Output 3:**
   - 55071115a3fe7c2c (delay) — this tab
 
 ---
@@ -91,6 +98,39 @@ ADDRESS_CLAIMED message (DGN EE00h) to claim the address.
 #### Downstream
 - **Output 0:**
   - 55071115a3fe7c2c (delay) — this tab
+  - MQTT out: Retain FALSE (link out) — this tab
+
+---
+
+### address_claim_responder
+- **File:** [`address_claim_responder.js`](../tabs/config/address_claim_responder.js)
+- **Node ID:** `ac1a1dd2e5f00e01`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_a2334b77d376["MQTT out_ Retain FALSE"]:::link
+  n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
+  n_ac1a1dd2e5f0["address_claim_responder"]:::fn
+  n_a6594a9464d8 -->|out 4| n_ac1a1dd2e5f0
+  n_ac1a1dd2e5f0 -->|out 0| n_a2334b77d376
+```
+
+#### Msg contract
+Answer requests for ADDRESS_CLAIMED after LibreCoach has claimed an address.
+
+#### Upstream
+- a6594a9464d8fe4e (switch) — this tab
+
+#### Downstream
+- **Output 0:**
   - MQTT out: Retain FALSE (link out) — this tab
 
 ---
@@ -211,6 +251,39 @@ Output 2 → Filter nodes (reset on enable)
 #### Downstream
 - **Output 0:**
   - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
+### can_transmit_guard
+- **File:** [`can_transmit_guard.js`](../tabs/config/can_transmit_guard.js)
+- **Node ID:** `ca7e7aa2d0a0d001`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_1ac6e0fa1cbb["MQTT Out_ Retain FALSE"]:::fn
+  n_74329f13cbbc["MQTT out_ Retain FALSE"]:::link
+  n_ca7e7aa2d0a0["can_transmit_guard"]:::fn
+  n_74329f13cbbc -->|out 0| n_ca7e7aa2d0a0
+  n_ca7e7aa2d0a0 -->|out 0| n_1ac6e0fa1cbb
+```
+
+#### Msg contract
+Prevent any CAN transmission after LibreCoach loses its claimed address.
+
+#### Upstream
+- MQTT out: Retain FALSE (link in) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT Out: Retain FALSE (mqtt out) — this tab
 
 ---
 
@@ -1147,7 +1220,7 @@ _None._
 
 - 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 2
 - 375ced2f0a80dc5c (note) — id `375ced2f0a80dc5c`, in: 0, out: 0
-- 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 2, out: 1
+- 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 3, out: 1
 - 8037e09fbf4ac87b (inject) — id `8037e09fbf4ac87b`, in: 0, out: 1
 - 8337a7f0dd0435d6 (http request) — id `8337a7f0dd0435d6`, in: 1, out: 0
 - BETA Testing (group) — id `9e47041ed71c4494`, in: 0, out: 0
@@ -1190,6 +1263,6 @@ _None._
 - Rest unique list (group) — id `9dd6a98018824be9`, in: 0, out: 0
 - User input (group) — id `f81ca31c89243206`, in: 0, out: 0
 - Write file (file) — id `cfa55144f4a17a5c`, in: 1, out: 0
-- a6594a9464d8fe4e (switch) — id `a6594a9464d8fe4e`, in: 1, out: 6
+- a6594a9464d8fe4e (switch) — id `a6594a9464d8fe4e`, in: 1, out: 7
 - c78420a075d43408 (json) — id `c78420a075d43408`, in: 1, out: 1
 - ceee39e4b10d6030 (group) — id `ceee39e4b10d6030`, in: 0, out: 0

@@ -779,7 +779,7 @@
 
     // If we reach here, it's a claim for a different address, so ignore it.
     return null;
-  outputs: 2
+  outputs: 4
   timeout: 0
   noerr: 0
   initialize: ""
@@ -790,6 +790,8 @@
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
+    - - 55071115a3fe7c2c
+    - - a2334b77d3764815
     - - 55071115a3fe7c2c
 - id: 4fa9b9fdc36c83da
   type: link out
@@ -997,15 +999,16 @@
     // Store the claimed address to global context
 
     global.set("rvc_source_address", claimedAddress);
+    global.set("rvc_address_claim_lost", false);
 
 
     // Clear claiming flags
 
     flow.set("claim_in_progress", false);
 
-    flow.set("claiming_address", null);
+    // Keep the claimed address and NAME available for continuous conflict defence.
 
-    flow.set("our_device_name", null);
+    flow.set("claiming_address", claimedAddress);
 
 
     //node.warn(`Successfully claimed address ${claimedAddress}
@@ -1288,6 +1291,34 @@
   "y": 600
   g: 3c819b7900145438
   l: true
+  wires:
+    - - ca7e7aa2d0a0d001
+- id: ca7e7aa2d0a0d001
+  type: function
+  z: 292e70a6ba25b323
+  name: can_transmit_guard
+  func: |-
+    // Prevent any CAN transmission after LibreCoach loses its claimed address.
+
+    if (
+      msg.topic === "can/send" &&
+      (msg.suppress_can_send === true ||
+        (global.get("rvc_address_claim_lost") === true &&
+          msg.address_claim_management !== true))
+    ) {
+      return null;
+    }
+
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 420
+  "y": 600
+  g: 3c819b7900145438
   wires:
     - - 1ac6e0fa1cbb3852
 - id: 74c7e4a6cc2508eb
@@ -1948,9 +1979,56 @@
       - 03a998942a940736
     - - 4fa9b9fdc36c83da
     - - c781b519a9f9b156
-    - []
+    - - ac1a1dd2e5f00e01
     - - 45414bacecada477
     - []
+- id: ac1a1dd2e5f00e01
+  type: function
+  z: 292e70a6ba25b323
+  name: address_claim_responder
+  func: |-
+    // Answer requests for ADDRESS_CLAIMED after LibreCoach has claimed an address.
+
+    const claimedAddress = global.get("rvc_source_address");
+    const deviceName = flow.get("our_device_name");
+    const request = msg.payload || {};
+    const data = String(request.data_payload || "").toUpperCase();
+
+    if (
+      global.get("rvc_address_claim_lost") === true ||
+      !Number.isInteger(claimedAddress) ||
+      typeof deviceName !== "string" ||
+      !/^[0-9A-F]{16}$/.test(deviceName)
+    ) {
+      return null;
+    }
+
+    // Requested DGN is little-endian in bytes 0-2: EE00h = 00 EE 00.
+    if (data.length < 6 || data.substring(0, 6) !== "00EE00") {
+      return null;
+    }
+
+    const destination = request.destination_address;
+    if (destination !== claimedAddress && destination !== 0xff) {
+      return null;
+    }
+
+    const canId = ((6 << 26) | (0xee00 << 8) | claimedAddress) >>> 0;
+    msg.topic = "can/send";
+    msg.payload = `${canId.toString(16).padStart(8, "0").toUpperCase()}#${deviceName.toUpperCase()}`;
+    msg.address_claim_management = true;
+    return msg;
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1740
+  "y": 520
+  g: f09f79586501cb0b
+  wires:
+    - - a2334b77d3764815
 - id: a8a757fe3b31cf9c
   type: function
   z: 292e70a6ba25b323
@@ -2246,6 +2324,7 @@
     msg.payload = canMessage;
     msg.topic = "can/send";
     msg.claiming_address = addressToTry;
+    msg.address_claim_management = true;
 
     node.log(
       `Attempting to claim address ${addressToTry} (0x${addressToTry.toString(16).toUpperCase()})`,

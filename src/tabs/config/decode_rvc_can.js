@@ -39,6 +39,10 @@ if (isNaN(canIdNum)) {
 // Get the 4-digit J1939 PGN (PF + PS). This value is consistent.
 const pf = (canIdNum >> 16) & 0xff; // PDU Format (Bits 16-23)
 const ps = (canIdNum >> 8) & 0xff; // PDU Specific (Bits 8-15)
+const sourceAddress = (canIdNum & 0xff)
+  .toString(16)
+  .padStart(2, "0")
+  .toUpperCase();
 let pgn = ((pf << 8) | ps).toString(16).toUpperCase();
 
 // Ensure 4 characters for known PGNs (e.g., EF4D)
@@ -151,6 +155,7 @@ msg.payload = {
   dgn_name: dgn_name,
   instance: instance,
   destination_address: destination_address,
+  sourceAddress: sourceAddress,
   data_payload: data_payload,
 };
 

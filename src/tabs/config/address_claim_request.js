@@ -77,6 +77,7 @@ flow.set("our_device_name", DEVICE_NAME);
 msg.payload = canMessage;
 msg.topic = "can/send";
 msg.claiming_address = addressToTry;
+msg.address_claim_management = true;
 
 node.log(
   `Attempting to claim address ${addressToTry} (0x${addressToTry.toString(16).toUpperCase()})`,

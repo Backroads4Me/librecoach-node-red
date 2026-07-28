@@ -215,6 +215,30 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "ac1a1dd2e5f00e01": {
+    "nodeId": "ac1a1dd2e5f00e01",
+    "name": "address_claim_responder",
+    "sanitizedName": "address_claim_responder",
+    "fileName": "address_claim_responder",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "ca7e7aa2d0a0d001": {
+    "nodeId": "ca7e7aa2d0a0d001",
+    "name": "can_transmit_guard",
+    "sanitizedName": "can_transmit_guard",
+    "fileName": "can_transmit_guard",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "ba0c52ff61838986": {
     "nodeId": "ba0c52ff61838986",
     "name": "poll_autofill",
