@@ -71,7 +71,8 @@ function decodeTemperature(value) {
 
 // Decodes State of Charge / Health / Relative Capacity (uint8)
 function decodePercentage(value) {
-  // 0.5% per step.
+  // SOC, health, and relative capacity are fractions of their full value, so
+  // these DGN fields stop at raw 200 = 100%.
   if (value <= 200) return parseFloat((value * 0.5).toFixed(1));
   if (value === 255) return "Not Available";
   return "Invalid";

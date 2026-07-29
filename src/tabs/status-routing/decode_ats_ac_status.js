@@ -13,7 +13,7 @@ function decodeBits(value, startBit, endBit) {
 function decodeATSACInstance(value) {
     // ATS AC instance interpretation
     // For ATS, this typically indicates the AC input/output line being monitored
-    if (value <= 200) {
+    if (value <= 250) {
         return value; // Direct instance number
     } else if (value === 251) {
         return "Error";
@@ -48,14 +48,14 @@ function decodeACVoltage(value) {
 // negative current (charging/import) is a raw value below 32000.
 // Special values per Table 3.2.3b.
 function decodeACCurrent(raw) {
-  if (raw === 65535) return "Not Available";
-  if (raw === 65534) return "Out of Range";
-  if (raw === 65533) return "Reserved";
+    if (raw === 65535) return "Not Available";
+    if (raw === 65534) return "Out of Range";
+    if (raw === 65533) return "Reserved";
 
-  const amps = raw * 0.05 - 1600;
-  if (amps < -1600 || amps > 1612.5) return "Invalid";
+    const amps = raw * 0.05 - 1600;
+    if (amps < -1600 || amps > 1612.5) return "Invalid";
 
-  return parseFloat(amps.toFixed(2));
+    return parseFloat(amps.toFixed(2));
 }
 
 function decodeFrequency(value) {

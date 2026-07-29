@@ -12,7 +12,7 @@ function decodeBits(value, startBit, endBit) {
 
 function decodeThermostatInstance(value) {
   // Thermostat instance mapping
-  if (value <= 200) {
+  if (value <= 250) {
     return value; // Direct instance number (Zone)
   } else if (value === 251) {
     return "Error";
@@ -36,7 +36,7 @@ function decodeCurrentScheduleInstance(value) {
 
 function decodeScheduleInstances(value) {
   // Number of schedule instances capacity
-  if (value <= 200) {
+  if (value <= 250) {
     return value; // Direct count
   } else if (value === 251) {
     return "Error";

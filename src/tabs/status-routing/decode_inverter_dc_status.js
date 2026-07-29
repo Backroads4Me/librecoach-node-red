@@ -12,7 +12,7 @@ function decodeBits(value, startBit, endBit) {
 
 function decodeInverterInstance(value) {
   // Inverter instance interpretation
-  if (value <= 200) {
+  if (value <= 250) {
     return value; // Direct instance number
   } else if (value === 251) {
     return "Error";

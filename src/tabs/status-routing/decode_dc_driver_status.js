@@ -55,8 +55,8 @@ switch (payload.dgn_name) {
     break;
   }
   case "DC_COMPONENT_DRIVER_STATUS_6": {
-    // 0-200 raw = 0-100% (0.5% per step); 201-255 are RV-C special values
-    // (error/reserved/not available) — leave pwm_duty_cycle unset for those.
+    // §6.50.11 defines PWM duty as raw 0-200 = 0-100%; leave the field
+    // unset for values outside that DGN-specific range.
     const pwmRaw = parseInt(bytePairs[3], 16);
     if (pwmRaw <= 200) {
       out.pwm_duty_cycle = pwmRaw * 0.5;

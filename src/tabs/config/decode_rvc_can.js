@@ -94,13 +94,20 @@ if (pf < 0xf0 && pf !== 0xec && pf !== 0xeb) {
 
 // Fallback: some PDU2 devices transmit with DP=0 instead of DP=1 (non-conformant).
 // If DP=0 lookup failed for a PDU2 message, try the DP=1 variant from the table.
-if (!dgn_name && dp === 0 && pf >= 0xf0) {
+if (!dgn_name && dp === 0 && pf >= 0xf0 && lookupPgn !== "FECA") {
   const altDgn = "1" + lookupPgn;
   const altName = dgnMap.get(altDgn);
   if (altName) {
     dgn = altDgn;
     dgn_name = altName;
   }
+}
+
+// SAE J1939 DM1 is PGN 0FECA. RV-C DM_RV uses data page 1 (1FECA) and a
+// different lamp/DTC layout, so the data-page fallback must never merge them.
+if (dp === 0 && lookupPgn === "FECA") {
+  dgn = "0FECA";
+  dgn_name = "J1939_DM1";
 }
 
 // Proprietary heat control, via a SilverLeaf TM-2xx module.
@@ -129,7 +136,8 @@ const source_address_num = canIdNum & 0xff;
 
 function proprietaryHeatName() {
   const involvesModule =
-    TM2XX_ADDRESSES.includes(ps) || TM2XX_ADDRESSES.includes(source_address_num);
+    TM2XX_ADDRESSES.includes(ps) ||
+    TM2XX_ADDRESSES.includes(source_address_num);
   if (!involvesModule) return null;
   if (data_payload.length < 2) return "AQUAHOT_UNUSED";
 

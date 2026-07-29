@@ -104,7 +104,8 @@
     // Decodes State of Charge / Health / Relative Capacity (uint8)
 
     function decodePercentage(value) {
-      // 0.5% per step.
+      // SOC, health, and relative capacity are fractions of their full value, so
+      // these DGN fields stop at raw 200 = 100%.
       if (value <= 200) return parseFloat((value * 0.5).toFixed(1));
       if (value === 255) return "Not Available";
       return "Invalid";
@@ -1919,7 +1920,7 @@
 
 
     function decodeBrightnessLevel(value) {
-      // Brightness level (0-200% per Table 5.3)
+      // This DGN uses raw 0-200 for 0-100% brightness (§6.24 test profile).
       if (value <= 200) {
         return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%
       } else if (value === 251) {
@@ -6221,8 +6222,8 @@
         break;
       }
       case "DC_COMPONENT_DRIVER_STATUS_6": {
-        // 0-200 raw = 0-100% (0.5% per step); 201-255 are RV-C special values
-        // (error/reserved/not available) — leave pwm_duty_cycle unset for those.
+        // §6.50.11 defines PWM duty as raw 0-200 = 0-100%; leave the field
+        // unset for values outside that DGN-specific range.
         const pwmRaw = parseInt(bytePairs[3], 16);
         if (pwmRaw <= 200) {
           out.pwm_duty_cycle = pwmRaw * 0.5;
@@ -6495,7 +6496,7 @@
 
     function decodeThermostatInstance(value) {
       // Thermostat instance mapping
-      if (value <= 200) {
+      if (value <= 250) {
         return value; // Direct instance number (Zone)
       } else if (value === 251) {
         return "Error";
@@ -6519,7 +6520,7 @@
 
     function decodeScheduleInstances(value) {
       // Number of schedule instances capacity
-      if (value <= 200) {
+      if (value <= 250) {
         return value; // Direct count
       } else if (value === 251) {
         return "Error";
@@ -7065,7 +7066,7 @@
 
     function decodeInverterInstance(value) {
       // Inverter instance interpretation
-      if (value <= 200) {
+      if (value <= 250) {
         return value; // Direct instance number
       } else if (value === 251) {
         return "Error";
@@ -7279,7 +7280,7 @@
     function decodeATSACInstance(value) {
         // ATS AC instance interpretation
         // For ATS, this typically indicates the AC input/output line being monitored
-        if (value <= 200) {
+        if (value <= 250) {
             return value; // Direct instance number
         } else if (value === 251) {
             return "Error";
@@ -7314,14 +7315,14 @@
     // negative current (charging/import) is a raw value below 32000.
     // Special values per Table 3.2.3b.
     function decodeACCurrent(raw) {
-      if (raw === 65535) return "Not Available";
-      if (raw === 65534) return "Out of Range";
-      if (raw === 65533) return "Reserved";
+        if (raw === 65535) return "Not Available";
+        if (raw === 65534) return "Out of Range";
+        if (raw === 65533) return "Reserved";
 
-      const amps = raw * 0.05 - 1600;
-      if (amps < -1600 || amps > 1612.5) return "Invalid";
+        const amps = raw * 0.05 - 1600;
+        if (amps < -1600 || amps > 1612.5) return "Invalid";
 
-      return parseFloat(amps.toFixed(2));
+        return parseFloat(amps.toFixed(2));
     }
 
     function decodeFrequency(value) {

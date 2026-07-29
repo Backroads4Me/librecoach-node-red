@@ -31,7 +31,7 @@ function decodeDimmerInstance(value) {
 }
 
 function decodeBrightnessLevel(value) {
-  // Brightness level (0-200% per Table 5.3)
+  // This DGN uses raw 0-200 for 0-100% brightness (§6.24 test profile).
   if (value <= 200) {
     return parseFloat((value * 0.5).toFixed(1)); // 0.5% per step, 0-100%
   } else if (value === 251) {
