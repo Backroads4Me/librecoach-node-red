@@ -97,6 +97,23 @@
       - d3cc901dd2fbd359
       - ba0c52ff61838986
       - 8e350e2c0a0536b4
+- id: 08bc68c0679da2b2
+  type: mqtt out
+  z: 292e70a6ba25b323
+  name: "MQTT Out: can/decoded"
+  topic: can/decoded
+  qos: "0"
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 1530
+  "y": 660
+  g: f09f79586501cb0b
+  wires: []
 - id: 092c751dcdd12270
   type: function
   z: 292e70a6ba25b323
@@ -295,6 +312,7 @@
   wires:
     - - a6594a9464d8fe4e
       - 3935564c9401e95d
+      - 08bc68c0679da2b2
 - id: 375ced2f0a80dc5c
   type: note
   z: 292e70a6ba25b323
@@ -3648,6 +3666,7 @@
     label: true
   nodes:
     - 02bdfc59de71b5a5
+    - 08bc68c0679da2b2
     - 0c76b4a89a0e60ca
     - 2110ea4d0b85f784
     - 21dfe84b8adafa6e

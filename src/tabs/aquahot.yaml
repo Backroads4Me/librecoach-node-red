@@ -5,22 +5,6 @@
   normalizedLabel: aquahot
   disabled: false
   info: ""
-- id: 1bd7e1d4c5f3864a
-  type: debug
-  z: 384249601e37ba22
-  name: AQUAHOT_SYSTEM_STATUS_2
-  active: false
-  tosidebar: true
-  console: false
-  tostatus: false
-  complete: payload
-  targetType: msg
-  statusVal: ""
-  statusType: auto
-  x: 620
-  "y": 420
-  g: 5811945b9bad79dc
-  wires: []
 - id: 1c1403c14b577fb4
   type: link out
   z: 384249601e37ba22
@@ -29,7 +13,7 @@
   links:
     - f658418a7b9b4857
   x: 1290
-  "y": 480
+  "y": 340
   g: 5811945b9bad79dc
   l: true
   wires: []
@@ -150,7 +134,7 @@
   finalize: ""
   libs: []
   x: 910
-  "y": 480
+  "y": 340
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4
@@ -612,7 +596,7 @@
   finalize: ""
   libs: []
   x: 910
-  "y": 540
+  "y": 400
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4
@@ -621,17 +605,15 @@
   z: 384249601e37ba22
   name: Aqua-Hot
   x: 74
-  "y": 319
+  "y": 299
   style:
     stroke: "#777777"
     label: true
   nodes:
-    - 1bd7e1d4c5f3864a
     - 1c1403c14b577fb4
     - 43cd836c21f66b26
     - 443fd5ec55d7111b
     - 5e7062bde869c7a5
-    - 691871e1972d2296
     - 8d93a86dc09f4c57
     - 914be705da0531dd
     - a6985e36ac9c8f1d
@@ -811,41 +793,36 @@
   finalize: ""
   libs: []
   x: 600
-  "y": 480
+  "y": 340
   g: 5811945b9bad79dc
   wires:
     - - 43cd836c21f66b26
-- id: 691871e1972d2296
-  type: debug
-  z: 384249601e37ba22
-  name: AQUAHOT_STATUS
-  active: false
-  tosidebar: true
-  console: false
-  tostatus: false
-  complete: payload
-  targetType: msg
-  statusVal: ""
-  statusType: auto
-  x: 580
-  "y": 360
-  g: 5811945b9bad79dc
-  wires: []
 - id: 7957e06c0f83dc0f
   type: note
   z: 384249601e37ba22
-  content: |-
+  content: >-
     # Aqua-Hot
-    AquaHot hydronic heating systems use two different protocols
-    depending on the model year. Older systems use proprietary
-    messages, newer ones use a mix of standard RV-C and proprietary.
-    This flow decodes both variants to report the status of the
-    diesel burner, AC heating elements, engine pre-heat, and zone temperatures.
+
+    An Aqua-Hot reaches the bus one of two ways, and a coach has one or the
+    other, never both.
+
+
+    Some boilers have no RV-C interface of their own. A SilverLeaf TM-2xx module
+    drives what
+
+    would otherwise be manual switches and speaks PROPRIETARY_A for them, from
+    static address 0x64
+
+    (TM-220/225/226) or 0x61 (TM-229). LibreCoach names that traffic AQUAHOT_1.
+
+
+    Others speak RV-C directly, using FF01, FF2E, FF2F and 6C00. LibreCoach
+    names that AQUAHOT_2.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
-  noteHeight: 174
-  x: 350
-  "y": 120
+  noteHeight: 198
+  x: 430
+  "y": 132
   wires: []
 - id: 8d93a86dc09f4c57
   type: debug
@@ -860,7 +837,7 @@
   statusVal: ""
   statusType: auto
   x: 600
-  "y": 780
+  "y": 640
   g: 5811945b9bad79dc
   wires: []
 - id: 914be705da0531dd
@@ -870,7 +847,7 @@
   links:
     - 3f467bbd66a21eb9
   x: 690
-  "y": 600
+  "y": 460
   g: 5811945b9bad79dc
   l: true
   wires:
@@ -1140,7 +1117,7 @@
   finalize: ""
   libs: []
   x: 600
-  "y": 540
+  "y": 400
   g: 5811945b9bad79dc
   wires:
     - - 443fd5ec55d7111b
@@ -1157,7 +1134,7 @@
   statusVal: ""
   statusType: auto
   x: 610
-  "y": 720
+  "y": 580
   g: 5811945b9bad79dc
   wires: []
 - id: cd5a041811bc2c9a
@@ -1167,7 +1144,7 @@
   links:
     - 398683928338f9c6
   x: 160
-  "y": 540
+  "y": 400
   g: 5811945b9bad79dc
   l: true
   wires:
@@ -1186,7 +1163,7 @@
   payload: ""
   payloadType: date
   x: 710
-  "y": 660
+  "y": 520
   g: 5811945b9bad79dc
   wires:
     - - ff1234567890abcd
@@ -1197,33 +1174,38 @@
   property: payload.dgn_name
   propertyType: msg
   rules:
-    - t: cont
-      v: AQUAHOT_STATUS
+    - t: eq
+      v: AQUAHOT_STATUS_1
       vt: str
     - t: eq
       v: AQUAHOT_SYSTEM_STATUS_2
       vt: str
     - t: eq
+      v: AQUAHOT_STATUS_2
+      vt: str
+    - t: eq
       v: AQUAHOT_THERMOSTAT_STATUS_2
       vt: str
-    - t: cont
-      v: AQUAHOT_COMMAND
+    - t: eq
+      v: AQUAHOT_COMMAND_2
+      vt: str
+    - t: eq
+      v: AQUAHOT_COMMAND_1
       vt: str
     - t: else
   checkall: "true"
   repair: false
-  outputs: 5
+  outputs: 7
   x: 330
-  "y": 540
+  "y": 400
   g: 5811945b9bad79dc
   wires:
     - - 5e7062bde869c7a5
-      - 691871e1972d2296
-    - - 1bd7e1d4c5f3864a
-      - a6985e36ac9c8f1d
+    - - a6985e36ac9c8f1d
+    - - a6985e36ac9c8f1d
+    - - a6985e36ac9c8f1d
     - - a6985e36ac9c8f1d
     - - c5fdb5067c820e76
-      - a6985e36ac9c8f1d
     - - 8d93a86dc09f4c57
 - id: ff1234567890abcd
   type: function
@@ -1277,7 +1259,7 @@
   finalize: ""
   libs: []
   x: 950
-  "y": 660
+  "y": 520
   g: 5811945b9bad79dc
   wires:
     - - 1c1403c14b577fb4
