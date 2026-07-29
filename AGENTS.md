@@ -29,14 +29,14 @@ After running, review the output for warnings (orphaned nodes, broken links, mis
 
 ## RV-C spec reference
 
-The RV-C specification is available at `~/src/librecoach/librecoach-rvc/`. Device definitions are in `devices/06_*.md`. Always reference the spec for standard DGN layouts, byte maps, and enumeration values.
+The RV-C specification is available at `~/src/librecoach/rvc-documentation/`. Device definitions are in `devices/06_*.md`. Always reference the spec for standard DGN layouts, byte maps, and enumeration values.
 
 **Important**: AquaHot and other proprietary devices often deviate from the spec. Proprietary notes (reverse-engineered from bus recordings) are in `notes/`. Do not assume a standard DGN byte map applies to proprietary devices without cross-checking the notes.
 
 Key paths:
-- Standard DGN definitions: `~/src/librecoach/librecoach-rvc/devices/`
-- Proprietary device notes: `~/src/librecoach/librecoach-rvc/notes/`
-- AquaHot protocol notes: `~/src/librecoach/librecoach-rvc/notes/aquahot.md`
+- Standard DGN definitions: `~/src/librecoach/rvc-documentation/devices/`
+- Proprietary device notes: `~/src/librecoach/rvc-documentation/notes/`
+- AquaHot protocol notes: `~/src/librecoach/rvc-documentation/notes/aquahot.md`
 
 ## Flow-splitter behavior
 
