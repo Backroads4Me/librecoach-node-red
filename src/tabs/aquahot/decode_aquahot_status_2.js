@@ -1,4 +1,6 @@
-// Aqua-Hot 100/200-Series systems
+// An Aqua-Hot that speaks RV-C directly, with no SilverLeaf TM-2xx module in
+// front of it (the AQUAHOT_2 family).
+//
 // Decoder for Proprietary AquaHot _2 DGNs:
 // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
 //

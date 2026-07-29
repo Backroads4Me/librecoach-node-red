@@ -245,7 +245,7 @@ function decodeStatus2(data, result) {
   const elecLowTempRaw = (byte6 >> 4) & 0x03; // Bits 4-5
   result.electric_low_temperature = decode2BitWarning(elecLowTempRaw);
 
-  // AquaHot 100/200 Series: bits 6-7 are independently confirmed via bus capture as
+  // Aqua-Hot speaking RV-C directly: bits 6-7 are independently confirmed via bus capture as
   // "any heat source active" (bit 6) and interior heating priority active
   // (bit 7), NOT the generic RV-C 2-bit "electric low input" field — so that
   // field is intentionally not decoded here. Bit 7 confirmed by 0x83->0x43

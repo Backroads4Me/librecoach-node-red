@@ -1,4 +1,4 @@
-// Aqua-Hot 100/200-Series systems
+// An Aqua-Hot that speaks RV-C directly (the AQUAHOT_2 family)
 // Publishes proprietary AquaHot zone entity states to MQTT state topics.
 // Also publishes MQTT discovery configs the first time a valid value is received.
 //

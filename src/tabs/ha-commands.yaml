@@ -1030,13 +1030,16 @@
   type: function
   z: b3d80c5dc947ec88
   name: decode_ha_command
-  func: |
+  func: >
     // Parse Home Assistant MQTT command topics
 
+
     // --- Cover (Shade) entities ---
+
     const rvcTopicMatch = msg.topic.match(
       /^homeassistant\/cover\/shade_(\d+)\/set$/,
     );
+
     if (rvcTopicMatch) {
       const instance = parseInt(rvcTopicMatch[1], 10);
       const command = String(msg.payload).toUpperCase();
@@ -1048,10 +1051,13 @@
       return msg;
     }
 
+
     // --- Lock entities ---
+
     const lockTopicMatch = msg.topic.match(
       /^homeassistant\/lock\/lock_(\d+)\/set$/,
     );
+
     if (lockTopicMatch) {
       const instance = parseInt(lockTopicMatch[1], 10);
       const command = String(msg.payload).toUpperCase();
@@ -1063,10 +1069,13 @@
       return msg;
     }
 
+
     // --- Climate (Floor Heat) Preset entities ---
+
     const climatePresetMatch = msg.topic.match(
       /^homeassistant\/climate\/floor_heat_(\d+)\/set_preset_mode$/,
     );
+
     if (climatePresetMatch) {
       const instance = parseInt(climatePresetMatch[1], 10);
       msg.routingKey = "floor_heat";
@@ -1078,10 +1087,13 @@
       return msg;
     }
 
+
     // --- Climate (Floor Heat) Mode entities ---
+
     const climateTopicMatch = msg.topic.match(
       /^homeassistant\/climate\/floor_heat_(\d+)\/set_mode$/,
     );
+
     if (climateTopicMatch) {
       const instance = parseInt(climateTopicMatch[1], 10);
       msg.routingKey = "floor_heat";
@@ -1092,10 +1104,13 @@
       return msg;
     }
 
+
     // --- Aqua-Hot entities ---
+
     const aquahotTopicMatch = msg.topic.match(
       /^homeassistant\/light\/aquahot_(burner|ac_1|ac_2|engine)\/set$/,
     );
+
     if (aquahotTopicMatch) {
       const instance = aquahotTopicMatch[1]; // "burner", "ac_1", "ac_2", or "engine"
       const command = String(msg.payload).toUpperCase();
@@ -1107,10 +1122,14 @@
       return msg;
     }
 
-    // --- Aqua-Hot 100/200 series switch entities (1FE98 / FF2F commands) ---
+
+    // --- Switch entities for an Aqua-Hot speaking RV-C directly (1FE98 / FF2F)
+    ---
+
     const aquahot125dMatch = msg.topic.match(
       /^homeassistant\/switch\/aquahot_(diesel_burner|electric_element|quiet_mode|interior_heating)\/set$/,
     );
+
     if (aquahot125dMatch) {
       const entityId = `aquahot_${aquahot125dMatch[1]}`;
       msg.routingKey = "aquahot_125d";
@@ -1120,7 +1139,9 @@
       return msg;
     }
 
+
     // --- Generator control ---
+
     if (msg.topic === "homeassistant/switch/generator_control/set") {
       msg.routingKey = "generator";
       msg.command = String(msg.payload).toUpperCase();
@@ -1129,8 +1150,11 @@
       return msg;
     }
 
+
     // --- Switch and Light entities (Fallback) ---
+
     const topicParts = msg.topic.split("/");
+
     if (
       topicParts.length === 4 &&
       topicParts[0] === "homeassistant" &&
@@ -1172,7 +1196,9 @@
       return msg;
     }
 
+
     node.warn(`Unhandled MQTT topic: ${msg.topic}`);
+
     return null;
   outputs: 1
   timeout: 0

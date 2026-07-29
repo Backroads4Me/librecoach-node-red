@@ -74,7 +74,7 @@ if (aquahotTopicMatch) {
   return msg;
 }
 
-// --- Aqua-Hot 100/200 series switch entities (1FE98 / FF2F commands) ---
+// --- Switch entities for an Aqua-Hot speaking RV-C directly (1FE98 / FF2F) ---
 const aquahot125dMatch = msg.topic.match(
   /^homeassistant\/switch\/aquahot_(diesel_burner|electric_element|quiet_mode|interior_heating)\/set$/,
 );

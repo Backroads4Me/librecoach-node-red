@@ -83,9 +83,12 @@ if (dp) {
 }
 dgn_name = dgnMap.get(dgn);
 
-// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA)
+// For PDU1 messages (PF < 0xF0), PS is the destination address (DSA). That
+// includes PROPRIETARY_A (0xEF): its PS byte is a destination like any other
+// PDU1 message, and is kept in the lookup key only because the proprietary
+// space has no other structure to key on.
 let destination_address = null;
-if (pf < 0xf0 && pf !== 0xef && pf !== 0xec && pf !== 0xeb) {
+if (pf < 0xf0 && pf !== 0xec && pf !== 0xeb) {
   destination_address = ps;
 }
 
@@ -100,17 +103,63 @@ if (!dgn_name && dp === 0 && pf >= 0xf0) {
   }
 }
 
-// Fallback logic for proprietary PGNs not in lookup table
-// Aqua-Hot 100/200-Series systems = AQUAHOT_1
-// Aqua-Hot 400/600-Series systems = AQUAHOT_2
+// Proprietary heat control, via a SilverLeaf TM-2xx module.
+//
+// Attributed by endpoint address and operation code, never by the PS byte
+// alone. PS is the destination for PDU1, and the SilverLeaf TM-220, TM-225,
+// TM-229 Application Document documents PROP_REPORT_AQUAHOT_STATUS as EF##
+// precisely because the module addresses its reply to whichever node asked --
+// its own revision history records correcting that PGN from EF64 to EF##.
+// Keying on the destination therefore claims every message sent to whatever
+// node happens to have polled the module.
+//
+// The module's own address is stable: the document specifies a static source
+// address of 100 (0x64) for the TM-220, TM-225 and TM-226, and 97 (0x61) for
+// the TM-229. A frame is heat-control traffic when one of its endpoints is that
+// module, and the operation code in the first payload byte says which message
+// it is.
+const TM2XX_ADDRESSES = [0x64, 0x61];
+const HEAT_OPERATIONS = {
+  0xa9: "AQUAHOT_STATUS_1", // PROP_REPORT_AQUAHOT_STATUS
+  0xaa: "AQUAHOT_REQUEST_STATUS_1", // PROP_REQUEST_AQUAHOT_STATUS
+  0xab: "AQUAHOT_COMMAND_1", // PROP_AQUAHOT_COMMAND
+};
+
+const source_address_num = canIdNum & 0xff;
+
+function proprietaryHeatName() {
+  const involvesModule =
+    TM2XX_ADDRESSES.includes(ps) || TM2XX_ADDRESSES.includes(source_address_num);
+  if (!involvesModule) return null;
+  if (data_payload.length < 2) return "AQUAHOT_UNUSED";
+
+  const operation = parseInt(data_payload.substring(0, 2), 16);
+  return HEAT_OPERATIONS[operation] || "AQUAHOT_UNUSED";
+}
+
+// Fallback logic for proprietary PGNs not in lookup table.
+//
+// The _1 and _2 suffixes are LibreCoach's own naming for two unrelated ways an
+// Aqua-Hot appears on the bus, and exist nowhere outside this project.
+//
+//   AQUAHOT_1  the boiler is fronted by a SilverLeaf TM-2xx module, which
+//              speaks PROPRIETARY_A on its behalf from static address 0x64
+//              (TM-220/225/226) or 0x61 (TM-229)
+//   AQUAHOT_2  the boiler presents itself, using the PDU2 DGNs FF01, FF2E,
+//              FF2F and 6C00
+//
+// A coach has one or the other, never both. Which one is decided by whether a
+// TM-2xx is installed, not by the boiler's series -- with a module in the way
+// the series is not visible on the bus at all, so it cannot be what selects the
+// protocol. Ask the node at 0x64 for its PRODUCT_ID to tell them apart.
+//
+// The series does not decide it, and cannot: a 600-Series boiler behind a
+// TM-225 produces AQUAHOT_1 traffic, while a recent 600-Series with RV-C built
+// in would produce AQUAHOT_2. Age correlates -- boilers without an RV-C
+// interface are the ones that need a module -- but the module is the fact to
+// test.
 if (!dgn_name) {
-  if (pgn === "EF64") {
-    dgn_name = "AQUAHOT_COMMAND_1";
-  } else if (pgn === "EF9F") {
-    dgn_name = "AQUAHOT_STATUS_1";
-  } else if (pgn === "EF4D") {
-    dgn_name = "AQUAHOT_THERMOSTAT_STATUS_1";
-  } else if (lookupPgn === "6F00") {
+  if (lookupPgn === "6F00") {
     dgn_name = "AQUAHOT_UNUSED";
   } else if (lookupPgn === "6C00") {
     dgn_name = "AQUAHOT_STATUS_2";
@@ -124,8 +173,12 @@ if (!dgn_name) {
     dgn_name = "WIRELESS_PANEL_SIGNAL_STATUS";
   } else if (dgn === "1AA00") {
     dgn_name = "WIRELESS_PANEL_QUALITY_STATUS";
-  } else if (pgn.startsWith("EF")) {
-    dgn_name = "AQUAHOT_UNUSED";
+  } else if (pf === 0xef) {
+    // PROPRIETARY_A is vendor-agnostic address space. Any manufacturer may use
+    // it, and on a coach with SilverLeaf gauges most of it is theirs, so an
+    // unrecognised frame here is labelled for what it is rather than assigned
+    // to a vendor.
+    dgn_name = proprietaryHeatName() || "PROPRIETARY";
   }
 }
 
