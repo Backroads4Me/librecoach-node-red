@@ -595,7 +595,9 @@
   z: 292e70a6ba25b323
   d: true
   name: tally_report
-  func: node.warn(JSON.stringify(flow.get("dgnCounts")))
+  func: |-
+    node.warn(JSON.stringify(flow.get("dgnCounts")))
+    flow.set("dgnCounts", undefined);
   outputs: 1
   timeout: 0
   noerr: 0
@@ -2145,6 +2147,12 @@
   property: payload.dgn_name
   propertyType: msg
   rules:
+    - t: eq
+      v: J1939_DM1
+      vt: str
+    - t: eq
+      v: ACKNOWLEDGEMENT
+      vt: str
     - t: cont
       v: AQUAHOT
       vt: str
@@ -2168,14 +2176,15 @@
       vt: str
   checkall: "false"
   repair: false
-  outputs: 7
+  outputs: 9
   x: 1510
   "y": 480
   g: f09f79586501cb0b
   wires:
+    - []
+    - []
     - - 398683928338f9c6
     - - 02bdfc59de71b5a5
-      - 03a998942a940736
     - - 4fa9b9fdc36c83da
     - - c781b519a9f9b156
     - - ac1a1dd2e5f00e01
