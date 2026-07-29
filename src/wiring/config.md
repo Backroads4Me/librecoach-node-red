@@ -116,7 +116,7 @@ flowchart LR
   n_a493ca49e16b["MQTT out_ Retain FALSE"]:::link
   n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
   n_ac1a1dd2e5f0["address_claim_responder"]:::fn
-  n_a6594a9464d8 -->|out 4| n_ac1a1dd2e5f0
+  n_a6594a9464d8 -->|out 6| n_ac1a1dd2e5f0
   n_ac1a1dd2e5f0 -->|out 0| n_a493ca49e16b
 ```
 
@@ -1050,15 +1050,13 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_03a998942a94["tally"]:::fn:::disabled
-  n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
-  n_a6594a9464d8 -->|out 1| n_03a998942a94
 ```
 
 #### Msg contract
 Tally node (temporary diagnostic)
 
 #### Upstream
-- a6594a9464d8fe4e (switch) — this tab
+_None._
 
 #### Downstream
 _None._
@@ -1113,7 +1111,7 @@ flowchart LR
   n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
   n_c781b519a9f9["unique_unknown"]:::fn
   n_eea1641469ef["New Unknown DGN"]:::fn
-  n_a6594a9464d8 -->|out 3| n_c781b519a9f9
+  n_a6594a9464d8 -->|out 5| n_c781b519a9f9
   n_c781b519a9f9 -->|out 0| n_eea1641469ef
 ```
 
@@ -1269,6 +1267,6 @@ _None._
 - Rest unique list (group) — id `9dd6a98018824be9`, in: 0, out: 0
 - User input (group) — id `f81ca31c89243206`, in: 0, out: 0
 - Write file (file) — id `cfa55144f4a17a5c`, in: 1, out: 0
-- a6594a9464d8fe4e (switch) — id `a6594a9464d8fe4e`, in: 1, out: 7
+- a6594a9464d8fe4e (switch) — id `a6594a9464d8fe4e`, in: 1, out: 6
 - c78420a075d43408 (json) — id `c78420a075d43408`, in: 1, out: 1
 - ceee39e4b10d6030 (group) — id `ceee39e4b10d6030`, in: 0, out: 0
