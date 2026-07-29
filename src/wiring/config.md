@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 101
+- **Node count:** 103
 - **Function nodes:** 31
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 15
+- **Link out (outbound):** 16
 - **Link in (inbound):** 7
 
 ## Function Nodes
@@ -18,7 +18,7 @@
 ### address_claim_monitor
 - **File:** [`address_claim_monitor.js`](../tabs/config/address_claim_monitor.js)
 - **Node ID:** `4e46ba83df00a31b`
-- **Outputs:** 4
+- **Outputs:** 3
 
 #### Neighborhood
 ```mermaid
@@ -35,9 +35,8 @@ flowchart LR
   n_b846bc1605da["address_claim_request"]:::fn
   n_f01db5ebc3ae["ADDRESS_CLAIMED"]:::link
   n_4e46ba83df00 -->|out 0| n_b846bc1605da
-  n_4e46ba83df00 -->|out 1| n_55071115a3fe
-  n_4e46ba83df00 -->|out 2| n_a2334b77d376
-  n_4e46ba83df00 -->|out 3| n_55071115a3fe
+  n_4e46ba83df00 -->|out 1| n_a2334b77d376
+  n_4e46ba83df00 -->|out 2| n_55071115a3fe
   n_f01db5ebc3ae -->|out 0| n_4e46ba83df00
 ```
 
@@ -53,10 +52,8 @@ Compares device NAMEs to determine winner in case of conflict
 - **Output 0:**
   - address_claim_request (function) — this tab, file: [`address_claim_request.js`](../tabs/config/address_claim_request.js)
 - **Output 1:**
-  - 55071115a3fe7c2c (delay) — this tab
-- **Output 2:**
   - MQTT out: Retain FALSE (link out) — this tab
-- **Output 3:**
+- **Output 2:**
   - 55071115a3fe7c2c (delay) — this tab
 
 ---
@@ -116,11 +113,11 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_a2334b77d376["MQTT out_ Retain FALSE"]:::link
+  n_a493ca49e16b["MQTT out_ Retain FALSE"]:::link
   n_a6594a9464d8["a6594a9464d8fe4e"]:::fn
   n_ac1a1dd2e5f0["address_claim_responder"]:::fn
   n_a6594a9464d8 -->|out 4| n_ac1a1dd2e5f0
-  n_ac1a1dd2e5f0 -->|out 0| n_a2334b77d376
+  n_ac1a1dd2e5f0 -->|out 0| n_a493ca49e16b
 ```
 
 #### Msg contract
@@ -277,6 +274,11 @@ flowchart LR
 
 #### Msg contract
 Prevent any CAN transmission after LibreCoach loses its claimed address.
+
+Every CAN frame leaves through the unretained MQTT path with topic
+"can/send"; retained publishes are Home Assistant state and never reach the
+bus. Address-management frames are exempt, because claiming a new address is
+the only way out of the lost state.
 
 #### Upstream
 - MQTT out: Retain FALSE (link in) — this tab
@@ -1158,6 +1160,8 @@ _None._
   - HA in in tab `HA Commands` ([wiring](./ha_commands.md))
 - **MQTT out: Retain FALSE** (`a2334b77d3764815`) →
   - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
+- **MQTT out: Retain FALSE** (`a493ca49e16bb03c`) →
+  - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain FALSE** (`c83c6b2b70c927a3`) →
   - MQTT out: Retain FALSE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`0a63b31d61802934`) →
@@ -1186,6 +1190,7 @@ _None._
 - **MQTT out: Retain FALSE** (`74329f13cbbc528a`) ←
   - MQTT out: Retain FALSE in tab `Micro-Air`
   - MQTT out: Retain FALSE in tab `HA Commands`
+  - MQTT out: Retain FALSE in tab `Config`
   - MQTT out: Retain FALSE in tab `Config`
   - MQTT out: Retain FALSE in tab `Config`
   - MQTT out: Retain FALSE in tab `HA Commands`
@@ -1218,9 +1223,9 @@ _None._
 
 ## Other Nodes
 
-- 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 2
+- 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 3
 - 375ced2f0a80dc5c (note) — id `375ced2f0a80dc5c`, in: 0, out: 0
-- 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 3, out: 1
+- 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 2, out: 1
 - 8037e09fbf4ac87b (inject) — id `8037e09fbf4ac87b`, in: 0, out: 1
 - 8337a7f0dd0435d6 (http request) — id `8337a7f0dd0435d6`, in: 1, out: 0
 - BETA Testing (group) — id `9e47041ed71c4494`, in: 0, out: 0
@@ -1247,6 +1252,7 @@ _None._
 - MQTT (group) — id `3c819b7900145438`, in: 0, out: 0
 - MQTT Out: Retain FALSE (mqtt out) — id `1ac6e0fa1cbb3852`, in: 1, out: 0
 - MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 1, out: 0
+- MQTT Out: can/decoded (mqtt out) — id `08bc68c0679da2b2`, in: 1, out: 0
 - MQTT discovery (group) — id `bc622f80fe99faa0`, in: 0, out: 0
 - New Unknown DGN (debug) — id `eea1641469efb23f`, in: 1, out: 0
 - Notifications (group) — id `efe52fc701f550cf`, in: 0, out: 0

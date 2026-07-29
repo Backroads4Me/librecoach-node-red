@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `384249601e37ba22`
 - **Disabled:** false
-- **Node count:** 18
+- **Node count:** 14
 - **Function nodes:** 5
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -15,43 +15,8 @@
 
 ## Function Nodes
 
-### decode_aquahot_status_1
-- **File:** [`decode_aquahot_status_1.js`](../tabs/aquahot/decode_aquahot_status_1.js)
-- **Node ID:** `5e7062bde869c7a5`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_43cd836c21f6["status_aquahot_1"]:::fn
-  n_5e7062bde869["decode_aquahot_status_1"]:::fn
-  n_ee4192410344["ee4192410344e659"]:::fn
-  n_5e7062bde869 -->|out 0| n_43cd836c21f6
-  n_ee4192410344 -->|out 1| n_5e7062bde869
-```
-
-#### Msg contract
-Aqua-Hot 400/600-Series systems
-Status Updater for Aqua-Hot
-Decodes proprietary AQUAHOT status byte into individual status messages
-
-#### Upstream
-- ee4192410344e659 (switch) — this tab
-
-#### Downstream
-- **Output 0:**
-  - status_aquahot_1 (function) — this tab, file: [`status_aquahot_1.js`](../tabs/aquahot/status_aquahot_1.js)
-
----
-
-### decode_aquahot_status_2
-- **File:** [`decode_aquahot_status_2.js`](../tabs/aquahot/decode_aquahot_status_2.js)
+### decode_aquahot_status_native
+- **File:** [`decode_aquahot_status_native.js`](../tabs/aquahot/decode_aquahot_status_native.js)
 - **Node ID:** `a6985e36ac9c8f1d`
 - **Outputs:** 1
 
@@ -64,20 +29,25 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_443fd5ec55d7["status_aquahot_2"]:::fn
-  n_a6985e36ac9c["decode_aquahot_status_2"]:::fn
+  n_443fd5ec55d7["status_aquahot_native"]:::fn
+  n_a6985e36ac9c["decode_aquahot_status_native"]:::fn
   n_ee4192410344["ee4192410344e659"]:::fn
   n_a6985e36ac9c -->|out 0| n_443fd5ec55d7
+  n_ee4192410344 -->|out 1| n_a6985e36ac9c
   n_ee4192410344 -->|out 2| n_a6985e36ac9c
   n_ee4192410344 -->|out 3| n_a6985e36ac9c
   n_ee4192410344 -->|out 4| n_a6985e36ac9c
-  n_ee4192410344 -->|out 5| n_a6985e36ac9c
 ```
 
 #### Msg contract
-Aqua-Hot 100/200-Series systems
-Decoder for Proprietary AquaHot _2 DGNs:
-FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
+An Aqua-Hot that speaks RV-C directly, with no SilverLeaf TM-2xx module in
+front of it (the NATIVE family).
+
+Decoder for proprietary native Aqua-Hot DGNs:
+FF01 (AQUAHOT_THERMOSTAT_STATUS_NATIVE),
+FF2F (AQUAHOT_COMMAND_NATIVE),
+FF2E (AQUAHOT_SYSTEM_STATUS_NATIVE),
+6C00 (AQUAHOT_STATUS_NATIVE)
 
 Note: These are NOT part of the standard RV-C specification. Decoding is based on
 reverse-engineered analysis of recordings. Confidence levels differ per field:
@@ -88,7 +58,52 @@ fields marked CONFIRMED were verified against live hardware
 
 #### Downstream
 - **Output 0:**
-  - status_aquahot_2 (function) — this tab, file: [`status_aquahot_2.js`](../tabs/aquahot/status_aquahot_2.js)
+  - status_aquahot_native (function) — this tab, file: [`status_aquahot_native.js`](../tabs/aquahot/status_aquahot_native.js)
+
+---
+
+### decode_aquahot_status_silverleaf
+- **File:** [`decode_aquahot_status_silverleaf.js`](../tabs/aquahot/decode_aquahot_status_silverleaf.js)
+- **Node ID:** `5e7062bde869c7a5`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_43cd836c21f6["status_aquahot_silverleaf"]:::fn
+  n_5e7062bde869["decode_aquahot_status_silverleaf"]:::fn
+  n_ee4192410344["ee4192410344e659"]:::fn
+  n_5e7062bde869 -->|out 0| n_43cd836c21f6
+  n_ee4192410344 -->|out 0| n_5e7062bde869
+```
+
+#### Msg contract
+An Aqua-Hot with no RV-C interface of its own, operated by a SilverLeaf
+TM-2xx module that drives what would otherwise be manual switches and speaks
+PROPRIETARY_A on the bus for it (the SILVERLEAF family). Confirmed against a
+600-Series boiler behind a TM-225.
+
+Decodes PROP_REPORT_AQUAHOT_STATUS into one message per controllable output.
+Field layout is from the SilverLeaf TM-220, TM-225, TM-229 Application
+Document, page 9, converted from its 1-based byte and bit numbering:
+
+  payload byte 0        operation code, always A9
+  payload byte 1 bits 0-1   Diesel Burner    0 = Off, 1 = On
+  payload byte 1 bits 2-5   Electric Element 0 = Off, 1 = Low, 2 = High
+  payload byte 1 bits 6-7   Engine Pre-heat  0 = Off, 1 = On
+
+#### Upstream
+- ee4192410344e659 (switch) — this tab
+
+#### Downstream
+- **Output 0:**
+  - status_aquahot_silverleaf (function) — this tab, file: [`status_aquahot_silverleaf.js`](../tabs/aquahot/status_aquahot_silverleaf.js)
 
 ---
 
@@ -129,44 +144,8 @@ not cross tabs.
 
 ---
 
-### status_aquahot_1
-- **File:** [`status_aquahot_1.js`](../tabs/aquahot/status_aquahot_1.js)
-- **Node ID:** `43cd836c21f66b26`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_1c1403c14b57["MQTT out_ Retain TRUE"]:::link
-  n_43cd836c21f6["status_aquahot_1"]:::fn
-  n_5e7062bde869["decode_aquahot_status_1"]:::fn
-  n_43cd836c21f6 -->|out 0| n_1c1403c14b57
-  n_5e7062bde869 -->|out 0| n_43cd836c21f6
-```
-
-#### Msg contract
-Aqua-Hot 400/600-Series systems
-HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
-Self-creating: publishes MQTT discovery on first valid reading per instance.
-Output 1: MQTT messages (discovery + state)
-
-#### Upstream
-- decode_aquahot_status_1 (function) — this tab, file: [`decode_aquahot_status_1.js`](../tabs/aquahot/decode_aquahot_status_1.js)
-
-#### Downstream
-- **Output 0:**
-  - MQTT out: Retain TRUE (link out) — this tab
-
----
-
-### status_aquahot_2
-- **File:** [`status_aquahot_2.js`](../tabs/aquahot/status_aquahot_2.js)
+### status_aquahot_native
+- **File:** [`status_aquahot_native.js`](../tabs/aquahot/status_aquahot_native.js)
 - **Node ID:** `443fd5ec55d7111b`
 - **Outputs:** 1
 
@@ -180,16 +159,16 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_1c1403c14b57["MQTT out_ Retain TRUE"]:::link
-  n_443fd5ec55d7["status_aquahot_2"]:::fn
+  n_443fd5ec55d7["status_aquahot_native"]:::fn
   n_914be705da05["Waterheater zone"]:::link
-  n_a6985e36ac9c["decode_aquahot_status_2"]:::fn
+  n_a6985e36ac9c["decode_aquahot_status_native"]:::fn
   n_443fd5ec55d7 -->|out 0| n_1c1403c14b57
   n_914be705da05 -->|out 0| n_443fd5ec55d7
   n_a6985e36ac9c -->|out 0| n_443fd5ec55d7
 ```
 
 #### Msg contract
-Aqua-Hot 100/200-Series systems
+An Aqua-Hot that speaks RV-C directly (the NATIVE family)
 Publishes proprietary AquaHot zone entity states to MQTT state topics.
 Also publishes MQTT discovery configs the first time a valid value is received.
 
@@ -200,7 +179,43 @@ status_waterheater) so zone_active flags can update the climate entities.
 
 #### Upstream
 - Waterheater zone (link in) — this tab
-- decode_aquahot_status_2 (function) — this tab, file: [`decode_aquahot_status_2.js`](../tabs/aquahot/decode_aquahot_status_2.js)
+- decode_aquahot_status_native (function) — this tab, file: [`decode_aquahot_status_native.js`](../tabs/aquahot/decode_aquahot_status_native.js)
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
+### status_aquahot_silverleaf
+- **File:** [`status_aquahot_silverleaf.js`](../tabs/aquahot/status_aquahot_silverleaf.js)
+- **Node ID:** `43cd836c21f66b26`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_1c1403c14b57["MQTT out_ Retain TRUE"]:::link
+  n_43cd836c21f6["status_aquahot_silverleaf"]:::fn
+  n_5e7062bde869["decode_aquahot_status_silverleaf"]:::fn
+  n_43cd836c21f6 -->|out 0| n_1c1403c14b57
+  n_5e7062bde869 -->|out 0| n_43cd836c21f6
+```
+
+#### Msg contract
+HA status publisher for an Aqua-Hot operated through a SilverLeaf TM-2xx
+module (AQUAHOT_STATUS_SILVERLEAF).
+Self-creating: publishes MQTT discovery on first valid reading per instance.
+Output 1: MQTT messages (discovery + state)
+
+#### Upstream
+- decode_aquahot_status_silverleaf (function) — this tab, file: [`decode_aquahot_status_silverleaf.js`](../tabs/aquahot/decode_aquahot_status_silverleaf.js)
 
 #### Downstream
 - **Output 0:**
@@ -235,12 +250,8 @@ _None._
 ## Other Nodes
 
 - 7957e06c0f83dc0f (note) — id `7957e06c0f83dc0f`, in: 0, out: 0
-- AQUAHOT_COMMAND_1 (debug) — id `c5fdb5067c820e76`, in: 2, out: 0
-- AQUAHOT_STATUS_1 (debug) — id `691871e1972d2296`, in: 2, out: 0
-- AQUAHOT_SYSTEM_STATUS_2 (debug) — id `1bd7e1d4c5f3864a`, in: 1, out: 0
-- AQUAHOT_THERMOSTAT_STATUS_1 (debug) — id `871009c15ad9a99b`, in: 2, out: 0
-- AQUAHOT_UNUSED (debug) — id `7a1eed2a34490b2a`, in: 1, out: 0
+- AQUAHOT_COMMAND (debug) — id `c5fdb5067c820e76`, in: 1, out: 0
 - AQUAHOT_UNUSED (debug) — id `8d93a86dc09f4c57`, in: 1, out: 0
 - Aqua-Hot (group) — id `5811945b9bad79dc`, in: 0, out: 0
 - Every 60s (inject) — id `ee1234567890abcd`, in: 0, out: 1
-- ee4192410344e659 (switch) — id `ee4192410344e659`, in: 1, out: 14
+- ee4192410344e659 (switch) — id `ee4192410344e659`, in: 1, out: 7

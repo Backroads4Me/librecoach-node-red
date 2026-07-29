@@ -81,8 +81,42 @@ Encodes AC_LOAD_COMMAND messages (DGN 1FFBEh, §6.22.4)
 
 ---
 
-### encode_aquahot_command_1
-- **File:** [`encode_aquahot_command_1.js`](../tabs/ha-commands/encode_aquahot_command_1.js)
+### encode_aquahot_command_native
+- **File:** [`encode_aquahot_command_native.js`](../tabs/ha-commands/encode_aquahot_command_native.js)
+- **Node ID:** `a71ac1bd86bd3e13`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_a71ac1bd86bd["encode_aquahot_command_native"]:::fn
+  n_d95299a44e1d["MQTT out_ Retain FALSE"]:::link
+  n_e19247ab204a["e19247ab204a8e12"]:::fn
+  n_a71ac1bd86bd -->|out 0| n_d95299a44e1d
+  n_e19247ab204a -->|out 1| n_a71ac1bd86bd
+```
+
+#### Msg contract
+Encodes MQTT climate commands into native Aqua-Hot CAN messages.
+Uses FF2F (AQUAHOT_COMMAND_NATIVE) cmd_type 0x0a for interior heating priority.
+
+#### Upstream
+- e19247ab204a8e12 (switch) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain FALSE (link out) — this tab
+
+---
+
+### encode_aquahot_command_silverleaf
+- **File:** [`encode_aquahot_command_silverleaf.js`](../tabs/ha-commands/encode_aquahot_command_silverleaf.js)
 - **Node ID:** `a8882b1f35300448`
 - **Outputs:** 1
 
@@ -97,50 +131,17 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_6aa079d768e1["MQTT out_ Retain FALSE"]:::link
   n_89946e1c7a57["89946e1c7a570ed0"]:::fn
-  n_a8882b1f3530["encode_aquahot_command_1"]:::fn
+  n_a8882b1f3530["encode_aquahot_command_silverleaf"]:::fn
   n_89946e1c7a57 -->|out 6| n_a8882b1f3530
   n_a8882b1f3530 -->|out 0| n_6aa079d768e1
 ```
 
 #### Msg contract
-Encodes AquaHot Commands (EF64)
+Encodes Aqua-Hot commands sent through a SilverLeaf TM-2xx module
+(AQUAHOT_COMMAND_SILVERLEAF, PROPRIETARY_A).
 
 #### Upstream
 - 89946e1c7a570ed0 (switch) — this tab
-
-#### Downstream
-- **Output 0:**
-  - MQTT out: Retain FALSE (link out) — this tab
-
----
-
-### encode_aquahot_command_2
-- **File:** [`encode_aquahot_command_2.js`](../tabs/ha-commands/encode_aquahot_command_2.js)
-- **Node ID:** `a71ac1bd86bd3e13`
-- **Outputs:** 1
-
-#### Neighborhood
-```mermaid
-flowchart LR
-  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
-  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
-  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
-  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
-  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
-  classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_a71ac1bd86bd["encode_aquahot_command_2"]:::fn
-  n_d95299a44e1d["MQTT out_ Retain FALSE"]:::link
-  n_e19247ab204a["e19247ab204a8e12"]:::fn
-  n_a71ac1bd86bd -->|out 0| n_d95299a44e1d
-  n_e19247ab204a -->|out 1| n_a71ac1bd86bd
-```
-
-#### Msg contract
-Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
-Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
-
-#### Upstream
-- e19247ab204a8e12 (switch) — this tab
 
 #### Downstream
 - **Output 0:**
@@ -546,8 +547,9 @@ flowchart LR
 ```
 
 #### Msg contract
-Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
-Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
+Encodes Aqua-Hot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F
+(AQUAHOT_COMMAND_NATIVE).
+Uses FF2F cmd_type 0x0a for interior heating priority.
 Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
 
 #### Upstream
