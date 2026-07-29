@@ -1,4 +1,5 @@
-// Encodes AquaHot Commands (EF64)
+// Encodes Aqua-Hot commands sent through a SilverLeaf TM-2xx module
+// (AQUAHOT_COMMAND_SILVERLEAF, PROPRIETARY_A).
 
 // --- Configuration ---
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;

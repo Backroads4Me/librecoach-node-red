@@ -1,8 +1,11 @@
 // An Aqua-Hot that speaks RV-C directly, with no SilverLeaf TM-2xx module in
-// front of it (the AQUAHOT_2 family).
+// front of it (the NATIVE family).
 //
-// Decoder for Proprietary AquaHot _2 DGNs:
-// FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
+// Decoder for proprietary native Aqua-Hot DGNs:
+// FF01 (AQUAHOT_THERMOSTAT_STATUS_NATIVE),
+// FF2F (AQUAHOT_COMMAND_NATIVE),
+// FF2E (AQUAHOT_SYSTEM_STATUS_NATIVE),
+// 6C00 (AQUAHOT_STATUS_NATIVE)
 //
 // Note: These are NOT part of the standard RV-C specification. Decoding is based on
 // reverse-engineered analysis of recordings. Confidence levels differ per field:
@@ -12,7 +15,7 @@ function decodeUint16(data, startByte) {
     return data[startByte] | (data[startByte + 1] << 8);
 }
 
-// === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
+// === AQUAHOT_THERMOSTAT_STATUS_NATIVE (FF01) ===
 function decodeZoneThermostat(data, result) {
     // Byte 0: Zone Index [HIGH confidence] (00=Zone 1, 01=Zone 2)
     result.zone_index = data[0];
@@ -43,7 +46,7 @@ function decodeZoneThermostat(data, result) {
     result.unknown_byte7 = data[7];
 }
 
-// === AQUAHOT_COMMAND_2 (FF2F) ===
+// === AQUAHOT_COMMAND_NATIVE (FF2F) ===
 function decodeCommand(data, result) {
     // Byte 0: Instance [HIGH confidence] (Always 0x01)
     result.instance = data[0];
@@ -75,7 +78,7 @@ function decodeCommand(data, result) {
     // Bytes 4-7: Reserved/Padding [HIGH confidence]
 }
 
-// === AQUAHOT_STATUS_2 (6C00) ===
+// === AQUAHOT_STATUS_NATIVE (6C00) ===
 function decodeStatus(data, result) {
     // Byte 0: Instance [HIGH confidence] (0xFF = all zones)
     result.instance = data[0];
@@ -90,7 +93,7 @@ function decodeStatus(data, result) {
     result.value_d = data[5];
 }
 
-// === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
+// === AQUAHOT_SYSTEM_STATUS_NATIVE (FF2E) ===
 function decodeSystemStatus(data, result) {
     // Byte 0: Instance [HIGH confidence] (Always 0x01)
     result.instance = data[0];
@@ -110,7 +113,8 @@ function decodeSystemStatus(data, result) {
 
     // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)
 
-    // This burst is the AquaHot's own acknowledgment of an AQUAHOT_COMMAND_2
+    // This burst is the Aqua-Hot's own acknowledgment of an
+    // AQUAHOT_COMMAND_NATIVE
     // (FF2F), fired after ANY FF2F is seen on the bus regardless of source.
     // Sub-index 0x07 confirms Quiet Mode; 0x0A confirms Interior Heating
     // Priority. Confirmed via bus capture: value flips to 0x01 immediately
@@ -151,13 +155,13 @@ function decodeAquaHotZone(dgn, dgn_name, data) {
     result.raw_byte6 = data[6];
     result.raw_byte7 = data[7];
 
-    if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
+    if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_NATIVE") {
         decodeZoneThermostat(data, result);
-    } else if (dgn_name === "AQUAHOT_COMMAND_2") {
+    } else if (dgn_name === "AQUAHOT_COMMAND_NATIVE") {
         decodeCommand(data, result);
-    } else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
+    } else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_NATIVE") {
         decodeSystemStatus(data, result);
-    } else if (dgn_name === "AQUAHOT_STATUS_2") {
+    } else if (dgn_name === "AQUAHOT_STATUS_NATIVE") {
         decodeStatus(data, result);
     } else {
         result.error = `Unhandled AquaHot DGN: ${dgn_name}`;

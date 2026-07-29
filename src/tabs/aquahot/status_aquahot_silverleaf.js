@@ -1,5 +1,5 @@
-// Aqua-Hot 400/600-Series systems
-// HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
+// HA status publisher for an Aqua-Hot operated through a SilverLeaf TM-2xx
+// module (AQUAHOT_STATUS_SILVERLEAF).
 // Self-creating: publishes MQTT discovery on first valid reading per instance.
 // Output 1: MQTT messages (discovery + state)
 

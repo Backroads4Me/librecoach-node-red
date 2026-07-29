@@ -1,5 +1,6 @@
-// Encodes AquaHot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F (AQUAHOT_COMMAND_2)
-// Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority
+// Encodes Aqua-Hot switch commands via 1FE98 (WATERHEATER_COMMAND_2) and FF2F
+// (AQUAHOT_COMMAND_NATIVE).
+// Uses FF2F cmd_type 0x0a for interior heating priority.
 // Entity IDs: aquahot_diesel_burner, aquahot_electric_element, aquahot_quiet_mode, aquahot_interior_heating
 
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;

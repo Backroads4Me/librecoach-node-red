@@ -1,6 +1,6 @@
 // An Aqua-Hot with no RV-C interface of its own, operated by a SilverLeaf
 // TM-2xx module that drives what would otherwise be manual switches and speaks
-// PROPRIETARY_A on the bus for it (the AQUAHOT_1 family). Confirmed against a
+// PROPRIETARY_A on the bus for it (the SILVERLEAF family). Confirmed against a
 // 600-Series boiler behind a TM-225.
 //
 // Decodes PROP_REPORT_AQUAHOT_STATUS into one message per controllable output.
@@ -57,7 +57,8 @@ function report(instance, status) {
   outputMessages.push({ payload: { instance, status } });
 }
 
-const onOff = (value) => (value === NOT_AVAILABLE_2BIT ? null : value === 1 ? "ON" : "OFF");
+const onOff = (value) =>
+  value === NOT_AVAILABLE_2BIT ? null : value === 1 ? "ON" : "OFF";
 
 report("burner", onOff(burner));
 report("engine", onOff(preheat));

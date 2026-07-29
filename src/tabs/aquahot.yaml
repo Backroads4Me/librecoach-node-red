@@ -20,11 +20,11 @@
 - id: 43cd836c21f66b26
   type: function
   z: 384249601e37ba22
-  name: status_aquahot_1
+  name: status_aquahot_silverleaf
   func: >
-    // Aqua-Hot 400/600-Series systems
+    // HA status publisher for an Aqua-Hot operated through a SilverLeaf TM-2xx
 
-    // HA Status Publisher for AquaHot (AQUAHOT_STATUS_1, EF9F)
+    // module (AQUAHOT_STATUS_SILVERLEAF).
 
     // Self-creating: publishes MQTT discovery on first valid reading per
     instance.
@@ -133,7 +133,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 910
+  x: 930
   "y": 340
   g: 5811945b9bad79dc
   wires:
@@ -141,9 +141,9 @@
 - id: 443fd5ec55d7111b
   type: function
   z: 384249601e37ba22
-  name: status_aquahot_2
+  name: status_aquahot_native
   func: >
-    // An Aqua-Hot that speaks RV-C directly (the AQUAHOT_2 family)
+    // An Aqua-Hot that speaks RV-C directly (the NATIVE family)
 
     // Publishes proprietary AquaHot zone entity states to MQTT state topics.
 
@@ -419,11 +419,11 @@
     }
 
 
-    // === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
+    // === AQUAHOT_THERMOSTAT_STATUS_NATIVE (FF01) ===
 
     // Provides current zone temperature
 
-    if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
+    if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_NATIVE") {
       const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2
 
       if (typeof p.zone_temperature === "number") {
@@ -452,12 +452,12 @@
     }
 
 
-    // === AQUAHOT_COMMAND_2 (FF2F) ===
+    // === AQUAHOT_COMMAND_NATIVE (FF2F) ===
 
     // Event-driven commands from 0x9E. Not periodic — only sent on state
     changes.
 
-    else if (dgn_name === "AQUAHOT_COMMAND_2") {
+    else if (dgn_name === "AQUAHOT_COMMAND_NATIVE") {
       if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
         // Quiet Mode on/off
         publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_on), () =>
@@ -530,9 +530,9 @@
     }
 
 
-    // === AQUAHOT_STATUS_2 (6C00) ===
+    // === AQUAHOT_STATUS_NATIVE (6C00) ===
 
-    else if (dgn_name === "AQUAHOT_STATUS_2") {
+    else if (dgn_name === "AQUAHOT_STATUS_NATIVE") {
       const nn = toHex(p.sub_index).substring(2);
       if (p.value_a !== undefined && p.value_a !== null) {
         publishSensor(`aquahot_status_2_sub_${nn}`, p.value_a, () =>
@@ -549,9 +549,9 @@
     }
 
 
-    // === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
+    // === AQUAHOT_SYSTEM_STATUS_NATIVE (FF2E) ===
 
-    else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
+    else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_NATIVE") {
       const nn = toHex(p.sub_index).substring(2);
 
       if (p.primary_value !== undefined && p.primary_value !== null) {
@@ -595,7 +595,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 910
+  x: 920
   "y": 400
   g: 5811945b9bad79dc
   wires:
@@ -625,15 +625,15 @@
 - id: 5e7062bde869c7a5
   type: function
   z: 384249601e37ba22
-  name: decode_aquahot_status_1
+  name: decode_aquahot_status_silverleaf
   func: >
     // An Aqua-Hot with no RV-C interface of its own, operated by a SilverLeaf
 
     // TM-2xx module that drives what would otherwise be manual switches and
     speaks
 
-    // PROPRIETARY_A on the bus for it (the AQUAHOT_1 family). Confirmed against
-    a
+    // PROPRIETARY_A on the bus for it (the SILVERLEAF family). Confirmed
+    against a
 
     // 600-Series boiler behind a TM-225.
 
@@ -732,9 +732,8 @@
     }
 
 
-    const onOff = (value) => (value === NOT_AVAILABLE_2BIT ? null : value === 1
-    ? "ON" : "OFF");
-
+    const onOff = (value) =>
+      value === NOT_AVAILABLE_2BIT ? null : value === 1 ? "ON" : "OFF";
 
     report("burner", onOff(burner));
 
@@ -792,7 +791,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 600
+  x: 620
   "y": 340
   g: 5811945b9bad79dc
   wires:
@@ -807,17 +806,16 @@
     other, never both.
 
 
-    Some boilers have no RV-C interface of their own. A SilverLeaf TM-2xx module
+    lder versions have RV-C interface of their own. A SilverLeaf TM-2xx module
     drives what
 
     would otherwise be manual switches and speaks PROPRIETARY_A for them, from
     static address 0x64
 
-    (TM-220/225/226) or 0x61 (TM-229). LibreCoach names that traffic AQUAHOT_1.
+    (TM-220/225/226) or 0x61 (TM-229).
 
 
-    Others speak RV-C directly, using FF01, FF2E, FF2F and 6C00. LibreCoach
-    names that AQUAHOT_2.
+    Others speak RV-C natively, using FF01, FF2E, FF2F and 6C00.
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 198
@@ -855,19 +853,24 @@
 - id: a6985e36ac9c8f1d
   type: function
   z: 384249601e37ba22
-  name: decode_aquahot_status_2
+  name: decode_aquahot_status_native
   func: >
     // An Aqua-Hot that speaks RV-C directly, with no SilverLeaf TM-2xx module
     in
 
-    // front of it (the AQUAHOT_2 family).
+    // front of it (the NATIVE family).
 
     //
 
-    // Decoder for Proprietary AquaHot _2 DGNs:
+    // Decoder for proprietary native Aqua-Hot DGNs:
 
-    // FF01 (AQUAHOT_THERMOSTAT_STATUS_2), FF2F (AQUAHOT_COMMAND_2), FF2E
-    (AQUAHOT_SYSTEM_STATUS_2), 6C00 (AQUAHOT_STATUS_2)
+    // FF01 (AQUAHOT_THERMOSTAT_STATUS_NATIVE),
+
+    // FF2F (AQUAHOT_COMMAND_NATIVE),
+
+    // FF2E (AQUAHOT_SYSTEM_STATUS_NATIVE),
+
+    // 6C00 (AQUAHOT_STATUS_NATIVE)
 
     //
 
@@ -885,7 +888,7 @@
     }
 
 
-    // === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
+    // === AQUAHOT_THERMOSTAT_STATUS_NATIVE (FF01) ===
 
     function decodeZoneThermostat(data, result) {
         // Byte 0: Zone Index [HIGH confidence] (00=Zone 1, 01=Zone 2)
@@ -918,7 +921,7 @@
     }
 
 
-    // === AQUAHOT_COMMAND_2 (FF2F) ===
+    // === AQUAHOT_COMMAND_NATIVE (FF2F) ===
 
     function decodeCommand(data, result) {
         // Byte 0: Instance [HIGH confidence] (Always 0x01)
@@ -952,7 +955,7 @@
     }
 
 
-    // === AQUAHOT_STATUS_2 (6C00) ===
+    // === AQUAHOT_STATUS_NATIVE (6C00) ===
 
     function decodeStatus(data, result) {
         // Byte 0: Instance [HIGH confidence] (0xFF = all zones)
@@ -969,7 +972,7 @@
     }
 
 
-    // === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
+    // === AQUAHOT_SYSTEM_STATUS_NATIVE (FF2E) ===
 
     function decodeSystemStatus(data, result) {
         // Byte 0: Instance [HIGH confidence] (Always 0x01)
@@ -990,7 +993,8 @@
 
         // Bytes 6-7: Padding [HIGH confidence] (0xFF 0xFF)
 
-        // This burst is the AquaHot's own acknowledgment of an AQUAHOT_COMMAND_2
+        // This burst is the Aqua-Hot's own acknowledgment of an
+        // AQUAHOT_COMMAND_NATIVE
         // (FF2F), fired after ANY FF2F is seen on the bus regardless of source.
         // Sub-index 0x07 confirms Quiet Mode; 0x0A confirms Interior Heating
         // Priority. Confirmed via bus capture: value flips to 0x01 immediately
@@ -1033,13 +1037,13 @@
         result.raw_byte6 = data[6];
         result.raw_byte7 = data[7];
 
-        if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
+        if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_NATIVE") {
             decodeZoneThermostat(data, result);
-        } else if (dgn_name === "AQUAHOT_COMMAND_2") {
+        } else if (dgn_name === "AQUAHOT_COMMAND_NATIVE") {
             decodeCommand(data, result);
-        } else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
+        } else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_NATIVE") {
             decodeSystemStatus(data, result);
-        } else if (dgn_name === "AQUAHOT_STATUS_2") {
+        } else if (dgn_name === "AQUAHOT_STATUS_NATIVE") {
             decodeStatus(data, result);
         } else {
             result.error = `Unhandled AquaHot DGN: ${dgn_name}`;
@@ -1116,7 +1120,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 600
+  x: 610
   "y": 400
   g: 5811945b9bad79dc
   wires:
@@ -1175,22 +1179,22 @@
   propertyType: msg
   rules:
     - t: eq
-      v: AQUAHOT_STATUS_1
+      v: AQUAHOT_STATUS_SILVERLEAF
       vt: str
     - t: eq
-      v: AQUAHOT_SYSTEM_STATUS_2
+      v: AQUAHOT_SYSTEM_STATUS_NATIVE
       vt: str
     - t: eq
-      v: AQUAHOT_STATUS_2
+      v: AQUAHOT_STATUS_NATIVE
       vt: str
     - t: eq
-      v: AQUAHOT_THERMOSTAT_STATUS_2
+      v: AQUAHOT_THERMOSTAT_STATUS_NATIVE
       vt: str
     - t: eq
-      v: AQUAHOT_COMMAND_2
+      v: AQUAHOT_COMMAND_NATIVE
       vt: str
     - t: eq
-      v: AQUAHOT_COMMAND_1
+      v: AQUAHOT_COMMAND_SILVERLEAF
       vt: str
     - t: else
   checkall: "true"

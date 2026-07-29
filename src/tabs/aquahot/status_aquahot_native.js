@@ -1,4 +1,4 @@
-// An Aqua-Hot that speaks RV-C directly (the AQUAHOT_2 family)
+// An Aqua-Hot that speaks RV-C directly (the NATIVE family)
 // Publishes proprietary AquaHot zone entity states to MQTT state topics.
 // Also publishes MQTT discovery configs the first time a valid value is received.
 //
@@ -238,9 +238,9 @@ function toHex(val) {
   return "0x" + val.toString(16).toUpperCase().padStart(2, "0");
 }
 
-// === AQUAHOT_THERMOSTAT_STATUS_2 (FF01) ===
+// === AQUAHOT_THERMOSTAT_STATUS_NATIVE (FF01) ===
 // Provides current zone temperature
-if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
+if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_NATIVE") {
   const z = p.zone_index + 1; // 00=Zone 1, 01=Zone 2
 
   if (typeof p.zone_temperature === "number") {
@@ -268,9 +268,9 @@ if (dgn_name === "AQUAHOT_THERMOSTAT_STATUS_2") {
   }
 }
 
-// === AQUAHOT_COMMAND_2 (FF2F) ===
+// === AQUAHOT_COMMAND_NATIVE (FF2F) ===
 // Event-driven commands from 0x9E. Not periodic — only sent on state changes.
-else if (dgn_name === "AQUAHOT_COMMAND_2") {
+else if (dgn_name === "AQUAHOT_COMMAND_NATIVE") {
   if (p.command_type === 0x07 && typeof p.quiet_mode_on === "boolean") {
     // Quiet Mode on/off
     publishSwitch("aquahot_quiet_mode", onOff(p.quiet_mode_on), () =>
@@ -336,8 +336,8 @@ else if (dgn_name === "WATERHEATER_STATUS_2") {
   }
 }
 
-// === AQUAHOT_STATUS_2 (6C00) ===
-else if (dgn_name === "AQUAHOT_STATUS_2") {
+// === AQUAHOT_STATUS_NATIVE (6C00) ===
+else if (dgn_name === "AQUAHOT_STATUS_NATIVE") {
   const nn = toHex(p.sub_index).substring(2);
   if (p.value_a !== undefined && p.value_a !== null) {
     publishSensor(`aquahot_status_2_sub_${nn}`, p.value_a, () =>
@@ -353,8 +353,8 @@ else if (dgn_name === "AQUAHOT_STATUS_2") {
   }
 }
 
-// === AQUAHOT_SYSTEM_STATUS_2 (FF2E) ===
-else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_2") {
+// === AQUAHOT_SYSTEM_STATUS_NATIVE (FF2E) ===
+else if (dgn_name === "AQUAHOT_SYSTEM_STATUS_NATIVE") {
   const nn = toHex(p.sub_index).substring(2);
 
   if (p.primary_value !== undefined && p.primary_value !== null) {

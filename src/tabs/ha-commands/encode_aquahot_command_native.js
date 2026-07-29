@@ -1,5 +1,5 @@
-// Encodes MQTT Climate commands into proprietary AquaHot zone CAN messages.
-// Uses FF2F (AQUAHOT_COMMAND_2) cmd_type 0x0a for interior heating priority.
+// Encodes MQTT climate commands into native Aqua-Hot CAN messages.
+// Uses FF2F (AQUAHOT_COMMAND_NATIVE) cmd_type 0x0a for interior heating priority.
 
 // --- Configuration ---
 const SOURCE_ADDRESS = global.get("rvc_source_address") || 254;

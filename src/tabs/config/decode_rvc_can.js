@@ -120,9 +120,9 @@ if (!dgn_name && dp === 0 && pf >= 0xf0) {
 // it is.
 const TM2XX_ADDRESSES = [0x64, 0x61];
 const HEAT_OPERATIONS = {
-  0xa9: "AQUAHOT_STATUS_1", // PROP_REPORT_AQUAHOT_STATUS
-  0xaa: "AQUAHOT_REQUEST_STATUS_1", // PROP_REQUEST_AQUAHOT_STATUS
-  0xab: "AQUAHOT_COMMAND_1", // PROP_AQUAHOT_COMMAND
+  0xa9: "AQUAHOT_STATUS_SILVERLEAF", // PROP_REPORT_AQUAHOT_STATUS
+  0xaa: "AQUAHOT_REQUEST_STATUS_SILVERLEAF", // PROP_REQUEST_AQUAHOT_STATUS
+  0xab: "AQUAHOT_COMMAND_SILVERLEAF", // PROP_AQUAHOT_COMMAND
 };
 
 const source_address_num = canIdNum & 0xff;
@@ -139,14 +139,14 @@ function proprietaryHeatName() {
 
 // Fallback logic for proprietary PGNs not in lookup table.
 //
-// The _1 and _2 suffixes are LibreCoach's own naming for two unrelated ways an
-// Aqua-Hot appears on the bus, and exist nowhere outside this project.
+// LibreCoach names Aqua-Hot traffic for the interface that places it on the
+// bus:
 //
-//   AQUAHOT_1  the boiler is fronted by a SilverLeaf TM-2xx module, which
-//              speaks PROPRIETARY_A on its behalf from static address 0x64
-//              (TM-220/225/226) or 0x61 (TM-229)
-//   AQUAHOT_2  the boiler presents itself, using the PDU2 DGNs FF01, FF2E,
-//              FF2F and 6C00
+//   SILVERLEAF  the boiler is fronted by a SilverLeaf TM-2xx module, which
+//               speaks PROPRIETARY_A on its behalf from static address 0x64
+//               (TM-220/225/226) or 0x61 (TM-229)
+//   NATIVE      the boiler presents itself, using the PDU2 DGNs FF01, FF2E,
+//               FF2F and 6C00
 //
 // A coach has one or the other, never both. Which one is decided by whether a
 // TM-2xx is installed, not by the boiler's series -- with a module in the way
@@ -154,21 +154,21 @@ function proprietaryHeatName() {
 // protocol. Ask the node at 0x64 for its PRODUCT_ID to tell them apart.
 //
 // The series does not decide it, and cannot: a 600-Series boiler behind a
-// TM-225 produces AQUAHOT_1 traffic, while a recent 600-Series with RV-C built
-// in would produce AQUAHOT_2. Age correlates -- boilers without an RV-C
-// interface are the ones that need a module -- but the module is the fact to
-// test.
+// TM-225 produces AQUAHOT_*_SILVERLEAF traffic, while a recent 600-Series with
+// RV-C built in would produce AQUAHOT_*_NATIVE traffic. Age correlates --
+// boilers without an RV-C interface are the ones that need a module -- but the
+// module is the fact to test.
 if (!dgn_name) {
   if (lookupPgn === "6F00") {
     dgn_name = "AQUAHOT_UNUSED";
   } else if (lookupPgn === "6C00") {
-    dgn_name = "AQUAHOT_STATUS_2";
+    dgn_name = "AQUAHOT_STATUS_NATIVE";
   } else if (lookupPgn === "FF01") {
-    dgn_name = "AQUAHOT_THERMOSTAT_STATUS_2";
+    dgn_name = "AQUAHOT_THERMOSTAT_STATUS_NATIVE";
   } else if (lookupPgn === "FF2E") {
-    dgn_name = "AQUAHOT_SYSTEM_STATUS_2";
+    dgn_name = "AQUAHOT_SYSTEM_STATUS_NATIVE";
   } else if (lookupPgn === "FF2F") {
-    dgn_name = "AQUAHOT_COMMAND_2";
+    dgn_name = "AQUAHOT_COMMAND_NATIVE";
   } else if (lookupPgn === "BF00") {
     dgn_name = "WIRELESS_PANEL_SIGNAL_STATUS";
   } else if (dgn === "1AA00") {
