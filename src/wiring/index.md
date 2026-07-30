@@ -46,6 +46,7 @@ flowchart TD
     n_cd73ee739dad["Notify user"]:::link
     n_dca8346e061f["MQTT out_ Retain TRUE"]:::link
     n_e38f32a1f6d3["MQTT out_ Retain TRUE"]:::link
+    n_entitymapret["MQTT out_ Retain TRUE"]:::link
     n_f01db5ebc3ae["ADDRESS_CLAIMED"]:::link
     n_f658418a7b9b["MQTT out_ Retain TRUE"]:::link
   end
@@ -126,6 +127,7 @@ flowchart TD
   n_dca8346e061f --> n_f658418a7b9b
   n_e371075d4dbf --> n_f658418a7b9b
   n_e38f32a1f6d3 --> n_f658418a7b9b
+  n_entitymapret --> n_f658418a7b9b
   n_f3f99ba42088 --> n_f658418a7b9b
   n_fa104ff19bbe --> n_a1e89f48333c
 ```
@@ -134,7 +136,7 @@ flowchart TD
 
 | Tab | Functions | Subflow instances | Link out | Link in |
 |---|---|---|---|---|
-| [Config](./config.md) | 31 | 0 | 16 | 7 |
+| [Config](./config.md) | 35 | 0 | 17 | 7 |
 | [Status routing](./status-routing.md) | 54 | 0 | 2 | 2 |
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
 | [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
@@ -194,6 +196,7 @@ _None._
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
+| MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | Notify user | Templates | → | Notify user | Config |
 
@@ -201,6 +204,6 @@ _None._
 
 | Name | Type | Used by |
 |---|---|---|
-| Home Assistant | server | 1 node across 1 tab |
+| Home Assistant | server | 4 nodes across 2 tabs |
 | Mosquitto | mqtt-broker | 28 nodes across 6 tabs |
 | Victron Cerbo GX | mqtt-broker | 5 nodes across 1 tab |

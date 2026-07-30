@@ -6,6 +6,25 @@ This repository contains the flow-based logic that decodes RV-C CAN messages, pu
 
 For user-facing documentation, visit [LibreCoach.com](https://librecoach.com).
 
+## Diagnostic entity map
+
+LibreCoach publishes one complete retained snapshot on `rvc/entity-map`.
+The version 1 payload joins each stable MQTT discovery `unique_id` to Home
+Assistant's current entity ID and effective friendly name. Each entity carries
+its original LibreCoach object identity, component, name source, and explicit
+RV-C bindings with decoder, selector, required-signal, projection, role, and
+provenance metadata.
+
+The Config flow rebuilds the snapshot after deploy, Home Assistant readiness,
+entity-registry updates, and discovery creation or removal. It uses the existing
+Home Assistant WebSocket connection for the entity registry and the existing
+Supervisor token for `/api/states`. The snapshot contains no credentials or CAN
+addresses. Command bindings are descriptive metadata only.
+
+Repeated discovery messages and refresh events do not republish an unchanged
+snapshot. Entity creation, removal, renaming, and binding changes produce a new
+complete snapshot.
+
 ## Related Repositories
 
 - [`ha-addons`](https://github.com/Backroads4Me/ha-addons) packages LibreCoach as a Home Assistant add-on.

@@ -46,9 +46,11 @@ switch (payload.dgn_name) {
     out.current = parseInt(bytePairs[5] + bytePairs[4], 16) * 0.05 - 1600.0;
 
     const b6 = parseInt(bytePairs[6], 16);
-    out.overcurrent_status = b6 & 0x03;
-    out.output_on = (b6 >> 2) & 0x03; // 00=off, 01=on
-    out.momentary_status = (b6 >> 4) & 0x03;
+    out.output_status = b6 & 0x03;
+    out.output_on = out.output_status; // 00=off, 01=on
+    out.desired_status = (b6 >> 2) & 0x03;
+    out.shutdown_status = (b6 >> 4) & 0x03;
+    out.reset_type = (b6 >> 6) & 0x03;
 
     const b7 = parseInt(bytePairs[7], 16);
     out.shutdown_reason = b7 & 0x0f;
@@ -61,10 +63,12 @@ switch (payload.dgn_name) {
     if (pwmRaw <= 200) {
       out.pwm_duty_cycle = pwmRaw * 0.5;
     }
-    const b4 = parseInt(bytePairs[4], 16);
-    out.direction = b4 & 0x03;
-    out.lock_status = (b4 >> 2) & 0x03;
-    out.command_timeout = (b4 >> 4) & 0x03;
+    const b2 = parseInt(bytePairs[2], 16);
+    out.direction = b2 & 0x03;
+    out.driver_pulsing = (b2 >> 2) & 0x03;
+    out.lock_status = (b2 >> 4) & 0x03;
+    out.command_timeout = (b2 >> 6) & 0x03;
+    out.override_input = parseInt(bytePairs[6], 16) & 0x03;
     break;
   }
 }

@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 104
-- **Function nodes:** 31
+- **Node count:** 115
+- **Function nodes:** 35
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 16
+- **Link out (outbound):** 17
 - **Link in (inbound):** 7
 
 ## Function Nodes
@@ -376,19 +376,164 @@ flowchart LR
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_aba7ef0da2fb["discovery_index"]:::fn
   n_e71f0cb35642["HA discovery configs"]:::fn
+  n_entitymapdeb["Debounce entity map refresh"]:::fn
+  n_aba7ef0da2fb -->|out 0| n_entitymapdeb
   n_e71f0cb35642 -->|out 0| n_aba7ef0da2fb
 ```
 
 #### Msg contract
-Indexes retained HA discovery configs by integration prefix so disable
-handlers can delete an integration's entities.
-Input: retained messages on homeassistant/+/+/config
+Index retained Home Assistant discovery configs and attach the RV-C binding
+known by LibreCoach's entity publishers. The index is the stable join point:
+Home Assistant may rename entity_id, but MQTT discovery unique_id remains the
+original LibreCoach identity.
+
+Output: one refresh trigger whenever a discovery entity is created, changed,
+or removed. A downstream trigger node debounces startup/deploy bursts.
 
 #### Upstream
 - HA discovery configs (mqtt in) — this tab
 
 #### Downstream
-_None._
+- **Output 0:**
+  - Debounce entity map refresh (trigger) — this tab
+
+---
+
+### entity_map_prepare
+- **File:** [`entity_map_prepare.js`](../tabs/config/entity_map_prepare.js)
+- **Node ID:** `entity_map_prepare`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_entitymapdeb["Debounce entity map refresh"]:::fn
+  n_entitymappre["entity_map_prepare"]:::fn
+  n_entitymapreg["Entity registry"]:::fn
+  n_entitymapdeb -->|out 0| n_entitymappre
+  n_entitymappre -->|out 0| n_entitymapreg
+```
+
+#### Msg contract
+Request the current Home Assistant entity registry over the existing
+node-red-contrib-home-assistant-websocket connection.
+
+#### Upstream
+- Debounce entity map refresh (trigger) — this tab
+
+#### Downstream
+- **Output 0:**
+  - Entity registry (ha-api) — this tab
+
+---
+
+### entity_map_prepare_states
+- **File:** [`entity_map_prepare_states.js`](../tabs/config/entity_map_prepare_states.js)
+- **Node ID:** `entity_map_prepare_states`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_entitymappre["entity_map_prepare_states"]:::fn
+  n_entitymapreg["Entity registry"]:::fn
+  n_entitymapsta["Entity map GET /api/states"]:::fn
+  n_entitymappre -->|out 0| n_entitymapsta
+  n_entitymapreg -->|out 0| n_entitymappre
+```
+
+#### Msg contract
+Preserve the entity registry result, then obtain current states through the
+add-on's existing Supervisor API credentials.
+
+#### Upstream
+- Entity registry (ha-api) — this tab
+
+#### Downstream
+- **Output 0:**
+  - Entity map GET /api/states (http request) — this tab
+
+---
+
+### entity_map_ready
+- **File:** [`entity_map_ready.js`](../tabs/config/entity_map_ready.js)
+- **Node ID:** `entity_map_ready`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_entitymapdeb["Debounce entity map refresh"]:::fn
+  n_entitymaphar["Home Assistant connection"]:::fn
+  n_entitymaprea["entity_map_ready"]:::fn
+  n_entitymaphar -->|out 0| n_entitymaprea
+  n_entitymaprea -->|out 0| n_entitymapdeb
+```
+
+#### Msg contract
+Home Assistant client events are emitted through the Events: all node. Only
+a ready/running transition requests a snapshot; disconnects and retries do
+not publish an incomplete map.
+
+#### Upstream
+- Home Assistant connection (server-events) — this tab
+
+#### Downstream
+- **Output 0:**
+  - Debounce entity map refresh (trigger) — this tab
+
+---
+
+### entity_map_snapshot
+- **File:** [`entity_map_snapshot.js`](../tabs/config/entity_map_snapshot.js)
+- **Node ID:** `entity_map_snapshot`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_entitymapret["MQTT out_ Retain TRUE"]:::link
+  n_entitymapsna["entity_map_snapshot"]:::fn
+  n_entitymapsta["Entity map GET /api/states"]:::fn
+  n_entitymapsna -->|out 0| n_entitymapret
+  n_entitymapsta -->|out 0| n_entitymapsna
+```
+
+#### Msg contract
+Join stable LibreCoach MQTT discovery unique IDs to Home Assistant's current
+entity registry and effective friendly names, then publish one complete
+retained snapshot. Replacing this payload atomically removes stale mappings.
+
+#### Upstream
+- Entity map GET /api/states (http request) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
 
 ---
 
@@ -1172,6 +1317,8 @@ _None._
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`e38f32a1f6d36bfb`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
+- **MQTT out: Retain TRUE** (`entity_map_retain_link`) →
+  - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **Notify user** (`cd73ee739dad9f59`) →
   - Notify user in tab `Config` ([wiring](./config.md))
 - **STATUS** (`02bdfc59de71b5a5`) →
@@ -1208,6 +1355,7 @@ _None._
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Victron`
   - MQTT out: Retain TRUE in tab `Config`
+  - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Victron`
 - **Notify user** (`a1e89f48333c8256`) ←
   - Notify user in tab `Templates`
@@ -1231,7 +1379,12 @@ _None._
 - CAN message routing (group) — id `f09f79586501cb0b`, in: 0, out: 0
 - Claim CAN source address (group) — id `8ef86a1c4b59d8e1`, in: 0, out: 0
 - Config in (mqtt in) — id `21029b71ed58348c`, in: 0, out: 1
+- Debounce entity map refresh (trigger) — id `entity_map_debounce`, in: 4, out: 1
 - Device discovery (inject) — id `07b8bcce03f19e8f`, in: 0, out: 7
+- Entity map GET /api/states (http request) — id `entity_map_states_api`, in: 1, out: 1
+- Entity map on deploy (inject) — id `entity_map_start`, in: 0, out: 1
+- Entity registry (ha-api) — id `entity_map_registry_api`, in: 1, out: 1
+- Entity registry updated (server-events) — id `entity_map_registry_event`, in: 0, out: 1
 - Every 60s (inject) — id `bce5d439a67df7da`, in: 0, out: 1
 - Flows loaded (inject) — id `3e9c6f1a2b4d5e6f`, in: 0, out: 1
 - GPS Updates (group) — id `f67b4a374db41b27`, in: 0, out: 0
@@ -1240,6 +1393,7 @@ _None._
 - HA in (mqtt in) — id `9e9b11b9441e51db`, in: 0, out: 2
 - HA in (mqtt in) — id `b86f82e84d961549`, in: 0, out: 2
 - HA in (debug) — id `d34a8c1fd2cc4320`, in: 3, out: 0
+- Home Assistant connection (server-events) — id `entity_map_ha_ready_event`, in: 0, out: 1
 - Load 5 seconds after Start (inject) — id `515386b6b0d01893`, in: 0, out: 1
 - Load 5 seconds after Start (inject) — id `9dc97e8a5aa12888`, in: 0, out: 1
 - Load RV-C Dgn Names (group) — id `9cfcca5efde78052`, in: 0, out: 0
