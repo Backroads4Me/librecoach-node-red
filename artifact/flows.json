@@ -4153,8 +4153,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 250,
-    "y": 2290,
+    "x": 1140,
+    "y": 2000,
     "g": "a06746acafc5968d",
     "wires": [
       [
@@ -4604,7 +4604,7 @@
     "type": "function",
     "z": "3e5f038a4f5a8b9a",
     "name": "decode_dc_driver_status",
-    "func": "// Decode DC Component Driver Status Messages (16F00 - 16300)\n\nconst payload = msg.payload;\n\nif (\n  !payload ||\n  !payload.dgn_name ||\n  !payload.dgn_name.startsWith(\"DC_COMPONENT_DRIVER_STATUS_\")\n) {\n  return null;\n}\n\nconst data_payload = payload.data_payload;\nif (\n  !data_payload ||\n  typeof data_payload !== \"string\" ||\n  data_payload.length < 16\n) {\n  return null;\n}\n\nconst bytePairs = data_payload.match(/.{1,2}/g);\nif (!bytePairs || bytePairs.length < 8) {\n  return null;\n}\n\nconst device_instance = parseInt(bytePairs[0], 16);\nconst driver_index = parseInt(bytePairs[1], 16);\n\nlet out = {\n  originalMessage: payload.originalMessage,\n  dgn: payload.dgn,\n  dgn_name: payload.dgn_name,\n  device_instance: device_instance,\n  driver_index: driver_index,\n  instance: driver_index, // Override instance with functional driver_index\n};\n\nif (payload.destination_address !== undefined) {\n  out.destination_address = payload.destination_address;\n}\n\nswitch (payload.dgn_name) {\n  case \"DC_COMPONENT_DRIVER_STATUS_1\": {\n    out.voltage = parseInt(bytePairs[3] + bytePairs[2], 16) * 0.05;\n    out.current = parseInt(bytePairs[5] + bytePairs[4], 16) * 0.05 - 1600.0;\n\n    const b6 = parseInt(bytePairs[6], 16);\n    out.overcurrent_status = b6 & 0x03;\n    out.output_on = (b6 >> 2) & 0x03; // 00=off, 01=on\n    out.momentary_status = (b6 >> 4) & 0x03;\n\n    const b7 = parseInt(bytePairs[7], 16);\n    out.shutdown_reason = b7 & 0x0f;\n    break;\n  }\n  case \"DC_COMPONENT_DRIVER_STATUS_6\": {\n    // §6.50.11 defines PWM duty as raw 0-200 = 0-100%; leave the field\n    // unset for values outside that DGN-specific range.\n    const pwmRaw = parseInt(bytePairs[3], 16);\n    if (pwmRaw <= 200) {\n      out.pwm_duty_cycle = pwmRaw * 0.5;\n    }\n    const b4 = parseInt(bytePairs[4], 16);\n    out.direction = b4 & 0x03;\n    out.lock_status = (b4 >> 2) & 0x03;\n    out.command_timeout = (b4 >> 4) & 0x03;\n    break;\n  }\n}\n\nmsg.payload = out;\nreturn msg;\n",
+    "func": "// Decode DC Component Driver Status Messages (16F00 - 16300)\n\nconst payload = msg.payload;\n\nif (\n  !payload ||\n  !payload.dgn_name ||\n  !payload.dgn_name.startsWith(\"DC_COMPONENT_DRIVER_STATUS_\")\n) {\n  return null;\n}\n\nconst data_payload = payload.data_payload;\nif (\n  !data_payload ||\n  typeof data_payload !== \"string\" ||\n  data_payload.length < 16\n) {\n  return null;\n}\n\nconst bytePairs = data_payload.match(/.{1,2}/g);\nif (!bytePairs || bytePairs.length < 8) {\n  return null;\n}\n\nconst device_instance = parseInt(bytePairs[0], 16);\nconst driver_index = parseInt(bytePairs[1], 16);\n\nlet out = {\n  originalMessage: payload.originalMessage,\n  dgn: payload.dgn,\n  dgn_name: payload.dgn_name,\n  device_instance: device_instance,\n  driver_index: driver_index,\n  instance: driver_index, // Override instance with functional driver_index\n};\n\nif (payload.destination_address !== undefined) {\n  out.destination_address = payload.destination_address;\n}\n\nswitch (payload.dgn_name) {\n  case \"DC_COMPONENT_DRIVER_STATUS_1\": {\n    out.voltage = parseInt(bytePairs[3] + bytePairs[2], 16) * 0.05;\n    out.current = parseInt(bytePairs[5] + bytePairs[4], 16) * 0.05 - 1600.0;\n\n    const b6 = parseInt(bytePairs[6], 16);\n    out.output_status = b6 & 0x03;\n    out.output_on = out.output_status; // 00=off, 01=on\n    out.desired_status = (b6 >> 2) & 0x03;\n    out.shutdown_status = (b6 >> 4) & 0x03;\n    out.reset_type = (b6 >> 6) & 0x03;\n\n    const b7 = parseInt(bytePairs[7], 16);\n    out.shutdown_reason = b7 & 0x0f;\n    break;\n  }\n  case \"DC_COMPONENT_DRIVER_STATUS_6\": {\n    // §6.50.11 defines PWM duty as raw 0-200 = 0-100%; leave the field\n    // unset for values outside that DGN-specific range.\n    const pwmRaw = parseInt(bytePairs[3], 16);\n    if (pwmRaw <= 200) {\n      out.pwm_duty_cycle = pwmRaw * 0.5;\n    }\n    const b2 = parseInt(bytePairs[2], 16);\n    out.direction = b2 & 0x03;\n    out.driver_pulsing = (b2 >> 2) & 0x03;\n    out.lock_status = (b2 >> 4) & 0x03;\n    out.command_timeout = (b2 >> 6) & 0x03;\n    out.override_input = parseInt(bytePairs[6], 16) & 0x03;\n    break;\n  }\n}\n\nmsg.payload = out;\nreturn msg;\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -4624,8 +4624,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "One time migrations",
-    "x": 84,
-    "y": 2249,
+    "x": 974,
+    "y": 1959,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -5113,18 +5113,20 @@
     "type": "function",
     "z": "292e70a6ba25b323",
     "name": "discovery_index",
-    "func": "// Indexes retained HA discovery configs by integration prefix so disable\n// handlers can delete an integration's entities.\n// Input: retained messages on homeassistant/+/+/config\n\nconst PREFIXES = [\"victron\", \"microair\", \"hughes\"];\n\nconst topic = msg.topic;\nif (typeof topic !== \"string\" || !topic.startsWith(\"homeassistant/\")) return null;\n\nconst index = global.get(\"discoveryIndex\", \"file\") || {};\n\n// Empty payload = entity removed; drop the topic from every bucket.\nconst raw = msg.payload;\nconst isEmpty =\n    raw === \"\" ||\n    raw === null ||\n    raw === undefined ||\n    (typeof raw === \"object\" && Object.keys(raw).length === 0);\n\nif (isEmpty) {\n    let changed = false;\n    for (const p of PREFIXES) {\n        const arr = index[p];\n        if (arr) {\n            const i = arr.indexOf(topic);\n            if (i !== -1) {\n                arr.splice(i, 1);\n                changed = true;\n            }\n        }\n    }\n    if (changed) global.set(\"discoveryIndex\", index, \"file\");\n    return null;\n}\n\n// Parse the config payload to read unique_id.\nlet cfg = raw;\nif (typeof raw === \"string\") {\n    try {\n        cfg = JSON.parse(raw);\n    } catch (e) {\n        return null;\n    }\n}\nconst uniqueId = cfg && cfg.unique_id;\nif (typeof uniqueId !== \"string\") return null;\n\n// Bucket by the integration prefix this entity belongs to.\nconst prefix = PREFIXES.find((p) => uniqueId.startsWith(p + \"_\"));\nif (!prefix) return null;\n\nconst bucket = index[prefix] || (index[prefix] = []);\nif (!bucket.includes(topic)) {\n    bucket.push(topic);\n    global.set(\"discoveryIndex\", index, \"file\");\n    node.status({ fill: \"blue\", shape: \"dot\", text: `${prefix}: ${bucket.length}` });\n}\n\nreturn null;\n",
+    "func": "// Index retained Home Assistant discovery configs and attach the RV-C binding\n// known by LibreCoach's entity publishers. The index is the stable join point:\n// Home Assistant may rename entity_id, but MQTT discovery unique_id remains the\n// original LibreCoach identity.\n//\n// Output: one refresh trigger whenever a discovery entity is created, changed,\n// or removed. A downstream trigger node debounces startup/deploy bursts.\n\nconst INTEGRATION_PREFIXES = [\"victron\", \"microair\", \"hughes\"];\nconst ENTITY_MAP_KEY = \"entityMapDiscovery\";\n\nfunction stateBinding({\n  dgn,\n  decoder,\n  selector,\n  signals,\n  projection,\n  authority,\n  role = \"state\",\n}) {\n  return {\n    role,\n    protocol: \"rvc\",\n    authority,\n    decoder_key: decoder,\n    dgn,\n    selector,\n    required_signals: signals,\n    projection,\n  };\n}\n\nfunction commandBinding({ dgn, decoder, selector, authority }) {\n  return {\n    role: \"command\",\n    protocol: \"rvc\",\n    authority,\n    decoder_key: decoder,\n    dgn,\n    selector,\n    required_signals: [],\n    descriptive_only: true,\n  };\n}\n\nfunction aquahotBinding(field, projection, role = \"state\") {\n  return {\n    role,\n    protocol: \"rvc-pdu1\",\n    authority: role === \"state\"\n      ? \"librecoach-node-red:status_aquahot_silverleaf\"\n      : \"librecoach-node-red:encode_aquahot_command_silverleaf\",\n    decoder_key: role === \"state\"\n      ? \"SILVERLEAF_AQUAHOT_STATUS\"\n      : \"SILVERLEAF_AQUAHOT_COMMAND\",\n    pf: \"EF\",\n    operation: role === \"state\" ? 0xa9 : 0xab,\n    selector: { kind: \"singleton\", value: \"aquahot\" },\n    required_signals: role === \"state\" ? [field] : [],\n    product_family: { models: [\"TM220\", \"TM225\", \"TM226\", \"TM229\"] },\n    ...(role === \"state\" ? { projection } : { descriptive_only: true }),\n  };\n}\n\nfunction bindingsFor(uniqueId) {\n  let match;\n  if ((match = /^switch_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FEDA\",\n        decoder: \"DC_DIMMER_STATUS_3\",\n        selector,\n        signals: [\"instance\", \"operating_status\", \"load_status\"],\n        projection: { kind: \"field\", field: \"operating_status\" },\n        authority: \"librecoach-node-red:status_dc_dimmer_3\",\n      }),\n      stateBinding({\n        dgn: \"1FFBB\",\n        decoder: \"DC_DIMMER_STATUS_1\",\n        selector,\n        signals: [\"instance\", \"master_brightness\"],\n        projection: { kind: \"field\", field: \"master_brightness\" },\n        authority: \"librecoach-node-red:status_dc_dimmer_3\",\n      }),\n      stateBinding({\n        dgn: \"16F00\",\n        decoder: \"DC_COMPONENT_DRIVER_STATUS_1\",\n        selector,\n        signals: [\n          \"device_instance\", \"driver_index\", \"output_status\",\n          \"desired_status\", \"shutdown_status\",\n        ],\n        projection: { kind: \"field\", field: \"output_status\" },\n        authority: \"librecoach-node-red:status_dc_driver\",\n      }),\n      stateBinding({\n        dgn: \"16300\",\n        decoder: \"DC_COMPONENT_DRIVER_STATUS_6\",\n        selector,\n        signals: [\n          \"device_instance\", \"driver_index\", \"direction\",\n          \"driver_pulsing\", \"lock_status\", \"command_timeout\",\n          \"pwm_duty_cycle\", \"override_input\",\n        ],\n        projection: { kind: \"field\", field: \"pwm_duty_cycle\" },\n        authority: \"librecoach-node-red:status_dc_driver\",\n      }),\n      commandBinding({\n        dgn: \"1FEDB\",\n        decoder: \"DC_DIMMER_COMMAND_2\",\n        selector,\n        authority: \"librecoach-node-red:encode_dc_dimmer_command_2\",\n      }),\n      commandBinding({\n        dgn: \"16000\",\n        decoder: \"DC_COMPONENT_DRIVER_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_dc_driver_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^switch_l_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FFBD\",\n        decoder: \"DC_LOAD_STATUS\",\n        selector,\n        signals: [\n          \"instance\", \"group\", \"operating_status\", \"operating_mode\",\n          \"variable_level_capability\", \"priority\",\n        ],\n        projection: {\n          kind: \"field\",\n          field: \"operating_status\",\n          unavailable: [\"Error\", \"Reserved\", \"Out of Range\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:status_dc_load\",\n      }),\n      stateBinding({\n        dgn: \"1FEDC\",\n        decoder: \"DC_LOAD_STATUS_2\",\n        selector,\n        signals: [\n          \"instance\", \"lock_status\", \"overcurrent_status\",\n          \"override_status\", \"enable_status\", \"last_command\",\n          \"interlock_status\", \"driver_direction_status\",\n        ],\n        authority: \"librecoach-node-red:decode_dc_load_status\",\n        role: \"corroboration\",\n      }),\n      commandBinding({\n        dgn: \"1FFBC\",\n        decoder: \"DC_LOAD_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_dc_load_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^switch_ac_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FFBF\",\n        decoder: \"AC_LOAD_STATUS\",\n        selector,\n        signals: [\n          \"instance\", \"group\", \"operating_status\", \"operating_mode\",\n          \"variable_level_capability\", \"priority\",\n        ],\n        projection: {\n          kind: \"field\",\n          field: \"operating_status\",\n          unavailable: [\"Error\", \"Reserved\", \"Out of Range\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:status_ac_load\",\n      }),\n      stateBinding({\n        dgn: \"1FEDD\",\n        decoder: \"AC_LOAD_STATUS_2\",\n        selector,\n        signals: [\n          \"instance\", \"lock_status\", \"overcurrent_status\",\n          \"override_status\", \"enable_status\", \"last_command\",\n          \"interlock_status\", \"driver_direction_status\",\n        ],\n        authority: \"librecoach-node-red:decode_ac_load_status\",\n        role: \"corroboration\",\n      }),\n      commandBinding({\n        dgn: \"1FFBE\",\n        decoder: \"AC_LOAD_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_ac_load_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^switch_i_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FED7\",\n        decoder: \"GENERIC_INDICATOR_STATUS\",\n        selector,\n        signals: [\n          \"instance\", \"group\", \"brightness\", \"bank_select\",\n          \"delay_duration\", \"led_1_status\", \"led_2_status\", \"last_command\",\n        ],\n        projection: {\n          kind: \"field\",\n          field: \"brightness\",\n          unavailable: [\"Error\", \"Reserved\", \"Out of Range\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:status_generic_indicator_cmd\",\n      }),\n      commandBinding({\n        dgn: \"1FED9\",\n        decoder: \"GENERIC_INDICATOR_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_generic_indicator_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^switch_g_(\\d+)$/.exec(uniqueId))) {\n    return [commandBinding({\n      dgn: \"1FED9\",\n      decoder: \"GENERIC_INDICATOR_COMMAND\",\n      selector: {\n        kind: \"semantic\",\n        value: Number(match[1]),\n        semantic: \"indicator-group\",\n      },\n      authority: \"librecoach-node-red:encode_generic_indicator_command\",\n    })];\n  }\n\n  if ((match = /^shade_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FEDE\",\n        decoder: \"WINDOW_SHADE_CONTROL_STATUS\",\n        selector,\n        signals: [\n          \"instance\", \"motor_status\", \"forward_status\",\n          \"reverse_status\", \"operating_status\",\n        ],\n        projection: { kind: \"field\", field: \"operating_status\" },\n        authority: \"librecoach-node-red:status_shade\",\n      }),\n      commandBinding({\n        dgn: \"1FEDF\",\n        decoder: \"WINDOW_SHADE_CONTROL_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_shade_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^lock_(\\d+)$/.exec(uniqueId))) {\n    const instance = Number(match[1]);\n    const selector = { kind: \"numeric\", value: instance };\n    const bindings = [];\n    if (instance !== 0) {\n      bindings.push(stateBinding({\n        dgn: \"1FEE5\",\n        decoder: \"LOCK_STATUS\",\n        selector,\n        signals: [\"instance\", \"lock_status\", \"position\"],\n        projection: { kind: \"field\", field: \"lock_status\" },\n        authority: \"librecoach-node-red:status_lock\",\n      }));\n    }\n    bindings.push(commandBinding({\n      dgn: \"1FEE4\",\n      decoder: \"LOCK_COMMAND\",\n      selector,\n      authority: \"librecoach-node-red:encode_lock_command\",\n    }));\n    return bindings;\n  }\n\n  const tankInstances = {\n    fresh: [0, \"fresh-water\"],\n    black: [1, \"black-water\"],\n    gray: [2, \"gray-water\"],\n    lpg: [3, \"lpg\"],\n    fresh2: [16, \"fresh-water-2\"],\n    black2: [17, \"black-water-2\"],\n    gray2: [18, \"gray-water-2\"],\n    lpg2: [19, \"lpg-2\"],\n  };\n  if ((match = /^tank_(fresh2?|black2?|gray2?|lpg2?)$/.exec(uniqueId))) {\n    const [value, semantic] = tankInstances[match[1]];\n    return [stateBinding({\n      dgn: \"1FFB7\",\n      decoder: \"TANK_STATUS\",\n      selector: { kind: \"semantic\", value, semantic },\n      signals: [\"instance\", \"relative_level\", \"resolution\", \"level_percentage\"],\n      projection: { kind: \"field\", field: \"level_percentage\" },\n      authority: \"librecoach-node-red:status_tank\",\n    })];\n  }\n\n  const batteryInstances = {\n    house: [1, \"house\"],\n    chassis: [2, \"chassis\"],\n    house2: [3, \"house-2\"],\n    generator: [4, \"generator\"],\n  };\n  if ((match = /^battery_(house|chassis|house2|generator|\\d+)$/.exec(uniqueId))) {\n    const known = batteryInstances[match[1]];\n    const value = known ? known[0] : Number(match[1]);\n    if (!Number.isInteger(value) || value < 1 || value > 250) return [];\n    const selector = known\n      ? { kind: \"semantic\", value, semantic: known[1] }\n      : { kind: \"numeric\", value };\n    return [\n      stateBinding({\n        dgn: \"1FFFD\",\n        decoder: \"DC_SOURCE_STATUS_1\",\n        selector,\n        signals: [\"instance\", \"dc_voltage\"],\n        projection: { kind: \"field\", field: \"dc_voltage\" },\n        authority: \"librecoach-node-red:status_battery\",\n      }),\n      stateBinding({\n        dgn: \"1FFFC\",\n        decoder: \"DC_SOURCE_STATUS_2\",\n        selector,\n        signals: [\"instance\", \"source_temperature\", \"state_of_charge\"],\n        projection: { kind: \"field\", field: \"state_of_charge\" },\n        authority: \"librecoach-node-red:decode_dc_source_status\",\n        role: \"corroboration\",\n      }),\n      stateBinding({\n        dgn: \"1FFFB\",\n        decoder: \"DC_SOURCE_STATUS_3\",\n        selector,\n        signals: [\"instance\", \"state_of_health\", \"relative_capacity\"],\n        projection: { kind: \"field\", field: \"state_of_health\" },\n        authority: \"librecoach-node-red:decode_dc_source_status\",\n        role: \"corroboration\",\n      }),\n    ];\n  }\n\n  if (uniqueId === \"water_pump\") {\n    const selector = { kind: \"singleton\", value: \"water_pump\" };\n    return [\n      stateBinding({\n        dgn: \"1FFB3\",\n        decoder: \"WATER_PUMP_STATUS\",\n        selector,\n        signals: [\"operating_status\"],\n        projection: {\n          kind: \"enum\",\n          field: \"operating_status\",\n          values: { Off: \"OFF\", On: \"ON\" },\n          unavailable: [\"Reserved\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:status_water_pump\",\n      }),\n      commandBinding({\n        dgn: \"1FFB2\",\n        decoder: \"WATER_PUMP_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_water_pump_command\",\n      }),\n    ];\n  }\n\n  if (uniqueId === \"autofill\") {\n    const selector = { kind: \"singleton\", value: \"autofill\" };\n    return [\n      stateBinding({\n        dgn: \"1FFB1\",\n        decoder: \"AUTOFILL_STATUS\",\n        selector,\n        signals: [\"operating_status\", \"valve_status\", \"last_operation\"],\n        projection: {\n          kind: \"field\",\n          field: \"operating_status\",\n          unavailable: [\"Reserved\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:status_autofill\",\n      }),\n      commandBinding({\n        dgn: \"1FFB0\",\n        decoder: \"AUTOFILL_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_autofill_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^floor_heat_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FEFC\",\n        decoder: \"FLOOR_HEAT_STATUS\",\n        selector,\n        signals: [\n          \"instance\", \"operating_mode\", \"operating_status\",\n          \"heat_element_status\", \"schedule_mode\",\n          \"measured_temperature\", \"set_point\", \"dead_band\",\n        ],\n        projection: {\n          kind: \"enum\",\n          field: \"operating_status\",\n          values: { Off: \"off\", On: \"heat\" },\n          unavailable: [\"Reserved\", \"Not Available\"],\n        },\n        authority: \"librecoach-node-red:create_floor_heat\",\n      }),\n      commandBinding({\n        dgn: \"1FEFB\",\n        decoder: \"FLOOR_HEAT_COMMAND\",\n        selector,\n        authority: \"librecoach-node-red:encode_floor_heat_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^thermostat_zone_(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [\n      stateBinding({\n        dgn: \"1FFE2\",\n        decoder: \"THERMOSTAT_STATUS_1\",\n        selector,\n        signals: [\n          \"instance\", \"operating_mode\", \"fan_mode\", \"schedule_mode\",\n          \"fan_speed\", \"setpoint_heat\", \"setpoint_cool\",\n        ],\n        projection: { kind: \"field\", field: \"operating_mode\" },\n        authority: \"librecoach-node-red:status_thermostat\",\n      }),\n      stateBinding({\n        dgn: \"1FEFA\",\n        decoder: \"THERMOSTAT_STATUS_2\",\n        selector,\n        signals: [\n          \"instance\", \"current_schedule_instance\",\n          \"number_of_schedule_instances\", \"reduced_noise_mode\",\n          \"eco_mode\", \"turbo_mode\",\n        ],\n        authority: \"librecoach-node-red:decode_thermostat_status_2\",\n        role: \"corroboration\",\n      }),\n      commandBinding({\n        dgn: \"1FEF9\",\n        decoder: \"THERMOSTAT_COMMAND_1\",\n        selector,\n        authority: \"librecoach-node-red:encode_thermostat_command\",\n      }),\n    ];\n  }\n\n  if ((match = /^thermostat_ambient_zone(\\d+)$/.exec(uniqueId))) {\n    const selector = { kind: \"numeric\", value: Number(match[1]) };\n    return [stateBinding({\n      dgn: \"1FF9C\",\n      decoder: \"THERMOSTAT_AMBIENT_STATUS\",\n      selector,\n      signals: [\"instance\", \"ambient_temperature\"],\n      projection: {\n        kind: \"field\",\n        field: \"ambient_temperature\",\n        unavailable: [\"Reserved\", \"Out of Range\", \"Not Available\"],\n      },\n      authority: \"librecoach-node-red:status_thermostat_ambient\",\n    })];\n  }\n\n  const aquahot = {\n    aquahot_burner: [\"diesel_burner\", {\n      kind: \"field\",\n      field: \"diesel_burner\",\n      unavailable: [\"Reserved\", \"Not Available\"],\n    }],\n    aquahot_ac_1: [\"electric_selector\", {\n      kind: \"equals\",\n      field: \"electric_selector\",\n      value: \"AC 1\",\n      unavailable: [\"Reserved\", \"Not Available\"],\n    }],\n    aquahot_ac_2: [\"electric_selector\", {\n      kind: \"equals\",\n      field: \"electric_selector\",\n      value: \"AC 2\",\n      unavailable: [\"Reserved\", \"Not Available\"],\n    }],\n    aquahot_engine: [\"engine_preheat\", {\n      kind: \"field\",\n      field: \"engine_preheat\",\n      unavailable: [\"Reserved\", \"Not Available\"],\n    }],\n  };\n  if (aquahot[uniqueId]) {\n    const [field, projection] = aquahot[uniqueId];\n    return [\n      aquahotBinding(field, projection),\n      aquahotBinding(null, null, \"command\"),\n    ];\n  }\n\n  return [];\n}\n\nfunction discoveryTopic(topic) {\n  const parts = String(topic || \"\").split(\"/\");\n  if (parts[0] !== \"homeassistant\" || parts.at(-1) !== \"config\") return null;\n  if (parts.length === 4) {\n    return { component: parts[1], objectId: parts[2] };\n  }\n  if (parts.length === 5) {\n    return { component: parts[1], objectId: parts[3] };\n  }\n  return null;\n}\n\nconst topic = msg.topic;\nconst parsedTopic = discoveryTopic(topic);\nif (!parsedTopic) return null;\n\nconst integrationIndex = global.get(\"discoveryIndex\", \"file\") || {};\nconst entityIndex = global.get(ENTITY_MAP_KEY, \"file\") || {};\nconst raw = msg.payload;\nconst isEmpty =\n  raw === \"\" ||\n  raw === null ||\n  raw === undefined ||\n  (typeof raw === \"object\" && Object.keys(raw).length === 0);\n\nif (isEmpty) {\n  let changed = false;\n  for (const prefix of INTEGRATION_PREFIXES) {\n    const topics = integrationIndex[prefix];\n    const index = topics ? topics.indexOf(topic) : -1;\n    if (index !== -1) {\n      topics.splice(index, 1);\n      changed = true;\n    }\n  }\n  if (entityIndex[topic]) {\n    delete entityIndex[topic];\n    global.set(ENTITY_MAP_KEY, entityIndex, \"file\");\n    changed = true;\n  }\n  if (changed) global.set(\"discoveryIndex\", integrationIndex, \"file\");\n  return changed\n    ? { topic: \"entity-map-refresh\", payload: { reason: \"discovery-removed\" } }\n    : null;\n}\n\nlet config = raw;\nif (typeof raw === \"string\") {\n  try {\n    config = JSON.parse(raw);\n  } catch {\n    return null;\n  }\n}\nconst uniqueId = config && config.unique_id;\nif (typeof uniqueId !== \"string\" || !uniqueId) return null;\n\nconst prefix = INTEGRATION_PREFIXES.find((value) =>\n  uniqueId.startsWith(value + \"_\"));\nif (prefix) {\n  const topics = integrationIndex[prefix] ||\n    (integrationIndex[prefix] = []);\n  if (!topics.includes(topic)) {\n    topics.push(topic);\n    global.set(\"discoveryIndex\", integrationIndex, \"file\");\n  }\n}\n\nconst stateTopics = Object.entries(config)\n  .filter(([key, value]) =>\n    /(?:^|_)state_topic$/.test(key) && typeof value === \"string\")\n  .map(([, value]) => value);\nconst commandTopics = Object.entries(config)\n  .filter(([key, value]) =>\n    /(?:^|_)command_topic$/.test(key) && typeof value === \"string\")\n  .map(([, value]) => value);\n\nentityIndex[topic] = {\n  topic,\n  component: parsedTopic.component,\n  object_id: parsedTopic.objectId,\n  unique_id: uniqueId,\n  original_name: typeof config.name === \"string\"\n    ? config.name : parsedTopic.objectId,\n  default_entity_id: typeof config.default_entity_id === \"string\"\n    ? config.default_entity_id\n    : `${parsedTopic.component}.${parsedTopic.objectId}`,\n  state_topics: [...new Set(stateTopics)],\n  command_topics: [...new Set(commandTopics)],\n  bindings: bindingsFor(uniqueId),\n};\nglobal.set(ENTITY_MAP_KEY, entityIndex, \"file\");\nnode.status({\n  fill: \"blue\",\n  shape: \"dot\",\n  text: `${Object.keys(entityIndex).length} discoveries`,\n});\n\nreturn {\n  topic: \"entity-map-refresh\",\n  payload: { reason: \"discovery-updated\", unique_id: uniqueId },\n};\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1350,
-    "y": 1990,
+    "x": 480,
+    "y": 2320,
     "g": "bc622f80fe99faa0",
     "wires": [
-      []
+      [
+        "entity_map_debounce"
+      ]
     ]
   },
   {
@@ -5661,15 +5663,26 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "MQTT discovery",
-    "x": 984,
-    "y": 1949,
+    "x": 94,
+    "y": 2279,
     "style": {
       "stroke": "#777777",
       "label": true
     },
     "nodes": [
       "aba7ef0da2fb2851",
-      "e71f0cb356427a9c"
+      "e71f0cb356427a9c",
+      "entity_map_debounce",
+      "entity_map_ha_ready_event",
+      "entity_map_prepare",
+      "entity_map_prepare_states",
+      "entity_map_ready",
+      "entity_map_registry_api",
+      "entity_map_registry_event",
+      "entity_map_retain_link",
+      "entity_map_snapshot",
+      "entity_map_start",
+      "entity_map_states_api"
     ]
   },
   {
@@ -7272,8 +7285,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 1110,
-    "y": 1990,
+    "x": 220,
+    "y": 2320,
     "g": "bc622f80fe99faa0",
     "wires": [
       [
@@ -7293,8 +7306,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 500,
-    "y": 2290,
+    "x": 1390,
+    "y": 2000,
     "g": "a06746acafc5968d",
     "wires": [
       []
@@ -7615,6 +7628,268 @@
       "8337a7f0dd0435d6",
       "a1e89f48333c8256",
       "dd199275f909301f"
+    ]
+  },
+  {
+    "id": "entity_map_debounce",
+    "type": "trigger",
+    "z": "292e70a6ba25b323",
+    "name": "Debounce entity map refresh",
+    "op1": "",
+    "op2": "",
+    "op1type": "nul",
+    "op2type": "payl",
+    "duration": "2",
+    "extend": true,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "outputs": 1,
+    "x": 790,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_prepare"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_ha_ready_event",
+    "type": "server-events",
+    "z": "292e70a6ba25b323",
+    "name": "Home Assistant connection",
+    "server": "d568dc0e5978b830",
+    "version": 3,
+    "exposeAsEntityConfig": "",
+    "eventType": "home_assistant_client",
+    "eventData": "",
+    "waitForRunning": false,
+    "outputProperties": [
+      {
+        "property": "payload",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "eventData"
+      }
+    ],
+    "x": 230,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_ready"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_prepare",
+    "type": "function",
+    "z": "292e70a6ba25b323",
+    "name": "entity_map_prepare",
+    "func": "// Request the current Home Assistant entity registry over the existing\n// node-red-contrib-home-assistant-websocket connection.\n\nmsg.payload = {\n  protocol: \"websocket\",\n  data: { type: \"config/entity_registry/list\" },\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1060,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_registry_api"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_prepare_states",
+    "type": "function",
+    "z": "292e70a6ba25b323",
+    "name": "entity_map_prepare_states",
+    "func": "// Preserve the entity registry result, then obtain current states through the\n// add-on's existing Supervisor API credentials.\n\nif (!Array.isArray(msg.payload)) {\n  node.error(\"Entity registry response is not an array\", msg);\n  return null;\n}\n\nconst token = env.get(\"SUPERVISOR_TOKEN\");\nif (!token) {\n  node.error(\"SUPERVISOR_TOKEN is unavailable\", msg);\n  return null;\n}\n\nmsg.entityRegistry = msg.payload;\nmsg.method = \"GET\";\nmsg.url = \"http://supervisor/core/api/states\";\nmsg.headers = {\n  Authorization: `Bearer ${token}`,\n  \"Content-Type\": \"application/json\",\n};\nmsg.payload = \"\";\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1560,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_states_api"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_ready",
+    "type": "function",
+    "z": "292e70a6ba25b323",
+    "name": "entity_map_ready",
+    "func": "// Home Assistant client events are emitted through the Events: all node. Only\n// a ready/running transition requests a snapshot; disconnects and retries do\n// not publish an incomplete map.\n\nconst event = msg.payload?.event ||\n  msg.payload?.event_type ||\n  msg.payload?.type ||\n  msg.payload;\nconst ready = new Set([\"connected\", \"states_loaded\", \"running\"]);\nif (!ready.has(String(event))) return null;\n\nmsg.topic = \"entity-map-refresh\";\nmsg.payload = { reason: \"home-assistant-ready\", event: String(event) };\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_debounce"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_registry_api",
+    "type": "ha-api",
+    "z": "292e70a6ba25b323",
+    "name": "Entity registry",
+    "server": "d568dc0e5978b830",
+    "version": 1,
+    "debugenabled": false,
+    "protocol": "websocket",
+    "method": "get",
+    "path": "",
+    "data": "",
+    "dataType": "jsonata",
+    "responseType": "json",
+    "outputProperties": [
+      {
+        "property": "payload",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "results"
+      }
+    ],
+    "x": 1300,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_prepare_states"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_registry_event",
+    "type": "server-events",
+    "z": "292e70a6ba25b323",
+    "name": "Entity registry updated",
+    "server": "d568dc0e5978b830",
+    "version": 3,
+    "exposeAsEntityConfig": "",
+    "eventType": "entity_registry_updated",
+    "eventData": "",
+    "waitForRunning": true,
+    "outputProperties": [
+      {
+        "property": "payload",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "eventData"
+      }
+    ],
+    "x": 460,
+    "y": 2560,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_debounce"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_retain_link",
+    "type": "link out",
+    "z": "292e70a6ba25b323",
+    "name": "MQTT out: Retain TRUE",
+    "mode": "link",
+    "links": [
+      "f658418a7b9b4857"
+    ],
+    "x": 2410,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "l": true,
+    "wires": []
+  },
+  {
+    "id": "entity_map_snapshot",
+    "type": "function",
+    "z": "292e70a6ba25b323",
+    "name": "entity_map_snapshot",
+    "func": "// Join stable LibreCoach MQTT discovery unique IDs to Home Assistant's current\n// entity registry and effective friendly names, then publish one complete\n// retained snapshot. Replacing this payload atomically removes stale mappings.\n\nif (!Array.isArray(msg.entityRegistry)) {\n  node.error(\"Entity map build is missing the entity registry\", msg);\n  return null;\n}\nif (!Array.isArray(msg.payload)) {\n  node.error(\"Entity map build is missing Home Assistant states\", msg);\n  return null;\n}\n\nconst discovery = global.get(\"entityMapDiscovery\", \"file\") || {};\nconst records = Object.values(discovery);\nconst byUniqueId = new Map();\nfor (const record of records) {\n  if (!record || typeof record.unique_id !== \"string\") continue;\n  if (byUniqueId.has(record.unique_id)) {\n    node.error(`Duplicate LibreCoach discovery unique_id ${record.unique_id}`, msg);\n    return null;\n  }\n  byUniqueId.set(record.unique_id, record);\n}\n\nconst registryByUniqueId = new Map();\nfor (const entry of msg.entityRegistry) {\n  if (!entry || typeof entry.unique_id !== \"string\") continue;\n  if (!byUniqueId.has(entry.unique_id)) continue;\n  if (registryByUniqueId.has(entry.unique_id)) {\n    node.error(`Ambiguous Home Assistant unique_id ${entry.unique_id}`, msg);\n    return null;\n  }\n  registryByUniqueId.set(entry.unique_id, entry);\n}\n\nconst states = new Map(msg.payload\n  .filter((state) => state && typeof state.entity_id === \"string\")\n  .map((state) => [state.entity_id, state]));\nconst entities = [];\nfor (const [uniqueId, record] of byUniqueId) {\n  const registry = registryByUniqueId.get(uniqueId);\n  if (!registry || typeof registry.entity_id !== \"string\") continue;\n  const state = states.get(registry.entity_id);\n  const stateName = state?.attributes?.friendly_name;\n  const registryName = typeof registry.name === \"string\" &&\n    registry.name.trim() ? registry.name.trim() : null;\n  const friendlyName = typeof stateName === \"string\" && stateName.trim()\n    ? stateName.trim()\n    : registryName || record.original_name;\n  const component = registry.entity_id.split(\".\")[0];\n  if (!component || !friendlyName) continue;\n\n  entities.push({\n    entity_id: registry.entity_id,\n    friendly_name: friendlyName,\n    name_source: registryName\n      ? \"owner-customized\" : \"librecoach-default\",\n    unique_id: uniqueId,\n    object_id: record.object_id,\n    original_name: record.original_name,\n    component,\n    state_bindings: (record.bindings || []).filter((binding) =>\n      binding.role === \"state\"),\n    command_bindings: (record.bindings || []).filter((binding) =>\n      binding.role === \"command\"),\n    bindings: record.bindings || [],\n    binding_authority: \"librecoach-node-red entity publishers\",\n  });\n}\nentities.sort((a, b) =>\n  a.unique_id.localeCompare(b.unique_id) ||\n  a.entity_id.localeCompare(b.entity_id));\n\nmsg.topic = \"rvc/entity-map\";\nmsg.qos = 1;\nmsg.retain = true;\nmsg.payload = {\n  schema_version: 1,\n  generated_at: new Date().toISOString(),\n  source: {\n    authority: \"librecoach-node-red\",\n    home_assistant: \"entity-registry+states\",\n  },\n  entities,\n};\nnode.status({\n  fill: \"green\",\n  shape: \"dot\",\n  text: `${entities.length} entities`,\n});\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 2140,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_retain_link"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_start",
+    "type": "inject",
+    "z": "292e70a6ba25b323",
+    "name": "Entity map on deploy",
+    "props": [
+      {
+        "p": "payload",
+        "v": "deploy",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 1,
+    "topic": "entity-map-refresh",
+    "x": 460,
+    "y": 2400,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_debounce"
+      ]
+    ]
+  },
+  {
+    "id": "entity_map_states_api",
+    "type": "http request",
+    "z": "292e70a6ba25b323",
+    "name": "Entity map GET /api/states",
+    "method": "use",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 1860,
+    "y": 2480,
+    "g": "bc622f80fe99faa0",
+    "wires": [
+      [
+        "entity_map_snapshot"
+      ]
     ]
   },
   {
@@ -8162,7 +8437,8 @@
       "e38f32a1f6d36bfb",
       "102272ba5b34f5e1",
       "6376d98589368f2b",
-      "5ffb64e684c20ea8"
+      "5ffb64e684c20ea8",
+      "entity_map_retain_link"
     ],
     "x": 1020,
     "y": 300,
