@@ -122,6 +122,31 @@ test("DC component driver PWM uses its explicit raw 0-200 range", () => {
   assert.equal("pwm_duty_cycle" in aboveFull, false);
 });
 
+test("DC component driver status fields follow RV-C section 6.50", () => {
+  const status1 = run("decode_dc_driver_status.js", {
+    dgn: "16F00",
+    dgn_name: "DC_COMPONENT_DRIVER_STATUS_1",
+    data_payload: "01010000007D6508",
+  });
+  assert.equal(status1.output_status, 1);
+  assert.equal(status1.output_on, 1);
+  assert.equal(status1.desired_status, 1);
+  assert.equal(status1.shutdown_status, 2);
+  assert.equal(status1.reset_type, 1);
+  assert.equal(status1.shutdown_reason, 8);
+
+  const status6 = run("decode_dc_driver_status.js", {
+    dgn: "16300",
+    dgn_name: "DC_COMPONENT_DRIVER_STATUS_6",
+    data_payload: "010165C800003100",
+  });
+  assert.equal(status6.direction, 1);
+  assert.equal(status6.driver_pulsing, 1);
+  assert.equal(status6.lock_status, 2);
+  assert.equal(status6.command_timeout, 1);
+  assert.equal(status6.override_input, 1);
+});
+
 test("DC source percentages preserve the RV-C error indication", () => {
   const stateOfCharge = run("decode_dc_source_status.js", {
     dgn: "1FFFC",

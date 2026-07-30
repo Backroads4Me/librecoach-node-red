@@ -359,6 +359,54 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "entity_map_prepare": {
+    "nodeId": "entity_map_prepare",
+    "name": "entity_map_prepare",
+    "sanitizedName": "entity_map_prepare",
+    "fileName": "entity_map_prepare",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "entity_map_prepare_states": {
+    "nodeId": "entity_map_prepare_states",
+    "name": "entity_map_prepare_states",
+    "sanitizedName": "entity_map_prepare_states",
+    "fileName": "entity_map_prepare_states",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "entity_map_ready": {
+    "nodeId": "entity_map_ready",
+    "name": "entity_map_ready",
+    "sanitizedName": "entity_map_ready",
+    "fileName": "entity_map_ready",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
+  "entity_map_snapshot": {
+    "nodeId": "entity_map_snapshot",
+    "name": "entity_map_snapshot",
+    "sanitizedName": "entity_map_snapshot",
+    "fileName": "entity_map_snapshot",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "f3ee6dc19b0155a0": {
     "nodeId": "f3ee6dc19b0155a0",
     "name": "record_unknown_export",

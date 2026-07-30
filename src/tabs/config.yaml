@@ -2420,7 +2420,7 @@
   "y": 1990
   g: bc622f80fe99faa0
   wires:
-    - []
+    - - entity_map_debounce
 - id: ac17a780a9a1dbcf
   type: link in
   z: 292e70a6ba25b323
@@ -3864,6 +3864,7 @@
     - 102272ba5b34f5e1
     - 6376d98589368f2b
     - 5ffb64e684c20ea8
+    - entity_map_retain_link
   x: 1020
   "y": 300
   g: 3c819b7900145438
@@ -3917,3 +3918,189 @@
   g: 1250cab4e8633d65
   wires:
     - - 880ca1b6bf10b8d2
+- id: entity_map_start
+  type: inject
+  z: 292e70a6ba25b323
+  name: Entity map on deploy
+  props:
+    - p: payload
+      v: deploy
+      vt: str
+  repeat: ""
+  crontab: ""
+  once: true
+  onceDelay: 1
+  topic: entity-map-refresh
+  x: 170
+  "y": 2240
+  wires:
+    - - entity_map_debounce
+- id: entity_map_ha_ready_event
+  type: server-events
+  z: 292e70a6ba25b323
+  name: Home Assistant connection
+  server: d568dc0e5978b830
+  version: 3
+  eventType: home_assistant_client
+  eventData: ""
+  waitForRunning: false
+  outputProperties:
+    - property: payload
+      propertyType: msg
+      value: ""
+      valueType: eventData
+  exposeAsEntityConfig: ""
+  x: 190
+  "y": 2300
+  wires:
+    - - entity_map_ready
+- id: entity_map_ready
+  type: function
+  z: 292e70a6ba25b323
+  name: entity_map_ready
+  func: ""
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 450
+  "y": 2300
+  wires:
+    - - entity_map_debounce
+- id: entity_map_registry_event
+  type: server-events
+  z: 292e70a6ba25b323
+  name: Entity registry updated
+  server: d568dc0e5978b830
+  version: 3
+  eventType: entity_registry_updated
+  eventData: ""
+  waitForRunning: true
+  outputProperties:
+    - property: payload
+      propertyType: msg
+      value: ""
+      valueType: eventData
+  exposeAsEntityConfig: ""
+  x: 190
+  "y": 2360
+  wires:
+    - - entity_map_debounce
+- id: entity_map_debounce
+  type: trigger
+  z: 292e70a6ba25b323
+  name: Debounce entity map refresh
+  op1: ""
+  op2: ""
+  op1type: nul
+  op2type: payl
+  duration: "2"
+  extend: true
+  overrideDelay: false
+  units: s
+  reset: ""
+  bytopic: all
+  outputs: 1
+  x: 730
+  "y": 2300
+  wires:
+    - - entity_map_prepare
+- id: entity_map_prepare
+  type: function
+  z: 292e70a6ba25b323
+  name: entity_map_prepare
+  func: ""
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 990
+  "y": 2300
+  wires:
+    - - entity_map_registry_api
+- id: entity_map_registry_api
+  type: ha-api
+  z: 292e70a6ba25b323
+  name: Entity registry
+  server: d568dc0e5978b830
+  version: 1
+  debugenabled: false
+  protocol: websocket
+  method: get
+  path: ""
+  data: ""
+  dataType: jsonata
+  responseType: json
+  outputProperties:
+    - property: payload
+      propertyType: msg
+      value: ""
+      valueType: results
+  x: 1210
+  "y": 2300
+  wires:
+    - - entity_map_prepare_states
+- id: entity_map_prepare_states
+  type: function
+  z: 292e70a6ba25b323
+  name: entity_map_prepare_states
+  func: ""
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1450
+  "y": 2300
+  wires:
+    - - entity_map_states_api
+- id: entity_map_states_api
+  type: http request
+  z: 292e70a6ba25b323
+  name: Entity map GET /api/states
+  method: use
+  ret: obj
+  paytoqs: ignore
+  url: ""
+  tls: ""
+  persist: false
+  proxy: ""
+  insecureHTTPParser: false
+  authType: ""
+  senderr: false
+  headers: []
+  x: 1700
+  "y": 2300
+  wires:
+    - - entity_map_snapshot
+- id: entity_map_snapshot
+  type: function
+  z: 292e70a6ba25b323
+  name: entity_map_snapshot
+  func: ""
+  outputs: 1
+  timeout: 0
+  noerr: 0
+  initialize: ""
+  finalize: ""
+  libs: []
+  x: 1930
+  "y": 2300
+  wires:
+    - - entity_map_retain_link
+- id: entity_map_retain_link
+  type: link out
+  z: 292e70a6ba25b323
+  name: "MQTT out: Retain TRUE"
+  mode: link
+  links:
+    - f658418a7b9b4857
+  x: 2160
+  "y": 2300
+  l: true
+  wires: []
