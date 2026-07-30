@@ -6,7 +6,7 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 103
+- **Node count:** 104
 - **Function nodes:** 31
 - **UI template nodes:** 0
 - **Subflow instances:** 0
@@ -340,10 +340,10 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_2110ea4d0b85["CAN in"]:::fn
-  n_21dfe84b8ada["21dfe84b8adafa6e"]:::fn
+  n_501fc880dc7b["dgn_filter"]:::fn
   n_8d7d5d3ea117["decode_rvc_can"]:::fn
   n_2110ea4d0b85 -->|out 0| n_8d7d5d3ea117
-  n_8d7d5d3ea117 -->|out 0| n_21dfe84b8ada
+  n_8d7d5d3ea117 -->|out 0| n_501fc880dc7b
 ```
 
 #### Msg contract
@@ -356,7 +356,7 @@ downstream routing (dgn_name) and decoding (data_payload).
 
 #### Downstream
 - **Output 0:**
-  - 21dfe84b8adafa6e (rbe) — this tab
+  - dgn_filter (switch) — this tab
 
 ---
 
@@ -1270,3 +1270,4 @@ _None._
 - a6594a9464d8fe4e (switch) — id `a6594a9464d8fe4e`, in: 1, out: 6
 - c78420a075d43408 (json) — id `c78420a075d43408`, in: 1, out: 1
 - ceee39e4b10d6030 (group) — id `ceee39e4b10d6030`, in: 0, out: 0
+- dgn_filter (switch) — id `501fc880dc7bbf3f`, in: 1, out: 1

@@ -122,6 +122,21 @@ test("DC component driver PWM uses its explicit raw 0-200 range", () => {
   assert.equal("pwm_duty_cycle" in aboveFull, false);
 });
 
+test("DC source percentages preserve the RV-C error indication", () => {
+  const stateOfCharge = run("decode_dc_source_status.js", {
+    dgn: "1FFFC",
+    data_payload: "01000000FB000000",
+  });
+  const sourceHealth = run("decode_dc_source_status.js", {
+    dgn: "1FFFB",
+    data_payload: "0100FB0000FB0000",
+  });
+
+  assert.equal(stateOfCharge.state_of_charge_percent, "Error");
+  assert.equal(sourceHealth.state_of_health_percent, "Error");
+  assert.equal(sourceHealth.relative_capacity_percent, "Error");
+});
+
 for (const item of [
   ["ATS AC", "decode_ats_ac_status.js", "1FEA7", "FA00000000000000"],
   ["inverter", "decode_inverter_dc_status.js", "1FF8D", "FA0000000000"],
