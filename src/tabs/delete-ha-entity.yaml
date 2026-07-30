@@ -9,8 +9,8 @@
   type: group
   z: 222c995b7790b8de
   name: Delete Home Assistant Entity
-  x: 94
-  "y": 199
+  x: 84
+  "y": 179
   style:
     stroke: "#777777"
     label: true
@@ -35,8 +35,8 @@
   topic: homeassistant/climate/microair_78_e3_6d_fc_5e_ce_zone_3/config
   payload: ""
   payloadType: str
-  x: 200
-  "y": 360
+  x: 190
+  "y": 340
   g: 04e375b0c463df72
   wires:
     - - d38c75bc1474be23
@@ -56,8 +56,8 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 200
-  "y": 300
+  x: 190
+  "y": 280
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
@@ -81,8 +81,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 440
-  "y": 240
+  x: 430
+  "y": 220
   g: 04e375b0c463df72
   wires:
     - - d38c75bc1474be23
@@ -102,8 +102,8 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 210
-  "y": 240
+  x: 200
+  "y": 220
   g: 04e375b0c463df72
   wires:
     - - a2d2ed96ff4615f9
@@ -114,8 +114,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 730
-  "y": 240
+  x: 720
+  "y": 220
   g: 04e375b0c463df72
   l: true
   wires: []
@@ -128,6 +128,6 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 78
-  x: 350
+  x: 340
   "y": 80
   wires: []

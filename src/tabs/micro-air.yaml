@@ -11,7 +11,7 @@
   name: Reset Microair filters
   links:
     - cdc4754f4c43430d
-  x: 230
+  x: 210
   "y": 460
   g: fe7cf55a75689b88
   l: true
@@ -30,7 +30,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1400
+  x: 1380
   "y": 580
   g: cd4c55cd4f675905
   wires:
@@ -110,7 +110,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 630
+  x: 610
   "y": 300
   g: fe7cf55a75689b88
   wires:
@@ -131,7 +131,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1150
+  x: 1130
   "y": 580
   g: cd4c55cd4f675905
   wires:
@@ -143,7 +143,7 @@
   mode: link
   links:
     - 74329f13cbbc528a
-  x: 1130
+  x: 1110
   "y": 720
   g: fe7cf55a75689b88
   l: true
@@ -155,7 +155,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 910
+  x: 890
   "y": 320
   g: fe7cf55a75689b88
   l: true
@@ -211,7 +211,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 630
+  x: 610
   "y": 560
   g: fe7cf55a75689b88
   wires:
@@ -271,7 +271,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1130
+  x: 1110
   "y": 420
   g: fe7cf55a75689b88
   wires:
@@ -283,7 +283,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1390
+  x: 1370
   "y": 400
   g: fe7cf55a75689b88
   l: true
@@ -294,7 +294,7 @@
   name: Reset Micro-Air
   links:
     - 1e244bad0304bb74
-  x: 1140
+  x: 1120
   "y": 520
   g: cd4c55cd4f675905
   l: true
@@ -314,7 +314,7 @@
   checkall: "true"
   repair: false
   outputs: 2
-  x: 350
+  x: 330
   "y": 700
   g: fe7cf55a75689b88
   wires:
@@ -412,7 +412,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 630
+  x: 610
   "y": 400
   g: fe7cf55a75689b88
   wires:
@@ -425,7 +425,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1130
+  x: 1110
   "y": 680
   g: fe7cf55a75689b88
   l: true
@@ -498,7 +498,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 880
+  x: 860
   "y": 400
   g: fe7cf55a75689b88
   wires:
@@ -510,7 +510,7 @@
   name: CONFIG_GLOBALS
   links:
     - 88e5fa035bedb48c
-  x: 230
+  x: 210
   "y": 300
   g: fe7cf55a75689b88
   l: true
@@ -855,7 +855,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1130
+  x: 1110
   "y": 380
   g: fe7cf55a75689b88
   wires:
@@ -864,7 +864,7 @@
   type: group
   z: e3804d2dd0b81928
   name: Rest unique list
-  x: 1034
+  x: 1014
   "y": 479
   g: fe7cf55a75689b88
   style:
@@ -881,7 +881,7 @@
   mode: link
   links:
     - 1d411b577497f7ae
-  x: 900
+  x: 880
   "y": 280
   g: fe7cf55a75689b88
   l: true
@@ -898,7 +898,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 200
   "y": 400
   g: fe7cf55a75689b88
   wires:
@@ -919,7 +919,7 @@
   drop: false
   allowrate: false
   outputs: 1
-  x: 420
+  x: 400
   "y": 300
   g: fe7cf55a75689b88
   wires:
@@ -1119,7 +1119,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 580
+  x: 560
   "y": 700
   g: fe7cf55a75689b88
   wires:
@@ -1350,7 +1350,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 860
+  x: 840
   "y": 700
   g: fe7cf55a75689b88
   wires:
@@ -1367,7 +1367,7 @@
   septopics: true
   property: payload
   topi: payload.zone
-  x: 430
+  x: 410
   "y": 400
   g: fe7cf55a75689b88
   wires:
@@ -1384,7 +1384,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 200
+  x: 180
   "y": 700
   g: fe7cf55a75689b88
   wires:
@@ -1406,14 +1406,14 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 150
-  x: 390
+  x: 370
   "y": 120
   wires: []
 - id: fe7cf55a75689b88
   type: group
   z: e3804d2dd0b81928
   name: Micro-Air status
-  x: 114
+  x: 94
   "y": 239
   style:
     stroke: "#777777"
@@ -1453,7 +1453,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 200
   "y": 560
   g: fe7cf55a75689b88
   wires:

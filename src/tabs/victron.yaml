@@ -20,7 +20,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 280
+  x: 260
   "y": 700
   g: 8aac091f0fffbf22
   wires:
@@ -37,7 +37,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 210
+  x: 190
   "y": 840
   g: 8aac091f0fffbf22
   wires:
@@ -131,7 +131,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 760
+  x: 740
   "y": 1020
   g: 8aac091f0fffbf22
   wires: []
@@ -146,7 +146,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 410
+  x: 390
   "y": 360
   g: 8aac091f0fffbf22
   wires:
@@ -166,7 +166,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 240
+  x: 220
   "y": 920
   g: 8aac091f0fffbf22
   wires:
@@ -177,7 +177,7 @@
   name: Reset Victron
   links:
     - 1e244bad0304bb74
-  x: 1050
+  x: 1030
   "y": 960
   g: 3ffa68cfd2195db1
   l: true
@@ -195,7 +195,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 240
+  x: 220
   "y": 1020
   g: 8aac091f0fffbf22
   wires:
@@ -212,7 +212,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 200
   "y": 320
   g: 8aac091f0fffbf22
   wires:
@@ -284,7 +284,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 830
+  x: 810
   "y": 660
   g: 8aac091f0fffbf22
   wires:
@@ -294,7 +294,7 @@
   type: group
   z: 1fde0c4ffb03727e
   name: Rest unique list
-  x: 954
+  x: 934
   "y": 919
   g: 8aac091f0fffbf22
   style:
@@ -317,7 +317,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 174
-  x: 350
+  x: 330
   "y": 120
   wires: []
 - id: 48292ec85eb70ee5
@@ -410,7 +410,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 920
+  x: 900
   "y": 420
   g: 8aac091f0fffbf22
   wires:
@@ -430,7 +430,7 @@
   once: true
   onceDelay: "0.3"
   topic: ""
-  x: 220
+  x: 200
   "y": 560
   g: 8aac091f0fffbf22
   wires:
@@ -450,7 +450,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 340
+  x: 320
   "y": 740
   g: 8aac091f0fffbf22
   wires:
@@ -470,7 +470,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 400
+  x: 380
   "y": 780
   g: 8aac091f0fffbf22
   wires:
@@ -488,7 +488,7 @@
   correl: ""
   expiry: ""
   broker: 68237e1473ec01aa
-  x: 1250
+  x: 1230
   "y": 360
   g: 8aac091f0fffbf22
   wires: []
@@ -500,7 +500,7 @@
   links:
     - db3ce2f66f852ca6
     - b1b68ff387e01a3a
-  x: 1270
+  x: 1250
   "y": 500
   g: 8aac091f0fffbf22
   l: true
@@ -521,7 +521,7 @@
   drop: false
   allowrate: false
   outputs: 1
-  x: 580
+  x: 560
   "y": 380
   g: 8aac091f0fffbf22
   wires:
@@ -530,7 +530,7 @@
   type: group
   z: 1fde0c4ffb03727e
   name: Victron GX device configuration
-  x: 114
+  x: 94
   "y": 259
   style:
     stroke: "#777777"
@@ -579,7 +579,7 @@
   name: CONFIG_GLOBALS
   links:
     - 88e5fa035bedb48c
-  x: 230
+  x: 210
   "y": 420
   g: 8aac091f0fffbf22
   l: true
@@ -598,7 +598,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 210
+  x: 190
   "y": 500
   g: 8aac091f0fffbf22
   wires:
@@ -628,7 +628,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1310
+  x: 1290
   "y": 1020
   g: 3ffa68cfd2195db1
   wires:
@@ -644,7 +644,7 @@
   septopics: true
   property: payload
   topi: topic
-  x: 410
+  x: 390
   "y": 300
   g: 8aac091f0fffbf22
   wires:
@@ -660,7 +660,7 @@
   septopics: true
   property: payload
   topi: topic
-  x: 450
+  x: 430
   "y": 1020
   g: 8aac091f0fffbf22
   wires:
@@ -676,7 +676,7 @@
   septopics: true
   property: payload
   topi: topic
-  x: 370
+  x: 350
   "y": 500
   g: 8aac091f0fffbf22
   wires:
@@ -687,7 +687,7 @@
   name: Reset Victron filters
   links:
     - 71ac45fb64bf70c9
-  x: 230
+  x: 210
   "y": 1100
   g: 8aac091f0fffbf22
   l: true
@@ -700,7 +700,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1290
+  x: 1270
   "y": 580
   g: 8aac091f0fffbf22
   l: true
@@ -718,7 +718,7 @@
   correl: ""
   expiry: ""
   broker: 68237e1473ec01aa
-  x: 1250
+  x: 1230
   "y": 720
   g: 8aac091f0fffbf22
   wires: []
@@ -737,7 +737,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1070
+  x: 1050
   "y": 1020
   g: 3ffa68cfd2195db1
   wires:
@@ -1106,7 +1106,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 560
+  x: 540
   "y": 500
   g: 8aac091f0fffbf22
   wires:
@@ -1178,7 +1178,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 820
+  x: 800
   "y": 500
   g: 8aac091f0fffbf22
   wires:
@@ -1806,7 +1806,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1040
+  x: 1020
   "y": 540
   g: 8aac091f0fffbf22
   wires:
@@ -1967,7 +1967,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 820
+  x: 800
   "y": 580
   g: 8aac091f0fffbf22
   wires:
@@ -1982,7 +1982,7 @@
   chunk: false
   sendError: false
   allProps: false
-  x: 490
+  x: 470
   "y": 920
   g: 8aac091f0fffbf22
   wires:
@@ -2050,7 +2050,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 750
+  x: 730
   "y": 920
   g: 8aac091f0fffbf22
   wires: []
@@ -2060,7 +2060,7 @@
   name: Reset Victron filters
   links:
     - 71ac45fb64bf70c9
-  x: 230
+  x: 210
   "y": 600
   g: 8aac091f0fffbf22
   l: true
@@ -2090,7 +2090,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 620
+  x: 600
   "y": 300
   g: 8aac091f0fffbf22
   wires: []
@@ -2101,7 +2101,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1290
+  x: 1270
   "y": 420
   g: 8aac091f0fffbf22
   l: true
@@ -2130,7 +2130,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 840
+  x: 820
   "y": 720
   g: 8aac091f0fffbf22
   wires:
@@ -2231,7 +2231,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 840
+  x: 820
   "y": 840
   g: 8aac091f0fffbf22
   wires:
@@ -2244,7 +2244,7 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1290
+  x: 1270
   "y": 840
   g: 8aac091f0fffbf22
   l: true
@@ -2264,7 +2264,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 220
+  x: 200
   "y": 660
   g: 8aac091f0fffbf22
   wires:

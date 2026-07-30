@@ -749,7 +749,7 @@
   checkall: "true"
   repair: false
   outputs: 9
-  x: 410
+  x: 370
   "y": 380
   wires:
     - - b07052c69f7b857c

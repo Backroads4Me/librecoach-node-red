@@ -112,7 +112,7 @@
     "type": "function",
     "z": "3e5f038a4f5a8b9a",
     "name": "decode_dc_source_status",
-    "func": "// Status Updater for DC Source\n// Decodes DC_SOURCE_STATUS_1/2/3 messages (1FFFD/C/B)\n\n// Decodes a bitfield from within a byte\nfunction decodeBits(byte, startBit, endBit) {\n  const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n  return (byte & mask) >> startBit;\n}\n\n// Decodes the DC Instance (Byte 0)\nfunction decodeDCInstance(value) {\n  const dcInstances = {\n    0: \"Invalid\",\n    1: \"Main House Battery Bank\",\n    2: \"Chassis Start Battery\",\n    3: \"Secondary House Battery Bank\",\n    4: \"Generator Starter Battery\",\n  };\n  // Per the spec, 5-250 are valid \"Other\" instances\n  if (value >= 5 && value <= 250) {\n    return `Other DC Instance ${value}`;\n  }\n  return dcInstances[value] || `Unknown DC Instance ${value}`;\n}\n\n// Decodes the Device Priority (Byte 1)\nfunction decodeDevicePriority(value) {\n  const priorities = {\n    20: \"Voltmeter\",\n    40: \"Voltmeter/Ammeter\",\n    60: \"Inverter\",\n    80: \"Charger\",\n    100: \"Inverter/Charger\",\n    120: \"Battery SOC/BMS Device\",\n  };\n  return priorities[value] || `Unknown Priority ${value}`;\n}\n\n// Decodes DC Voltage (uint16)\nfunction decodeDCVoltage(value) {\n  if (value <= 64000) return parseFloat((value * 0.05).toFixed(2));\n  if (value === 65535) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// RV-C Table 5.3 — amperage, uint32: 0.001 A/bit, offset-encoded with 0 A at\n// raw 0x77359400 (2,000,000,000). Range -2,000,000 to 2,221,081.2 A.\n// NOT two's complement — negative current is a raw value below the zero point.\n// Callers must pass an unsigned value; see the >>> 0 at the reconstruction.\n// Special values per Table 3.2.3b.\nfunction decodeDCCurrent32bit(raw) {\n  if (raw === 4294967295) return \"Not Available\";\n  if (raw === 4294967294) return \"Out of Range\";\n  if (raw === 4294967293) return \"Reserved\";\n\n  const amps = raw * 0.001 - 2000000;\n  if (amps < -2000000 || amps > 2221081.2) return \"Invalid\";\n\n  return parseFloat(amps.toFixed(3));\n}\n\n// Decodes Temperature (uint16, 0.03125°C/bit, Kelvin base, output °F)\nfunction decodeTemperature(value) {\n  if (value <= 64000) {\n    const tempC = value * 0.03125 - 273;\n    return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));\n  }\n  if (value === 65535) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// Decodes State of Charge / Health / Relative Capacity (uint8)\nfunction decodePercentage(value) {\n  // SOC, health, and relative capacity are fractions of their full value, so\n  // these DGN fields stop at raw 200 = 100%.\n  if (value <= 200) return parseFloat((value * 0.5).toFixed(1));\n  if (value === 255) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// === DGN-Specific Decoders ===\n\nfunction decodeDCSourceStatus1(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_1\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_1\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_1): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n\n  const voltage = (data[3] << 8) | data[2];\n  result.dc_voltage_V = decodeDCVoltage(voltage);\n\n  // JS bitwise operators yield a signed int32; >>> 0 restores the unsigned\n  // value the uint32 amperage helper expects.\n  const current =\n    ((data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4]) >>> 0;\n  result.dc_current_A = decodeDCCurrent32bit(current);\n\n  return result;\n}\n\nfunction decodeDCSourceStatus2(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_2\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_2\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_2): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n\n  const temp = (data[3] << 8) | data[2];\n  result.source_temperature = decodeTemperature(temp);\n\n  result.state_of_charge_percent = decodePercentage(data[4]);\n\n  const time = (data[6] << 8) | data[5];\n  result.time_remaining_min = time <= 64000 ? time : \"Not Available\";\n\n  const interp = decodeBits(data[7], 0, 1);\n  const interpMap = {\n    0: \"Time to Empty\",\n    1: \"Time to Full\",\n    3: \"Not Available\",\n  };\n  result.time_remaining_interpretation = interpMap[interp] || \"Reserved\";\n\n  return result;\n}\n\nfunction decodeDCSourceStatus3(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_3\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_3\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_3): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n  result.state_of_health_percent = decodePercentage(data[2]);\n\n  const cap = (data[4] << 8) | data[3];\n  result.capacity_remaining_Ah = cap <= 64000 ? cap : \"Not Available\";\n\n  result.relative_capacity_percent = decodePercentage(data[5]);\n\n  const ripple = (data[7] << 8) | data[6];\n  result.ac_rms_ripple_mV = ripple <= 65530 ? ripple : \"Not Available\";\n\n  return result;\n}\n\n// === Main Router Function ===\n\nfunction decodeDCSourceMessage(dgn, data) {\n  switch (dgn) {\n    case \"1FFFD\":\n      return decodeDCSourceStatus1(data);\n    case \"1FFFC\":\n      return decodeDCSourceStatus2(data);\n    case \"1FFFB\":\n      return decodeDCSourceStatus3(data);\n    default:\n      return {\n        dgn: dgn,\n        error: `Unsupported DGN for DC_SOURCE_STATUS decoding.`,\n      };\n  }\n}\n\n// === Main Node-RED Logic ===\n\nconst incomingPayload = msg.payload;\nif (!incomingPayload || !incomingPayload.dgn || !incomingPayload.data_payload) {\n  node.warn(\"Missing required fields: dgn and/or data_payload\");\n  return null;\n}\n\n// Convert hex payload to byte array\nconst dataBytes = [];\nfor (let i = 0; i < incomingPayload.data_payload.length; i += 2) {\n  dataBytes.push(\n    parseInt(incomingPayload.data_payload.substring(i, i + 2), 16),\n  );\n}\n\n// Decode the message by routing to the correct function based on DGN\nconst decodedData = decodeDCSourceMessage(incomingPayload.dgn, dataBytes);\n\n// Handle null return (invalid instance filtered out)\nif (!decodedData) {\n  return null;\n}\n\n// Merge the original payload and the newly decoded data\nmsg.payload = {\n  ...incomingPayload,\n  ...decodedData,\n};\n\n// Clean up by removing the raw hex payload\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
+    "func": "// Status Updater for DC Source\n// Decodes DC_SOURCE_STATUS_1/2/3 messages (1FFFD/C/B)\n\n// Decodes a bitfield from within a byte\nfunction decodeBits(byte, startBit, endBit) {\n  const mask = ((1 << (endBit - startBit + 1)) - 1) << startBit;\n  return (byte & mask) >> startBit;\n}\n\n// Decodes the DC Instance (Byte 0)\nfunction decodeDCInstance(value) {\n  const dcInstances = {\n    0: \"Invalid\",\n    1: \"Main House Battery Bank\",\n    2: \"Chassis Start Battery\",\n    3: \"Secondary House Battery Bank\",\n    4: \"Generator Starter Battery\",\n  };\n  // Per the spec, 5-250 are valid \"Other\" instances\n  if (value >= 5 && value <= 250) {\n    return `Other DC Instance ${value}`;\n  }\n  return dcInstances[value] || `Unknown DC Instance ${value}`;\n}\n\n// Decodes the Device Priority (Byte 1)\nfunction decodeDevicePriority(value) {\n  const priorities = {\n    20: \"Voltmeter\",\n    40: \"Voltmeter/Ammeter\",\n    60: \"Inverter\",\n    80: \"Charger\",\n    100: \"Inverter/Charger\",\n    120: \"Battery SOC/BMS Device\",\n  };\n  return priorities[value] || `Unknown Priority ${value}`;\n}\n\n// Decodes DC Voltage (uint16)\nfunction decodeDCVoltage(value) {\n  if (value <= 64000) return parseFloat((value * 0.05).toFixed(2));\n  if (value === 65535) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// RV-C Table 5.3 — amperage, uint32: 0.001 A/bit, offset-encoded with 0 A at\n// raw 0x77359400 (2,000,000,000). Range -2,000,000 to 2,221,081.2 A.\n// NOT two's complement — negative current is a raw value below the zero point.\n// Callers must pass an unsigned value; see the >>> 0 at the reconstruction.\n// Special values per Table 3.2.3b.\nfunction decodeDCCurrent32bit(raw) {\n  if (raw === 4294967295) return \"Not Available\";\n  if (raw === 4294967294) return \"Out of Range\";\n  if (raw === 4294967293) return \"Reserved\";\n\n  const amps = raw * 0.001 - 2000000;\n  if (amps < -2000000 || amps > 2221081.2) return \"Invalid\";\n\n  return parseFloat(amps.toFixed(3));\n}\n\n// Decodes Temperature (uint16, 0.03125°C/bit, Kelvin base, output °F)\nfunction decodeTemperature(value) {\n  if (value <= 64000) {\n    const tempC = value * 0.03125 - 273;\n    return parseFloat(((tempC * 9) / 5 + 32).toFixed(1));\n  }\n  if (value === 65535) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// Decodes State of Charge / Health / Relative Capacity (uint8)\nfunction decodePercentage(value) {\n  // SOC, health, and relative capacity are fractions of their full value, so\n  // these DGN fields stop at raw 200 = 100%.\n  if (value <= 200) return parseFloat((value * 0.5).toFixed(1));\n  if (value === 251) return \"Error\";\n  if (value === 255) return \"Not Available\";\n  return \"Invalid\";\n}\n\n// === DGN-Specific Decoders ===\n\nfunction decodeDCSourceStatus1(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_1\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_1\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_1): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n\n  const voltage = (data[3] << 8) | data[2];\n  result.dc_voltage_V = decodeDCVoltage(voltage);\n\n  // JS bitwise operators yield a signed int32; >>> 0 restores the unsigned\n  // value the uint32 amperage helper expects.\n  const current =\n    ((data[7] << 24) | (data[6] << 16) | (data[5] << 8) | data[4]) >>> 0;\n  result.dc_current_A = decodeDCCurrent32bit(current);\n\n  return result;\n}\n\nfunction decodeDCSourceStatus2(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_2\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_2\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_2): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n\n  const temp = (data[3] << 8) | data[2];\n  result.source_temperature = decodeTemperature(temp);\n\n  result.state_of_charge_percent = decodePercentage(data[4]);\n\n  const time = (data[6] << 8) | data[5];\n  result.time_remaining_min = time <= 64000 ? time : \"Not Available\";\n\n  const interp = decodeBits(data[7], 0, 1);\n  const interpMap = {\n    0: \"Time to Empty\",\n    1: \"Time to Full\",\n    3: \"Not Available\",\n  };\n  result.time_remaining_interpretation = interpMap[interp] || \"Reserved\";\n\n  return result;\n}\n\nfunction decodeDCSourceStatus3(data) {\n  if (data.length < 8) return { error: \"Invalid data length for STATUS_3\" };\n\n  const result = { dgn_name: \"DC_SOURCE_STATUS_3\" };\n\n  result.instance = data[0];\n  result.instance_name = decodeDCInstance(data[0]);\n\n  // Validate instance - DC Source valid instances are 1-250\n  if (result.instance < 1 || result.instance > 250) {\n    node.warn(\n      `Invalid DC source instance (STATUS_3): ${result.instance} (${result.instance_name}) - message ignored`,\n    );\n    return null;\n  }\n\n  result.device_priority = decodeDevicePriority(data[1]);\n  result.state_of_health_percent = decodePercentage(data[2]);\n\n  const cap = (data[4] << 8) | data[3];\n  result.capacity_remaining_Ah = cap <= 64000 ? cap : \"Not Available\";\n\n  result.relative_capacity_percent = decodePercentage(data[5]);\n\n  const ripple = (data[7] << 8) | data[6];\n  result.ac_rms_ripple_mV = ripple <= 65530 ? ripple : \"Not Available\";\n\n  return result;\n}\n\n// === Main Router Function ===\n\nfunction decodeDCSourceMessage(dgn, data) {\n  switch (dgn) {\n    case \"1FFFD\":\n      return decodeDCSourceStatus1(data);\n    case \"1FFFC\":\n      return decodeDCSourceStatus2(data);\n    case \"1FFFB\":\n      return decodeDCSourceStatus3(data);\n    default:\n      return {\n        dgn: dgn,\n        error: `Unsupported DGN for DC_SOURCE_STATUS decoding.`,\n      };\n  }\n}\n\n// === Main Node-RED Logic ===\n\nconst incomingPayload = msg.payload;\nif (!incomingPayload || !incomingPayload.dgn || !incomingPayload.data_payload) {\n  node.warn(\"Missing required fields: dgn and/or data_payload\");\n  return null;\n}\n\n// Convert hex payload to byte array\nconst dataBytes = [];\nfor (let i = 0; i < incomingPayload.data_payload.length; i += 2) {\n  dataBytes.push(\n    parseInt(incomingPayload.data_payload.substring(i, i + 2), 16),\n  );\n}\n\n// Decode the message by routing to the correct function based on DGN\nconst decodedData = decodeDCSourceMessage(incomingPayload.dgn, dataBytes);\n\n// Handle null return (invalid instance filtered out)\nif (!decodedData) {\n  return null;\n}\n\n// Merge the original payload and the newly decoded data\nmsg.payload = {\n  ...incomingPayload,\n  ...decodedData,\n};\n\n// Clean up by removing the raw hex payload\ndelete msg.payload.data_payload;\n\nreturn msg;\n",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -148,8 +148,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 220,
-    "y": 1300,
+    "x": 210,
+    "y": 1630,
     "g": "f81ca31c89243206",
     "wires": [
       [
@@ -165,8 +165,8 @@
     "links": [
       "88e5fa035bedb48c"
     ],
-    "x": 1110,
-    "y": 1780,
+    "x": 1100,
+    "y": 2110,
     "g": "9e47041ed71c4494",
     "l": true,
     "wires": [
@@ -184,8 +184,8 @@
     "links": [
       "fbc5efde2c447eda"
     ],
-    "x": 1800,
-    "y": 420,
+    "x": 1200,
+    "y": 730,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -224,8 +224,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1210,
-    "y": 620,
+    "x": 390,
+    "y": 930,
     "g": "ceee39e4b10d6030",
     "wires": []
   },
@@ -251,8 +251,8 @@
     "type": "group",
     "z": "222c995b7790b8de",
     "name": "Delete Home Assistant Entity",
-    "x": 94,
-    "y": 199,
+    "x": 84,
+    "y": 179,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -286,8 +286,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1140,
-    "y": 1020,
+    "x": 1130,
+    "y": 1340,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -357,8 +357,8 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 1530,
-    "y": 660,
+    "x": 930,
+    "y": 970,
     "g": "f09f79586501cb0b",
     "wires": []
   },
@@ -374,8 +374,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 2140,
-    "y": 540,
+    "x": 1540,
+    "y": 850,
     "g": "9dd6a98018824be9",
     "wires": [
       []
@@ -409,8 +409,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 730,
-    "y": 1300,
+    "x": 720,
+    "y": 1630,
     "g": "f81ca31c89243206",
     "l": true,
     "wires": []
@@ -436,7 +436,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 280,
+    "x": 260,
     "y": 700,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -458,7 +458,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 210,
+    "x": 190,
     "y": 840,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -505,8 +505,8 @@
     "once": true,
     "onceDelay": 0.1,
     "topic": "",
-    "x": 1180,
-    "y": 400,
+    "x": 560,
+    "y": 670,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -589,8 +589,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "Recording unknown DGNs",
-    "x": 94,
-    "y": 1659,
+    "x": 84,
+    "y": 1989,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -617,7 +617,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 760,
+    "x": 740,
     "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": []
@@ -666,7 +666,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 410,
+    "x": 390,
     "y": 360,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -696,7 +696,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 240,
+    "x": 220,
     "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -718,7 +718,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 190,
+    "x": 180,
     "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -741,8 +741,8 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 730,
-    "y": 600,
+    "x": 1560,
+    "y": 380,
     "g": "3c819b7900145438",
     "wires": []
   },
@@ -795,8 +795,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 450,
-    "y": 1480,
+    "x": 440,
+    "y": 1830,
     "g": "f67b4a374db41b27",
     "wires": [
       [
@@ -827,7 +827,7 @@
     "links": [
       "cdc4754f4c43430d"
     ],
-    "x": 230,
+    "x": 210,
     "y": 460,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -848,8 +848,8 @@
       "2343c8c12f2081fa",
       "a58b5f05c8346eab"
     ],
-    "x": 1420,
-    "y": 1160,
+    "x": 1410,
+    "y": 1480,
     "g": "8ef86a1c4b59d8e1",
     "l": true,
     "wires": []
@@ -884,7 +884,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1400,
+    "x": 1380,
     "y": 580,
     "g": "cd4c55cd4f675905",
     "wires": [
@@ -904,8 +904,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 180,
-    "y": 680,
+    "x": 170,
+    "y": 460,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -926,8 +926,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 990,
-    "y": 480,
+    "x": 170,
+    "y": 790,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -947,8 +947,8 @@
     "septopics": true,
     "property": "payload",
     "topi": "filter_key",
-    "x": 1350,
-    "y": 480,
+    "x": 710,
+    "y": 790,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -966,7 +966,7 @@
     "links": [
       "1e244bad0304bb74"
     ],
-    "x": 1050,
+    "x": 1030,
     "y": 960,
     "g": "3ffa68cfd2195db1",
     "l": true,
@@ -988,7 +988,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 460,
+    "x": 450,
     "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -1069,7 +1069,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 630,
+    "x": 610,
     "y": 300,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -1094,7 +1094,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 240,
+    "x": 220,
     "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -1116,7 +1116,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 220,
+    "x": 200,
     "y": 320,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -1151,7 +1151,7 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 800,
+    "x": 830,
     "y": 1000,
     "g": "7183c5f0ad762adb",
     "wires": []
@@ -1210,7 +1210,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1150,
+    "x": 1130,
     "y": 580,
     "g": "cd4c55cd4f675905",
     "wires": [
@@ -1231,7 +1231,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 830,
+    "x": 810,
     "y": 660,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -1251,7 +1251,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "noteHeight": 126,
-    "x": 330,
+    "x": 310,
     "y": 100,
     "wires": []
   },
@@ -1267,8 +1267,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1570,
-    "y": 300,
+    "x": 970,
+    "y": 610,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -1289,8 +1289,8 @@
       "00b1afc9a96aca8e",
       "cd5a041811bc2c9a"
     ],
-    "x": 1810,
-    "y": 380,
+    "x": 1210,
+    "y": 690,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -1309,7 +1309,7 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 730,
+    "x": 720,
     "y": 260,
     "g": "e2a57851c2fe7bca",
     "wires": []
@@ -1335,8 +1335,8 @@
     "topic": "homeassistant/climate/microair_78_e3_6d_fc_5e_ce_zone_3/config",
     "payload": "",
     "payloadType": "str",
-    "x": 200,
-    "y": 360,
+    "x": 190,
+    "y": 340,
     "g": "04e375b0c463df72",
     "wires": [
       [
@@ -1369,8 +1369,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "MQTT",
-    "x": 94,
-    "y": 239,
+    "x": 84,
+    "y": 199,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -1404,8 +1404,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1210,
-    "y": 680,
+    "x": 390,
+    "y": 990,
     "g": "ceee39e4b10d6030",
     "wires": [
       []
@@ -1432,8 +1432,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 220,
-    "y": 1380,
+    "x": 210,
+    "y": 1710,
     "wires": [
       [
         "9d8e7f6a5b4c3d2e"
@@ -1466,8 +1466,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1390,
-    "y": 1000,
+    "x": 1380,
+    "y": 1320,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -1480,7 +1480,7 @@
     "type": "group",
     "z": "1fde0c4ffb03727e",
     "name": "Rest unique list",
-    "x": 954,
+    "x": 934,
     "y": 919,
     "g": "8aac091f0fffbf22",
     "style": {
@@ -1555,7 +1555,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "noteHeight": 174,
-    "x": 350,
+    "x": 330,
     "y": 120,
     "wires": []
   },
@@ -1568,8 +1568,8 @@
     "links": [
       "f01db5ebc3ae2e18"
     ],
-    "x": 1840,
-    "y": 700,
+    "x": 1240,
+    "y": 1010,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -1636,7 +1636,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 920,
+    "x": 900,
     "y": 420,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -1734,7 +1734,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 220,
+    "x": 210,
     "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -1756,8 +1756,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 200,
-    "y": 1820,
+    "x": 190,
+    "y": 2150,
     "g": "1250cab4e8633d65",
     "wires": [
       [
@@ -1773,7 +1773,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "noteHeight": 126,
-    "x": 300,
+    "x": 280,
     "y": 100,
     "wires": []
   },
@@ -1789,8 +1789,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 470,
-    "y": 900,
+    "x": 460,
+    "y": 1220,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -1832,8 +1832,8 @@
     "links": [
       "00b1afc9a96aca8e"
     ],
-    "x": 1810,
-    "y": 460,
+    "x": 1210,
+    "y": 770,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -1855,6 +1855,54 @@
     "wires": [
       [
         "d3a13b531babee66"
+      ]
+    ]
+  },
+  {
+    "id": "501fc880dc7bbf3f",
+    "type": "switch",
+    "z": "292e70a6ba25b323",
+    "name": "dgn_filter",
+    "property": "payload.dgn_name",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "J1939_DM1",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "ACKNOWLEDGEMENT",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "DIGITAL_INPUT_STATUS",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "DATE_TIME_STATUS",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 5,
+    "x": 520,
+    "y": 790,
+    "g": "f09f79586501cb0b",
+    "wires": [
+      [],
+      [],
+      [],
+      [],
+      [
+        "21dfe84b8adafa6e"
       ]
     ]
   },
@@ -1890,8 +1938,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 200,
-    "y": 1560,
+    "x": 190,
+    "y": 1910,
     "g": "f67b4a374db41b27",
     "wires": [
       [
@@ -1920,8 +1968,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 260,
-    "y": 840,
+    "x": 250,
+    "y": 1160,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -1934,8 +1982,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "RV-C Time Sync",
-    "x": 994,
-    "y": 1499,
+    "x": 984,
+    "y": 1829,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -1977,7 +2025,7 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1130,
+    "x": 1110,
     "y": 720,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -2000,8 +2048,8 @@
     "once": false,
     "onceDelay": 0.1,
     "topic": "",
-    "x": 1190,
-    "y": 360,
+    "x": 570,
+    "y": 630,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -2078,8 +2126,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 170,
-    "y": 400,
+    "x": 160,
+    "y": 360,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -2105,8 +2153,8 @@
     "drop": false,
     "allowrate": false,
     "outputs": 1,
-    "x": 890,
-    "y": 920,
+    "x": 880,
+    "y": 1240,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -2203,7 +2251,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 850,
+    "x": 880,
     "y": 340,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -2221,7 +2269,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 910,
+    "x": 890,
     "y": 320,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -2239,7 +2287,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 480,
+    "x": 470,
     "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -2342,8 +2390,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 730,
-    "y": 1500,
+    "x": 720,
+    "y": 1850,
     "g": "f67b4a374db41b27",
     "l": true,
     "wires": []
@@ -2376,8 +2424,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1850,
-    "y": 280,
+    "x": 1250,
+    "y": 590,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -2394,8 +2442,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1110,
-    "y": 920,
+    "x": 1100,
+    "y": 1240,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -2436,8 +2484,8 @@
     "links": [
       "a3b957142479c075"
     ],
-    "x": 570,
-    "y": 380,
+    "x": 560,
+    "y": 340,
     "g": "3c819b7900145438",
     "l": true,
     "wires": []
@@ -2459,7 +2507,7 @@
     "once": true,
     "onceDelay": "0.3",
     "topic": "",
-    "x": 220,
+    "x": 200,
     "y": 560,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -2532,8 +2580,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1380,
-    "y": 960,
+    "x": 1370,
+    "y": 1280,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -2586,7 +2634,7 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 770,
+    "x": 760,
     "y": 340,
     "g": "e2a57851c2fe7bca",
     "wires": []
@@ -2600,7 +2648,7 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1290,
+    "x": 1320,
     "y": 440,
     "g": "aea9d97e0563bd83",
     "l": true,
@@ -2618,8 +2666,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1410,
-    "y": 1780,
+    "x": 1400,
+    "y": 2110,
     "g": "9e47041ed71c4494",
     "wires": [
       [
@@ -2669,7 +2717,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 340,
+    "x": 320,
     "y": 740,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -2690,7 +2738,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 860,
+    "x": 890,
     "y": 700,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -2777,7 +2825,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 400,
+    "x": 380,
     "y": 780,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -2800,7 +2848,7 @@
     "correl": "",
     "expiry": "",
     "broker": "68237e1473ec01aa",
-    "x": 1250,
+    "x": 1230,
     "y": 360,
     "g": "8aac091f0fffbf22",
     "wires": []
@@ -2836,7 +2884,7 @@
       "db3ce2f66f852ca6",
       "b1b68ff387e01a3a"
     ],
-    "x": 1270,
+    "x": 1250,
     "y": 500,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -2854,8 +2902,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1410,
-    "y": 920,
+    "x": 1400,
+    "y": 1240,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -2876,8 +2924,8 @@
       "c83c6b2b70c927a3",
       "a493ca49e16bb03c"
     ],
-    "x": 230,
-    "y": 600,
+    "x": 1020,
+    "y": 380,
     "g": "3c819b7900145438",
     "l": true,
     "wires": [
@@ -2897,8 +2945,8 @@
     "chunk": false,
     "sendError": false,
     "allProps": false,
-    "x": 1320,
-    "y": 1420,
+    "x": 1310,
+    "y": 1750,
     "g": "9cfcca5efde78052",
     "wires": [
       [
@@ -2918,7 +2966,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 870,
+    "x": 900,
     "y": 960,
     "g": "7183c5f0ad762adb",
     "wires": [
@@ -2939,7 +2987,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 630,
+    "x": 610,
     "y": 560,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -2961,7 +3009,7 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 800,
+    "x": 830,
     "y": 740,
     "g": "aea9d97e0563bd83",
     "wires": []
@@ -2978,7 +3026,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1130,
+    "x": 1110,
     "y": 420,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -3048,7 +3096,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 200,
+    "x": 190,
     "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -3090,8 +3138,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1120,
-    "y": 1420,
+    "x": 1110,
+    "y": 1750,
     "g": "9cfcca5efde78052",
     "wires": [
       [
@@ -3121,8 +3169,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1040,
-    "y": 680,
+    "x": 220,
+    "y": 990,
     "g": "ceee39e4b10d6030",
     "wires": [
       [
@@ -3178,8 +3226,8 @@
     "authType": "",
     "senderr": false,
     "headers": [],
-    "x": 1550,
-    "y": 1300,
+    "x": 1540,
+    "y": 1630,
     "g": "efe52fc701f550cf",
     "wires": [
       []
@@ -3197,7 +3245,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 860,
+    "x": 890,
     "y": 880,
     "g": "7183c5f0ad762adb",
     "wires": [
@@ -3259,7 +3307,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 880,
+    "x": 910,
     "y": 260,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -3329,8 +3377,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 450,
-    "y": 1700,
+    "x": 440,
+    "y": 2030,
     "g": "1250cab4e8633d65",
     "wires": [
       [
@@ -3362,8 +3410,8 @@
       "027d238476871cfe",
       "ac17a780a9a1dbcf"
     ],
-    "x": 620,
-    "y": 680,
+    "x": 610,
+    "y": 460,
     "g": "3c819b7900145438",
     "l": true,
     "wires": []
@@ -3403,7 +3451,7 @@
     "drop": false,
     "allowrate": false,
     "outputs": 1,
-    "x": 580,
+    "x": 560,
     "y": 380,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -3552,7 +3600,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 850,
+    "x": 880,
     "y": 380,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -3566,7 +3614,7 @@
     "type": "group",
     "z": "1fde0c4ffb03727e",
     "name": "Victron GX device configuration",
-    "x": 114,
+    "x": 94,
     "y": 259,
     "style": {
       "stroke": "#777777",
@@ -3624,7 +3672,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 460,
+    "x": 450,
     "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": [
@@ -3655,8 +3703,8 @@
     "once": false,
     "onceDelay": 0.1,
     "topic": "",
-    "x": 200,
-    "y": 300,
+    "x": 190,
+    "y": 280,
     "g": "04e375b0c463df72",
     "wires": [
       [
@@ -3676,12 +3724,12 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1160,
-    "y": 480,
+    "x": 340,
+    "y": 790,
     "g": "f09f79586501cb0b",
     "wires": [
       [
-        "21dfe84b8adafa6e"
+        "501fc880dc7bbf3f"
       ]
     ]
   },
@@ -3698,7 +3746,7 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 600,
+    "x": 580,
     "y": 640,
     "g": "5811945b9bad79dc",
     "wires": []
@@ -3715,8 +3763,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1390,
-    "y": 1120,
+    "x": 1380,
+    "y": 1440,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -3729,8 +3777,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "Claim CAN source address",
-    "x": 94,
-    "y": 799,
+    "x": 84,
+    "y": 1119,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -3761,7 +3809,7 @@
     "links": [
       "88e5fa035bedb48c"
     ],
-    "x": 230,
+    "x": 210,
     "y": 420,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -3785,7 +3833,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 210,
+    "x": 190,
     "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -3842,7 +3890,7 @@
     "links": [
       "3f467bbd66a21eb9"
     ],
-    "x": 690,
+    "x": 640,
     "y": 460,
     "g": "5811945b9bad79dc",
     "l": true,
@@ -3881,7 +3929,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 870,
+    "x": 900,
     "y": 300,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -3922,7 +3970,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1310,
+    "x": 1290,
     "y": 1020,
     "g": "3ffa68cfd2195db1",
     "wires": [
@@ -3941,7 +3989,7 @@
     "septopics": true,
     "property": "payload",
     "topi": "topic",
-    "x": 410,
+    "x": 390,
     "y": 300,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -3959,7 +4007,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1390,
+    "x": 1370,
     "y": 400,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -4019,7 +4067,7 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 760,
+    "x": 750,
     "y": 420,
     "g": "e2a57851c2fe7bca",
     "wires": []
@@ -4036,7 +4084,7 @@
     "septopics": true,
     "property": "payload",
     "topi": "topic",
-    "x": 450,
+    "x": 430,
     "y": 1020,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -4050,8 +4098,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "Load RV-C Dgn Names",
-    "x": 994,
-    "y": 1379,
+    "x": 984,
+    "y": 1709,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -4075,8 +4123,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 450,
-    "y": 1380,
+    "x": 440,
+    "y": 1710,
     "g": "f81ca31c89243206",
     "wires": [
       [
@@ -4105,8 +4153,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 260,
-    "y": 1980,
+    "x": 250,
+    "y": 2290,
     "g": "a06746acafc5968d",
     "wires": [
       [
@@ -4119,8 +4167,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "Rest unique list",
-    "x": 1734,
-    "y": 499,
+    "x": 1134,
+    "y": 809,
     "g": "f09f79586501cb0b",
     "style": {
       "stroke": "#777777",
@@ -4138,8 +4186,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "BETA Testing",
-    "x": 994,
-    "y": 1739,
+    "x": 984,
+    "y": 2069,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -4185,8 +4233,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 170,
-    "y": 340,
+    "x": 160,
+    "y": 300,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -4576,8 +4624,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "One time migrations",
-    "x": 94,
-    "y": 1939,
+    "x": 84,
+    "y": 2249,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -4598,8 +4646,8 @@
       "cd73ee739dad9f59",
       "fa104ff19bbee333"
     ],
-    "x": 1080,
-    "y": 1300,
+    "x": 1070,
+    "y": 1630,
     "g": "efe52fc701f550cf",
     "l": true,
     "wires": [
@@ -4617,8 +4665,8 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1710,
-    "y": 840,
+    "x": 1700,
+    "y": 1160,
     "g": "8ef86a1c4b59d8e1",
     "l": true,
     "wires": []
@@ -4635,8 +4683,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 440,
-    "y": 240,
+    "x": 430,
+    "y": 220,
     "g": "04e375b0c463df72",
     "wires": [
       [
@@ -4704,8 +4752,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1850,
-    "y": 540,
+    "x": 1250,
+    "y": 850,
     "g": "9dd6a98018824be9",
     "wires": [
       [
@@ -4746,8 +4794,8 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 2110,
-    "y": 660,
+    "x": 1510,
+    "y": 970,
     "g": "f09f79586501cb0b",
     "l": true,
     "wires": []
@@ -4764,7 +4812,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 860,
+    "x": 890,
     "y": 620,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -4781,7 +4829,7 @@
     "links": [
       "1e244bad0304bb74"
     ],
-    "x": 1140,
+    "x": 1120,
     "y": 520,
     "g": "cd4c55cd4f675905",
     "l": true,
@@ -4848,8 +4896,8 @@
     "checkall": "false",
     "repair": false,
     "outputs": 9,
-    "x": 1510,
-    "y": 480,
+    "x": 910,
+    "y": 790,
     "g": "f09f79586501cb0b",
     "wires": [
       [],
@@ -4908,7 +4956,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 880,
+    "x": 910,
     "y": 920,
     "g": "7183c5f0ad762adb",
     "wires": [
@@ -4929,7 +4977,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 890,
+    "x": 920,
     "y": 500,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -4950,8 +4998,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 430,
-    "y": 1560,
+    "x": 420,
+    "y": 1910,
     "g": "f67b4a374db41b27",
     "wires": [
       [
@@ -5001,7 +5049,7 @@
     "septopics": true,
     "property": "payload",
     "topi": "topic",
-    "x": 370,
+    "x": 350,
     "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -5050,7 +5098,7 @@
     "checkall": "true",
     "repair": false,
     "outputs": 2,
-    "x": 350,
+    "x": 330,
     "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -5072,8 +5120,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1360,
-    "y": 1660,
+    "x": 1350,
+    "y": 1990,
     "g": "bc622f80fe99faa0",
     "wires": [
       []
@@ -5101,8 +5149,8 @@
     "once": false,
     "onceDelay": 0.1,
     "topic": "",
-    "x": 210,
-    "y": 240,
+    "x": 200,
+    "y": 220,
     "g": "04e375b0c463df72",
     "wires": [
       [
@@ -5118,8 +5166,8 @@
     "links": [
       "88e5fa035bedb48c"
     ],
-    "x": 210,
-    "y": 1480,
+    "x": 200,
+    "y": 1830,
     "g": "f67b4a374db41b27",
     "l": true,
     "wires": [
@@ -5140,8 +5188,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1850,
-    "y": 660,
+    "x": 1250,
+    "y": 970,
     "g": "f09f79586501cb0b",
     "wires": [
       [
@@ -5213,7 +5261,7 @@
     "topic": "can/send",
     "payload": "19FED99F#FF7E00FFFFFF00FF",
     "payloadType": "str",
-    "x": 1190,
+    "x": 1220,
     "y": 660,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -5234,7 +5282,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 630,
+    "x": 610,
     "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -5327,7 +5375,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1130,
+    "x": 1110,
     "y": 680,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -5341,7 +5389,7 @@
     "links": [
       "71ac45fb64bf70c9"
     ],
-    "x": 230,
+    "x": 210,
     "y": 1100,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -5454,8 +5502,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 710,
-    "y": 840,
+    "x": 700,
+    "y": 1160,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -5477,8 +5525,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 170,
-    "y": 280,
+    "x": 160,
+    "y": 240,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -5519,8 +5567,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1390,
-    "y": 1080,
+    "x": 1380,
+    "y": 1400,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -5540,7 +5588,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 880,
+    "x": 860,
     "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -5580,7 +5628,7 @@
     "links": [
       "88e5fa035bedb48c"
     ],
-    "x": 230,
+    "x": 210,
     "y": 300,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -5613,8 +5661,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "MQTT discovery",
-    "x": 994,
-    "y": 1619,
+    "x": 984,
+    "y": 1949,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -5645,8 +5693,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1110,
-    "y": 1540,
+    "x": 1100,
+    "y": 1870,
     "g": "5169613bd2735138",
     "wires": [
       [
@@ -5663,7 +5711,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1290,
+    "x": 1270,
     "y": 580,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -5743,7 +5791,7 @@
     "checkall": "true",
     "repair": false,
     "outputs": 9,
-    "x": 410,
+    "x": 370,
     "y": 380,
     "wires": [
       [
@@ -5807,8 +5855,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 220,
-    "y": 1340,
+    "x": 210,
+    "y": 1670,
     "g": "f81ca31c89243206",
     "wires": [
       [
@@ -5890,7 +5938,7 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 610,
+    "x": 590,
     "y": 580,
     "g": "5811945b9bad79dc",
     "wires": []
@@ -5907,8 +5955,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1850,
-    "y": 580,
+    "x": 1250,
+    "y": 890,
     "g": "9dd6a98018824be9",
     "wires": [
       [
@@ -5924,8 +5972,8 @@
     "property": "payload",
     "action": "",
     "pretty": false,
-    "x": 1530,
-    "y": 1420,
+    "x": 1520,
+    "y": 1750,
     "g": "9cfcca5efde78052",
     "wires": [
       [
@@ -5947,7 +5995,7 @@
     "correl": "",
     "expiry": "",
     "broker": "68237e1473ec01aa",
-    "x": 1250,
+    "x": 1230,
     "y": 720,
     "g": "8aac091f0fffbf22",
     "wires": []
@@ -5961,8 +6009,8 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1570,
-    "y": 1540,
+    "x": 1560,
+    "y": 1870,
     "g": "5169613bd2735138",
     "l": true,
     "wires": []
@@ -5999,7 +6047,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1130,
+    "x": 1110,
     "y": 380,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -6020,8 +6068,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 380,
-    "y": 680,
+    "x": 370,
+    "y": 460,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -6041,8 +6089,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 480,
-    "y": 600,
+    "x": 1290,
+    "y": 380,
     "g": "3c819b7900145438",
     "wires": [
       [
@@ -6064,8 +6112,8 @@
     "correl": "",
     "expiry": "",
     "broker": "80727e60a251c36c",
-    "x": 730,
-    "y": 500,
+    "x": 1560,
+    "y": 300,
     "g": "3c819b7900145438",
     "wires": []
   },
@@ -6114,7 +6162,7 @@
     "type": "group",
     "z": "e3804d2dd0b81928",
     "name": "Rest unique list",
-    "x": 1034,
+    "x": 1014,
     "y": 479,
     "g": "fe7cf55a75689b88",
     "style": {
@@ -6157,8 +6205,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1740,
-    "y": 1420,
+    "x": 1730,
+    "y": 1750,
     "g": "9cfcca5efde78052",
     "wires": []
   },
@@ -6171,8 +6219,8 @@
     "links": [
       "a1e89f48333c8256"
     ],
-    "x": 690,
-    "y": 1840,
+    "x": 680,
+    "y": 2170,
     "g": "1250cab4e8633d65",
     "l": true,
     "wires": []
@@ -6207,7 +6255,7 @@
     "links": [
       "1d411b577497f7ae"
     ],
-    "x": 900,
+    "x": 880,
     "y": 280,
     "g": "fe7cf55a75689b88",
     "l": true,
@@ -6234,7 +6282,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 1070,
+    "x": 1050,
     "y": 1020,
     "g": "3ffa68cfd2195db1",
     "wires": [
@@ -6247,8 +6295,8 @@
     "id": "ceee39e4b10d6030",
     "type": "group",
     "z": "292e70a6ba25b323",
-    "x": 934,
-    "y": 579,
+    "x": 114,
+    "y": 889,
     "g": "f09f79586501cb0b",
     "style": {
       "stroke": "#777777",
@@ -6271,8 +6319,8 @@
     "createDir": true,
     "overwriteFile": "true",
     "encoding": "none",
-    "x": 680,
-    "y": 1800,
+    "x": 670,
+    "y": 2130,
     "g": "1250cab4e8633d65",
     "wires": [
       []
@@ -6330,7 +6378,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 560,
+    "x": 540,
     "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -6352,7 +6400,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 820,
+    "x": 800,
     "y": 500,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -6376,7 +6424,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1040,
+    "x": 1020,
     "y": 540,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -6397,7 +6445,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 820,
+    "x": 800,
     "y": 580,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -6417,7 +6465,7 @@
     "chunk": false,
     "sendError": false,
     "allProps": false,
-    "x": 490,
+    "x": 470,
     "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -6438,7 +6486,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 750,
+    "x": 730,
     "y": 920,
     "g": "8aac091f0fffbf22",
     "wires": []
@@ -6449,8 +6497,8 @@
     "z": "292e70a6ba25b323",
     "name": "BETA TEST",
     "links": [],
-    "x": 1090,
-    "y": 1840,
+    "x": 1080,
+    "y": 2170,
     "g": "9e47041ed71c4494",
     "l": true,
     "wires": [
@@ -6472,8 +6520,8 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 570,
-    "y": 320,
+    "x": 560,
+    "y": 280,
     "g": "3c819b7900145438",
     "wires": []
   },
@@ -6489,7 +6537,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 850,
+    "x": 880,
     "y": 420,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -6507,8 +6555,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 730,
-    "y": 240,
+    "x": 720,
+    "y": 220,
     "g": "04e375b0c463df72",
     "l": true,
     "wires": []
@@ -6569,8 +6617,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1410,
-    "y": 1040,
+    "x": 1400,
+    "y": 1360,
     "g": "8ef86a1c4b59d8e1",
     "wires": [
       [
@@ -6622,7 +6670,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 220,
+    "x": 200,
     "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -6643,8 +6691,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 440,
-    "y": 1300,
+    "x": 430,
+    "y": 1630,
     "g": "f81ca31c89243206",
     "wires": [
       [
@@ -6685,8 +6733,8 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 1830,
-    "y": 320,
+    "x": 1230,
+    "y": 630,
     "g": "f09f79586501cb0b",
     "wires": []
   },
@@ -6711,7 +6759,7 @@
     "links": [
       "74329f13cbbc528a"
     ],
-    "x": 1290,
+    "x": 1320,
     "y": 920,
     "g": "7183c5f0ad762adb",
     "l": true,
@@ -6741,7 +6789,7 @@
     "links": [
       "71ac45fb64bf70c9"
     ],
-    "x": 230,
+    "x": 210,
     "y": 600,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -6768,7 +6816,7 @@
     "drop": false,
     "allowrate": false,
     "outputs": 1,
-    "x": 420,
+    "x": 400,
     "y": 300,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -6786,8 +6834,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 730,
-    "y": 1700,
+    "x": 720,
+    "y": 2030,
     "g": "1250cab4e8633d65",
     "l": true,
     "wires": []
@@ -6804,8 +6852,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1310,
-    "y": 1300,
+    "x": 1300,
+    "y": 1630,
     "g": "efe52fc701f550cf",
     "wires": [
       [
@@ -6825,8 +6873,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1320,
-    "y": 1540,
+    "x": 1310,
+    "y": 1870,
     "g": "5169613bd2735138",
     "wires": [
       [
@@ -6846,7 +6894,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 880,
+    "x": 910,
     "y": 660,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -6936,7 +6984,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 620,
+    "x": 600,
     "y": 300,
     "g": "8aac091f0fffbf22",
     "wires": []
@@ -7001,7 +7049,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 580,
+    "x": 560,
     "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -7022,7 +7070,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 860,
+    "x": 840,
     "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -7046,7 +7094,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 860,
+    "x": 890,
     "y": 540,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -7060,7 +7108,7 @@
     "type": "group",
     "z": "8a7f019c3d4e5b60",
     "name": "Hughes Power Watchdog",
-    "x": 94,
+    "x": 84,
     "y": 219,
     "style": {
       "stroke": "#777777",
@@ -7091,8 +7139,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1420,
-    "y": 1840,
+    "x": 1410,
+    "y": 2170,
     "g": "9e47041ed71c4494",
     "wires": [
       []
@@ -7107,7 +7155,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1290,
+    "x": 1270,
     "y": 420,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -7142,8 +7190,8 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1670,
-    "y": 1780,
+    "x": 1660,
+    "y": 2110,
     "g": "9e47041ed71c4494",
     "l": true,
     "wires": []
@@ -7224,8 +7272,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 1120,
-    "y": 1660,
+    "x": 1110,
+    "y": 1990,
     "g": "bc622f80fe99faa0",
     "wires": [
       [
@@ -7245,8 +7293,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 510,
-    "y": 1980,
+    "x": 500,
+    "y": 2290,
     "g": "a06746acafc5968d",
     "wires": [
       []
@@ -7285,7 +7333,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 840,
+    "x": 820,
     "y": 720,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -7344,7 +7392,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 840,
+    "x": 820,
     "y": 840,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -7368,7 +7416,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 870,
+    "x": 900,
     "y": 460,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -7394,7 +7442,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 710,
+    "x": 660,
     "y": 520,
     "g": "5811945b9bad79dc",
     "wires": [
@@ -7505,8 +7553,8 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 2140,
-    "y": 580,
+    "x": 1540,
+    "y": 890,
     "g": "9dd6a98018824be9",
     "wires": []
   },
@@ -7522,7 +7570,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 890,
+    "x": 920,
     "y": 580,
     "g": "aea9d97e0563bd83",
     "wires": [
@@ -7543,7 +7591,7 @@
     "septopics": true,
     "property": "payload",
     "topi": "payload.zone",
-    "x": 430,
+    "x": 410,
     "y": 400,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -7557,8 +7605,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "Notifications",
-    "x": 994,
-    "y": 1259,
+    "x": 984,
+    "y": 1589,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -7951,8 +7999,8 @@
     "links": [
       "45414bacecada477"
     ],
-    "x": 220,
-    "y": 900,
+    "x": 210,
+    "y": 1220,
     "g": "8ef86a1c4b59d8e1",
     "l": true,
     "wires": [
@@ -7966,8 +8014,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "CAN message routing",
-    "x": 908,
-    "y": 239,
+    "x": 88,
+    "y": 549,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -7982,6 +8030,7 @@
       "398683928338f9c6",
       "45414bacecada477",
       "4fa9b9fdc36c83da",
+      "501fc880dc7bbf3f",
       "52f6bcc4fb0ca263",
       "6376d98589368f2b",
       "8d7d5d3ea117cf79",
@@ -8065,8 +8114,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 450,
-    "y": 1820,
+    "x": 440,
+    "y": 2150,
     "g": "1250cab4e8633d65",
     "wires": [
       [
@@ -8086,7 +8135,7 @@
     "links": [
       "f658418a7b9b4857"
     ],
-    "x": 1290,
+    "x": 1270,
     "y": 840,
     "g": "8aac091f0fffbf22",
     "l": true,
@@ -8115,8 +8164,8 @@
       "6376d98589368f2b",
       "5ffb64e684c20ea8"
     ],
-    "x": 230,
-    "y": 500,
+    "x": 1020,
+    "y": 300,
     "g": "3c819b7900145438",
     "l": true,
     "wires": [
@@ -8150,8 +8199,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "GPS Updates",
-    "x": 94,
-    "y": 1439,
+    "x": 84,
+    "y": 1789,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -8189,7 +8238,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "noteHeight": 78,
-    "x": 350,
+    "x": 340,
     "y": 80,
     "wires": []
   },
@@ -8198,8 +8247,8 @@
     "type": "group",
     "z": "292e70a6ba25b323",
     "name": "User input",
-    "x": 94,
-    "y": 1259,
+    "x": 84,
+    "y": 1589,
     "style": {
       "stroke": "#777777",
       "label": true
@@ -8245,7 +8294,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 200,
+    "x": 180,
     "y": 700,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -8311,7 +8360,7 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 220,
+    "x": 200,
     "y": 660,
     "g": "8aac091f0fffbf22",
     "wires": [
@@ -8328,7 +8377,7 @@
     "bgcolor": "#f3e5ab",
     "textcolor": "#333333",
     "noteHeight": 150,
-    "x": 390,
+    "x": 370,
     "y": 120,
     "wires": []
   },
@@ -8386,7 +8435,7 @@
     "type": "group",
     "z": "e3804d2dd0b81928",
     "name": "Micro-Air status",
-    "x": 114,
+    "x": 94,
     "y": 239,
     "style": {
       "stroke": "#777777",
@@ -8430,7 +8479,7 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 220,
+    "x": 200,
     "y": 560,
     "g": "fe7cf55a75689b88",
     "wires": [
@@ -8473,8 +8522,8 @@
     "rap": true,
     "rh": 0,
     "inputs": 0,
-    "x": 200,
-    "y": 1700,
+    "x": 190,
+    "y": 2030,
     "g": "1250cab4e8633d65",
     "wires": [
       [

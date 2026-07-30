@@ -74,6 +74,7 @@ function decodePercentage(value) {
   // SOC, health, and relative capacity are fractions of their full value, so
   // these DGN fields stop at raw 200 = 100%.
   if (value <= 200) return parseFloat((value * 0.5).toFixed(1));
+  if (value === 251) return "Error";
   if (value === 255) return "Not Available";
   return "Invalid";
 }

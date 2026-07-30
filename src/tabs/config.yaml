@@ -20,8 +20,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 220
-  "y": 1300
+  x: 210
+  "y": 1630
   g: f81ca31c89243206
   wires:
     - - d6680567062a0908
@@ -31,8 +31,8 @@
   name: CONFIG_GLOBALS
   links:
     - 88e5fa035bedb48c
-  x: 1110
-  "y": 1780
+  x: 1100
+  "y": 2110
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -44,8 +44,8 @@
   mode: link
   links:
     - fbc5efde2c447eda
-  x: 1800
-  "y": 420
+  x: 1200
+  "y": 730
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -67,8 +67,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1210
-  "y": 620
+  x: 390
+  "y": 930
   g: ceee39e4b10d6030
   wires: []
 - id: 07b8bcce03f19e8f
@@ -86,8 +86,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1140
-  "y": 1020
+  x: 1130
+  "y": 1340
   g: 8ef86a1c4b59d8e1
   wires:
     - - 73abad3deeed31e8
@@ -110,8 +110,8 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 1530
-  "y": 660
+  x: 930
+  "y": 970
   g: f09f79586501cb0b
   wires: []
 - id: 092c751dcdd12270
@@ -127,8 +127,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 2140
-  "y": 540
+  x: 1540
+  "y": 850
   g: 9dd6a98018824be9
   wires:
     - []
@@ -139,8 +139,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 730
-  "y": 1300
+  x: 720
+  "y": 1630
   g: f81ca31c89243206
   l: true
   wires: []
@@ -157,8 +157,8 @@
   once: true
   onceDelay: 0.1
   topic: ""
-  x: 1180
-  "y": 400
+  x: 560
+  "y": 670
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -166,8 +166,8 @@
   type: group
   z: 292e70a6ba25b323
   name: Recording unknown DGNs
-  x: 94
-  "y": 1659
+  x: 84
+  "y": 1989
   style:
     stroke: "#777777"
     label: true
@@ -192,8 +192,8 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 730
-  "y": 600
+  x: 1560
+  "y": 380
   g: 3c819b7900145438
   wires: []
 - id: 1becc1dacb0ecaf8
@@ -242,8 +242,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 450
-  "y": 1480
+  x: 440
+  "y": 1830
   g: f67b4a374db41b27
   wires:
     - - 5ffb64e684c20ea8
@@ -256,8 +256,8 @@
     - 893d80d1125057e8
     - 2343c8c12f2081fa
     - a58b5f05c8346eab
-  x: 1420
-  "y": 1160
+  x: 1410
+  "y": 1480
   g: 8ef86a1c4b59d8e1
   l: true
   wires: []
@@ -273,8 +273,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 180
-  "y": 680
+  x: 170
+  "y": 460
   g: 3c819b7900145438
   wires:
     - - c9d298bbaa855984
@@ -290,8 +290,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 990
-  "y": 480
+  x: 170
+  "y": 790
   g: f09f79586501cb0b
   wires:
     - - 8d7d5d3ea117cf79
@@ -306,8 +306,8 @@
   septopics: true
   property: payload
   topi: filter_key
-  x: 1350
-  "y": 480
+  x: 710
+  "y": 790
   g: f09f79586501cb0b
   wires:
     - - a6594a9464d8fe4e
@@ -324,7 +324,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 126
-  x: 330
+  x: 310
   "y": 100
   wires: []
 - id: 3935564c9401e95d
@@ -548,8 +548,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1570
-  "y": 300
+  x: 970
+  "y": 610
   g: f09f79586501cb0b
   wires:
     - - 6376d98589368f2b
@@ -562,8 +562,8 @@
   links:
     - 00b1afc9a96aca8e
     - cd5a041811bc2c9a
-  x: 1810
-  "y": 380
+  x: 1210
+  "y": 690
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -571,8 +571,8 @@
   type: group
   z: 292e70a6ba25b323
   name: MQTT
-  x: 94
-  "y": 239
+  x: 84
+  "y": 199
   style:
     stroke: "#777777"
     label: true
@@ -604,8 +604,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1210
-  "y": 680
+  x: 390
+  "y": 990
   g: ceee39e4b10d6030
   wires:
     - []
@@ -624,8 +624,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 220
-  "y": 1380
+  x: 210
+  "y": 1710
   wires:
     - - 9d8e7f6a5b4c3d2e
 - id: 3f5eb271f702c8f3
@@ -708,8 +708,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1390
-  "y": 1000
+  x: 1380
+  "y": 1320
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -720,8 +720,8 @@
   mode: link
   links:
     - f01db5ebc3ae2e18
-  x: 1840
-  "y": 700
+  x: 1240
+  "y": 1010
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -737,8 +737,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 200
-  "y": 1820
+  x: 190
+  "y": 2150
   g: 1250cab4e8633d65
   wires:
     - - f3ee6dc19b0155a0
@@ -879,8 +879,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 470
-  "y": 900
+  x: 460
+  "y": 1220
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
@@ -893,11 +893,43 @@
   mode: link
   links:
     - 00b1afc9a96aca8e
-  x: 1810
-  "y": 460
+  x: 1210
+  "y": 770
   g: f09f79586501cb0b
   l: true
   wires: []
+- id: 501fc880dc7bbf3f
+  type: switch
+  z: 292e70a6ba25b323
+  name: dgn_filter
+  property: payload.dgn_name
+  propertyType: msg
+  rules:
+    - t: eq
+      v: J1939_DM1
+      vt: str
+    - t: eq
+      v: ACKNOWLEDGEMENT
+      vt: str
+    - t: eq
+      v: DIGITAL_INPUT_STATUS
+      vt: str
+    - t: eq
+      v: DATE_TIME_STATUS
+      vt: str
+    - t: else
+  checkall: "false"
+  repair: false
+  outputs: 5
+  x: 520
+  "y": 790
+  g: f09f79586501cb0b
+  wires:
+    - []
+    - []
+    - []
+    - []
+    - - 21dfe84b8adafa6e
 - id: 50dfcea54d80866b
   type: mqtt in
   z: 292e70a6ba25b323
@@ -910,8 +942,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 200
-  "y": 1560
+  x: 190
+  "y": 1910
   g: f67b4a374db41b27
   wires:
     - - a8a757fe3b31cf9c
@@ -930,8 +962,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 260
-  "y": 840
+  x: 250
+  "y": 1160
   g: 8ef86a1c4b59d8e1
   wires:
     - - b846bc1605dae821
@@ -939,8 +971,8 @@
   type: group
   z: 292e70a6ba25b323
   name: RV-C Time Sync
-  x: 994
-  "y": 1499
+  x: 984
+  "y": 1829
   style:
     stroke: "#777777"
     label: true
@@ -961,8 +993,8 @@
   once: false
   onceDelay: 0.1
   topic: ""
-  x: 1190
-  "y": 360
+  x: 570
+  "y": 630
   g: f09f79586501cb0b
   wires:
     - - 21dfe84b8adafa6e
@@ -978,8 +1010,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 170
-  "y": 400
+  x: 160
+  "y": 360
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -1000,8 +1032,8 @@
   drop: false
   allowrate: false
   outputs: 1
-  x: 890
-  "y": 920
+  x: 880
+  "y": 1240
   g: 8ef86a1c4b59d8e1
   wires:
     - - 6423c433e099d2a5
@@ -1012,8 +1044,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 730
-  "y": 1500
+  x: 720
+  "y": 1850
   g: f67b4a374db41b27
   l: true
   wires: []
@@ -1024,8 +1056,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1850
-  "y": 280
+  x: 1250
+  "y": 590
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -1127,8 +1159,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1110
-  "y": 920
+  x: 1100
+  "y": 1240
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1143,8 +1175,8 @@
   mode: link
   links:
     - a3b957142479c075
-  x: 570
-  "y": 380
+  x: 560
+  "y": 340
   g: 3c819b7900145438
   l: true
   wires: []
@@ -1204,8 +1236,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1380
-  "y": 960
+  x: 1370
+  "y": 1280
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1306,8 +1338,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1410
-  "y": 1780
+  x: 1400
+  "y": 2110
   g: 9e47041ed71c4494
   wires:
     - - e38f32a1f6d36bfb
@@ -1367,8 +1399,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1410
-  "y": 920
+  x: 1400
+  "y": 1240
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1383,8 +1415,8 @@
     - d95299a44e1d7ed5
     - c83c6b2b70c927a3
     - a493ca49e16bb03c
-  x: 230
-  "y": 600
+  x: 1020
+  "y": 380
   g: 3c819b7900145438
   l: true
   wires:
@@ -1399,8 +1431,8 @@
   chunk: false
   sendError: false
   allProps: false
-  x: 1320
-  "y": 1420
+  x: 1310
+  "y": 1750
   g: 9cfcca5efde78052
   wires:
     - - c78420a075d43408
@@ -1419,8 +1451,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1120
-  "y": 1420
+  x: 1110
+  "y": 1750
   g: 9cfcca5efde78052
   wires:
     - - 74c7e4a6cc2508eb
@@ -1440,8 +1472,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1040
-  "y": 680
+  x: 220
+  "y": 990
   g: ceee39e4b10d6030
   wires:
     - - 3d07bdca6b71b669
@@ -1460,8 +1492,8 @@
   authType: ""
   senderr: false
   headers: []
-  x: 1550
-  "y": 1300
+  x: 1540
+  "y": 1630
   g: efe52fc701f550cf
   wires:
     - []
@@ -1516,8 +1548,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 450
-  "y": 1700
+  x: 440
+  "y": 2030
   g: 1250cab4e8633d65
   wires:
     - - dca8346e061f1d42
@@ -1531,8 +1563,8 @@
     - bb154cf7301d6fa7
     - 027d238476871cfe
     - ac17a780a9a1dbcf
-  x: 620
-  "y": 680
+  x: 610
+  "y": 460
   g: 3c819b7900145438
   l: true
   wires: []
@@ -1894,11 +1926,11 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1160
-  "y": 480
+  x: 340
+  "y": 790
   g: f09f79586501cb0b
   wires:
-    - - 21dfe84b8adafa6e
+    - - 501fc880dc7bbf3f
 - id: 8e350e2c0a0536b4
   type: function
   z: 292e70a6ba25b323
@@ -1932,8 +1964,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1390
-  "y": 1120
+  x: 1380
+  "y": 1440
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -1941,8 +1973,8 @@
   type: group
   z: 292e70a6ba25b323
   name: Claim CAN source address
-  x: 94
-  "y": 799
+  x: 84
+  "y": 1119
   style:
     stroke: "#777777"
     label: true
@@ -1966,8 +1998,8 @@
   type: group
   z: 292e70a6ba25b323
   name: Load RV-C Dgn Names
-  x: 994
-  "y": 1379
+  x: 984
+  "y": 1709
   style:
     stroke: "#777777"
     label: true
@@ -1996,8 +2028,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 450
-  "y": 1380
+  x: 440
+  "y": 1710
   g: f81ca31c89243206
   wires:
     - - 0a63b31d61802934
@@ -2016,8 +2048,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 260
-  "y": 1980
+  x: 250
+  "y": 2290
   g: a06746acafc5968d
   wires:
     - - e768c973d1faa66f
@@ -2025,8 +2057,8 @@
   type: group
   z: 292e70a6ba25b323
   name: Rest unique list
-  x: 1734
-  "y": 499
+  x: 1134
+  "y": 809
   g: f09f79586501cb0b
   style:
     stroke: "#777777"
@@ -2040,8 +2072,8 @@
   type: group
   z: 292e70a6ba25b323
   name: BETA Testing
-  x: 994
-  "y": 1739
+  x: 984
+  "y": 2069
   style:
     stroke: "#777777"
     label: true
@@ -2063,8 +2095,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 170
-  "y": 340
+  x: 160
+  "y": 300
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -2073,8 +2105,8 @@
   type: group
   z: 292e70a6ba25b323
   name: One time migrations
-  x: 94
-  "y": 1939
+  x: 84
+  "y": 2249
   style:
     stroke: "#777777"
     label: true
@@ -2090,8 +2122,8 @@
     - 47ac3adc971d73eb
     - cd73ee739dad9f59
     - fa104ff19bbee333
-  x: 1080
-  "y": 1300
+  x: 1070
+  "y": 1630
   g: efe52fc701f550cf
   l: true
   wires:
@@ -2103,8 +2135,8 @@
   mode: link
   links:
     - 74329f13cbbc528a
-  x: 1710
-  "y": 840
+  x: 1700
+  "y": 1160
   g: 8ef86a1c4b59d8e1
   l: true
   wires: []
@@ -2123,8 +2155,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1850
-  "y": 540
+  x: 1250
+  "y": 850
   g: 9dd6a98018824be9
   wires:
     - - 092c751dcdd12270
@@ -2135,8 +2167,8 @@
   mode: link
   links:
     - 74329f13cbbc528a
-  x: 2110
-  "y": 660
+  x: 1510
+  "y": 970
   g: f09f79586501cb0b
   l: true
   wires: []
@@ -2177,8 +2209,8 @@
   checkall: "false"
   repair: false
   outputs: 9
-  x: 1510
-  "y": 480
+  x: 910
+  "y": 790
   g: f09f79586501cb0b
   wires:
     - []
@@ -2288,8 +2320,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 430
-  "y": 1560
+  x: 420
+  "y": 1910
   g: f67b4a374db41b27
   wires:
     - - 5ffb64e684c20ea8
@@ -2384,8 +2416,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1360
-  "y": 1660
+  x: 1350
+  "y": 1990
   g: bc622f80fe99faa0
   wires:
     - []
@@ -2395,8 +2427,8 @@
   name: CONFIG_GLOBALS
   links:
     - 88e5fa035bedb48c
-  x: 210
-  "y": 1480
+  x: 200
+  "y": 1830
   g: f67b4a374db41b27
   l: true
   wires:
@@ -2468,8 +2500,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1850
-  "y": 660
+  x: 1250
+  "y": 970
   g: f09f79586501cb0b
   wires:
     - - a493ca49e16bb03c
@@ -2570,8 +2602,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 710
-  "y": 840
+  x: 700
+  "y": 1160
   g: 8ef86a1c4b59d8e1
   wires:
     - - 55071115a3fe7c2c
@@ -2588,8 +2620,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 170
-  "y": 280
+  x: 160
+  "y": 240
   g: 3c819b7900145438
   wires:
     - - 64c5e5cfd4382453
@@ -2650,8 +2682,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1390
-  "y": 1080
+  x: 1380
+  "y": 1400
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -2659,8 +2691,8 @@
   type: group
   z: 292e70a6ba25b323
   name: MQTT discovery
-  x: 994
-  "y": 1619
+  x: 984
+  "y": 1949
   style:
     stroke: "#777777"
     label: true
@@ -2682,8 +2714,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1110
-  "y": 1540
+  x: 1100
+  "y": 1870
   g: 5169613bd2735138
   wires:
     - - dd22c9c987534342
@@ -2702,8 +2734,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 220
-  "y": 1340
+  x: 210
+  "y": 1670
   g: f81ca31c89243206
   wires:
     - - d6680567062a0908
@@ -2744,8 +2776,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1850
-  "y": 580
+  x: 1250
+  "y": 890
   g: 9dd6a98018824be9
   wires:
     - - eea1641469efb23f
@@ -2756,8 +2788,8 @@
   property: payload
   action: ""
   pretty: false
-  x: 1530
-  "y": 1420
+  x: 1520
+  "y": 1750
   g: 9cfcca5efde78052
   wires:
     - - cd670f6465b6374b
@@ -2768,8 +2800,8 @@
   mode: link
   links:
     - 74329f13cbbc528a
-  x: 1570
-  "y": 1540
+  x: 1560
+  "y": 1870
   g: 5169613bd2735138
   l: true
   wires: []
@@ -2795,8 +2827,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 380
-  "y": 680
+  x: 370
+  "y": 460
   g: 3c819b7900145438
   wires:
     - - 88e5fa035bedb48c
@@ -2836,8 +2868,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 480
-  "y": 600
+  x: 1290
+  "y": 380
   g: 3c819b7900145438
   wires:
     - - 1ac6e0fa1cbb3852
@@ -2854,8 +2886,8 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 730
-  "y": 500
+  x: 1560
+  "y": 300
   g: 3c819b7900145438
   wires: []
 - id: cd670f6465b6374b
@@ -2912,8 +2944,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1740
-  "y": 1420
+  x: 1730
+  "y": 1750
   g: 9cfcca5efde78052
   wires: []
 - id: cd73ee739dad9f59
@@ -2923,16 +2955,16 @@
   mode: link
   links:
     - a1e89f48333c8256
-  x: 690
-  "y": 1840
+  x: 680
+  "y": 2170
   g: 1250cab4e8633d65
   l: true
   wires: []
 - id: ceee39e4b10d6030
   type: group
   z: 292e70a6ba25b323
-  x: 934
-  "y": 579
+  x: 114
+  "y": 889
   g: f09f79586501cb0b
   style:
     stroke: "#777777"
@@ -2951,8 +2983,8 @@
   createDir: true
   overwriteFile: "true"
   encoding: none
-  x: 680
-  "y": 1800
+  x: 670
+  "y": 2130
   g: 1250cab4e8633d65
   wires:
     - []
@@ -2961,8 +2993,8 @@
   z: 292e70a6ba25b323
   name: BETA TEST
   links: []
-  x: 1090
-  "y": 1840
+  x: 1080
+  "y": 2170
   g: 9e47041ed71c4494
   l: true
   wires:
@@ -2979,8 +3011,8 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 570
-  "y": 320
+  x: 560
+  "y": 280
   g: 3c819b7900145438
   wires: []
 - id: d3cc901dd2fbd359
@@ -3039,8 +3071,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1410
-  "y": 1040
+  x: 1400
+  "y": 1360
   g: 8ef86a1c4b59d8e1
   wires:
     - - a2334b77d3764815
@@ -3281,8 +3313,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 440
-  "y": 1300
+  x: 430
+  "y": 1630
   g: f81ca31c89243206
   wires:
     - - 0a63b31d61802934
@@ -3298,8 +3330,8 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 1830
-  "y": 320
+  x: 1230
+  "y": 630
   g: f09f79586501cb0b
   wires: []
 - id: dca8346e061f1d42
@@ -3309,8 +3341,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 730
-  "y": 1700
+  x: 720
+  "y": 2030
   g: 1250cab4e8633d65
   l: true
   wires: []
@@ -3358,8 +3390,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1310
-  "y": 1300
+  x: 1300
+  "y": 1630
   g: efe52fc701f550cf
   wires:
     - - 8337a7f0dd0435d6
@@ -3464,8 +3496,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1320
-  "y": 1540
+  x: 1310
+  "y": 1870
   g: 5169613bd2735138
   wires:
     - - c83c6b2b70c927a3
@@ -3501,8 +3533,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1420
-  "y": 1840
+  x: 1410
+  "y": 2170
   g: 9e47041ed71c4494
   wires:
     - []
@@ -3513,8 +3545,8 @@
   mode: link
   links:
     - f658418a7b9b4857
-  x: 1670
-  "y": 1780
+  x: 1660
+  "y": 2110
   g: 9e47041ed71c4494
   l: true
   wires: []
@@ -3530,8 +3562,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 1120
-  "y": 1660
+  x: 1110
+  "y": 1990
   g: bc622f80fe99faa0
   wires:
     - - aba7ef0da2fb2851
@@ -3629,8 +3661,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 510
-  "y": 1980
+  x: 500
+  "y": 2290
   g: a06746acafc5968d
   wires:
     - []
@@ -3646,16 +3678,16 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 2140
-  "y": 580
+  x: 1540
+  "y": 890
   g: 9dd6a98018824be9
   wires: []
 - id: efe52fc701f550cf
   type: group
   z: 292e70a6ba25b323
   name: Notifications
-  x: 994
-  "y": 1259
+  x: 984
+  "y": 1589
   style:
     stroke: "#777777"
     label: true
@@ -3669,8 +3701,8 @@
   name: ADDRESS_CLAIMED
   links:
     - 45414bacecada477
-  x: 220
-  "y": 900
+  x: 210
+  "y": 1220
   g: 8ef86a1c4b59d8e1
   l: true
   wires:
@@ -3679,8 +3711,8 @@
   type: group
   z: 292e70a6ba25b323
   name: CAN message routing
-  x: 908
-  "y": 239
+  x: 88
+  "y": 549
   style:
     stroke: "#777777"
     label: true
@@ -3694,6 +3726,7 @@
     - 398683928338f9c6
     - 45414bacecada477
     - 4fa9b9fdc36c83da
+    - 501fc880dc7bbf3f
     - 52f6bcc4fb0ca263
     - 6376d98589368f2b
     - 8d7d5d3ea117cf79
@@ -3804,8 +3837,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 450
-  "y": 1820
+  x: 440
+  "y": 2150
   g: 1250cab4e8633d65
   wires:
     - - cfa55144f4a17a5c
@@ -3831,8 +3864,8 @@
     - 102272ba5b34f5e1
     - 6376d98589368f2b
     - 5ffb64e684c20ea8
-  x: 230
-  "y": 500
+  x: 1020
+  "y": 300
   g: 3c819b7900145438
   l: true
   wires:
@@ -3841,8 +3874,8 @@
   type: group
   z: 292e70a6ba25b323
   name: GPS Updates
-  x: 94
-  "y": 1439
+  x: 84
+  "y": 1789
   style:
     stroke: "#777777"
     label: true
@@ -3856,8 +3889,8 @@
   type: group
   z: 292e70a6ba25b323
   name: User input
-  x: 94
-  "y": 1259
+  x: 84
+  "y": 1589
   style:
     stroke: "#777777"
     label: true
@@ -3879,8 +3912,8 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 200
-  "y": 1700
+  x: 190
+  "y": 2030
   g: 1250cab4e8633d65
   wires:
     - - 880ca1b6bf10b8d2

@@ -17,7 +17,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 190
+  x: 180
   "y": 260
   g: e2a57851c2fe7bca
   wires:
@@ -278,7 +278,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 460
+  x: 450
   "y": 260
   g: e2a57851c2fe7bca
   wires:
@@ -296,7 +296,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 730
+  x: 720
   "y": 260
   g: e2a57851c2fe7bca
   wires: []
@@ -312,7 +312,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 220
+  x: 210
   "y": 340
   g: e2a57851c2fe7bca
   wires:
@@ -328,7 +328,7 @@
   bgcolor: "#f3e5ab"
   textcolor: "#333333"
   noteHeight: 126
-  x: 300
+  x: 280
   "y": 100
   wires: []
 - id: 5a7f019c3d4e5b66
@@ -419,7 +419,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 480
+  x: 470
   "y": 340
   g: e2a57851c2fe7bca
   wires:
@@ -438,7 +438,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 770
+  x: 760
   "y": 340
   g: e2a57851c2fe7bca
   wires: []
@@ -454,7 +454,7 @@
   rap: true
   rh: 0
   inputs: 0
-  x: 200
+  x: 190
   "y": 420
   g: e2a57851c2fe7bca
   wires:
@@ -529,7 +529,7 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 460
+  x: 450
   "y": 420
   g: e2a57851c2fe7bca
   wires:
@@ -547,7 +547,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 760
+  x: 750
   "y": 420
   g: e2a57851c2fe7bca
   wires: []
@@ -555,7 +555,7 @@
   type: group
   z: 8a7f019c3d4e5b60
   name: Hughes Power Watchdog
-  x: 94
+  x: 84
   "y": 219
   style:
     stroke: "#777777"

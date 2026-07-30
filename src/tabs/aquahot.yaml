@@ -834,7 +834,7 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 600
+  x: 580
   "y": 640
   g: 5811945b9bad79dc
   wires: []
@@ -844,7 +844,7 @@
   name: Waterheater zone
   links:
     - 3f467bbd66a21eb9
-  x: 690
+  x: 640
   "y": 460
   g: 5811945b9bad79dc
   l: true
@@ -1137,7 +1137,7 @@
   targetType: msg
   statusVal: ""
   statusType: auto
-  x: 610
+  x: 590
   "y": 580
   g: 5811945b9bad79dc
   wires: []
@@ -1166,7 +1166,7 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 710
+  x: 660
   "y": 520
   g: 5811945b9bad79dc
   wires:
