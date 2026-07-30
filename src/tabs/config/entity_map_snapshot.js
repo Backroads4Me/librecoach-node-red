@@ -17,7 +17,10 @@ const byUniqueId = new Map();
 for (const record of records) {
   if (!record || typeof record.unique_id !== "string") continue;
   if (byUniqueId.has(record.unique_id)) {
-    node.error(`Duplicate LibreCoach discovery unique_id ${record.unique_id}`, msg);
+    node.error(
+      `Duplicate LibreCoach discovery unique_id ${record.unique_id}`,
+      msg,
+    );
     return null;
   }
   byUniqueId.set(record.unique_id, record);
@@ -34,43 +37,70 @@ for (const entry of msg.entityRegistry) {
   registryByUniqueId.set(entry.unique_id, entry);
 }
 
-const states = new Map(msg.payload
-  .filter((state) => state && typeof state.entity_id === "string")
-  .map((state) => [state.entity_id, state]));
+const states = new Map(
+  msg.payload
+    .filter((state) => state && typeof state.entity_id === "string")
+    .map((state) => [state.entity_id, state]),
+);
 const entities = [];
 for (const [uniqueId, record] of byUniqueId) {
   const registry = registryByUniqueId.get(uniqueId);
   if (!registry || typeof registry.entity_id !== "string") continue;
   const state = states.get(registry.entity_id);
   const stateName = state?.attributes?.friendly_name;
-  const registryName = typeof registry.name === "string" &&
-    registry.name.trim() ? registry.name.trim() : null;
-  const friendlyName = typeof stateName === "string" && stateName.trim()
-    ? stateName.trim()
-    : registryName || record.original_name;
+  const registryName =
+    typeof registry.name === "string" && registry.name.trim()
+      ? registry.name.trim()
+      : null;
+  const friendlyName =
+    typeof stateName === "string" && stateName.trim()
+      ? stateName.trim()
+      : registryName || record.original_name;
   const component = registry.entity_id.split(".")[0];
   if (!component || !friendlyName) continue;
 
   entities.push({
     entity_id: registry.entity_id,
     friendly_name: friendlyName,
-    name_source: registryName
-      ? "owner-customized" : "librecoach-default",
+    name_source: registryName ? "owner-customized" : "librecoach-default",
     unique_id: uniqueId,
     object_id: record.object_id,
     original_name: record.original_name,
     component,
-    state_bindings: (record.bindings || []).filter((binding) =>
-      binding.role === "state"),
-    command_bindings: (record.bindings || []).filter((binding) =>
-      binding.role === "command"),
+    state_bindings: (record.bindings || []).filter(
+      (binding) => binding.role === "state",
+    ),
+    command_bindings: (record.bindings || []).filter(
+      (binding) => binding.role === "command",
+    ),
     bindings: record.bindings || [],
     binding_authority: "librecoach-node-red entity publishers",
   });
 }
-entities.sort((a, b) =>
-  a.unique_id.localeCompare(b.unique_id) ||
-  a.entity_id.localeCompare(b.entity_id));
+entities.sort(
+  (a, b) =>
+    a.unique_id.localeCompare(b.unique_id) ||
+    a.entity_id.localeCompare(b.entity_id),
+);
+
+const source = {
+  authority: "librecoach-node-red",
+  home_assistant: "entity-registry+states",
+};
+const signature = JSON.stringify({
+  schema_version: 1,
+  source,
+  entities,
+});
+if (context.get("publishedSignature") === signature) {
+  node.status({
+    fill: "green",
+    shape: "ring",
+    text: `${entities.length} entities · unchanged`,
+  });
+  return null;
+}
+context.set("publishedSignature", signature);
 
 msg.topic = "rvc/entity-map";
 msg.qos = 1;
@@ -78,10 +108,7 @@ msg.retain = true;
 msg.payload = {
   schema_version: 1,
   generated_at: new Date().toISOString(),
-  source: {
-    authority: "librecoach-node-red",
-    home_assistant: "entity-registry+states",
-  },
+  source,
   entities,
 };
 node.status({

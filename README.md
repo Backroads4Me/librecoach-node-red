@@ -21,6 +21,10 @@ Home Assistant WebSocket connection for the entity registry and the existing
 Supervisor token for `/api/states`. The snapshot contains no credentials or CAN
 addresses. Command bindings are descriptive metadata only.
 
+Repeated discovery messages and refresh events do not republish an unchanged
+snapshot. Entity creation, removal, renaming, and binding changes produce a new
+complete snapshot.
+
 ## Related Repositories
 
 - [`ha-addons`](https://github.com/Backroads4Me/ha-addons) packages LibreCoach as a Home Assistant add-on.

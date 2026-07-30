@@ -47,12 +47,14 @@ function aquahotBinding(field, projection, role = "state") {
   return {
     role,
     protocol: "rvc-pdu1",
-    authority: role === "state"
-      ? "librecoach-node-red:status_aquahot_silverleaf"
-      : "librecoach-node-red:encode_aquahot_command_silverleaf",
-    decoder_key: role === "state"
-      ? "SILVERLEAF_AQUAHOT_STATUS"
-      : "SILVERLEAF_AQUAHOT_COMMAND",
+    authority:
+      role === "state"
+        ? "librecoach-node-red:status_aquahot_silverleaf"
+        : "librecoach-node-red:encode_aquahot_command_silverleaf",
+    decoder_key:
+      role === "state"
+        ? "SILVERLEAF_AQUAHOT_STATUS"
+        : "SILVERLEAF_AQUAHOT_COMMAND",
     pf: "EF",
     operation: role === "state" ? 0xa9 : 0xab,
     selector: { kind: "singleton", value: "aquahot" },
@@ -88,8 +90,11 @@ function bindingsFor(uniqueId) {
         decoder: "DC_COMPONENT_DRIVER_STATUS_1",
         selector,
         signals: [
-          "device_instance", "driver_index", "output_status",
-          "desired_status", "shutdown_status",
+          "device_instance",
+          "driver_index",
+          "output_status",
+          "desired_status",
+          "shutdown_status",
         ],
         projection: { kind: "field", field: "output_status" },
         authority: "librecoach-node-red:status_dc_driver",
@@ -99,9 +104,14 @@ function bindingsFor(uniqueId) {
         decoder: "DC_COMPONENT_DRIVER_STATUS_6",
         selector,
         signals: [
-          "device_instance", "driver_index", "direction",
-          "driver_pulsing", "lock_status", "command_timeout",
-          "pwm_duty_cycle", "override_input",
+          "device_instance",
+          "driver_index",
+          "direction",
+          "driver_pulsing",
+          "lock_status",
+          "command_timeout",
+          "pwm_duty_cycle",
+          "override_input",
         ],
         projection: { kind: "field", field: "pwm_duty_cycle" },
         authority: "librecoach-node-red:status_dc_driver",
@@ -129,8 +139,12 @@ function bindingsFor(uniqueId) {
         decoder: "DC_LOAD_STATUS",
         selector,
         signals: [
-          "instance", "group", "operating_status", "operating_mode",
-          "variable_level_capability", "priority",
+          "instance",
+          "group",
+          "operating_status",
+          "operating_mode",
+          "variable_level_capability",
+          "priority",
         ],
         projection: {
           kind: "field",
@@ -144,9 +158,14 @@ function bindingsFor(uniqueId) {
         decoder: "DC_LOAD_STATUS_2",
         selector,
         signals: [
-          "instance", "lock_status", "overcurrent_status",
-          "override_status", "enable_status", "last_command",
-          "interlock_status", "driver_direction_status",
+          "instance",
+          "lock_status",
+          "overcurrent_status",
+          "override_status",
+          "enable_status",
+          "last_command",
+          "interlock_status",
+          "driver_direction_status",
         ],
         authority: "librecoach-node-red:decode_dc_load_status",
         role: "corroboration",
@@ -168,8 +187,12 @@ function bindingsFor(uniqueId) {
         decoder: "AC_LOAD_STATUS",
         selector,
         signals: [
-          "instance", "group", "operating_status", "operating_mode",
-          "variable_level_capability", "priority",
+          "instance",
+          "group",
+          "operating_status",
+          "operating_mode",
+          "variable_level_capability",
+          "priority",
         ],
         projection: {
           kind: "field",
@@ -183,9 +206,14 @@ function bindingsFor(uniqueId) {
         decoder: "AC_LOAD_STATUS_2",
         selector,
         signals: [
-          "instance", "lock_status", "overcurrent_status",
-          "override_status", "enable_status", "last_command",
-          "interlock_status", "driver_direction_status",
+          "instance",
+          "lock_status",
+          "overcurrent_status",
+          "override_status",
+          "enable_status",
+          "last_command",
+          "interlock_status",
+          "driver_direction_status",
         ],
         authority: "librecoach-node-red:decode_ac_load_status",
         role: "corroboration",
@@ -207,8 +235,14 @@ function bindingsFor(uniqueId) {
         decoder: "GENERIC_INDICATOR_STATUS",
         selector,
         signals: [
-          "instance", "group", "brightness", "bank_select",
-          "delay_duration", "led_1_status", "led_2_status", "last_command",
+          "instance",
+          "group",
+          "brightness",
+          "bank_select",
+          "delay_duration",
+          "led_1_status",
+          "led_2_status",
+          "last_command",
         ],
         projection: {
           kind: "field",
@@ -227,16 +261,18 @@ function bindingsFor(uniqueId) {
   }
 
   if ((match = /^switch_g_(\d+)$/.exec(uniqueId))) {
-    return [commandBinding({
-      dgn: "1FED9",
-      decoder: "GENERIC_INDICATOR_COMMAND",
-      selector: {
-        kind: "semantic",
-        value: Number(match[1]),
-        semantic: "indicator-group",
-      },
-      authority: "librecoach-node-red:encode_generic_indicator_command",
-    })];
+    return [
+      commandBinding({
+        dgn: "1FED9",
+        decoder: "GENERIC_INDICATOR_COMMAND",
+        selector: {
+          kind: "semantic",
+          value: Number(match[1]),
+          semantic: "indicator-group",
+        },
+        authority: "librecoach-node-red:encode_generic_indicator_command",
+      }),
+    ];
   }
 
   if ((match = /^shade_(\d+)$/.exec(uniqueId))) {
@@ -247,8 +283,11 @@ function bindingsFor(uniqueId) {
         decoder: "WINDOW_SHADE_CONTROL_STATUS",
         selector,
         signals: [
-          "instance", "motor_status", "forward_status",
-          "reverse_status", "operating_status",
+          "instance",
+          "motor_status",
+          "forward_status",
+          "reverse_status",
+          "operating_status",
         ],
         projection: { kind: "field", field: "operating_status" },
         authority: "librecoach-node-red:status_shade",
@@ -267,21 +306,25 @@ function bindingsFor(uniqueId) {
     const selector = { kind: "numeric", value: instance };
     const bindings = [];
     if (instance !== 0) {
-      bindings.push(stateBinding({
-        dgn: "1FEE5",
-        decoder: "LOCK_STATUS",
-        selector,
-        signals: ["instance", "lock_status", "position"],
-        projection: { kind: "field", field: "lock_status" },
-        authority: "librecoach-node-red:status_lock",
-      }));
+      bindings.push(
+        stateBinding({
+          dgn: "1FEE5",
+          decoder: "LOCK_STATUS",
+          selector,
+          signals: ["instance", "lock_status", "position"],
+          projection: { kind: "field", field: "lock_status" },
+          authority: "librecoach-node-red:status_lock",
+        }),
+      );
     }
-    bindings.push(commandBinding({
-      dgn: "1FEE4",
-      decoder: "LOCK_COMMAND",
-      selector,
-      authority: "librecoach-node-red:encode_lock_command",
-    }));
+    bindings.push(
+      commandBinding({
+        dgn: "1FEE4",
+        decoder: "LOCK_COMMAND",
+        selector,
+        authority: "librecoach-node-red:encode_lock_command",
+      }),
+    );
     return bindings;
   }
 
@@ -297,14 +340,21 @@ function bindingsFor(uniqueId) {
   };
   if ((match = /^tank_(fresh2?|black2?|gray2?|lpg2?)$/.exec(uniqueId))) {
     const [value, semantic] = tankInstances[match[1]];
-    return [stateBinding({
-      dgn: "1FFB7",
-      decoder: "TANK_STATUS",
-      selector: { kind: "semantic", value, semantic },
-      signals: ["instance", "relative_level", "resolution", "level_percentage"],
-      projection: { kind: "field", field: "level_percentage" },
-      authority: "librecoach-node-red:status_tank",
-    })];
+    return [
+      stateBinding({
+        dgn: "1FFB7",
+        decoder: "TANK_STATUS",
+        selector: { kind: "semantic", value, semantic },
+        signals: [
+          "instance",
+          "relative_level",
+          "resolution",
+          "level_percentage",
+        ],
+        projection: { kind: "field", field: "level_percentage" },
+        authority: "librecoach-node-red:status_tank",
+      }),
+    ];
   }
 
   const batteryInstances = {
@@ -313,7 +363,9 @@ function bindingsFor(uniqueId) {
     house2: [3, "house-2"],
     generator: [4, "generator"],
   };
-  if ((match = /^battery_(house|chassis|house2|generator|\d+)$/.exec(uniqueId))) {
+  if (
+    (match = /^battery_(house|chassis|house2|generator|\d+)$/.exec(uniqueId))
+  ) {
     const known = batteryInstances[match[1]];
     const value = known ? known[0] : Number(match[1]);
     if (!Number.isInteger(value) || value < 1 || value > 250) return [];
@@ -407,9 +459,14 @@ function bindingsFor(uniqueId) {
         decoder: "FLOOR_HEAT_STATUS",
         selector,
         signals: [
-          "instance", "operating_mode", "operating_status",
-          "heat_element_status", "schedule_mode",
-          "measured_temperature", "set_point", "dead_band",
+          "instance",
+          "operating_mode",
+          "operating_status",
+          "heat_element_status",
+          "schedule_mode",
+          "measured_temperature",
+          "set_point",
+          "dead_band",
         ],
         projection: {
           kind: "enum",
@@ -436,8 +493,13 @@ function bindingsFor(uniqueId) {
         decoder: "THERMOSTAT_STATUS_1",
         selector,
         signals: [
-          "instance", "operating_mode", "fan_mode", "schedule_mode",
-          "fan_speed", "setpoint_heat", "setpoint_cool",
+          "instance",
+          "operating_mode",
+          "fan_mode",
+          "schedule_mode",
+          "fan_speed",
+          "setpoint_heat",
+          "setpoint_cool",
         ],
         projection: { kind: "field", field: "operating_mode" },
         authority: "librecoach-node-red:status_thermostat",
@@ -447,9 +509,12 @@ function bindingsFor(uniqueId) {
         decoder: "THERMOSTAT_STATUS_2",
         selector,
         signals: [
-          "instance", "current_schedule_instance",
-          "number_of_schedule_instances", "reduced_noise_mode",
-          "eco_mode", "turbo_mode",
+          "instance",
+          "current_schedule_instance",
+          "number_of_schedule_instances",
+          "reduced_noise_mode",
+          "eco_mode",
+          "turbo_mode",
         ],
         authority: "librecoach-node-red:decode_thermostat_status_2",
         role: "corroboration",
@@ -465,43 +530,57 @@ function bindingsFor(uniqueId) {
 
   if ((match = /^thermostat_ambient_zone(\d+)$/.exec(uniqueId))) {
     const selector = { kind: "numeric", value: Number(match[1]) };
-    return [stateBinding({
-      dgn: "1FF9C",
-      decoder: "THERMOSTAT_AMBIENT_STATUS",
-      selector,
-      signals: ["instance", "ambient_temperature"],
-      projection: {
-        kind: "field",
-        field: "ambient_temperature",
-        unavailable: ["Reserved", "Out of Range", "Not Available"],
-      },
-      authority: "librecoach-node-red:status_thermostat_ambient",
-    })];
+    return [
+      stateBinding({
+        dgn: "1FF9C",
+        decoder: "THERMOSTAT_AMBIENT_STATUS",
+        selector,
+        signals: ["instance", "ambient_temperature"],
+        projection: {
+          kind: "field",
+          field: "ambient_temperature",
+          unavailable: ["Reserved", "Out of Range", "Not Available"],
+        },
+        authority: "librecoach-node-red:status_thermostat_ambient",
+      }),
+    ];
   }
 
   const aquahot = {
-    aquahot_burner: ["diesel_burner", {
-      kind: "field",
-      field: "diesel_burner",
-      unavailable: ["Reserved", "Not Available"],
-    }],
-    aquahot_ac_1: ["electric_selector", {
-      kind: "equals",
-      field: "electric_selector",
-      value: "AC 1",
-      unavailable: ["Reserved", "Not Available"],
-    }],
-    aquahot_ac_2: ["electric_selector", {
-      kind: "equals",
-      field: "electric_selector",
-      value: "AC 2",
-      unavailable: ["Reserved", "Not Available"],
-    }],
-    aquahot_engine: ["engine_preheat", {
-      kind: "field",
-      field: "engine_preheat",
-      unavailable: ["Reserved", "Not Available"],
-    }],
+    aquahot_burner: [
+      "diesel_burner",
+      {
+        kind: "field",
+        field: "diesel_burner",
+        unavailable: ["Reserved", "Not Available"],
+      },
+    ],
+    aquahot_ac_1: [
+      "electric_selector",
+      {
+        kind: "equals",
+        field: "electric_selector",
+        value: "AC 1",
+        unavailable: ["Reserved", "Not Available"],
+      },
+    ],
+    aquahot_ac_2: [
+      "electric_selector",
+      {
+        kind: "equals",
+        field: "electric_selector",
+        value: "AC 2",
+        unavailable: ["Reserved", "Not Available"],
+      },
+    ],
+    aquahot_engine: [
+      "engine_preheat",
+      {
+        kind: "field",
+        field: "engine_preheat",
+        unavailable: ["Reserved", "Not Available"],
+      },
+    ],
   };
   if (aquahot[uniqueId]) {
     const [field, projection] = aquahot[uniqueId];
@@ -540,22 +619,25 @@ const isEmpty =
   (typeof raw === "object" && Object.keys(raw).length === 0);
 
 if (isEmpty) {
-  let changed = false;
+  let integrationChanged = false;
   for (const prefix of INTEGRATION_PREFIXES) {
     const topics = integrationIndex[prefix];
     const index = topics ? topics.indexOf(topic) : -1;
     if (index !== -1) {
       topics.splice(index, 1);
-      changed = true;
+      integrationChanged = true;
     }
   }
+  let entityChanged = false;
   if (entityIndex[topic]) {
     delete entityIndex[topic];
     global.set(ENTITY_MAP_KEY, entityIndex, "file");
-    changed = true;
+    entityChanged = true;
   }
-  if (changed) global.set("discoveryIndex", integrationIndex, "file");
-  return changed
+  if (integrationChanged) {
+    global.set("discoveryIndex", integrationIndex, "file");
+  }
+  return entityChanged
     ? { topic: "entity-map-refresh", payload: { reason: "discovery-removed" } }
     : null;
 }
@@ -572,10 +654,10 @@ const uniqueId = config && config.unique_id;
 if (typeof uniqueId !== "string" || !uniqueId) return null;
 
 const prefix = INTEGRATION_PREFIXES.find((value) =>
-  uniqueId.startsWith(value + "_"));
+  uniqueId.startsWith(value + "_"),
+);
 if (prefix) {
-  const topics = integrationIndex[prefix] ||
-    (integrationIndex[prefix] = []);
+  const topics = integrationIndex[prefix] || (integrationIndex[prefix] = []);
   if (!topics.includes(topic)) {
     topics.push(topic);
     global.set("discoveryIndex", integrationIndex, "file");
@@ -583,28 +665,43 @@ if (prefix) {
 }
 
 const stateTopics = Object.entries(config)
-  .filter(([key, value]) =>
-    /(?:^|_)state_topic$/.test(key) && typeof value === "string")
+  .filter(
+    ([key, value]) =>
+      /(?:^|_)state_topic$/.test(key) && typeof value === "string",
+  )
   .map(([, value]) => value);
 const commandTopics = Object.entries(config)
-  .filter(([key, value]) =>
-    /(?:^|_)command_topic$/.test(key) && typeof value === "string")
+  .filter(
+    ([key, value]) =>
+      /(?:^|_)command_topic$/.test(key) && typeof value === "string",
+  )
   .map(([, value]) => value);
 
-entityIndex[topic] = {
+const record = {
   topic,
   component: parsedTopic.component,
   object_id: parsedTopic.objectId,
   unique_id: uniqueId,
-  original_name: typeof config.name === "string"
-    ? config.name : parsedTopic.objectId,
-  default_entity_id: typeof config.default_entity_id === "string"
-    ? config.default_entity_id
-    : `${parsedTopic.component}.${parsedTopic.objectId}`,
+  original_name:
+    typeof config.name === "string" ? config.name : parsedTopic.objectId,
+  default_entity_id:
+    typeof config.default_entity_id === "string"
+      ? config.default_entity_id
+      : `${parsedTopic.component}.${parsedTopic.objectId}`,
   state_topics: [...new Set(stateTopics)],
   command_topics: [...new Set(commandTopics)],
   bindings: bindingsFor(uniqueId),
 };
+if (JSON.stringify(entityIndex[topic]) === JSON.stringify(record)) {
+  node.status({
+    fill: "green",
+    shape: "ring",
+    text: `${Object.keys(entityIndex).length} discoveries · unchanged`,
+  });
+  return null;
+}
+
+entityIndex[topic] = record;
 global.set(ENTITY_MAP_KEY, entityIndex, "file");
 node.status({
   fill: "blue",
