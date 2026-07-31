@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `292e70a6ba25b323`
 - **Disabled:** false
-- **Node count:** 115
+- **Node count:** 117
 - **Function nodes:** 35
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 17
+- **Link out (outbound):** 16
 - **Link in (inbound):** 7
 
 ## Function Nodes
@@ -265,11 +265,11 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_1ac6e0fa1cbb["MQTT Out_ Retain FALSE"]:::fn
+  n_1ebd6405aa9b["1ebd6405aa9bbcc8"]:::fn
   n_74329f13cbbc["MQTT out_ Retain FALSE"]:::link
   n_ca7e7aa2d0a0["can_transmit_guard"]:::fn
   n_74329f13cbbc -->|out 0| n_ca7e7aa2d0a0
-  n_ca7e7aa2d0a0 -->|out 0| n_1ac6e0fa1cbb
+  n_ca7e7aa2d0a0 -->|out 0| n_1ebd6405aa9b
 ```
 
 #### Msg contract
@@ -285,7 +285,7 @@ the only way out of the lost state.
 
 #### Downstream
 - **Output 0:**
-  - MQTT Out: Retain FALSE (mqtt out) — this tab
+  - 1ebd6405aa9bbcc8 (switch) — this tab
 
 ---
 
@@ -516,10 +516,10 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
-  n_entitymapret["MQTT out_ Retain TRUE"]:::link
+  n_1ed37bf72535["MQTT Out_ Retain TRUE"]:::fn
   n_entitymapsna["entity_map_snapshot"]:::fn
   n_entitymapsta["Entity map GET /api/states"]:::fn
-  n_entitymapsna -->|out 0| n_entitymapret
+  n_entitymapsna -->|out 0| n_1ed37bf72535
   n_entitymapsta -->|out 0| n_entitymapsna
 ```
 
@@ -533,7 +533,7 @@ retained snapshot. Replacing this payload atomically removes stale mappings.
 
 #### Downstream
 - **Output 0:**
-  - MQTT out: Retain TRUE (link out) — this tab
+  - MQTT Out: Retain TRUE (mqtt out) — this tab
 
 ---
 
@@ -1317,8 +1317,6 @@ _None._
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **MQTT out: Retain TRUE** (`e38f32a1f6d36bfb`) →
   - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
-- **MQTT out: Retain TRUE** (`entity_map_retain_link`) →
-  - MQTT out: Retain TRUE in tab `Config` ([wiring](./config.md))
 - **Notify user** (`cd73ee739dad9f59`) →
   - Notify user in tab `Config` ([wiring](./config.md))
 - **STATUS** (`02bdfc59de71b5a5`) →
@@ -1355,7 +1353,6 @@ _None._
   - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Victron`
   - MQTT out: Retain TRUE in tab `Config`
-  - MQTT out: Retain TRUE in tab `Config`
   - MQTT out: Retain TRUE in tab `Victron`
 - **Notify user** (`a1e89f48333c8256`) ←
   - Notify user in tab `Templates`
@@ -1369,6 +1366,7 @@ _None._
 
 ## Other Nodes
 
+- 1ebd6405aa9bbcc8 (switch) — id `1ebd6405aa9bbcc8`, in: 1, out: 2
 - 21dfe84b8adafa6e (rbe) — id `21dfe84b8adafa6e`, in: 3, out: 3
 - 375ced2f0a80dc5c (note) — id `375ced2f0a80dc5c`, in: 0, out: 0
 - 55071115a3fe7c2c (delay) — id `55071115a3fe7c2c`, in: 2, out: 1
@@ -1403,6 +1401,8 @@ _None._
 - Location updates (mqtt in) — id `50dfcea54d80866b`, in: 0, out: 1
 - MQTT (group) — id `3c819b7900145438`, in: 0, out: 0
 - MQTT Out: Retain FALSE (mqtt out) — id `1ac6e0fa1cbb3852`, in: 1, out: 0
+- MQTT Out: Retain FALSE (mqtt out) — id `f838e0badc33a9fb`, in: 1, out: 0
+- MQTT Out: Retain TRUE (mqtt out) — id `1ed37bf725355426`, in: 1, out: 0
 - MQTT Out: Retain TRUE (mqtt out) — id `cacf35b859af22a9`, in: 1, out: 0
 - MQTT Out: can/decoded (mqtt out) — id `08bc68c0679da2b2`, in: 1, out: 0
 - MQTT discovery (group) — id `bc622f80fe99faa0`, in: 0, out: 0

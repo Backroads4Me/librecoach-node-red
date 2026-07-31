@@ -390,7 +390,7 @@ _None._
 
 - HA climate (mqtt in) — id `f937b8d3f3e0c24e`, in: 0, out: 1
 - Micro-Air config (mqtt in) — id `feeabea8484a11e6`, in: 0, out: 1
-- Micro-Air status (mqtt in) — id `d5cb654b4dad986f`, in: 0, out: 1
+- Micro-Air state (mqtt in) — id `d5cb654b4dad986f`, in: 0, out: 1
 - Micro-Air status (group) — id `fe7cf55a75689b88`, in: 0, out: 0
 - Reset unique (inject) — id `36941b7928b35ae1`, in: 0, out: 1
 - Rest unique list (group) — id `cd4c55cd4f675905`, in: 0, out: 0
