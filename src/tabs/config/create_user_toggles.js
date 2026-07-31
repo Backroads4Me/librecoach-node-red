@@ -18,6 +18,7 @@ messages.push({
   payload: {
     name: "Export LibreCoach Configuration",
     unique_id: "librecoach_export_config",
+    qos: 1,
     default_entity_id: "button.librecoach_export_config",
     icon: "mdi:download",
     command_topic: "librecoach/export/trigger",
@@ -31,6 +32,7 @@ messages.push({
   payload: {
     name: "Import LibreCoach Configuration",
     unique_id: "librecoach_import_config",
+    qos: 1,
     default_entity_id: "button.librecoach_import_config",
     icon: "mdi:upload",
     command_topic: "librecoach/import/trigger",
@@ -58,6 +60,7 @@ for (const field of rvFields) {
     payload: {
       name: field.name,
       unique_id: field.id,
+      qos: 1,
       default_entity_id: `text.${field.id}`,
       icon: field.icon,
       state_topic: `librecoach/rv_info/${field.id}`,
@@ -84,6 +87,7 @@ messages.push({
   payload: {
     name: "Tools: Record Unknown Commands",
     unique_id: "librecoach_record_unknown",
+    qos: 1,
     default_entity_id: "switch.librecoach_record_unknown",
     icon: "mdi:record-rec",
     command_topic: "librecoach/record_unknown/set",
@@ -112,6 +116,7 @@ messages.push({
   payload: {
     name: "Export AI Dashboard Prompt (Mushroom Cards)",
     unique_id: "librecoach_export_entities",
+    qos: 1,
     default_entity_id: "button.librecoach_export_entities",
     icon: "mdi:robot-outline",
     command_topic: "librecoach/export/entities/trigger",
@@ -125,6 +130,7 @@ messages.push({
   payload: {
     name: "Export AI Dashboard Prompt (Standard Cards)",
     unique_id: "librecoach_export_entities_default",
+    qos: 1,
     default_entity_id: "button.librecoach_export_entities_default",
     icon: "mdi:view-dashboard-outline",
     command_topic: "librecoach/export/entities/default/trigger",
@@ -138,6 +144,7 @@ messages.push({
   payload: {
     name: "Forget Bluetooth Devices",
     unique_id: "librecoach_forget_bluetooth",
+    qos: 1,
     default_entity_id: "button.librecoach_forget_bluetooth",
     icon: "mdi:bluetooth-off",
     command_topic: "librecoach/ble/reset_locks",
@@ -151,6 +158,7 @@ messages.push({
   payload: {
     name: "Tools: Save Recorded Log",
     unique_id: "librecoach_export_unknown",
+    qos: 1,
     default_entity_id: "button.librecoach_export_unknown",
     icon: "mdi:download",
     command_topic: "librecoach/export/unknown/trigger",

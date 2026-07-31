@@ -28,6 +28,7 @@ if (!created[instance]) {
     payload: {
       name: "Autofill",
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId}`,
       icon: "mdi:water-plus-outline",
       command_topic: `homeassistant/${componentType}/${entityId}/set`,

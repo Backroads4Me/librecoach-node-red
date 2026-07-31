@@ -52,6 +52,7 @@ if (!created[instance]) {
     payload: {
       name: displayName,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `sensor.${entityId}`,
       icon: "mdi:water-percent",
       state_topic: stateTopic,

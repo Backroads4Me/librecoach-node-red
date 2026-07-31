@@ -741,7 +741,7 @@
   z: bfa6336b0d45dc23
   name: HA in
   topic: librecoach/import/trigger
-  qos: "2"
+  qos: "1"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false

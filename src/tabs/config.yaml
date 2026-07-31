@@ -184,7 +184,7 @@
   z: 292e70a6ba25b323
   name: "MQTT Out: Retain FALSE"
   topic: ""
-  qos: "0"
+  qos: "2"
   retain: "false"
   respTopic: ""
   contentType: ""
@@ -192,7 +192,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 1560
+  x: 1540
   "y": 380
   g: 3c819b7900145438
   wires: []
@@ -261,6 +261,43 @@
   g: 8ef86a1c4b59d8e1
   l: true
   wires: []
+- id: 1ebd6405aa9bbcc8
+  type: switch
+  z: 292e70a6ba25b323
+  name: ""
+  property: topic
+  propertyType: msg
+  rules:
+    - t: eq
+      v: can/send
+      vt: str
+    - t: else
+  checkall: "true"
+  repair: false
+  outputs: 2
+  x: 1320
+  "y": 380
+  g: 3c819b7900145438
+  wires:
+    - - 1ac6e0fa1cbb3852
+    - - f838e0badc33a9fb
+- id: 1ed37bf725355426
+  type: mqtt out
+  z: 292e70a6ba25b323
+  name: "MQTT Out: Retain TRUE"
+  topic: ""
+  qos: "1"
+  retain: "true"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 2310
+  "y": 2460
+  g: bc622f80fe99faa0
+  wires: []
 - id: 21029b71ed58348c
   type: mqtt in
   z: 292e70a6ba25b323
@@ -283,7 +320,7 @@
   z: 292e70a6ba25b323
   name: CAN in
   topic: can/raw
-  qos: "1"
+  qos: "0"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -578,6 +615,7 @@
     label: true
   nodes:
     - 1ac6e0fa1cbb3852
+    - 1ebd6405aa9bbcc8
     - 21029b71ed58348c
     - 54cd7e4a8959a77c
     - 64c5e5cfd4382453
@@ -590,6 +628,7 @@
     - cacf35b859af22a9
     - d34a8c1fd2cc4320
     - f658418a7b9b4857
+    - f838e0badc33a9fb
 - id: 3d07bdca6b71b669
   type: function
   z: 292e70a6ba25b323
@@ -935,7 +974,7 @@
   z: 292e70a6ba25b323
   name: Location updates
   topic: can/status/geo
-  qos: "2"
+  qos: "1"
   datatype: json
   broker: 80727e60a251c36c
   nl: false
@@ -1415,7 +1454,7 @@
     - d95299a44e1d7ed5
     - c83c6b2b70c927a3
     - a493ca49e16bb03c
-  x: 1020
+  x: 900
   "y": 380
   g: 3c819b7900145438
   l: true
@@ -2269,6 +2308,7 @@
         const payload = {
           name: name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `sensor.${entityId}`,
           icon: icon,
           state_topic: `homeassistant/sensor/${entityId}/state`,
@@ -3368,6 +3408,7 @@
     stroke: "#777777"
     label: true
   nodes:
+    - 1ed37bf725355426
     - aba7ef0da2fb2851
     - e71f0cb356427a9c
     - entity_map_debounce
@@ -3377,7 +3418,6 @@
     - entity_map_ready
     - entity_map_registry_api
     - entity_map_registry_event
-    - entity_map_retain_link
     - entity_map_snapshot
     - entity_map_start
     - entity_map_states_api
@@ -3550,17 +3590,17 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1290
+  x: 1140
   "y": 380
   g: 3c819b7900145438
   wires:
-    - - 1ac6e0fa1cbb3852
+    - - 1ebd6405aa9bbcc8
 - id: cacf35b859af22a9
   type: mqtt out
   z: 292e70a6ba25b323
   name: "MQTT Out: Retain TRUE"
   topic: ""
-  qos: "0"
+  qos: "1"
   retain: "true"
   respTopic: ""
   contentType: ""
@@ -3568,7 +3608,7 @@
   correl: ""
   expiry: ""
   broker: 80727e60a251c36c
-  x: 1560
+  x: 1540
   "y": 300
   g: 3c819b7900145438
   wires: []
@@ -3789,6 +3829,7 @@
       payload: {
         name: "Export LibreCoach Configuration",
         unique_id: "librecoach_export_config",
+        qos: 1,
         default_entity_id: "button.librecoach_export_config",
         icon: "mdi:download",
         command_topic: "librecoach/export/trigger",
@@ -3804,6 +3845,7 @@
       payload: {
         name: "Import LibreCoach Configuration",
         unique_id: "librecoach_import_config",
+        qos: 1,
         default_entity_id: "button.librecoach_import_config",
         icon: "mdi:upload",
         command_topic: "librecoach/import/trigger",
@@ -3834,6 +3876,7 @@
         payload: {
           name: field.name,
           unique_id: field.id,
+          qos: 1,
           default_entity_id: `text.${field.id}`,
           icon: field.icon,
           state_topic: `librecoach/rv_info/${field.id}`,
@@ -3863,6 +3906,7 @@
       payload: {
         name: "Tools: Record Unknown Commands",
         unique_id: "librecoach_record_unknown",
+        qos: 1,
         default_entity_id: "switch.librecoach_record_unknown",
         icon: "mdi:record-rec",
         command_topic: "librecoach/record_unknown/set",
@@ -3896,6 +3940,7 @@
       payload: {
         name: "Export AI Dashboard Prompt (Mushroom Cards)",
         unique_id: "librecoach_export_entities",
+        qos: 1,
         default_entity_id: "button.librecoach_export_entities",
         icon: "mdi:robot-outline",
         command_topic: "librecoach/export/entities/trigger",
@@ -3912,6 +3957,7 @@
       payload: {
         name: "Export AI Dashboard Prompt (Standard Cards)",
         unique_id: "librecoach_export_entities_default",
+        qos: 1,
         default_entity_id: "button.librecoach_export_entities_default",
         icon: "mdi:view-dashboard-outline",
         command_topic: "librecoach/export/entities/default/trigger",
@@ -3927,6 +3973,7 @@
       payload: {
         name: "Forget Bluetooth Devices",
         unique_id: "librecoach_forget_bluetooth",
+        qos: 1,
         default_entity_id: "button.librecoach_forget_bluetooth",
         icon: "mdi:bluetooth-off",
         command_topic: "librecoach/ble/reset_locks",
@@ -3942,6 +3989,7 @@
       payload: {
         name: "Tools: Save Recorded Log",
         unique_id: "librecoach_export_unknown",
+        qos: 1,
         default_entity_id: "button.librecoach_export_unknown",
         icon: "mdi:download",
         command_topic: "librecoach/export/unknown/trigger",
@@ -4573,18 +4621,6 @@
   g: bc622f80fe99faa0
   wires:
     - - entity_map_debounce
-- id: entity_map_retain_link
-  type: link out
-  z: 292e70a6ba25b323
-  name: "MQTT out: Retain TRUE"
-  mode: link
-  links:
-    - f658418a7b9b4857
-  x: 2310
-  "y": 2460
-  g: bc622f80fe99faa0
-  l: true
-  wires: []
 - id: entity_map_snapshot
   type: function
   z: 292e70a6ba25b323
@@ -4745,7 +4781,7 @@
   "y": 2460
   g: bc622f80fe99faa0
   wires:
-    - - entity_map_retain_link
+    - - 1ed37bf725355426
 - id: entity_map_start
   type: inject
   z: 292e70a6ba25b323
@@ -4953,8 +4989,7 @@
     - 102272ba5b34f5e1
     - 6376d98589368f2b
     - 5ffb64e684c20ea8
-    - entity_map_retain_link
-  x: 1020
+  x: 900
   "y": 300
   g: 3c819b7900145438
   l: true
@@ -4990,6 +5025,23 @@
     - 9d8e7f6a5b4c3d2e
     - c2e1bc849357fcb4
     - d6680567062a0908
+- id: f838e0badc33a9fb
+  type: mqtt out
+  z: 292e70a6ba25b323
+  name: "MQTT Out: Retain FALSE"
+  topic: ""
+  qos: "1"
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 80727e60a251c36c
+  x: 1540
+  "y": 440
+  g: 3c819b7900145438
+  wires: []
 - id: ff7901a611c1e1aa
   type: mqtt in
   z: 292e70a6ba25b323

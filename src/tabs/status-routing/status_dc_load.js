@@ -71,6 +71,7 @@ if (created[instance] !== desiredMode) {
     const config = {
         name: `Switch ${instance}`,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `light.${entityId}`,
         icon: "mdi:light-recessed",
         schema: "json",

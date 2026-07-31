@@ -243,6 +243,7 @@
     const discoveryPayload = {
       name: `Outdoor Temperature`,
       unique_id: uniqueId,
+      qos: 1,
       default_entity_id: "sensor.temperature_outdoor",
       state_topic: stateTopic,
       value_template:
@@ -667,6 +668,7 @@
     const discoveryPayload = {
       name: `MicroAir Zone ${zone + 1}`,
       unique_id: uniqueId,
+      qos: 1,
       default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,
       icon: "mdi:thermostat",
 
@@ -756,6 +758,7 @@
         payload: {
           name: "BLE Availability",
           unique_id: `microair_${safeMac}_availability`,
+          qos: 1,
           default_entity_id: `binary_sensor.microair_${safeMac}_availability`,
           device_class: "connectivity",
           entity_category: "diagnostic",
@@ -771,6 +774,7 @@
         payload: {
           name: "BLE Last Success",
           unique_id: `microair_${safeMac}_last_success`,
+          qos: 1,
           default_entity_id: `sensor.microair_${safeMac}_last_success`,
           entity_category: "diagnostic",
           device_class: "timestamp",
@@ -785,6 +789,7 @@
         payload: {
           name: "BLE Failure Count",
           unique_id: `microair_${safeMac}_failure_count`,
+          qos: 1,
           default_entity_id: `sensor.microair_${safeMac}_failure_count`,
           entity_category: "diagnostic",
           state_class: "measurement",
@@ -799,6 +804,7 @@
         payload: {
           name: "BLE Last Error",
           unique_id: `microair_${safeMac}_last_error`,
+          qos: 1,
           default_entity_id: `sensor.microair_${safeMac}_last_error`,
           entity_category: "diagnostic",
           // ha-addons publishes none | auth_failed | connectivity on this topic,
@@ -813,6 +819,7 @@
         payload: {
           name: "BLE Reconnect",
           unique_id: `microair_${safeMac}_reconnect`,
+          qos: 1,
           default_entity_id: `button.microair_${safeMac}_reconnect`,
           icon: "mdi:bluetooth-connect",
           entity_category: "config",
@@ -828,6 +835,7 @@
         payload: {
           name: "BLE Clear Errors",
           unique_id: `microair_${safeMac}_clear_errors`,
+          qos: 1,
           default_entity_id: `button.microair_${safeMac}_clear_errors`,
           icon: "mdi:alert-circle-check",
           entity_category: "config",
@@ -889,16 +897,16 @@
 - id: d5cb654b4dad986f
   type: mqtt in
   z: e3804d2dd0b81928
-  name: Micro-Air status
+  name: Micro-Air state
   topic: librecoach/ble/microair/+/state
-  qos: "2"
+  qos: "1"
   datatype: json
   broker: 80727e60a251c36c
   nl: false
   rap: true
   rh: 0
   inputs: 0
-  x: 200
+  x: 190
   "y": 400
   g: fe7cf55a75689b88
   wires:
@@ -1377,7 +1385,7 @@
   z: e3804d2dd0b81928
   name: HA climate
   topic: homeassistant/climate/+/+/set
-  qos: "2"
+  qos: "1"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false
@@ -1446,7 +1454,7 @@
   z: e3804d2dd0b81928
   name: Micro-Air config
   topic: librecoach/ble/microair/+/zone/+/config
-  qos: "2"
+  qos: "1"
   datatype: json
   broker: 80727e60a251c36c
   nl: false

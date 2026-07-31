@@ -40,6 +40,7 @@ if (!created) {
     const payload = {
       name: name,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `sensor.${entityId}`,
       icon: icon,
       state_topic: `homeassistant/sensor/${entityId}/state`,

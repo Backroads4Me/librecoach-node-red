@@ -48,6 +48,7 @@ if (!created[instance]) {
     payload: {
       name: config.name,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId}`,
       icon: config.icon,
       command_topic: `homeassistant/${componentType}/${entityId}/set`,

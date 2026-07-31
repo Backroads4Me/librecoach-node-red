@@ -36,6 +36,7 @@ function climateConfig(entityId, name) {
   const cfg = {
     name,
     unique_id: entityId,
+    qos: 1,
     default_entity_id: `climate.${entityId}`,
     mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,
     mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,
@@ -62,6 +63,7 @@ function sensorConfig(entityId, name, unit, deviceClass, stateClass, icon) {
   const cfg = {
     name,
     unique_id: entityId,
+    qos: 1,
     default_entity_id: `sensor.${entityId}`,
     state_topic: `homeassistant/sensor/${entityId}/state`,
     availability_mode: "all",
@@ -87,6 +89,7 @@ function binarySensorConfig(entityId, name, deviceClass, icon) {
     payload: {
       name,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `binary_sensor.${entityId}`,
       state_topic: `homeassistant/binary_sensor/${entityId}/state`,
       payload_on: "ON",

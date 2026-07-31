@@ -567,6 +567,7 @@
         payload: {
           name: displayName,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `sensor.${entityId}`,
           icon: "mdi:car-battery",
           state_topic: stateTopic,
@@ -1537,6 +1538,7 @@
         payload: {
           name: `Zone ${instance + 1} Ambient Temperature`,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `sensor.${entityId}`,
           icon: "mdi:thermometer",
           state_topic: stateTopic,
@@ -1770,6 +1772,7 @@
       const config = {
         name: entityName,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `light.${entityId}`,
         icon: "mdi:light-recessed",
         schema: "json",
@@ -2390,6 +2393,7 @@
         payload: {
           name: "Autofill",
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `${componentType}.${entityId}`,
           icon: "mdi:water-plus-outline",
           command_topic: `homeassistant/${componentType}/${entityId}/set`,
@@ -3424,6 +3428,7 @@
       const cfg = {
         name,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
@@ -3459,6 +3464,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `binary_sensor.${entityId}`,
           state_topic: `homeassistant/binary_sensor/${entityId}/state`,
           payload_on: "ON",
@@ -3525,6 +3531,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `switch.${entityId}`,
           state_topic: `homeassistant/switch/${entityId}/state`,
           command_topic: commandTopic,
@@ -3552,6 +3559,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `binary_sensor.${entityId}`,
           state_topic: `homeassistant/binary_sensor/${entityId}/state`,
           payload_on: "ON",
@@ -3976,6 +3984,7 @@
         payload: {
           name: `Thermostat Zone ${instance}`,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `climate.${entityId}`,
           modes: ["off", "cool", "heat", "heat_cool", "fan_only", "dry"],
           fan_modes: ["auto", "low", "high"],
@@ -4543,6 +4552,7 @@
         payload: {
           name: displayName,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `sensor.${entityId}`,
           icon: "mdi:water-percent",
           state_topic: stateTopic,
@@ -4759,6 +4769,7 @@
       const cfg = {
         name,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
@@ -4785,6 +4796,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `binary_sensor.${entityId}`,
           state_topic: `homeassistant/binary_sensor/${entityId}/state`,
           payload_on: "ON",
@@ -4943,6 +4955,7 @@
             payload: {
               name: "Generator Control",
               unique_id: "generator_control",
+              qos: 1,
               default_entity_id: "switch.generator_control",
               state_topic: "homeassistant/switch/generator_control/state",
               command_topic: "homeassistant/switch/generator_control/set",
@@ -5238,6 +5251,7 @@
       const cfg = {
         name,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `climate.${entityId}`,
         mode_state_topic: `homeassistant/climate/${entityId}/mode/state`,
         mode_command_topic: `homeassistant/climate/${entityId}/mode/set`,
@@ -5264,6 +5278,7 @@
       const cfg = {
         name,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
@@ -5289,6 +5304,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `binary_sensor.${entityId}`,
           state_topic: `homeassistant/binary_sensor/${entityId}/state`,
           payload_on: "ON",
@@ -6430,6 +6446,7 @@
             payload: {
                 name: `Shade ${instance}`,
                 unique_id: entityId,
+                qos: 1,
                 default_entity_id: `${componentType}.${entityId}`,
                 icon: "mdi:window-shutter",
                 command_topic: `homeassistant/${componentType}/${entityId}/set`,
@@ -6968,6 +6985,7 @@
     const payload = {
       name: displayName,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId}`,
       icon: "mdi:heating-coil",
 
@@ -7589,6 +7607,7 @@
             ensureDiscovery(entityId, {
                 name: `Panel ${instance} Signal Strength`,
                 unique_id: entityId,
+                qos: 1,
                 default_entity_id: `sensor.${entityId}`,
                 icon: "mdi:signal",
                 state_topic: stateTopic,
@@ -7622,6 +7641,7 @@
             ensureDiscovery(entityId, {
                 name: `Panel ${instance} Signal Quality`,
                 unique_id: entityId,
+                qos: 1,
                 default_entity_id: `sensor.${entityId}`,
                 icon: "mdi:wifi-strength-2",
                 state_topic: stateTopic,
@@ -8075,6 +8095,7 @@
         payload: {
           name: "Water Pump",
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `${componentType}.${entityId}`,
           icon: "mdi:water-pump",
           command_topic: `homeassistant/${componentType}/${entityId}/set`,
@@ -8190,6 +8211,7 @@
         payload: {
           name: "All Locks",
           unique_id: entityId0,
+          qos: 1,
           default_entity_id: `${componentType}.${entityId0}`,
           icon: "mdi:lock",
           command_topic: `homeassistant/${componentType}/${entityId0}/set`,
@@ -8237,6 +8259,7 @@
         payload: {
           name: `Lock ${instance}`,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `${componentType}.${entityId}`,
           icon: "mdi:lock",
           command_topic: `homeassistant/${componentType}/${entityId}/set`,
@@ -9071,6 +9094,7 @@
       const config = {
         name: entityName,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `light.${entityId}`,
         icon: "mdi:light-recessed",
         schema: "json",
@@ -9553,6 +9577,7 @@
         const config = {
             name: `Switch ${instance}`,
             unique_id: entityId,
+            qos: 1,
             default_entity_id: `light.${entityId}`,
             icon: "mdi:light-recessed",
             schema: "json",
@@ -10677,6 +10702,7 @@
       const config = {
         name: `AC Load ${instance}`,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `light.${entityId}`,
         icon: "mdi:power-plug",
         schema: "json",
@@ -10814,6 +10840,7 @@
       const cfg = {
         name,
         unique_id: entityId,
+        qos: 1,
         default_entity_id: `sensor.${entityId}`,
         state_topic: `homeassistant/sensor/${entityId}/state`,
         availability_mode: "all",
@@ -10839,6 +10866,7 @@
         payload: {
           name,
           unique_id: entityId,
+          qos: 1,
           default_entity_id: `binary_sensor.${entityId}`,
           state_topic: `homeassistant/binary_sensor/${entityId}/state`,
           payload_on: "ON",

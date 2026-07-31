@@ -28,6 +28,7 @@ if (!created[instance]) {
     payload: {
       name: "Water Pump",
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId}`,
       icon: "mdi:water-pump",
       command_topic: `homeassistant/${componentType}/${entityId}/set`,

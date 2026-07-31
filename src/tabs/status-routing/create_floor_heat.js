@@ -65,6 +65,7 @@ const stateTopic = `homeassistant/${componentType}/${entityId}/state`;
 const payload = {
   name: displayName,
   unique_id: entityId,
+  qos: 1,
   default_entity_id: `${componentType}.${entityId}`,
   icon: "mdi:heating-coil",
 

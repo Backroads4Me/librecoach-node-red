@@ -56,6 +56,7 @@ if (!created[instance]) {
     payload: {
       name: `Zone ${instance + 1} Ambient Temperature`,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `sensor.${entityId}`,
       icon: "mdi:thermometer",
       state_topic: stateTopic,

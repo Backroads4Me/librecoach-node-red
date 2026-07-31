@@ -20,6 +20,7 @@ const stateTopic = `librecoach/ble/microair/${mac}/zone/0/state`;
 const discoveryPayload = {
   name: `Outdoor Temperature`,
   unique_id: uniqueId,
+  qos: 1,
   default_entity_id: "sensor.temperature_outdoor",
   state_topic: stateTopic,
   value_template:

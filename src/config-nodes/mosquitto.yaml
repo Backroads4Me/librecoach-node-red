@@ -10,18 +10,18 @@
   keepalive: 60
   cleansession: true
   autoUnsubscribe: true
-  birthTopic: ""
-  birthQos: "0"
-  birthRetain: "false"
-  birthPayload: ""
+  birthTopic: librecoach/nodered/status
+  birthQos: "1"
+  birthRetain: "true"
+  birthPayload: online
   birthMsg: {}
   closeTopic: librecoach/nodered/status
-  closeQos: "0"
+  closeQos: "1"
   closeRetain: "true"
   closePayload: offline
   closeMsg: {}
   willTopic: librecoach/nodered/status
-  willQos: "0"
+  willQos: "1"
   willRetain: "true"
   willPayload: offline
   willMsg: {}

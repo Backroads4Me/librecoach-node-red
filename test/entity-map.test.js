@@ -139,7 +139,8 @@ test("startup and registry events rebuild one debounced retained snapshot", () =
     yaml,
     /name: Debounce entity map refresh[\s\S]*?duration: "2"[\s\S]*?extend: true/,
   );
-  assert.match(yaml, /id: entity_map_snapshot[\s\S]*?entity_map_retain_link/);
+  assert.match(yaml, /id: entity_map_snapshot[\s\S]*?1ed37bf725355426/);
+  assert.match(yaml, /id: 1ed37bf725355426[\s\S]*?qos: "1"[\s\S]*?retain: "true"/);
 
   const manifest = JSON.parse(
     fs.readFileSync(path.join(configDir, ".manifest.json"), "utf8"),

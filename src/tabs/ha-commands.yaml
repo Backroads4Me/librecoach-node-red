@@ -46,7 +46,7 @@
   z: b3d80c5dc947ec88
   name: HA climate
   topic: homeassistant/climate/+/+/set
-  qos: "2"
+  qos: "1"
   datatype: auto-detect
   broker: 80727e60a251c36c
   nl: false

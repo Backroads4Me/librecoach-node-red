@@ -48,6 +48,7 @@ if (!created[0]) {
     payload: {
       name: "All Locks",
       unique_id: entityId0,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId0}`,
       icon: "mdi:lock",
       command_topic: `homeassistant/${componentType}/${entityId0}/set`,
@@ -89,6 +90,7 @@ if (!created[instance]) {
     payload: {
       name: `Lock ${instance}`,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `${componentType}.${entityId}`,
       icon: "mdi:lock",
       command_topic: `homeassistant/${componentType}/${entityId}/set`,

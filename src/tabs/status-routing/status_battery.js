@@ -59,6 +59,7 @@ if (!created[instance]) {
     payload: {
       name: displayName,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `sensor.${entityId}`,
       icon: "mdi:car-battery",
       state_topic: stateTopic,

@@ -382,6 +382,7 @@ function buildDefaultEntityId() {
 const payload = {
   name: friendlyName,
   unique_id: entityId,
+  qos: 1,
   default_entity_id: buildDefaultEntityId(),
   icon: haMetadata.icon,
   state_topic: stateTopic,

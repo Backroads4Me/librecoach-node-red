@@ -148,6 +148,7 @@ if (priorMode !== desiredMode) {
   const config = {
     name: entityName,
     unique_id: entityId,
+    qos: 1,
     default_entity_id: `light.${entityId}`,
     icon: "mdi:light-recessed",
     schema: "json",

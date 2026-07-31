@@ -52,6 +52,7 @@ function add(component, suffix, payload) {
   const entityId = `${baseId}_${suffix}`;
   const topic = `homeassistant/${component}/${entityId}/config`;
   payload.unique_id = entityId;
+  payload.qos = 1;
   payload.default_entity_id = `${component}.${entityId}`;
   payload.device = device;
   if (!payload.availability && !payload.availability_topic) {

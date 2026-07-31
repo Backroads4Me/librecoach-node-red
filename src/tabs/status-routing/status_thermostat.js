@@ -60,6 +60,7 @@ if (!created[instance]) {
     payload: {
       name: `Thermostat Zone ${instance}`,
       unique_id: entityId,
+      qos: 1,
       default_entity_id: `climate.${entityId}`,
       modes: ["off", "cool", "heat", "heat_cool", "fan_only", "dry"],
       fan_modes: ["auto", "low", "high"],

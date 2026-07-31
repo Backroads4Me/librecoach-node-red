@@ -71,6 +71,7 @@ if (created[instance] !== desiredMode) {
   const config = {
     name: `AC Load ${instance}`,
     unique_id: entityId,
+    qos: 1,
     default_entity_id: `light.${entityId}`,
     icon: "mdi:power-plug",
     schema: "json",

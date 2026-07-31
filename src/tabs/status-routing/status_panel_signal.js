@@ -57,6 +57,7 @@ if (dgnName === "WIRELESS_PANEL_SIGNAL_STATUS") {
         ensureDiscovery(entityId, {
             name: `Panel ${instance} Signal Strength`,
             unique_id: entityId,
+            qos: 1,
             default_entity_id: `sensor.${entityId}`,
             icon: "mdi:signal",
             state_topic: stateTopic,
@@ -89,6 +90,7 @@ if (dgnName === "WIRELESS_PANEL_QUALITY_STATUS") {
         ensureDiscovery(entityId, {
             name: `Panel ${instance} Signal Quality`,
             unique_id: entityId,
+            qos: 1,
             default_entity_id: `sensor.${entityId}`,
             icon: "mdi:wifi-strength-2",
             state_topic: stateTopic,

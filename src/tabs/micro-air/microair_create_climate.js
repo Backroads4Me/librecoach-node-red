@@ -94,6 +94,7 @@ if (zoneConfig.SPL && zoneConfig.SPL.length >= 4) {
 const discoveryPayload = {
   name: `MicroAir Zone ${zone + 1}`,
   unique_id: uniqueId,
+  qos: 1,
   default_entity_id: `climate.librecoach_climate_microair_zone_${zone + 1}`,
   icon: "mdi:thermostat",
 
@@ -180,6 +181,7 @@ const diagnostics = [
     payload: {
       name: "BLE Availability",
       unique_id: `microair_${safeMac}_availability`,
+      qos: 1,
       default_entity_id: `binary_sensor.microair_${safeMac}_availability`,
       device_class: "connectivity",
       entity_category: "diagnostic",
@@ -195,6 +197,7 @@ const diagnostics = [
     payload: {
       name: "BLE Last Success",
       unique_id: `microair_${safeMac}_last_success`,
+      qos: 1,
       default_entity_id: `sensor.microair_${safeMac}_last_success`,
       entity_category: "diagnostic",
       device_class: "timestamp",
@@ -209,6 +212,7 @@ const diagnostics = [
     payload: {
       name: "BLE Failure Count",
       unique_id: `microair_${safeMac}_failure_count`,
+      qos: 1,
       default_entity_id: `sensor.microair_${safeMac}_failure_count`,
       entity_category: "diagnostic",
       state_class: "measurement",
@@ -223,6 +227,7 @@ const diagnostics = [
     payload: {
       name: "BLE Last Error",
       unique_id: `microair_${safeMac}_last_error`,
+      qos: 1,
       default_entity_id: `sensor.microair_${safeMac}_last_error`,
       entity_category: "diagnostic",
       // ha-addons publishes none | auth_failed | connectivity on this topic,
@@ -237,6 +242,7 @@ const diagnostics = [
     payload: {
       name: "BLE Reconnect",
       unique_id: `microair_${safeMac}_reconnect`,
+      qos: 1,
       default_entity_id: `button.microair_${safeMac}_reconnect`,
       icon: "mdi:bluetooth-connect",
       entity_category: "config",
@@ -252,6 +258,7 @@ const diagnostics = [
     payload: {
       name: "BLE Clear Errors",
       unique_id: `microair_${safeMac}_clear_errors`,
+      qos: 1,
       default_entity_id: `button.microair_${safeMac}_clear_errors`,
       icon: "mdi:alert-circle-check",
       entity_category: "config",
