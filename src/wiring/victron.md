@@ -6,8 +6,8 @@
 ## Tab Summary
 - **Tab ID:** `1fde0c4ffb03727e`
 - **Disabled:** false
-- **Node count:** 42
-- **Function nodes:** 13
+- **Node count:** 45
+- **Function nodes:** 14
 - **UI template nodes:** 0
 - **Subflow instances:** 0
 - **Link out (outbound):** 4
@@ -430,6 +430,39 @@ _None._
 
 ---
 
+### victron_store_outputs
+- **File:** [`victron_store_outputs.js`](../tabs/victron/victron_store_outputs.js)
+- **Node ID:** `cedd284504c51402`
+- **Outputs:** 1
+
+#### Neighborhood
+```mermaid
+flowchart LR
+  classDef fn fill:#dbeafe,stroke:#1e40af,stroke-width:2px
+  classDef ui fill:#ede9fe,stroke:#5b21b6,stroke-width:2px
+  classDef sub fill:#fef3c7,stroke:#92400e,stroke-width:2px
+  classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
+  classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
+  classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_8c03feeee076["Victron SwitchableOutput"]:::fn
+  n_cedd284504c5["victron_store_outputs"]:::fn
+  n_f3f99ba42088["MQTT out_ Retain TRUE"]:::link
+  n_8c03feeee076 -->|out 0| n_cedd284504c5
+  n_cedd284504c5 -->|out 0| n_f3f99ba42088
+```
+
+#### Msg contract
+_No documented msg contract._
+
+#### Upstream
+- Victron SwitchableOutput (mqtt in) — this tab
+
+#### Downstream
+- **Output 0:**
+  - MQTT out: Retain TRUE (link out) — this tab
+
+---
+
 ### victron_unique
 - **File:** [`victron_unique.js`](../tabs/victron/victron_unique.js)
 - **Node ID:** `d1a2b3c4e5f67804`
@@ -505,7 +538,7 @@ _None._
 - 44a63dad48ab3ced (note) — id `44a63dad48ab3ced`, in: 0, out: 0
 - 89759b3d2d9812c8 (delay) — id `89759b3d2d9812c8`, in: 2, out: 1
 - 943309ad88255256 (rbe) — id `943309ad88255256`, in: 1, out: 1
-- 9be2b9ec5c4f51d4 (rbe) — id `9be2b9ec5c4f51d4`, in: 2, out: 1
+- 9be2b9ec5c4f51d4 (rbe) — id `9be2b9ec5c4f51d4`, in: 3, out: 1
 - Load on Start (inject) — id `0b2b4c52d68092cc`, in: 0, out: 1
 - Load on Start (inject) — id `1a548b4f42a93938`, in: 0, out: 1
 - Load on Start (inject) — id `6ba061be2ab168c5`, in: 0, out: 1
@@ -515,11 +548,13 @@ _None._
 - Repeat (inject) — id `f9d1a59e25ce32dd`, in: 0, out: 1
 - Reset unique (inject) — id `ce787dfcc75988be`, in: 0, out: 1
 - Rest unique list (group) — id `3ffa68cfd2195db1`, in: 0, out: 0
+- Victron CustomName (mqtt in) — id `66e12c55fb2e2913`, in: 0, out: 1
 - Victron GX device configuration (group) — id `8aac091f0fffbf22`, in: 0, out: 0
 - Victron HA in (mqtt in) — id `0b4d0850eae8a0b4`, in: 0, out: 1
 - Victron Instance (mqtt in) — id `3057b4acf81dc8db`, in: 0, out: 2
 - Victron MQTT (mqtt in) — id `903a7fac6108ac58`, in: 0, out: 1
 - Victron ProductName (mqtt in) — id `2ff7b2c41ee41253`, in: 0, out: 1
+- Victron SwitchableOutput (mqtt in) — id `8c03feeee0762978`, in: 0, out: 1
 - Victron out (mqtt out) — id `711d5e8499354c05`, in: 1, out: 0
 - Victron out (mqtt out) — id `c80ea298a37232a2`, in: 3, out: 0
 - a95d74d20270f69b (rbe) — id `a95d74d20270f69b`, in: 3, out: 1
