@@ -6,11 +6,11 @@
 ## Tab Summary
 - **Tab ID:** `1fde0c4ffb03727e`
 - **Disabled:** false
-- **Node count:** 45
+- **Node count:** 47
 - **Function nodes:** 14
 - **UI template nodes:** 0
 - **Subflow instances:** 0
-- **Link out (outbound):** 4
+- **Link out (outbound):** 5
 - **Link in (inbound):** 4
 
 ## Function Nodes
@@ -344,7 +344,7 @@ HA Status Updater for Victron
 ### victron_store_devices
 - **File:** [`victron_store_devices.js`](../tabs/victron/victron_store_devices.js)
 - **Node ID:** `1284b5e380db32be`
-- **Outputs:** 0
+- **Outputs:** 2
 
 #### Neighborhood
 ```mermaid
@@ -356,7 +356,11 @@ flowchart LR
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
   n_1284b5e380db["victron_store_devices"]:::fn
+  n_75e24e63fc41["Victron out"]:::fn
   n_9be2b9ec5c4f["9be2b9ec5c4f51d4"]:::fn
+  n_fe904c842d05["Reset Victron filters"]:::link
+  n_1284b5e380db -->|out 0| n_fe904c842d05
+  n_1284b5e380db -->|out 1| n_75e24e63fc41
   n_9be2b9ec5c4f -->|out 0| n_1284b5e380db
 ```
 
@@ -367,7 +371,10 @@ _No documented msg contract._
 - 9be2b9ec5c4f51d4 (rbe) — this tab
 
 #### Downstream
-_None._
+- **Output 0:**
+  - Reset Victron filters (link out) — this tab
+- **Output 1:**
+  - Victron out (mqtt out) — this tab
 
 ---
 
@@ -433,7 +440,7 @@ _None._
 ### victron_store_outputs
 - **File:** [`victron_store_outputs.js`](../tabs/victron/victron_store_outputs.js)
 - **Node ID:** `cedd284504c51402`
-- **Outputs:** 1
+- **Outputs:** 3
 
 #### Neighborhood
 ```mermaid
@@ -444,11 +451,15 @@ flowchart LR
   classDef link fill:#dcfce7,stroke:#166534,stroke-width:1px,stroke-dasharray:3 3
   classDef config fill:#f3f4f6,stroke:#6b7280,stroke-width:1px,stroke-dasharray:2 2
   classDef disabled opacity:0.5,stroke-dasharray:4 4
+  n_75e24e63fc41["Victron out"]:::fn
   n_8c03feeee076["Victron SwitchableOutput"]:::fn
   n_cedd284504c5["victron_store_outputs"]:::fn
   n_f3f99ba42088["MQTT out_ Retain TRUE"]:::link
+  n_fe904c842d05["Reset Victron filters"]:::link
   n_8c03feeee076 -->|out 0| n_cedd284504c5
   n_cedd284504c5 -->|out 0| n_f3f99ba42088
+  n_cedd284504c5 -->|out 1| n_fe904c842d05
+  n_cedd284504c5 -->|out 2| n_75e24e63fc41
 ```
 
 #### Msg contract
@@ -460,6 +471,10 @@ _No documented msg contract._
 #### Downstream
 - **Output 0:**
   - MQTT out: Retain TRUE (link out) — this tab
+- **Output 1:**
+  - Reset Victron filters (link out) — this tab
+- **Output 2:**
+  - Victron out (mqtt out) — this tab
 
 ---
 
@@ -518,6 +533,9 @@ _None._
 - **Reset Victron filters** (`71ac45fb64bf70c9`) →
   - Reset Victron filters in tab `Victron` ([wiring](./victron.md))
   - Reset Victron filters in tab `Victron` ([wiring](./victron.md))
+- **Reset Victron filters** (`fe904c842d057578`) →
+  - Reset Victron filters in tab `Victron` ([wiring](./victron.md))
+  - Reset Victron filters in tab `Victron` ([wiring](./victron.md))
 
 ### Inbound (link in)
 - **CONFIG_GLOBALS** (`8fdd1d506d28b9b6`) ←
@@ -526,7 +544,9 @@ _None._
   - Clear unique values in tab `Config`
 - **Reset Victron filters** (`b1b68ff387e01a3a`) ←
   - Reset Victron filters in tab `Victron`
+  - Reset Victron filters in tab `Victron`
 - **Reset Victron filters** (`db3ce2f66f852ca6`) ←
+  - Reset Victron filters in tab `Victron`
   - Reset Victron filters in tab `Victron`
 
 ## Catch / Status Nodes
@@ -556,5 +576,6 @@ _None._
 - Victron ProductName (mqtt in) — id `2ff7b2c41ee41253`, in: 0, out: 1
 - Victron SwitchableOutput (mqtt in) — id `8c03feeee0762978`, in: 0, out: 1
 - Victron out (mqtt out) — id `711d5e8499354c05`, in: 1, out: 0
+- Victron out (mqtt out) — id `75e24e63fc4164a9`, in: 2, out: 0
 - Victron out (mqtt out) — id `c80ea298a37232a2`, in: 3, out: 0
 - a95d74d20270f69b (rbe) — id `a95d74d20270f69b`, in: 3, out: 1

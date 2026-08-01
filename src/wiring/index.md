@@ -21,6 +21,7 @@ flowchart TD
     n_db3ce2f66f85["Reset Victron filters"]:::link
     n_e371075d4dbf["MQTT out_ Retain TRUE"]:::link
     n_f3f99ba42088["MQTT out_ Retain TRUE"]:::link
+    n_fe904c842d05["Reset Victron filters"]:::link
   end
   subgraph n_222c995b7790["Delete HA Entity"]
     n_d38c75bc1474["MQTT out_ Retain TRUE"]:::link
@@ -128,6 +129,8 @@ flowchart TD
   n_e38f32a1f6d3 --> n_f658418a7b9b
   n_f3f99ba42088 --> n_f658418a7b9b
   n_fa104ff19bbe --> n_a1e89f48333c
+  n_fe904c842d05 --> n_b1b68ff387e0
+  n_fe904c842d05 --> n_db3ce2f66f85
 ```
 
 ## Tabs
@@ -139,7 +142,7 @@ flowchart TD
 | [Command routing](./command-routing.md) | 8 | 0 | 1 | 1 |
 | [HA Commands](./ha-commands.md) | 16 | 0 | 2 | 1 |
 | [AquaHot](./aquahot.md) | 5 | 0 | 1 | 2 |
-| [Victron](./victron.md) | 14 | 0 | 4 | 4 |
+| [Victron](./victron.md) | 14 | 0 | 5 | 4 |
 | [Micro-Air](./micro-air.md) | 9 | 0 | 5 | 3 |
 | [Hughes](./hughes.md) | 3 | 0 | 0 | 0 |
 | [Templates](./templates.md) | 15 | 0 | 4 | 0 |
@@ -196,6 +199,8 @@ _None._
 | MQTT out: Retain TRUE | Config | → | MQTT out: Retain TRUE | Config |
 | MQTT out: Retain TRUE | Victron | → | MQTT out: Retain TRUE | Config |
 | Notify user | Templates | → | Notify user | Config |
+| Reset Victron filters | Victron | → | Reset Victron filters | Victron |
+| Reset Victron filters | Victron | → | Reset Victron filters | Victron |
 
 ## Config nodes
 
@@ -203,4 +208,4 @@ _None._
 |---|---|---|
 | Home Assistant | server | 4 nodes across 2 tabs |
 | Mosquitto | mqtt-broker | 30 nodes across 6 tabs |
-| Victron Cerbo GX | mqtt-broker | 7 nodes across 1 tab |
+| Victron Cerbo GX | mqtt-broker | 8 nodes across 1 tab |
