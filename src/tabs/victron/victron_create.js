@@ -13,6 +13,10 @@ const {
   unit,
   short_name,
   product_name,
+  custom_name,
+  output_custom_name,
+  value_min,
+  value_max,
   writable,
 } = msg.payload;
 
@@ -87,8 +91,8 @@ const friendlyNameMap = {
   "system:/SystemState/State": "System State",
   "system:/Ac/Consumption/Total/Power": "AC Consumption Total",
   "system:/Ac/Grid/Total/Power": "Shore Power Total",
-  "system:/Relay/0/State": "Relay 1",
-  "system:/Relay/1/State": "Relay 2",
+  "system:/SwitchableOutput/0/State": "Relay 1",
+  "system:/SwitchableOutput/1/State": "Relay 2",
   // battery
   "battery:/Dc/0/Voltage": "Battery Voltage",
   "battery:/Dc/0/Current": "Battery Current",
@@ -106,6 +110,10 @@ const friendlyNameMap = {
   "solarcharger:/Dc/0/Current": "Solar Charge Current",
   "solarcharger:/Pv/V": "Solar Panel Voltage",
   "solarcharger:/State": "Solar Charger State",
+  "solarcharger:/MppOperationMode": "MPPT Mode",
+  "solarcharger:/ErrorCode": "Error",
+  "solarcharger:/Alarms/Alarm": "Alarm",
+  "solarcharger:/Link/VoltageSense": "Shared Voltage Sense",
   // vebus
   "vebus:/Ac/ActiveIn/L1/V": "AC Input L1 Voltage",
   "vebus:/Ac/ActiveIn/L1/I": "AC Input L1 Current",
@@ -150,6 +158,8 @@ const friendlyNameMap = {
   "alternator:/Dc/In/I": "Input Current",
   "alternator:/Dc/In/P": "Input Power",
   "alternator:/State": "Charge State",
+  "alternator:/DeviceOffReason": "Off Reason",
+  "alternator:/Link/VoltageSense": "Shared Voltage Sense",
   // dcdc
   "dcdc:/Dc/0/Voltage": "Output Voltage",
   "dcdc:/Dc/0/Current": "Output Current",
@@ -158,6 +168,19 @@ const friendlyNameMap = {
   "dcdc:/Dc/In/I": "Input Current",
   "dcdc:/Dc/In/P": "Input Power",
   "dcdc:/State": "Charge State",
+  "dcdc:/DeviceOffReason": "Off Reason",
+  "dcdc:/Link/VoltageSense": "Shared Voltage Sense",
+  // generator (GX generator start/stop service)
+  "generator:/State": "State",
+  "generator:/Error": "Error",
+  "generator:/ManualStart": "Manual Start",
+  "generator:/AutoStartEnabled": "Auto Start",
+  "generator:/Runtime": "Runtime",
+  "generator:/TodayRuntime": "Runtime Today",
+  "generator:/AccumulatedRuntime": "Total Runtime",
+  "generator:/ServiceCounter": "Service Counter",
+  "generator:/RunningByConditionCode": "Running By Condition",
+  "generator:/Alarms/NoGeneratorAtAcIn": "No Generator at AC Input Alarm",
   // grid
   "grid:/Ac/L1/Power": "L1 Power",
   "grid:/Ac/L2/Power": "L2 Power",
@@ -200,10 +223,31 @@ if (service_type === "solarcharger" && safePath.includes("dc_0")) {
 }
 
 // 2. Term normalization
-safePath = safePath
-  .replace("chargepower", "charge_power")
-  .replace("inverterpower", "inverter_power")
-  .replace("totaloutputpower", "total_output_power");
+// CamelCase D-Bus segments collapse into unreadable ids once lowercased, so
+// split them back into words. Must match victron_status.
+const wordSplits = {
+  chargepower: "charge_power",
+  inverterpower: "inverter_power",
+  totaloutputpower: "total_output_power",
+  manualstart: "manual_start",
+  autostartenabled: "auto_start_enabled",
+  accumulatedruntime: "accumulated_runtime",
+  todayruntime: "today_runtime",
+  servicecounter: "service_counter",
+  runningbyconditioncode: "running_by_condition_code",
+  mppoperationmode: "mpp_operation_mode",
+  errorcode: "error_code",
+  nogeneratoratacin: "no_generator_at_ac_in",
+  deviceoffreason: "device_off_reason",
+  voltagesense: "voltage_sense",
+};
+for (const [from, to] of Object.entries(wordSplits)) {
+  safePath = safePath.replace(from, to);
+}
+// The GX exposes its relays under both the legacy /Relay/ tree and the newer
+// /SwitchableOutput/ tree. We read and write the new path but keep the legacy
+// entity id, so existing switches, automations and renames are undisturbed.
+safePath = safePath.replace(/^switchableoutput_(\d+)_state$/, "relay_$1_state");
 safePath = safePath.replace("_activein", "_in");
 safePath = safePath.replace("_active_in", "_in");
 safePath = safePath.replace("_active_input", "_in");
@@ -242,83 +286,50 @@ const baseName =
     .replace(/\//g, " ")
     .replace(/([a-z])([A-Z])/g, "$1 $2");
 
-// Build short display name from first two alpha words of product name
-const displayName = product_name
-  ? product_name
-    .split(/\s+/)
-    .filter((w) => /^[a-zA-Z]/.test(w))
-    .slice(0, 2)
-    .join(" ")
-  : "";
+// The GX CustomName is what distinguishes devices that share a ProductName —
+// four Orion XS chargers all report "Orion XS", but are named "Orion XS 1".."4".
+// Use it verbatim; trailing digits are the whole point. Fall back to the first
+// two alpha words of the product name (skip model numbers) when unset.
+const displayName = custom_name
+  ? custom_name
+  : product_name
+    ? product_name
+        .split(/\s+/)
+        .filter((w) => /^[a-zA-Z]/.test(w))
+        .slice(0, 2)
+        .join(" ")
+    : "";
 
 // Prefix with device display name, for example "MultiPlus-II - Inverter DC Power".
-// System service uses "System" prefix instead of product name.
-const prefix = service_type === "system" ? "System" : displayName;
-const friendlyName = prefix ? `${prefix} — ${baseName}` : baseName;
+// Services whose product name is a description rather than a device name get a
+// fixed prefix ("Generator start/stop" -> "Generator"), but a name the user set
+// on the GX outranks it.
+// The system service is the GX's aggregated view — its readings come from the
+// battery monitor, meters and chargers, so "System" is right for them. The
+// switchable outputs are the GX's own relays, where that prefix misleads.
+const fixedPrefixes = { system: "System", generator: "Generator" };
+const prefix = dbus_path.startsWith("/SwitchableOutput/")
+  ? "GX"
+  : custom_name || fixedPrefixes[service_type] || displayName;
+const outputName = output_custom_name || baseName;
+const friendlyName = prefix ? `${prefix} — ${outputName}` : outputName;
 
-// === Unit Override for Paths Missing from Victron CSV ===
+const effectiveUnit = unit || "";
 
-const unitOverrides = {
-  "/Dc/0/Power": "W",
-  "/Dc/0/Voltage": "V DC",
-  "/Dc/0/Current": "A DC",
-  "/Dc/0/Temperature": "Degrees celsius",
-  "/Dc/In/V": "V DC",
-  "/Dc/In/I": "A DC",
-  "/Dc/In/P": "W",
-  "/Ac/In/L1/P": "W",
-  "/Ac/L1/Power": "W",
-  "/Ac/L2/Power": "W",
-  "/Ac/Power": "W",
-  "/Level": "%level",
-  "/Remaining": "L",
-  "/Temperature": "Degrees celsius",
-  "/Humidity": "%RH",
-  // vebus paths (whitelisted but may not all appear in Victron CSV)
-  "/Ac/ActiveIn/L1/V": "V AC",
-  "/Ac/ActiveIn/L1/I": "A AC",
-  "/Ac/ActiveIn/L1/P": "W",
-  "/Ac/ActiveIn/L2/V": "V AC",
-  "/Ac/ActiveIn/L2/I": "A AC",
-  "/Ac/ActiveIn/L2/P": "W",
-  "/Ac/ActiveIn/Total/P": "W",
-  "/Ac/ActiveIn/L1/F": "Hz",
-  "/Ac/ActiveIn/CurrentLimit": "A",
-  "/Ac/Out/L1/V": "V AC",
-  "/Ac/Out/L1/I": "A AC",
-  "/Ac/Out/L1/P": "W",
-  "/Ac/Out/L2/V": "V AC",
-  "/Ac/Out/L2/I": "A AC",
-  "/Ac/Out/L2/P": "W",
-  "/Ac/Out/Total/P": "W",
-  // System service paths (synthesized by GX, not in Victron CSV)
-  "/Dc/Battery/Voltage": "V DC",
-  "/Dc/Battery/Current": "A DC",
-  "/Dc/Battery/Power": "W",
-  "/Dc/Battery/Soc": "%",
-  "/Dc/Battery/Temperature": "Degrees celsius",
-  "/Dc/Pv/Power": "W",
-  "/Dc/Pv/Current": "A DC",
-  "/Dc/System/Power": "W",
-  "/Dc/Battery/TimeToGo": "seconds",
-  "/ConsumedAmphours": "Ah",
-  "/History/Daily/0/Yield": "kWh",
-  "/SystemState/State":
-    "0=Off;1=Low Power;2=Fault;3=Bulk Charging;4=Absorption Charging;5=Float Charging;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Assisting;11=Power Supply;244=Sustain;252=External Control",
-  "/Ac/ActiveIn/Connected": "0=Disconnected;1=Connected",
-  "/Alarms/LowVoltage": "0=Ok;1=Warning;2=Alarm",
-  "/Alarms/LowBattery": "0=Ok;1=Warning;2=Alarm",
-  "/Alarms/Overload": "0=Ok;1=Warning;2=Alarm",
-  "/Alarms/HighTemperature": "0=Ok;1=Warning;2=Alarm",
-  "/Ac/Consumption/L1/Power": "W",
-  "/Ac/Consumption/L2/Power": "W",
-  "/Ac/Consumption/Total/Power": "W",
-  "/Ac/Grid/L1/Power": "W",
-  "/Ac/Grid/L2/Power": "W",
-  "/Ac/Grid/Total/Power": "W",
+// Two-state writable enums that belong in HA as switches rather than selects,
+// with the value each state writes. Charger /Mode is 1=On/4=Off, so payload_off
+// is not simply 0. VE.Bus /Mode is absent here — it has four states and stays a
+// select. Must match the component-type choice in victron_status.
+const switchPaths = {
+  "generator:/ManualStart": { on: "1", off: "0" },
+  "generator:/AutoStartEnabled": { on: "1", off: "0" },
 };
 
-const effectiveUnit = unit || unitOverrides[dbus_path] || "";
+const switchSpec =
+  switchPaths[`${service_type}:${dbus_path}`] ||
+  (/\/(Relay|SwitchableOutput)\//.test(dbus_path)
+    ? { on: "1", off: "0" }
+    : null);
 
 // === Determine HA Metadata ===
 
@@ -331,9 +342,7 @@ if (!haMetadata && effectiveUnit && effectiveUnit.includes("=")) {
   haMetadata = {
     device_class: null,
     unit: null,
-    icon: dbus_path.includes("/Relay/")
-      ? "mdi:toggle-switch-outline"
-      : "mdi:information-outline",
+    icon: switchSpec ? "mdi:toggle-switch-outline" : "mdi:information-outline",
   };
 }
 
@@ -346,17 +355,37 @@ if (!haMetadata) {
   };
 }
 
+// Parse the enum once — both the component-type choice and the state template
+// below depend on how many states it has.
+const enumMappings = {};
+if (isEnum) {
+  for (const part of effectiveUnit.split(";")) {
+    const [val, label] = part.split("=");
+    if (val !== undefined && label !== undefined) {
+      enumMappings[val.trim()] = label.trim();
+    }
+  }
+}
+
+// A read-only enum with exactly two states, one of them zero, is a boolean
+// dressed as text. Venus uses zero for the normal state throughout, so the
+// non-zero key is the active one.
+const binarySpec = (() => {
+  if (!isEnum || writable) return null;
+  const keys = Object.keys(enumMappings);
+  if (keys.length !== 2 || !keys.includes("0")) return null;
+  return { on: keys.find((k) => k !== "0") };
+})();
+
 // === Determine HA Component Type ===
 
 let componentType = "sensor";
 if (dbus_path.endsWith("/CurrentLimit")) {
   componentType = "number";
+} else if (binarySpec) {
+  componentType = "binary_sensor";
 } else if (writable && isEnum) {
-  if (dbus_path.includes("/Relay/")) {
-    componentType = "switch";
-  } else {
-    componentType = "select";
-  }
+  componentType = switchSpec ? "switch" : "select";
 } else if (writable && !isEnum) {
   componentType = "number";
 }
@@ -418,13 +447,12 @@ if (
 }
 
 if (componentType === "switch") {
-  payload.payload_on = "1";
-  payload.payload_off = "0";
+  payload.payload_on = switchSpec.on;
+  payload.payload_off = switchSpec.off;
   payload.state_on = "ON";
   payload.state_off = "OFF";
   payload.optimistic = false;
-  payload.value_template =
-    "{{ 'ON' if (value_json | default({'value': 0})).value | int == 1 else 'OFF' }}";
+  payload.value_template = `{{ 'ON' if (value_json | default({'value': 0})).value | int == ${switchSpec.on} else 'OFF' }}`;
 } else if (componentType === "number") {
   // Safe defaults for unknown numeric writable paths
   payload.min = 0;
@@ -440,6 +468,22 @@ if (componentType === "switch") {
     payload.step = 0.5;
     payload.mode = "box";
   }
+
+  // A range reported by Venus describes this installation's actual hardware,
+  // so it outranks every default above.
+  if (typeof value_min === "number") payload.min = value_min;
+  if (typeof value_max === "number") payload.max = value_max;
+} else if (componentType === "binary_sensor") {
+  payload.payload_on = binarySpec.on;
+  payload.payload_off = "0";
+  payload.value_template =
+    "{{ (value_json | default({'value': 0})).value | int }}";
+  if (dbus_path.includes("/Alarms/")) {
+    payload.device_class = "problem";
+  } else if (dbus_path.endsWith("/Connected")) {
+    payload.device_class = "plug";
+  }
+  delete payload.icon;
 }
 
 // Add device_class if defined
@@ -473,20 +517,39 @@ if (dbus_path === "/Dc/Battery/TimeToGo") {
   payload.value_template = `{% set v = (value_json | default({'value': none})).value %}{{ (v | float / 3600) | round(1) if v is number else None }}`;
 }
 
+// DeviceOffReason is a bit-mask rather than a single enumerated value, so it
+// needs a template that joins every reason whose bit is set. Bits are per the
+// Orion XS VE.Direct HEX protocol, register 0x0207, where bits 1 and 9 are
+// documented as not applicable. Labels are shortened from the spec wording so
+// that two simultaneous reasons still fit a dashboard row.
+if (dbus_path === "/DeviceOffReason") {
+  const offReasonBits = {
+    1: "No input",
+    4: "Switched off",
+    8: "Remote",
+    16: "Internal",
+    32: "PAYG",
+    64: "BMS",
+    128: "Engine off",
+    256: "Error",
+  };
+  const pairs = Object.entries(offReasonBits)
+    .map(([bit, label]) => `(${bit}, '${label}')`)
+    .join(", ");
+  payload.value_template =
+    `{% set v = (value_json | default({'value': 0})).value | int %}` +
+    `{% set ns = namespace(r=[]) %}` +
+    `{% for bit, label in [${pairs}] %}` +
+    `{% if v | bitwise_and(bit) %}{% set ns.r = ns.r + [label] %}{% endif %}` +
+    `{% endfor %}` +
+    `{{ ns.r | join(', ') if ns.r else 'None' }}`;
+}
+
 // For enum values, build a Jinja2 template to map numeric values to labels.
 // Applies to selects and to read-only enum sensors (states, alarms).
-if (isEnum && componentType !== "switch") {
-  const enumParts = effectiveUnit.split(";").map((p) => p.trim());
-  const mappings = {};
-  for (const part of enumParts) {
-    const [val, label] = part.split("=");
-    if (val !== undefined && label !== undefined) {
-      mappings[val.trim()] = label.trim();
-    }
-  }
-
+if (isEnum && componentType !== "switch" && componentType !== "binary_sensor") {
   // Build Jinja2 map template
-  const mapEntries = Object.entries(mappings)
+  const mapEntries = Object.entries(enumMappings)
     .map(([k, v]) => `'${k}': '${v}'`)
     .join(", ");
   // Values arrive as numbers (possibly decoded as floats); normalize to a
@@ -494,8 +557,25 @@ if (isEnum && componentType !== "switch") {
   payload.value_template = `{% set vj = value_json | default({'value': ''}) %}{% set m = {${mapEntries}} %}{{ m.get(vj.value | int(-1) | string, vj.value) }}`;
 
   if (componentType === "select") {
-    payload.options = Object.values(mappings);
+    payload.options = Object.values(enumMappings);
   }
+}
+
+// LibreCoach surfaces what a coach owner operates, not what an installer
+// configures or a technician troubleshoots. Paths below leave the primary
+// dashboard, and are not created at all until someone enables them.
+const diagnosticPaths = [
+  "/DeviceOffReason",
+  "/Link/VoltageSense",
+  "/MppOperationMode",
+  "/ErrorCode",
+  "/Error",
+  "/ServiceCounter",
+  "/RunningByConditionCode",
+];
+if (diagnosticPaths.includes(dbus_path)) {
+  payload.entity_category = "diagnostic";
+  payload.enabled_by_default = false;
 }
 
 // Republish the discovery config only when its payload changes.
@@ -515,7 +595,12 @@ msg.stateTopic = stateTopic;
 if (dbus_path.endsWith("/CurrentLimit")) {
   node.send({ topic: `homeassistant/select/${entityId}/config`, payload: "" });
   node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
-} else if (dbus_path.includes("/Relay/")) {
+} else if (/\/(Relay|SwitchableOutput)\//.test(dbus_path)) {
+  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
+} else if (switchSpec) {
+  node.send({ topic: `homeassistant/select/${entityId}/config`, payload: "" });
+  node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
+} else if (componentType === "binary_sensor") {
   node.send({ topic: `homeassistant/sensor/${entityId}/config`, payload: "" });
 }
 

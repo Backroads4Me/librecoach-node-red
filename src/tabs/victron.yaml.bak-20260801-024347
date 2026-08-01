@@ -52,11 +52,9 @@
     if (!victronEnabled) return null;
 
 
-    // Store active Victron device instances from ProductName and CustomName
-    topics
+    // Store active Victron device instances from ProductName topics
 
-    // Input: msg.topic =
-    N/{portalId}/{serviceType}/{instance}/{ProductName|CustomName}
+    // Input: msg.topic = N/{portalId}/{serviceType}/{instance}/ProductName
 
 
     const topic = msg.topic;
@@ -73,93 +71,50 @@
 
     const instance = parts[3];
 
-    const field = parts[4];
-
     const key = `${serviceType}_${instance}`;
 
 
-    // Services whose product name describes a function rather than a device
+    // Extract product name from payload
 
-    // ("Generator start/stop") make a poor entity-id component; use the service
-
-    // type, which is already unique per instance.
-
-    const genericNameServices = ["generator"];
-
-
-    // Extract the name from the payload
-
-    let name = "";
+    let productName = "";
 
     if (typeof msg.payload === "string") {
       try {
-        name = JSON.parse(msg.payload).value || "";
+        productName = JSON.parse(msg.payload).value || "";
       } catch (e) {
-        name = msg.payload;
+        productName = msg.payload;
       }
     } else if (typeof msg.payload === "object" && msg.payload !== null) {
-      name = msg.payload.value || "";
+      productName = msg.payload.value || "";
     }
 
-    name = typeof name === "string" ? name.trim() : "";
 
+    // Build short name from first two alpha words of product name (skip model
+    numbers)
+
+    const alphaWords = productName.split(/\s+/).filter((w) =>
+    /^[a-zA-Z]/.test(w));
+
+    const shortName = alphaWords
+      .slice(0, 2)
+      .join("_")
+      .replace(/[^a-zA-Z0-9_-]/g, "")
+      .toLowerCase();
 
     // Get or initialize the active devices object
 
     let victronDevices = global.get("victronDevices", "file") || {};
 
 
-    // ProductName and CustomName arrive as separate messages, so merge into the
+    // Store or update device entry
 
-    // existing entry rather than replacing it.
+    victronDevices[key] = {
+      productName: productName,
+      shortName: shortName || serviceType,
+    };
 
-    const device = victronDevices[key] || {};
-
-    const previousCustomName = device.customName;
-
-
-    if (field === "CustomName") {
-      // The name the user assigned on the GX. It is the only thing that tells four
-      // identical Orion XS chargers apart, so victron_create prefers it verbatim.
-      device.customName = name;
-    } else {
-      device.productName = name;
-
-      // Short name from the first two alpha words of the product name (skip model
-      // numbers). This feeds unique_id/entity_id, so it is deliberately derived
-      // from ProductName only — renaming a device on the GX must not orphan the
-      // existing HA entities.
-      const alphaWords = name.split(/\s+/).filter((w) => /^[a-zA-Z]/.test(w));
-      const derivedShortName =
-        alphaWords
-          .slice(0, 2)
-          .join("_")
-          .replace(/[^a-zA-Z0-9_-]/g, "")
-          .toLowerCase() || serviceType;
-      device.shortName = genericNameServices.includes(serviceType)
-        ? serviceType
-        : derivedShortName;
-    }
-
-
-    victronDevices[key] = device;
 
     global.set("victronDevices", victronDevices, "file");
-
-
-    if (field === "CustomName" && previousCustomName !== name) {
-      // Retained topics arrive in arbitrary order, so entities for this device may
-      // already have been announced under the ProductName prefix. Dropping the
-      // device's dedup keys lets the next value message re-run discovery;
-      // victron_create's payload signature check then republishes only the configs
-      // whose name actually changed.
-      const uniqueVictron = global.get("uniqueVictron") || [];
-      const devicePrefix = `${serviceType}_${instance}_`;
-      const remaining = uniqueVictron.filter((k) => !k.startsWith(devicePrefix));
-      if (remaining.length !== uniqueVictron.length) {
-        global.set("uniqueVictron", remaining);
-      }
-    }
 
 
     node.status({
@@ -1064,6 +1019,7 @@
         "/Dc/0/Current",
         "/Pv/V",
         "/State",
+        "/Mode",
         "/MppOperationMode",
         "/ErrorCode",
         "/Alarms/Alarm",
@@ -1078,6 +1034,7 @@
         "/Dc/In/I",
         "/Dc/In/P",
         "/State",
+        "/Mode",
         "/DeviceOffReason",
         "/Link/VoltageSense",
       ],
@@ -1089,6 +1046,7 @@
         "/Dc/In/I",
         "/Dc/In/P",
         "/State",
+        "/Mode",
         "/DeviceOffReason",
         "/Link/VoltageSense",
       ],
@@ -1705,6 +1663,7 @@
       "solarcharger:/Dc/0/Current": "Solar Charge Current",
       "solarcharger:/Pv/V": "Solar Panel Voltage",
       "solarcharger:/State": "Solar Charger State",
+      "solarcharger:/Mode": "Charger",
       "solarcharger:/MppOperationMode": "MPPT Mode",
       "solarcharger:/ErrorCode": "Error",
       "solarcharger:/Alarms/Alarm": "Alarm",
@@ -1753,6 +1712,7 @@
       "alternator:/Dc/In/I": "Input Current",
       "alternator:/Dc/In/P": "Input Power",
       "alternator:/State": "Charge State",
+      "alternator:/Mode": "Charger",
       "alternator:/DeviceOffReason": "Off Reason",
       "alternator:/Link/VoltageSense": "Shared Voltage Sense",
       // dcdc
@@ -1763,6 +1723,7 @@
       "dcdc:/Dc/In/I": "Input Current",
       "dcdc:/Dc/In/P": "Input Power",
       "dcdc:/State": "Charge State",
+      "dcdc:/Mode": "Charger",
       "dcdc:/DeviceOffReason": "Off Reason",
       "dcdc:/Link/VoltageSense": "Shared Voltage Sense",
       // generator (GX generator start/stop service)
@@ -1932,10 +1893,10 @@
       ? custom_name
       : product_name
         ? product_name
-            .split(/\s+/)
-            .filter((w) => /^[a-zA-Z]/.test(w))
-            .slice(0, 2)
-            .join(" ")
+          .split(/\s+/)
+          .filter((w) => /^[a-zA-Z]/.test(w))
+          .slice(0, 2)
+          .join(" ")
         : "";
 
     // Prefix with device display name, for example "MultiPlus-II - Inverter DC
@@ -1981,6 +1942,9 @@
     // select. Must match the component-type choice in victron_status.
 
     const switchPaths = {
+      "alternator:/Mode": { on: "1", off: "4" },
+      "dcdc:/Mode": { on: "1", off: "4" },
+      "solarcharger:/Mode": { on: "1", off: "4" },
       "generator:/ManualStart": { on: "1", off: "0" },
       "generator:/AutoStartEnabled": { on: "1", off: "0" },
     };
@@ -2513,6 +2477,9 @@
     // read-only and stays a sensor.
 
     const switchPaths = [
+      "alternator:/Mode",
+      "dcdc:/Mode",
+      "solarcharger:/Mode",
       "generator:/ManualStart",
       "generator:/AutoStartEnabled",
     ];
@@ -2521,9 +2488,9 @@
 
     const enumKeys = isEnum
       ? unit
-          .split(";")
-          .map((p) => p.split("=")[0].trim())
-          .filter((k) => k !== "")
+        .split(";")
+        .map((p) => p.split("=")[0].trim())
+        .filter((k) => k !== "")
       : [];
     const isBinary =
       isEnum && !writable && enumKeys.length === 2 && enumKeys.includes("0");
@@ -2537,7 +2504,7 @@
     } else if (writable && isEnum) {
       componentType =
         switchPaths.includes(`${service_type}:${dbus_path}`) ||
-        /\/(Relay|SwitchableOutput)\//.test(dbus_path)
+          /\/(Relay|SwitchableOutput)\//.test(dbus_path)
           ? "switch"
           : "select";
     } else if (writable && !isEnum) {

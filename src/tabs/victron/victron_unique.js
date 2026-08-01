@@ -20,6 +20,16 @@ if (!uniqueVictron.includes(key)) {
   const deviceInfo = victronDevices[`${serviceType}_${instance}`];
   const shortName = deviceInfo ? deviceInfo.shortName : serviceType;
   const productName = deviceInfo ? deviceInfo.productName : "";
+  const customName = deviceInfo ? deviceInfo.customName : "";
+
+  // Switchable outputs carry their own GX name, distinct from the device name.
+  let outputCustomName = "";
+  if (dbusPath.startsWith("/SwitchableOutput/")) {
+    const victronOutputs = global.get("victronOutputs", "file") || {};
+    const outputInfo =
+      victronOutputs[`${serviceType}_${instance}_${dbusPath.split("/")[2]}`];
+    outputCustomName = outputInfo ? outputInfo.customName || "" : "";
+  }
 
   return [
     { reset: true },
@@ -32,8 +42,12 @@ if (!uniqueVictron.includes(key)) {
         value: msg.payload.value,
         short_name: shortName,
         product_name: productName,
+        custom_name: customName,
+        output_custom_name: outputCustomName,
         access: msg.payload.access,
         writable: msg.payload.writable,
+        value_min: msg.payload.value_min,
+        value_max: msg.payload.value_max,
       },
     },
   ];

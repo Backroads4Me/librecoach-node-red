@@ -38,8 +38,8 @@ const pathWhitelist = {
     "/Dc/System/Power",
     "/Dc/Battery/TimeToGo",
     "/SystemState/State",
-    "/Relay/0/State",
-    "/Relay/1/State",
+    "/SwitchableOutput/0/State",
+    "/SwitchableOutput/1/State",
   ],
   // Overlaps with system:/Dc/Battery/*, which mirrors only the elected battery
   // monitor — per-device paths are kept so additional shunts/BMS batteries report.
@@ -61,6 +61,10 @@ const pathWhitelist = {
     "/Dc/0/Current",
     "/Pv/V",
     "/State",
+    "/MppOperationMode",
+    "/ErrorCode",
+    "/Alarms/Alarm",
+    "/Link/VoltageSense",
   ],
   charger: ["/Dc/0/Voltage", "/Dc/0/Current", "/Ac/In/L1/P", "/State"],
   alternator: [
@@ -71,6 +75,8 @@ const pathWhitelist = {
     "/Dc/In/I",
     "/Dc/In/P",
     "/State",
+    "/DeviceOffReason",
+    "/Link/VoltageSense",
   ],
   dcdc: [
     "/Dc/0/Voltage",
@@ -80,6 +86,20 @@ const pathWhitelist = {
     "/Dc/In/I",
     "/Dc/In/P",
     "/State",
+    "/DeviceOffReason",
+    "/Link/VoltageSense",
+  ],
+  generator: [
+    "/State",
+    "/Error",
+    "/ManualStart",
+    "/AutoStartEnabled",
+    "/Runtime",
+    "/TodayRuntime",
+    "/AccumulatedRuntime",
+    "/ServiceCounter",
+    "/RunningByConditionCode",
+    "/Alarms/NoGeneratorAtAcIn",
   ],
   grid: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
   acload: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
@@ -118,16 +138,37 @@ const pathWhitelist = {
 const allowedPaths = pathWhitelist[serviceType];
 if (!allowedPaths || !allowedPaths.includes(dbusPath)) return null;
 
+// A GX switchable output is only user-controllable when assigned the Manual
+// function (2). Under every other assignment the GX drives the relay itself and
+// reverts outside writes, so publishing a switch would be a control that
+// silently does nothing.
+if (dbusPath.startsWith("/SwitchableOutput/")) {
+  const outputIndex = dbusPath.split("/")[2];
+  const victronOutputs = global.get("victronOutputs", "file") || {};
+  const outputInfo =
+    victronOutputs[`${serviceType}_${instance}_${outputIndex}`];
+  if (!outputInfo || outputInfo.func !== 2) return null;
+}
+
 // === 2. Device Discovery Gate ===
 const victronDevices = global.get("victronDevices", "file") || {};
 if (!victronDevices[`${serviceType}_${instance}`]) return null;
 
 // === 3. Value Extraction & Early Rounding ===
+// Venus reports the settable range alongside the value on adjustable paths
+// (for example {"min":0,"max":50,"value":40} on the shore current limit).
+// That is per-installation truth, so it beats any static table downstream.
 let rawValue;
+let valueMin;
+let valueMax;
 try {
   const parsed =
     typeof msg.payload === "string" ? JSON.parse(msg.payload) : msg.payload;
   rawValue = parsed && parsed.value !== undefined ? parsed.value : parsed;
+  if (parsed && typeof parsed === "object") {
+    if (typeof parsed.min === "number") valueMin = parsed.min;
+    if (typeof parsed.max === "number") valueMax = parsed.max;
+  }
 } catch (e) {
   rawValue = msg.payload;
 }
@@ -188,6 +229,85 @@ if (victronMap.has(serviceType)) {
   }
 }
 
+// The Victron reference CSV is a Modbus register list and predates the
+// SwitchableOutput tree, so these carry no access flag. Writability is proven
+// against a GX: a write moves both this path and the legacy /Relay/ mirror.
+const accessOverrides = {
+  "system:/SwitchableOutput/0/State": "W",
+  "system:/SwitchableOutput/1/State": "W",
+};
+access = accessOverrides[`${serviceType}:${dbusPath}`] || access;
+
+// Units for paths the Victron reference CSV omits. Applied here so the
+// decoder emits one effective unit and every downstream node classifies
+// identically.
+const unitOverrides = {
+  "/Dc/0/Power": "W",
+  "/Dc/0/Voltage": "V DC",
+  "/Dc/0/Current": "A DC",
+  "/Dc/0/Temperature": "Degrees celsius",
+  "/Dc/In/V": "V DC",
+  "/Dc/In/I": "A DC",
+  "/Dc/In/P": "W",
+  "/Link/VoltageSense": "V DC",
+  "/Yield/System": "kWh",
+  "/SwitchableOutput/0/State": "0=Open;1=Closed",
+  "/SwitchableOutput/1/State": "0=Open;1=Closed",
+  "/TodayRuntime": "seconds",
+  "/AccumulatedRuntime": "seconds",
+  "/Ac/In/L1/P": "W",
+  "/Ac/L1/Power": "W",
+  "/Ac/L2/Power": "W",
+  "/Ac/Power": "W",
+  "/Level": "%level",
+  "/Remaining": "L",
+  "/Temperature": "Degrees celsius",
+  "/Humidity": "%RH",
+  // vebus paths (whitelisted but may not all appear in Victron CSV)
+  "/Ac/ActiveIn/L1/V": "V AC",
+  "/Ac/ActiveIn/L1/I": "A AC",
+  "/Ac/ActiveIn/L1/P": "W",
+  "/Ac/ActiveIn/L2/V": "V AC",
+  "/Ac/ActiveIn/L2/I": "A AC",
+  "/Ac/ActiveIn/L2/P": "W",
+  "/Ac/ActiveIn/Total/P": "W",
+  "/Ac/ActiveIn/L1/F": "Hz",
+  "/Ac/ActiveIn/CurrentLimit": "A",
+  "/Ac/Out/L1/V": "V AC",
+  "/Ac/Out/L1/I": "A AC",
+  "/Ac/Out/L1/P": "W",
+  "/Ac/Out/L2/V": "V AC",
+  "/Ac/Out/L2/I": "A AC",
+  "/Ac/Out/L2/P": "W",
+  "/Ac/Out/Total/P": "W",
+  // System service paths (synthesized by GX, not in Victron CSV)
+  "/Dc/Battery/Voltage": "V DC",
+  "/Dc/Battery/Current": "A DC",
+  "/Dc/Battery/Power": "W",
+  "/Dc/Battery/Soc": "%",
+  "/Dc/Battery/Temperature": "Degrees celsius",
+  "/Dc/Pv/Power": "W",
+  "/Dc/Pv/Current": "A DC",
+  "/Dc/System/Power": "W",
+  "/Dc/Battery/TimeToGo": "seconds",
+  "/ConsumedAmphours": "Ah",
+  "/History/Daily/0/Yield": "kWh",
+  "/SystemState/State":
+    "0=Off;1=Low Power;2=Fault;3=Bulk Charging;4=Absorption Charging;5=Float Charging;6=Storage;7=Equalize;8=Passthru;9=Inverting;10=Assisting;11=Power Supply;244=Sustain;252=External Control",
+  "/Ac/ActiveIn/Connected": "0=Disconnected;1=Connected",
+  "/Alarms/LowVoltage": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/LowBattery": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/Overload": "0=Ok;1=Warning;2=Alarm",
+  "/Alarms/HighTemperature": "0=Ok;1=Warning;2=Alarm",
+  "/Ac/Consumption/L1/Power": "W",
+  "/Ac/Consumption/L2/Power": "W",
+  "/Ac/Consumption/Total/Power": "W",
+  "/Ac/Grid/L1/Power": "W",
+  "/Ac/Grid/L2/Power": "W",
+  "/Ac/Grid/Total/Power": "W",
+};
+unit = unit || unitOverrides[dbusPath] || "";
+
 // === 6. Build Standardized Payload (Removed routing_key) ===
 const basePayload = {
   service_type: serviceType,
@@ -199,6 +319,8 @@ const basePayload = {
   scale: scale,
   access: access,
   writable: access === "W" || access === "RW",
+  value_min: valueMin,
+  value_max: valueMax,
 };
 
 msg.payload = basePayload;

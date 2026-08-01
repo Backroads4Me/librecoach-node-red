@@ -11,7 +11,8 @@ if (
   return null;
 }
 
-const { service_type, instance, dbus_path, value } = incomingPayload;
+const { service_type, instance, dbus_path, value, unit, writable } =
+  incomingPayload;
 
 // 1. Context-Aware Rounding (Filter Logic)
 let roundedValue = value;
@@ -59,10 +60,27 @@ if (
 
 // Must stay in sync with the same normalization in victron_create —
 // mismatched safePath means state topics no longer match discovery configs.
-safePath = safePath
-  .replace("chargepower", "charge_power")
-  .replace("inverterpower", "inverter_power")
-  .replace("totaloutputpower", "total_output_power");
+const wordSplits = {
+  chargepower: "charge_power",
+  inverterpower: "inverter_power",
+  totaloutputpower: "total_output_power",
+  manualstart: "manual_start",
+  autostartenabled: "auto_start_enabled",
+  accumulatedruntime: "accumulated_runtime",
+  todayruntime: "today_runtime",
+  servicecounter: "service_counter",
+  runningbyconditioncode: "running_by_condition_code",
+  mppoperationmode: "mpp_operation_mode",
+  errorcode: "error_code",
+  nogeneratoratacin: "no_generator_at_ac_in",
+  deviceoffreason: "device_off_reason",
+  voltagesense: "voltage_sense",
+};
+for (const [from, to] of Object.entries(wordSplits)) {
+  safePath = safePath.replace(from, to);
+}
+// Must match the same alias in victron_create.
+safePath = safePath.replace(/^switchableoutput_(\d+)_state$/, "relay_$1_state");
 safePath = safePath
   .replace("_activein", "_in")
   .replace("_active_in", "_in")
@@ -89,10 +107,38 @@ const deviceName = deviceInfo ? deviceInfo.shortName : service_type;
 const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 
 // 4. Determine Component Type & Topic
+// Mirrors the component-type ladder in victron_create; a mismatch publishes
+// state to a topic no discovery config is listening on. Relay paths are only
+// switches where the reference map marks them writable — the VE.Bus relay is
+// read-only and stays a sensor.
+const switchPaths = [
+  "generator:/ManualStart",
+  "generator:/AutoStartEnabled",
+];
+const isEnum = typeof unit === "string" && unit.includes("=");
+const enumKeys = isEnum
+  ? unit
+      .split(";")
+      .map((p) => p.split("=")[0].trim())
+      .filter((k) => k !== "")
+  : [];
+const isBinary =
+  isEnum && !writable && enumKeys.length === 2 && enumKeys.includes("0");
+
 let componentType = "sensor";
-if (dbus_path === "/Ac/ActiveIn/CurrentLimit") componentType = "number";
-else if (dbus_path === "/Mode") componentType = "select";
-else if (dbus_path.includes("/Relay/")) componentType = "switch";
+if (dbus_path.endsWith("/CurrentLimit")) {
+  componentType = "number";
+} else if (isBinary) {
+  componentType = "binary_sensor";
+} else if (writable && isEnum) {
+  componentType =
+    switchPaths.includes(`${service_type}:${dbus_path}`) ||
+    /\/(Relay|SwitchableOutput)\//.test(dbus_path)
+      ? "switch"
+      : "select";
+} else if (writable && !isEnum) {
+  componentType = "number";
+}
 
 // 5. Build Final Message
 msg.topic = `homeassistant/${componentType}/${entityId}/state`;

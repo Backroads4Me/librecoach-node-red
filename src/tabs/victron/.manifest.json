@@ -59,6 +59,18 @@
     "hasFinalize": false,
     "hasInfo": false
   },
+  "cedd284504c51402": {
+    "nodeId": "cedd284504c51402",
+    "name": "victron_store_outputs",
+    "sanitizedName": "victron_store_outputs",
+    "fileName": "victron_store_outputs",
+    "isVue": false,
+    "isFun": true,
+    "hasCode": true,
+    "hasInitialize": false,
+    "hasFinalize": false,
+    "hasInfo": false
+  },
   "d1a2b3c4e5f67801": {
     "nodeId": "d1a2b3c4e5f67801",
     "name": "victron_decode_mqtt",
