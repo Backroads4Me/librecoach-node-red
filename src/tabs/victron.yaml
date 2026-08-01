@@ -73,6 +73,8 @@
 
     const instance = parts[3];
 
+    const portalId = parts[1];
+
     const field = parts[4];
 
     const key = `${serviceType}_${instance}`;
@@ -147,6 +149,8 @@
     global.set("victronDevices", victronDevices, "file");
 
 
+    let refreshPaths = [];
+
     if (field === "CustomName" && previousCustomName !== name) {
       // Retained topics arrive in arbitrary order, so entities for this device may
       // already have been announced under the ProductName prefix. Dropping the
@@ -155,6 +159,9 @@
       // whose name actually changed.
       const uniqueVictron = global.get("uniqueVictron") || [];
       const devicePrefix = `${serviceType}_${instance}_`;
+      refreshPaths = uniqueVictron
+        .filter((k) => k.startsWith(devicePrefix))
+        .map((k) => k.slice(devicePrefix.length));
       const remaining = uniqueVictron.filter((k) => !k.startsWith(devicePrefix));
       if (remaining.length !== uniqueVictron.length) {
         global.set("uniqueVictron", remaining);
@@ -169,17 +176,39 @@
     });
 
 
-    return null;
-  outputs: 0
+    if (refreshPaths.length === 0) return null;
+
+
+    // Reset the upstream and decoder filters before requesting unchanged
+    values.
+
+    // Each response then follows the normal metadata and discovery pipeline
+    with
+
+    // the current device name. Synthetic paths are harmless if Venus ignores
+    them;
+
+    // their real source paths are also requested and recreate them locally.
+
+    const refreshMessages = refreshPaths.map((dbusPath) => ({
+      topic: `R/${portalId}/${serviceType}/${instance}${dbusPath}`,
+      payload: "",
+    }));
+
+
+    return [{ reset: true }, refreshMessages];
+  outputs: 2
   timeout: ""
   noerr: 0
   initialize: ""
   finalize: ""
   libs: []
   x: 740
-  "y": 1120
+  "y": 1140
   g: 8aac091f0fffbf22
-  wires: []
+  wires:
+    - - fe904c842d057578
+    - - 75e24e63fc4164a9
 - id: 19993b80c1009e61
   type: function
   z: 1fde0c4ffb03727e
@@ -222,8 +251,8 @@
   name: Reset Victron
   links:
     - 1e244bad0304bb74
-  x: 1030
-  "y": 1060
+  x: 1000
+  "y": 1260
   g: 3ffa68cfd2195db1
   l: true
   wires:
@@ -241,7 +270,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 1140
+  "y": 1160
   g: 8aac091f0fffbf22
   wires:
     - - 9be2b9ec5c4f51d4
@@ -339,8 +368,8 @@
   type: group
   z: 1fde0c4ffb03727e
   name: Rest unique list
-  x: 934
-  "y": 1019
+  x: 904
+  "y": 1219
   g: 8aac091f0fffbf22
   style:
     stroke: "#777777"
@@ -475,7 +504,7 @@
   rh: 0
   inputs: 0
   x: 220
-  "y": 1100
+  "y": 1110
   g: 8aac091f0fffbf22
   wires:
     - - 9be2b9ec5c4f51d4
@@ -567,6 +596,23 @@
   g: 8aac091f0fffbf22
   l: true
   wires: []
+- id: 75e24e63fc4164a9
+  type: mqtt out
+  z: 1fde0c4ffb03727e
+  name: Victron out
+  topic: ""
+  qos: "1"
+  retain: "false"
+  respTopic: ""
+  contentType: ""
+  userProps: ""
+  correl: ""
+  expiry: ""
+  broker: 68237e1473ec01aa
+  x: 1220
+  "y": 1150
+  g: 8aac091f0fffbf22
+  wires: []
 - id: 89759b3d2d9812c8
   type: delay
   z: 1fde0c4ffb03727e
@@ -614,6 +660,7 @@
     - 70c7d357a6f48e4a
     - 711d5e8499354c05
     - 71ac45fb64bf70c9
+    - 75e24e63fc4164a9
     - 89759b3d2d9812c8
     - 8c03feeee0762978
     - 8fdd1d506d28b9b6
@@ -638,6 +685,7 @@
     - eced66f05a1796cd
     - f3f99ba42088c9b1
     - f9d1a59e25ce32dd
+    - fe904c842d057578
 - id: 8c03feeee0762978
   type: mqtt in
   z: 1fde0c4ffb03727e
@@ -710,8 +758,8 @@
   initialize: ""
   finalize: ""
   libs: []
-  x: 1290
-  "y": 1120
+  x: 1260
+  "y": 1320
   g: 3ffa68cfd2195db1
   wires:
     - []
@@ -743,7 +791,7 @@
   property: payload
   topi: topic
   x: 430
-  "y": 1120
+  "y": 1140
   g: 8aac091f0fffbf22
   wires:
     - - 1284b5e380db32be
@@ -769,7 +817,8 @@
   name: Reset Victron filters
   links:
     - 71ac45fb64bf70c9
-  x: 210
+    - fe904c842d057578
+  x: 260
   "y": 1220
   g: 8aac091f0fffbf22
   l: true
@@ -819,8 +868,8 @@
   topic: ""
   payload: ""
   payloadType: date
-  x: 1050
-  "y": 1120
+  x: 1020
+  "y": 1320
   g: 3ffa68cfd2195db1
   wires:
     - - 9401b2d19494b1c2
@@ -841,8 +890,13 @@
 
     //
 
-    // Output 1 -> MQTT out: removes the switch when an output stops being
+    // Output 1 -> HA MQTT out: removes the switch when an output stops being
     manual.
+
+    // Output 2 -> filter reset: allows an unchanged state response through.
+
+    // Output 3 -> Victron MQTT out: requests the current state after metadata
+    changes.
 
 
     // The GX drives the relay itself under every function except Manual,
@@ -867,6 +921,8 @@
     const serviceType = parts[2];
 
     const instance = parts[3];
+
+    const portalId = parts[1];
 
     const output = parts[5];
 
@@ -956,18 +1012,36 @@
     global.set(`victron_${entityId}_dsig`, undefined, "file");
 
 
+    // A settings update does not cause Venus OS to publish the state path.
+    Request
+
+    // its current value so the normal decode/discovery pipeline immediately
+    rebuilds
+
+    // the retained Home Assistant config with the current function and name.
+
+    const refresh = {
+      topic: `R/${portalId}/${serviceType}/${instance}/SwitchableOutput/${output}/State`,
+      payload: "",
+    };
+
+
     // Leaving Manual means the switch can no longer control anything, and no
 
     // further state messages will arrive to retire it — remove it here.
 
     if (previousFunction === MANUAL_FUNCTION && entry.func !== MANUAL_FUNCTION)
     {
-      return { topic: `homeassistant/switch/${entityId}/config`, payload: "" };
+      return [
+        { topic: `homeassistant/switch/${entityId}/config`, payload: "" },
+        { reset: true },
+        refresh,
+      ];
     }
 
 
-    return null;
-  outputs: 1
+    return [null, { reset: true }, refresh];
+  outputs: 3
   timeout: ""
   noerr: 0
   initialize: ""
@@ -978,6 +1052,8 @@
   g: 8aac091f0fffbf22
   wires:
     - - f3f99ba42088c9b1
+    - - fe904c842d057578
+    - - 75e24e63fc4164a9
 - id: d1a2b3c4e5f67801
   type: function
   z: 1fde0c4ffb03727e
@@ -1032,6 +1108,8 @@
         "/Dc/Battery/Temperature",
         "/Dc/Pv/Power",
         "/Dc/Pv/Current",
+        "/Dc/Vebus/Current",
+        "/Dc/InverterCharger/Current",
         "/Ac/Consumption/L1/Power",
         "/Ac/Consumption/L2/Power",
         "/Ac/Grid/L1/Power",
@@ -1063,13 +1141,22 @@
         "/Dc/0/Voltage",
         "/Dc/0/Current",
         "/Pv/V",
+        "/Pv/I",
         "/State",
         "/MppOperationMode",
         "/ErrorCode",
         "/Alarms/Alarm",
         "/Link/VoltageSense",
       ],
-      charger: ["/Dc/0/Voltage", "/Dc/0/Current", "/Ac/In/L1/P", "/State"],
+      charger: [
+        "/Dc/0/Voltage",
+        "/Dc/0/Current",
+        "/Dc/1/Current",
+        "/Dc/2/Current",
+        "/Ac/In/L1/I",
+        "/Ac/In/L1/P",
+        "/State",
+      ],
       alternator: [
         "/Dc/0/Voltage",
         "/Dc/0/Current",
@@ -1104,8 +1191,22 @@
         "/RunningByConditionCode",
         "/Alarms/NoGeneratorAtAcIn",
       ],
-      grid: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
-      acload: ["/Ac/L1/Power", "/Ac/L2/Power", "/Ac/Power"],
+      grid: [
+        "/Ac/L1/Current",
+        "/Ac/L2/Current",
+        "/Ac/L3/Current",
+        "/Ac/L1/Power",
+        "/Ac/L2/Power",
+        "/Ac/Power",
+      ],
+      acload: [
+        "/Ac/L1/Current",
+        "/Ac/L2/Current",
+        "/Ac/L3/Current",
+        "/Ac/L1/Power",
+        "/Ac/L2/Power",
+        "/Ac/Power",
+      ],
       tank: ["/Level", "/Remaining", "/FluidType"],
       temperature: ["/Temperature", "/Humidity"],
       digitalinput: ["/InputState", "/Count"],
@@ -1116,12 +1217,14 @@
         "/Ac/ActiveIn/L2/V",
         "/Ac/ActiveIn/L2/I",
         "/Ac/ActiveIn/L2/P",
+        "/Ac/ActiveIn/L3/I",
         "/Ac/Out/L1/V",
         "/Ac/Out/L1/I",
         "/Ac/Out/L1/P",
         "/Ac/Out/L2/V",
         "/Ac/Out/L2/I",
         "/Ac/Out/L2/P",
+        "/Ac/Out/L3/I",
         "/Ac/ActiveIn/CurrentLimit",
         "/Ac/ActiveIn/L1/F",
         "/Dc/0/Voltage",
@@ -1675,6 +1778,8 @@
       "system:/Dc/Battery/Temperature": "Battery Temperature",
       "system:/Dc/Pv/Power": "Solar Power",
       "system:/Dc/Pv/Current": "Solar Current",
+      "system:/Dc/Vebus/Current": "Inverter/Charger Current",
+      "system:/Dc/InverterCharger/Current": "Inverter/Charger DC Current",
       "system:/Ac/Consumption/L1/Power": "AC Consumption L1",
       "system:/Ac/Consumption/L2/Power": "AC Consumption L2",
       "system:/Ac/Grid/L1/Power": "Shore Power L1",
@@ -1704,6 +1809,7 @@
       "solarcharger:/Dc/0/Voltage": "Solar Battery Voltage",
       "solarcharger:/Dc/0/Current": "Solar Charge Current",
       "solarcharger:/Pv/V": "Solar Panel Voltage",
+      "solarcharger:/Pv/I": "Solar Panel Current",
       "solarcharger:/State": "Solar Charger State",
       "solarcharger:/MppOperationMode": "MPPT Mode",
       "solarcharger:/ErrorCode": "Error",
@@ -1716,12 +1822,14 @@
       "vebus:/Ac/ActiveIn/L2/V": "AC Input L2 Voltage",
       "vebus:/Ac/ActiveIn/L2/I": "AC Input L2 Current",
       "vebus:/Ac/ActiveIn/L2/P": "AC Input L2 Power",
+      "vebus:/Ac/ActiveIn/L3/I": "AC Input L3 Current",
       "vebus:/Ac/Out/L1/V": "AC Output L1 Voltage",
       "vebus:/Ac/Out/L1/I": "AC Output L1 Current",
       "vebus:/Ac/Out/L1/P": "AC Output L1 Power",
       "vebus:/Ac/Out/L2/V": "AC Output L2 Voltage",
       "vebus:/Ac/Out/L2/I": "AC Output L2 Current",
       "vebus:/Ac/Out/L2/P": "AC Output L2 Power",
+      "vebus:/Ac/Out/L3/I": "AC Output L3 Current",
       "vebus:/Ac/ActiveIn/Total/P": "AC Input Total Power",
       "vebus:/Ac/Out/Total/P": "AC Output Total Power",
       "vebus:/Ac/ActiveIn/CurrentLimit": "Shore Power Limit",
@@ -1743,6 +1851,9 @@
       // charger
       "charger:/Dc/0/Voltage": "Output Voltage",
       "charger:/Dc/0/Current": "Output Current",
+      "charger:/Dc/1/Current": "Output 2 Current",
+      "charger:/Dc/2/Current": "Output 3 Current",
+      "charger:/Ac/In/L1/I": "AC Input Current",
       "charger:/Ac/In/L1/P": "AC Input Power",
       "charger:/State": "Charge State",
       // alternator (Orion XS DC-DC)
@@ -1780,10 +1891,16 @@
       "grid:/Ac/L1/Power": "L1 Power",
       "grid:/Ac/L2/Power": "L2 Power",
       "grid:/Ac/Power": "Total Power",
+      "grid:/Ac/L1/Current": "L1 Current",
+      "grid:/Ac/L2/Current": "L2 Current",
+      "grid:/Ac/L3/Current": "L3 Current",
       // acload
       "acload:/Ac/L1/Power": "L1 Power",
       "acload:/Ac/L2/Power": "L2 Power",
       "acload:/Ac/Power": "Total Power",
+      "acload:/Ac/L1/Current": "L1 Current",
+      "acload:/Ac/L2/Current": "L2 Current",
+      "acload:/Ac/L3/Current": "L3 Current",
       // tank
       "tank:/Level": "Level",
       "tank:/Remaining": "Remaining",
@@ -2652,6 +2769,7 @@
   name: Reset Victron filters
   links:
     - 71ac45fb64bf70c9
+    - fe904c842d057578
   x: 210
   "y": 600
   g: 8aac091f0fffbf22
@@ -2861,3 +2979,16 @@
   g: 8aac091f0fffbf22
   wires:
     - - 36f5f1a727dfd1ca
+- id: fe904c842d057578
+  type: link out
+  z: 1fde0c4ffb03727e
+  name: Reset Victron filters
+  mode: link
+  links:
+    - db3ce2f66f852ca6
+    - b1b68ff387e01a3a
+  x: 1240
+  "y": 1050
+  g: 8aac091f0fffbf22
+  l: true
+  wires: []

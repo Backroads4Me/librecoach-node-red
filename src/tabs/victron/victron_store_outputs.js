@@ -4,7 +4,9 @@ if (!victronEnabled) return null;
 // Track per-output metadata for the GX switchable outputs (the GX relays).
 // Input: msg.topic = N/{portal}/{service}/{instance}/SwitchableOutput/{output}/Settings/{field}
 //
-// Output 1 -> MQTT out: removes the switch when an output stops being manual.
+// Output 1 -> HA MQTT out: removes the switch when an output stops being manual.
+// Output 2 -> filter reset: allows an unchanged state response through.
+// Output 3 -> Victron MQTT out: requests the current state after metadata changes.
 
 // The GX drives the relay itself under every function except Manual, silently
 // reverting anything written from outside. Only a manual output gets a switch.
@@ -18,6 +20,7 @@ if (parts.length < 8) return null;
 
 const serviceType = parts[2];
 const instance = parts[3];
+const portalId = parts[1];
 const output = parts[5];
 const field = parts[7];
 if (field !== "Function" && field !== "CustomName") return null;
@@ -74,10 +77,22 @@ if (remaining.length !== uniqueVictron.length) {
 }
 global.set(`victron_${entityId}_dsig`, undefined, "file");
 
+// A settings update does not cause Venus OS to publish the state path. Request
+// its current value so the normal decode/discovery pipeline immediately rebuilds
+// the retained Home Assistant config with the current function and name.
+const refresh = {
+  topic: `R/${portalId}/${serviceType}/${instance}/SwitchableOutput/${output}/State`,
+  payload: "",
+};
+
 // Leaving Manual means the switch can no longer control anything, and no
 // further state messages will arrive to retire it — remove it here.
 if (previousFunction === MANUAL_FUNCTION && entry.func !== MANUAL_FUNCTION) {
-  return { topic: `homeassistant/switch/${entityId}/config`, payload: "" };
+  return [
+    { topic: `homeassistant/switch/${entityId}/config`, payload: "" },
+    { reset: true },
+    refresh,
+  ];
 }
 
-return null;
+return [null, { reset: true }, refresh];

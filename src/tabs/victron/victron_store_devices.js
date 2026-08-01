@@ -12,6 +12,7 @@ if (parts.length < 5) return null;
 
 const serviceType = parts[2];
 const instance = parts[3];
+const portalId = parts[1];
 const field = parts[4];
 const key = `${serviceType}_${instance}`;
 
@@ -67,6 +68,7 @@ if (field === "CustomName") {
 victronDevices[key] = device;
 global.set("victronDevices", victronDevices, "file");
 
+let refreshPaths = [];
 if (field === "CustomName" && previousCustomName !== name) {
   // Retained topics arrive in arbitrary order, so entities for this device may
   // already have been announced under the ProductName prefix. Dropping the
@@ -75,6 +77,9 @@ if (field === "CustomName" && previousCustomName !== name) {
   // whose name actually changed.
   const uniqueVictron = global.get("uniqueVictron") || [];
   const devicePrefix = `${serviceType}_${instance}_`;
+  refreshPaths = uniqueVictron
+    .filter((k) => k.startsWith(devicePrefix))
+    .map((k) => k.slice(devicePrefix.length));
   const remaining = uniqueVictron.filter((k) => !k.startsWith(devicePrefix));
   if (remaining.length !== uniqueVictron.length) {
     global.set("uniqueVictron", remaining);
@@ -87,4 +92,15 @@ node.status({
   text: `${Object.keys(victronDevices).length} active devices`,
 });
 
-return null;
+if (refreshPaths.length === 0) return null;
+
+// Reset the upstream and decoder filters before requesting unchanged values.
+// Each response then follows the normal metadata and discovery pipeline with
+// the current device name. Synthetic paths are harmless if Venus ignores them;
+// their real source paths are also requested and recreate them locally.
+const refreshMessages = refreshPaths.map((dbusPath) => ({
+  topic: `R/${portalId}/${serviceType}/${instance}${dbusPath}`,
+  payload: "",
+}));
+
+return [{ reset: true }, refreshMessages];
