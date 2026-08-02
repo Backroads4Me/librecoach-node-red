@@ -18,7 +18,7 @@ if (!uniqueVictron.includes(key)) {
   // Look up product short name from discovered devices
   const victronDevices = global.get("victronDevices", "file") || {};
   const deviceInfo = victronDevices[`${serviceType}_${instance}`];
-  const shortName = deviceInfo ? deviceInfo.shortName : serviceType;
+  const shortName = (deviceInfo && deviceInfo.shortName) || serviceType;
   const productName = deviceInfo ? deviceInfo.productName : "";
   const customName = deviceInfo ? deviceInfo.customName : "";
 

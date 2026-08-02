@@ -68,6 +68,25 @@ test("device CustomName changes refresh every discovered entity", () => {
   assert.deepEqual(memory.get("uniqueVictron"), ["battery_1_/Dc/0/Current"]);
 });
 
+test("ProductName for an unseen device does not request a republish", () => {
+  const { global, memory, node } = harness({
+    victronEnabled: true,
+    victronDevices: {},
+  });
+
+  const result = runNode(
+    {
+      topic: "N/portal-123/system/0/ProductName",
+      payload: { value: "Cerbo GX" },
+    },
+    global,
+    node,
+  );
+
+  assert.equal(result, null);
+  assert.equal(memory.get("victronDevices").system_0.shortName, "cerbo_gx");
+});
+
 test("unchanged device CustomName does not request refreshes", () => {
   const { global, node } = harness({
     victronEnabled: true,

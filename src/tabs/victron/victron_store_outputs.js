@@ -64,7 +64,7 @@ if (!functionChanged && !nameChanged) return null;
 // survive the move to the SwitchableOutput tree — mirror that here.
 const victronDevices = global.get("victronDevices", "file") || {};
 const deviceInfo = victronDevices[`${serviceType}_${instance}`];
-const deviceName = deviceInfo ? deviceInfo.shortName : serviceType;
+const deviceName = (deviceInfo && deviceInfo.shortName) || serviceType;
 const entityId = `victron_${deviceName}_${instance}_relay_${output}_state`;
 
 // Drop the dedup key and cached signature so the next state message re-runs

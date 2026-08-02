@@ -103,7 +103,8 @@ else if (safePath === "ac_power") safePath = "ac_total_power";
 // Look up product name
 const victronDevices = global.get("victronDevices", "file") || {};
 const deviceInfo = victronDevices[`${service_type}_${instance}`];
-const deviceName = deviceInfo ? deviceInfo.shortName : service_type;
+// Same fallback as victron_create, so state and discovery agree on the id.
+const deviceName = (deviceInfo && deviceInfo.shortName) || service_type;
 const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 
 // 4. Determine Component Type & Topic
@@ -111,16 +112,13 @@ const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 // state to a topic no discovery config is listening on. Relay paths are only
 // switches where the reference map marks them writable — the VE.Bus relay is
 // read-only and stays a sensor.
-const switchPaths = [
-  "generator:/ManualStart",
-  "generator:/AutoStartEnabled",
-];
+const switchPaths = ["generator:/ManualStart", "generator:/AutoStartEnabled"];
 const isEnum = typeof unit === "string" && unit.includes("=");
 const enumKeys = isEnum
   ? unit
-      .split(";")
-      .map((p) => p.split("=")[0].trim())
-      .filter((k) => k !== "")
+    .split(";")
+    .map((p) => p.split("=")[0].trim())
+    .filter((k) => k !== "")
   : [];
 const isBinary =
   isEnum && !writable && enumKeys.length === 2 && enumKeys.includes("0");
@@ -133,7 +131,7 @@ if (dbus_path.endsWith("/CurrentLimit")) {
 } else if (writable && isEnum) {
   componentType =
     switchPaths.includes(`${service_type}:${dbus_path}`) ||
-    /\/(Relay|SwitchableOutput)\//.test(dbus_path)
+      /\/(Relay|SwitchableOutput)\//.test(dbus_path)
       ? "switch"
       : "select";
 } else if (writable && !isEnum) {

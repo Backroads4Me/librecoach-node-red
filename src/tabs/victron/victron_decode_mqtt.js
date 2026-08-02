@@ -178,8 +178,15 @@ if (dbusPath.startsWith("/SwitchableOutput/")) {
 }
 
 // === 2. Device Discovery Gate ===
+// ProductName, CustomName and values arrive in arbitrary order, and a
+// CustomName-only device entry has no ProductName-derived shortName yet. Entity
+// ids are built from that shortName, so passing a value through before it
+// exists would announce discovery under the service-type fallback and leave
+// state on a topic no config listens to. victron_store_devices asks Venus to
+// republish once the device is complete.
 const victronDevices = global.get("victronDevices", "file") || {};
-if (!victronDevices[`${serviceType}_${instance}`]) return null;
+const deviceInfo = victronDevices[`${serviceType}_${instance}`];
+if (!deviceInfo || !deviceInfo.shortName) return null;
 
 // === 3. Value Extraction & Early Rounding ===
 // Venus reports the settable range alongside the value on adjustable paths

@@ -41,6 +41,8 @@ let victronDevices = global.get("victronDevices", "file") || {};
 // existing entry rather than replacing it.
 const device = victronDevices[key] || {};
 const previousCustomName = device.customName;
+const knownDevice = Boolean(victronDevices[key]);
+const hadShortName = Boolean(device.shortName);
 
 if (field === "CustomName") {
   // The name the user assigned on the GX. It is the only thing that tells four
@@ -68,6 +70,21 @@ if (field === "CustomName") {
 victronDevices[key] = device;
 global.set("victronDevices", victronDevices, "file");
 
+// A device whose CustomName arrived before its ProductName had no shortName
+// while its values were flowing, so the decoder's discovery gate dropped them.
+// Venus resends only on request, so ask for a full republish now that the
+// device is complete. One request covers every device, so a startup burst is
+// coalesced into a single republish.
+const REPUBLISH_COOLDOWN_MS = 15000;
+let republish = false;
+if (field !== "CustomName" && knownDevice && !hadShortName) {
+  const lastRequest = global.get("victronRepublishRequested") || 0;
+  if (Date.now() - lastRequest > REPUBLISH_COOLDOWN_MS) {
+    global.set("victronRepublishRequested", Date.now());
+    republish = true;
+  }
+}
+
 let refreshPaths = [];
 if (field === "CustomName" && previousCustomName !== name) {
   // Retained topics arrive in arbitrary order, so entities for this device may
@@ -91,6 +108,10 @@ node.status({
   shape: "dot",
   text: `${Object.keys(victronDevices).length} active devices`,
 });
+
+if (republish) {
+  return [{ reset: true }, { topic: `R/${portalId}/keepalive`, payload: "" }];
+}
 
 if (refreshPaths.length === 0) return null;
 

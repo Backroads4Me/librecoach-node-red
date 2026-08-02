@@ -119,6 +119,10 @@
 
     const previousCustomName = device.customName;
 
+    const knownDevice = Boolean(victronDevices[key]);
+
+    const hadShortName = Boolean(device.shortName);
+
 
     if (field === "CustomName") {
       // The name the user assigned on the GX. It is the only thing that tells four
@@ -149,6 +153,31 @@
     global.set("victronDevices", victronDevices, "file");
 
 
+    // A device whose CustomName arrived before its ProductName had no shortName
+
+    // while its values were flowing, so the decoder's discovery gate dropped
+    them.
+
+    // Venus resends only on request, so ask for a full republish now that the
+
+    // device is complete. One request covers every device, so a startup burst
+    is
+
+    // coalesced into a single republish.
+
+    const REPUBLISH_COOLDOWN_MS = 15000;
+
+    let republish = false;
+
+    if (field !== "CustomName" && knownDevice && !hadShortName) {
+      const lastRequest = global.get("victronRepublishRequested") || 0;
+      if (Date.now() - lastRequest > REPUBLISH_COOLDOWN_MS) {
+        global.set("victronRepublishRequested", Date.now());
+        republish = true;
+      }
+    }
+
+
     let refreshPaths = [];
 
     if (field === "CustomName" && previousCustomName !== name) {
@@ -174,6 +203,11 @@
       shape: "dot",
       text: `${Object.keys(victronDevices).length} active devices`,
     });
+
+
+    if (republish) {
+      return [{ reset: true }, { topic: `R/${portalId}/keepalive`, payload: "" }];
+    }
 
 
     if (refreshPaths.length === 0) return null;
@@ -989,7 +1023,7 @@
 
     const deviceInfo = victronDevices[`${serviceType}_${instance}`];
 
-    const deviceName = deviceInfo ? deviceInfo.shortName : serviceType;
+    const deviceName = (deviceInfo && deviceInfo.shortName) || serviceType;
 
     const entityId = `victron_${deviceName}_${instance}_relay_${output}_state`;
 
@@ -1267,9 +1301,25 @@
 
     // === 2. Device Discovery Gate ===
 
+    // ProductName, CustomName and values arrive in arbitrary order, and a
+
+    // CustomName-only device entry has no ProductName-derived shortName yet.
+    Entity
+
+    // ids are built from that shortName, so passing a value through before it
+
+    // exists would announce discovery under the service-type fallback and leave
+
+    // state on a topic no config listens to. victron_store_devices asks Venus
+    to
+
+    // republish once the device is complete.
+
     const victronDevices = global.get("victronDevices", "file") || {};
 
-    if (!victronDevices[`${serviceType}_${instance}`]) return null;
+    const deviceInfo = victronDevices[`${serviceType}_${instance}`];
+
+    if (!deviceInfo || !deviceInfo.shortName) return null;
 
 
     // === 3. Value Extraction & Early Rounding ===
@@ -1630,7 +1680,7 @@
       // Look up product short name from discovered devices
       const victronDevices = global.get("victronDevices", "file") || {};
       const deviceInfo = victronDevices[`${serviceType}_${instance}`];
-      const shortName = deviceInfo ? deviceInfo.shortName : serviceType;
+      const shortName = (deviceInfo && deviceInfo.shortName) || serviceType;
       const productName = deviceInfo ? deviceInfo.productName : "";
       const customName = deviceInfo ? deviceInfo.customName : "";
 
@@ -2612,7 +2662,9 @@
 
     const deviceInfo = victronDevices[`${service_type}_${instance}`];
 
-    const deviceName = deviceInfo ? deviceInfo.shortName : service_type;
+    // Same fallback as victron_create, so state and discovery agree on the id.
+
+    const deviceName = (deviceInfo && deviceInfo.shortName) || service_type;
 
     const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 
@@ -2629,18 +2681,16 @@
 
     // read-only and stays a sensor.
 
-    const switchPaths = [
-      "generator:/ManualStart",
-      "generator:/AutoStartEnabled",
-    ];
+    const switchPaths = ["generator:/ManualStart",
+    "generator:/AutoStartEnabled"];
 
     const isEnum = typeof unit === "string" && unit.includes("=");
 
     const enumKeys = isEnum
       ? unit
-          .split(";")
-          .map((p) => p.split("=")[0].trim())
-          .filter((k) => k !== "")
+        .split(";")
+        .map((p) => p.split("=")[0].trim())
+        .filter((k) => k !== "")
       : [];
     const isBinary =
       isEnum && !writable && enumKeys.length === 2 && enumKeys.includes("0");
@@ -2654,7 +2704,7 @@
     } else if (writable && isEnum) {
       componentType =
         switchPaths.includes(`${service_type}:${dbus_path}`) ||
-        /\/(Relay|SwitchableOutput)\//.test(dbus_path)
+          /\/(Relay|SwitchableOutput)\//.test(dbus_path)
           ? "switch"
           : "select";
     } else if (writable && !isEnum) {
