@@ -5,24 +5,24 @@ Workspace rules: `../../AGENTS.md`
 
 ## Wiring map — start here for topology
 
-`src/_wiring_index.md` — global index of all tabs, subflows, config nodes, and cross-tab link pairs.
+`src/wiring/index.md` — global index of all tabs, subflows, config nodes, and cross-tab link pairs.
 
-Each tab and subflow has its own `_wiring.md` co-located in `src/tabs/<tab>/` and `src/subflows/<subflow>/`. These files list every node, its message contract, upstream/downstream wiring, and config-node dependencies.
+Each tab and subflow has its own map at `src/wiring/<name>.md`. These files list every node, its message contract, upstream/downstream wiring, and config-node dependencies.
 
 To regenerate after flow changes:
 
 ```bash
-node ~/src/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach --config ~/src/librecoach/librecoach-flow-tools/librecoach-flow-tools.config.json
+node ~/src/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --src ~/src/librecoach/librecoach-node-red/src
 ```
 
 The pre-commit hook regenerates stale wiring maps automatically on every commit.
 
 ## REQUIRED: Regenerate wiring maps before any work
 
-**You must run the wiring map generator as the first step of every session — before reading any flow files, before investigating any issue, before making any changes.** The wiring maps in `src/wiring/` and `src/_wiring_index.md` may not reflect the current canvas state, and working from stale maps leads to incorrect conclusions.
+**You must run the wiring map generator as the first step of every session — before reading any flow files, before investigating any issue, before making any changes.** The wiring maps in `src/wiring/` may not reflect the current canvas state, and working from stale maps leads to incorrect conclusions.
 
 ```bash
-node ~/src/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --project librecoach --config ~/src/librecoach/librecoach-flow-tools/librecoach-flow-tools.config.json
+node ~/src/librecoach/librecoach-flow-tools/tools/wiring-map/generate.js --src ~/src/librecoach/librecoach-node-red/src
 ```
 
 After running, review the output for warnings (orphaned nodes, broken links, missing companion `.js` files) before proceeding. Do not skip this step even for small or apparently simple tasks.
