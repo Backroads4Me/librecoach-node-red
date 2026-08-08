@@ -188,7 +188,7 @@ const victronDevices = global.get("victronDevices", "file") || {};
 const deviceInfo = victronDevices[`${serviceType}_${instance}`];
 if (!deviceInfo || !deviceInfo.shortName) return null;
 
-// === 3. Value Extraction & Early Rounding ===
+// === 3. Value Extraction ===
 // Venus reports the settable range alongside the value on adjustable paths
 // (for example {"min":0,"max":50,"value":40} on the shore current limit).
 // That is per-installation truth, so it beats any static table downstream.
@@ -220,29 +220,7 @@ if (
 
 if (rawValue === null || rawValue === undefined) return null;
 
-let processedValue = rawValue;
-if (typeof rawValue === "number") {
-  const decimals = dbusPath.toLowerCase().includes("soc") ? 0 : 1;
-  processedValue =
-    Math.round(rawValue * Math.pow(10, decimals)) / Math.pow(10, decimals);
-}
-
-// === 4. Early RBE Filter ===
-const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
-const discoveryKey = `${serviceType}_${instance}_${dbusPath}`;
-const uniqueVictron = global.get("uniqueVictron") || [];
-const discoverySeen = uniqueVictron.includes(discoveryKey);
-const alwaysPublishState =
-  dbusPath === "/Mode" || dbusPath === "/Ac/ActiveIn/CurrentLimit";
-if (
-  flow.get(cacheKey) === processedValue &&
-  discoverySeen &&
-  !alwaysPublishState
-)
-  return null;
-flow.set(cacheKey, processedValue);
-
-// === 5. Map Lookup ===
+// === 4. Map Lookup ===
 const victronMap = global.get("victronMap");
 
 // Block processing until map is loaded — prevents unitless discovery at startup.
@@ -342,6 +320,101 @@ const unitOverrides = {
 };
 unit = unit || unitOverrides[dbusPath] || "";
 
+// === 5. Precision & Report by Exception ===
+// Venus republishes at full float precision on every sample, so a fixed
+// decimal count leaves analog values changing on every message and the
+// exception gate below never blocks. Each unit gets an absolute floor step,
+// widened by a fraction of the reading, so a 3 kW inverter is not tracked to
+// the watt while a 30 W load still resolves.
+//
+// A step only suppresses anything once it clears the sensor's own swing, and
+// the transition is abrupt. These were fitted against the raw Venus stream:
+// line voltage moves just under 1 V, so 1 V is the knee and 0.5 V filters
+// almost nothing. The absolute floors matter more than the relative terms,
+// because a coach at rest sits at single-digit amps and double-digit watts,
+// where the relative term never engages. Battery voltage stays at 0.1 V —
+// 12.6 against 13.6 is a distinction an owner reads.
+//
+// That flat V DC step is sized for a 12 V bank, where it is 0.7% of the
+// reading. On a 24 or 48 V system the same 0.1 V is a fraction of the ripple
+// and filters little if ripple scales with bank voltage, so we need to
+// eventually check against another installtion to see if this step carries over.
+
+const precisionPolicy = {
+  W: { step: 5, relative: 0.02 },
+  VA: { step: 5, relative: 0.02 },
+  "V AC": { step: 1 },
+  "V DC": { step: 0.1 },
+  "A AC": { step: 0.5, relative: 0.04 },
+  "A DC": { step: 0.5, relative: 0.04 },
+  A: { step: 0.5, relative: 0.04 },
+  Ah: { step: 0.1, relative: 0.01 },
+  Hz: { step: 0.1 },
+  "Degrees celsius": { step: 0.5 },
+  "Degrees Celsius": { step: 0.5 },
+  "%": { step: 1 },
+  "%RH": { step: 1 },
+  "%level": { step: 1 },
+  kWh: { step: 0.01 },
+  L: { step: 0.5 },
+  seconds: { step: 60 },
+  RPM: { step: 10 },
+  "m/s": { step: 0.1 },
+};
+
+function stepFor(currentUnit, value) {
+  // An enumeration encodes its codes in the unit string ("0=Off;1=On"). Those
+  // are exact values, not measurements; step 0 selects equality comparison.
+  if (typeof currentUnit === "string" && currentUnit.includes("=")) return 0;
+  const policy = precisionPolicy[currentUnit] || { step: 0.1 };
+  if (!policy.relative) return policy.step;
+  const widened = policy.relative * Math.abs(value);
+  if (!(widened > policy.step)) return policy.step;
+  // Snap the widened step onto a 1/2/5 decade ladder so published values stay
+  // legible — 3720 W rather than 3708.365 W.
+  const magnitude = Math.pow(10, Math.floor(Math.log10(widened)));
+  const normalized = widened / magnitude;
+  const snapped =
+    normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
+  return snapped * magnitude;
+}
+
+function quantize(value, step) {
+  if (step <= 0 || typeof value !== "number" || !isFinite(value)) return value;
+  // toFixed collapses the binary-float residue that dividing by a decimal
+  // step leaves behind (5.9 stored as 5.900000000000001).
+  return Number((Math.round(value / step) * step).toFixed(6));
+}
+
+// The deadband is measured against the value Home Assistant is currently
+// showing, not against the previous raw sample. Comparing to the published
+// value is what stops a reading parked on a bucket boundary from alternating
+// between two adjacent buckets forever.
+function changedEnough(value, published, step) {
+  if (published === undefined) return true;
+  if (step <= 0 || typeof value !== "number" || typeof published !== "number") {
+    return value !== published;
+  }
+  return Math.abs(value - published) >= step;
+}
+
+const cacheKey = `rbe_${serviceType}_${instance}_${dbusPath}`;
+const discoveryKey = `${serviceType}_${instance}_${dbusPath}`;
+const uniqueVictron = global.get("uniqueVictron") || [];
+const discoverySeen = uniqueVictron.includes(discoveryKey);
+const alwaysPublishState =
+  dbusPath === "/Mode" || dbusPath === "/Ac/ActiveIn/CurrentLimit";
+
+const valueStep = stepFor(unit, rawValue);
+const processedValue = quantize(rawValue, valueStep);
+if (
+  discoverySeen &&
+  !alwaysPublishState &&
+  !changedEnough(rawValue, flow.get(cacheKey), valueStep)
+)
+  return null;
+flow.set(cacheKey, processedValue);
+
 // === 6. Build Standardized Payload (Removed routing_key) ===
 const basePayload = {
   service_type: serviceType,
@@ -358,6 +431,27 @@ const basePayload = {
 };
 
 msg.payload = basePayload;
+
+// Derived sensors are recomputed on every contributing input — the VE.Bus
+// total output is fed by three paths — so they carry the same deadband as
+// measured values. Gating on the value rather than on the trigger is what
+// keeps that fan-in from multiplying the publish rate.
+function sendDerived(path, value) {
+  const step = stepFor("W", value);
+  const derivedValue = quantize(value, step);
+  const rbeKey = `rbe_${serviceType}_${instance}_${path}`;
+  const seen = uniqueVictron.includes(`${serviceType}_${instance}_${path}`);
+  if (seen && !changedEnough(value, flow.get(rbeKey), step)) return;
+  flow.set(rbeKey, derivedValue);
+  node.send({
+    payload: {
+      ...basePayload,
+      dbus_path: path,
+      value: derivedValue,
+      unit: "W",
+    },
+  });
+}
 
 // === 7. Synthetic Totals (using node.send) ===
 const powerTotalPairs = [
@@ -389,13 +483,10 @@ for (const pair of powerTotalPairs) {
     flow.set(contextKey, stored);
 
     if (stored.l1 !== undefined && stored.l2 !== undefined) {
-      node.send({
-        payload: {
-          ...basePayload,
-          dbus_path: pair.total,
-          value: (Number(stored.l1) || 0) + (Number(stored.l2) || 0),
-        },
-      });
+      sendDerived(
+        pair.total,
+        (Number(stored.l1) || 0) + (Number(stored.l2) || 0),
+      );
     }
     break;
   }
@@ -405,17 +496,6 @@ for (const pair of powerTotalPairs) {
 // Power-flow cards need directional (positive-only) values, but the VE.Bus
 // DC side is one signed sensor. Derive charge/invert splits and the total
 // power the device delivers on both sides (AC out + DC charge).
-function sendSynthetic(path, value) {
-  const rounded = Math.round(value * 10) / 10;
-  const rbeKey = `rbe_${serviceType}_${instance}_${path}`;
-  const seen = uniqueVictron.includes(`${serviceType}_${instance}_${path}`);
-  if (flow.get(rbeKey) === rounded && seen) return;
-  flow.set(rbeKey, rounded);
-  node.send({
-    payload: { ...basePayload, dbus_path: path, value: rounded, unit: "W" },
-  });
-}
-
 if (serviceType === "vebus") {
   const flowKey = `vebusflow_${instance}`;
   const st = flow.get(flowKey) || {};
@@ -436,10 +516,10 @@ if (serviceType === "vebus") {
   if (touched) {
     flow.set(flowKey, st);
     if (st.dc !== undefined) {
-      sendSynthetic("/Dc/0/ChargePower", Math.max(0, st.dc));
-      sendSynthetic("/Dc/0/InverterPower", Math.max(0, -st.dc));
+      sendDerived("/Dc/0/ChargePower", Math.max(0, st.dc));
+      sendDerived("/Dc/0/InverterPower", Math.max(0, -st.dc));
       if (st.acOut !== undefined) {
-        sendSynthetic("/TotalOutputPower", st.acOut + Math.max(0, st.dc));
+        sendDerived("/TotalOutputPower", st.acOut + Math.max(0, st.dc));
       }
     }
   }

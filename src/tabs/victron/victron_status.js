@@ -14,16 +14,11 @@ if (
 const { service_type, instance, dbus_path, value, unit, writable } =
   incomingPayload;
 
-// 1. Context-Aware Rounding (Filter Logic)
-let roundedValue = value;
-if (typeof value === "number") {
-  // Round SOC to whole numbers, everything else to 1 decimal
-  const decimals = dbus_path.toLowerCase().includes("soc") ? 0 : 1;
-  const factor = Math.pow(10, decimals);
-  roundedValue = Math.round(value * factor) / factor;
-}
-
-// 2. Report by Exception (Filter Logic)
+// 1. Report by Exception (Filter Logic)
+// victron_decode_mqtt quantizes to the step its unit actually resolves and
+// applies the deadband, so exact equality is the right comparison here: this
+// node only guards against a value being republished under an entity id it
+// has already announced.
 const lastValues = context.get("lastValues") || {};
 const publishedState = context.get("publishedState") || {};
 const cacheKey = `${service_type}_${instance}_${dbus_path}`;
@@ -31,18 +26,18 @@ const alwaysPublishState =
   dbus_path === "/Mode" || dbus_path === "/Ac/ActiveIn/CurrentLimit";
 
 if (
-  lastValues[cacheKey] === roundedValue &&
+  lastValues[cacheKey] === value &&
   publishedState[cacheKey] &&
   !alwaysPublishState
 ) {
-  return null; // Block if rounded value hasn't changed
+  return null; // Block if the value has not changed
 }
-lastValues[cacheKey] = roundedValue;
+lastValues[cacheKey] = value;
 publishedState[cacheKey] = true;
 context.set("lastValues", lastValues);
 context.set("publishedState", publishedState);
 
-// 3. Build Entity ID (Status Logic)
+// 2. Build Entity ID (Status Logic)
 const safePathRaw = dbus_path
   .replace(/^\//, "")
   .replace(/\//g, "_")
@@ -107,7 +102,7 @@ const deviceInfo = victronDevices[`${service_type}_${instance}`];
 const deviceName = (deviceInfo && deviceInfo.shortName) || service_type;
 const entityId = `victron_${deviceName}_${instance}_${safePath}`;
 
-// 4. Determine Component Type & Topic
+// 3. Determine Component Type & Topic
 // Mirrors the component-type ladder in victron_create; a mismatch publishes
 // state to a topic no discovery config is listening on. Relay paths are only
 // switches where the reference map marks them writable — the VE.Bus relay is
@@ -116,9 +111,9 @@ const switchPaths = ["generator:/ManualStart", "generator:/AutoStartEnabled"];
 const isEnum = typeof unit === "string" && unit.includes("=");
 const enumKeys = isEnum
   ? unit
-    .split(";")
-    .map((p) => p.split("=")[0].trim())
-    .filter((k) => k !== "")
+      .split(";")
+      .map((p) => p.split("=")[0].trim())
+      .filter((k) => k !== "")
   : [];
 const isBinary =
   isEnum && !writable && enumKeys.length === 2 && enumKeys.includes("0");
@@ -131,15 +126,15 @@ if (dbus_path.endsWith("/CurrentLimit")) {
 } else if (writable && isEnum) {
   componentType =
     switchPaths.includes(`${service_type}:${dbus_path}`) ||
-      /\/(Relay|SwitchableOutput)\//.test(dbus_path)
+    /\/(Relay|SwitchableOutput)\//.test(dbus_path)
       ? "switch"
       : "select";
 } else if (writable && !isEnum) {
   componentType = "number";
 }
 
-// 5. Build Final Message
+// 4. Build Final Message
 msg.topic = `homeassistant/${componentType}/${entityId}/state`;
-msg.payload = { value: roundedValue };
+msg.payload = { value };
 
 return msg;
